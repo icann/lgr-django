@@ -1,0 +1,318 @@
+{% extends "lgr_editor/_editor_base.html" %}
+{% load i18n static %}
+
+{% block html_head_more %}
+    {{ block.super }}
+    <style>
+    .tag-field .control-label {
+        width: 100%;
+    }
+
+    </style>
+{% endblock %}
+
+{% block content %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{% url 'codepoint_list' lgr_id %}">{% trans "Code points" %}</a>
+        </li>
+        <li class="active">{{ cp_disp }} {{ name }}</li>
+    </ol>
+    <p>{% blocktrans %}Code point appeared in Unicode version: {{ age }}{% endblocktrans %}</p>
+
+    <h3>Variants</h3>
+
+    {% if not is_range %}
+        <form class="form-inline" method="post">
+            {% csrf_token %}
+            {{ add_variant_form.error }}
+            {{ add_variant_form }}
+            <button type="submit" class="btn btn-primary" name="add_variant">{% trans "Add variant" %}</button>
+        </form>
+    {% endif %}
+
+    <div id="cp_variants">
+        <form method="post">
+            {% csrf_token %}
+            {# Need to dispay management form even for range char since it will still be checked in view #}
+            {{ variants_form.management_form }}
+            {% if not is_range %}
+                <table class="table table-hover table-striped">
+                    <tr>
+                        <th style="display:none;"/>
+                        <th>{% trans "Code point" %}</th>
+                        <th>{% trans "Type" %}</th>
+                        <th>{% trans "Comments" %}</th>
+                        <th>{% trans "When" %}</th>
+                        <th>{% trans "Not When" %}</th>
+                        <th>{% trans "Action" %}</th>
+                    </tr>
+                    {% for char in variants_form %}
+                    <tr>
+                        <td style="display:none;">{{ char.cp }}</td>
+                        <td class="codepoint-display">
+                            <a href="{% url 'codepoint_view' lgr_id=lgr_id codepoint_id=char.cp.value %}">
+                                {{ char.cp_disp.value }}
+                                <br>{{ char.name.value }}
+                            </a>
+                            <br>
+                            Age: {{ char.age.value }}
+                        </td>
+                        <td class="codepoint-type">{{ char.type }}</td>
+                        <td>{{ char.comment }}</td>
+                        <td class="codepoint-conditional">{{ char.when }}</td>
+                        <td class="codepoint-conditional">{{ char.not_when }}</td>
+                        <td>
+                            <ul class="list-unstyled">
+                                <li><a class="btn btn-xs confirm-prompt" data-confirmation-prompt="{% trans "Are you sure you want delete this variant?" %}" href="{% url 'variant_delete' lgr_id=lgr_id codepoint_id=cp var_slug=char.to_slug %}">{% trans 'Delete variant' %}</a></li>
+                                <li><a class="btn btn-xs btn-edit-var-refs" href="#" data-var-update-ref-url="{% url 'var_update_refs' lgr_id=lgr_id codepoint_id=cp var_slug=char.to_slug %}">{% trans 'Edit references' %}</a></li>
+                            </ul>
+                            <h5>{% trans "References" %}</h5>
+                            <ul class="references" data-cp-disp="{{ char.cp_disp.value }}" data-references-json-url="{% url 'references_json' lgr_id %}">
+                                {% for ref_id in char.reference_list %}
+                                    <li data-refid="{{ ref_id }}"><a href="{% url 'references' lgr_id %}#ref_{{ref_id}}">{{ ref_id }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>{% trans "Range characters do not have variants." %}</p>
+            {% endif %}
+
+            <div class="tag-field">
+                {% include "lgr_editor/_form_field_vertical.html" with field=codepoint_form.tags %}
+            </div>
+
+            <div class="context-rules-field">
+                {% include "lgr_editor/_form_field_vertical.html" with field=codepoint_form.when %}
+                {% include "lgr_editor/_form_field_vertical.html" with field=codepoint_form.not_when %}
+            </div>
+
+            {{ codepoint_form.errors }}
+            {% include "lgr_editor/_form_field_vertical.html" with field=codepoint_form.comment %}
+
+            <p><button type="submit" class="btn btn-primary" name="edit_cp" id="edit_cp_button">{% trans "Save variants, tags, context rules and comment" %}</button></p>
+        </form>
+    </div>
+
+    <hr/>
+
+    <h3>References</h3>
+
+    <div id="cp_references">
+        <ul data-references-json-url="{% url 'references_json' lgr_id %}">
+            {% for ref in cp_references %}
+                <li data-refid="{{ ref.ref_id }}">
+                    {{ ref.ref_id }} - {{ ref.description }}
+                    {% if ref.comment %}({{ ref.comment }}){% endif %}
+                </li>
+            {% empty %}
+                {% trans "No references associated with code point." %}
+            {% endfor %}
+        </ul>
+        <a href="#"
+           data-cp-update-ref-url="{% url 'codepoint_update_refs' lgr_id cp %}"
+           class="btn btn-default edit-refs"><i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}</a>
+    </div>
+
+    <hr/>
+
+    <a class="btn btn-danger confirm-prompt" data-confirmation-prompt="{% trans "Are you sure you want delete this code point?" %}"
+       href="{% url 'codepoint_delete' lgr_id=lgr_id codepoint_id=cp %}">
+        <i class="glyphicon glyphicon-trash"></i> {% trans 'Delete code point' %}</a>
+
+    <div class="modal" id="reference-editor">
+        <form class="form" action="#" method="post">
+            {% csrf_token %}
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{% trans "Edit References for <span></span>" %}</h4>
+                </div>
+                <div class="modal-body">
+
+                        <ul class="list-unstyled">
+                            <li class="ref-entry clearfix template hide">
+                                <button title="{% trans "Delete reference" context "button title" %}" class="btn btn-default btn-sm delete-ref pull-right"><i class="glyphicon glyphicon-trash"></i></button>
+                                <span class="description"></span>
+                                <input name="ref_id" type="hidden">
+                            </li>
+                        </ul>
+                        <div class="spinner"><img src="{% static 'chrome/img/spinner.gif' %}" alt=""></div>
+
+                    <hr>
+                    <div>
+                        <p class="modal-section-title">{% trans "Add an existing reference" %}</p>
+                        <p>
+                            <select name="ref-choice" id="ref-choice">
+                                <option value="" class="blank"></option>
+                            </select>
+                        </p>
+                        <p>
+                            <button class="btn btn-default btn-xs add-ref">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                {% trans "Add" %}
+                            </button>
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="modal-section-title">{% trans "Create a new reference" %}</p>
+                        <p>
+                            <label for="new-ref-desc">{% trans "Description" %}</label>
+                            <input type="text" name="new_ref_desc" id="new-ref-desc"/>
+                        </p>
+                        <p>
+                            <label for="new-ref-comment">{% trans "URL (optional)" %}</label>
+                            <input type="text" name="new_ref_comment" id="new-ref-comment"/>
+                        </p>
+                        <p>
+                            <button class="btn btn-default btn-xs new-ref" data-url="{% url 'reference_add_ajax' lgr_id %}">
+                                <i class="glyphicon glyphicon-plus"></i>
+                                {% trans "New reference" %}
+                            </button>
+                        </p>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+                    <button type="submit" class="btn btn-primary save-changes">{% trans "Save changes" %}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+
+        </form>
+    </div><!-- /.modal -->
+
+{% endblock content %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        var cp_references = $.parseJSON('{{ cp_references_json|escapejs }}');
+
+        function modal_clear_ref_entries() {
+            var editor_modal = $("#reference-editor");
+            editor_modal.find(".modal-body .ref-entry").not('.template').remove();
+        }
+
+        function modal_add_ref_entry(ref_id, description) {
+            var editor_modal = $("#reference-editor");
+            var template_ref_entry = editor_modal.find(".modal-body .ref-entry.template");
+            var ref_el = template_ref_entry.clone(true);
+            ref_el.find('.description').text(ref_id + " - " + description);
+            ref_el.find('input').val(ref_id);
+            ref_el.data('refid', ref_id)
+                    .removeClass('hide').removeClass('template')
+                    .appendTo(template_ref_entry.parent());
+        }
+
+        function populate_all_references($, references, select_ref) {
+            var select = $('#ref-choice');
+            var by_id = {};
+            select.find('option').not('.blank').remove();
+            $.each(references, function(i, ref) {
+                var opt = $('<option>').val(ref.ref_id).text(ref.ref_id + " - " + ref.description).attr('data-description', ref.description).appendTo(select);
+                if (select_ref === ref.description) {
+                    // preselect
+                    opt.attr('selected', 'selected');
+                }
+                by_id[ref.ref_id] = ref;
+            });
+            return by_id;
+        }
+
+        function edit_references($, title, ul, update_url) {
+            // given an element `ul` containing a list of references, it pops up a modal dialog with `title`
+            // upon saving, it calls `success_cb` with the list of ref_ids
+            var editor_modal = $("#reference-editor");
+            var spinner = editor_modal.find('.spinner');
+
+            spinner.show();
+            modal_clear_ref_entries();
+
+            // extract ref id's from the `data-refid` attribute of "li" child elements
+            var ref_ids = $.map(ul.find("li"), function(el) { return $(el).data('refid')});
+            var all_refs_by_id = {};
+
+            var references_json_url = ul.data('references-json-url');
+            $.getJSON(references_json_url, function(all_references) {
+                all_refs_by_id = populate_all_references($, all_references);
+
+                $.each(ref_ids, function(i, refid) {
+                    modal_add_ref_entry(refid, all_refs_by_id[refid].description);
+                });
+                spinner.hide();
+            });
+            editor_modal.find('.modal-title span').html(title);
+            editor_modal.find('form').attr('action', update_url);
+            editor_modal.modal({
+                keyboard: false
+            });
+        }
+
+        $(document).ready(function($) {
+
+            var tag_select = $('input[name="edit_cp-tags"]');
+            tag_select.select2({
+                tags: $.parseJSON('{{ all_tags_json|escapejs }}'),
+                separator: " ",
+                tokenSeparators: [" "]
+            });
+
+            $(".btn.edit-refs").click(function() {
+                // bring up the "Edit References" modal
+                edit_references($, "{{ cp_disp|escapejs }}", $(this).prev("ul"), $(this).data('cp-update-ref-url'));
+                return false;
+            });
+
+            $(".btn.add-ref").click(function() {
+                var option = $('#ref-choice').find(':selected');
+                modal_add_ref_entry(option.val(), option.attr('data-description'));
+                return false;
+            });
+            $(".btn.delete-ref").click(function() {
+                $(this).parent().remove();
+                return false;
+            });
+            $(".btn.new-ref").click(function() {
+                var url = $(this).data('url');
+                var desc = $.trim($('#new-ref-desc').val());
+                if (desc.length === 0) {
+                    return;
+                }
+                var com = $.trim($('#new-ref-comment').val());
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {description: desc, comment: com},
+                    beforeSend: function(xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+                    }
+                }).done(function(data) {
+                    populate_all_references($, data.data, desc);
+                    // clear the text box to indicated that it has been added
+                    $('#new-ref-desc').val('');
+                    $('#new-ref-comment').val('');
+                });
+                return false;
+            });
+            $(".btn.save-changes").click(function() {
+                $("#reference-editor form").submit();
+                return false;
+            });
+
+            $(".btn.btn-edit-var-refs").click(function() {
+                var url = $(this).data('var-update-ref-url');
+                var references_ul = $(this).parents("td").find("ul.references");
+                edit_references($, references_ul.data('cp-disp'), references_ul, url);
+                return false;
+            });
+        });
+    </script>
+{% endblock html_body_more %}

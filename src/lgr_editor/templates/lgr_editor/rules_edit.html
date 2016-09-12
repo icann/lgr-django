@@ -1,0 +1,168 @@
+{% extends "lgr_editor/_editor_base.html" %}
+{% load i18n staticfiles %}
+
+{% block pane-rules-active %}active{% endblock %}
+
+{% block content-pane %}
+    <div class="rules-body col-md-12">
+        {% comment %}
+        <div class="panel panel-default">
+            <div class="panel-heading bg-primary text-right">
+                <button class="btn btn-primary validate-rules">
+                    <i class="glyphicon glyphicon-ok"></i>
+                    {% trans "Validate rules" %}
+                </button>
+            </div>
+        </div>
+        {% endcomment %}
+        <br>
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <button class="btn btn-default new-rule pull-right" data-target="#new-class-container">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                    {% trans "New class" %}
+                </button>
+                <h4 class="panel-title">{% trans "Classes" %}</h4>
+            </div>
+            <div class="panel-body">
+                {% for class in rules.classes %}
+                    <div class="clearfix rule-container">
+                        <form action="{% url 'rule_edit_class' lgr_id class.name %}">
+                            {% include "lgr_editor/_rule_editor_widgets.html" with rule=class %}
+                        </form>
+                    </div>
+                {% endfor %}
+
+                <div id="new-class-container" class="clearfix rule-container" style="display: none">
+                    <form action="{% url 'rule_edit_class' lgr_id NEW_ELEMENT_NAME_PARAM %}">
+                        <button class="btn btn-default cancel-new-rule cancel-editing pull-right">
+                            <i class="glyphicon glyphicon-remove"></i> {% trans "Cancel" %}
+                        </button>
+                        <button class="btn btn-default save-rule pull-right">
+                            <i class="glyphicon glyphicon-floppy-save"></i> {% trans "Save" %}
+                        </button>
+                        <textarea>{{ class_skeleton }}</textarea>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <button class="btn btn-default new-rule pull-right" data-target="#new-rule-container">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                    {% trans "New rule" %}
+                </button>
+                <h4 class="panel-title">{% trans "Rules" %}</h4>
+            </div>
+            <div class="panel-body">
+                {% for rule in rules.rules %}
+                    <div class="clearfix rule-container">
+                        <form action="{% url 'rule_edit_rule' lgr_id rule.name %}">
+                            {% include "lgr_editor/_rule_editor_widgets.html" with rule=rule %}
+                        </form>
+                    </div>
+                {% endfor %}
+
+                <div id="new-rule-container" class="clearfix rule-container" style="display: none">
+                    <form action="{% url 'rule_edit_rule' lgr_id NEW_ELEMENT_NAME_PARAM %}">
+                        <button class="btn btn-default cancel-new-rule cancel-editing pull-right">
+                            <i class="glyphicon glyphicon-remove"></i> {% trans "Cancel" %}
+                        </button>
+                        <button class="btn btn-default save-rule pull-right">
+                            <i class="glyphicon glyphicon-floppy-save"></i> {% trans "Save" %}
+                        </button>
+                        <textarea>{{ rule_skeleton }}</textarea>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <button class="btn btn-default new-rule pull-right" data-target="#new-action-container">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                    {% trans "New action" %}
+                </button>
+                <h4 class="panel-title">{% trans "Actions" %}</h4>
+            </div>
+            <div class="panel-body">
+                {% for action in rules.actions %}
+                    <div class="clearfix rule-container">
+                        <form action="{% url 'rule_edit_action' lgr_id forloop.counter0 %}">
+                            {% include "lgr_editor/_rule_editor_widgets.html" with rule=action %}
+                        </form>
+                    </div>
+                {% endfor %}
+
+                <div id="new-action-container" class="clearfix rule-container" style="display: none">
+                    <form action="{% url 'rule_edit_action' lgr_id '-1' %}">
+                        <button class="btn btn-default cancel-new-rule cancel-editing pull-right">
+                            <i class="glyphicon glyphicon-remove"></i> {% trans "Cancel" %}
+                        </button>
+                        <button class="btn btn-default save-rule pull-right">
+                            <i class="glyphicon glyphicon-floppy-save"></i> {% trans "Save" %}
+                        </button>
+                        <textarea>{{ action_skeleton }}</textarea>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock content-pane %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'chrome/codemirror/lib/codemirror.css' %}">
+    <link rel="stylesheet" href="{% static 'chrome/codemirror/theme/3024-night.css' %}">
+    <style>
+    .panel-default .panel-heading {
+        /* .panel-default is not part of bootstrap, we want a simple grey background */
+        background-color: lightgrey;
+    }
+    .CodeMirror {
+        /* make editor fit to content */
+        height: auto;
+        clear: both;
+    }
+    .rule-container {
+        margin-bottom: 1em;
+        padding: 3px;
+        line-height: 37px;  /* match height of button so that when the button is hidden, the positions won't change */
+    }
+    .rule-container:hover {
+        background-color: lightgrey;
+    }
+    .rule-container.bg-info:hover {
+        background-color: lightblue;
+    }
+    .rule-container button {
+        /* vertical space between the buttons and the code editor */
+        margin-bottom: 3px;
+    }
+    .panel-heading h4 {
+        line-height: 36px;  /* match height of button so that when the button is hidden, the positions won't change */
+    }
+    </style>
+    <script type="text/javascript" src="{% static 'chrome/codemirror/lib/codemirror.js' %}"></script>
+    <script type="text/javascript" src="{% static 'chrome/codemirror/mode/xml/xml.js' %}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function($) {
+            $('textarea').each(function() {
+                CodeMirror.fromTextArea(this, {
+                    theme: 'default',
+                    readOnly: true,
+                    lineWrapping: true,
+                    cursorBlinkRate: -530  // any negative value will hide the cursor, we use 530 because that's the default blink
+                });
+            });
+
+            var editor = new RuleEditor();
+            editor.init_editor();
+        });
+    </script>
+{% endblock html_body_more %}

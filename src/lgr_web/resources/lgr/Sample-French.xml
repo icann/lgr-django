@@ -1,0 +1,48 @@
+<lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
+  <meta>
+    <version comment="Sample LGR for French">1</version>
+    <date>2015-08-07</date>
+    <unicode-version>6.3.0</unicode-version>
+    <language>fr</language>
+    <scope type="domain">example</scope>
+    <description type="text/plain">This is a basic LGR sample for the French language. It does not aim to be complete or accurate but only to provide an example.</description>
+    <references>
+      <reference comment="http://www.unicode.org/versions/Unicode1.1.0/" id="0">The Unicode Standard 1.1</reference>
+    </references>
+  </meta>
+  <data>
+    <char cp="0061" ref="0"/>
+    <char cp="0062" ref="0"/>
+    <char cp="0063" ref="0"/>
+    <char cp="0064" ref="0"/>
+    <char cp="0065" ref="0"/>
+    <char cp="0066" ref="0"/>
+    <char cp="0067" ref="0"/>
+    <char cp="0068" ref="0"/>
+    <char cp="0069" ref="0"/>
+    <char cp="006A" ref="0"/>
+    <char cp="006B" ref="0"/>
+    <char cp="006C" ref="0"/>
+    <char cp="006D" ref="0"/>
+    <char cp="006E" ref="0"/>
+    <char cp="006F" ref="0"/>
+    <char cp="006F 0065">
+      <var cp="0153" type="block"/>
+    </char>
+    <char cp="0070" ref="0"/>
+    <char cp="0071" ref="0"/>
+    <char cp="0072" ref="0"/>
+    <char cp="0073" ref="0"/>
+    <char cp="0074" ref="0"/>
+    <char cp="0075" ref="0"/>
+    <char cp="0076" ref="0"/>
+    <char cp="0077" ref="0"/>
+    <char cp="0078" ref="0"/>
+    <char cp="0079"/>
+    <char cp="007A" ref="0"/>
+    <char cp="0153">
+      <var cp="006F 0065" type="block"/>
+    </char>
+  </data>
+  <rules/>
+</lgr>

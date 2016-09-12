@@ -1,0 +1,13 @@
+[Unit]
+Description=LGR Django application
+After=network.target
+Wants=lgr-celery.service
+
+[Service]
+WorkingDirectory=/var/www/lgr/lgr-django
+ExecStart=/var/www/lgr/venv/bin/gunicorn --error-log /var/log/lgr/gunicorn-lgr.log -w 3 -t 300 --max-requests 100 -b unix:/run/lgr/lgr-django.sock --chdir /var/www/lgr/lgr-django/src lgr_web.wsgi:application
+User=lgr
+Group=lgr
+
+[Install]
+WantedBy=multi-user.target

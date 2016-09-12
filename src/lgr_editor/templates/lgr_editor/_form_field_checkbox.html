@@ -1,0 +1,20 @@
+{% load widget_tweaks %}
+<div class="form-group{% if field.errors %} has-error{% endif %} clearfix">
+    <div class="col-sm-offset-{{ label_width|default:2 }} col-sm-{{ label_width|default:10 }}">
+        <div class="checkbox">
+            <label>
+                {{ field }}
+                {{ field.label }}
+            </label>
+        </div>
+        {% if field.errors %}
+            <span class="help-block">
+                {% for error in  field.errors %}{{ error }}{% endfor %}
+            </span>
+        {% else %}
+            {% if field.help_text %}
+                <p class="help-block"><small>{{ field.help_text }}</small></p>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>

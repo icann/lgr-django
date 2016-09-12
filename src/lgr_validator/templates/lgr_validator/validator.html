@@ -1,0 +1,196 @@
+{% extends base_template|default:"_base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block content %}
+    {% comment %}
+    This template may be used in two ways. Either by passing a Django form object in the context variable named `form`,
+    or a simple string in a context variable named `input`
+    {% endcomment %}
+
+    <form method="GET" class="form-horizontal" role="form">
+        <div class="form-group{% if form.label.errors %} has-error{% endif %} clearfix">
+            <label class="col-sm-1 control-label" for="id_{{ form.label.name }}">
+                {{ form.label.label|default:_("Label") }}
+            </label>
+            <div class="col-sm-9">
+                {% if form.label %}
+                    {{ form.label|add_class:"form-control" }}
+                {% else %}
+                    <input class="form-control" type="text" name="label" value="{{ input }}">
+                {% endif %}
+                {% if form.label.errors %}
+                    <span class="help-block">
+                        {% for error in  form.label.errors %}{{ error }}{% endfor %}
+                    </span>
+                {% else %}
+                    <p class="help-block"><small>
+                        {% if form.label.help_text %}
+                            {{ form.label.help_text }}
+                        {% else %}
+                            {% blocktrans %}maximum length: {{max_label_len}} code points{% endblocktrans %}
+                        {% endif %}
+                    </small></p>
+                {% endif %}
+            </div>
+            <button class="col-sm-2 btn btn-primary" type="submit">{% trans "Validate" %}</button>
+        </div>
+    </form>
+
+    {% if u_label %}
+        {% if eligible %}
+            <h3 class="text-success"><i class="glyphicon glyphicon-ok"></i> {{ disposition|upper }}</h3>
+        {% else %}
+            <h3 class="text-danger"><i class="glyphicon glyphicon-remove"></i> {{ disposition|upper }}</h3>
+        {% endif %}
+
+        <table class="table table-responsive">
+            <tr>
+                <th>{% trans "U-label" %}</th>
+                <th>{% trans "Disposition" %}</th>
+                <th>{% trans "Code point sequence" %}</th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <td>{{ u_label }}
+                    <br>
+                    <small class="text-muted">{{ a_label }}</small>
+                </td>
+                <td>{{ disposition }}</td>
+                <td>{{ cp_display_html }}</td>
+                <td>
+                    <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-main"
+                       aria-expanded="false" aria-controls="rule-detail-main">
+                        {% blocktrans trimmed %}
+                            Show / hide rule
+                        {% endblocktrans %}
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="rule-detail-cell">
+                    <div class="collapse rule-detail" id="rule-detail-main">
+                        {% if action_idx >= 0 %}
+                            {% blocktrans %}[Action index: {{ action_idx }}] {{ action }}{% endblocktrans %}
+                        {% endif %}
+                        <textarea style="width: 100%" rows="10" disabled="disabled">{{ logs }}</textarea>
+                    </div>
+                </td>
+            </tr>
+        {% if num_variants %}
+            <tr>
+                <th colspan="4">{% trans "Variant labels (including original as last)" %}</th>
+            </tr>
+        {% endif %}
+            <tr>
+                <td colspan="4">
+                    {% if num_variants %}
+                        {% blocktrans %}{{ num_variants }} variant label(s) generated.{% endblocktrans %}
+                        <br>
+                        {% trans "By disposition: " %} {{ summary }}
+                    {% else %}
+                        {% blocktrans %}No variant labels generated.{% endblocktrans %}
+                    {% endif %}
+                </td>
+            </tr>
+
+        {% if variants %}
+            {% for v in variants %}
+                <tr>
+                    <td>
+                        {{ v.u_label }}
+                        <br>
+                        <small class="text-muted">{{ v.a_label }}</small>
+                    </td>
+                    <td>{{ v.disposition }}</td>
+                    <td>
+                        <a href="?label={{ v.cp_input|urlencode }}">
+                            {{ v.cp_display_html }}
+                        </a>
+                    </td>
+                <td>
+                    <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-v-{{ forloop.counter }}"
+                       aria-expanded="false" aria-controls="rule-detail-v-{{ forloop.counter }}">
+                        {% blocktrans trimmed %}
+                            Show / hide rule
+                        {% endblocktrans %}
+                    </a>
+                </td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="rule-detail-cell">
+                        <div class="collapse rule-detail" id="rule-detail-v-{{ forloop.counter }}">
+                            {% if v.action_idx >= 0 %}
+                                {% blocktrans with action_idx=v.action_idx action=v.action trimmed %}
+                                    [Action index: {{ action_idx }}] {{ action }}
+                                {% endblocktrans %}
+                            {% endif %}
+                            <textarea style="width: 100%" rows="10" disabled="disabled">{{ v.logs }}</textarea>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+
+        {% elif num_variants > threshold_include_vars %}
+            <tr>
+                <td colspan="4" class="bg-warning">
+                    {% blocktrans trimmed %}
+                        Too many variant labels to be displayed in the browser. Please download the results in .csv instead.
+                    {% endblocktrans %}
+                </td>
+            </tr>
+
+        {% endif %}
+        </table>
+
+        <a class="btn btn-info" href="{% url 'lgr_validate_csv' lgr_id=lgr_id %}?label={{ u_label|urlencode }}">
+            <i class="glyphicon glyphicon-save"></i>
+            {% blocktrans %}Download results in CSV{% endblocktrans %}
+        </a>
+
+    {% endif %}
+{% endblock content %}
+
+
+{% block html_head_more %}
+    {{ block.super }}
+    <style>
+    td.rule-detail-cell {
+        /* make it blend into the row above */
+        padding: 0 !important;
+        border-top: none !important;
+    }
+    div.rule-detail {
+        /* add the padding to offset the padding that we removed from the containing <td> */
+        padding: 8px;
+    }
+    </style>
+{% endblock %}
+
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            // turn off bootstrap transition because it is horrible when using collapse with table cell
+            $.support.transition = false;
+            $("#add-codepoint-modal")
+                    .on('show.bs.modal', function(event) {
+                        // reset iframe URLs whenever modal is shown (so we won't get stale content)
+                        $(this).find('iframe').each(function() {
+                            this.src = $(this).data('url');
+                        });
+                    })
+                    .on('shown.bs.modal', function(event) {
+                        // resize iframes
+                        var modal_body = $(this).find(".modal-body");
+                        $("#range-iframe").outerHeight(modal_body.height() - modal_body.find(".nav-tabs").outerHeight() - 5);
+                        $("#import-file-iframe").outerHeight(modal_body.height() - modal_body.find(".nav-tabs").outerHeight() - 5);
+                    });
+
+            $("#codepoints tr[data-url]").click(function() {
+                window.location.href = $(this).data('url');
+            });
+        });
+    </script>
+{% endblock html_body_more %}

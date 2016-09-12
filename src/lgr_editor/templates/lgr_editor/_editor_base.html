@@ -1,0 +1,38 @@
+{% extends "_base.html" %}
+{% load i18n staticfiles %}
+
+{% block html_title %}{{ lgr.name|title }}{% endblock %}
+
+{% block content %}
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="{% block pane-cp-active %}{% endblock %}">
+            <a href="{% url 'codepoint_list' lgr_id %}">{% trans "Code points" %}</a>
+        </li>
+        <li role="presentation" class="{% block pane-ref-active %}{% endblock %}">
+            <a href="{% url 'references' lgr_id %}">{% trans "References" %}</a>
+        </li>
+        <li role="presentation" class="{% block pane-md-active %}{% endblock %}">
+            <a href="{% url 'metadata' lgr_id %}">{% trans "Meta data" %}</a>
+        </li>
+        <li role="presentation" class="{% block pane-rules-active %}{% endblock %}">
+            <a href="{% url 'rules' lgr_id %}">{% trans "Rules" %}</a>
+        </li>
+    </ul>
+
+    <div>
+    {% block content-pane %}
+    {% endblock content-pane %}
+    </div>
+{% endblock content %}
+
+{% block html_head_more %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'chrome/select2/select2.css' %}">
+    <link rel="stylesheet" href="{% static 'chrome/select2/select2-bootstrap.css' %}">
+{% endblock %}
+
+{% block html_body_more %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'chrome/select2/select2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'lgr_editor/js/editor.js' %}"></script>
+{% endblock html_body_more %}

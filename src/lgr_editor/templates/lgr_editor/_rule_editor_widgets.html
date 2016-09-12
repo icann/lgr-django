@@ -1,0 +1,13 @@
+{% load i18n %}
+&nbsp;
+<button class="btn btn-default delete-rule pull-right"><i class="glyphicon glyphicon-trash"></i></button>
+<button class="btn btn-default cancel-editing pull-right" style="display: none">
+    <i class="glyphicon glyphicon-remove"></i> {% trans "Cancel" %}
+</button>
+<button class="btn btn-default save-rule pull-right" style="display: none">
+    <i class="glyphicon glyphicon-floppy-save"></i> {% trans "Save" %}
+</button>
+<button class="btn btn-default begin-editing pull-right">
+    <i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}
+</button>
+<textarea id="class-content-{{ rule.name }}" style="width: 100%">{{ rule.content }}</textarea>

@@ -1,0 +1,245 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-06-14 15:24+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: settings/default.py:151
+msgid "Arabic"
+msgstr ""
+
+#: settings/default.py:152
+msgid "English"
+msgstr ""
+
+#: settings/default.py:153
+msgid "French"
+msgstr ""
+
+#: templates/_base.html:8 templates/_base.html.py:32
+msgid "LGR Editor"
+msgstr ""
+
+#: templates/_base.html:31 templates/_base.html.py:32
+msgid "Go to home screen"
+msgstr ""
+
+#: templates/_base.html:41
+msgid "Import an existing LGR file"
+msgstr ""
+
+#: templates/_base.html:43
+msgid "Import"
+msgstr ""
+
+#: templates/_base.html:46
+msgid "Create a new LGR file"
+msgstr ""
+
+#: templates/_base.html:48
+msgid "New"
+msgstr ""
+
+#: templates/_base.html:52 templates/_base.html.py:54
+msgid "Tools"
+msgstr ""
+
+#: templates/_base.html:59
+msgid "Compare two LGR"
+msgstr ""
+
+#: templates/_base.html:61
+msgid "Compare"
+msgstr ""
+
+#: templates/_base.html:64
+msgid "Get difference for a list of labels for two LGR versions"
+msgstr ""
+
+#: templates/_base.html:67
+msgid "Diff"
+msgstr ""
+
+#: templates/_base.html:70
+msgid "Get collisions in a list of labels"
+msgstr ""
+
+#: templates/_base.html:72
+msgid "Collisions"
+msgstr ""
+
+#: templates/_base.html:75
+msgid "Annotate list of labels with their disposition"
+msgstr ""
+
+#: templates/_base.html:77
+msgid "Annotate"
+msgstr ""
+
+#: templates/_base.html:86
+msgid "Validate label against LGR"
+msgstr ""
+
+#: templates/_base.html:88 templates/_base.html.py:195
+msgid "Validate label"
+msgstr ""
+
+#: templates/_base.html:92
+msgid "Analyze current file for errors and statistics"
+msgstr ""
+
+#: templates/_base.html:95
+msgid "Summary"
+msgstr ""
+
+#: templates/_base.html:98
+msgid "Preview LGR file"
+msgstr ""
+
+#: templates/_base.html:101
+msgid "View XML"
+msgstr ""
+
+#: templates/_base.html:104
+msgid "Download LGR file"
+msgstr ""
+
+#: templates/_base.html:106
+msgid "Download"
+msgstr ""
+
+#: templates/_base.html:111
+msgid "About LGR Toolset"
+msgstr ""
+
+#: templates/_base.html:112 templates/_base.html.py:211
+msgid "About"
+msgstr ""
+
+#: templates/_base.html:169
+msgid "LGR Summary"
+msgstr ""
+
+#: templates/_base.html:179
+msgid "Save summary"
+msgstr ""
+
+#: templates/_base.html:181 templates/_base.html.py:217
+msgid "Close"
+msgstr ""
+
+#: templates/_languages.html:15
+msgctxt "language switcher submit button"
+msgid "Go"
+msgstr ""
+
+#: templates/index.html:5
+msgid "Welcome to the LGR (Label Generation Ruleset) Editor"
+msgstr ""
+
+#: templates/index.html:8
+msgid ""
+"This application provides a convenient interface for browsing and editing "
+"<abbr title=\"Label Generation Ruleset\">LGR</abbr>’s conforming to the <a "
+"href=\"https://tools.ietf.org/html/draft-davies-idntables-09\">Representing "
+"Label Generation Rulesets using XML</a> specification."
+msgstr ""
+
+#: templates/index.html:17
+msgid "Your LGRs"
+msgstr ""
+
+#: templates/index.html:19
+msgid ""
+"Previously, you edited the following LGR file(s). Click on its title to "
+"resume your editing session. <br/> <strong><i class=\"glyphicon glyphicon-"
+"alert\"></i> Note that importing large LGR files may take significant time "
+"to load on your browser.</strong>"
+msgstr ""
+
+#: templates/index.html:27
+#, python-format
+msgid "View %(lgr_name)s"
+msgstr ""
+
+#: templates/index.html:34
+msgid "You may also use one of the following options:"
+msgstr ""
+
+#: templates/index.html:41
+msgid ""
+"To begin using this application, you may use one of the following options:"
+msgstr ""
+
+#: templates/index.html:50
+msgid "Import an existing XML file"
+msgstr ""
+
+#: templates/index.html:56
+msgid "Start with a New blank XML file"
+msgstr ""
+
+#: templates/index.html:60
+msgid ""
+"Alternatively, you may select one of the built-in LGR’s below as a starting "
+"point."
+msgstr ""
+
+#: templates/index.html:65
+msgid "Built-in LGRs"
+msgstr ""
+
+#: templates/index.html:66
+msgid ""
+"The following LGRs are pre-installed in the system. You may use them as a "
+"starting point for your own LGR. To do so, just click on it to make a copy "
+"that you can then edit."
+msgstr ""
+
+#: templates/index.html:74
+#, python-format
+msgid "Open %(xml)s"
+msgstr ""
+
+#: templates/index.html:79
+msgid ""
+"<strong class=\"text-danger\">Remember to save your work regularly by "
+"downloading a copy of the XML file.</strong>"
+msgstr ""
+
+#: templates/index.html:85
+msgid "Your saved results"
+msgstr ""
+
+#: templates/index.html:87
+msgid ""
+"The following files contains your tools computation results.<br/> <strong><i "
+"class=\"glyphicon glyphicon-alert\"></i> Note that these files could be "
+"cleaned up regularly.</strong>"
+msgstr ""
+
+#: templates/index.html:95
+#, python-format
+msgid "Download %(file)s"
+msgstr ""
+
+#: templates/index.html:104
+msgid ""
+"Please send any feedback to <a href=\"mailto:support@viagenie.ca"
+"\">support@viagenie.ca</a>."
+msgstr ""

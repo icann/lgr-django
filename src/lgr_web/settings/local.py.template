@@ -1,0 +1,70 @@
+from .default import *
+import sys
+
+DEBUG = True
+
+if DEBUG:
+    # useful during development
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+    # turn off HTTPS only cookies for development
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-snowflake'
+        }
+    }
+
+    LOGGING['loggers']['lgr_web']['level'] = 'DEBUG'
+    LOGGING['loggers']['lgr_editor']['level'] = 'DEBUG'
+    LOGGING['loggers']['lgr']['level'] = 'DEBUG'
+    LOGGING['loggers']['lgr-rule-logger']['level'] = 'DEBUG'
+
+# UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
+# Keys are the Unicode version, like '6.3.0'
+# Values are a dict of the kwargs to pass to the munidata.manager.register function along with the version.
+# Currently, we assume that the underlying implementation is "picu", so the value should have the following keys:
+# - icu_uc_lib: full path to the libicuuc.so file
+# - icu_i18n_lib': full path to the libicui18n.so file
+# - version_tag: version tag used in the function symbols in the above libraries (usually the ICU major version)
+# See picu.loader.KNOWN_ICU_VERSIONS
+
+UNICODE_DATABASES = {
+    # This config is for mac osx Homebrew-based multiple installations of icu4c
+    '6.3.0': {
+        'icu_uc_lib': '/usr/local/Cellar/icu4c/52.1/lib/libicuuc.dylib',
+        'icu_i18n_lib': '/usr/local/Cellar/icu4c/52.1/lib/libicui18n.dylib',
+        'version_tag': 52,
+    },
+    '5.2.0': {
+        'icu_uc_lib': '/usr/local/Cellar/icu4c/4.4.1/lib/libicuuc.dylib',
+        'icu_i18n_lib': '/usr/local/Cellar/icu4c/4.4.1/lib/libicui18n.dylib',
+        'version_tag': 44,
+    },
+}
+
+# Database
+# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Either 'django.db.backends.postgresql_psycopg2', 'django.db.backends.mysql' or 'django.db.backends.sqlite3'.
+        'NAME': BASE_DIR + '/dev.db',
+        # 'USER': 'myusername', # Your database username (not used for SQLite).
+        # 'PASSWORD': 's3krit', # Your database password (not used for SQLite).
+    }
+}
+
+# DELETE_FROM_HERE_AFTER_GENERATION
+if SECRET_KEY == 'PLEASE GENERATE ONE':
+    import os
+    thisfile = __file__[:-1] if __file__.endswith('pyc') else __file__
+    path = os.path.join(os.path.dirname(thisfile), '..', '..', '..', 'bin', 'gen_secret_key')
+    execfile(path, locals())
+    secret_key = write_secret_key(thisfile) # overwrite me
+    SECRET_KEY = secret_key
+    print >> sys.stderr, "generating SECRET_KEY (and writing to %s)" % __file__
+# DELETE_TO_HERE_AFTER_GENERATION

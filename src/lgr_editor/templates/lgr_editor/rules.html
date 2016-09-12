@@ -1,0 +1,26 @@
+{% extends "lgr_editor/_editor_base.html" %}
+{% load i18n %}
+
+{% block pane-rules-active %}active{% endblock %}
+
+{% block content-pane %}
+<div class="rules-body">
+
+<h4>{% trans "Classes" %}</h4>
+<pre>
+{{ rules.classes }}
+</pre>
+
+<h4>{% trans "Rules" %}</h4>
+<pre>
+{{ rules.rules }}
+</pre>
+
+<h4>{% trans "Actions" %}</h4>
+<pre>
+{{ rules.actions }}
+</pre>
+
+</div>
+
+{% endblock content-pane %}

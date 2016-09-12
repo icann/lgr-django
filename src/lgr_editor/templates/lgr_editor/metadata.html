@@ -1,0 +1,35 @@
+{% extends "lgr_editor/_editor_base.html" %}
+{% load i18n %}
+
+{% block pane-md-active %}active{% endblock %}
+
+{% block content-pane %}
+    <br>
+    <form class="form-horizontal" role="form" method="post">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-error">{% trans "There was an error saving; please see error(s) below" %}</div>
+        {% endif %}
+        {% include "lgr_editor/_form_field.html" with field=form.version %}
+        {% include "lgr_editor/_form_field.html" with field=form.version_comment %}
+        {% include "lgr_editor/_form_field.html" with field=form.date %}
+        {{ language_formset.management_form }}
+        {% for langform in language_formset %}
+            {% for field in langform %}
+                {% include "lgr_editor/_form_field.html" %}
+            {% endfor %}
+        {% endfor %}
+        {% include "lgr_editor/_form_field.html" with field=form.scope %}
+        {% include "lgr_editor/_form_field.html" with field=form.scope_type %}
+        {% include "lgr_editor/_form_field.html" with field=form.validity_start %}
+        {% include "lgr_editor/_form_field.html" with field=form.validity_end %}
+        {% include "lgr_editor/_form_field.html" with field=form.unicode_version %}
+        {% include "lgr_editor/_form_field.html" with field=form.description %}
+        {% include "lgr_editor/_form_field.html" with field=form.description_type %}
+        {% include "lgr_editor/_form_field.html" with field=form.validating_repertoire %}
+        <div class="text-right">
+            <button type="reset" class="btn btn-default">{% trans "Cancel" %}</button>
+            <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+        </div>
+    </form>
+{% endblock content-pane %}

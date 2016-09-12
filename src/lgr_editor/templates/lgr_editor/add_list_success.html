@@ -1,0 +1,7 @@
+{% load i18n %}
+
+<p>{% blocktrans %}Code points added. <a href="{{ url }}" href="_top">Click here</a> if you are not redirected automatically.{% endblocktrans %}</p>
+
+<script>
+    window.top.location.href = '{{ url }}';
+</script>

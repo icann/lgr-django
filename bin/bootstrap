@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+
+DSITE="src/lgr_web"
+
+if [ ! -e venv ]; then
+	echo "==> Creating virtualenv"
+	virtualenv2 venv || exit 3
+fi
+
+# activate virtualenv
+. venv/bin/activate
+
+echo "==> Installing packages"
+pip install -r etc/requirements.txt || exit 4
+
+if [ ! -e "$DSITE/settings/local.py" ]; then
+	echo "==> Copying local settings"
+	cd "$DSITE"
+	cp settings/local.py.template settings/local.py || exit 5
+	cd ../..
+	echo "==> Running migrate"
+	./manage.py migrate || exit 6
+else
+	echo "~~~ local settings already exists, assuming you're all set up"
+fi

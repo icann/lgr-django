@@ -1,0 +1,14 @@
+{% extends "_base_noframe.html" %}
+{% load i18n %}
+
+{% block content %}
+    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            {% include "lgr_editor/_form_field.html" with field=field %}
+        {% endfor %}
+        <div class="col-sm-12 text-right">
+            <button id="btn-add-range" type="submit" class="btn btn-primary">{% trans "Next" %}</button>
+        </div>
+    </form>
+{% endblock content %}

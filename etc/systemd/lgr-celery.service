@@ -1,0 +1,12 @@
+[Unit]
+Description=Celery application for LGR Toolset
+After=network.target
+
+[Service]
+WorkingDirectory=/var/www/lgr/lgr-django
+ExecStart=/var/www/lgr/venv/bin/celery --app=lgr_tools --workdir=/var/www/lgr/lgr-django/src --concurrency=2 --logfile=/var/log/lgr/celery-lgr.log worker
+User=lgr
+Group=lgr
+
+[Install]
+WantedBy=multi-user.target

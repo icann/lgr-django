@@ -1,0 +1,121 @@
+{% extends "lgr_editor/_editor_base.html" %}
+{% load i18n %}
+
+{% block pane-cp-active %}active{% endblock %}
+
+{% block content-pane %}
+    <div class="text-right" id="add-codepoint">
+        {% url 'expand_ranges' lgr_id=lgr_id as expand_ranges_url %}
+        <a href="{{ expand_ranges_url }}" class="btn btn-primary" >{% trans "Expand range(s)" %}</a>
+        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#add-codepoint-modal">{% trans "Add code point(s)" %}</a>
+    </div>
+    <table id="codepoints" class="table table-hover table-striped table-bordered">
+        <tr>
+            <th>{% trans "Code point" %}</th>
+            <th>{% trans "Character Name" %}</th>
+            <th>{% trans "Comments" %}</th>
+            <th>{% trans "Action" %}</th>
+        </tr>
+    {% for char in repertoire %}
+        {% url 'codepoint_view' lgr_id=lgr_id codepoint_id=char.cp as cp_url %}
+        {% url 'expand_range' lgr_id=lgr_id codepoint_id=char.cp as expand_range_url %}
+        <tr data-url="{{ cp_url }}">
+            <td><a href="{{ cp_url }}">{{ char.cp_disp }}</a> {% if not char.is_range %}<span class="variant_count">{{ char.variant_number }}&nbsp;{% trans "Variant(s)" %}</span>{% endif %}</td>
+            <td><a href="{{ cp_url }}">{{ char.name }}</a></td>
+            <td><a href="{{ cp_url }}">{{ char.comment }}</a></td>
+            <td><a href="{{ cp_url }}" class="btn btn-primary btn-block">{% trans "See code point" %}</a>
+            {% if char.is_range %}
+                <a href="{{ expand_range_url }}" class="btn btn-primary btn-block"> {% trans "Expand range" %}</a>
+            {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+
+
+    {#### BEGIN add codepoint modal ####}
+    <div class="modal fade" id="add-codepoint-modal" data-summary-url="{% url 'summary' lgr_id %}">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="close-modal" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{% trans "Add code point(s)" %}</h4>
+                </div>
+                <div class="modal-body">
+
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#addcp" aria-controls="addcp" role="tab" data-toggle="tab">{% trans "Code point" %}</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#addrange" aria-controls="addrange" role="tab" data-toggle="tab">{% trans "Code point range" %}</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#import" aria-controls="import" role="tab" data-toggle="tab">{% trans "Import from file" %}</a>
+                        </li>
+                    </ul>
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="addcp">
+                            <br>
+                            <form class="form-horizontal" method="post">
+                                {% csrf_token %}
+                                {% include "lgr_editor/_form_field.html" with field=cp_form.codepoint label_width=4 field_width=8 %}
+                                {% include "lgr_editor/_form_field_checkbox.html" with field=cp_form.override_repertoire label_width=4 field_width=8 %}
+                                <div class="col-sm-12 text-right">
+                                    <button type="submit" class="btn btn-primary" name="add_cp">{% trans "Add Code Point" %}</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="addrange">
+                            <iframe id="range-iframe" data-url="{% url 'add_range' lgr_id %}" src="{% url 'add_range' lgr_id %}" frameborder="0" width="100%"></iframe>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="import">
+                            <iframe id="import-file-iframe" data-url="{% url 'import_from_file' lgr_id %}" src="{% url 'import_from_file' lgr_id %}" frameborder="0" width="100%"></iframe>
+                        </div>
+                    </div>
+
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    {#### END add codepoint modal ####}
+
+{% endblock content-pane %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $("#add-codepoint-modal")
+                    .on('show.bs.modal', function(event) {
+                        // reset iframe URLs whenever modal is shown (so we won't get stale content)
+                        $(this).find('iframe').each(function() {
+                            this.src = $(this).data('url');
+                        });
+                    })
+                    .on('shown.bs.modal', function(event) {
+                        // resize iframes
+                        var modal_body = $(this).find(".modal-body");
+                        $("#range-iframe").outerHeight(modal_body.height() - modal_body.find(".nav-tabs").outerHeight() - 5);
+                        $("#import-file-iframe").outerHeight(modal_body.height() - modal_body.find(".nav-tabs").outerHeight() - 5);
+                    })
+                    .on('hide.bs.modal', function(event) {
+			            var iframe = $('#import-file-iframe');
+		                var tmp_lgr = $('#id_tmp_lgr', iframe.contents()).attr('value');
+		                var url = '{% url "delete_lgr" "TODO_REPLACE" %}'.replace('TODO_REPLACE', tmp_lgr);
+		                if (tmp_lgr) {
+		                    $.ajax({
+		                        type: "GET",
+		                        url: url,
+		                    });
+		                };
+                    });
+
+            $("#codepoints tr[data-url]").click(function() {
+                window.location.href = $(this).data('url');
+            });
+
+        });
+    </script>
+{% endblock html_body_more %}

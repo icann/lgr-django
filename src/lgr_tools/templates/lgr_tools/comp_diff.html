@@ -1,0 +1,16 @@
+{% extends base_template|default:"_base.html" %}
+{% load i18n %}
+
+{% block content %}
+{% url 'codepoint_list' lgr_id=lgr_1.name as lgr_1_url %}
+{% url 'codepoint_list' lgr_id=lgr_2.name as lgr_2_url %}
+<h2>{% blocktrans with lgr_1_name=lgr_1.name lgr_2_name=lgr_2.name %}Result of diff of <a href="{{ lgr_1_url }}">{{ lgr_1_name }}</a> with <a href="{{ lgr_2_url }}">{{ lgr_2_name }}</a> {% endblocktrans %}</h2>
+<div class="diff-body">
+
+<pre>
+{{ content }}
+</pre>
+
+</div>
+
+{% endblock content %}

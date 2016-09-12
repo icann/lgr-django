@@ -1,0 +1,44 @@
+{% extends base_template|default:"_base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.lgr_1 %}
+        {% include "lgr_editor/_form_field.html" with field=form.lgr_2 %}
+        {% include "lgr_editor/_form_field.html" with field=form.labels %}
+        <p>{% blocktrans %}As the computing may be very long, we will warn by e-mail once the result can be downloaded. Please provide a valid e-mail address:{% endblocktrans %}</p>
+        {% include "lgr_editor/_form_field.html" with field=form.email %}
+        {% include "lgr_editor/_form_field_checkbox.html" with field=form.collision label_width=7 field_width=8 %}
+        {% include "lgr_editor/_form_field_checkbox.html" with field=form.with_rules label_width=7 field_width=8 %}
+        <div id='dump_box'>
+            {% include "lgr_editor/_form_field_checkbox.html" with field=form.full_dump label_width=7 field_width=8 %}
+        </div>
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">{% trans "Get diff" %}</button>
+        </div>
+    </form>
+
+{% endblock content %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            function check_collision() {
+                if($('#id_collision').is(':checked')){
+                    $('#dump_box').show();
+                } else {
+                    $('#dump_box').hide();
+                }
+            }
+            $('#id_collision').click(function(){check_collision()});
+            $('#id_collision').show(function(){check_collision()});
+        });
+    </script>
+{% endblock html_body_more %}

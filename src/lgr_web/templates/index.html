@@ -1,0 +1,109 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h1>{% trans "Welcome to the LGR (Label Generation Ruleset) Editor" %}</h1>
+
+    <p>
+    {% blocktrans trimmed %}
+        This application provides a convenient interface for browsing
+        and editing <abbr title="Label Generation Ruleset">LGR</abbr>’s conforming to the
+        <a href="https://tools.ietf.org/html/draft-davies-idntables-09">Representing Label Generation Rulesets using XML</a>
+        specification.
+    {% endblocktrans %}
+    </p>
+
+    {% if lgrs %}
+        <h3>{% trans "Your LGRs" %}</h3>
+        <p>
+            {% blocktrans trimmed %}
+                Previously, you edited the following LGR file(s). Click on its title to resume your editing session. <br/>
+                <strong><i class="glyphicon glyphicon-alert"></i> Note that importing large LGR files may take significant time to load on your browser.</strong>
+            {% endblocktrans %}
+        </p>
+        <ul>
+            {% for lgr in lgrs %}
+                <li>
+                    <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
+                    <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-trash"></i></a>
+                </li>
+            {% endfor %}
+        </ul>
+        <br>
+        <p>
+            {% blocktrans trimmed %}
+                You may also use one of the following options:
+            {% endblocktrans %}
+        </p>
+    {% else %}
+        {# no LGR #}
+        <p>
+            {% blocktrans trimmed %}
+                To begin using this application, you may use one of the following options:
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+
+        <p>
+                <a href="{% url 'import_lgr' %}" class="btn btn-default btn-sm">
+                    <i class="glyphicon glyphicon-folder-open"></i>&nbsp;
+                    {% trans "Import an existing XML file" %}
+                </a>
+            <br>
+            <br>
+                <a href="{% url 'new_lgr' %}" class="btn btn-default btn-sm">
+                    <i class="glyphicon glyphicon-file"></i>
+                    {% trans "Start with a New blank XML file" %}
+                </a>
+            <br>
+            <br>
+                {% blocktrans trimmed %}
+                    Alternatively, you may select one of the built-in LGR’s below as a starting point.
+                {% endblocktrans %}
+        </p>
+
+    <h3>{% trans "Built-in LGRs" %}</h3>
+    <p>{% blocktrans trimmed %}
+        The following LGRs are pre-installed in the system.
+        You may use them as a starting point for your own LGR.
+        To do so, just click on it to make a copy that you can then edit.
+    {% endblocktrans %}
+    </p>
+    <ul>
+        {% for xml in lgr_xml %}
+            <li><a href="{% url 'import_reference_lgr' xml %}">{% blocktrans %}Open {{xml}}{% endblocktrans %}</a></li>
+        {% endfor %}
+    </ul>
+
+    <p>
+        {% blocktrans trimmed %}
+            <strong class="text-danger">Remember to save your work regularly by downloading a copy of the XML file.</strong>
+        {% endblocktrans %}
+    </p>
+
+    {% if storage %}
+        <h3>{% trans "Your saved results" %}</h3>
+        <p>
+            {% blocktrans trimmed %}
+                The following files contains your tools computation results.<br/>
+                <strong><i class="glyphicon glyphicon-alert"></i> Note that these files could be cleaned up regularly.</strong>
+            {% endblocktrans %}
+        </p>
+        <ul>
+            {% for file in storage %}
+                <li>
+                    <a href="{% url 'download_file' file %}">{% blocktrans %}Download {{ file }}{% endblocktrans %}</a>
+                    <a href="{% url 'delete_file' file %}" class="delete_file"><i class="glyphicon glyphicon-trash"></i></a>
+                </li>
+            {% endfor %}
+        </ul>
+        <br>
+    {% endif %}
+
+    <p>
+        {% blocktrans trimmed %}
+            Please send any feedback to <a href="mailto:support@viagenie.ca">support@viagenie.ca</a>.
+        {% endblocktrans %}
+    </p>
+
+{% endblock %}

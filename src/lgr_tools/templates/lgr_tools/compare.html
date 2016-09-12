@@ -1,0 +1,20 @@
+{% extends base_template|default:"_base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.lgr_1 %}
+        {% include "lgr_editor/_form_field.html" with field=form.lgr_2 %}
+        {% include "lgr_editor/_form_field.html" with field=form.action %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">{% trans "Compare" %}</button>
+        </div>
+    </form>
+
+{% endblock content %}

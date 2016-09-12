@@ -1,0 +1,33 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block content %}
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.file %}
+        {% include "lgr_editor/_form_field.html" with field=form.validating_repertoire %}
+        {% if lgrs %}
+            <strong>{% trans "These LGRs are already imported. Click on one to access it." %}</strong>
+            <ul>
+                {% for lgr in lgrs %}
+                    <li>
+                        <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}{{ lgr_name }}{% endblocktrans %}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <br>
+        {% endif %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">{% trans "Import" %}</button>
+        </div>
+    </form>
+
+    <p>
+        {% blocktrans trimmed %}
+            <strong class="text-danger"><i class="glyphicon glyphicon-alert"></i> Note that importing large LGR files may take significant time to load on your browser.</strong>
+        {% endblocktrans %}
+    </p>
+{% endblock content %}

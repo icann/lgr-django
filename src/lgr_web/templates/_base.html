@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>{% block html_title %}{% trans 'LGR Editor' %}{% endblock %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="{% static 'chrome/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="{% static 'chrome/css/lgr.css' %}">
+        {% block html_head_more %}{% endblock %}
+    </head>
+    <body>
+        {% block navbar %}
+            <nav class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div id="navbar" class="collapse navbar-collapse">
+                        <p>
+                            <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom"><i class="glyphicon glyphicon-home"></i></a>
+                            <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom">{% trans "LGR Editor" %}</a>
+                            {% if lgr %}
+                                / <a href="{% url 'codepoint_list' lgr_id %}">{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}</a>
+                                {% if cp %}/ <a href="{% url 'codepoint_view' lgr_id cp %}">{{ cp_disp }} {{ name }}</a>{% endif %}
+                            {% endif %}
+
+                        </p>
+                        <form class="navbar-form navbar-left">
+                            <a href="{% url 'import_lgr' %}" class="btn btn-default show-tooltip"
+                               title="{% trans 'Import an existing LGR file' %}" data-placement="bottom">
+                                <i class="glyphicon glyphicon-folder-open"></i>&nbsp;
+                                {% trans "Import" %}
+                            </a>
+                            <a href="{% url 'new_lgr' %}" class="btn btn-default show-tooltip"
+                               title="{% trans 'Create a new LGR file' %}" data-placement="bottom">
+                                <i class="glyphicon glyphicon-file"></i>
+                                {% trans "New" %}
+                            </a>
+                            <div class="dropdown form-group">
+                                <a href="" class="btn btn-default dropdown-toggle"
+                                   data-toggle="dropdown" title="{% trans 'Tools' %}" data-placement="bottom">
+                                    <i class="glyphicon glyphicon-cog"></i>
+                                    {% trans "Tools" %}
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_compare' lgr_id %}"
+                                           title="{% trans 'Compare two LGR' %}" data-placement="bottom">
+                                            <i class="glyphicon glyphicon-transfer"></i>
+                                            {% trans "Compare" %}
+                                    </a></li>
+                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_diff' lgr_id %}"
+                                           title="{% trans 'Get difference for a list of labels for two LGR versions' %}"
+                                           data-placement="bottom">
+                                            <i class="glyphicon glyphicon-random"></i>
+                                            {% trans "Diff" %}
+                                    </a></li>
+                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_collisions' lgr_id %}"
+                                           title="{% trans 'Get collisions in a list of labels' %}" data-placement="bottom">
+                                            <i class="glyphicon glyphicon-resize-small"></i>
+                                            {% trans "Collisions" %}
+                                    </a></li>
+                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_annotate' lgr_id %}"
+                                           title="{% trans 'Annotate list of labels with their disposition' %}" data-placement="bottom">
+                                            <i class="glyphicon glyphicon-list"></i>
+                                            {% trans "Annotate" %}
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </form>
+                        <div class="navbar-form navbar-right">
+                            {% if lgr_id %}
+                                <a class="btn btn-default show-tooltip"
+                                   data-toggle="modal" data-target="#validation-modal"
+                                   title="{% trans 'Validate label against LGR' %}" data-placement="bottom">
+                                    <i class="glyphicon glyphicon-ok"></i>
+                                    {% trans "Validate label" %}
+                                </a>
+                                <a class="btn btn-default show-tooltip"
+                                        data-toggle="modal" data-target="#lgr-summary-modal"
+                                        title="{% trans 'Analyze current file for errors and statistics' %}"
+                                        data-placement="bottom">
+                                    <i class="glyphicon glyphicon-list-alt"></i>
+                                    {% trans "Summary" %}
+                                </a>
+                                <a class="btn btn-default show-tooltip"
+                                   title="{% trans 'Preview LGR file' %}" data-placement="bottom"
+                                   href="{% url 'view_lgr_xml' lgr_id %}" target="_blank">
+                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                    {% trans "View XML" %}
+                                </a>
+                                <a class="btn btn-default show-tooltip"
+                                   title="{% trans 'Download LGR file' %}" data-placement="bottom"
+                                   href="{% url 'download_lgr_xml' lgr_id %}">
+                                    <i class="glyphicon glyphicon-save"></i> {% trans "Download" %}
+                                </a>
+                            {% else %}
+                                <a class="btn btn-default show-tooltip"
+                                   data-toggle="modal" data-target="#about-modal"
+                                   title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
+                                    <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </nav>
+        {% endblock navbar %}
+
+        {% block messages %}
+            {% include "_msgs.html" %}
+        {% endblock messages %}
+
+
+        {% block container %}
+        <div class="container">
+            {% block content %}
+                <h1>Bootstrap starter template</h1>
+                <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+                <div class="row">
+                    <div class="span4">
+                        <h2>Heading</h2>
+                        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                        <p><a class="btn" href="#">View details &raquo;</a></p>
+                    </div>
+                    <div class="span4">
+                        <h2>Heading</h2>
+                        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+                        <p><a class="btn" href="#">View details &raquo;</a></p>
+                   </div>
+                    <div class="span4">
+                        <h2>Heading</h2>
+                        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                        <p><a class="btn" href="#">View details &raquo;</a></p>
+                    </div>
+                </div>
+            {% endblock content %}
+            {% block footer %}
+            <hr>
+            <footer>
+                <p class="pull-right"><small>&copy;</small></p>
+                {% include "_languages.html" %}
+                <ul class="inline">
+                </ul>
+            </footer>
+            {% endblock %}
+
+        </div> <!-- /container -->
+        {% endblock container %}
+
+        <!-- Summary Modal -->
+        {% if lgr_id %}
+        <div class="modal fade" id="lgr-summary-modal" data-summary-url="{% url 'summary' lgr_id %}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{% trans "LGR Summary" %}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="spinner"><img src="{% static 'chrome/img/spinner.gif' %}" alt=""></div>
+                        {% if lgr_id %}
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-info" href="{% url 'summary_save' lgr_id=lgr_id %}">
+                            <i class="glyphicon glyphicon-save"></i>
+                            {% blocktrans %}Save summary{% endblocktrans %}
+                        </a>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        {% endif %}
+
+        <!-- Validation Modal -->
+        {% if lgr_id %}
+        <div class="modal fade" id="validation-modal" data-validate-url="{% url 'lgr_validate_label_noframe' lgr_id %}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{% trans "Validate label" %}</h4>
+                    </div>
+                    <div id="validation-modal-body" class="modal-body" style="height: 85vh;">
+                        <iframe id="validation-model-iframe" data-url="{% url 'lgr_validate_label_noframe' lgr_id %}" src="{% url 'lgr_validate_label_noframe' lgr_id %}" frameborder="0" width="100%" height="98%"></iframe>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        {% endif %}
+
+        <!-- About Modal -->
+        <div class="modal fade" id="about-modal" data-summary-url="{% url 'about' %}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{% trans "About" %}</h4>
+                    </div>
+                    <div id="modal-body" class="modal-body">
+                        <iframe id="about-iframe" data-url="{% url 'about' %}" src="{% url 'about' %}" frameborder="0" width="100%" height="100%"></iframe>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{% static 'chrome/js/vendor/jquery.min.js' %}"><\/script>')</script>
+        <script src="{% static 'chrome/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script>
+            jQuery(document).ready(function($) {
+                $("#lgr-summary-modal").on('show.bs.modal', function() {
+                    var spinner = $(this).find('.spinner');
+                    spinner.show();
+                    var url = $("#lgr-summary-modal").data('summaryUrl');
+                    var success = function(html) {
+                        $("#lgr-summary-modal .modal-body").html(html);
+                        spinner.hide();
+                    };
+                    $.get(url, null, success, 'html');
+                });
+                $('.datepicker').datepicker({
+                    dateFormat: "yy-mm-dd"
+                });
+                $('.show-tooltip').tooltip();
+            });
+        </script>
+        {% block html_body_more %}{% endblock %}
+    </body>
+</html>
+
+
+
+
+

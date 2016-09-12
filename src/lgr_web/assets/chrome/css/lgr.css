@@ -1,0 +1,117 @@
+body {
+	padding-top: 90px;
+	padding-bottom: 40px;
+}
+
+.modal-body {
+	height: 500px;
+	overflow: auto;
+}
+
+.navbar-text {
+	font-size: larger;
+	font-weight: bold;
+}
+
+.errorlist {
+	color: red;
+}
+
+.alert-error {
+	color: red;
+}
+
+.modal-section-title {
+	font-size: x-large;
+}
+
+.navbar p {
+	font-size: larger;
+	color: #eee;
+}
+
+.navbar p > a {
+	color: #eee;
+}
+
+.navbar-form.navbar-left {
+	/* remove the left padding to flush align with title */
+	padding-left: 0;
+}
+
+.variant_count {
+	color: #6d6d6d;
+	font-style: italic;
+	font-size: small;
+}
+
+#add-codepoint {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.ref-entry {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.table > tbody > tr > td {
+	vertical-align: middle;
+}
+
+.codepoint-display > input {
+	width: 6em;
+}
+
+.codepoint-type > input {
+	width: 10em;
+}
+
+.codepoint-age > input {
+	width: 4em;
+}
+
+.codepoint-conditional > select, #ref-choice {
+	width: 12em;
+}
+
+.ref-id {
+	width: 10%;
+}
+
+.ref-id > input {
+	border: none;
+}
+
+.ref-desc {
+	width: 45%;
+}
+.ref-comment {
+	width: 40%;
+}
+#refs-table td input {
+	width: 100%;
+}
+
+.ref-desc > input {
+	width: 100%;
+}
+
+#codepoints tr {
+	cursor: pointer;
+}
+
+#edit_cp_button {
+	margin-top: 20px;
+	margin-bottom: 5px;
+}
+
+.delete_lgr {
+	color: darkgrey;
+	text-decoration: none;
+}
+
+.delete_lgr:hover {
+	color: grey;
+	text-decoration: none;
+}

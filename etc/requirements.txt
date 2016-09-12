@@ -1,0 +1,9 @@
+# Core stuff
+Django==1.8.4
+django-widget-tweaks==1.4.1
+celery==3.1.23
+
+# LGR/Unicode modules
+picu==0.8
+munidata==1.2
+lgr-core==1.6

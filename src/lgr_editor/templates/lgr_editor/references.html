@@ -1,0 +1,54 @@
+{% extends "lgr_editor/_editor_base.html" %}
+{% load i18n %}
+
+{% block pane-ref-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h3>{% trans 'Existing references' %}</h3>
+        <form class="form-inline" method="post">
+            {% csrf_token %}
+            {{ references_form.management_form }}
+            <table id="refs-table" class="table table-hover table-striped">
+                <tr>
+                    <th>{% trans "Reference id" %}</th>
+                    <th>{% trans "Description" %}</th>
+                    <th>{% trans "URL" %}</th>
+                    <th>{% trans "Action" %}</th>
+                </tr>
+                {% for ref in references_form %}
+                    <tr id="ref_{{ ref.ref_id.value }}">
+                        <td class="ref-id">{{ ref.ref_id }}</td>
+                        <td class="ref-desc">{{ ref.description }}</td>
+                        <td class="ref-comment">{{ ref.comment }}</td>
+                        <td class="text-right">
+                            <a class="btn btn-default confirm-prompt"
+                               title="{% trans 'Delete reference' %}"
+                               data-confirmation-prompt="{% trans "Are you sure you want delete this reference?" %}"
+                               href="{% url 'reference_delete' lgr_id=lgr_id ref_id=ref.ref_id.value %}">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <button type="submit" class="btn btn-primary" name="edit_references">{% trans "Save" %}</button>
+        </form>
+
+    <h3>{% trans 'New reference' %}</h3>
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        {{add_reference_form.error}}
+        <table class="table table-hover table-striped">
+            <tr>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "URL" %}</th>
+            </tr>
+            <tr>
+                <td class="ref-desc">{{add_reference_form.description}}</td>
+                <td>{{add_reference_form.comment}}</td>
+            </tr>
+         </table>
+        <button type="submit" class="btn btn-primary" name="add_reference">{% trans "Add" %}</button>
+    </form>
+
+{% endblock content-pane %}
