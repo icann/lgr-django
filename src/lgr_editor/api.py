@@ -9,6 +9,7 @@ from uuid import uuid4
 
 from django.http import Http404
 from django.utils import six
+from django.utils.text import slugify
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
@@ -30,11 +31,13 @@ logger = logging.getLogger(__name__)
 
 
 class LGRInfo(object):
-    def __init__(self, name, lgr=None, xml=None, validating_repertoire=None):
+    def __init__(self, name, lgr=None, xml=None, validating_repertoire=None, lgr_set=None, zone_labels=None):
         self.name = name
         self.lgr = lgr
         self.xml = xml
         self.validating_repertoire = validating_repertoire
+        self.lgr_set = lgr_set
+        self.zone_labels = zone_labels
 
     def update_xml(self, pretty_print=False):
         # if something was changed in `lgr`, calling this will re-generate the xml
@@ -56,6 +59,18 @@ class LGRInfo(object):
         name = dct.get('name', '')
         xml = dct['xml']
         validate = dct.get('validate', False)
+        zone_labels = dct.get('zone_labels', None)
+        lgr_set_dct = dct.get('lgr_set_dct', None)
+        lgr_set = None
+        if lgr_set_dct:
+            lgr_set = []
+            for lgr_dct in lgr_set_dct:
+                lgr_set.append(cls.from_dict(lgr_dct, lgr_loader_func=lgr_loader_func))
+
+        # check if xml is of unicode type
+        if isinstance(xml, six.text_type):
+            # convert to a str (bytes in PY3) to be consistent
+            xml = xml.encode('utf-8')
 
         # Parse XML #
         # Replace old namespace by the new one for compatibility purpose with
@@ -105,7 +120,9 @@ class LGRInfo(object):
         lgr_info = cls(name=name,
                        xml=xml,
                        lgr=lgr,
-                       validating_repertoire=val_lgr)
+                       validating_repertoire=val_lgr,
+                       lgr_set=lgr_set,
+                       zone_labels=zone_labels)
         return lgr_info
 
     def to_dict(self):
@@ -113,7 +130,13 @@ class LGRInfo(object):
             'name': self.name,
             'xml': self.xml,
             'validating_repertoire': self.validating_repertoire.name if self.validating_repertoire else None,
+            'lgr_set_dct': map(lambda x: x.to_dict(), self.lgr_set) if self.is_set() else None,
+            'zone_labels': self.zone_labels,
+            'is_set': self.is_set()  # for index.html
         }
+
+    def is_set(self):
+        return self.lgr_set is not None and len(self.lgr_set) > 1
 
 
 def get_builtin_or_session_repertoire(repertoire_id, request):
@@ -165,7 +188,8 @@ def session_new_lgr(request, lgr_id, unicode_version, validating_repertoire_name
 
 def session_open_lgr(request, lgr_id, lgr_xml,
                      validating_repertoire_name=None,
-                     validate=False):
+                     validate=False, from_set=False,
+                     lgr_set=None, zone_labels=None):
     """
     Parse the given LGR in XML format, and save it in session.
 
@@ -174,6 +198,9 @@ def session_open_lgr(request, lgr_id, lgr_xml,
     :param lgr_xml: a string with the xml
     :param validating_repertoire_name: optional name of a validating repertoire
     :param validate: if True, ensure the XML is valid LGR XML
+    :param from_set: Whether the LGR belongs to a set or not
+    :param lgr_set: The list of LGRInfo in the set if this is a merged LGR from a set
+    :param zone_labels: The list of labels in the zone for LGR sets
     :return: `LGRInfo`
     """
     lgr_info = LGRInfo.from_dict(
@@ -182,19 +209,27 @@ def session_open_lgr(request, lgr_id, lgr_xml,
             'xml': lgr_xml,
             'validating_repertoire': validating_repertoire_name,
             'validate': validate,
+            'lgr_set_dct': map(lambda x: x.to_dict(), lgr_set) if lgr_set else None,
+            'zone_labels': zone_labels
         },
         lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request)
     )
-    session_save_lgr(request, lgr_info)
+    if not from_set:
+        # do not save lgr in session, it will be kept in set
+        session_save_lgr(request, lgr_info)
+    else:
+        lgr_info.update_xml()
+
     return lgr_info
 
 
-def session_select_lgr(request, lgr_id):
+def session_select_lgr(request, lgr_id, lgr_set_id=None):
     """
     Find the LGR identified by `lgr_id` in the session.
 
     :param request: Django request object
     :param lgr_id: a slug identifying the LGR
+    :param lgr_set_id: a slug identifying a LGR in the LGR set
     :return: `LGRInfo`
     """
     known_lgrs = request.session.get(LGRS_SESSION_KEY, {})
@@ -203,13 +238,18 @@ def session_select_lgr(request, lgr_id):
 
     lgr_dct = known_lgrs[lgr_id]
 
-    # check if xml is of unicode type
-    xml = lgr_dct['xml']
-    if isinstance(xml, six.text_type):
-        # convert to a str (bytes in PY3) to be consistent
-        lgr_dct['xml'] = xml.encode('utf-8')
-    return LGRInfo.from_dict(lgr_dct,
-                             lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
+    if not lgr_set_id:
+        return LGRInfo.from_dict(lgr_dct,
+                                 lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
+
+    if not lgr_dct.get('lgr_set_dct', None):
+        raise Http404
+
+    for lgr in lgr_dct.get('lgr_set_dct'):
+        if lgr['name'] == lgr_set_id:
+            return LGRInfo.from_dict(lgr,
+                                     lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
+    raise Http404
 
 
 def session_save_lgr(request, lgr_info, lgr_id=None, update_xml=True):
@@ -239,6 +279,40 @@ def session_delete_lgr(request, lgr_id):
         raise Http404
     # mark session as modified because we are possibly only changing the content of a dict
     request.session.modified = True
+
+
+def session_merge_set(request, lgr_set, zone_labels_file):
+    """
+    Merge some LGR to build a set
+    :param request: Django request object
+    :param lgr_set: The list of LGRs id in the set
+    :param zone_labels: The labels in the LGR set zone
+    :return: The LGR set merge id
+    """
+    from lgr.tools.compare import union_lgrs
+    from lgr.tools.utils import read_labels
+    from lgr_tools.tasks import prepare_labels
+    merged_info = lgr_set[0]
+    merged_id = None
+    for lgr_info in lgr_set[1:]:
+        lgr_info_1 = merged_info
+        lgr_info_2 = lgr_info
+        result_lgr = union_lgrs(lgr_info_1.lgr, lgr_info_2.lgr)
+        # Generate new slug (LGR id)
+        merged_id = slugify(result_lgr.name)
+
+        merged_info = LGRInfo(name=merged_id,
+                              lgr=result_lgr)
+        merged_info.update_xml()
+
+    lgr, labels = prepare_labels({'xml': merged_info.xml, 'name': merged_info.name},
+                                 zone_labels_file.read().decode('utf-8'))
+    zone_labels = [l for l in read_labels(labels, lgr.unicode_database)]
+
+    session_open_lgr(request, merged_id, merged_info.xml,
+                     validating_repertoire_name=None,
+                     validate=True, lgr_set=lgr_set, zone_labels=zone_labels)
+    return merged_id
 
 
 def session_get_storage(request):

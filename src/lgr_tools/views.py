@@ -155,6 +155,7 @@ def lgr_collisions(request, lgr_id):
 
         storage_path = session_get_storage(request)
 
+        # need to transmit json serializable data
         labels = {
             'data': labels_file.read(),
             'name': labels_file.name
@@ -203,6 +204,7 @@ def lgr_annotate(request, lgr_id):
 
         storage_path = session_get_storage(request)
 
+        # need to transmit json serializable data
         labels = {
             'data': labels_file.read(),
             'name': labels_file.name

@@ -22,6 +22,33 @@ from lgr_editor.lgr_exceptions import lgr_exception_to_text
 logger = logging.getLogger(__name__)
 
 
+def prepare_labels(lgr_infos, labels):
+    """
+    Get relevant information to parse labels and correctly encode label content
+
+    :param lgr_infos: The related LGRs information
+    :param labels: The label file content
+    :return: The related LGRs and the labels content in a correct format
+    """
+    if not isinstance(lgr_infos, list):
+        lgr_infos = [lgr_infos]
+
+    lgrs = []
+    for lgr_info in lgr_infos:
+        lgr_parser = XMLParser(StringIO(lgr_info['xml'].encode('utf-8')),
+                               lgr_info['name'])
+        lgr = lgr_parser.parse_document()
+        lgr.unicode_database = unidb.manager.get_db_by_version(
+            lgr.metadata.unicode_version)
+        lgrs.append(lgr)
+        labels = iterdecode(StringIO(labels.encode('utf-8')), 'utf-8')
+
+    if len(lgrs) == 1:
+        lgrs = lgrs[0]
+
+    return lgrs, labels
+
+
 def _lgr_tool_task(labels_info, storage_path, base_filename, email_subject,
                    email_body, email_address, cb, **cb_kwargs):
     """
@@ -78,13 +105,13 @@ def _lgr_tool_task(labels_info, storage_path, base_filename, email_subject,
 
 
 @shared_task
-def diff_task(lgr_1, lgr_2, labels_info, email_address, collision, full_dump,
+def diff_task(lgr_info_1, lgr_info_2, labels_info, email_address, collision, full_dump,
               with_rules, storage_path):
     """
     Launch difference computation for a list of labels between two LGR
 
-    :param lgr_1: The first LGR useful elements
-    :param lgr_2: The second LGR useful elements
+    :param lgr_info_1: The first LGR useful elements
+    :param lgr_info_2: The second LGR useful elements
     :param labels_info: The labels useful data
     :param email_address: The e-mail address where the results will be sent
     :param collision: Whether we also compute collisions
@@ -93,17 +120,10 @@ def diff_task(lgr_1, lgr_2, labels_info, email_address, collision, full_dump,
     :param storage_path: The place where results will be stored
     :return:
     """
-    lgr1_parser = XMLParser(StringIO(lgr_1['xml'].encode('utf-8')),
-                            lgr_1['name'])
-    lgr2_parser = XMLParser(StringIO(lgr_2['xml'].encode('utf-8')),
-                            lgr_2['name'])
-    lgr1 = lgr1_parser.parse_document()
-    lgr2 = lgr2_parser.parse_document()
-    lgr1.unicode_database = unidb.manager.get_db_by_version(
-        lgr1.metadata.unicode_version)
-    lgr2.unicode_database = unidb.manager.get_db_by_version(
-        lgr2.metadata.unicode_version)
-    labels = iterdecode(StringIO(labels_info['data'].encode('utf-8')), 'utf-8')
+    lgrs, labels = prepare_labels([lgr_info_1, lgr_info_2], labels_info['data'])
+
+    lgr1 = lgrs[0]
+    lgr2 = lgrs[1]
 
     body = "Hi,\nThe processing of diff from labels provided in the attached " \
            "file '{f}' between LGR '{lgr1}' and " \
@@ -139,12 +159,7 @@ def collision_task(lgr_info, labels_info, email_address, full_dump,
     :param storage_path: The place where results will be stored
     :return:
     """
-    lgr_parser = XMLParser(StringIO(lgr_info['xml'].encode('utf-8')),
-                           lgr_info['name'])
-    lgr = lgr_parser.parse_document()
-    lgr.unicode_database = unidb.manager.get_db_by_version(
-        lgr.metadata.unicode_version)
-    labels = iterdecode(StringIO(labels_info['data'].encode('utf-8')), 'utf-8')
+    lgr, labels = prepare_labels(lgr_info, labels_info['data'])
 
     body = "Hi,\nThe processing of collisions from labels provided in the " \
            "attached file '{f}' in LGR '{lgr}' has".format(f=labels_info['name'],
@@ -171,12 +186,7 @@ def annotate_task(lgr_info, labels_info, email_address, storage_path):
     :param email_address: The e-mail address where the results will be sent
     :param storage_path: The place where results will be stored
     """
-    lgr_parser = XMLParser(StringIO(lgr_info['xml'].encode('utf-8')),
-                           lgr_info['name'])
-    lgr = lgr_parser.parse_document()
-    lgr.unicode_database = unidb.manager.get_db_by_version(
-        lgr.metadata.unicode_version)
-    labels = iterdecode(StringIO(labels_info['data'].encode('utf-8')), 'utf-8')
+    lgr, labels = prepare_labels(lgr_info, labels_info['data'])
 
     body = "Hi,\nThe processing of annotation from labels provided in the " \
            "attached file '{f}' in LGR '{lgr}' has".format(f=labels_info['name'],

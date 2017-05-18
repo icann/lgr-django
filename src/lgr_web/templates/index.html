@@ -23,12 +23,53 @@
         </p>
         <ul>
             {% for lgr in lgrs %}
-                <li>
-                    <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
-                    <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-trash"></i></a>
-                </li>
+                {% if not lgr.is_set %}
+                    <li>
+                        <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
+                        <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-trash"></i></a>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
+        <!--<h4>{% trans "LGR sets" %}</h4>-->
+        {% for lgr in lgrs %}
+            {% if lgr.is_set %}
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h5 class="panel-title">
+                                <a data-toggle="collapse" href="#{{lgr.name}}"><i class="glyphicon glyphicon-chevron-down"></i> {{ lgr.name }}</a>
+                                <a href="{% url 'codepoint_list' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-trash"></i></a>
+                            </h5>
+                        </div>
+                        <div id={{lgr.name}} class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul>
+                                    {% for lgr_info in lgr.lgr_set_dct %}
+                                        <li>
+                                            <a href="{% url 'codepoint_list' lgr.name lgr_info.name %}">{% blocktrans with lgr_name=lgr_info.name %}View {{ lgr_name }}{% endblocktrans %}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                <div class="panel-group">
+                                    <div class="panel-heading">
+                                        <b><a data-toggle="collapse" href="#{{lgr.name}}_labels">{% blocktrans %} Zone labels{% endblocktrans %}</a></b>
+                                    </div>
+                                    <div id={{lgr.name}}_labels class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            {% for label in lgr.zone_labels %}
+                                                {{ label }}<br>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
         <br>
         <p>
             {% blocktrans trimmed %}

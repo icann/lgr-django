@@ -57,6 +57,7 @@ from .api import (session_open_lgr,
                   session_list_lgr,
                   session_get_file,
                   session_delete_file,
+                  session_merge_set,
                   get_builtin_or_session_repertoire, LGRInfo)
 from .utils import (render_char,
                     render_name,
@@ -111,32 +112,61 @@ def import_lgr(request):
     """
     form = ImportLGRForm(request.POST or None, request.FILES or None)
     if form.is_valid():
-        lgr_id = form.cleaned_data['file'].name
-        if not RE_SAFE_FILENAME.match(lgr_id):
-            raise SuspiciousOperation()
-        if lgr_id.endswith('.xml'):
-            lgr_id = lgr_id.rsplit('.', 1)[0]
-        lgr_id = slugify(lgr_id)
+        is_set = len(form.cleaned_data['file']) > 1
+        merged_id = None
+        lgr_set = []
+        for lgr_file in form.cleaned_data['file']:
+            lgr_id = lgr_file.name
+            if not RE_SAFE_FILENAME.match(lgr_id):
+                raise SuspiciousOperation()
+            if lgr_id.endswith('.xml'):
+                lgr_id = lgr_id.rsplit('.', 1)[0]
+            lgr_id = slugify(lgr_id)
 
-        if lgr_id in [lgr['name'] for lgr in session_list_lgr(request)]:
-            logger.error("Import existing LGR")
-            return render(request, 'lgr_editor/import_invalid.html',
-                          context={'error': _("The LGR you have tried to import already exists in your working session. Please rename it before importing it.")})
+            if lgr_id in [lgr['name'] for lgr in session_list_lgr(request)] and not is_set:
+                    logger.error("Import existing LGR")
+                    return render(request, 'lgr_editor/import_invalid.html',
+                                  context={'error': _("The LGR you have tried to import already exists in your working "
+                                                      "session. Please rename it before importing it.")})
 
-        try:
-            session_open_lgr(request,
-                             lgr_id,
-                             form.cleaned_data['file'].read(),
-                             form.cleaned_data['validating_repertoire'],
-                             validate=True)
-        except Exception as import_error:
-            logger.error("Input is not valid: '%s'",
-                         import_error)
-            return render(request, 'lgr_editor/import_invalid.html',
-                          context={'error': lgr_exception_to_text(import_error)})
+            if is_set and lgr_id in map(lambda x: x.name, lgr_set):
+                logger.error("Import existing LGR in set")
+                return render(request, 'lgr_editor/import_invalid.html',
+                              context={'error': _("The LGR you have tried to import already exists in your set. "
+                                                  "Please rename it before importing it.")})
+
+            try:
+                lgr_info = session_open_lgr(request,
+                                            lgr_id,
+                                            lgr_file.read(),
+                                            form.cleaned_data['validating_repertoire'],
+                                            validate=True,
+                                            from_set=is_set)
+            except Exception as import_error:
+                logger.error("Input is not valid: '%s'",
+                             import_error)
+                return render(request, 'lgr_editor/import_invalid.html',
+                              context={'error': lgr_exception_to_text(import_error)})
+
+            lgr_set.append(lgr_info)
+
+        if is_set:
+            if merged_id in [lgr['name'] for lgr in session_list_lgr(request)]:
+                logger.error("Import existing LGR set")
+                return render(request, 'lgr_editor/import_invalid.html',
+                              context={'error': _("The LGR set you have tried to import already exists in your working "
+                                                  "session. Please rename some LGR in set before importing it.")})
+
+            try:
+                merged_id = session_merge_set(request, lgr_set, form.cleaned_data['zone_labels'])
+            except Exception as import_error:
+                # remove imported LGRs, those that were already existing won't be erased
+                logger.error("Merge LGR from set is invalid")
+                return render(request, 'lgr_editor/import_invalid.html',
+                              context={'error': lgr_exception_to_text(import_error)})
 
         # All green, redirect to codepoint list
-        return redirect('codepoint_list', lgr_id)
+        return redirect('codepoint_list', merged_id if is_set else lgr_id)
 
     ctx = {
         'form': form,
@@ -216,11 +246,11 @@ def _prepare_txt_response(ctx):
     return response
 
 
-def codepoint_list(request, lgr_id='default'):
+def codepoint_list(request, lgr_id='default', lgr_set_id=None):
     """
     List the codepoints defined in an LGR.
     """
-    lgr_info = session_select_lgr(request, lgr_id)
+    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
     udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
 
     # instantiate form

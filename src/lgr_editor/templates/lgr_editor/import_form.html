@@ -6,6 +6,9 @@
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.file %}
         {% include "lgr_editor/_form_field.html" with field=form.validating_repertoire %}
+        <div id="zone_box">
+            {% include "lgr_editor/_form_field.html" with field=form.zone_labels %}
+        </div>
         {% if lgrs %}
             <strong>{% trans "These LGRs are already imported. Click on one to access it." %}</strong>
             <ul>
@@ -31,3 +34,23 @@
         {% endblocktrans %}
     </p>
 {% endblock content %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            function check_multi_files() {
+                var files = $('#id_file').prop('files');
+                if(files.length > 1) {
+                    $('#zone_box').show();
+                    $("#id_zone_labels").prop('required', true);
+                } else {
+                    $('#zone_box').hide();
+                    $("#id_zone_labels").prop('required', false);
+                }
+            }
+            $('#id_file').change(function(){check_multi_files()});
+            $('#id_file').show(function(){check_multi_files()});
+        });
+    </script>
+{% endblock html_body_more %}
