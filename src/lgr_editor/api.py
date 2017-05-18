@@ -17,6 +17,7 @@ from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.parser.xml_parser import XMLParser, LGR_NS
+from lgr.tools.merge_set import merge_lgr_set
 from lgr_web.settings import TOOLS_OUTPUT_STORAGE_LOCATION
 
 from .exceptions import LGRValidationException
@@ -281,33 +282,28 @@ def session_delete_lgr(request, lgr_id):
     request.session.modified = True
 
 
-def session_merge_set(request, lgr_set, zone_labels_file):
+def session_merge_set(request, lgr_set, lgr_set_name, zone_labels_file):
     """
     Merge some LGR to build a set
     :param request: Django request object
     :param lgr_set: The list of LGRs id in the set
-    :param zone_labels: The labels in the LGR set zone
+    :param lgr_set_name: The name of the LGR set
+    :param zone_labels_file: The file containing labels in the LGR set zone
     :return: The LGR set merge id
     """
-    from lgr.tools.compare import union_lgrs
     from lgr.tools.utils import read_labels
     from lgr_tools.tasks import prepare_labels
-    merged_info = lgr_set[0]
-    merged_id = None
-    for lgr_info in lgr_set[1:]:
-        lgr_info_1 = merged_info
-        lgr_info_2 = lgr_info
-        result_lgr = union_lgrs(lgr_info_1.lgr, lgr_info_2.lgr)
-        # Generate new slug (LGR id)
-        merged_id = slugify(result_lgr.name)
 
-        merged_info = LGRInfo(name=merged_id,
-                              lgr=result_lgr)
-        merged_info.update_xml()
+    merged_lgr = merge_lgr_set(lgr_set, lgr_set_name)
+    merged_id = slugify(merged_lgr.name)
+    merged_info = LGRInfo(name=merged_id,
+                          lgr=merged_lgr)
+    merged_info.update_xml(pretty_print=True)
 
-    lgr, labels = prepare_labels({'xml': merged_info.xml, 'name': merged_info.name},
+    lgr, labels = prepare_labels({'xml': merged_info.xml.decode('utf-8'), 'name': merged_info.name},
                                  zone_labels_file.read().decode('utf-8'))
     zone_labels = [l for l in read_labels(labels, lgr.unicode_database)]
+    # TODO validate all labels else error
 
     session_open_lgr(request, merged_id, merged_info.xml,
                      validating_repertoire_name=None,

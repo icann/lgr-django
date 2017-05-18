@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.utils.translation import ugettext_lazy as _
 from django import forms
+from django.core import validators
 from multiupload.fields import MultiFileField
 from .fields import (DEFAULT_UNICODE_VERSION,
                      VALIDATING_REPERTOIRES,
@@ -28,6 +29,17 @@ class ImportLGRForm(forms.Form):
                                               required=False,
                                               choices=(('', ''),) + VALIDATING_REPERTOIRES,
                                               initial=DEFAULT_VALIDATING_REPERTOIRE)
+    set_name = forms.CharField(label=_("LGR set name"),
+                               required=False,
+                               # TODO should catch that to get a valid LGR name
+                               validators=[
+                                   validators.RegexValidator(r'^[\w\_\-\.]+$',
+                                                             _('Enter a valid LGR set name. '
+                                                               'This value may contain only letters, numbers '
+                                                               'and ./-/_ characters.'), 'invalid'),
+                               ],
+                               help_text=_('The name of the label set'),
+                               )
     zone_labels = forms.FileField(label=_("Zone labels"),
                                   required=False,
                                   help_text=_('Labels existing in the zone, that will be used to check for collisions '
