@@ -298,7 +298,7 @@ def session_merge_set(request, lgr_set, lgr_set_name, zone_labels_file):
     from lgr.tools.utils import read_labels
     from lgr_tools.tasks import prepare_labels
 
-    merged_lgr = merge_lgr_set(lgr_set, lgr_set_name)
+    merged_lgr = merge_lgr_set(map(lambda x: x.lgr, lgr_set), lgr_set_name)
     merged_id = slugify(merged_lgr.name)
     merged_info = LGRInfo(name=merged_id,
                           lgr=merged_lgr)
