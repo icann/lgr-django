@@ -20,7 +20,7 @@ from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.tools.merge_set import merge_lgr_set
 from lgr_web.settings import TOOLS_OUTPUT_STORAGE_LOCATION
 
-from .exceptions import LGRValidationException
+from .exceptions import LGRValidationException, LGRInvalidLabelException
 from .repertoires import get_by_name
 from . import unidb
 
@@ -306,12 +306,17 @@ def session_merge_set(request, lgr_set, lgr_set_name, zone_labels_file):
 
     lgr, labels = prepare_labels({'xml': merged_info.xml.decode('utf-8'), 'name': merged_info.name},
                                  zone_labels_file.read().decode('utf-8'))
-    zone_labels = [l for l in read_labels(labels, lgr.unicode_database)]
-    # TODO validate all labels else error
+    zone_labels = set()
+    for label in read_labels(labels, lgr.unicode_database, do_raise=True):
+        label_cp = tuple([ord(c) for c in label])
+        (eligible, _, _, _, _, logs) = lgr.test_label_eligible(label_cp)
+        if not eligible:
+            raise LGRInvalidLabelException(label, logs.strip().split('\n')[-1])
+        zone_labels.add(label)
 
     session_open_lgr(request, merged_id, merged_info.xml,
                      validating_repertoire_name=None,
-                     validate=True, lgr_set=lgr_set, zone_labels=zone_labels)
+                     validate=True, lgr_set=lgr_set, zone_labels=list(zone_labels))
     return merged_id
 
 
