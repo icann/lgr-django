@@ -14,7 +14,12 @@
 {% block content %}
     <ol class="breadcrumb">
         <li>
-            <a href="{% url 'codepoint_list' lgr_id %}">{% trans "Code points" %}</a>
+            {% if lgr_set_id %}
+                {% url 'codepoint_list' lgr_set_id lgr_id as codepoint_list %}
+            {% else %}
+                {% url 'codepoint_list' lgr_id as codepoint_list %}
+            {% endif %}
+            <a href="{{ codepoint_list }}">{% trans "Code points" %}</a>
         </li>
         <li class="active">{{ cp_disp }} {{ name }}</li>
     </ol>
@@ -22,13 +27,13 @@
 
     <h3>Variants</h3>
 
-    {% if not is_range %}
-        <form class="form-inline" method="post">
-            {% csrf_token %}
-            {{ add_variant_form.error }}
-            {{ add_variant_form }}
-            <button type="submit" class="btn btn-primary" name="add_variant">{% trans "Add variant" %}</button>
-        </form>
+    {% if not is_range and not is_set %}
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        {{ add_variant_form.error }}
+        {{ add_variant_form }}
+        <button type="submit" class="btn btn-primary" name="add_variant">{% trans "Add variant" %}</button>
+    </form>
     {% endif %}
 
     <div id="cp_variants">
@@ -36,7 +41,7 @@
             {% csrf_token %}
             {# Need to dispay management form even for range char since it will still be checked in view #}
             {{ variants_form.management_form }}
-            {% if not is_range %}
+            {% if not is_range and variants_form|length > 0 %}
                 <table class="table table-hover table-striped">
                     <tr>
                         <th style="display:none;"/>
@@ -45,13 +50,25 @@
                         <th>{% trans "Comments" %}</th>
                         <th>{% trans "When" %}</th>
                         <th>{% trans "Not When" %}</th>
+                        <th>{% trans "References" %}</th>
+                        {% if not is_set %}
                         <th>{% trans "Action" %}</th>
+                        {% endif %}
                     </tr>
                     {% for char in variants_form %}
                     <tr>
+                        {% if lgr_set_id %}
+                            {% url 'codepoint_view' lgr_set_id=lgr_set_id lgr_id=lgr_id codepoint_id=char.cp.value as cp_url %}
+                            {% url 'references_json' lgr_set_id=lgr_set_id lgr_id=lgr_id as references_json %}
+                            {% url 'references' lgr_set_id=lgr_set_id lgr_id=lgr_id as references %}
+                        {% else %}
+                            {% url 'codepoint_view' lgr_id=lgr_id codepoint_id=char.cp.value as cp_url %}
+                            {% url 'references_json' lgr_id=lgr_id as references_json %}
+                            {% url 'references' lgr_id=lgr_id as references %}
+                        {% endif %}
                         <td style="display:none;">{{ char.cp }}</td>
                         <td class="codepoint-display">
-                            <a href="{% url 'codepoint_view' lgr_id=lgr_id codepoint_id=char.cp.value %}">
+                            <a href="{{ cp_url }}">
                                 {{ char.cp_disp.value }}
                                 <br>{{ char.name.value }}
                             </a>
@@ -62,23 +79,28 @@
                         <td>{{ char.comment }}</td>
                         <td class="codepoint-conditional">{{ char.when }}</td>
                         <td class="codepoint-conditional">{{ char.not_when }}</td>
+                        <td class="references" data-cp-disp="{{ char.cp_disp.value }}" data-references-json-url="{{ references_json }}">
+                            {% for ref_id in char.reference_list %}
+                                <li data-refid="{{ ref_id }}"><a href="{{ references }}#ref_{{ref_id}}">{{ ref_id }}</a></li>
+                            {% endfor %}
+                        </td>
+                        {% if not is_set %}
                         <td>
                             <ul class="list-unstyled">
-                                <li><a class="btn btn-xs confirm-prompt" data-confirmation-prompt="{% trans "Are you sure you want delete this variant?" %}" href="{% url 'variant_delete' lgr_id=lgr_id codepoint_id=cp var_slug=char.to_slug %}">{% trans 'Delete variant' %}</a></li>
+                                <li><a class="btn btn-xs confirm-prompt" data-confirmation-prompt="{% trans 'Are you sure you want delete this variant?' %}" href="{% url 'variant_delete' lgr_id=lgr_id codepoint_id=cp var_slug=char.to_slug %}">{% trans 'Delete variant' %}</a></li>
                                 <li><a class="btn btn-xs btn-edit-var-refs" href="#" data-var-update-ref-url="{% url 'var_update_refs' lgr_id=lgr_id codepoint_id=cp var_slug=char.to_slug %}">{% trans 'Edit references' %}</a></li>
                             </ul>
-                            <h5>{% trans "References" %}</h5>
-                            <ul class="references" data-cp-disp="{{ char.cp_disp.value }}" data-references-json-url="{% url 'references_json' lgr_id %}">
-                                {% for ref_id in char.reference_list %}
-                                    <li data-refid="{{ ref_id }}"><a href="{% url 'references' lgr_id %}#ref_{{ref_id}}">{{ ref_id }}</li>
-                                {% endfor %}
-                            </ul>
                         </td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </table>
             {% else %}
-                <p>{% trans "Range characters do not have variants." %}</p>
+                {% if id_range %}
+                    <p>{% trans "Range characters do not have variants." %}</p>
+                {% else %}
+                    <p>{% trans "Code point has not variant" %}</p>
+                {% endif %}
             {% endif %}
 
             <div class="tag-field">
@@ -93,7 +115,9 @@
             {{ codepoint_form.errors }}
             {% include "lgr_editor/_form_field_vertical.html" with field=codepoint_form.comment %}
 
+            {% if not is_set %}
             <p><button type="submit" class="btn btn-primary" name="edit_cp" id="edit_cp_button">{% trans "Save variants, tags, context rules and comment" %}</button></p>
+            {% endif %}
         </form>
     </div>
 
@@ -112,16 +136,20 @@
                 {% trans "No references associated with code point." %}
             {% endfor %}
         </ul>
+        {% if not is_set %}
         <a href="#"
            data-cp-update-ref-url="{% url 'codepoint_update_refs' lgr_id cp %}"
            class="btn btn-default edit-refs"><i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}</a>
+        {% endif %}
     </div>
 
+    {% if not is_set %}
     <hr/>
 
-    <a class="btn btn-danger confirm-prompt" data-confirmation-prompt="{% trans "Are you sure you want delete this code point?" %}"
+    <a class="btn btn-danger confirm-prompt" data-confirmation-prompt="{% trans 'Are you sure you want delete this code point?' %}"
        href="{% url 'codepoint_delete' lgr_id=lgr_id codepoint_id=cp %}">
         <i class="glyphicon glyphicon-trash"></i> {% trans 'Delete code point' %}</a>
+    {% endif %}
 
     <div class="modal" id="reference-editor">
         <form class="form" action="#" method="post">
@@ -137,7 +165,7 @@
 
                         <ul class="list-unstyled">
                             <li class="ref-entry clearfix template hide">
-                                <button title="{% trans "Delete reference" context "button title" %}" class="btn btn-default btn-sm delete-ref pull-right"><i class="glyphicon glyphicon-trash"></i></button>
+                                <button title="{% trans 'Delete reference' context 'button title' %}" class="btn btn-default btn-sm delete-ref pull-right"><i class="glyphicon glyphicon-trash"></i></button>
                                 <span class="description"></span>
                                 <input name="ref_id" type="hidden">
                             </li>

@@ -131,11 +131,12 @@ class LGRInfo(object):
             'name': self.name,
             'xml': self.xml,
             'validating_repertoire': self.validating_repertoire.name if self.validating_repertoire else None,
-            'lgr_set_dct': map(lambda x: x.to_dict(), self.lgr_set) if self.is_set() else None,
+            'lgr_set_dct': map(lambda x: x.to_dict(), self.lgr_set) if self.is_set else None,
             'zone_labels': self.zone_labels,
-            'is_set': self.is_set()  # for index.html
+            'is_set': self.is_set  # for index.html
         }
 
+    @property
     def is_set(self):
         return self.lgr_set is not None and len(self.lgr_set) > 1
 
@@ -230,16 +231,19 @@ def session_select_lgr(request, lgr_id, lgr_set_id=None):
 
     :param request: Django request object
     :param lgr_id: a slug identifying the LGR
-    :param lgr_set_id: a slug identifying a LGR in the LGR set
+    :param lgr_set_id: a slug identifying a LGR set if LGR is in a set
     :return: `LGRInfo`
     """
     known_lgrs = request.session.get(LGRS_SESSION_KEY, {})
-    if lgr_id not in known_lgrs:
-        raise Http404
 
-    lgr_dct = known_lgrs[lgr_id]
-
-    if not lgr_set_id:
+    if lgr_set_id:
+        if lgr_set_id not in known_lgrs:
+            raise Http404
+        lgr_dct = known_lgrs[lgr_set_id]
+    else:
+        if lgr_id not in known_lgrs:
+            raise Http404
+        lgr_dct = known_lgrs[lgr_id]
         return LGRInfo.from_dict(lgr_dct,
                                  lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
 
@@ -247,7 +251,7 @@ def session_select_lgr(request, lgr_id, lgr_set_id=None):
         raise Http404
 
     for lgr in lgr_dct.get('lgr_set_dct'):
-        if lgr['name'] == lgr_set_id:
+        if lgr['name'] == lgr_id:
             return LGRInfo.from_dict(lgr,
                                      lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
     raise Http404

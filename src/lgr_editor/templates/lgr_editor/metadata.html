@@ -27,9 +27,11 @@
         {% include "lgr_editor/_form_field.html" with field=form.description %}
         {% include "lgr_editor/_form_field.html" with field=form.description_type %}
         {% include "lgr_editor/_form_field.html" with field=form.validating_repertoire %}
+        {% if not lgr_set_id %} {# do not enable to update references for LGRs in a set #}
         <div class="text-right">
             <button type="reset" class="btn btn-default">{% trans "Cancel" %}</button>
             <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
         </div>
+        {% endif %}
     </form>
 {% endblock content-pane %}

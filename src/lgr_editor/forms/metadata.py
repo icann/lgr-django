@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from functools import partial
 from datetime import date
 
+from django.utils import six
 from django import forms
-from django.forms import formset_factory
+from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext_lazy as _
+
+from .utils import BaseDisableableFormSet
 
 from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, VALIDATING_REPERTOIRES, DEFAULT_VALIDATING_REPERTOIRE
 
@@ -55,11 +57,17 @@ class MetadataForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         additional_repertoires = kwargs.pop('additional_repertoires', [])
+        disabled = kwargs.pop('disabled')
         super(MetadataForm, self).__init__(*args, **kwargs)
         if additional_repertoires:
             # dynamically append the session LGRs (by copy, not by reference)
             self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + [
                 (_('My LGRs'), tuple((rname, rname) for rname in additional_repertoires))]
+        if disabled:
+            # do not enable to update references for LGRs in a set
+            for field in six.itervalues(self.fields):
+                # field.disabled = True  XXX need django 1.9
+                field.widget.attrs['disabled'] = True
 
 
 class LanguageForm(forms.Form):
@@ -67,4 +75,6 @@ class LanguageForm(forms.Form):
     language = forms.CharField(label=_("Language"), max_length=50, required=False)  # https://tools.ietf.org/html/rfc5646#section-4.4
 
 
-LanguageFormSet = formset_factory(LanguageForm, extra=1)
+LanguageFormSet = formset_factory(LanguageForm,
+                                  formset=BaseDisableableFormSet,
+                                  extra=1)

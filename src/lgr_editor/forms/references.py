@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from functools import partial
-
 from django import forms
 from django.forms.formsets import formset_factory
 
-ReadOnlyTextInput = partial(forms.TextInput, {'readonly': 'readonly'})
+from .utils import BaseDisableableFormSet, ReadOnlyTextInput
 
 
 class ReferenceForm(forms.Form):
@@ -20,4 +18,6 @@ class ReferenceForm(forms.Form):
     comment = forms.CharField(label='', required=False)
 
 
-ReferenceFormSet = formset_factory(ReferenceForm, extra=0)
+ReferenceFormSet = formset_factory(ReferenceForm,
+                                   formset=BaseDisableableFormSet,
+                                   extra=0)

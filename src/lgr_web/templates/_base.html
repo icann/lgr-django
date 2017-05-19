@@ -31,9 +31,15 @@
                             <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom"><i class="glyphicon glyphicon-home"></i></a>
                             <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom">{% trans "LGR Editor" %}</a>
                             {% if lgr %}
-                                / <a href="{% url 'codepoint_list' lgr_id %}">{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}</a>
-                                {% if cp %}/ <a href="{% url 'codepoint_view' lgr_id cp %}">{{ cp_disp }} {{ name }}</a>{% endif %}
+                                {% if lgr_set_id %}
+                                    / <a href="{% url 'codepoint_list' lgr_set_id %}">{{ lgr_set.name }}</a> / <a href="{% url 'codepoint_list' lgr_set_id lgr_id %}">{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}</a>
+                                    {% if cp %}/ <a href="{% url 'codepoint_view' lgr_set_id lgr_id cp %}">{{ cp_disp }} {{ name }}</a>{% endif %}
+                                {% else %}
+                                    / <a href="{% url 'codepoint_list' lgr_id %}">{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}</a>
+                                    {% if cp %}/ <a href="{% url 'codepoint_view' lgr_id cp %}">{{ cp_disp }} {{ name }}</a>{% endif %}
+                                {% endif %}
                             {% endif %}
+
 
                         </p>
                         <form class="navbar-form navbar-left">
@@ -81,6 +87,13 @@
                         </form>
                         <div class="navbar-form navbar-right">
                             {% if lgr_id %}
+                                {% if lgr_set_id %}
+                                    {% url 'view_lgr_xml' lgr_set_id lgr_id as view_lgr_xml_url %}
+                                    {% url 'download_lgr_xml' lgr_set_id lgr_id as download_lgr_xml_url %}
+                                {% else %}
+                                    {% url 'view_lgr_xml' lgr_id as view_lgr_xml_url %}
+                                    {% url 'download_lgr_xml' lgr_id as download_lgr_xml_url %}
+                                {% endif %}
                                 <a class="btn btn-default show-tooltip"
                                    data-toggle="modal" data-target="#validation-modal"
                                    title="{% trans 'Validate label against LGR' %}" data-placement="bottom">
@@ -96,13 +109,13 @@
                                 </a>
                                 <a class="btn btn-default show-tooltip"
                                    title="{% trans 'Preview LGR file' %}" data-placement="bottom"
-                                   href="{% url 'view_lgr_xml' lgr_id %}" target="_blank">
+                                   href="{{ view_lgr_xml_url }}" target="_blank">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                     {% trans "View XML" %}
                                 </a>
                                 <a class="btn btn-default show-tooltip"
                                    title="{% trans 'Download LGR file' %}" data-placement="bottom"
-                                   href="{% url 'download_lgr_xml' lgr_id %}">
+                                   href="{{ download_lgr_xml_url }}">
                                     <i class="glyphicon glyphicon-save"></i> {% trans "Download" %}
                                 </a>
                             {% else %}
@@ -161,7 +174,14 @@
 
         <!-- Summary Modal -->
         {% if lgr_id %}
-        <div class="modal fade" id="lgr-summary-modal" data-summary-url="{% url 'summary' lgr_id %}">
+            {% if lgr_set_id %}
+                {% url 'summary' lgr_set_id lgr_id as summary_url %}
+                {% url 'summary_save' lgr_set_id lgr_id as summary_save_url %}
+            {% else %}
+                {% url 'summary' lgr_id as summary_url %}
+                {% url 'summary_save' lgr_id as summary_save_url %}
+            {% endif %}
+        <div class="modal fade" id="lgr-summary-modal" data-summary-url="{{ summary_url }}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -174,7 +194,7 @@
                         {% endif %}
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-info" href="{% url 'summary_save' lgr_id=lgr_id %}">
+                        <a class="btn btn-info" href="{{ summary_save_url }}">
                             <i class="glyphicon glyphicon-save"></i>
                             {% blocktrans %}Save summary{% endblocktrans %}
                         </a>
@@ -187,7 +207,12 @@
 
         <!-- Validation Modal -->
         {% if lgr_id %}
-        <div class="modal fade" id="validation-modal" data-validate-url="{% url 'lgr_validate_label_noframe' lgr_id %}">
+            {% if lgr_set_id %}
+                {% url 'lgr_validate_label_noframe' lgr_set_id lgr_id as lgr_validate_label_noframe_url %}
+            {% else %}
+                {% url 'lgr_validate_label_noframe' lgr_id as lgr_validate_label_noframe_url %}
+            {% endif %}
+        <div class="modal fade" id="validation-modal" data-validate-url="{{ lgr_validate_label_noframe_url }}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -195,7 +220,7 @@
                         <h4 class="modal-title">{% trans "Validate label" %}</h4>
                     </div>
                     <div id="validation-modal-body" class="modal-body" style="height: 85vh;">
-                        <iframe id="validation-model-iframe" data-url="{% url 'lgr_validate_label_noframe' lgr_id %}" src="{% url 'lgr_validate_label_noframe' lgr_id %}" frameborder="0" width="100%" height="98%"></iframe>
+                        <iframe id="validation-model-iframe" data-url="{{ lgr_validate_label_noframe_url }}" src="{{ lgr_validate_label_noframe_url }}" frameborder="0" width="100%" height="98%"></iframe>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -203,7 +228,7 @@
         {% endif %}
 
         <!-- About Modal -->
-        <div class="modal fade" id="about-modal" data-summary-url="{% url 'about' %}">
+        <div class="modal fade" id="about-modal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">

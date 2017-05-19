@@ -6,20 +6,32 @@
 {% block content-pane %}
 <div class="rules-body">
 
-<h4>{% trans "Classes" %}</h4>
+<h3>{% trans "Classes" %}</h3>
+{% if rules.classes|length > 0 %}
 <pre>
 {{ rules.classes }}
 </pre>
+{% else %}
+<p>The LGR has no class</p>
+{% endif %}
 
-<h4>{% trans "Rules" %}</h4>
+<h3>{% trans "Rules" %}</h3>
+{% if rules.rules|length > 0 %}
 <pre>
 {{ rules.rules }}
 </pre>
+{% else %}
+<p>The LGR has no rule</p>
+{% endif %}
 
-<h4>{% trans "Actions" %}</h4>
+<h3>{% trans "Actions" %}</h3>
+{% if rules.actions|length > 0 %}
 <pre>
 {{ rules.actions }}
 </pre>
+{% else %}
+<p>The LGR has no action</p>
+{% endif %}
 
 </div>
 

@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from functools import partial
 from urllib import quote_plus
 
+from django.utils import six
 from django import forms
-from django.forms.formsets import BaseFormSet, formset_factory
+from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext_lazy as _
 
-
-ReadOnlyTextInput = partial(forms.TextInput, {'readonly': 'readonly'})
+from .utils import BaseDisableableFormSet, ReadOnlyTextInput
 
 
 class CodepointForm(forms.Form):
@@ -19,10 +18,15 @@ class CodepointForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         rule_names = kwargs.pop('rules', tuple())
+        disabled = kwargs.pop('disabled', False)  # in set fields are note editable
         super(CodepointForm, self).__init__(*args, **kwargs)
 
         self.fields['when'].choices = rule_names
         self.fields['not_when'].choices = rule_names
+        if disabled:
+            for field in six.itervalues(self.fields):
+                # field.disabled = True  XXX need django 1.9
+                field.widget.attrs['disabled'] = True
 
 
 class CodepointVariantForm(forms.Form):
@@ -56,10 +60,10 @@ class CodepointVariantForm(forms.Form):
         return filter(None, self['references'].value())
 
 
-class BaseCodepointVariantFormSet(BaseFormSet):
+class BaseCodepointVariantFormSet(BaseDisableableFormSet):
     """
-    Custom FormSet implementation to be able to dynamically set the choices
-    of the encapsulated form.
+    Custom FormSet implementation to be able to dynamically set the choices of the encapsulated form
+    and the disabled flag.
     """
 
     def __init__(self, *args, **kwargs):
@@ -70,11 +74,9 @@ class BaseCodepointVariantFormSet(BaseFormSet):
         """
         Called when building "internal" forms.
 
-        Hook ourselves into this function to set the "when"
-        and "not-when" fields' choices.
+        Hook ourselves into this function to set the "when" and "not-when" fields' choices and required flag.
         """
-        form = super(BaseCodepointVariantFormSet, self)._construct_form(i,
-                                                                        **kwargs)
+        form = super(BaseCodepointVariantFormSet, self)._construct_form(i, **kwargs)
         form.fields['when'].choices = self.rule_names
         form.fields['not_when'].choices = self.rule_names
         return form
