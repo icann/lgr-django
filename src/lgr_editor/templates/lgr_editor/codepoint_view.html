@@ -59,12 +59,12 @@
                     <tr>
                         {% if lgr_set_id %}
                             {% url 'codepoint_view' lgr_set_id=lgr_set_id lgr_id=lgr_id codepoint_id=char.cp.value as cp_url %}
-                            {% url 'references_json' lgr_set_id=lgr_set_id lgr_id=lgr_id as references_json %}
-                            {% url 'references' lgr_set_id=lgr_set_id lgr_id=lgr_id as references %}
+                            {% url 'references_json' lgr_set_id=lgr_set_id lgr_id=lgr_id as references_json_url %}
+                            {% url 'references' lgr_set_id=lgr_set_id lgr_id=lgr_id as references_url %}
                         {% else %}
                             {% url 'codepoint_view' lgr_id=lgr_id codepoint_id=char.cp.value as cp_url %}
-                            {% url 'references_json' lgr_id=lgr_id as references_json %}
-                            {% url 'references' lgr_id=lgr_id as references %}
+                            {% url 'references_json' lgr_id=lgr_id as references_json_url %}
+                            {% url 'references' lgr_id=lgr_id as references_url %}
                         {% endif %}
                         <td style="display:none;">{{ char.cp }}</td>
                         <td class="codepoint-display">
@@ -79,10 +79,12 @@
                         <td>{{ char.comment }}</td>
                         <td class="codepoint-conditional">{{ char.when }}</td>
                         <td class="codepoint-conditional">{{ char.not_when }}</td>
-                        <td class="references" data-cp-disp="{{ char.cp_disp.value }}" data-references-json-url="{{ references_json }}">
+                        <td>
+                            <ul class="references" data-cp-disp="{{ char.cp_disp.value }}" data-references-json-url="{{ references_json_url }}">
                             {% for ref_id in char.reference_list %}
-                                <li data-refid="{{ ref_id }}"><a href="{{ references }}#ref_{{ref_id}}">{{ ref_id }}</a></li>
+                                <li data-refid="{{ ref_id }}"><a href="{{ references_url }}#ref_{{ref_id}}">{{ ref_id }}</a></li>
                             {% endfor %}
+                            </ul>
                         </td>
                         {% if not is_set %}
                         <td>
@@ -126,7 +128,12 @@
     <h3>References</h3>
 
     <div id="cp_references">
-        <ul data-references-json-url="{% url 'references_json' lgr_id %}">
+        {% if lgr_set_id %}
+            {% url 'references_json' lgr_set_id=lgr_set_id lgr_id=lgr_id as references_json_url %}
+        {% else %}
+            {% url 'references_json' lgr_id=lgr_id as references_json_url %}
+        {% endif %}
+        <ul data-references-json-url="{{ references_json_url }}">
             {% for ref in cp_references %}
                 <li data-refid="{{ ref.ref_id }}">
                     {{ ref.ref_id }} - {{ ref.description }}
@@ -337,7 +344,7 @@
 
             $(".btn.btn-edit-var-refs").click(function() {
                 var url = $(this).data('var-update-ref-url');
-                var references_ul = $(this).parents("td").find("ul.references");
+                var references_ul = $('ul.references');
                 edit_references($, references_ul.data('cp-disp'), references_ul, url);
                 return false;
             });

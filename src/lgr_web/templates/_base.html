@@ -32,10 +32,10 @@
                             <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom">{% trans "LGR Editor" %}</a>
                             {% if lgr %}
                                 {% if lgr_set_id %}
-                                    / <a href="{% url 'codepoint_list' lgr_set_id %}">{{ lgr_set.name }}</a> / <a href="{% url 'codepoint_list' lgr_set_id lgr_id %}">{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}</a>
+                                    / <a href="{% url 'codepoint_list' lgr_set_id %}">{{ lgr_set.name }}</a> / <a href="{% url 'codepoint_list' lgr_set_id lgr_id %}">{{ lgr.name }} {% if not cp %}{% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment|truncatechars:60 }}{% endif %}{% endif %}</a>
                                     {% if cp %}/ <a href="{% url 'codepoint_view' lgr_set_id lgr_id cp %}">{{ cp_disp }} {{ name }}</a>{% endif %}
                                 {% else %}
-                                    / <a href="{% url 'codepoint_list' lgr_id %}">{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}</a>
+                                    / <a href="{% url 'codepoint_list' lgr_id %}">{{ lgr.name }} {% if not cp %}{% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment|truncatechars:60 }}{% endif %}{% endif %}</a>
                                     {% if cp %}/ <a href="{% url 'codepoint_view' lgr_id cp %}">{{ cp_disp }} {{ name }}</a>{% endif %}
                                 {% endif %}
                             {% endif %}

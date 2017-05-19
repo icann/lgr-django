@@ -723,6 +723,9 @@ def reference_list(request, lgr_id, lgr_set_id=None):
     add_reference_form = ReferenceForm(request.POST or None,
                                        prefix='add_reference')
     if 'add_reference' in request.POST:
+        if lgr_info.is_set or lgr_set_id:
+            return HttpResponseBadRequest('Cannot edit LGR set')
+
         logger.debug('Add reference')
         if add_reference_form.is_valid():
             # form was submitted, we parse the value from the form field
