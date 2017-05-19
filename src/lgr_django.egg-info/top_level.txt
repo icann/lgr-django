@@ -1,4 +1,0 @@
-lgr_editor
-lgr_tools
-lgr_validator
-lgr_web

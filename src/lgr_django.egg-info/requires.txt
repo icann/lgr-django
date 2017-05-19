@@ -1,6 +1,0 @@
-Django
-django-widget-tweaks
-celery
-lgr-core
-munidata
-picu
