@@ -15,7 +15,7 @@ class LGRValidationException(LGRException):
 
 class LGRInvalidLabelException(LGRException):
     """
-    Raised when a label is invalid in a LGR/
+    Raised when a label is invalid in a LGR
     """
     def __init__(self, label, message):
         super(LGRInvalidLabelException, self).__init__()

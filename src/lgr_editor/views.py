@@ -223,7 +223,16 @@ def validate_lgr(request, lgr_id, output_func=None, lgr_set_id=None):
         options['validating_repertoire'] = lgr_info.validating_repertoire
     options['rng_filepath'] = settings.LGR_RNG_FILE
 
-    output = lgr_info.lgr.validate(options)
+    output = ''
+    if lgr_info.is_set:
+        output += 'LGR is a set containning the following LGRs:\n'
+        for lgr in lgr_info.lgr_set:
+            output += lgr.name + '\n'
+        output += '\n'
+    elif lgr_set_id:
+        output += 'LGR belong to the LGR set: "{}"\n\n'.format(lgr_set_id)
+
+    output += lgr_info.lgr.validate(options)
     if output_func:
         return output_func(ctx={'output': output,
                                 'name': lgr_id})
@@ -233,8 +242,8 @@ def validate_lgr(request, lgr_id, output_func=None, lgr_set_id=None):
                       context={'output': output})
 
 
-def save_summary(request, lgr_id):
-    return validate_lgr(request, lgr_id,
+def save_summary(request, lgr_id, lgr_set_id=None):
+    return validate_lgr(request, lgr_id, lgr_set_id=lgr_set_id,
                         output_func=_prepare_txt_response)
 
 
