@@ -8,14 +8,7 @@
         {% include "lgr_editor/_form_field.html" with field=form.validating_repertoire %}
         {% if lgrs %}
             <strong>{% trans "These LGRs are already created. Click on one to access it." %}</strong>
-            <ul>
-                {% for lgr in lgrs %}
-                    <li>
-                        <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}{{ lgr_name }}{% endblocktrans %}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-            <br>
+            {% include "lgr_editor/_list_opened_lgrs.html" with lgrs=lgrs %}
         {% endif %}
         {% for hidden in form.hidden_fields %}
             {{ hidden }}

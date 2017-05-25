@@ -1,0 +1,21 @@
+{% load i18n %}
+
+{% regroup lgrs|dictsort:"is_set" by is_set as lgrs_sorted %}
+<ul>
+    {% for local_lgrs in lgrs_sorted %}
+        {% if local_lgrs.grouper %}
+            <li>{% trans 'Sets:' %}
+                <ul>
+        {% endif %}
+        {% for lgr in local_lgrs.list %}
+            <li>
+                <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}{{ lgr_name }}{% endblocktrans %}</a>
+            </li>
+        {% endfor %}
+        {% if local_lgrs.grouper %}
+                </ul>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+<br>
