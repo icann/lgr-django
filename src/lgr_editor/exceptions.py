@@ -13,11 +13,11 @@ class LGRValidationException(LGRException):
     pass
 
 
-class LGRInvalidLabelException(LGRException):
+class LGRInvalidLabelFileException(LGRException):
     """
     Raised when a label is invalid in a LGR
     """
     def __init__(self, label, message):
-        super(LGRInvalidLabelException, self).__init__()
+        super(LGRInvalidLabelFileException, self).__init__()
         self.label = label
         self.message = message

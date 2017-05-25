@@ -32,9 +32,9 @@
         jQuery(document).ready(function($) {
             function check_collision() {
                 if($('#id_collision').is(':checked')){
-                    $('#dump_box').show();
+                    $('#dump_box').show(500);
                 } else {
-                    $('#dump_box').hide();
+                    $('#dump_box').hide(500);
                 }
             }
             $('#id_collision').click(function(){check_collision()});

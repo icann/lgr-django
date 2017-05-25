@@ -89,13 +89,18 @@ class AddVariantForm(forms.Form):
 
 class ValidateLabelForm(forms.Form):
     label = forms.CharField(label=_("Label"))
+    script = forms.ChoiceField(label=_("Script"), required=False, help_text='The script used to validate the label')
 
     def __init__(self, *args, **kwargs):
         max_label_len = kwargs.pop('max_label_len', None)
         self.idna_decoder = kwargs.pop('idna_decoder', None)
+        scripts = kwargs.pop('scripts', None)
         super(ValidateLabelForm, self).__init__(*args, **kwargs)
         if max_label_len is not None:
-            self.fields['label'].help_text = _("maximum length: %d code points" % max_label_len)
+            self.fields['label'].help_text = _("Maximum length: %d code points" % max_label_len)
+        if scripts:
+            self.fields['script'].choices = scripts
+            self.fields['script'].required = True
 
     def clean_label(self):
         value = self.cleaned_data['label']

@@ -31,7 +31,8 @@ from lgr.utils import format_cp
 from lgr.parser.rfc3743_parser import RFC3743Parser
 from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.parser.line_parser import LineParser
-from lgr_validator.api import evaluate_label
+from lgr_validator.views import evaluate_label_from_info
+from lgr_validator.api import evaluate_label, lgr_set_evaluate_label
 
 from .forms import (AddCodepointForm,
                     AddRangeForm,
@@ -163,7 +164,7 @@ def import_lgr(request):
                                               form.cleaned_data['zone_labels'])
             except Exception as import_error:
                 # remove imported LGRs, those that were already existing won't be erased
-                logger.error("Merge LGR from set is invalid")
+                logger.exception("Merge LGR from set is invalid")
                 return render(request, 'lgr_editor/import_invalid.html',
                               context={'error': lgr_exception_to_text(import_error)})
 
@@ -1597,19 +1598,27 @@ def validate_label(request, lgr_id, lgr_set_id=None, noframe=False):
     lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
     udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
     max_label_len = lgr_info.lgr.max_label_length()
+    scripts = None
+    if lgr_info.is_set:
+        scripts = []
+        for lgr_set_info in lgr_info.lgr_set:
+            try:
+                scripts.append((lgr_set_info.name, lgr_set_info.lgr.metadata.languages[0]))
+            except (AttributeError, IndexError):
+                pass
     form = ValidateLabelForm(request.GET or None,
                              max_label_len=max_label_len,
-                             idna_decoder=udata.idna_decode_label)
+                             idna_decoder=udata.idna_decode_label,
+                             scripts=scripts)
+    ctx = {}
     if form.is_bound and form.is_valid():
         label_cplist = form.cleaned_data['label']
+        script_lgr_name = form.cleaned_data.get('script', None)
         try:
-            ctx = evaluate_label(lgr_info.lgr, label_cplist,
-                                 threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE,
-                                 idna_encoder=udata.idna_encode_label)
+            ctx = evaluate_label_from_info(lgr_info, label_cplist, script_lgr_name, udata)
         except UnicodeError as ex:
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
-
         except LGRException as ex:
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
@@ -1618,8 +1627,7 @@ def validate_label(request, lgr_id, lgr_set_id=None, noframe=False):
                 return redirect('lgr_validate_label_noframe', lgr_id=lgr_id, lgr_set_id=lgr_set_id)
             else:
                 return redirect('lgr_validate_label', lgr_id=lgr_id, lgr_set_id=lgr_set_id)
-    else:
-        ctx = {}
+
     ctx['form'] = form
     ctx['lgr_id'] = lgr_id
     ctx['max_label_len'] = max_label_len

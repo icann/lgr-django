@@ -9,6 +9,7 @@ from uuid import uuid4
 
 from django.http import Http404
 from django.utils import six
+from django.utils.translation import ugettext_lazy as _
 from django.utils.text import slugify
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -18,9 +19,10 @@ from lgr.metadata import Metadata, Version
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.tools.merge_set import merge_lgr_set
+from lgr.tools.diff_collisions import is_collision
 from lgr_web.settings import TOOLS_OUTPUT_STORAGE_LOCATION
 
-from .exceptions import LGRValidationException, LGRInvalidLabelException
+from .exceptions import LGRValidationException, LGRInvalidLabelFileException
 from .repertoires import get_by_name
 from . import unidb
 
@@ -202,7 +204,7 @@ def session_open_lgr(request, lgr_id, lgr_xml,
     :param validate: if True, ensure the XML is valid LGR XML
     :param from_set: Whether the LGR belongs to a set or not
     :param lgr_set: The list of LGRInfo in the set if this is a merged LGR from a set
-    :param zone_labels: The list of labels in the zone for LGR sets
+    :param zone_labels: The list of labels in the LGR set
     :return: `LGRInfo`
     """
     lgr_info = LGRInfo.from_dict(
@@ -292,7 +294,7 @@ def session_merge_set(request, lgr_set, lgr_set_name, zone_labels_file):
     :param request: Django request object
     :param lgr_set: The list of LGRs id in the set
     :param lgr_set_name: The name of the LGR set
-    :param zone_labels_file: The file containing labels in the LGR set zone
+    :param zone_labels_file: The file containing labels in the LGR set
     :return: The LGR set merge id
     """
     from lgr.tools.utils import read_labels
@@ -309,10 +311,13 @@ def session_merge_set(request, lgr_set, lgr_set_name, zone_labels_file):
     zone_labels = set()
     for label in read_labels(labels, lgr.unicode_database, do_raise=True):
         label_cp = tuple([ord(c) for c in label])
-        (eligible, _, _, _, _, logs) = lgr.test_label_eligible(label_cp)
+        (eligible, __, __, __, __, logs) = lgr.test_label_eligible(label_cp)
         if not eligible:
-            raise LGRInvalidLabelException(label, logs.strip().split('\n')[-1])
+            raise LGRInvalidLabelFileException(label, logs.strip().split('\n')[-1])
         zone_labels.add(label)
+
+    if is_collision(lgr, zone_labels):
+        raise LGRInvalidLabelFileException(None, _('Input label file contains collision(s)'))
 
     session_open_lgr(request, merged_id, merged_info.xml,
                      validating_repertoire_name=None,

@@ -32,6 +32,9 @@
                         {% endif %}
                     </small></p>
                 {% endif %}
+                {% if is_set and not lgr_set_id %}
+                    {% include "lgr_editor/_form_field.html" with field=form.script %}
+                {% endif %}
             </div>
             <button class="col-sm-2 btn btn-primary" type="submit">{% trans "Validate" %}</button>
         </div>
@@ -77,11 +80,61 @@
                     </div>
                 </td>
             </tr>
-        {% if num_variants %}
+
+            {# collision if this is a LGR set but not an LGR in a set #}
+            {% if is_set and not lgr_set_id %}
+                <tr>
+                    <th colspan="4">{% trans "Collision" %}</th>
+                </tr>
+                {% if collisions_error %}
+                    <tr>
+                        <td colspan="4" class="text-danger">{{ collisions_error }}</td>
+                    </tr>
+                    {% elif collision %}
+                    <tr>
+                        <td>
+                            {{ collision.u_label }}
+                            <br>
+                            <small class="text-muted">{{ collision.variant_a }}</small>
+                        </td>
+                        <td>{{ collision.disposition }}</td>
+
+                        <td>
+                            <a href="?label={{ collision.input|urlencode }}{% if script %}&script={{ script }}{% endif %}">
+                                {{ collision.cp_display_html }}
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-collision"
+                               aria-expanded="false" aria-controls="rule-detail-collision">
+                                {% blocktrans trimmed %}
+                                    Show / hide rule
+                                {% endblocktrans %}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="rule-detail-cell">
+                            <div class="collapse rule-detail" id="rule-detail-collision">
+                                {% if collision.action_idx >= 0 %}
+                                    {% blocktrans with action_idx=collision.action_idx action=collision.action trimmed %}
+                                        [Action index: {{ action_idx }}] {{ action }}
+                                    {% endblocktrans %}
+                                {% endif %}
+                                <textarea style="width: 100%" rows="10" disabled="disabled">{{ collision.rules }}</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">{% blocktrans %}No collision.{% endblocktrans %}</td>
+                    </tr>
+                {% endif %}
+            {% endif %}
+
             <tr>
-                <th colspan="4">{% trans "Variant labels (including original as last)" %}</th>
+                <th colspan="4">{% trans "Variant labels" %}{% if num_variants %}{% trans " (including original as last)" %}{% endif %}</th>
             </tr>
-        {% endif %}
             <tr>
                 <td colspan="4">
                     {% if num_variants %}
@@ -94,60 +147,64 @@
                 </td>
             </tr>
 
-        {% if variants %}
-            {% for v in variants %}
-                <tr>
-                    <td>
-                        {{ v.u_label }}
-                        <br>
-                        <small class="text-muted">{{ v.a_label }}</small>
-                    </td>
-                    <td>{{ v.disposition }}</td>
-                    <td>
-                        <a href="?label={{ v.cp_input|urlencode }}">
-                            {{ v.cp_display_html }}
-                        </a>
-                    </td>
-                <td>
-                    <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-v-{{ forloop.counter }}"
-                       aria-expanded="false" aria-controls="rule-detail-v-{{ forloop.counter }}">
-                        {% blocktrans trimmed %}
-                            Show / hide rule
-                        {% endblocktrans %}
-                    </a>
-                </td>
-                </tr>
-                <tr>
-                    <td colspan="4" class="rule-detail-cell">
-                        <div class="collapse rule-detail" id="rule-detail-v-{{ forloop.counter }}">
-                            {% if v.action_idx >= 0 %}
-                                {% blocktrans with action_idx=v.action_idx action=v.action trimmed %}
-                                    [Action index: {{ action_idx }}] {{ action }}
+            {% if variants %}
+                {% for v in variants %}
+                    <tr>
+                        <td>
+                            {{ v.u_label }}
+                            <br>
+                            <small class="text-muted">{{ v.a_label }}</small>
+                        </td>
+                        <td>{{ v.disposition }}</td>
+                        <td>
+                            <a href="?label={{ v.cp_input|urlencode }}{% if script %}&script={{ script }}{% endif %}">
+                                {{ v.cp_display_html }}
+                            </a>
+                        </td>
+                        <td>
+                            <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-v-{{ forloop.counter }}"
+                               aria-expanded="false" aria-controls="rule-detail-v-{{ forloop.counter }}">
+                                {% blocktrans trimmed %}
+                                    Show / hide rule
                                 {% endblocktrans %}
-                            {% endif %}
-                            <textarea style="width: 100%" rows="10" disabled="disabled">{{ v.logs }}</textarea>
-                        </div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="rule-detail-cell">
+                            <div class="collapse rule-detail" id="rule-detail-v-{{ forloop.counter }}">
+                                {% if v.action_idx >= 0 %}
+                                    {% blocktrans with action_idx=v.action_idx action=v.action trimmed %}
+                                        [Action index: {{ action_idx }}] {{ action }}
+                                    {% endblocktrans %}
+                                {% endif %}
+                                <textarea style="width: 100%" rows="10" disabled="disabled">{{ v.logs }}</textarea>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            {% elif num_variants > threshold_include_vars %}
+                <tr>
+                    <td colspan="4" class="bg-warning">
+                        {% blocktrans trimmed %}
+                            Too many variant labels to be displayed in the browser. Please download the results in .csv instead.
+                        {% endblocktrans %}
                     </td>
                 </tr>
-            {% endfor %}
 
-        {% elif num_variants > threshold_include_vars %}
-            <tr>
-                <td colspan="4" class="bg-warning">
-                    {% blocktrans trimmed %}
-                        Too many variant labels to be displayed in the browser. Please download the results in .csv instead.
-                    {% endblocktrans %}
-                </td>
-            </tr>
-
-        {% endif %}
+            {% endif %}
         </table>
 
-        <a class="btn btn-info" href="{% url 'lgr_validate_csv' lgr_id=lgr_id %}?label={{ u_label|urlencode }}">
+        {% if lgr_set_id %}
+            {% url 'lgr_validate_csv' lgr_set_id=lgr_set_id lgr_id=lgr_id as lgr_validate_csv_url %}
+        {% else %}
+            {% url 'lgr_validate_csv' lgr_id=lgr_id as lgr_validate_csv_url %}
+        {% endif %}
+        <a class="btn btn-info" href="{{ lgr_validate_csv_url }}?label={{ u_label|urlencode }}{% if script %}&script={{ script|urlencode }}{% endif %}">
             <i class="glyphicon glyphicon-save"></i>
             {% blocktrans %}Download results in CSV{% endblocktrans %}
         </a>
-
     {% endif %}
 {% endblock content %}
 

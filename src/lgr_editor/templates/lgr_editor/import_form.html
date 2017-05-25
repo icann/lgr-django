@@ -59,11 +59,11 @@
             function check_multi_files() {
                 var files = $('#id_file').prop('files');
                 if(files.length > 1) {
-                    $('#zone_box').show();
+                    $('#zone_box').show(500);
                     $("#id_zone_labels").prop('required', true);
                     $("#id_set_name").prop('required', true);
                 } else {
-                    $('#zone_box').hide();
+                    $('#zone_box').hide(500);
                     $("#id_zone_labels").prop('required', false);
                     $("#id_set_name").prop('required', false);
                 }
