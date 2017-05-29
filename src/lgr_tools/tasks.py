@@ -15,7 +15,7 @@ from django.core.files.storage import FileSystemStorage
 
 from lgr.exceptions import LGRException
 from lgr.parser.xml_parser import XMLParser
-from lgr_tools.api import lgr_diff_labels, lgr_collision_labels, lgr_annotate_labels
+from lgr_tools.api import lgr_diff_labels, lgr_collision_labels, lgr_annotate_labels, lgr_set_annotate_labels
 from lgr_editor.api import unidb
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
 
@@ -41,7 +41,8 @@ def prepare_labels(lgr_infos, labels):
         lgr.unicode_database = unidb.manager.get_db_by_version(
             lgr.metadata.unicode_version)
         lgrs.append(lgr)
-        labels = iterdecode(StringIO(labels.encode('utf-8')), 'utf-8')
+
+    labels = iterdecode(StringIO(labels.encode('utf-8')), 'utf-8')
 
     if len(lgrs) == 1:
         lgrs = lgrs[0]
@@ -199,4 +200,36 @@ def annotate_task(lgr_info, labels_info, email_address, storage_path):
                    email_address=email_address,
                    cb=lgr_annotate_labels,
                    lgr=lgr,
+                   labels_file=labels)
+
+
+@shared_task
+def lgr_set_annotate_task(lgr_info, script_lgr_info, labels_info, email_address, storage_path):
+    """
+    Compute dispositions of labels in a LGR.
+
+    :param lgr_info: The LGR to use.
+    :param script_lgr_info: The LGR info for the script used to check label validity.
+    :param labels_info: The labels useful data
+    :param email_address: The e-mail address where the results will be sent
+    :param storage_path: The place where results will be stored
+    """
+    lgrs, labels = prepare_labels([lgr_info, script_lgr_info], labels_info['data'])
+    lgr = lgrs[0]
+    script_lgr = lgrs[1]
+
+    body = "Hi,\nThe processing of annotation from labels provided in the " \
+           "attached file '{f}' in LGR set '{lgr}' with script '{script}' has".format(f=labels_info['name'],
+                                                                                      lgr=lgr.name,
+                                                                                      script=script_lgr.name)
+
+    _lgr_tool_task(labels_info, storage_path,
+                   base_filename='annotation_{0}'.format(lgr.name),
+                   email_subject='LGR Toolset annotation result',
+                   email_body=body,
+                   email_address=email_address,
+                   cb=lgr_set_annotate_labels,
+                   lgr=lgr,
+                   script_lgr=script_lgr,
+                   set_labels=lgr_info['set_labels'],
                    labels_file=labels)

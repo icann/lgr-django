@@ -23,7 +23,11 @@
             <button type="submit" class="btn btn-primary">{% trans "Get diff" %}</button>
         </div>
     </form>
-
+    <p>
+        {% blocktrans trimmed %}
+            <strong class="text-danger"><i class="glyphicon glyphicon-alert"></i> Note that diff tool is not available for LGR sets.</strong>
+        {% endblocktrans %}
+    </p>
 {% endblock content %}
 
 {% block html_body_more %}
@@ -36,9 +40,39 @@
                 } else {
                     $('#dump_box').hide(500);
                 }
-            }
+            };
+            function hide_option(selector) {
+                $(selector).wrap('<span/>');
+                $(selector).attr('data-hidden', true);
+                $(selector).removeAttr('selected');
+            };
+            function show_option(selector) {
+                $(selector + '[data-hidden=true]').unwrap();
+                $(selector).attr('data-hidden', false);
+            };
+            function update_choices() {
+                var is_set = $('#id_lgr_1 option:selected').val();
+
+                show_option('#id_lgr_2 option');
+
+                // remove selected LGR from LGR2 list
+                $('#id_lgr_2 option[value=' + is_set + ']').each(function() {
+                    var lgr1_name = $('#id_lgr_1 option:selected').text();
+                    if ($(this).text() == lgr1_name) {
+                        hide_option(this);
+                    };
+                });
+
+                // select an available value
+                if($('#id_lgr_2 option:selected').attr('data-hidden') && $('#id_lgr_2 option[data-hidden=false]').length > 0) {
+                    $('#id_lgr_2 option[data-hidden=false]')[0].selected = true;
+                };
+            };
+
+            $('#id_lgr_1').change(function(){update_choices()});
             $('#id_collision').click(function(){check_collision()});
             $('#id_collision').show(function(){check_collision()});
+            update_choices();
         });
     </script>
 {% endblock html_body_more %}

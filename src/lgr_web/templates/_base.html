@@ -60,24 +60,38 @@
                                     {% trans "Tools" %}
                                     <span class="caret"></span>
                                 </a>
+                                {% if lgr_set_id %}
+                                    {% url 'lgr_tools_compare' lgr_set_id as lgr_tools_compare_url %}
+                                    {% url 'lgr_tools_diff' lgr_set_id as lgr_tools_diff_url %}
+                                    {% url 'lgr_tools_collisions' lgr_set_id as lgr_tools_collisions_url %}
+                                    {% url 'lgr_tools_annotate' lgr_set_id as lgr_tools_annotate_url %}
+                                {% else %}
+                                    {% url 'lgr_tools_compare' lgr_id as lgr_tools_compare_url %}
+                                    {% url 'lgr_tools_diff' lgr_id as lgr_tools_diff_url %}
+                                    {% url 'lgr_tools_collisions' lgr_id as lgr_tools_collisions_url %}
+                                    {% url 'lgr_tools_annotate' lgr_id as lgr_tools_annotate_url %}
+                                {% endif %}
                                 <ul class="dropdown-menu">
-                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_compare' lgr_id %}"
+                                    <li class="btn show-tooltip"><a href="{{ lgr_tools_compare_url }}"
                                            title="{% trans 'Compare two LGR' %}" data-placement="bottom">
                                             <i class="glyphicon glyphicon-transfer"></i>
                                             {% trans "Compare" %}
                                     </a></li>
-                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_diff' lgr_id %}"
-                                           title="{% trans 'Get difference for a list of labels for two LGR versions' %}"
-                                           data-placement="bottom">
-                                            <i class="glyphicon glyphicon-random"></i>
-                                            {% trans "Diff" %}
-                                    </a></li>
-                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_collisions' lgr_id %}"
-                                           title="{% trans 'Get collisions in a list of labels' %}" data-placement="bottom">
-                                            <i class="glyphicon glyphicon-resize-small"></i>
-                                            {% trans "Collisions" %}
-                                    </a></li>
-                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_annotate' lgr_id %}"
+                                    {# hide diff and collisions if the LGR is (in) a set #}
+                                    {% if not is_set %}
+                                        <li class="btn show-tooltip"><a href="{{ lgr_tools_diff_url }}"
+                                               title="{% trans 'Get difference for a list of labels for two LGR versions' %}"
+                                               data-placement="bottom">
+                                                <i class="glyphicon glyphicon-random"></i>
+                                                {% trans "Diff" %}
+                                        </a></li>
+                                        <li class="btn show-tooltip"><a href="{{ lgr_tools_collisions_url }}"
+                                               title="{% trans 'Get collisions in a list of labels' %}" data-placement="bottom">
+                                                <i class="glyphicon glyphicon-resize-small"></i>
+                                                {% trans "Collisions" %}
+                                        </a></li>
+                                    {% endif %}
+                                    <li class="btn show-tooltip"><a href="{{ lgr_tools_annotate_url }}"
                                            title="{% trans 'Annotate list of labels with their disposition' %}" data-placement="bottom">
                                             <i class="glyphicon glyphicon-list"></i>
                                             {% trans "Annotate" %}

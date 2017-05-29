@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 from django.utils.text import slugify
 
 from lgr_editor.exceptions import LGRValidationException
-from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs
-from lgr.tools.annotate import annotate
+from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_sets
+from lgr.tools.annotate import annotate, lgr_set_annotate
 from lgr.tools.diff_collisions import diff, collision
 
 from lgr_editor.api import LGRInfo, session_open_lgr
@@ -62,7 +62,14 @@ def lgr_comp_diff(request, lgr_info_1, lgr_info_2):
     :param lgr_info_2: The second LGR info object.
     :return: Text log to be displayed.
     """
-    content = diff_lgrs(lgr_info_1.lgr, lgr_info_2.lgr)
+    # if lgr_info_1 is a set then lgr_info_2 also and reciprocally
+    if not lgr_info_1.is_set:
+        content = diff_lgrs(lgr_info_1.lgr, lgr_info_2.lgr)
+    else:
+        content = diff_lgr_sets(lgr_info_1.lgr, lgr_info_2.lgr,
+                                [lgr.lgr for lgr in lgr_info_1.lgr_set],
+                                [lgr.lgr for lgr in lgr_info_2.lgr_set])
+
     return content
 
 
@@ -89,7 +96,7 @@ def lgr_collision_labels(lgr, labels_file, full_dump, with_rules):
     """
     Show difference between two LGR for a list of labels
 
-    :param lgr: The LGR info object.
+    :param lgr: The LGR object.
     :param labels_file: The file containing the list of labels
     :param full_dump: Whether we output a full dump
     :param with_rules: Whether we also output rules
@@ -102,8 +109,21 @@ def lgr_annotate_labels(lgr, labels_file):
     """
     Compute disposition of a list of labels in a LGR.
 
-    :param lgr: The LGR info object.
+    :param lgr: The LGR object.
     :param labels_file: The file containing the list of labels
     :return: Text log to be displayed
     """
     return annotate(lgr, labels_file)
+
+
+def lgr_set_annotate_labels(lgr, script_lgr, set_labels, labels_file):
+    """
+    Compute disposition of a list of labels in a LGR.
+
+    :param lgr: The LGR object.
+    :param script_lgr: The LGR fo the script used to check label validity
+    :param set_labels: The label of the LGR set
+    :param labels_file: The file containing the list of labels
+    :return: Text log to be displayed
+    """
+    return lgr_set_annotate(lgr, script_lgr, set_labels, labels_file)

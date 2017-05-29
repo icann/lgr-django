@@ -89,7 +89,9 @@ class AddVariantForm(forms.Form):
 
 class ValidateLabelForm(forms.Form):
     label = forms.CharField(label=_("Label"))
-    script = forms.ChoiceField(label=_("Script"), required=False, help_text='The script used to validate the label')
+    script = forms.ChoiceField(label=_("Script"),
+                               required=False,
+                               help_text=_('The script used to validate the label'))
 
     def __init__(self, *args, **kwargs):
         max_label_len = kwargs.pop('max_label_len', None)

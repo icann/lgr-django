@@ -7,6 +7,9 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.lgr %}
+        <div id="script_box">
+            {% include "lgr_editor/_form_field.html" with field=form.script %}
+        </div>
         {% include "lgr_editor/_form_field.html" with field=form.labels %}
         <p>{% blocktrans %}As the computing may be very long, we will warn by e-mail once the result can be downloaded. Please provide a valid e-mail address:{% endblocktrans %}</p>
         {% include "lgr_editor/_form_field.html" with field=form.email %}
@@ -20,3 +23,42 @@
 
 {% endblock content %}
 
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            // hide and unhide with wrap because
+            function hide_option(selector) {
+                $(selector).wrap('<span/>');
+                $(selector).attr('data-hidden', true);
+                $(selector).removeAttr('selected');
+            };
+            function show_option(selector) {
+                $(selector + '[data-hidden=true]').unwrap();
+                $(selector).attr('data-hidden', false);
+            };
+            function check_set() {
+                var lgr_set_str = $('#id_lgr option:selected').data('lgr-set');
+                // unwrap then wrap each option to avoid double wraps
+                show_option('#id_script option');
+                hide_option('#id_script option');
+                if(lgr_set_str) {
+                    // show script box
+                    $('#script_box').show(500);
+                    $("#id_script").prop('required', true);
+                    // populate script options
+                    var lgr_set = lgr_set_str.split(',');
+                    lgr_set.forEach(function(name) {
+                        // unwrap available scripts
+                        show_option('#id_script option[value=' + name + ']');
+                    });
+                } else {
+                    $('#script_box').hide(500);
+                    $("#id_script").prop('required', false);
+                }
+            }
+            $('#id_lgr').change(function(){check_set()});
+            check_set();
+        });
+    </script>
+{% endblock html_body_more %}
