@@ -49,14 +49,15 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
     if threshold_include_vars < 0 or len(label_dispositions) <= threshold_include_vars:
         for (variant_cp, var_disp, action_idx, disp_set, logs) in label_dispositions:
             variant_u = ''.join([unichr(c) for c in variant_cp])
-            variant_display = u' '.join(u"U+{:04X} ({})".format(cp, unichr(cp)) for cp in variant_cp)
+            variant_display_html = mark_safe(u' '.join(u"U+{:04X} ({})".format(cp, unichr(cp)) for cp in variant_cp))
+            variant_display = u' '.join(u"U+{:04X}".format(cp, unichr(cp)) for cp in variant_cp)
             variant_input = u' '.join(u"U+{:04X}".format(cp) for cp in variant_cp)
             variant_a = idna_encoder(variant_u)
 
             var_results.append({
                 'u_label': variant_u,
                 'a_label': variant_a,
-                'cp_display_html': variant_display,  # html version is identical to text, but just for consistency
+                'cp_display_html': variant_display_html,
                 'cp_display': variant_display,
                 'cp_input': variant_input,
                 'disposition': var_disp,
@@ -111,7 +112,8 @@ def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
 
     collide_with = collide_with[0]
     variant_u = idna_encoder(collide_with['label'])
-    variant_display = u' '.join(u"U+{:04X} ({})".format(cp, unichr(cp)) for cp in collide_with['cp'])
+    variant_display_html = mark_safe(u' '.join(u"U+{:04X} ({})".format(cp, unichr(cp)) for cp in collide_with['cp']))
+    variant_display = u' '.join(u"U+{:04X}".format(cp, unichr(cp)) for cp in collide_with['cp'])
     try:
         variant_a = idna_encoder(variant_u)
     except UnicodeError as e:
@@ -123,7 +125,7 @@ def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
         'input': collide_with['label'],
         'u_label': variant_u,
         'a_label': variant_a,
-        'cp_display_html': variant_display,  # html version is identical to text, but just for consistency
+        'cp_display_html': variant_display_html,
         'cp_display': variant_display,
         'disposition': collision['disp'][collide_with['label']],
         'action_idx': action_idx,
