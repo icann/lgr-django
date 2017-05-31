@@ -28,7 +28,7 @@ def evaluate_label_from_info(lgr_info, label_cplist, script_lgr_name,
                 break
         # TODO if script_lgr_info is None
         ctx = lgr_set_evaluate_label(lgr_info.lgr, script_lgr_info.lgr, label_cplist,
-                                     lgr_info.zone_labels,
+                                     lgr_info.set_labels,
                                      threshold_include_vars=threshold_include_vars,
                                      idna_encoder=udata.idna_encode_label)
     else:

@@ -57,11 +57,11 @@
                                     </ul>
                                     <div class="panel-group">
                                         <div class="panel-heading">
-                                            <b><a data-toggle="collapse" href="#{{lgr.name}}_labels">{% blocktrans %} Zone labels{% endblocktrans %}</a></b>
+                                            <b><a data-toggle="collapse" href="#{{lgr.name}}_labels">{% blocktrans %} Set labels{% endblocktrans %}</a></b>
                                         </div>
                                         <div id={{lgr.name}}_labels class="panel-collapse collapse">
                                             <div class="panel-body">
-                                                {% for label in lgr.zone_labels %}
+                                                {% for label in lgr.set_labels %}
                                                     {{ label }}<br>
                                                 {% endfor %}
                                             </div>

@@ -34,13 +34,13 @@ logger = logging.getLogger(__name__)
 
 
 class LGRInfo(object):
-    def __init__(self, name, lgr=None, xml=None, validating_repertoire=None, lgr_set=None, zone_labels=None):
+    def __init__(self, name, lgr=None, xml=None, validating_repertoire=None, lgr_set=None, set_labels=None):
         self.name = name
         self.lgr = lgr
         self.xml = xml
         self.validating_repertoire = validating_repertoire
         self.lgr_set = lgr_set
-        self.zone_labels = zone_labels
+        self.set_labels = set_labels
 
     def update_xml(self, pretty_print=False):
         # if something was changed in `lgr`, calling this will re-generate the xml
@@ -62,7 +62,7 @@ class LGRInfo(object):
         name = dct.get('name', '')
         xml = dct['xml']
         validate = dct.get('validate', False)
-        zone_labels = dct.get('zone_labels', None)
+        set_labels = dct.get('set_labels', None)
         lgr_set_dct = dct.get('lgr_set_dct', None)
         lgr_set = None
         if lgr_set_dct:
@@ -125,7 +125,7 @@ class LGRInfo(object):
                        lgr=lgr,
                        validating_repertoire=val_lgr,
                        lgr_set=lgr_set,
-                       zone_labels=zone_labels)
+                       set_labels=set_labels)
         return lgr_info
 
     def to_dict(self):
@@ -134,7 +134,7 @@ class LGRInfo(object):
             'xml': self.xml,
             'validating_repertoire': self.validating_repertoire.name if self.validating_repertoire else None,
             'lgr_set_dct': map(lambda x: x.to_dict(), self.lgr_set) if self.is_set else None,
-            'zone_labels': self.zone_labels,
+            'set_labels': self.set_labels,
             'is_set': self.is_set  # for index.html
         }
 
@@ -193,7 +193,7 @@ def session_new_lgr(request, lgr_id, unicode_version, validating_repertoire_name
 def session_open_lgr(request, lgr_id, lgr_xml,
                      validating_repertoire_name=None,
                      validate=False, from_set=False,
-                     lgr_set=None, zone_labels=None):
+                     lgr_set=None, set_labels=None):
     """
     Parse the given LGR in XML format, and save it in session.
 
@@ -204,7 +204,7 @@ def session_open_lgr(request, lgr_id, lgr_xml,
     :param validate: if True, ensure the XML is valid LGR XML
     :param from_set: Whether the LGR belongs to a set or not
     :param lgr_set: The list of LGRInfo in the set if this is a merged LGR from a set
-    :param zone_labels: The list of labels in the LGR set
+    :param set_labels: The list of labels in the LGR set
     :return: `LGRInfo`
     """
     lgr_info = LGRInfo.from_dict(
@@ -214,7 +214,7 @@ def session_open_lgr(request, lgr_id, lgr_xml,
             'validating_repertoire': validating_repertoire_name,
             'validate': validate,
             'lgr_set_dct': map(lambda x: x.to_dict(), lgr_set) if lgr_set else None,
-            'zone_labels': zone_labels
+            'set_labels': set_labels
         },
         lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request)
     )
@@ -288,13 +288,13 @@ def session_delete_lgr(request, lgr_id):
     request.session.modified = True
 
 
-def session_merge_set(request, lgr_set, lgr_set_name, zone_labels_file):
+def session_merge_set(request, lgr_set, lgr_set_name, set_labels_file):
     """
     Merge some LGR to build a set
     :param request: Django request object
     :param lgr_set: The list of LGRs id in the set
     :param lgr_set_name: The name of the LGR set
-    :param zone_labels_file: The file containing labels in the LGR set
+    :param set_labels_file: The file containing labels in the LGR set
     :return: The LGR set merge id
     """
     from lgr.tools.utils import read_labels
@@ -307,21 +307,22 @@ def session_merge_set(request, lgr_set, lgr_set_name, zone_labels_file):
     merged_info.update_xml(pretty_print=True)
 
     lgr, labels = prepare_labels({'xml': merged_info.xml.decode('utf-8'), 'name': merged_info.name},
-                                 zone_labels_file.read().decode('utf-8'))
-    zone_labels = set()
+                                 set_labels_file.read().decode('utf-8'))
+    set_labels = set()
     for label in read_labels(labels, lgr.unicode_database, do_raise=True):
         label_cp = tuple([ord(c) for c in label])
         (eligible, __, __, __, __, logs) = lgr.test_label_eligible(label_cp)
         if not eligible:
             raise LGRInvalidLabelFileException(label, logs.strip().split('\n')[-1])
-        zone_labels.add(label)
 
-    if is_collision(lgr, zone_labels):
+        set_labels.add(label)
+
+    if is_collision(lgr, set_labels):
         raise LGRInvalidLabelFileException(None, _('Input label file contains collision(s)'))
 
     session_open_lgr(request, merged_id, merged_info.xml,
                      validating_repertoire_name=None,
-                     validate=True, lgr_set=lgr_set, zone_labels=list(zone_labels))
+                     validate=True, lgr_set=lgr_set, set_labels=list(set_labels))
     return merged_id
 
 

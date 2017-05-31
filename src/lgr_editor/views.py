@@ -161,7 +161,7 @@ def import_lgr(request):
             try:
                 merged_id = session_merge_set(request, lgr_set,
                                               form.cleaned_data['set_name'],
-                                              form.cleaned_data['zone_labels'])
+                                              form.cleaned_data['set_labels'])
             except Exception as import_error:
                 # remove imported LGRs, those that were already existing won't be erased
                 logger.exception("Merge LGR from set is invalid")

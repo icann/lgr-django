@@ -6,11 +6,11 @@
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.file %}
         {% include "lgr_editor/_form_field.html" with field=form.validating_repertoire %}
-        <div id="zone_box">
-            {% include "lgr_editor/_form_field.html" with field=form.zone_labels %}
+        <div id="set_box">
+            {% include "lgr_editor/_form_field.html" with field=form.set_labels %}
             {% include "lgr_editor/_form_field.html" with field=form.set_name %}
         </div>
-        <div id="zone_error">
+        <div id="set_error">
             {% if form.errors %}
                 {% for field in form %}
                     {% for error in field.errors %}
@@ -52,18 +52,18 @@
             function check_multi_files() {
                 var files = $('#id_file').prop('files');
                 if(files.length > 1) {
-                    $('#zone_box').show(500);
-                    $("#id_zone_labels").prop('required', true);
+                    $('#set_box').show(500);
+                    $("#id_set_labels").prop('required', true);
                     $("#id_set_name").prop('required', true);
                 } else {
-                    $('#zone_box').hide(500);
-                    $("#id_zone_labels").prop('required', false);
+                    $('#set_box').hide(500);
+                    $("#id_set_labels").prop('required', false);
                     $("#id_set_name").prop('required', false);
                 }
             }
             $('#id_file').change(function(){check_multi_files()});
-            $('#id_file').show(function(){check_multi_files()});
-            $('#id_file').click(function(){$('#zone_error').hide()});
+            $('#id_file').click(function(){$('#set_error').hide()});
+            check_multi_files();
         });
     </script>
 {% endblock html_body_more %}
