@@ -2,52 +2,22 @@
 
 from __future__ import unicode_literals
 
-import time
-from gzip import GzipFile
-from cStringIO import StringIO
-from codecs import iterdecode
 import logging
+import time
+from cStringIO import StringIO
+from gzip import GzipFile
 
 from celery import shared_task
-
-from django.core.mail import EmailMessage
 from django.core.files.storage import FileSystemStorage
+from django.core.mail import EmailMessage
 
 from lgr.exceptions import LGRException
-from lgr.parser.xml_parser import XMLParser
-from lgr_tools.api import lgr_diff_labels, lgr_collision_labels, lgr_annotate_labels, lgr_set_annotate_labels
+from lgr.tools.utils import prepare_labels
 from lgr_editor.api import unidb
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
+from lgr_tools.api import lgr_diff_labels, lgr_collision_labels, lgr_annotate_labels, lgr_set_annotate_labels
 
 logger = logging.getLogger(__name__)
-
-
-def prepare_labels(lgr_infos, labels):
-    """
-    Get relevant information to parse labels and correctly encode label content
-
-    :param lgr_infos: The related LGRs information
-    :param labels: The label file content
-    :return: The related LGRs and the labels content in a correct format
-    """
-    if not isinstance(lgr_infos, list):
-        lgr_infos = [lgr_infos]
-
-    lgrs = []
-    for lgr_info in lgr_infos:
-        lgr_parser = XMLParser(StringIO(lgr_info['xml'].encode('utf-8')),
-                               lgr_info['name'])
-        lgr = lgr_parser.parse_document()
-        lgr.unicode_database = unidb.manager.get_db_by_version(
-            lgr.metadata.unicode_version)
-        lgrs.append(lgr)
-
-    labels = iterdecode(StringIO(labels.encode('utf-8')), 'utf-8')
-
-    if len(lgrs) == 1:
-        lgrs = lgrs[0]
-
-    return lgrs, labels
 
 
 def _lgr_tool_task(labels_info, storage_path, base_filename, email_subject,
@@ -121,7 +91,7 @@ def diff_task(lgr_info_1, lgr_info_2, labels_info, email_address, collision, ful
     :param storage_path: The place where results will be stored
     :return:
     """
-    lgrs, labels = prepare_labels([lgr_info_1, lgr_info_2], labels_info['data'])
+    lgrs, labels = prepare_labels([lgr_info_1, lgr_info_2], labels_info['data'], unidb)
 
     lgr1 = lgrs[0]
     lgr2 = lgrs[1]
@@ -160,7 +130,7 @@ def collision_task(lgr_info, labels_info, email_address, full_dump,
     :param storage_path: The place where results will be stored
     :return:
     """
-    lgr, labels = prepare_labels(lgr_info, labels_info['data'])
+    lgr, labels = prepare_labels(lgr_info, labels_info['data'], unidb)
 
     body = "Hi,\nThe processing of collisions from labels provided in the " \
            "attached file '{f}' in LGR '{lgr}' has".format(f=labels_info['name'],
@@ -187,7 +157,7 @@ def annotate_task(lgr_info, labels_info, email_address, storage_path):
     :param email_address: The e-mail address where the results will be sent
     :param storage_path: The place where results will be stored
     """
-    lgr, labels = prepare_labels(lgr_info, labels_info['data'])
+    lgr, labels = prepare_labels(lgr_info, labels_info['data'], unidb)
 
     body = "Hi,\nThe processing of annotation from labels provided in the " \
            "attached file '{f}' in LGR '{lgr}' has".format(f=labels_info['name'],
@@ -214,7 +184,7 @@ def lgr_set_annotate_task(lgr_info, script_lgr_info, labels_info, email_address,
     :param email_address: The e-mail address where the results will be sent
     :param storage_path: The place where results will be stored
     """
-    lgrs, labels = prepare_labels([lgr_info, script_lgr_info], labels_info['data'])
+    lgrs, labels = prepare_labels([lgr_info, script_lgr_info], labels_info['data'], unidb)
     lgr = lgrs[0]
     script_lgr = lgrs[1]
 

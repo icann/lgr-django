@@ -9,7 +9,6 @@ from uuid import uuid4
 
 from django.http import Http404
 from django.utils import six
-from django.utils.translation import ugettext_lazy as _
 from django.utils.text import slugify
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -19,10 +18,10 @@ from lgr.metadata import Metadata, Version
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.tools.merge_set import merge_lgr_set
-from lgr.tools.diff_collisions import is_collision
+from lgr.tools.utils import prepare_merged_lgr
 from lgr_web.settings import TOOLS_OUTPUT_STORAGE_LOCATION
 
-from .exceptions import LGRValidationException, LGRInvalidLabelFileException
+from .exceptions import LGRValidationException
 from .repertoires import get_by_name
 from . import unidb
 
@@ -297,30 +296,14 @@ def session_merge_set(request, lgr_set, lgr_set_name, set_labels_file):
     :param set_labels_file: The file containing labels in the LGR set
     :return: The LGR set merge id
     """
-    from lgr.tools.utils import read_labels
-    from lgr_tools.tasks import prepare_labels
-
     merged_lgr = merge_lgr_set(map(lambda x: x.lgr, lgr_set), lgr_set_name)
     merged_id = slugify(merged_lgr.name)
-    merged_info = LGRInfo(name=merged_id,
-                          lgr=merged_lgr)
-    merged_info.update_xml(pretty_print=True)
 
-    lgr, labels = prepare_labels({'xml': merged_info.xml.decode('utf-8'), 'name': merged_info.name},
-                                 set_labels_file.read().decode('utf-8'))
-    set_labels = set()
-    for label in read_labels(labels, lgr.unicode_database, do_raise=True):
-        label_cp = tuple([ord(c) for c in label])
-        (eligible, __, __, __, __, logs) = lgr.test_label_eligible(label_cp)
-        if not eligible:
-            raise LGRInvalidLabelFileException(label, logs.strip().split('\n')[-1])
+    _, merged_lgr_xml, set_labels = prepare_merged_lgr(merged_lgr, merged_id,
+                                                       set_labels_file.read().decode('utf-8'),
+                                                       unidb, validate_labels=True, do_raise=True)
 
-        set_labels.add(label)
-
-    if is_collision(lgr, set_labels):
-        raise LGRInvalidLabelFileException(None, _('Input label file contains collision(s)'))
-
-    session_open_lgr(request, merged_id, merged_info.xml,
+    session_open_lgr(request, merged_id, merged_lgr_xml,
                      validating_repertoire_name=None,
                      validate=True, lgr_set=lgr_set, set_labels=list(set_labels))
     return merged_id

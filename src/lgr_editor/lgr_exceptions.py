@@ -108,14 +108,13 @@ def lgr_exception_to_text(exception):
         message = _('A general exception occurred in the LGR API')
     elif isinstance(exception, exceptions.LGRValidationException):
         message = _('LGR is not valid (%(args)s)') % {'args': exception.args[0]}
-    elif isinstance(exception, exceptions.LGRInvalidLabelFileException):
-        if exception.label:
-            message = _('Label %(label)s is not valid in the LGR (%(message)s)') % {
-                'label': exception.label,
-                'message': exception.message
-            }
-        else:
-            message = exception.message
+    elif isinstance(exception, lgr.exceptions.LGRInvalidLabelException):
+        message = _('Label %(label)s is not valid in the LGR (%(message)s)') % {
+            'label': exception.label,
+            'message': exception.message
+        }
+    elif isinstance(exception, lgr.exceptions.LGRLabelCollisionException):
+        message = _('Input label file contains collision(s)')
     elif isinstance(exception, lgr.exceptions.InvalidSymmetry):
         message = _('The LGR contains a variant that do not have symmetric '
                     'relations')

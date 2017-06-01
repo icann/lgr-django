@@ -102,7 +102,7 @@ def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
 
     if not collision:
         # this should not happen
-        res['collisions_error'] = _('ERROR cannot retrieve label in collisions')
+        res['collisions_error'] = _('ERROR cannot retrieve label in collisions, please check your LGR set labels')
         return res
 
     if len(collide_with) != 1:
