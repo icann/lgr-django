@@ -8,6 +8,7 @@
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.lgr %}
         <div id="script_box">
+            {% include "lgr_editor/_form_field.html" with field=form.set_labels %}
             {% include "lgr_editor/_form_field.html" with field=form.script %}
         </div>
         {% include "lgr_editor/_form_field.html" with field=form.labels %}

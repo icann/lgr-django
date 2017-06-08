@@ -148,6 +148,12 @@ class LGRAnnotateSelector(forms.Form):
                             required=True,
                             widget=DataSelectWidget)
 
+    set_labels = forms.FileField(label=_("Allocated Set labels"),
+                                 required=False,
+                                 help_text=_('Labels already allocated in the LGR set, '
+                                             'that will be used to check for collisions '
+                                             'when evaluating labels on the LGR set'))
+
     script = forms.ChoiceField(label=_("Script"),
                                help_text=_('The script used to validate the label'),
                                required=False)
@@ -163,7 +169,7 @@ class LGRAnnotateSelector(forms.Form):
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', {})
-        lgr_id = kwargs.pop('lgr_id', '')
+        lgr_info = kwargs.pop('lgr_info', None)
         scripts = kwargs.pop('scripts', [])
         super(LGRAnnotateSelector, self).__init__(*args, **kwargs)
         lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
@@ -171,9 +177,12 @@ class LGRAnnotateSelector(forms.Form):
         # dynamically append the session LGRs (by copy, not by reference)
         self.fields['lgr'].choices = ((_('LGR'), [(lgr['name'], lgr['name']) for lgr in lgrs]),
                                       (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
-        self.fields['lgr'].initial = lgr_id
         self.fields['lgr'].widget.data = {lgr['name']: {'lgr-set': ','.join([l['name'] for l in lgr['lgr_set_dct']])}
                                           for lgr in lgr_sets}
+        if lgr_info is not None:
+            self.fields['lgr'].initial = lgr_info.name
+            if lgr_info.set_labels_info is not None:
+                self.fields['set_labels'].initial = lgr_info.set_labels_info.name
 
         if scripts:
             self.fields['script'].choices = scripts

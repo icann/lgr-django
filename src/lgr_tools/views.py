@@ -176,28 +176,28 @@ def lgr_collisions(request, lgr_id):
 
 
 def lgr_annotate(request, lgr_id):
+    # Retrieve complete list of all scripts defined in all sets
     lgr_scripts = set()
-
-    for lgr in session_list_lgr(request):
-        if lgr['is_set']:
-            lgr_set = [l['name'] for l in lgr['lgr_set_dct']]
+    for lgr_dct in session_list_lgr(request):
+        if lgr_dct['is_set']:
+            lgr_set = [l['name'] for l in lgr_dct['lgr_set_dct']]
             scripts = []
             for lgr_name in lgr_set:
-                lgr_info = session_select_lgr(request, lgr_name, lgr['name'])
+                lgr_info = session_select_lgr(request, lgr_name, lgr_dct['name'])
                 try:
                     scripts.append((lgr_info.name, lgr_info.lgr.metadata.languages[0]))
                 except (AttributeError, IndexError):
                     pass
             lgr_scripts |= set(scripts)
 
-    form = LGRAnnotateSelector(request.POST or None, request.FILES or None,
-                               session_lgrs=session_list_lgr(request),
-                               lgr_id=lgr_id,
-                               scripts=list(lgr_scripts))
-
     lgr_info = None
     if lgr_id is not None:
         lgr_info = session_select_lgr(request, lgr_id)
+
+    form = LGRAnnotateSelector(request.POST or None, request.FILES or None,
+                               session_lgrs=session_list_lgr(request),
+                               lgr_info=lgr_info,
+                               scripts=list(lgr_scripts))
 
     if form.is_valid():
         ctx = {}
@@ -213,6 +213,14 @@ def lgr_annotate(request, lgr_id):
         labels_json = LabelInfo.from_form(labels_file.name,
                                           labels_file.read(),
                                           lgr_info.lgr.unicode_database).to_dict()
+        if lgr_info.is_set:
+            set_labels_file = form.cleaned_data['set_labels']
+            if set_labels_file is not None:
+                # Handle label set
+                if lgr_info.set_labels_info is None or lgr_info.set_labels_info.name != set_labels_file.name:
+                    lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
+                                                                   set_labels_file.read(),
+                                                                   lgr_info.lgr.unicode_database)
         lgr_json = lgr_info.to_dict()
         if not lgr_info.is_set:
             annotate_task.delay(lgr_json, labels_json, email_address, storage_path)

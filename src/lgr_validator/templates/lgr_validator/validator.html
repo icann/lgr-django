@@ -8,7 +8,8 @@
     or a simple string in a context variable named `input`
     {% endcomment %}
 
-    <form method="GET" class="form-horizontal" role="form">
+    <form method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">
+        {% csrf_token %}
         <div class="form-group{% if form.label.errors %} has-error{% endif %} clearfix">
             <label class="col-sm-1 control-label" for="id_{{ form.label.name }}">
                 {{ form.label.label|default:_("Label") }}
@@ -32,8 +33,11 @@
                         {% endif %}
                     </small></p>
                 {% endif %}
-                {% if is_set and not lgr_set_id %}
-                    {% include "lgr_editor/_form_field.html" with field=form.script %}
+                {% if is_set %}
+                    {% include "lgr_editor/_form_field.html" with field=form.set_labels %}
+                    {% if not lgr_set_id %}
+                        {% include "lgr_editor/_form_field.html" with field=form.script %}
+                    {% endif %}
                 {% endif %}
             </div>
             <button class="col-sm-2 btn btn-primary" type="submit">{% trans "Validate" %}</button>
@@ -196,6 +200,7 @@
             {% endif %}
         </table>
 
+        {# TODO: Need to pass set_labels along #}
         {% if lgr_set_id %}
             {% url 'lgr_validate_csv' lgr_set_id=lgr_set_id lgr_id=lgr_id as lgr_validate_csv_url %}
         {% else %}

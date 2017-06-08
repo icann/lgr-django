@@ -1606,7 +1606,9 @@ def validate_label(request, lgr_id, lgr_set_id=None, noframe=False):
                 scripts.append((lgr_set_info.name, lgr_set_info.lgr.metadata.languages[0]))
             except (AttributeError, IndexError):
                 pass
-    form = ValidateLabelForm(request.GET or None,
+    form = ValidateLabelForm(request.POST or None,
+                             files=request.FILES or None,
+                             lgr_info=lgr_info,
                              max_label_len=max_label_len,
                              idna_decoder=udata.idna_decode_label,
                              scripts=scripts)
@@ -1614,6 +1616,13 @@ def validate_label(request, lgr_id, lgr_set_id=None, noframe=False):
     if form.is_bound and form.is_valid():
         label_cplist = form.cleaned_data['label']
         script_lgr_name = form.cleaned_data.get('script', None)
+        if lgr_info.is_set:
+            set_labels_file = form.cleaned_data['set_labels']
+            if set_labels_file is not None:
+                if lgr_info.set_labels_info is None or lgr_info.set_labels_info.name != set_labels_file.name:
+                    lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
+                                                                   set_labels_file.read(),
+                                                                   lgr_info.lgr.unicode_database)
         try:
             ctx = evaluate_label_from_info(lgr_info, label_cplist, script_lgr_name, udata)
         except UnicodeError as ex:
