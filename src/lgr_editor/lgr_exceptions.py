@@ -6,8 +6,8 @@ from __future__ import unicode_literals
 from django.utils.translation import ugettext_lazy as _
 
 import lgr.exceptions
-import exceptions
 from lgr.utils import format_cp
+from .exceptions import LGRValidationException
 
 
 def lgr_exception_to_text(exception):
@@ -106,7 +106,7 @@ def lgr_exception_to_text(exception):
         message = _('Input parameter has invalid format')
     elif isinstance(exception, lgr.exceptions.LGRApiException):
         message = _('A general exception occurred in the LGR API')
-    elif isinstance(exception, exceptions.LGRValidationException):
+    elif isinstance(exception, LGRValidationException):
         message = _('LGR is not valid (%(args)s)') % {'args': exception.args[0]}
     elif isinstance(exception, lgr.exceptions.LGRInvalidLabelException):
         message = _('Label %(label)s is not valid in the LGR (%(message)s)') % {
