@@ -115,7 +115,7 @@ def import_lgr(request):
     if form.is_valid():
         is_set = len(form.cleaned_data['file']) > 1
         merged_id = None
-        lgr_set = []
+        lgr_info_set = []
         for lgr_file in form.cleaned_data['file']:
             lgr_id = lgr_file.name
             if not RE_SAFE_FILENAME.match(lgr_id):
@@ -130,7 +130,7 @@ def import_lgr(request):
                                   context={'error': _("The LGR you have tried to import already exists in your working "
                                                       "session. Please rename it before importing it.")})
 
-            if is_set and lgr_id in map(lambda x: x.name, lgr_set):
+            if is_set and lgr_id in map(lambda x: x.name, lgr_info_set):
                 logger.error("Import existing LGR in set")
                 return render(request, 'lgr_editor/import_invalid.html',
                               context={'error': _("The LGR you have tried to import already exists in your set. "
@@ -149,7 +149,7 @@ def import_lgr(request):
                 return render(request, 'lgr_editor/import_invalid.html',
                               context={'error': lgr_exception_to_text(import_error)})
 
-            lgr_set.append(lgr_info)
+            lgr_info_set.append(lgr_info)
 
         if is_set:
             if merged_id in [lgr['name'] for lgr in session_list_lgr(request)]:
@@ -159,9 +159,8 @@ def import_lgr(request):
                                                   "session. Please rename some LGR in set before importing it.")})
 
             try:
-                merged_id = session_merge_set(request, lgr_set,
-                                              form.cleaned_data['set_name'],
-                                              form.cleaned_data['set_labels'])
+                merged_id = session_merge_set(request, lgr_info_set,
+                                              form.cleaned_data['set_name'])
             except Exception as import_error:
                 # remove imported LGRs, those that were already existing won't be erased
                 logger.exception("Merge LGR from set is invalid")

@@ -203,7 +203,6 @@ def session_open_lgr(request, lgr_id, lgr_xml,
     :param validate: if True, ensure the XML is valid LGR XML
     :param from_set: Whether the LGR belongs to a set or not
     :param lgr_set: The list of LGRInfo in the set if this is a merged LGR from a set
-    :param set_labels: The list of labels in the LGR set
     :return: `LGRInfo`
     """
     lgr_info = LGRInfo.from_dict(
@@ -287,25 +286,23 @@ def session_delete_lgr(request, lgr_id):
     request.session.modified = True
 
 
-def session_merge_set(request, lgr_set, lgr_set_name, set_labels_file):
+def session_merge_set(request, lgr_info_set, lgr_set_name):
     """
-    Merge some LGR to build a set
+    Merge some LGR to build a set.
+
     :param request: Django request object
-    :param lgr_set: The list of LGRs id in the set
+    :param lgr_info_set: The list of LGRInfo objects in the set
     :param lgr_set_name: The name of the LGR set
-    :param set_labels_file: The file containing labels in the LGR set
     :return: The LGR set merge id
     """
-    merged_lgr = merge_lgr_set(map(lambda x: x.lgr, lgr_set), lgr_set_name)
+    merged_lgr = merge_lgr_set(map(lambda x: x.lgr, lgr_info_set), lgr_set_name)
     merged_id = slugify(merged_lgr.name)
 
-    _, merged_lgr_xml, set_labels = prepare_merged_lgr(merged_lgr, merged_id,
-                                                       set_labels_file.read().decode('utf-8'),
-                                                       unidb, validate_labels=True, do_raise=True)
+    merged_lgr_xml = serialize_lgr_xml(merged_lgr)
 
     session_open_lgr(request, merged_id, merged_lgr_xml,
                      validating_repertoire_name=None,
-                     validate=True, lgr_set=lgr_set, set_labels=list(set_labels))
+                     validate=True, lgr_set=lgr_info_set)
     return merged_id
 
 

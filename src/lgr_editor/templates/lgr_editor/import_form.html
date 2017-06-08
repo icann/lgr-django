@@ -7,7 +7,6 @@
         {% include "lgr_editor/_form_field.html" with field=form.file %}
         {% include "lgr_editor/_form_field.html" with field=form.validating_repertoire %}
         <div id="set_box">
-            {% include "lgr_editor/_form_field.html" with field=form.set_labels %}
             {% include "lgr_editor/_form_field.html" with field=form.set_name %}
         </div>
         <div id="set_error">
@@ -53,11 +52,9 @@
                 var files = $('#id_file').prop('files');
                 if(files.length > 1) {
                     $('#set_box').show(500);
-                    $("#id_set_labels").prop('required', true);
                     $("#id_set_name").prop('required', true);
                 } else {
                     $('#set_box').hide(500);
-                    $("#id_set_labels").prop('required', false);
                     $("#id_set_name").prop('required', false);
                 }
             }
