@@ -4,10 +4,9 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.conf import settings
 
-from .forms import LGRCompareSelector, LGRDiffSelector, LGRCollisionSelector, LGRAnnotateSelector
-
-from lgr_editor.api import session_list_lgr, session_select_lgr, session_get_storage
+from lgr_editor.api import session_list_lgr, session_select_lgr, session_get_storage, LGRInfo, LabelInfo
 from lgr_tools.api import lgr_intersect_union, lgr_comp_diff, LGRCompInvalidException
+from lgr_tools.forms import LGRCompareSelector, LGRDiffSelector, LGRCollisionSelector, LGRAnnotateSelector
 
 from tasks import diff_task, collision_task, annotate_task, lgr_set_annotate_task
 
@@ -101,19 +100,11 @@ def lgr_diff(request, lgr_id):
         storage_path = session_get_storage(request)
 
         # need to transmit json serializable data
-        labels = {
-            'data': labels_file.read(),
-            'name': labels_file.name
-        }
-        lgr_1 = {
-            'xml': lgr_info_1.xml,
-            'name': lgr_info_1.name,
-        }
-        lgr_2 = {
-            'xml': lgr_info_2.xml,
-            'name': lgr_info_2.name,
-        }
-        diff_task.delay(lgr_1, lgr_2, labels, email_address, collision,
+        labels_json = LabelInfo.from_form(labels_file.name,
+                                          labels_file.read(), lgr_info_1.lgr.unicode_database).to_dict()
+        lgr_1_json = lgr_info_1.to_dict()
+        lgr_2_json = lgr_info_2.to_dict()
+        diff_task.delay(lgr_1_json, lgr_2_json, labels_json, email_address, collision,
                         full_dump, with_rules, storage_path)
 
         ctx = {
@@ -158,15 +149,10 @@ def lgr_collisions(request, lgr_id):
         storage_path = session_get_storage(request)
 
         # need to transmit json serializable data
-        labels = {
-            'data': labels_file.read(),
-            'name': labels_file.name
-        }
-        lgr = {
-            'xml': lgr_info.xml,
-            'name': lgr_info.name,
-        }
-        collision_task.delay(lgr, labels, email_address,
+        labels_json = LabelInfo.from_form(labels_file.name,
+                                          labels_file.read(), lgr_info.lgr.unicode_database).to_dict()
+        lgr_json = lgr_info.to_dict()
+        collision_task.delay(lgr_json, labels_json, email_address,
                              full_dump, with_rules, storage_path)
 
         ctx = {
@@ -224,26 +210,18 @@ def lgr_annotate(request, lgr_id):
         storage_path = session_get_storage(request)
 
         # need to transmit json serializable data
-        labels = {
-            'data': labels_file.read(),
-            'name': labels_file.name
-        }
-        lgr = {
-            'xml': lgr_info.xml,
-            'name': lgr_info.name,
-        }
+        labels_json = LabelInfo.from_form(labels_file.name,
+                                          labels_file.read(),
+                                          lgr_info.lgr.unicode_database).to_dict()
+        lgr_json = lgr_info.to_dict()
         if not lgr_info.is_set:
-            annotate_task.delay(lgr, labels, email_address, storage_path)
+            annotate_task.delay(lgr_json, labels_json, email_address, storage_path)
         else:
             script_lgr_id = form.cleaned_data['script']
             script_lgr_info = session_select_lgr(request, script_lgr_id, lgr_set_id=lgr_id)
 
-            lgr['set_labels'] = lgr_info.set_labels
-            script_lgr = {
-                'xml': script_lgr_info.xml,
-                'name': script_lgr_info.name
-            }
-            lgr_set_annotate_task.delay(lgr, script_lgr, labels, email_address, storage_path)
+            script_lgr_json = script_lgr_info.to_dict()
+            lgr_set_annotate_task.delay(lgr_json, script_lgr_json, labels_json, email_address, storage_path)
             ctx['script'] = script_lgr_id
 
         ctx.update({

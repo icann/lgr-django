@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from functools import partial
 import logging
+import base64
 from StringIO import StringIO
 import errno
 import os
@@ -18,7 +19,7 @@ from lgr.metadata import Metadata, Version
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.tools.merge_set import merge_lgr_set
-from lgr.tools.utils import prepare_merged_lgr
+from lgr.tools.utils import read_labels
 from lgr_web.settings import TOOLS_OUTPUT_STORAGE_LOCATION
 
 from .exceptions import LGRValidationException
@@ -33,13 +34,13 @@ logger = logging.getLogger(__name__)
 
 
 class LGRInfo(object):
-    def __init__(self, name, lgr=None, xml=None, validating_repertoire=None, lgr_set=None, set_labels=None):
+    def __init__(self, name, lgr=None, xml=None, validating_repertoire=None, lgr_set=None, set_labels_info=None):
         self.name = name
         self.lgr = lgr
         self.xml = xml
         self.validating_repertoire = validating_repertoire
         self.lgr_set = lgr_set
-        self.set_labels = set_labels
+        self.set_labels_info = set_labels_info  # List of labels defined for the LGR set, optional
 
     def update_xml(self, pretty_print=False):
         # if something was changed in `lgr`, calling this will re-generate the xml
@@ -57,11 +58,13 @@ class LGRInfo(object):
         return lgr_info
 
     @classmethod
-    def from_dict(cls, dct, lgr_loader_func):
+    def from_dict(cls, dct, lgr_loader_func=None):
         name = dct.get('name', '')
         xml = dct['xml']
         validate = dct.get('validate', False)
-        set_labels = dct.get('set_labels', None)
+        set_labels_info = None
+        if 'set_labels_info' in dct:
+            set_labels_info = LabelInfo.from_dict(dct['set_labels_info'])
         lgr_set_dct = dct.get('lgr_set_dct', None)
         lgr_set = None
         if lgr_set_dct:
@@ -124,22 +127,52 @@ class LGRInfo(object):
                        lgr=lgr,
                        validating_repertoire=val_lgr,
                        lgr_set=lgr_set,
-                       set_labels=set_labels)
+                       set_labels_info=set_labels_info)
         return lgr_info
 
     def to_dict(self):
-        return {
+        dct = {
             'name': self.name,
             'xml': self.xml,
             'validating_repertoire': self.validating_repertoire.name if self.validating_repertoire else None,
-            'lgr_set_dct': map(lambda x: x.to_dict(), self.lgr_set) if self.is_set else None,
-            'set_labels': self.set_labels,
+            'lgr_set_dct': [l.to_dict() for l in self.lgr_set] if self.is_set else None,
             'is_set': self.is_set  # for index.html
         }
+        if self.set_labels_info is not None:
+            dct['set_labels_info'] = self.set_labels_info.to_dict()
+
+        return dct
 
     @property
     def is_set(self):
         return self.lgr_set is not None and len(self.lgr_set) > 1
+
+
+class LabelInfo(object):
+
+    def __init__(self, name, labels=None, data=None):
+        self.name = name
+        self.labels = labels
+        self.data = data
+
+    @classmethod
+    def from_dict(cls, dct):
+        return cls(dct['name'], dct['labels'], dct['data'])
+
+    @classmethod
+    def from_form(cls, name, label_input, unidb):
+        data = label_input
+        labels = StringIO(data.decode('utf-8'))
+        b64data = base64.encodestring(label_input)
+
+        return cls(name, read_labels(labels, unidb), b64data)
+
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'labels': list(self.labels),
+            'data': self.data
+        }
 
 
 def get_builtin_or_session_repertoire(repertoire_id, request):

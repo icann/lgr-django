@@ -31,6 +31,7 @@ from lgr.utils import format_cp
 from lgr.parser.rfc3743_parser import RFC3743Parser
 from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.parser.line_parser import LineParser
+from lgr_editor.api import LabelInfo
 from lgr_validator.views import evaluate_label_from_info
 from lgr_validator.api import evaluate_label, lgr_set_evaluate_label
 
