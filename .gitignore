@@ -30,3 +30,6 @@ pip-delete-this-directory.txt
 
 # Documentation
 doc/_build/
+
+# Local configuration
+src/lgr_web/settings/local.py
