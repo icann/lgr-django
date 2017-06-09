@@ -95,6 +95,9 @@ def diff_task(lgr_json_1, lgr_json_2, labels_json, email_address, collision, ful
     lgr2 = LGRInfo.from_dict(lgr_json_2).lgr
     labels_info = LabelInfo.from_dict(labels_json)
 
+    logger.info("Starting task 'diff' between %s and %s, for file %s",
+                lgr1.name, lgr2.name, labels_info.name)
+
     body = "Hi,\nThe processing of diff from labels provided in the attached " \
            "file '{f}' between LGR '{lgr1}' and " \
            "LGR '{lgr2}' has".format(f=labels_info.name,
@@ -132,6 +135,9 @@ def collision_task(lgr_json, labels_json, email_address, full_dump,
     lgr = LGRInfo.from_dict(lgr_json).lgr
     labels_info = LabelInfo.from_dict(labels_json)
 
+    logger.info("Starting task 'collision' for %s, for file %s",
+                lgr.name, labels_info.name)
+
     body = "Hi,\nThe processing of collisions from labels provided in the " \
            "attached file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
                                                            lgr=lgr.name)
@@ -159,6 +165,9 @@ def annotate_task(lgr_json, labels_json, email_address, storage_path):
     """
     lgr = LGRInfo.from_dict(lgr_json).lgr
     labels_info = LabelInfo.from_dict(labels_json)
+
+    logger.info("Starting task 'annotate' for %s, for file %s",
+                lgr.name, labels_info.name)
 
     body = "Hi,\nThe processing of annotation from labels provided in the " \
            "attached file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
@@ -188,6 +197,12 @@ def lgr_set_annotate_task(lgr_json, script_lgr_json, labels_json, email_address,
     lgr_info = LGRInfo.from_dict(lgr_json)
     script_lgr = LGRInfo.from_dict(script_lgr_json).lgr
     labels_info = LabelInfo.from_dict(labels_json)
+    set_labels_info = lgr_info.set_labels_info
+    if set_labels_info is None:
+        set_labels_info = LabelInfo(name='None', labels=[])
+
+    logger.info("Starting task 'annotate' for LGR set %s, with set labels %s, for file %s",
+                lgr_info.name, lgr_info.set_labels_info.name, labels_info.name)
 
     body = "Hi,\nThe processing of annotation from labels provided in the " \
            "attached file '{f}' in LGR set '{lgr}' with script '{script}' has".format(f=labels_info.name,
@@ -202,5 +217,5 @@ def lgr_set_annotate_task(lgr_json, script_lgr_json, labels_json, email_address,
                    cb=lgr_set_annotate_labels,
                    lgr=lgr_info.lgr,
                    script_lgr=script_lgr,
-                   set_labels=lgr_info.set_labels_info.labels,
+                   set_labels=set_labels_info.labels,
                    labels_file=labels_info.labels)
