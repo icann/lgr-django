@@ -42,6 +42,42 @@ def render_char(char):
                                  for c in char.cp))
 
 
+def render_cp(char):
+    """
+    Render the code point(s) of a character.
+
+    :param char: The char object to render.
+    :returns: HTML string of the code points.
+    """
+    if isinstance(char, RangeChar):
+        return mark_safe('U+{first_c} &hellip; U+{last_c}'.format(
+            first_c=cp_to_str(char.first_cp),
+            last_c=cp_to_str(char.last_cp),
+        ))
+    else:
+        return format_html_join(" ", "U+{}",
+                                ((cp_to_str(c), )
+                                 for c in char.cp))
+
+
+def render_glyph(char):
+    """
+    Render the glyph corresponding to a char in HTML.
+
+    :param char: The char object to render.
+    :returns: HTML string of the glyph.
+    """
+    if isinstance(char, RangeChar):
+        return mark_safe('{first_u} &hellip; {last_u}'.format(
+            first_u=HTML_UNICODE_FORMAT % char.first_cp,
+            last_u=HTML_UNICODE_FORMAT % char.last_cp,
+        ))
+    else:
+        return format_html_join(" ", "{}",
+                                ((mark_safe(HTML_UNICODE_FORMAT % c), )
+                                 for c in char.cp))
+
+
 def render_name(char, udata):
     """
     Render the name of a char in HTML.

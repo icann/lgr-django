@@ -10,12 +10,14 @@ from django.conf.urls import include, url
 import lgr_editor.urls
 import lgr_validator.urls
 import lgr_tools.urls
+import lgr_renderer.urls
 from . import views
 
 urlpatterns = [
     url(r'^editor/', include(lgr_editor.urls.urlpatterns)),
     url(r'^validator/', include(lgr_validator.urls.urlpatterns)),
     url(r'^tools/', include(lgr_tools.urls.urlpatterns)),
+    url(r'^render/', include(lgr_renderer.urls.urlpatterns)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^$', views.index, name='homepage'),
 ]

@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'lgr_editor',
     'lgr_validator',
     'lgr_tools',
+    'lgr_renderer',
     'widget_tweaks',
 )
 
