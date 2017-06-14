@@ -17,15 +17,15 @@ RUN pip install -r etc/requirements.txt -f ${HOME}/packages; pip install gunicor
 RUN mkdir /root/icu
 WORKDIR /root/icu
 # TODO add md5sum checking 
-RUN curl http://download.icu-project.org/files/icu4c/4.4.2/icu4c-4_4_2-RHEL52-x64.tgz \
+RUN curl -L http://download.icu-project.org/files/icu4c/4.4.2/icu4c-4_4_2-RHEL52-x64.tgz \
        | tar xz -C / --wildcards usr/local/lib/*.44*; \
-    curl http://download.icu-project.org/files/icu4c/4.6.1/icu4c-4_6_1-RHEL6-x64.tgz \
+    curl -L http://download.icu-project.org/files/icu4c/4.6.1/icu4c-4_6_1-RHEL6-x64.tgz \
        | tar xz -C / --wildcards usr/local/lib/*.46*; \
-    curl http://download.icu-project.org/files/icu4c/49.1.2/icu4c-49_1_2-RHEL6-x64.tgz \
+    curl -L http://download.icu-project.org/files/icu4c/49.1.2/icu4c-49_1_2-RHEL6-x64.tgz \
        | tar xz -C / --wildcards usr/local/lib/*.49*; \
-    curl http://download.icu-project.org/files/icu4c/50.1/icu4c-50_1-RHEL6-x64.tgz \
+    curl -L http://download.icu-project.org/files/icu4c/50.1/icu4c-50_1-RHEL6-x64.tgz \
        | tar xz -C / --wildcards usr/local/lib/*.50*; \
-    curl http://download.icu-project.org/files/icu4c/52.1/icu4c-52_1-RHEL6-x64.tgz \
+    curl -L http://download.icu-project.org/files/icu4c/52.1/icu4c-52_1-RHEL6-x64.tgz \
        | tar xz -C / --wildcards usr/local/lib/*.52*; \
     echo "/usr/local/lib" > /etc/ld.so.conf.d/lgr.conf; ldconfig
 
