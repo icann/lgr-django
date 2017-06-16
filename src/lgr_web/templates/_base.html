@@ -137,6 +137,12 @@
                                     {% trans "View XML" %}
                                 </a>
                                 <a class="btn btn-default show-tooltip"
+                                   title="{% trans 'HTML Output' %}" data-placement="bottom"
+                                   href="{% url 'lgr_render' lgr_id %}" target="_blank">
+                                    <i class="glyphicon glyphicon-globe"></i>
+                                    {% trans "HTML Output" %}
+                                </a>
+                                <a class="btn btn-default show-tooltip"
                                    title="{% trans 'Download LGR file' %}" data-placement="bottom"
                                    href="{{ download_lgr_xml_url }}">
                                     <i class="glyphicon glyphicon-save"></i> {% trans "Download" %}
