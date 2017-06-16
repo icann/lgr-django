@@ -6,6 +6,7 @@ Responsible for creating the proper context to render the HTML view of an LGR do
 """
 from __future__ import unicode_literals
 import logging
+from itertools import izip
 
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import mark_safe
@@ -62,31 +63,60 @@ def _generate_context_metadata(metadata):
     return context
 
 
-def _generate_context_repertoire(repertoire, udata):
+def _generate_context_char(char):
+    """
+    Given a char object, return the HTML string to be used in template.
+
+    :param char: CharObject.
+    :return: HTML string to be used in template.
+    """
+    output = ''
+    if char.when is not None:
+        output = mark_safe("when: {}".format(char.when))
+    if char.not_when is not None:
+        output = mark_safe("not-when: {}".format(char.not_when))
+    return output
+
+
+def _generate_context_repertoire(repertoire, variant_sets_sorted, udata):
     """
     Generate the context of an LGR's repertoire.
 
     :param repertoire: The LGR's repertoire object.
     :param udata: The unicode database.
-    :return: Context to be used in template.
+    :return: Context to be used in template, List of context rules.
     """
 
     ctx = []
+    ctx_rules = set()
     for char in repertoire:
+        ctx_rules.add(char.when)
+        ctx_rules.add(char.not_when)
+        variant_id = ''
+        for var_id, variant_set in variant_sets_sorted.items():
+            if char.cp in variant_set:
+                variant_id = var_id
         ctx.append({
             'cp': cp_to_slug(char.cp),
             'cp_disp': render_cp(char),
             'glyph': render_glyph(char),
             'script': udata.get_script(char.cp[0]),
             'name': render_name(char, udata),
+            'context': _generate_context_char(char),
+            'variant_set': variant_id,
             'tags': char.tags,
             'references': _generate_references(char.references),
             'comment': char.comment or '',
         })
-    return ctx
+    try:
+        # Remove 'None' rule
+        ctx_rules.remove(None)
+    except KeyError:
+        pass
+    return ctx, ctx_rules
 
 
-def _generate_context_variant_sets(repertoire, udata):
+def _generate_context_variant_sets(repertoire, variant_sets_sorted, udata):
     """
     Generate the context of an LGR's variant sets.
 
@@ -96,12 +126,15 @@ def _generate_context_variant_sets(repertoire, udata):
     """
     ctx = []
 
-    for variant_set in repertoire.get_variant_sets():
-        set_ctx = []
+    for set_id, variant_set in variant_sets_sorted.items():
+        set_ctx = {
+            'id': set_id,
+            'variants': []
+        }
         for cp in variant_set:
             char = repertoire.get_char(cp)
             for var in char.get_variants():
-                set_ctx.append({
+                set_ctx['variants'].append({
                     'source_cp': cp_to_slug(char.cp),
                     'source_cp_disp': render_cp(char),
                     'source_glyph': render_glyph(char),
@@ -156,12 +189,14 @@ def _generate_context_classes(lgr, udata):
     return ctx
 
 
-def _generate_context_rules(lgr, udata):
+def _generate_context_rules(lgr, udata, context_rules, trigger_rules):
     """
     Generate the context of an LGR's rules.
 
     :param lgr: LGR to process.
     :param udata: The unicode database.
+    :param context_rules: List of rule names used in context (when/not-when in repertoire).
+    :param trigger_rules: List of rule names used in actions.
     :return: Context to be used in template.
     """
     ctx = []
@@ -169,6 +204,8 @@ def _generate_context_rules(lgr, udata):
         ctx.append({
             'name': rule.name,
             'regex': rule.get_pattern(lgr.rules_lookup, lgr.classes_lookup, udata),
+            'context': rule.name in context_rules,
+            'trigger': rule.name in trigger_rules,
             'comment': rule.comment,
         })
 
@@ -201,10 +238,13 @@ def _generate_context_actions(lgr):
     Generate the context of an LGR's actions.
 
     :param lgr: LGR to process.
-    :return: Context to be used in template.
+    :return: Context to be used in template, List of rule's names in action.
     """
+    trigger_rules = set()
     ctx = []
     for action in lgr.actions:
+        trigger_rules.add(action.match)
+        trigger_rules.add(action.not_match)
         condition, rule_variant_set = _generate_action_condition_rule_variant_set(action)
         ctx.append({
             'condition': condition,
@@ -214,7 +254,12 @@ def _generate_context_actions(lgr):
             'comment': action.comment or ''
         })
 
-    return ctx
+    try:
+        # Remove 'None' rule
+        trigger_rules.remove(None)
+    except KeyError:
+        pass
+    return ctx, trigger_rules
 
 
 def _generate_context_references(reference_manager):
@@ -246,12 +291,15 @@ def generate_context(lgr):
 
     udata = unidb.manager.get_db_by_version(lgr.metadata.unicode_version)
 
+    variant_sets = lgr.repertoire.get_variant_sets()
+    variant_sets_sorted = {idx: s for idx, s in izip(range(1, len(variant_sets)), variant_sets)}
+
     context.update(_generate_context_metadata(lgr.metadata))
-    context['repertoire'] = _generate_context_repertoire(lgr.repertoire, udata)
-    context['variant_sets'] = _generate_context_variant_sets(lgr.repertoire, udata)
+    context['repertoire'], ctxt_rules = _generate_context_repertoire(lgr.repertoire, variant_sets_sorted, udata)
+    context['variant_sets'] = _generate_context_variant_sets(lgr.repertoire, variant_sets_sorted, udata)
     context['classes'] = _generate_context_classes(lgr, udata)
-    context['rules'] = _generate_context_rules(lgr, udata)
-    context['actions'] = _generate_context_actions(lgr)
+    context['actions'], trigger_rules = _generate_context_actions(lgr)
+    context['rules'] = _generate_context_rules(lgr, udata, ctxt_rules, trigger_rules)
     context['references'] = _generate_context_references(lgr.reference_manager)
 
     return context

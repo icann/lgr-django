@@ -246,9 +246,9 @@
             <td>{{ cp.script }}</td>
             <td>{{ cp.name }}</td>
             <td>{{ cp.tags|join:"," }}</td>
-            <td>TODO - Required context</td>
+            <td>{{ cp.context }}</td>
             <td>TODO - Part of repertoire</td>
-            <td>TODO - Variants</td>
+            <td>{% if cp.variant_set %}<a href="#variant_set_{{ cp.variant_set }}">set {{ cp.variant_set }}</a>{% endif %}</td>
             <td>{{ cp.comment }}</td>
             <td>{{ cp.references }}</td>
           </tr>
@@ -303,8 +303,8 @@
       code point or sequence.</p>
 
       {% for variant_set in variant_sets %}
-        <h3 class="varsetheader"><a name='varset_{{ forloop.counter }}'>Variant Set {{ forloop.counter }} — {{ variant_set|length }} Members</a></h3>
-        <table id='Variant_Set{{ forloop.counter }}' class="simple">
+        <h3 class="varsetheader"><a name='varset_{{ variant_set.id }}'>Variant Set {{ forloop.counter }} — {{ variant_set.variants|length }} Members</a></h3>
+        <table id='variant_set_{{ variant_set.id }}' class="simple">
           <tr>
             <th>#</th>
             <th>Source</th>
@@ -316,7 +316,7 @@
             <th>References</th>
             <th>Comment</th>
           </tr>
-          {% for var in variant_set %}
+          {% for var in variant_set.variants %}
             <tr style="background-color:#F8F4EC">
               <td>{{ forloop.counter }}</td>
               <td><a href='#{{ var.source_cp }}' title='{{ var.source_name }}'>{{ var.source_cp_disp }}</a></td>
@@ -378,8 +378,8 @@
             <tr>
               <td><a name='rule_{{ rule.name }}'>{{ rule.name }}</a></td>
               <td>{{ rule.regex }}</td>
-              <td style="text-align:center">TODO</td>
-              <td style="text-align:center">TODO</td>
+              <td style="text-align:center">{{ rule.trigger }}</td>
+              <td style="text-align:center">{{ rule.context }}</td>
               <td style="text-align:center">TODO</td>
               <td>{{ rule.references }}</td>
               <td>{{ rule.comment }}</td>
