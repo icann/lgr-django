@@ -25,7 +25,10 @@ def _generate_references(references):
     :param references: List of reference's ids.
     :return: HTML string to be used in template.
     """
-    return format_html_join(", ", "<a href=#ref_{0}>[{0}]</a>", ((r,) for r in references))
+    if references:
+        return format_html_join(", ", "<a href=#ref_{0}>[{0}]</a>", ((r,) for r in references))
+
+    return ''
 
 
 def _generate_context_metadata(metadata):
@@ -49,7 +52,7 @@ def _generate_context_metadata(metadata):
     if languages:
         ctx_meta.append((_('Language(s)'), '<br/>'.join(metadata.languages)))
     if metadata.scopes:
-        ctx_meta.append((_('Scope(s)'), metadata.scopes))
+        ctx_meta.append((_('Scope(s)'),  '<br/>'.join([str(x) for x in metadata.scopes])))
     if metadata.validity_start is not None:
         ctx_meta.append((_('Validity Start'), metadata.validity_start))
     if metadata.validity_end is not None:
@@ -72,9 +75,9 @@ def _generate_context_char(char):
     """
     output = ''
     if char.when is not None:
-        output = mark_safe("when: {}".format(char.when))
+        output = mark_safe('when: <a href="#rule_{0}">{0}</a>'.format(char.when))
     if char.not_when is not None:
-        output = mark_safe("not-when: {}".format(char.not_when))
+        output = mark_safe('not-when: <a href="#rule_{0}">{0}</a>'.format(char.not_when))
     return output
 
 
@@ -126,6 +129,10 @@ def _generate_context_variant_sets(repertoire, variant_sets_sorted, udata):
     """
     ctx = []
 
+    var_summary = {
+        'largest': 0,
+        'var_types': {}
+    }
     for set_id, variant_set in variant_sets_sorted.items():
         set_ctx = {
             'id': set_id,
@@ -147,9 +154,13 @@ def _generate_context_variant_sets(repertoire, variant_sets_sorted, udata):
                     'references': _generate_references(var.references),
                     'comment': var.comment or ''
                 })
+                var_summary['var_types'].setdefault(var.type, 0)
+                var_summary['var_types'][var.type] += 1
+
+        var_summary['largest'] = max(len(set_ctx['variants']), var_summary['largest'])
         ctx.append(set_ctx)
 
-    return ctx
+    return ctx, var_summary
 
 
 def _generate_clz_definition(clz):
@@ -292,11 +303,13 @@ def generate_context(lgr):
     udata = unidb.manager.get_db_by_version(lgr.metadata.unicode_version)
 
     variant_sets = lgr.repertoire.get_variant_sets()
-    variant_sets_sorted = {idx: s for idx, s in izip(range(1, len(variant_sets)), variant_sets)}
+    variant_sets_sorted = {idx: s for idx, s in izip(range(1, len(variant_sets) + 1), variant_sets)}
 
     context.update(_generate_context_metadata(lgr.metadata))
     context['repertoire'], ctxt_rules = _generate_context_repertoire(lgr.repertoire, variant_sets_sorted, udata)
-    context['variant_sets'] = _generate_context_variant_sets(lgr.repertoire, variant_sets_sorted, udata)
+    context['variant_sets'], context['variant_summary'] = _generate_context_variant_sets(lgr.repertoire,
+                                                                                         variant_sets_sorted,
+                                                                                         udata)
     context['classes'] = _generate_context_classes(lgr, udata)
     context['actions'], trigger_rules = _generate_context_actions(lgr)
     context['rules'] = _generate_context_rules(lgr, udata, ctxt_rules, trigger_rules)

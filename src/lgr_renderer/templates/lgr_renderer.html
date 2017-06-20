@@ -194,7 +194,7 @@
   <body>
     <div id="lgr">
 
-      <h1>LGR for {{ main_language }}</a></h1>
+      <h1>LGR for {{ main_language }}</h1>
       <p>This document is mechanically formatted from the XML file for the LGR. It provides additional summary data and explanatory text.
         The XML file remains the sole normative specification of the LGR.</p>
       <table id="metadata" class="simple">
@@ -205,6 +205,37 @@
           </tr>
         {% endfor %}
       </table>
+
+      <div id="table_of_contents">
+      <h1><a name="toc">Table of Contents</a></h1>
+      <ol>
+      <li>
+        <a href="#repertoire">Repertoire</a>
+      </li>
+      <li>
+        <a href="#variant_sets">Variant Sets</a>
+      </li>
+      <li>
+        <a href="#classes_rules_and_actions">Classes, Rules and Actions</a>
+        <ol>
+	<li>
+          <a href="#character_classes">Character Classes</a>
+	</li>
+	<li>
+	  <a href="#whole_label_evaluation_and_context_rules">Whole label evaluation and context rules</a>
+	</li>
+	<li>
+	  <a href="#actions">Actions</a>
+	</li>
+       </ol>
+      </li>
+      <li>
+        <a href="#table_of_references">Table of References</a>
+      </li>
+	  <!--<li>-->
+        <!--<a href="#appendix">Appendix</a>-->
+      <!--</li>-->
+      </ol>
 
       {% if description %}
         <h2>Description</h2>
@@ -233,7 +264,7 @@
           <th>Name</th>
           <th>Tags</th>
           <th>Required Context</th>
-          <th>Part of<br/>Repertoire</th>
+          <!--<th>Part of<br/>Repertoire</th>-->
           <th>Variants</th>
           <th>Comment</th>
           <th>References</th>
@@ -247,7 +278,7 @@
             <td>{{ cp.name }}</td>
             <td>{{ cp.tags|join:"," }}</td>
             <td>{{ cp.context }}</td>
-            <td>TODO - Part of repertoire</td>
+            <!--<td>TODO - Part of repertoire</td>-->
             <td>{% if cp.variant_set %}<a href="#variant_set_{{ cp.variant_set }}">set {{ cp.variant_set }}</a>{% endif %}</td>
             <td>{{ cp.comment }}</td>
             <td>{{ cp.references }}</td>
@@ -275,29 +306,50 @@
           <dd>A link to the variant set the code point or sequence is a member of, except where a coded point or sequence maps only to itself, in which case the type of that mapping is listed.</dd>
           <dt>Comment</dt>
           <dd>If the comment in this row consists only of the code point or sequence name it is suppressed in this view.</dd>
-          <dt>✔ - core repertoire</dt>
-          <dd>A check mark in the Part-of-Repertoire column indicates a code point is part of the core repertoire.</dd>
-          <dt>◯ - extended repertoire</dt>
-          <dd>An open circle indicates a code point is part of an optional extended repertoire, which is normally disabled but could be supported by deleting the relevant context restriction.</dd>
-          <dt>✗ - excluded from repertoire</dt>
-          <dd>A code point shown with <span style="color:red">✗</span> is considered excluded from the repertoire. It is shown only for review purposes.</dd>
+          <!--<dt>✔ - core repertoire</dt>-->
+          <!--<dd>A check mark in the Part-of-Repertoire column indicates a code point is part of the core repertoire.</dd>-->
+          <!--<dt>◯ - extended repertoire</dt>-->
+          <!--<dd>An open circle indicates a code point is part of an optional extended repertoire, which is normally disabled but could be supported by deleting the relevant context restriction.</dd>-->
+          <!--<dt>✗ - excluded from repertoire</dt>-->
+          <!--<dd>A code point shown with <span style="color:red">✗</span> is considered excluded from the repertoire. It is shown only for review purposes.</dd>-->
         </dl>
       </div>
 
       <h1><a name="variant_sets">Variant Sets</a></h1>
 
+      {{ variant_sets.items }}
       <h2><a name="variant_sets_summary">Summary</a></h2>
+      <table class="simple">
+        <tr>
+          <th style="text-align:left;">Number of variant sets</th>
+          <td>{{ variant_sets|length }}</td>
+        </tr>
+        <tr>
+          <th style="text-align:left;">Largest variant set</th>
+          <td>{{ variant_summary.largest }}</td>
+        </tr>
+        <tr>
+          <th style="text-align:left;">Ordinary Variants by Type</th>
+          <td>{% for var_type, var_nbr in variant_summary.var_types.items %}{{ var_type }} ({{ var_nbr }})<br>{% endfor %}</td>
+        </tr>
+        <!--<tr>-->
+          <!--<th style="text-align:left;">Reflexive Variants by Type</th>-->
+          <!--<td>&nbsp;</td>-->
+        <!--</tr>-->
+      </table>
 
-      <p>The following tables list each pair of variant mappings on one row. For each pair of code points, by convention,
-      the lower code point is taken as the source of the mapping in the forward → direction and the reverse direction ← is not
-      listed separately. The variant mappings defined in an LGR are required to be symmetric, that is, both the forward and reverse
-      mappings must be specified. </p>
-      <p>A mapping where source and target are the same is <i>reflexive</i>. Variant sets consisting of only a single reflexive
-      mapping are not shown as a set. Instead, the variant type of the mapping is listed in the Variants column of the Repertoire
-      by Code Point table. Reflexive mappings that are part of a larger set are indicated with a “≡”.</p>
-      <p>Where the <i>type</i> of both forward and reverse mappings are the same, a single value is given in the Type(s) column,
-      otherwise the types for forward and reverse mapping are given in that order, as indicated by the arrows. The same applies to
-      any comments.</p>
+      <p>The following tables list each pair of variant mappings on one row.
+        <!--For each pair of code points, by convention,-->
+      <!--the lower code point is taken as the source of the mapping in the forward → direction and the reverse direction ← is not-->
+      <!--listed separately. The variant mappings defined in an LGR are required to be symmetric, that is, both the forward and reverse-->
+      <!--mappings must be specified.-->
+      </p>
+      <!--<p>A mapping where source and target are the same is <i>reflexive</i>. Variant sets consisting of only a single reflexive-->
+      <!--mapping are not shown as a set. Instead, the variant type of the mapping is listed in the Variants column of the Repertoire-->
+      <!--by Code Point table. Reflexive mappings that are part of a larger set are indicated with a “≡”.</p>-->
+      <!--<p>Where the <i>type</i> of both forward and reverse mappings are the same, a single value is given in the Type(s) column,-->
+      <!--otherwise the types for forward and reverse mapping are given in that order, as indicated by the arrows. The same applies to-->
+      <!--any comments.</p>-->
       <p>In a properly specified LGR, all members of each variant set are variants of each other, a property called transitivity.
       Because of that, all variant sets are necessarily disjoint. In each set, shading is used to group mappings from the same source
       code point or sequence.</p>
@@ -311,7 +363,7 @@
             <th>Glyph</th>
             <th>Target</th>
             <th>Glyph</th>
-            <th>&nbsp;</th>
+            <!--<th>&nbsp;</th>-->
             <th>Type(s)</th>
             <th>References</th>
             <th>Comment</th>
@@ -323,7 +375,7 @@
               <td style="text-align:center">{{ var.source_glyph }}</td>
               <td><a href='#{{ var.dest_cp }}' title='{{ var.dest_name }}'>{{ var.dest_cp_disp }}</a></td>
               <td style="text-align:center">{{ var.dest_glyph }}</td>
-              <td style="text-align:center">TODO</td>
+              <!--<td style="text-align:center">TODO</td>-->
               <td>{{ var.type }}</td>
               <td>{{ var.references }}</td>
               <td>{{ var.comment }}</td>
@@ -337,7 +389,7 @@
 
         <h2><a name="character_classes">Character Classes</a></h2>
 
-        <p>The following table lists all top-level classes with their definition and a list of their members intersected with the current repertoire. </p>
+        <p>The following table lists all top-level classes with their definition and the regular expression defining their members. </p>
 
         <table class="simple">
           <tr>
