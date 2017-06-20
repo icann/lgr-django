@@ -15,104 +15,106 @@
     {% endblocktrans %}
     </p>
 
-    {% if lgrs %}
-        <h3>{% trans "Your LGRs" %}</h3>
-        <p>
-            {% blocktrans trimmed %}
-                Previously, you edited the following LGR file(s). Click on its title to resume your editing session. <br/>
-                <strong><i class="glyphicon glyphicon-alert"></i> Note that importing large LGR files may take significant time to load on your browser.</strong>
-            {% endblocktrans %}
-        </p>
+    <hr class="header-sep"/>
 
-        {% for local_lgrs in lgrs_sorted %}
-            {% if not local_lgrs.grouper %}
-                <ul>
-                    {% for lgr in local_lgrs.list %}
-                        <li>
-                            <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
-                            <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-trash"></i></a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <h4>{% trans "LGR sets" %}</h4>
-                {% for lgr in local_lgrs.list %}
-                    <div class="panel-group">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h5 class="panel-title">
-                                    <a data-toggle="collapse" href="#{{lgr.name}}">{{ lgr.name }}</a>
-                                    <a href="{% url 'codepoint_list' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-eye-open"></i></a>
-                                    <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-trash"></i></a>
-                                </h5>
-                            </div>
-                            <div id={{lgr.name}} class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <ul>
-                                        {% for lgr_info in lgr.lgr_set_dct %}
-                                            <li>
-                                                <a href="{% url 'codepoint_list' lgr.name lgr_info.name %}">{% blocktrans with lgr_name=lgr_info.name %}View {{ lgr_name }}{% endblocktrans %}</a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
+    <div class="col-md-8">
+
+        <h3>{% trans "Previously loaded LGR file(s)" %}</h3>
+
+        {% if lgrs %}
+            <p>
+                {% blocktrans trimmed %}
+                    Previously, you edited the following LGR file(s). Click on its title to resume your editing session.
+                {% endblocktrans %}
+            </p>
+
+            {% for local_lgrs in lgrs_sorted %}
+                {% if not local_lgrs.grouper %}
+                    <h4>{% trans "LGRs" %}</h4>
+                    <ul>
+                        {% for lgr in local_lgrs.list %}
+                            <li>
+                                <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
+                                <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-trash"></i></a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <h4>{% trans "LGR sets" %}</h4>
+                    <ul>
+                        {% for lgr in local_lgrs.list %}
+                            <li>
+                                <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
+                                <a href="#{{lgr.name}}" data-toggle="collapse" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-th-list"></i>&nbsp;{% blocktrans %}View embedded LGRs{% endblocktrans %}</a>
+                                <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-trash"></i></a>
+                            </li>
+
+                            <div class="panel-group">
+                                <div class="panel panel-default">
+                                    <div id={{lgr.name}} class="panel-collapse collapse">
+                                        <div class="panel-body">
+                                            <ul>
+                                                {% for lgr_info in lgr.lgr_set_dct %}
+                                                    <li>
+                                                        <a href="{% url 'codepoint_list' lgr.name lgr_info.name %}">{% blocktrans with lgr_name=lgr_info.name %}View {{ lgr_name }}{% endblocktrans %}</a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-        <br>
-        <p>
-            {% blocktrans trimmed %}
-                You may also use one of the following options:
-            {% endblocktrans %}
-        </p>
-    {% else %}
-        {# no LGR #}
-        <p>
-            {% blocktrans trimmed %}
-                To begin using this application, you may use one of the following options:
-            {% endblocktrans %}
-        </p>
-    {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
 
-        <p>
-            <a href="{% url 'import_lgr' %}" class="btn btn-default btn-sm">
-                <i class="glyphicon glyphicon-folder-open"></i>&nbsp;
-                {% trans "Import an existing XML file" %}
-            </a>
-            <br>
-            <br>
-                <a href="{% url 'new_lgr' %}" class="btn btn-default btn-sm">
-                    <i class="glyphicon glyphicon-file"></i>
-                    {% trans "Start with a New blank XML file" %}
-                </a>
-            <br>
-            <br>
+        {% else %}
+            <p>
                 {% blocktrans trimmed %}
-                    Alternatively, you may select one of the built-in LGR’s below as a starting point.
+                    No LGR has been previously load.
                 {% endblocktrans %}
+            </p>
+        {% endif %}
+
+
+        <hr class="body-sep"/>
+
+        <h3>{% trans "Start a new LGR file or import an existing one" %}</h3>
+
+        <p>
+            <a href="{% url 'import_lgr' %}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;{% trans "Import an existing XML file" %}</a>
+            <br/>
+            <strong><i class="glyphicon glyphicon-alert"></i>&nbsp;Note that importing large LGR files may take significant time to load on your browser.</strong>
         </p>
 
-    <h3>{% trans "Built-in LGRs" %}</h3>
-    <p>{% blocktrans trimmed %}
-        The following LGRs are pre-installed in the system.
-        You may use them as a starting point for your own LGR.
-        To do so, just click on it to make a copy that you can then edit.
-    {% endblocktrans %}
-    </p>
-    <ul>
-        {% for xml in lgr_xml %}
-            <li><a href="{% url 'import_reference_lgr' xml %}">{% blocktrans %}Open {{xml}}{% endblocktrans %}</a></li>
-        {% endfor %}
-    </ul>
+        <p>
+            <a href="{% url 'new_lgr' %}" class="btn btn-default btn-sm">
+                <i class="glyphicon glyphicon-file"></i>&nbsp;{% trans "Start with a New blank XML file" %}
+            </a>
+        </p>
 
-    <p>
-        {% blocktrans trimmed %}
-            <strong class="text-danger">Remember to save your work regularly by downloading a copy of the XML file.</strong>
+        <h4>{% trans "Start from a built-in LGRs" %}</h4>
+        <p>{% blocktrans trimmed %}
+            The following LGRs are pre-installed in the system.
+            You may use them as a starting point for your own LGR.
+            To do so, just click on it to make a copy that you can then edit.
         {% endblocktrans %}
-    </p>
+        </p>
+        <ul>
+            {% for xml in lgr_xml %}
+                <li><a href="{% url 'import_reference_lgr' xml %}">{% blocktrans %}Open {{xml}}{% endblocktrans %}</a></li>
+            {% endfor %}
+        </ul>
+
+        <p>
+            {% blocktrans trimmed %}
+                <strong class="text-danger">Remember to save your work regularly by downloading a copy of the XML file.</strong>
+            {% endblocktrans %}
+        </p>
+    </div>
+
+    <div class="col-md-4">
 
     {% if storage %}
         <h3>{% trans "Your saved results" %}</h3>
@@ -132,6 +134,9 @@
         </ul>
         <br>
     {% endif %}
+
+    </div>
+    <div class="clearfix"></div>
 
     <p>
         {% blocktrans trimmed %}

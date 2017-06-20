@@ -115,3 +115,11 @@ body {
 	color: grey;
 	text-decoration: none;
 }
+
+hr {
+	border-color: #C9C9C9;
+}
+
+.header-sep {
+	border-width: 3px;
+}
