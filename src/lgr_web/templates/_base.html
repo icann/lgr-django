@@ -5,11 +5,11 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>{% block html_title %}{% trans 'LGR Editor' %}{% endblock %}</title>
+        <title>{% block html_title %}{% trans 'LGR Editor' %}{% endblock %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<link rel="stylesheet" href="{% static 'chrome/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'chrome/bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="{% static 'chrome/css/lgr.css' %}">
         {% block html_head_more %}{% endblock %}
@@ -74,37 +74,49 @@
                                     {% url 'lgr_tools_cross_script' as lgr_tools_cross_script_url %}
                                 {% endif %}
                                 <ul class="dropdown-menu">
-                                    <li class="btn show-tooltip"><a href="{{ lgr_tools_compare_url }}"
+                                    <li class="btn btn-block show-tooltip">
+                                        <a href="{{ lgr_tools_compare_url }}"
                                            title="{% trans 'Compare two LGR' %}" data-placement="bottom">
                                             <i class="glyphicon glyphicon-transfer"></i>
                                             {% trans "Compare two LGRs" %}
-                                    </a></li>
+                                        </a>
+                                    </li>
                                     {# hide diff and collisions if the LGR is (in) a set #}
                                     {% if not lgr_id or not is_set %}
-                                        <li class="btn show-tooltip"><a href="{{ lgr_tools_diff_url }}"
+                                        <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_tools_diff_url }}"
                                                title="{% trans 'Get differences for a list of labels for two LGRs versions' %}"
                                                data-placement="bottom">
                                                 <i class="glyphicon glyphicon-random"></i>
                                                 {% trans "Diff labels of two LGRs" %}
-                                        </a></li>
-                                        <li class="btn show-tooltip"><a href="{{ lgr_tools_collisions_url }}"
-                                               title="{% trans 'Get collisions in a list of labels' %}" data-placement="bottom">
+                                            </a>
+                                        </li>
+                                        <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_tools_collisions_url }}"
+                                               title="{% trans 'Get collisions in a list of labels' %}"
+                                               data-placement="bottom">
                                                 <i class="glyphicon glyphicon-resize-small"></i>
                                                 {% trans "Get collisions in a list of labels" %}
                                         </a></li>
                                     {% endif %}
                                     {% if not lgr_id or is_set %}
-                                        <li class="btn show-tooltip"><a href="{{ lgr_tools_cross_script_url }}"
-                                           title="{% trans 'Compute cross-script variants' %}" data-placement="bottom">
-                                            <i class="glyphicon glyphicon-transfer"></i>
-                                            {% trans "Cross-script variants" %}
-                                        </a></li>
+                                        <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_tools_cross_script_url }}"
+                                               title="{% trans 'Compute cross-script variants' %}"
+                                               data-placement="bottom">
+                                                <i class="glyphicon glyphicon-transfer"></i>
+                                                {% trans "Cross-script variants" %}
+                                            </a>
+                                        </li>
                                     {% endif %}
-                                    <li class="btn show-tooltip"><a href="{{ lgr_tools_annotate_url }}"
-                                           title="{% trans 'Annotate list of labels with their disposition' %}" data-placement="bottom">
+                                    <li class="btn btn-block show-tooltip">
+                                        <a href="{{ lgr_tools_annotate_url }}"
+                                           title="{% trans 'Annotate list of labels with their disposition' %}"
+                                           data-placement="bottom">
                                             <i class="glyphicon glyphicon-list"></i>
                                             {% trans "Generate disp. annotations" %}
-                                    </a></li>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </form>
