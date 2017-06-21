@@ -20,7 +20,6 @@ from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.tools.merge_set import merge_lgr_set
 from lgr.tools.utils import read_labels
-from lgr_web.settings import TOOLS_OUTPUT_STORAGE_LOCATION
 
 from .exceptions import LGRValidationException
 from .repertoires import get_by_name
@@ -355,7 +354,7 @@ def session_get_storage(request):
         request.session['storage'] = storage_key
     # the storage may still not be created here but now it has a path for
     #  this session
-    return os.path.join(TOOLS_OUTPUT_STORAGE_LOCATION,
+    return os.path.join(settings.TOOLS_OUTPUT_STORAGE_LOCATION,
                         storage_key)
 
 
