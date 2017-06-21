@@ -200,7 +200,7 @@ def lgr_set_annotate_task(lgr_json, script_lgr_json, labels_json, email_address,
         set_labels_info = LabelInfo(name='None', labels=[])
 
     logger.info("Starting task 'annotate' for LGR set %s, with set labels %s, for file %s",
-                lgr_info.name, lgr_info.set_labels_info.name, labels_info.name)
+                lgr_info.name, set_labels_info.name, labels_info.name)
 
     body = "Hi,\nThe processing of annotation from labels provided in the " \
            "attached file '{f}' in LGR set '{lgr}' with script '{script}' has".format(f=labels_info.name,
