@@ -5,11 +5,14 @@ api.py - API of the LGR renderer.
 Responsible for creating the proper context to render the HTML view of an LGR document.
 """
 from __future__ import unicode_literals
+
 import logging
 from itertools import izip
 
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join, format_html
+
+from lgr.matcher import AnchorMatcher
 
 from lgr_editor import unidb
 from lgr_editor.utils import render_cp, render_glyph, render_name, cp_to_slug
@@ -209,6 +212,15 @@ def _generate_context_rules(lgr, udata, context_rules, trigger_rules):
     :param trigger_rules: List of rule names used in actions.
     :return: Context to be used in template.
     """
+    def _has_anchor_rule(rule):
+        """Utility function that test if a rule has an anchor."""
+        if isinstance(rule, AnchorMatcher):
+            return True
+        for r in rule.iter_children():
+            if _has_anchor_rule(r):
+                return True
+        return False
+
     ctx = []
     for rule in lgr.rules_lookup.values():
         ctx.append({
@@ -216,6 +228,7 @@ def _generate_context_rules(lgr, udata, context_rules, trigger_rules):
             'regex': rule.get_pattern(lgr.rules_lookup, lgr.classes_lookup, udata),
             'context': rule.name in context_rules,
             'trigger': rule.name in trigger_rules,
+            'anchor': _has_anchor_rule(rule),
             'comment': rule.comment,
         })
 
