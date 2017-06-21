@@ -188,3 +188,25 @@ class LGRAnnotateSelector(forms.Form):
             self.fields['script'].choices = scripts
 
 
+class LGRCrossScriptVariantsSelector(forms.Form):
+    lgr = forms.ChoiceField(label=_("LGR"),
+                            help_text=_('LGR to use for collisions'),
+                            required=True)
+
+    labels = forms.FileField(label=_("Labels"),
+                             help_text=_('List of labels to use in diff. '
+                                         'File must be encoded in UNIX format.'),
+                             required=True)
+
+    email = forms.EmailField(label=_("E-mail"),
+                             help_text=_('Provide your e-mail address'),
+                             required=True)
+
+    def __init__(self, *args, **kwargs):
+        session_lgrs = kwargs.pop('session_lgrs', [])
+        lgr_id = kwargs.pop('lgr_id', '')
+        super(LGRCrossScriptVariantsSelector, self).__init__(*args, **kwargs)
+        lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
+        # dynamically append the session LGRs (by copy, not by reference)
+        self.fields['lgr'].choices = ((lgr['name'], lgr['name']) for lgr in lgr_sets)
+        self.fields['lgr'].initial = lgr_id

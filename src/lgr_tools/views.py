@@ -3,12 +3,17 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.contrib import messages
 
-from lgr_editor.api import session_list_lgr, session_select_lgr, session_get_storage, LGRInfo, LabelInfo
+from lgr_editor.api import session_list_lgr, session_select_lgr, session_get_storage, LabelInfo
 from lgr_tools.api import lgr_intersect_union, lgr_comp_diff, LGRCompInvalidException
-from lgr_tools.forms import LGRCompareSelector, LGRDiffSelector, LGRCollisionSelector, LGRAnnotateSelector
+from lgr_tools.forms import (LGRCompareSelector,
+                             LGRDiffSelector,
+                             LGRCollisionSelector,
+                             LGRAnnotateSelector,
+                             LGRCrossScriptVariantsSelector)
 
-from tasks import diff_task, collision_task, annotate_task, lgr_set_annotate_task
+from tasks import diff_task, collision_task, annotate_task, lgr_set_annotate_task, cross_script_variants_task
 
 select_lgr = getattr(__import__(settings.LGR_SELECTOR_FUNC.rpartition('.')[0],
                                 fromlist=[settings.LGR_SELECTOR_FUNC.rpartition('.')[0]]),
@@ -250,3 +255,42 @@ def lgr_annotate(request, lgr_id):
     }
 
     return render(request, 'lgr_tools/annotate.html', context=ctx)
+
+
+def lgr_cross_script_variants(request, lgr_id):
+    form = LGRCrossScriptVariantsSelector(request.POST or None, request.FILES or None,
+                                          session_lgrs=session_list_lgr(request),
+                                          lgr_id=lgr_id)
+
+    if form.is_valid():
+        ctx = {}
+        lgr_id = form.cleaned_data['lgr']
+        labels_file = form.cleaned_data['labels']
+        email_address = form.cleaned_data['email']
+
+        lgr_info = session_select_lgr(request, lgr_id)
+
+        storage_path = session_get_storage(request)
+
+        # need to transmit json serializable data
+        labels_json = LabelInfo.from_form(labels_file.name,
+                                          labels_file.read(),
+                                          lgr_info.lgr.unicode_database).to_dict()
+        if not lgr_info.is_set:
+            messages.add_message(request, messages.ERROR, 'Please select an LGR set.')
+        else:
+            lgr_json = lgr_info.to_dict()
+            cross_script_variants_task.delay(lgr_json, labels_json, email_address, storage_path)
+
+            ctx.update({
+                'lgr_info': lgr_info,
+                'labels_file': labels_file.name,
+                'email': email_address,
+            })
+            return render(request, 'lgr_tools/wait_cross_scripts.html', context=ctx)
+
+    ctx = {
+        'form': form,
+    }
+
+    return render(request, 'lgr_tools/cross_script_variants.html', context=ctx)

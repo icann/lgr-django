@@ -15,7 +15,7 @@ from lgr.exceptions import LGRException
 
 from lgr_editor.api import LabelInfo, LGRInfo
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
-from lgr_tools.api import lgr_diff_labels, lgr_collision_labels, lgr_annotate_labels, lgr_set_annotate_labels
+from lgr_tools.api import lgr_diff_labels, lgr_collision_labels, lgr_annotate_labels, lgr_set_annotate_labels, lgr_cross_script_variants
 
 logger = logging.getLogger(__name__)
 
@@ -34,8 +34,6 @@ def _lgr_tool_task(labels_info, storage_path, base_filename, email_subject,
     :param email_address: The e-mail address where the results will be sent
     :param cb: The callback to launch the tool
     :param cb_kwargs: The argument for the callback
-
-    :return:
     """
     sio = StringIO()
     email = EmailMessage(subject='{}'.format(email_subject),
@@ -218,4 +216,35 @@ def lgr_set_annotate_task(lgr_json, script_lgr_json, labels_json, email_address,
                    lgr=lgr_info.lgr,
                    script_lgr=script_lgr,
                    set_labels=set_labels_info.labels,
+                   labels_file=labels_info.labels)
+
+
+@shared_task
+def cross_script_variants_task(lgr_json, labels_json, email_address, storage_path):
+    """
+    Compute cross-script variants of labels in a LGR set.
+
+    :param lgr_json: The LGRInfo as a JSON object.
+    :param labels_json: The LabelInfo as a JSON object.
+    :param email_address: The e-mail address where the results will be sent
+    :param storage_path: The place where results will be stored
+    """
+    lgr_info = LGRInfo.from_dict(lgr_json)
+    labels_info = LabelInfo.from_dict(labels_json)
+
+    logger.info("Starting task 'cross-script variants' for %s, for file %s",
+                lgr_info.name, labels_info.name)
+
+    body = "Hi,\nThe processing of cross-script variants from labels provided in the " \
+           "attached file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
+                                                           lgr=lgr_info.name)
+
+    _lgr_tool_task(labels_info, storage_path,
+                   base_filename='cross_script_variants_{0}'.format(lgr_info.name),
+                   email_subject='LGR Toolset cross-script variants result',
+                   email_body=body,
+                   email_address=email_address,
+                   cb=lgr_cross_script_variants,
+                   lgr_set=[s.lgr for s in lgr_info.lgr_set],
+                   unidb=lgr_info.lgr.unicode_database,
                    labels_file=labels_info.labels)

@@ -7,6 +7,7 @@ from lgr_editor.exceptions import LGRValidationException
 from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_sets
 from lgr.tools.annotate import annotate, lgr_set_annotate
 from lgr.tools.diff_collisions import diff, collision
+from lgr.tools.cross_script_variants import  cross_script_variants
 
 from lgr_editor.api import LGRInfo, session_open_lgr
 
@@ -127,3 +128,15 @@ def lgr_set_annotate_labels(lgr, script_lgr, set_labels, labels_file):
     :return: Text log to be displayed
     """
     return lgr_set_annotate(lgr, script_lgr, set_labels, labels_file)
+
+
+def lgr_cross_script_variants(lgr_set, unidb, labels_file):
+    """
+    Compute cross-script variants of a list of labels in a LGR.
+
+    :param lgr_set: The LGR set object.
+    :param unidb: The unicode database to use.
+    :param labels_file: The file containing the list of labels
+    :return: Text log to be displayed
+    """
+    return cross_script_variants(lgr_set, unidb, labels_file)

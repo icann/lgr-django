@@ -65,11 +65,13 @@
                                     {% url 'lgr_tools_diff' lgr_set_id as lgr_tools_diff_url %}
                                     {% url 'lgr_tools_collisions' lgr_set_id as lgr_tools_collisions_url %}
                                     {% url 'lgr_tools_annotate' lgr_set_id as lgr_tools_annotate_url %}
+                                    {% url 'lgr_tools_cross_script' lgr_set_id as lgr_tools_cross_script_url %}
                                 {% else %}
                                     {% url 'lgr_tools_compare' lgr_id as lgr_tools_compare_url %}
                                     {% url 'lgr_tools_diff' lgr_id as lgr_tools_diff_url %}
                                     {% url 'lgr_tools_collisions' lgr_id as lgr_tools_collisions_url %}
                                     {% url 'lgr_tools_annotate' lgr_id as lgr_tools_annotate_url %}
+                                    {% url 'lgr_tools_cross_script' as lgr_tools_cross_script_url %}
                                 {% endif %}
                                 <ul class="dropdown-menu">
                                     <li class="btn show-tooltip"><a href="{{ lgr_tools_compare_url }}"
@@ -78,7 +80,7 @@
                                             {% trans "Compare" %}
                                     </a></li>
                                     {# hide diff and collisions if the LGR is (in) a set #}
-                                    {% if not is_set %}
+                                    {% if not lgr_id or not is_set %}
                                         <li class="btn show-tooltip"><a href="{{ lgr_tools_diff_url }}"
                                                title="{% trans 'Get difference for a list of labels for two LGR versions' %}"
                                                data-placement="bottom">
@@ -89,6 +91,13 @@
                                                title="{% trans 'Get collisions in a list of labels' %}" data-placement="bottom">
                                                 <i class="glyphicon glyphicon-resize-small"></i>
                                                 {% trans "Collisions" %}
+                                        </a></li>
+                                    {% endif %}
+                                    {% if not lgr_id or is_set %}
+                                        <li class="btn show-tooltip"><a href="{{ lgr_tools_cross_script_url }}"
+                                           title="{% trans 'Compute cross-script variants' %}" data-placement="bottom">
+                                            <i class="glyphicon glyphicon-transfer"></i>
+                                            {% trans "Cross-script variants" %}
                                         </a></li>
                                     {% endif %}
                                     <li class="btn show-tooltip"><a href="{{ lgr_tools_annotate_url }}"
