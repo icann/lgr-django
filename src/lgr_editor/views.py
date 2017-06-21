@@ -23,7 +23,7 @@ from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.views.decorators.http import require_POST
 
-from lgr.exceptions import LGRException
+from lgr.exceptions import LGRException, NotInLGR
 from lgr.metadata import Scope, Description, Metadata, Version
 from lgr.char import RangeChar
 from lgr.parser.xml_parser import LGR_NS
@@ -451,18 +451,27 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
                                 codepoint_id=codepoint_id)
 
     char = lgr_info.lgr.get_char(codepoint)
-    variants = [{
-        'cp': cp_to_slug(v.cp),
-        'slug': var_to_slug(v),
-        'cp_disp': render_char(v),
-        'name': render_name(v, udata),
-        'age': render_age(v, udata),
-        'when': v.when,
-        'not_when': v.not_when,
-        'type': v.type,
-        'comment': v.comment or '',
-        'references': v.references,
-    } for v in char.get_variants()]
+    variants = []
+    for v in char.get_variants():
+        in_lgr = True
+        try:
+            lgr_info.lgr.get_char(v.cp)
+        except NotInLGR:
+            in_lgr = False
+
+        variants.append({
+            'cp': cp_to_slug(v.cp),
+            'slug': var_to_slug(v),
+            'cp_disp': render_char(v),
+            'name': render_name(v, udata),
+            'age': render_age(v, udata),
+            'when': v.when,
+            'not_when': v.not_when,
+            'type': v.type,
+            'comment': v.comment or '',
+            'references': v.references,
+            'in_lgr': in_lgr
+        })
     variants_form = CodepointVariantFormSet(initial=variants,
                                             prefix='variants',
                                             rules=rule_names,

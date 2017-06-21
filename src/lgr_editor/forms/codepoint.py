@@ -48,6 +48,8 @@ class CodepointVariantForm(forms.Form):
     comment = forms.CharField(label='', required=False, widget=forms.Textarea(attrs={'rows': '2',
                                                                                      'cols': '30',
                                                                                      'class': 'form-control'}))
+    # whether the variant codepoint is in LGR or not
+    in_lgr = forms.BooleanField(widget=forms.HiddenInput)
 
     def to_slug(self):
         return '{},{},{}'.format(

@@ -39,12 +39,13 @@
     <div id="cp_variants">
         <form method="post">
             {% csrf_token %}
-            {# Need to dispay management form even for range char since it will still be checked in view #}
+            {# Need to display management form even for range char since it will still be checked in view #}
             {{ variants_form.management_form }}
             {% if not is_range and variants_form|length > 0 %}
                 <table class="table table-hover table-striped">
                     <tr>
                         <th style="display:none;"/>
+                        <th></th>  {# for warning #}
                         <th>{% trans "Code point" %}</th>
                         <th>{% trans "Type" %}</th>
                         <th>{% trans "Comments" %}</th>
@@ -67,11 +68,21 @@
                             {% url 'references' lgr_id=lgr_id as references_url %}
                         {% endif %}
                         <td style="display:none;">{{ char.cp }}</td>
+                        <td>
+                            {% if not char.in_lgr.value %}
+                                <i class="glyphicon glyphicon-exclamation-sign" title="{% trans 'Code point is not in LGR' %}"></i>
+                            {% endif %}
+                        </td>
                         <td class="codepoint-display">
-                            <a href="{{ cp_url }}">
+                            {% if char.in_lgr.value %}
+                                <a href="{{ cp_url }}">
+                                    {{ char.cp_disp.value }}
+                                    <br>{{ char.name.value }}
+                                </a>
+                            {% else %}  {# variant does not exist in LGR do not display link #}
                                 {{ char.cp_disp.value }}
                                 <br>{{ char.name.value }}
-                            </a>
+                            {% endif %}
                             <br>
                             Age: {{ char.age.value }}
                         </td>
