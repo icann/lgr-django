@@ -81,7 +81,6 @@ def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
 
     # check for collisions
     indexes = get_collisions(lgr, list(set_labels) + [label_u], quiet=False)
-    # TODO set invalid???
     if len(indexes) > 1:
         # there should be one collision as set labels are checked, this error should not happen
         res['collisions_error'] = _('ERROR more than one collision, please check your LGR set labels')

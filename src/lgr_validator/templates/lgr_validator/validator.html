@@ -33,11 +33,9 @@
                         {% endif %}
                     </small></p>
                 {% endif %}
-                {% if is_set %}
+                {% if is_set and not lgr_set_id %}
                     {% include "lgr_editor/_form_field.html" with field=form.set_labels %}
-                    {% if not lgr_set_id %}
-                        {% include "lgr_editor/_form_field.html" with field=form.script %}
-                    {% endif %}
+                    {% include "lgr_editor/_form_field.html" with field=form.script %}
                 {% endif %}
             </div>
             <button class="col-sm-2 btn btn-primary" type="submit">{% trans "Validate" %}</button>
@@ -206,10 +204,12 @@
         {% else %}
             {% url 'lgr_validate_csv' lgr_id=lgr_id as lgr_validate_csv_url %}
         {% endif %}
-        <a class="btn btn-info" href="{{ lgr_validate_csv_url }}?label={{ u_label|urlencode }}{% if script %}&script={{ script|urlencode }}{% endif %}">
-            <i class="glyphicon glyphicon-save"></i>
-            {% blocktrans %}Download results in CSV{% endblocktrans %}
-        </a>
+        {% if not is_set or lgr_set_id %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
+            <a class="btn btn-info" href="{{ lgr_validate_csv_url }}?label={{ u_label|urlencode }}{% if script %}&script={{ script|urlencode }}{% endif %}">
+                <i class="glyphicon glyphicon-save"></i>
+                    {% blocktrans %}Download results in CSV{% endblocktrans %}
+            </a>
+        {% endif %}
     {% endif %}
 {% endblock content %}
 

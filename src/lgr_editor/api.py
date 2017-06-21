@@ -165,7 +165,7 @@ class LabelInfo(object):
         labels = StringIO(data.decode('utf-8'))
         b64data = base64.encodestring(label_input)
 
-        return cls(name, read_labels(labels, unidb), b64data)
+        return cls(name, list(read_labels(labels, unidb)), b64data)
 
     def to_dict(self):
         return {
