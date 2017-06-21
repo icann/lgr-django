@@ -113,9 +113,11 @@
                                 {% if lgr_set_id %}
                                     {% url 'view_lgr_xml' lgr_set_id lgr_id as view_lgr_xml_url %}
                                     {% url 'download_lgr_xml' lgr_set_id lgr_id as download_lgr_xml_url %}
+                                    {% url 'lgr_render' lgr_set_id lgr_id as lgr_render_url %}
                                 {% else %}
                                     {% url 'view_lgr_xml' lgr_id as view_lgr_xml_url %}
                                     {% url 'download_lgr_xml' lgr_id as download_lgr_xml_url %}
+                                    {% url 'lgr_render' lgr_id as lgr_render_url %}
                                 {% endif %}
                                 <a class="btn btn-default show-tooltip"
                                    data-toggle="modal" data-target="#validation-modal"
@@ -138,7 +140,7 @@
                                 </a>
                                 <a class="btn btn-default show-tooltip"
                                    title="{% trans 'HTML Output' %}" data-placement="bottom"
-                                   href="{% url 'lgr_render' lgr_id %}" target="_blank">
+                                   href="{{ lgr_render_url }}" target="_blank">
                                     <i class="glyphicon glyphicon-globe"></i>
                                     {% trans "HTML Output" %}
                                 </a>

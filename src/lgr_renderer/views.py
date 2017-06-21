@@ -13,7 +13,7 @@ class LGRRendererView(TemplateView):
     template_name = 'lgr_renderer.html'
 
     def get(self, request, *args, **kwargs):
-        self.lgr_info = session_select_lgr(request, kwargs['lgr_id'])
+        self.lgr_info = session_select_lgr(request, kwargs['lgr_id'], kwargs['lgr_set_id'])
         return super(LGRRendererView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
