@@ -9,8 +9,7 @@ import logging
 from itertools import izip
 
 from django.utils.translation import ugettext_lazy as _
-from django.utils.text import mark_safe
-from django.utils.html import format_html_join
+from django.utils.html import format_html_join, format_html
 
 from lgr_editor import unidb
 from lgr_editor.utils import render_cp, render_glyph, render_name, cp_to_slug
@@ -50,9 +49,9 @@ def _generate_context_metadata(metadata):
     if metadata.date is not None:
         ctx_meta.append((_('Date'), metadata.date))
     if languages:
-        ctx_meta.append((_('Language(s)'), '<br/>'.join(metadata.languages)))
+        ctx_meta.append((_('Language(s)'), format_html_join('\n', '{}<br/>', ((l,) for l in metadata.languages))))
     if metadata.scopes:
-        ctx_meta.append((_('Scope(s)'),  '<br/>'.join([str(x) for x in metadata.scopes])))
+        ctx_meta.append((_('Scope(s)'), format_html_join('\n', '{}<br/>', ((s,) for s in metadata.scopes))))
     if metadata.validity_start is not None:
         ctx_meta.append((_('Validity Start'), metadata.validity_start))
     if metadata.validity_end is not None:
@@ -75,9 +74,9 @@ def _generate_context_char(char):
     """
     output = ''
     if char.when is not None:
-        output = mark_safe('when: <a href="#rule_{0}">{0}</a>'.format(char.when))
+        output = format_html('when: <a href="#rule_{0}">{0}</a>', char.when)
     if char.not_when is not None:
-        output = mark_safe('not-when: <a href="#rule_{0}">{0}</a>'.format(char.not_when))
+        output = format_html('not-when: <a href="#rule_{0}">{0}</a>', char.not_when)
     return output
 
 
@@ -171,11 +170,11 @@ def _generate_clz_definition(clz):
     :return: HTML string to be used in template.
     """
     if clz.from_tag is not None:
-        return mark_safe("Tag=&nbsp;<strong>{}</strong>".format(clz.from_tag))
+        return format_html("Tag=&nbsp;<strong>{}</strong>", clz.from_tag)
     if clz.unicode_property is not None:
-        return mark_safe("Unicode property=&nbsp;<strong>{}</strong>".format(clz.unicode_property))
+        return format_html("Unicode property=&nbsp;<strong>{}</strong>", clz.unicode_property)
     if clz.by_ref is not None:
-        return mark_safe("By Ref=&nbsp;<strong></strong>".format(clz.by_ref))
+        return format_html("By Ref=&nbsp;<strong></strong>", clz.by_ref)
 
     return ''
 
@@ -231,9 +230,9 @@ def _generate_action_condition_rule_variant_set(action):
     :return: (condition, rule/variant)
     """
     if action.match is not None:
-        return 'if label match ', mark_safe('<a href="#rule_{0}">{0}</a>'.format(action.match))
+        return 'if label match ', format_html('<a href="#rule_{0}">{0}</a>', action.match)
     elif action.not_match is not None:
-        return 'if label does not match ', mark_safe('<a href="#rule_{0}">{0}</a>'.format(action.not_match))
+        return 'if label does not match ', format_html('<a href="#rule_{0}">{0}</a>', action.not_match)
     elif action.any_variant is not None:
         return 'if at least one variant is in', '{' + ','.join(action.any_variant) + '}'
     elif action.all_variants is not None:
