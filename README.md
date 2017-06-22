@@ -14,8 +14,8 @@ The following modules are reusable Django apps that can be included in other Dja
 
 ## Acknowledgment
 
-This toolset was implemented by Viagenie (Audric Schiltknecht, David
-Drouin and Marc Blanchet) and Wil Tan on an ICANN contract.
+This toolset was implemented by Viagenie (Audric Schiltknecht, Julien Bernard,
+David Drouin and Marc Blanchet) and Wil Tan on an ICANN contract.
 
 ## License
 
