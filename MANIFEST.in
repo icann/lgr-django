@@ -1,5 +1,5 @@
 include manage.py README.md runtests.sh Makefile LICENSE
-include Installation_Guide.md
+include Installation_Guide.md Release_Notes.md
 include bin/bootstrap bin/gen_secret_key
 include etc/requirements.txt
 include etc/nginx/lgr-django.conf etc/systemd/lgr-django.service etc/systemd/lgr-django.conf etc/systemd/lgr-celery.service
