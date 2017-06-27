@@ -106,7 +106,7 @@ def lgr_diff(request, lgr_id):
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
-                                          labels_file.read(), lgr_info_1.lgr.unicode_database).to_dict()
+                                          labels_file.read()).to_dict()
         lgr_1_json = lgr_info_1.to_dict()
         lgr_2_json = lgr_info_2.to_dict()
         diff_task.delay(lgr_1_json, lgr_2_json, labels_json, email_address, collision,
@@ -155,7 +155,7 @@ def lgr_collisions(request, lgr_id):
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
-                                          labels_file.read(), lgr_info.lgr.unicode_database).to_dict()
+                                          labels_file.read()).to_dict()
         lgr_json = lgr_info.to_dict()
         collision_task.delay(lgr_json, labels_json, email_address,
                              full_dump, with_rules, storage_path)
@@ -216,16 +216,14 @@ def lgr_annotate(request, lgr_id):
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
-                                          labels_file.read(),
-                                          lgr_info.lgr.unicode_database).to_dict()
+                                          labels_file.read()).to_dict()
         if lgr_info.is_set:
             set_labels_file = form.cleaned_data['set_labels']
             if set_labels_file is not None:
                 # Handle label set
                 if lgr_info.set_labels_info is None or lgr_info.set_labels_info.name != set_labels_file.name:
                     lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
-                                                                   set_labels_file.read(),
-                                                                   lgr_info.lgr.unicode_database)
+                                                                   set_labels_file.read())
         lgr_json = lgr_info.to_dict()
         if not lgr_info.is_set:
             annotate_task.delay(lgr_json, labels_json, email_address, storage_path)
@@ -274,8 +272,7 @@ def lgr_cross_script_variants(request, lgr_id):
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
-                                          labels_file.read(),
-                                          lgr_info.lgr.unicode_database).to_dict()
+                                          labels_file.read()).to_dict()
         if not lgr_info.is_set:
             messages.add_message(request, messages.ERROR, 'Please select an LGR set.')
         else:

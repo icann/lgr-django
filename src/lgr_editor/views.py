@@ -1629,8 +1629,7 @@ def validate_label(request, lgr_id, lgr_set_id=None, noframe=False):
             if set_labels_file is not None:
                 if lgr_info.set_labels_info is None or lgr_info.set_labels_info.name != set_labels_file.name:
                     lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
-                                                                   set_labels_file.read(),
-                                                                   lgr_info.lgr.unicode_database)
+                                                                   set_labels_file.read())
         try:
             ctx = evaluate_label_from_info(lgr_info, label_cplist, script_lgr_name, udata)
         except UnicodeError as ex:

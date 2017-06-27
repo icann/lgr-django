@@ -7,6 +7,8 @@ from StringIO import StringIO
 import errno
 import os
 from uuid import uuid4
+from codecs import iterdecode
+
 
 from django.http import Http404
 from django.utils import six
@@ -19,7 +21,6 @@ from lgr.metadata import Metadata, Version
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.tools.merge_set import merge_lgr_set
-from lgr.tools.utils import read_labels
 
 from .exceptions import LGRValidationException
 from .repertoires import get_by_name
@@ -156,20 +157,19 @@ class LabelInfo(object):
 
     @classmethod
     def from_dict(cls, dct):
-        return cls(dct['name'], dct['labels'], dct['data'])
+        return cls(dct['name'], StringIO(base64.decodestring(dct['data']).decode('utf-8')), dct['data'])
 
     @classmethod
-    def from_form(cls, name, label_input, unidb):
+    def from_form(cls, name, label_input):
         data = label_input
         labels = StringIO(data.decode('utf-8'))
         b64data = base64.encodestring(label_input)
 
-        return cls(name, list(read_labels(labels, unidb)), b64data)
+        return cls(name, labels, b64data)
 
     def to_dict(self):
         return {
             'name': self.name,
-            'labels': list(self.labels),
             'data': self.data
         }
 
