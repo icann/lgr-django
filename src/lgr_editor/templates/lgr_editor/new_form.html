@@ -2,6 +2,8 @@
 {% load i18n %}
 
 {% block content %}
+    <h1>{% trans 'Create a new LGR' %}</h1>
+
     <form class="form-horizontal" role="form" method="post">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.name %}

@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{% block html_title %}{% trans 'LGR Editor' %}{% endblock %}</title>
+        <title>{% block html_title %}{% trans 'LGR Tool' %}{% endblock %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -29,7 +29,7 @@
                     <div id="navbar" class="collapse navbar-collapse">
                         <p>
                             <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom"><i class="glyphicon glyphicon-home"></i></a>
-                            <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom">{% trans "LGR Editor" %}</a>
+                            <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom">{% trans "LGR Tool" %}</a>
                             {% if lgr %}
                                 {% if lgr_set_id %}
                                     / <a href="{% url 'codepoint_list' lgr_set_id %}" title="{{ lgr_set.name }} {% if lgr_set.metadata and lgr_set.metadata.version.comment %}- {{ lgr_set.metadata.version.comment }}{% endif %}">{{ lgr_set.name }}</a> / <a href="{% url 'codepoint_list' lgr_set_id lgr_id %}"  title="{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}">{{ lgr.name }} {% if not cp %}{% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment|truncatechars:60 }}{% endif %}{% endif %}</a>

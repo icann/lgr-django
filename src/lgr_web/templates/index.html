@@ -4,7 +4,7 @@
 {% block content %}
     {% regroup lgrs|dictsort:"is_set" by is_set as lgrs_sorted %}
 
-    <h1>{% trans "Welcome to the LGR (Label Generation Ruleset) Editor" %}</h1>
+    <h1>{% trans "Welcome to the LGR (Label Generation Ruleset) Tool" %}</h1>
 
     <p>
     {% blocktrans trimmed %}
@@ -85,7 +85,7 @@
         <p>
             <a href="{% url 'import_lgr' %}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;{% trans "Import an existing XML file" %}</a>
             <br/>
-            <strong><i class="glyphicon glyphicon-alert"></i>&nbsp;Note that importing large LGR files may take significant time to load on your browser.</strong>
+            <strong><i class="glyphicon glyphicon-alert"></i>&nbsp;{% trans "Note that importing large LGR files may take significant time to load on your browser." %}</strong>
         </p>
 
         <p>
@@ -94,7 +94,7 @@
             </a>
         </p>
 
-        <h4>{% trans "Start from a built-in LGRs" %}</h4>
+        <h4>{% trans "Start from a built-in LGR" %}</h4>
         <p>{% blocktrans trimmed %}
             The following LGRs are pre-installed in the system.
             You may use them as a starting point for your own LGR.

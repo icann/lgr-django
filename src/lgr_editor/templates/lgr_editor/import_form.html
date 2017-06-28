@@ -2,6 +2,12 @@
 {% load i18n %}
 
 {% block content %}
+    <h1>{% trans 'Import existing LGR' %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            To import LGR set, select the XML files composing the LGR set. The set will automatically be created.
+        {% endblocktrans %}
+    </p>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.file %}
