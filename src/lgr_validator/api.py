@@ -74,13 +74,15 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
 def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
     res = {}
     label_u = u''.join([unichr(c) for c in label_cplist])
+    set_labels = [l.strip() for l in set_labels]
+
     # if label is in the LGR set labels skip
     if label_u in set_labels:
         res['collisions_error'] = _('The label is in the LGR set labels.')
         return res
 
     # check for collisions
-    indexes = get_collisions(lgr, list(set_labels) + [label_u], quiet=False)
+    indexes = get_collisions(lgr, set_labels + [label_u], quiet=False)
     if len(indexes) > 1:
         # there should be one collision as set labels are checked, this error should not happen
         res['collisions_error'] = _('ERROR more than one collision, please check your LGR set labels')
