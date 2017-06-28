@@ -193,7 +193,8 @@ def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
 
     # Third, now that the label is known to be valid, and not in collision, use the appropriate element LGR to
     # generate all allocatable variants.
-    if res['eligible'] and 'collision' not in res:  # XXX if collide => eligible = False remove second condition
+    if res['eligible'] and 'collision' not in res and 'collisions_error' not in res:
+        # XXX if collide => eligible = False remove collision condition
         res.update(_get_variants(script_lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions))
 
     return res

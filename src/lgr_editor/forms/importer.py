@@ -40,8 +40,3 @@ class ImportLGRForm(forms.Form):
                                ],
                                help_text=_('The name of the label set'),
                                )
-    set_labels = forms.FileField(label=_("Optional set labels"),
-                                 required=False,
-                                 help_text=_('Labels existing in the LGR set, '
-                                             'that will be used to check for collisions '
-                                             'when evaluating labels on the LGR set'))

@@ -124,11 +124,17 @@ def import_lgr(request):
                 lgr_id = lgr_id.rsplit('.', 1)[0]
             lgr_id = slugify(lgr_id)
 
-            if lgr_id in [lgr['name'] for lgr in session_list_lgr(request)] and not is_set:
+            if lgr_id in [lgr['name'] for lgr in session_list_lgr(request)]:
+                if not is_set:
                     logger.error("Import existing LGR")
                     return render(request, 'lgr_editor/import_invalid.html',
                                   context={'error': _("The LGR you have tried to import already exists in your working "
                                                       "session. Please rename it before importing it.")})
+                else:
+                    logger.error("Import existing LGR set")
+                    return render(request, 'lgr_editor/import_invalid.html',
+                                  context={
+                                      'error': _("The LGR set name already exists. Please use another name.")})
 
             if is_set and lgr_id in map(lambda x: x.name, lgr_info_set):
                 logger.error("Import existing LGR in set")
