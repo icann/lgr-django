@@ -9,10 +9,13 @@ from __future__ import unicode_literals
 import logging
 from itertools import izip
 
+from natsort import natsorted
+
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join, format_html
 
 from lgr.matcher import AnchorMatcher
+from lgr.validate.lgr_stats import generate_stats
 
 from lgr_editor import unidb
 from lgr_editor.utils import render_cp, render_glyph, render_name, cp_to_slug
@@ -131,10 +134,6 @@ def _generate_context_variant_sets(repertoire, variant_sets_sorted, udata):
     """
     ctx = []
 
-    var_summary = {
-        'largest': 0,
-        'var_types': {}
-    }
     for set_id, variant_set in variant_sets_sorted.items():
         set_ctx = {
             'id': set_id,
@@ -156,13 +155,9 @@ def _generate_context_variant_sets(repertoire, variant_sets_sorted, udata):
                     'references': _generate_references(var.references),
                     'comment': var.comment or ''
                 })
-                var_summary['var_types'].setdefault(var.type, 0)
-                var_summary['var_types'][var.type] += 1
-
-        var_summary['largest'] = max(len(set_ctx['variants']), var_summary['largest'])
         ctx.append(set_ctx)
 
-    return ctx, var_summary
+    return ctx
 
 
 def _generate_clz_definition(clz):
@@ -300,7 +295,7 @@ def _generate_context_references(reference_manager):
             'comment': ref.get('comment', ''),
         })
 
-    return ctx
+    return natsorted(ctx, key=lambda c: c['id'])
 
 
 def generate_context(lgr):
@@ -310,7 +305,7 @@ def generate_context(lgr):
     :param lgr: The LGR to generate the context for.
     :return: The context, as a dict.
     """
-    context = {}
+    context = {'name': lgr.name, 'stats': generate_stats(lgr)}
 
     udata = unidb.manager.get_db_by_version(lgr.metadata.unicode_version)
 
@@ -319,9 +314,9 @@ def generate_context(lgr):
 
     context.update(_generate_context_metadata(lgr.metadata))
     context['repertoire'], ctxt_rules = _generate_context_repertoire(lgr.repertoire, variant_sets_sorted, udata)
-    context['variant_sets'], context['variant_summary'] = _generate_context_variant_sets(lgr.repertoire,
-                                                                                         variant_sets_sorted,
-                                                                                         udata)
+    context['variant_sets'] = _generate_context_variant_sets(lgr.repertoire,
+                                                             variant_sets_sorted,
+                                                             udata)
     context['classes'] = _generate_context_classes(lgr, udata)
     context['actions'], trigger_rules = _generate_context_actions(lgr)
     context['rules'] = _generate_context_rules(lgr, udata, ctxt_rules, trigger_rules)

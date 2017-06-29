@@ -29,5 +29,7 @@ setup(
         'lgr-core',
         'munidata',
         'picu',
+        # Other
+        'natsort'
     ]
 )

@@ -64,6 +64,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
   * lgr-core [TBD]
   * [picu](https://pypi.python.org/pypi/picu) [MIT/X License]
   * munidata [TBD]
+  * [natsort](https://pypi.python.org/pypi/natsort) [MIT License]
 
  For documentation generation:
 

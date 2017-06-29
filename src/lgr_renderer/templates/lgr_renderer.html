@@ -2,7 +2,7 @@
 <HTML xmlns="http://www.w3.org/1999/xHTML">
   <head>
     <meta http-equiv="Content-Type" content="text/HTML; charset=utf-8" />
-    <title>LGR for und-Arab-PK</title>
+    <title>{{ name|title }}</title>
     <style type="text/css">
   #lgr {
           max-width:1200px;
@@ -194,7 +194,7 @@
   <body>
     <div id="lgr">
 
-      <h1>LGR for {{ main_language }}</h1>
+      <h1>{{ name|title }}</h1>
       <p>This document is mechanically formatted from the XML file for the LGR. It provides additional summary data and explanatory text.
         The XML file remains the sole normative specification of the LGR.</p>
       <table id="metadata" class="simple">
@@ -207,35 +207,21 @@
       </table>
 
       <div id="table_of_contents">
-      <h1><a name="toc">Table of Contents</a></h1>
-      <ol>
-      <li>
-        <a href="#repertoire">Repertoire</a>
-      </li>
-      <li>
-        <a href="#variant_sets">Variant Sets</a>
-      </li>
-      <li>
-        <a href="#classes_rules_and_actions">Classes, Rules and Actions</a>
+        <h1><a name="toc">Table of Contents</a></h1>
         <ol>
-	<li>
-          <a href="#character_classes">Character Classes</a>
-	</li>
-	<li>
-	  <a href="#whole_label_evaluation_and_context_rules">Whole label evaluation and context rules</a>
-	</li>
-	<li>
-	  <a href="#actions">Actions</a>
-	</li>
-       </ol>
-      </li>
-      <li>
-        <a href="#table_of_references">Table of References</a>
-      </li>
-	  <!--<li>-->
-        <!--<a href="#appendix">Appendix</a>-->
-      <!--</li>-->
-      </ol>
+          <li><a href="#description">Description</a></li>
+          <li><a href="#repertoire">Repertoire</a></li>
+          <li><a href="#variant_sets">Variant Sets</a></li>
+          <li>
+            <a href="#classes_rules_and_actions">Classes, Rules and Actions</a>
+            <ol>
+              <li><a href="#character_classes">Character Classes</a></li>
+              <li><a href="#whole_label_evaluation_and_context_rules">Whole label evaluation and context rules</a></li>
+              <li><a href="#actions">Actions</a></li>
+            </ol>
+          </li>
+          <li><a href="#table_of_references">Table of References</a></li>
+        </ol>
 
       {% if description %}
         <h2>Description</h2>
@@ -247,6 +233,20 @@
       <h1><a name="repertoire">Repertoire</a></h1>
 
       <h2><a name="repertoire_summary">Summary</a></h2>
+      <table class="simple">
+        <tr>
+          <th style="text-align:left;">Number of elements in repertoire</th>
+          <td>{{ stats.codepoint_number }}</td>
+        </tr>
+        <tr>
+          <th style="text-align:left;">Number of ranges in repertoire</th>
+          <td>{{ stats.range_number }}</td>
+        </tr>
+        <tr>
+          <th style="text-align:left;">Number of code point sequences</th>
+          <td>{{ stats.sequence_number }}</td>
+        </tr>
+      </table>
 
       <h2><a name="repertoire_by_code_point">Repertoire by Code Point</a></h2>
 
@@ -317,7 +317,6 @@
 
       <h1><a name="variant_sets">Variant Sets</a></h1>
 
-      {{ variant_sets.items }}
       <h2><a name="variant_sets_summary">Summary</a></h2>
       <table class="simple">
         <tr>
@@ -326,11 +325,11 @@
         </tr>
         <tr>
           <th style="text-align:left;">Largest variant set</th>
-          <td>{{ variant_summary.largest }}</td>
+          <td>{{ stats.largest_variant_set }}</td>
         </tr>
         <tr>
           <th style="text-align:left;">Ordinary Variants by Type</th>
-          <td>{% for var_type, var_nbr in variant_summary.var_types.items %}{{ var_type }} ({{ var_nbr }})<br>{% endfor %}</td>
+          <td>{% for var_type, var_nbr in stats.variants_by_type.items %}{{ var_type }} ({{ var_nbr }})<br>{% endfor %}</td>
         </tr>
         <!--<tr>-->
           <!--<th style="text-align:left;">Reflexive Variants by Type</th>-->
