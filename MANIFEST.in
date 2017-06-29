@@ -20,3 +20,5 @@ recursive-include src/lgr_validator/templates *
 recursive-include src/lgr_validator/locale *
 recursive-include src/lgr_tools/templates *
 recursive-include src/lgr_tools/locale *
+recursive-include src/lgr_renderer/templates *
+recursive-include src/lgr_renderer/locale *

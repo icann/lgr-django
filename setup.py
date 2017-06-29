@@ -4,11 +4,11 @@ from setuptools import setup, find_packages
 
 setup(
     name='lgr-django',
-    version='1.6',
+    version='1.7',
     author='Viagenie and Wil Tan',
     author_email='support@viagenie.ca',
     packages=find_packages('src'),
-    package_dir = {'':'src'},
+    package_dir={'': 'src'},
     license='TODO',
     description='Web-application for LGR editing',
     long_description=open('README.md').read(),
