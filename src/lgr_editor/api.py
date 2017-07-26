@@ -121,7 +121,7 @@ class LGRInfo(object):
             lgr.unicode_database = unidb.manager.get_db_by_version(unicode_version)
 
         validating_repertoire = dct.get('validating_repertoire')
-        val_lgr = lgr_loader_func(validating_repertoire) if validating_repertoire else None
+        val_lgr = lgr_loader_func(validating_repertoire) if (validating_repertoire and lgr_loader_func is not None) else None
         lgr_info = cls(name=name,
                        xml=xml,
                        lgr=lgr,
