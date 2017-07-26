@@ -20,13 +20,12 @@ from lgr_tools.api import lgr_diff_labels, lgr_collision_labels, lgr_annotate_la
 logger = logging.getLogger(__name__)
 
 
-def _lgr_tool_task(labels_info, storage_path, base_filename, email_subject,
+def _lgr_tool_task(storage_path, base_filename, email_subject,
                    email_body, email_address, cb, **cb_kwargs):
     """
     Launch the tool task and send e-mail
 
 
-    :param labels_info: The LabelInfo object.
     :param storage_path: The place where results will be stored
     :param base_filename: The beginning of the filename that will be generated
     :param email_subject: The subject for the e-mail to be sent
@@ -38,7 +37,6 @@ def _lgr_tool_task(labels_info, storage_path, base_filename, email_subject,
     sio = StringIO()
     email = EmailMessage(subject='{}'.format(email_subject),
                          to=[email_address])
-    email.attach(labels_info.name, labels_info.data, 'text/plain')
 
     try:
         with GzipFile(filename='{}.txt'.format(base_filename),
@@ -96,13 +94,13 @@ def diff_task(lgr_json_1, lgr_json_2, labels_json, email_address, collision, ful
     logger.info("Starting task 'diff' between %s and %s, for file %s",
                 lgr1.name, lgr2.name, labels_info.name)
 
-    body = "Hi,\nThe processing of diff from labels provided in the attached " \
+    body = "Hi,\nThe processing of diff from labels provided in the " \
            "file '{f}' between LGR '{lgr1}' and " \
            "LGR '{lgr2}' has".format(f=labels_info.name,
                                      lgr1=lgr1.name,
                                      lgr2=lgr2.name)
 
-    _lgr_tool_task(labels_info, storage_path,
+    _lgr_tool_task(storage_path,
                    base_filename='diff_{0}_{1}'.format(lgr1.name,
                                                        lgr2.name),
                    email_subject='LGR Toolset diff result',
@@ -137,9 +135,9 @@ def collision_task(lgr_json, labels_json, email_address, full_dump,
                 lgr.name, labels_info.name)
 
     body = "Hi,\nThe processing of collisions from labels provided in the " \
-           "attached file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
-                                                           lgr=lgr.name)
-    _lgr_tool_task(labels_info, storage_path,
+           "file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
+                                                  lgr=lgr.name)
+    _lgr_tool_task(storage_path,
                    base_filename='collisions_{0}'.format(lgr.name),
                    email_subject='LGR Toolset collisions result',
                    email_body=body,
@@ -168,10 +166,10 @@ def annotate_task(lgr_json, labels_json, email_address, storage_path):
                 lgr.name, labels_info.name)
 
     body = "Hi,\nThe processing of annotation from labels provided in the " \
-           "attached file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
-                                                           lgr=lgr.name)
+           "file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
+                                                  lgr=lgr.name)
 
-    _lgr_tool_task(labels_info, storage_path,
+    _lgr_tool_task(storage_path,
                    base_filename='annotation_{0}'.format(lgr.name),
                    email_subject='LGR Toolset annotation result',
                    email_body=body,
@@ -203,11 +201,11 @@ def lgr_set_annotate_task(lgr_json, script_lgr_json, labels_json, email_address,
                 lgr_info.name, set_labels_info.name, labels_info.name)
 
     body = "Hi,\nThe processing of annotation from labels provided in the " \
-           "attached file '{f}' in LGR set '{lgr}' with script '{script}' has".format(f=labels_info.name,
-                                                                                      lgr=lgr_info.lgr.name,
-                                                                                      script=script_lgr.name)
+           "file '{f}' in LGR set '{lgr}' with script '{script}' has".format(f=labels_info.name,
+                                                                             lgr=lgr_info.lgr.name,
+                                                                             script=script_lgr.name)
 
-    _lgr_tool_task(labels_info, storage_path,
+    _lgr_tool_task(storage_path,
                    base_filename='annotation_{0}'.format(lgr_info.lgr.name),
                    email_subject='LGR Toolset annotation result',
                    email_body=body,
@@ -236,10 +234,10 @@ def cross_script_variants_task(lgr_json, labels_json, email_address, storage_pat
                 lgr_info.name, labels_info.name)
 
     body = "Hi,\nThe processing of cross-script variants from labels provided in the " \
-           "attached file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
-                                                           lgr=lgr_info.name)
+           "file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
+                                                  lgr=lgr_info.name)
 
-    _lgr_tool_task(labels_info, storage_path,
+    _lgr_tool_task(storage_path,
                    base_filename='cross_script_variants_{0}'.format(lgr_info.name),
                    email_subject='LGR Toolset cross-script variants result',
                    email_body=body,
