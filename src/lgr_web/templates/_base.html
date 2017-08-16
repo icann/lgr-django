@@ -5,11 +5,11 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>{% block html_title %}{% trans 'LGR Editor' %}{% endblock %}</title>
+        <title>{% block html_title %}{% trans 'LGR Tool' %}{% endblock %}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<link rel="stylesheet" href="{% static 'chrome/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'chrome/bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="{% static 'chrome/css/lgr.css' %}">
         {% block html_head_more %}{% endblock %}
@@ -29,16 +29,22 @@
                     <div id="navbar" class="collapse navbar-collapse">
                         <p>
                             <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom"><i class="glyphicon glyphicon-home"></i></a>
-                            <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom">{% trans "LGR Editor" %}</a>
+                            <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom">{% trans "LGR Tool" %}</a>
                             {% if lgr %}
-                                / <a href="{% url 'codepoint_list' lgr_id %}">{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}</a>
-                                {% if cp %}/ <a href="{% url 'codepoint_view' lgr_id cp %}">{{ cp_disp }} {{ name }}</a>{% endif %}
+                                {% if lgr_set_id %}
+                                    / <a href="{% url 'codepoint_list' lgr_set_id %}" title="{{ lgr_set.name }} {% if lgr_set.metadata and lgr_set.metadata.version.comment %}- {{ lgr_set.metadata.version.comment }}{% endif %}">{{ lgr_set.name }}</a> / <a href="{% url 'codepoint_list' lgr_set_id lgr_id %}"  title="{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}">{{ lgr.name }} {% if not cp %}{% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment|truncatechars:60 }}{% endif %}{% endif %}</a>
+                                    {% if cp %}/ <a href="{% url 'codepoint_view' lgr_set_id lgr_id cp %}">{{ cp_disp }} {{ name }}</a>{% endif %}
+                                {% else %}
+                                    / <a href="{% url 'codepoint_list' lgr_id %}" title="{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}">{{ lgr.name }} {% if not cp %}{% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment|truncatechars:60 }}{% endif %}{% endif %}</a>
+                                    {% if cp %}/ <a href="{% url 'codepoint_view' lgr_id cp %}">{{ cp_disp }} {{ name }}</a>{% endif %}
+                                {% endif %}
                             {% endif %}
+
 
                         </p>
                         <form class="navbar-form navbar-left">
                             <a href="{% url 'import_lgr' %}" class="btn btn-default show-tooltip"
-                               title="{% trans 'Import an existing LGR file' %}" data-placement="bottom">
+                               title="{% trans 'Import an existing LGR file or set' %}" data-placement="bottom">
                                 <i class="glyphicon glyphicon-folder-open"></i>&nbsp;
                                 {% trans "Import" %}
                             </a>
@@ -54,33 +60,77 @@
                                     {% trans "Tools" %}
                                     <span class="caret"></span>
                                 </a>
+                                {% if lgr_set_id %}
+                                    {% url 'lgr_tools_compare' lgr_set_id as lgr_tools_compare_url %}
+                                    {% url 'lgr_tools_diff' lgr_set_id as lgr_tools_diff_url %}
+                                    {% url 'lgr_tools_collisions' lgr_set_id as lgr_tools_collisions_url %}
+                                    {% url 'lgr_tools_annotate' lgr_set_id as lgr_tools_annotate_url %}
+                                    {% url 'lgr_tools_cross_script' lgr_set_id as lgr_tools_cross_script_url %}
+                                {% else %}
+                                    {% url 'lgr_tools_compare' lgr_id as lgr_tools_compare_url %}
+                                    {% url 'lgr_tools_diff' lgr_id as lgr_tools_diff_url %}
+                                    {% url 'lgr_tools_collisions' lgr_id as lgr_tools_collisions_url %}
+                                    {% url 'lgr_tools_annotate' lgr_id as lgr_tools_annotate_url %}
+                                    {% url 'lgr_tools_cross_script' as lgr_tools_cross_script_url %}
+                                {% endif %}
                                 <ul class="dropdown-menu">
-                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_compare' lgr_id %}"
+                                    <li class="btn btn-block show-tooltip">
+                                        <a href="{{ lgr_tools_compare_url }}"
                                            title="{% trans 'Compare two LGR' %}" data-placement="bottom">
                                             <i class="glyphicon glyphicon-transfer"></i>
-                                            {% trans "Compare" %}
-                                    </a></li>
-                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_diff' lgr_id %}"
-                                           title="{% trans 'Get difference for a list of labels for two LGR versions' %}"
+                                            {% trans "Compare two LGRs" %}
+                                        </a>
+                                    </li>
+                                    {# hide diff and collisions if the LGR is (in) a set #}
+                                    {% if not lgr_id or not is_set %}
+                                        <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_tools_diff_url }}"
+                                               title="{% trans 'Get differences for a list of labels for two LGRs versions' %}"
+                                               data-placement="bottom">
+                                                <i class="glyphicon glyphicon-random"></i>
+                                                {% trans "Diff labels of two LGRs" %}
+                                            </a>
+                                        </li>
+                                        <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_tools_collisions_url }}"
+                                               title="{% trans 'Get collisions in a list of labels' %}"
+                                               data-placement="bottom">
+                                                <i class="glyphicon glyphicon-resize-small"></i>
+                                                {% trans "Get collisions in a list of labels" %}
+                                        </a></li>
+                                    {% endif %}
+                                    {% if not lgr_id or is_set %}
+                                        <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_tools_cross_script_url }}"
+                                               title="{% trans 'Compute cross-script variants' %}"
+                                               data-placement="bottom">
+                                                <i class="glyphicon glyphicon-transfer"></i>
+                                                {% trans "Cross-script variants" %}
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                    <li class="btn btn-block show-tooltip">
+                                        <a href="{{ lgr_tools_annotate_url }}"
+                                           title="{% trans 'Annotate list of labels with their disposition' %}"
                                            data-placement="bottom">
-                                            <i class="glyphicon glyphicon-random"></i>
-                                            {% trans "Diff" %}
-                                    </a></li>
-                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_collisions' lgr_id %}"
-                                           title="{% trans 'Get collisions in a list of labels' %}" data-placement="bottom">
-                                            <i class="glyphicon glyphicon-resize-small"></i>
-                                            {% trans "Collisions" %}
-                                    </a></li>
-                                    <li class="btn show-tooltip"><a href="{% url 'lgr_tools_annotate' lgr_id %}"
-                                           title="{% trans 'Annotate list of labels with their disposition' %}" data-placement="bottom">
                                             <i class="glyphicon glyphicon-list"></i>
-                                            {% trans "Annotate" %}
-                                    </a></li>
+                                            {% trans "Generate disp. annotations" %}
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </form>
                         <div class="navbar-form navbar-right">
                             {% if lgr_id %}
+                                {% if lgr_set_id %}
+                                    {% url 'view_lgr_xml' lgr_set_id lgr_id as view_lgr_xml_url %}
+                                    {% url 'download_lgr_xml' lgr_set_id lgr_id as download_lgr_xml_url %}
+                                    {% url 'lgr_render' lgr_set_id lgr_id as lgr_render_url %}
+                                {% else %}
+                                    {% url 'view_lgr_xml' lgr_id as view_lgr_xml_url %}
+                                    {% url 'download_lgr_xml' lgr_id as download_lgr_xml_url %}
+                                    {% url 'lgr_render' lgr_id as lgr_render_url %}
+                                {% endif %}
                                 <a class="btn btn-default show-tooltip"
                                    data-toggle="modal" data-target="#validation-modal"
                                    title="{% trans 'Validate label against LGR' %}" data-placement="bottom">
@@ -96,13 +146,19 @@
                                 </a>
                                 <a class="btn btn-default show-tooltip"
                                    title="{% trans 'Preview LGR file' %}" data-placement="bottom"
-                                   href="{% url 'view_lgr_xml' lgr_id %}" target="_blank">
+                                   href="{{ view_lgr_xml_url }}" target="_blank">
                                     <i class="glyphicon glyphicon-eye-open"></i>
                                     {% trans "View XML" %}
                                 </a>
                                 <a class="btn btn-default show-tooltip"
+                                   title="{% trans 'HTML Output' %}" data-placement="bottom"
+                                   href="{{ lgr_render_url }}" target="_blank">
+                                    <i class="glyphicon glyphicon-globe"></i>
+                                    {% trans "HTML Output" %}
+                                </a>
+                                <a class="btn btn-default show-tooltip"
                                    title="{% trans 'Download LGR file' %}" data-placement="bottom"
-                                   href="{% url 'download_lgr_xml' lgr_id %}">
+                                   href="{{ download_lgr_xml_url }}">
                                     <i class="glyphicon glyphicon-save"></i> {% trans "Download" %}
                                 </a>
                             {% else %}
@@ -161,7 +217,14 @@
 
         <!-- Summary Modal -->
         {% if lgr_id %}
-        <div class="modal fade" id="lgr-summary-modal" data-summary-url="{% url 'summary' lgr_id %}">
+            {% if lgr_set_id %}
+                {% url 'summary' lgr_set_id lgr_id as summary_url %}
+                {% url 'summary_save' lgr_set_id lgr_id as summary_save_url %}
+            {% else %}
+                {% url 'summary' lgr_id as summary_url %}
+                {% url 'summary_save' lgr_id as summary_save_url %}
+            {% endif %}
+        <div class="modal fade" id="lgr-summary-modal" data-summary-url="{{ summary_url }}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -174,7 +237,7 @@
                         {% endif %}
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-info" href="{% url 'summary_save' lgr_id=lgr_id %}">
+                        <a class="btn btn-info" href="{{ summary_save_url }}">
                             <i class="glyphicon glyphicon-save"></i>
                             {% blocktrans %}Save summary{% endblocktrans %}
                         </a>
@@ -187,7 +250,12 @@
 
         <!-- Validation Modal -->
         {% if lgr_id %}
-        <div class="modal fade" id="validation-modal" data-validate-url="{% url 'lgr_validate_label_noframe' lgr_id %}">
+            {% if lgr_set_id %}
+                {% url 'lgr_validate_label_noframe' lgr_set_id lgr_id as lgr_validate_label_noframe_url %}
+            {% else %}
+                {% url 'lgr_validate_label_noframe' lgr_id as lgr_validate_label_noframe_url %}
+            {% endif %}
+        <div class="modal fade" id="validation-modal" data-validate-url="{{ lgr_validate_label_noframe_url }}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -195,7 +263,7 @@
                         <h4 class="modal-title">{% trans "Validate label" %}</h4>
                     </div>
                     <div id="validation-modal-body" class="modal-body" style="height: 85vh;">
-                        <iframe id="validation-model-iframe" data-url="{% url 'lgr_validate_label_noframe' lgr_id %}" src="{% url 'lgr_validate_label_noframe' lgr_id %}" frameborder="0" width="100%" height="98%"></iframe>
+                        <iframe id="validation-model-iframe" data-url="{{ lgr_validate_label_noframe_url }}" src="{{ lgr_validate_label_noframe_url }}" frameborder="0" width="100%" height="98%"></iframe>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -203,7 +271,7 @@
         {% endif %}
 
         <!-- About Modal -->
-        <div class="modal fade" id="about-modal" data-summary-url="{% url 'about' %}">
+        <div class="modal fade" id="about-modal">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">

@@ -2,20 +2,38 @@
 {% load i18n %}
 
 {% block content %}
+    <h1>{% trans 'Import existing LGR' %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            To import LGR set, select the XML files composing the LGR set. The set will automatically be created.
+        {% endblocktrans %}
+    </p>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.file %}
         {% include "lgr_editor/_form_field.html" with field=form.validating_repertoire %}
+        <div id="set_box">
+            {% include "lgr_editor/_form_field.html" with field=form.set_name %}
+        </div>
+        <div id="set_error">
+            {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
         {% if lgrs %}
             <strong>{% trans "These LGRs are already imported. Click on one to access it." %}</strong>
-            <ul>
-                {% for lgr in lgrs %}
-                    <li>
-                        <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}{{ lgr_name }}{% endblocktrans %}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-            <br>
+            {% include "lgr_editor/_list_opened_lgrs.html" with lgrs=lgrs %}
         {% endif %}
         {% for hidden in form.hidden_fields %}
             {{ hidden }}
@@ -31,3 +49,24 @@
         {% endblocktrans %}
     </p>
 {% endblock content %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            function check_multi_files() {
+                var files = $('#id_file').prop('files');
+                if(files.length > 1) {
+                    $('#set_box').show(500);
+                    $("#id_set_name").prop('required', true);
+                } else {
+                    $('#set_box').hide(500);
+                    $("#id_set_name").prop('required', false);
+                }
+            }
+            $('#id_file').change(function(){check_multi_files()});
+            $('#id_file').click(function(){$('#set_error').hide()});
+            check_multi_files();
+        });
+    </script>
+{% endblock html_body_more %}

@@ -2,13 +2,17 @@
 from __future__ import unicode_literals
 from functools import partial
 import logging
+import base64
 from StringIO import StringIO
 import errno
 import os
 from uuid import uuid4
+from codecs import iterdecode
+
 
 from django.http import Http404
 from django.utils import six
+from django.utils.text import slugify
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
@@ -16,7 +20,7 @@ from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.parser.xml_parser import XMLParser, LGR_NS
-from lgr_web.settings import TOOLS_OUTPUT_STORAGE_LOCATION
+from lgr.tools.merge_set import merge_lgr_set
 
 from .exceptions import LGRValidationException
 from .repertoires import get_by_name
@@ -30,11 +34,13 @@ logger = logging.getLogger(__name__)
 
 
 class LGRInfo(object):
-    def __init__(self, name, lgr=None, xml=None, validating_repertoire=None):
+    def __init__(self, name, lgr=None, xml=None, validating_repertoire=None, lgr_set=None, set_labels_info=None):
         self.name = name
         self.lgr = lgr
         self.xml = xml
         self.validating_repertoire = validating_repertoire
+        self.lgr_set = lgr_set
+        self.set_labels_info = set_labels_info  # List of labels defined for the LGR set, optional
 
     def update_xml(self, pretty_print=False):
         # if something was changed in `lgr`, calling this will re-generate the xml
@@ -52,10 +58,24 @@ class LGRInfo(object):
         return lgr_info
 
     @classmethod
-    def from_dict(cls, dct, lgr_loader_func):
+    def from_dict(cls, dct, lgr_loader_func=None):
         name = dct.get('name', '')
         xml = dct['xml']
         validate = dct.get('validate', False)
+        set_labels_info = None
+        if 'set_labels_info' in dct:
+            set_labels_info = LabelInfo.from_dict(dct['set_labels_info'])
+        lgr_set_dct = dct.get('lgr_set_dct', None)
+        lgr_set = None
+        if lgr_set_dct:
+            lgr_set = []
+            for lgr_dct in lgr_set_dct:
+                lgr_set.append(cls.from_dict(lgr_dct, lgr_loader_func=lgr_loader_func))
+
+        # check if xml is of unicode type
+        if isinstance(xml, six.text_type):
+            # convert to a str (bytes in PY3) to be consistent
+            xml = xml.encode('utf-8')
 
         # Parse XML #
         # Replace old namespace by the new one for compatibility purpose with
@@ -101,18 +121,56 @@ class LGRInfo(object):
             lgr.unicode_database = unidb.manager.get_db_by_version(unicode_version)
 
         validating_repertoire = dct.get('validating_repertoire')
-        val_lgr = lgr_loader_func(validating_repertoire) if validating_repertoire else None
+        val_lgr = lgr_loader_func(validating_repertoire) if (validating_repertoire and lgr_loader_func is not None) else None
         lgr_info = cls(name=name,
                        xml=xml,
                        lgr=lgr,
-                       validating_repertoire=val_lgr)
+                       validating_repertoire=val_lgr,
+                       lgr_set=lgr_set,
+                       set_labels_info=set_labels_info)
         return lgr_info
+
+    def to_dict(self):
+        dct = {
+            'name': self.name,
+            'xml': self.xml,
+            'validating_repertoire': self.validating_repertoire.name if self.validating_repertoire else None,
+            'lgr_set_dct': [l.to_dict() for l in self.lgr_set] if self.is_set else None,
+            'is_set': self.is_set  # for index.html
+        }
+        if self.set_labels_info is not None:
+            dct['set_labels_info'] = self.set_labels_info.to_dict()
+
+        return dct
+
+    @property
+    def is_set(self):
+        return self.lgr_set is not None and len(self.lgr_set) > 1
+
+
+class LabelInfo(object):
+
+    def __init__(self, name, labels=None, data=None):
+        self.name = name
+        self.labels = labels
+        self.data = data
+
+    @classmethod
+    def from_dict(cls, dct):
+        return cls(dct['name'], StringIO(base64.decodestring(dct['data']).decode('utf-8')), dct['data'])
+
+    @classmethod
+    def from_form(cls, name, label_input):
+        data = label_input
+        labels = StringIO(data.decode('utf-8'))
+        b64data = base64.encodestring(label_input)
+
+        return cls(name, labels, b64data)
 
     def to_dict(self):
         return {
             'name': self.name,
-            'xml': self.xml,
-            'validating_repertoire': self.validating_repertoire.name if self.validating_repertoire else None,
+            'data': self.data
         }
 
 
@@ -165,7 +223,8 @@ def session_new_lgr(request, lgr_id, unicode_version, validating_repertoire_name
 
 def session_open_lgr(request, lgr_id, lgr_xml,
                      validating_repertoire_name=None,
-                     validate=False):
+                     validate=False, from_set=False,
+                     lgr_set=None, set_labels=None):
     """
     Parse the given LGR in XML format, and save it in session.
 
@@ -174,6 +233,8 @@ def session_open_lgr(request, lgr_id, lgr_xml,
     :param lgr_xml: a string with the xml
     :param validating_repertoire_name: optional name of a validating repertoire
     :param validate: if True, ensure the XML is valid LGR XML
+    :param from_set: Whether the LGR belongs to a set or not
+    :param lgr_set: The list of LGRInfo in the set if this is a merged LGR from a set
     :return: `LGRInfo`
     """
     lgr_info = LGRInfo.from_dict(
@@ -182,34 +243,50 @@ def session_open_lgr(request, lgr_id, lgr_xml,
             'xml': lgr_xml,
             'validating_repertoire': validating_repertoire_name,
             'validate': validate,
+            'lgr_set_dct': map(lambda x: x.to_dict(), lgr_set) if lgr_set else None,
+            'set_labels': set_labels
         },
         lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request)
     )
-    session_save_lgr(request, lgr_info)
+    if not from_set:
+        # do not save lgr in session, it will be kept in set
+        session_save_lgr(request, lgr_info)
+    else:
+        lgr_info.update_xml()
+
     return lgr_info
 
 
-def session_select_lgr(request, lgr_id):
+def session_select_lgr(request, lgr_id, lgr_set_id=None):
     """
     Find the LGR identified by `lgr_id` in the session.
 
     :param request: Django request object
     :param lgr_id: a slug identifying the LGR
+    :param lgr_set_id: a slug identifying a LGR set if LGR is in a set
     :return: `LGRInfo`
     """
     known_lgrs = request.session.get(LGRS_SESSION_KEY, {})
-    if lgr_id not in known_lgrs:
+
+    if lgr_set_id:
+        if lgr_set_id not in known_lgrs:
+            raise Http404
+        lgr_dct = known_lgrs[lgr_set_id]
+    else:
+        if lgr_id not in known_lgrs:
+            raise Http404
+        lgr_dct = known_lgrs[lgr_id]
+        return LGRInfo.from_dict(lgr_dct,
+                                 lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
+
+    if not lgr_dct.get('lgr_set_dct', None):
         raise Http404
 
-    lgr_dct = known_lgrs[lgr_id]
-
-    # check if xml is of unicode type
-    xml = lgr_dct['xml']
-    if isinstance(xml, six.text_type):
-        # convert to a str (bytes in PY3) to be consistent
-        lgr_dct['xml'] = xml.encode('utf-8')
-    return LGRInfo.from_dict(lgr_dct,
-                             lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
+    for lgr in lgr_dct.get('lgr_set_dct'):
+        if lgr['name'] == lgr_id:
+            return LGRInfo.from_dict(lgr,
+                                     lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
+    raise Http404
 
 
 def session_save_lgr(request, lgr_info, lgr_id=None, update_xml=True):
@@ -241,6 +318,26 @@ def session_delete_lgr(request, lgr_id):
     request.session.modified = True
 
 
+def session_merge_set(request, lgr_info_set, lgr_set_name):
+    """
+    Merge some LGR to build a set.
+
+    :param request: Django request object
+    :param lgr_info_set: The list of LGRInfo objects in the set
+    :param lgr_set_name: The name of the LGR set
+    :return: The LGR set merge id
+    """
+    merged_lgr = merge_lgr_set(map(lambda x: x.lgr, lgr_info_set), lgr_set_name)
+    merged_id = slugify(merged_lgr.name)
+
+    merged_lgr_xml = serialize_lgr_xml(merged_lgr)
+
+    session_open_lgr(request, merged_id, merged_lgr_xml,
+                     validating_repertoire_name=None,
+                     validate=True, lgr_set=lgr_info_set)
+    return merged_id
+
+
 def session_get_storage(request):
     """
     Get the storage path for the session
@@ -257,7 +354,7 @@ def session_get_storage(request):
         request.session['storage'] = storage_key
     # the storage may still not be created here but now it has a path for
     #  this session
-    return os.path.join(TOOLS_OUTPUT_STORAGE_LOCATION,
+    return os.path.join(settings.TOOLS_OUTPUT_STORAGE_LOCATION,
                         storage_key)
 
 

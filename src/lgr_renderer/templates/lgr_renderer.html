@@ -1,0 +1,489 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xHTML1/DTD/xHTML1-strict.dtd">
+<HTML xmlns="http://www.w3.org/1999/xHTML">
+  <head>
+    <meta http-equiv="Content-Type" content="text/HTML; charset=utf-8" />
+    <title>{{ name|title }}</title>
+    <style type="text/css">
+  #lgr {
+          max-width:1200px;
+          margin:0 auto;
+          background-color:white;
+          padding:.3em 1em;
+      }
+  div#lgr h1 {
+          font-size:185%;;
+      }
+  body {
+          padding:0  0 1em 0;
+          margin:0;
+          background-color:#EEE;
+          font-family:sans-serif;
+      }
+  .boxed {
+          border-width:1px;
+          border-style:solid;
+          border-color:#A0A0A0;
+          padding:.4em;
+      }
+  table.simple,table.simple td,table.simple th {
+          border-width:1px;
+          border-style:solid;
+          border-color:#A0A0A0;
+          border-collapse:collapse;
+          border-spacing:1px;
+      }
+  table.simple td,table.simple th {
+          font-family:sans-serif;
+          padding:.2em;
+      }
+  table.simple th {
+          font-weight:bold;
+          background-color:#D0D0D0;
+          color:#808080;
+      }
+  table#references td {
+          padding-bottom:.3em;
+          padding-left:.3em;
+          padding-right:.3em;
+      }
+  ul.cp-list li p {
+          margin-bottom:.4em;
+          margin-top:.4em;
+      }
+  a {
+          text-decoration:none;
+      }
+  a:link,a:visited {
+          color:blue;
+      }
+  a:hover,a:active {
+          color:red;
+      }
+  div#description {
+          padding-left:1em;
+      }
+  div#description * {
+          color:#226644;
+          font-family:sans-serif;
+      }
+  div#description a:link,div#description a:visited {
+          color:blue;
+      }
+  div#description a:hover,div#description a:active {
+          color:red;
+      }
+  div#description h1 {
+          color:#676;
+      }
+  div#description h2,div#description h3,div#description h4 {
+          color:#063;
+      }
+  div#description h1 {
+          font-size:250%;;
+      }
+  div#description h2 {
+          font-size:165%;;
+          margin-bottom:.6em;
+      }
+  div#description h3 {
+          font-size:120%;;
+          margin-bottom:.3em;
+      }
+  div#description h3+p {
+          margin-top:.3em;
+      }
+  div#description h4 {
+          font-size:100%;;
+          margin-bottom:.1em;
+      }
+  div#description h4+p {
+          margin-top:.1em;
+      }
+  body h1:first-child + p {
+          color:#999;;
+          float:right;;
+          border:solid 1px #999;;
+          width:30%;;
+          margin-right:20%;;
+          margin-top:0;
+          padding:.4em;;
+      }
+  h1 {
+          font-size:175%;;
+      }
+  h2 {
+          font-size:150%;;
+      }
+  h3 {
+          font-size:120%;;
+      }
+  h4 {
+          font-size:100%;;
+      }
+  h1,h2,h3,h4 {
+          font-weight:bold;
+          font-family:sans-serif;
+          color:#8888FF;
+      }
+  body h1:first-child {
+          font-size:120%;
+      }
+  h3.varsetheader {
+          margin-bottom:.1em;;
+          color:#966;
+      }
+  div#description dt {
+          float:left;
+          padding-left:.5em;
+          padding-right:.5em;
+  }
+  div#description dd {
+          margin-left:8em;;
+          margin-bottom:.4em;
+  }
+  div.legend {
+          font-size:85%;
+          color:#888;
+  }
+  div.legend p {
+          margin-left:0.5em;
+  }
+  div.legend .caption {
+          text-decoration:underline;
+          color:#888;
+          margin-left:0.5em;
+          margin-bottom:.4em;
+  }
+  div.legend dl {
+          color:#888;
+          margin-top:0em;
+          padding-top:0em;
+          margin-bottom:0em;
+  }
+  div.legend dt {
+          float:left;
+          font-weight:bold;
+          padding-left:.5em;
+          padding-right:.5em;
+  }
+  div.legend dt::after {
+          content:":";
+  }
+  div.legend dd {
+          padding-left:0.5em;
+          margin-bottom:.4em;
+  }
+  ol {
+      counter-reset: item;
+  }
+  ol li {
+    line-height: 30px;
+  }
+  ol ol li {
+    line-height: 20px;
+  }
+  li {
+      display: block;
+  }
+  div#table_of_contents li:before {
+      content: counters(item, ".")" ";
+      counter-increment: item;
+  }
+    </style>
+  </head>
+  <body>
+    <div id="lgr">
+
+      <h1>{{ name|title }}</h1>
+      <p>This document is mechanically formatted from the XML file for the LGR. It provides additional summary data and explanatory text.
+        The XML file remains the sole normative specification of the LGR.</p>
+      <table id="metadata" class="simple">
+        {% for header, value in metadata %}
+          <tr>
+            <th>{{ header }}</th>
+            <td>{{ value }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+
+      <div id="table_of_contents">
+        <h1><a name="toc">Table of Contents</a></h1>
+        <ol>
+          <li><a href="#description">Description</a></li>
+          <li><a href="#repertoire">Repertoire</a></li>
+          <li><a href="#variant_sets">Variant Sets</a></li>
+          <li>
+            <a href="#classes_rules_and_actions">Classes, Rules and Actions</a>
+            <ol>
+              <li><a href="#character_classes">Character Classes</a></li>
+              <li><a href="#whole_label_evaluation_and_context_rules">Whole label evaluation and context rules</a></li>
+              <li><a href="#actions">Actions</a></li>
+            </ol>
+          </li>
+          <li><a href="#table_of_references">Table of References</a></li>
+        </ol>
+
+      {% if description %}
+        <h2>Description</h2>
+        <div id="description"><pre>
+          {{ description }}
+        </pre></div>
+      {% endif %}
+
+      <h1><a name="repertoire">Repertoire</a></h1>
+
+      <h2><a name="repertoire_summary">Summary</a></h2>
+      <table class="simple">
+        <tr>
+          <th style="text-align:left;">Number of elements in repertoire</th>
+          <td>{{ stats.codepoint_number }}</td>
+        </tr>
+        <tr>
+          <th style="text-align:left;">Number of ranges in repertoire</th>
+          <td>{{ stats.range_number }}</td>
+        </tr>
+        <tr>
+          <th style="text-align:left;">Number of code point sequences</th>
+          <td>{{ stats.sequence_number }}</td>
+        </tr>
+      </table>
+
+      <h2><a name="repertoire_by_code_point">Repertoire by Code Point</a></h2>
+
+      <p>The following table lists the repertoire by code point (or code point sequence). The data in the Script and Name column are extracted from the
+      Unicode character database. Where the comment in the original LGR is equal to the character name, it has been suppressed. </p>
+      <p>For any code point or sequence for which a variant is defined, the link to the associated variant set, or if mapped to itself, the
+      variant type of that mapping is provided in the Variants column.</p>
+
+      <table id="Repertoire-Listing" class="simple">
+        <tr>
+          <th>#</th>
+          <th>Code<br/>Point</th>
+          <th>Glyph</th>
+          <th>Script</th>
+          <th>Name</th>
+          <th>Tags</th>
+          <th>Required Context</th>
+          <!--<th>Part of<br/>Repertoire</th>-->
+          <th>Variants</th>
+          <th>Comment</th>
+          <th>References</th>
+        </tr>
+        {% for cp in repertoire %}
+          <tr style="background-color:white;">
+            <td>{{ forloop.counter }}</td>
+            <td><a name='{{ cp.cp }}'>{{ cp.cp_disp }}</a></td>
+            <td style="text-align:center">{{ cp.glyph }}</td>
+            <td>{{ cp.script }}</td>
+            <td>{{ cp.name }}</td>
+            <td>{{ cp.tags|join:"," }}</td>
+            <td>{{ cp.context }}</td>
+            <!--<td>TODO - Part of repertoire</td>-->
+            <td>{% if cp.variant_set %}<a href="#variant_set_{{ cp.variant_set }}">set {{ cp.variant_set }}</a>{% endif %}</td>
+            <td>{{ cp.comment }}</td>
+            <td>{{ cp.references }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      <div class="legend">
+        <p class="caption">Legend</p>
+        <dl>
+          <dt>Code Point</dt>
+          <dd>A code point or code point sequence.</dd>
+          <dt>Name</dt>
+          <dd>Shows the character or sequence name from the Unicode Character Database.</dd>
+          <dt>Glyph</dt>
+          <dd>The shape displayed depends on the fonts available to your browser.</dd>
+          <dt>Script</dt>
+          <dd>Shows the script property value from the Unicode Character Database. Combining marks may have the value <b>Inherited</b> and code points used with more than one script may have the value <b>Common</b>. </dd>
+          <dt>References</dt>
+          <dd>Links to the references associated with the code point or sequence, if any.</dd>
+          <dt>Tags</dt>
+          <dd>LGR-defined tag values. Any tags matching the Unicode script property are suppressed in this view.</dd>
+          <dt>Required Context</dt>
+          <dd>Link to the rule defining the required context a code point or sequence must satisfy. If prefixed by "<b>not:</b>", identifies a context that must not occur.</dd>
+          <dt>Variants</dt>
+          <dd>A link to the variant set the code point or sequence is a member of, except where a coded point or sequence maps only to itself, in which case the type of that mapping is listed.</dd>
+          <dt>Comment</dt>
+          <dd>If the comment in this row consists only of the code point or sequence name it is suppressed in this view.</dd>
+          <!--<dt>✔ - core repertoire</dt>-->
+          <!--<dd>A check mark in the Part-of-Repertoire column indicates a code point is part of the core repertoire.</dd>-->
+          <!--<dt>◯ - extended repertoire</dt>-->
+          <!--<dd>An open circle indicates a code point is part of an optional extended repertoire, which is normally disabled but could be supported by deleting the relevant context restriction.</dd>-->
+          <!--<dt>✗ - excluded from repertoire</dt>-->
+          <!--<dd>A code point shown with <span style="color:red">✗</span> is considered excluded from the repertoire. It is shown only for review purposes.</dd>-->
+        </dl>
+      </div>
+
+      <h1><a name="variant_sets">Variant Sets</a></h1>
+
+      <h2><a name="variant_sets_summary">Summary</a></h2>
+      <table class="simple">
+        <tr>
+          <th style="text-align:left;">Number of variant sets</th>
+          <td>{{ variant_sets|length }}</td>
+        </tr>
+        <tr>
+          <th style="text-align:left;">Largest variant set</th>
+          <td>{{ stats.largest_variant_set }}</td>
+        </tr>
+        <tr>
+          <th style="text-align:left;">Ordinary Variants by Type</th>
+          <td>{% for var_type, var_nbr in stats.variants_by_type.items %}{{ var_type }} ({{ var_nbr }})<br>{% endfor %}</td>
+        </tr>
+        <!--<tr>-->
+          <!--<th style="text-align:left;">Reflexive Variants by Type</th>-->
+          <!--<td>&nbsp;</td>-->
+        <!--</tr>-->
+      </table>
+
+      <p>The following tables list each pair of variant mappings on one row.
+        <!--For each pair of code points, by convention,-->
+      <!--the lower code point is taken as the source of the mapping in the forward → direction and the reverse direction ← is not-->
+      <!--listed separately. The variant mappings defined in an LGR are required to be symmetric, that is, both the forward and reverse-->
+      <!--mappings must be specified.-->
+      </p>
+      <!--<p>A mapping where source and target are the same is <i>reflexive</i>. Variant sets consisting of only a single reflexive-->
+      <!--mapping are not shown as a set. Instead, the variant type of the mapping is listed in the Variants column of the Repertoire-->
+      <!--by Code Point table. Reflexive mappings that are part of a larger set are indicated with a “≡”.</p>-->
+      <!--<p>Where the <i>type</i> of both forward and reverse mappings are the same, a single value is given in the Type(s) column,-->
+      <!--otherwise the types for forward and reverse mapping are given in that order, as indicated by the arrows. The same applies to-->
+      <!--any comments.</p>-->
+      <p>In a properly specified LGR, all members of each variant set are variants of each other, a property called transitivity.
+      Because of that, all variant sets are necessarily disjoint. In each set, shading is used to group mappings from the same source
+      code point or sequence.</p>
+
+      {% for variant_set in variant_sets %}
+        <h3 class="varsetheader"><a name='varset_{{ variant_set.id }}'>Variant Set {{ forloop.counter }} — {{ variant_set.variants|length }} Members</a></h3>
+        <table id='variant_set_{{ variant_set.id }}' class="simple">
+          <tr>
+            <th>#</th>
+            <th>Source</th>
+            <th>Glyph</th>
+            <th>Target</th>
+            <th>Glyph</th>
+            <!--<th>&nbsp;</th>-->
+            <th>Type(s)</th>
+            <th>References</th>
+            <th>Comment</th>
+          </tr>
+          {% for var in variant_set.variants %}
+            <tr style="background-color:#F8F4EC">
+              <td>{{ forloop.counter }}</td>
+              <td><a href='#{{ var.source_cp }}' title='{{ var.source_name }}'>{{ var.source_cp_disp }}</a></td>
+              <td style="text-align:center">{{ var.source_glyph }}</td>
+              <td><a href='#{{ var.dest_cp }}' title='{{ var.dest_name }}'>{{ var.dest_cp_disp }}</a></td>
+              <td style="text-align:center">{{ var.dest_glyph }}</td>
+              <!--<td style="text-align:center">TODO</td>-->
+              <td>{{ var.type }}</td>
+              <td>{{ var.references }}</td>
+              <td>{{ var.comment }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endfor %}
+
+      <h1><a name="classes_rules_and_actions">Classes, Rules and Actions</a></h1>
+      <div id="rules">
+
+        <h2><a name="character_classes">Character Classes</a></h2>
+
+        <p>The following table lists all top-level classes with their definition and the regular expression defining their members. </p>
+
+        <table class="simple">
+          <tr>
+            <th>Name</th>
+            <th>Definition</th>
+            <th>Count</th>
+            <th>Members</th>
+            <th>References</th>
+            <th>Comment</th>
+          </tr>
+          {% for clz in classes %}
+            <tr>
+              <td style="font-style:italic">{{ clz.name }}</td>
+              <td>{{ clz.definition }}</td>
+              <td style="text-align:right">{{ clz.members|length }}</td>
+              <td>{{ clz.members }}</td>
+              <td>{{ clz.references }}</td>
+              <td>{{ clz.comment }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+
+        <h2><a name="whole_label_evaluation_and_context_rules">Whole label evaluation and context rules</a></h2>
+
+        <p>The following table lists all the top-level, or named rules defined in the LGR and indicates whether they are used as trigger in an action or as context (when or not-when) for a code point. (Any use of context rules for variants is not indicated).</p>
+
+        <table class="simple">
+          <tr>
+            <th>Name</th>
+            <th>Regular Expression</th>
+            <th>Used as<br/>Trigger</th>
+            <th>Used as<br/>Context</th>
+            <th>Anchor</th>
+            <th>References</th>
+            <th>Comment</th>
+          </tr>
+          {% for rule in rules %}
+            <tr>
+              <td><a name='rule_{{ rule.name }}'>{{ rule.name }}</a></td>
+              <td>{{ rule.regex }}</td>
+              <td style="text-align:center">{{ rule.trigger }}</td>
+              <td style="text-align:center">{{ rule.context }}</td>
+              <td style="text-align:center">{{ rule.anchor }}</td>
+              <td>{{ rule.references }}</td>
+              <td>{{ rule.comment }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+
+        <h2><a name="actions">Actions</a></h2>
+
+        <p>The following table lists the actions that are used to assign dispositions to labels and variant labels, based on the specified conditions.
+        The order of actions defines their precedence: the first action triggered by a label is the one defining its disposition.</p>
+
+        <table class="simple">
+          <tr>
+            <th>#</th>
+            <th>Condition</th>
+            <th>Rule / Variant Set</th>
+            <th>&nbsp;</th>
+            <th>Disposition</th>
+            <th>References</th>
+            <th>Comment</th>
+          </tr>
+          {% for action in actions %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ action.condition }}</td>
+              <td>{{ action.rule_variant_set }}</td>
+              <td>→</td>
+              <td>{{ action.disposition }}</td>
+              <td>{{ action.references }}</td>
+              <td>{{ action.comment }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+
+        <div class="legend">
+          <p class="caption">Legend</p>
+          <dl>
+            <dt>{...} - variant type set</dt>
+            <dd>In the "Rule/Variant Set" column the notation {...} means a set of variant types.</dd>
+          </dl>
+        </div>
+      </div>
+
+      <h1><a name="table_of_references">Table of References</a></h1>
+      <table id="references">
+        {% for ref in references %}
+          <tr>
+            <td style="vertical-align:top">[<a name="ref_{{ ref.id }}">{{ ref.id }}</a>]</td>
+            <td>{{ ref.value }} {% if ref.comment %}<br/><i>{{ ref.comment }}</i>{% endif %}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </body>
+</HTML>

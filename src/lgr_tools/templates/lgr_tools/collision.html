@@ -19,6 +19,9 @@
             <button type="submit" class="btn btn-primary">{% trans "Get collisions" %}</button>
         </div>
     </form>
-
+    <p>
+        {% blocktrans trimmed %}
+            <strong class="text-danger"><i class="glyphicon glyphicon-alert"></i> Note that collision tool is not available for LGR sets.</strong>
+        {% endblocktrans %}
+    </p>
 {% endblock content %}
-

@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'lgr_editor',
     'lgr_validator',
     'lgr_tools',
+    'lgr_renderer',
     'widget_tweaks',
 )
 
@@ -196,7 +197,7 @@ TOOLS_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'output')
 STORAGE_DURATION = 60*60*24*7  # 1 week
 
 # Default variant type when creating new variant
-DEFAULT_VARIANT_TYPE = "block"
+DEFAULT_VARIANT_TYPE = "blocked"
 
 SUPPORTED_UNICODE_VERSIONS = (
     '6.3.0',

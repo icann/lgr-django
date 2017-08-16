@@ -51,19 +51,6 @@ for mod in ['django.request', 'lgr_web', 'lgr_editor', 'lgr']:
 ##### /e-mail settings #####
 
 ##### LGR Toolset Project-specific settings #####
-# Where the XML files are stored on the filesystem
-# For the repertoires
-REPERTOIRE_STORAGE_LOCATION = os.path.join(BASE_DIR, 'resources', 'repertoires')
-
-# For the built-in LGRs
-LGR_STORAGE_LOCATION = os.path.join(BASE_DIR, 'resources', 'lgr')
-
-# Filepath of the LGR RNG schema file
-LGR_RNG_FILE = os.path.join(BASE_DIR, 'resources', 'lgr.rng')
-
-# Default variant type when creating new variant
-DEFAULT_VARIANT_TYPE = "block"
-
 SUPPORTED_UNICODE_VERSIONS = (
     '6.3.0',
     '6.2.0',

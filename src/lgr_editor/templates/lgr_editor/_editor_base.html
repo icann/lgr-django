@@ -4,19 +4,36 @@
 {% block html_title %}{{ lgr.name|title }}{% endblock %}
 
 {% block content %}
+    {% if lgr_set_id %}
+        {% url 'codepoint_list' lgr_set_id lgr_id as codepoint_list_url %}
+        {% url 'references' lgr_set_id lgr_id as references_url %}
+        {% url 'metadata' lgr_set_id lgr_id as metadata_url %}
+        {% url 'rules' lgr_set_id lgr_id as rules_url %}
+    {% else %}
+        {% url 'codepoint_list' lgr_id as codepoint_list_url %}
+        {% url 'references' lgr_id as references_url %}
+        {% url 'metadata' lgr_id as metadata_url %}
+        {% url 'rules' lgr_id as rules_url %}
+    {% endif %}
     <ul class="nav nav-tabs">
         <li role="presentation" class="{% block pane-cp-active %}{% endblock %}">
-            <a href="{% url 'codepoint_list' lgr_id %}">{% trans "Code points" %}</a>
+            <a href="{{ codepoint_list_url }}">{% trans "Code points" %}</a>
         </li>
         <li role="presentation" class="{% block pane-ref-active %}{% endblock %}">
-            <a href="{% url 'references' lgr_id %}">{% trans "References" %}</a>
+            <a href="{{ references_url }}">{% trans "References" %}</a>
         </li>
         <li role="presentation" class="{% block pane-md-active %}{% endblock %}">
-            <a href="{% url 'metadata' lgr_id %}">{% trans "Meta data" %}</a>
+            <a href="{{ metadata_url }}">{% trans "Meta data" %}</a>
         </li>
         <li role="presentation" class="{% block pane-rules-active %}{% endblock %}">
-            <a href="{% url 'rules' lgr_id %}">{% trans "Rules" %}</a>
+            <a href="{{ rules_url }}">{% trans "Rules" %}</a>
         </li>
+        {% if is_set and not lgr_set_id %}
+        {# Merged LGR set: show all LGRs in the set #}
+        <li role="presentation" class="{% block pane-embedded-active %}{% endblock %}">
+            <a href="{% url 'embedded_lgrs' lgr_id %}">{% trans "Embedded LGRs" %}</a>
+        </li>
+        {% endif %}
     </ul>
 
     <div>
