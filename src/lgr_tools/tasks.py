@@ -44,8 +44,8 @@ def _lgr_tool_task(storage_path, base_filename, email_subject,
             for line in cb(**cb_kwargs):
                 gzf.write(line.encode('utf-8'))
 
-        filename = '{0}_{1}.txt.gz'.format(base_filename,
-                                           time.strftime('%Y%m%d_%H%M%S'))
+        filename = '{0}_{1}.txt.gz'.format(time.strftime('%Y%m%d_%H%M%S'),
+                                           base_filename)
 
         storage = FileSystemStorage(location=storage_path,
                                     file_permissions_mode=0o440)
