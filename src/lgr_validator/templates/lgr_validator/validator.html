@@ -82,9 +82,18 @@
                     </div>
                 </td>
             </tr>
+        </table>
 
-            {# collision if this is a LGR set but not an LGR in a set #}
-            {% if is_set and not lgr_set_id %}
+        {# collision if this is a LGR set but not an LGR in a set #}
+        {% if eligible and is_set and not lgr_set_id %}
+
+            {% if collisions_error or collision %}
+                <h3 class="text-danger"><i class="glyphicon glyphicon-remove"></i> {% trans "Collision(s) found" %}</h3>
+            {% else %}
+                <h3 class="text-success"><i class="glyphicon glyphicon-ok"></i> {% trans "No collision" %}</h3>
+            {% endif %}
+
+            <table class="table table-responsive">
                 <tr>
                     <th colspan="4">{% trans "Collision" %}</th>
                 </tr>
@@ -132,8 +141,11 @@
                         <td colspan="4">{% blocktrans %}No collision.{% endblocktrans %}</td>
                     </tr>
                 {% endif %}
-            {% endif %}
+            </table>
+        {% endif %}
 
+        {# TODO: for set, only display if eligible #}
+        <table class="table table-responsive">
             <tr>
                 <th colspan="4">{% trans "Variant labels" %}{% if num_variants %}{% trans " (including original as last)" %}{% endif %}</th>
             </tr>
