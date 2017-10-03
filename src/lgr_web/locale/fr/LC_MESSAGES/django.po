@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-13 18:06+0000\n"
-"PO-Revision-Date: 2017-09-13 14:06-0400\n"
+"POT-Creation-Date: 2017-10-03 21:01+0000\n"
+"PO-Revision-Date: 2017-10-03 17:02-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -202,7 +202,7 @@ msgid "View embedded LGRs"
 msgstr "Voir les LGR embarquées"
 
 #: templates/index.html:74
-msgid "No LGR has been previously load."
+msgid "No LGR has been previously loaded."
 msgstr "Aucune LGR n'a été précédemment chargée."
 
 #: templates/index.html:83
