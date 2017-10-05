@@ -1,3 +1,5 @@
+{% load lgr_renderer %}
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xHTML1/DTD/xHTML1-strict.dtd">
 <HTML xmlns="http://www.w3.org/1999/xHTML">
   <head>
@@ -226,11 +228,7 @@
       {% if description %}
         <h2>Description</h2>
         <div id="description">
-          {% if description_type == 'text/html' %}
-            <div id="html-description" style="display:none">
-              {{ description|safe }}
-            </div>
-          {% else %}
+          {% if description_type != 'text/html' %}
             <pre>
               {{ description }}
             </pre>
@@ -502,17 +500,20 @@
         // Create a new blank iframe
         var description_iframe = document.createElement('iframe');
         // Set attributes for iframe
+        description_iframe.src = 'about:blank'; // See https://developer.mozilla.org/fr/docs/Web/HTML/Element/iframe
         description_iframe.width = '100%'; description_iframe.height = '100%';
         description_iframe.frameBorder = '0'; description_iframe.scrolling = 'no';
-        // TODO: description_iframe.sandbox = '';
-        // causes: SecurityError: Permission denied to access property "document" on cross-origin object
+        // Sandbox iframe, but need this value otherwise writing to it will provokes
+        // SecurityError: Permission denied to access property "document" on cross-origin object
+        // This will prevent scripts from being executed in the sandbox
+        description_iframe.sandbox = 'allow-same-origin';
 
         // Append the iframe at its position
         document.getElementById("description").appendChild(description_iframe);
-        // Retrieve iframe content
-        var description_html = document.getElementById('html-description').innerHTML;
-        // Create iframe content
-        var description_iframe_content = '<!DOCTYPE html><head/><body>' + description_html + '</body></html>';
+        // Create iframe content - use DOMParser as it won't execute any JS embedded in the description
+        var description_dom = new DOMParser().parseFromString("{{ description|escape_newlines }}", "text/html");
+        var description_iframe_html = description_dom.documentElement.textContent;
+        var description_iframe_content = '<!DOCTYPE html><head/><body>' + description_iframe_html + '</body></html>';
 
         // Use the JavaScript methods to write to the iframe, then close it
         description_iframe.contentWindow.document.open('text/html', 'replace');
@@ -520,14 +521,17 @@
         description_iframe.contentWindow.document.close();
 
         // Resize iframe with content of document - nightmare: https://stackoverflow.com/a/1147768
-        var description_document = description_iframe.contentDocument;
-        var body = description_document.body, html = description_document.documentElement;
-        var height = Math.max(body.scrollHeight, body.offsetHeight,
-                              html.clientHeight, html.scrollHeight, html.offsetHeight);
-        var width = Math.max(body.scrollWidth, body.offsetWidth,
-                              html.clientWidth, html.scrollWidth, html.offsetWidth);
-        description_iframe.width  = width;
-        description_iframe.height = height;
+        // Need to use event for DOM loaded otherwise, document's height will be 0
+        document.addEventListener("DOMContentLoaded", function(event) {
+          var description_document = description_iframe.contentDocument;
+          var body = description_document.body, html = description_document.documentElement;
+          var height = Math.max(body.scrollHeight, body.offsetHeight,
+                                html.clientHeight, html.scrollHeight, html.offsetHeight);
+          var width = Math.max(body.scrollWidth, body.offsetWidth,
+                                html.clientWidth, html.scrollWidth, html.offsetWidth);
+          description_iframe.width  = width;
+          description_iframe.height = height;
+        })
       </script>
     {% endif %}
   </body>
