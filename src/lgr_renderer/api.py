@@ -67,6 +67,7 @@ def _generate_context_metadata(metadata):
 
     if metadata.description is not None:
         context['description'] = metadata.description.value
+        context['description_type'] = metadata.description.description_type
 
     return context
 

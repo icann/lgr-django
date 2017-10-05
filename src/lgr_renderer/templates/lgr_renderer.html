@@ -225,9 +225,17 @@
 
       {% if description %}
         <h2>Description</h2>
-        <div id="description"><pre>
-          {{ description }}
-        </pre></div>
+        <div id="description">
+          {% if description_type == 'text/html' %}
+            <div id="html-description" style="display:none">
+              {{ description|safe }}
+            </div>
+          {% else %}
+            <pre>
+              {{ description }}
+            </pre>
+          {% endif %}
+        </div>
       {% endif %}
 
       <h1><a name="repertoire">Repertoire</a></h1>
@@ -485,5 +493,42 @@
         {% endfor %}
       </table>
     </div>
+    {% if description and description_type == 'text/html' %}
+      <script>
+        // Need some JS to create an iframe, and input HTML code into it
+        // since it is not possible for an iframe to load local HTML code.
+        // Note: In HTML5, there is the iframe's "srcdoc" attribute,
+        // but it is not supported by IE.
+        // Create a new blank iframe
+        var description_iframe = document.createElement('iframe');
+        // Set attributes for iframe
+        description_iframe.width = '100%'; description_iframe.height = '100%';
+        description_iframe.frameBorder = '0'; description_iframe.scrolling = 'no';
+        // TODO: description_iframe.sandbox = '';
+        // causes: SecurityError: Permission denied to access property "document" on cross-origin object
+
+        // Append the iframe at its position
+        document.getElementById("description").appendChild(description_iframe);
+        // Retrieve iframe content
+        var description_html = document.getElementById('html-description').innerHTML;
+        // Create iframe content
+        var description_iframe_content = '<!DOCTYPE html><head/><body>' + description_html + '</body></html>';
+
+        // Use the JavaScript methods to write to the iframe, then close it
+        description_iframe.contentWindow.document.open('text/html', 'replace');
+        description_iframe.contentWindow.document.write(description_iframe_content);
+        description_iframe.contentWindow.document.close();
+
+        // Resize iframe with content of document - nightmare: https://stackoverflow.com/a/1147768
+        var description_document = description_iframe.contentDocument;
+        var body = description_document.body, html = description_document.documentElement;
+        var height = Math.max(body.scrollHeight, body.offsetHeight,
+                              html.clientHeight, html.scrollHeight, html.offsetHeight);
+        var width = Math.max(body.scrollWidth, body.offsetWidth,
+                              html.clientWidth, html.scrollWidth, html.offsetWidth);
+        description_iframe.width  = width;
+        description_iframe.height = height;
+      </script>
+    {% endif %}
   </body>
 </HTML>
