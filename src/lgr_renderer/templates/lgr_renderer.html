@@ -407,7 +407,7 @@
           </tr>
           {% for clz in classes %}
             <tr>
-              <td style="font-style:italic">{{ clz.name }}</td>
+              <td><a name='class_{{ clz.name }}'>{{ clz.name }}</a></td>
               <td>{{ clz.definition }}</td>
               <td style="text-align:right">{{ clz.members|length }}</td>
               <td>{{ clz.members }}</td>
@@ -416,6 +416,20 @@
             </tr>
           {% endfor %}
         </table>
+        <div class="legend">
+          <p class="caption">Legend</p>
+          <dl>
+            <dt>Members or Ranges</dt>
+            <dd>Lists the members of the class as code points (<i>xxx</i>) or as ranges of code points (<i>xxx-yyy</i>). Any class too numerous to list in full is elided with "...".</dd>
+            <dt>Tag=ttt</dt>
+            <dd>An anonymous class implicitly defined based on tag value.</dd>
+            <dt>[: :] - named character set</dt>
+            <dd>Reference to a named character set [:name:].</dd>
+            <dt>(∩,∪,\,△) - set operators</dt>
+            <dd>Sets may be combined by set operators (<b>∩</b> = intersection, <b>∪</b> = union, <b>\</b> = difference, <b>△</b> = symmetric difference).</dd>
+          </dl>
+        </div>
+
 
         <h2><a name="whole_label_evaluation_and_context_rules">Whole label evaluation and context rules</a></h2>
 
@@ -434,7 +448,7 @@
           {% for rule in rules %}
             <tr>
               <td><a name='rule_{{ rule.name }}'>{{ rule.name }}</a></td>
-              <td>{{ rule.regex }}</td>
+              <td>{{ rule.readable_regex }}</td>
               <td style="text-align:center">{{ rule.trigger }}</td>
               <td style="text-align:center">{{ rule.context }}</td>
               <td style="text-align:center">{{ rule.anchor }}</td>
@@ -443,6 +457,39 @@
             </tr>
           {% endfor %}
         </table>
+        <div class="legend">
+          <p class="caption">Legend</p>
+          <dl>
+            <dt>Used as Trigger</dt>
+            <dd>This rule triggers one of the actions listed below.</dd>
+            <dt>Used as Context</dt>
+            <dd>This rule defines a required context for a code point.</dd>
+            <dt>Anchor</dt>
+            <dd>This has a placeholder for the code point for which it is evaluated.</dd>
+            <dt>Regular Expression</dt>
+            <dd>A regular expression equivalent to the rule, shown in the standard notation with some extensions as noted:</dd>
+            <dt>⚓ - context anchor</dt>
+            <dd>In a regex the ⚓ signifies a placeholder for the actual code point, when a context is evaluated. The code point must occur at the position corresponding to the anchor. Rules containing an anchor cannot be used as triggers.</dd>
+            <dt>(...)← - look-behind</dt>
+            <dd>If present encloses required context preceding the anchor.</dd>
+            <dt>→(...) - look-ahead</dt>
+            <dd>If present encloses required context following the anchor.</dd>
+            <dt>(: :) - rule reference</dt>
+            <dd>Non-recursive reference to a named rule.</dd>
+            <dt>[: :] - character set either named, implicit or property</dt>
+            <dd>Reference to a named character set [:name:], an implicit character set [:class tag=val:] or a given Unicode property [:class property:prop=val:]. A leading "<b>^</b>" before name or tag indicates the set complement.</dd>
+            <dt>(|) - choice operator</dt>
+            <dd>When there are various choices in a rule, choices are separated by the set operator (|) and each choice is represented by a set enclosed in parenthesis.</dd>
+            <dt>(∩,∪,\,△) - set operators</dt>
+            <dd>Sets may be combined by set operators (<b>∩</b> = intersection, <b>∪</b> = union, <b>\</b> = difference, <b>△</b> = symmetric difference).</dd>
+            <dt>Ø - empty set</dt>
+            <dd>Indicated that the following set is empty because of the result of set operations or because non of its elements are part of the repertoire defined here.</dd>
+            <dd>An empty set that is not optional means that a rule can never match.</dd>
+            <dt>{m}, {m, n}, {m,} - count</dt>
+            <dd>Indicates that the preceding element is evaluated from m to n times. Only {m} means the preceding element is evaluated exactly m times (equivalent to {m,m}), {m,} means the preceding element is evaluated at least m times.</dd>
+            <dd>No count indicated the elements is evaluated once (equivalent to "{1}").</dd>
+          </dl>
+        </div>
 
         <h2><a name="actions">Actions</a></h2>
 
@@ -534,5 +581,16 @@
         })
       </script>
     {% endif %}
+    {% comment "Enable for beautiful flashing background effect" %}
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+      <script>
+        $(window).bind( 'hashchange', function(e) {
+          var hash = location.hash.substring(1);
+          $("*[name=" + hash + "]").parents("tr").animate({backgroundColor: '#feb47b'}, 'fast');
+          $("*[name=" + hash + "]").parents("tr").animate({backgroundColor: 'none'}, 'slow');
+        });
+      </script>
+    {% endcomment %}
   </body>
 </HTML>
