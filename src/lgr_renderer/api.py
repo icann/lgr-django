@@ -191,7 +191,7 @@ def _generate_context_classes(lgr, udata):
         ctx.append({
             'name': clz.name,
             'definition': _generate_clz_definition(clz),
-            'references': _generate_references(clz.ref),
+            'references': _generate_references(clz.references),
             'members': clz.get_pattern(lgr.rules_lookup, lgr.classes_lookup, udata, as_set=True)
         })
 
