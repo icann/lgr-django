@@ -226,6 +226,7 @@ def _generate_context_rules(lgr, udata, context_rules, trigger_rules):
             'trigger': rule.name in trigger_rules,
             'anchor': _has_anchor_rule(rule),
             'comment': rule.comment,
+            'references': _generate_references(rule.references),
         })
 
     return ctx
@@ -269,7 +270,7 @@ def _generate_context_actions(lgr):
             'condition': condition,
             'rule_variant_set': rule_variant_set,
             'disposition': action.disp,
-            'references': _generate_references([]),
+            'references': _generate_references(action.references),
             'comment': action.comment or ''
         })
 
