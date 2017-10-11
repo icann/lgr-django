@@ -61,9 +61,9 @@ THE POSSIBILITY OF SUCH DAMAGE.
   * [django-widget-tweaks](https://github.com/kmike/django-widget-tweaks) [MIT License]
   * [Celery](http://www.celeryproject.org/) [BSD License]
   * [lxml](http://lxml.de/) [BSD License]
-  * lgr-core [TBD]
+  * [lgr-core](https://github.com/icann/lgr-core) [BSD License]
   * [picu](https://pypi.python.org/pypi/picu) [MIT/X License]
-  * munidata [TBD]
+  * [munidata](https://github.com/icann/munidata) [BSD License]
   * [natsort](https://pypi.python.org/pypi/natsort) [MIT License]
 
  For documentation generation:
@@ -180,6 +180,7 @@ Some notes for developers
 * `src/lgr_editor/templates` contains editor-specific templates
 * `src/lgr_validator/templates` contains validator-specific templates
 * `src/lgr_tools/templates` contains tool-specific templates
+* `src/lgr_renderer/templates` contains renderers (HTML output) templates
 
 
 #### Static Assets (CSS, Javascript, Images)
@@ -227,7 +228,7 @@ relevant container.
 The -h option should contain an allowed host specified in the hosts argument
 when building the container.
 
-    # docker run -h lgr.example -d -p 80:80 lgr-toolset 
+    # docker run -h lgr.example -d -p 80:80 lgr-toolset
 
 ### Debug the Docker image
 
