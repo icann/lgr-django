@@ -91,9 +91,10 @@ class ValidateLabelForm(forms.Form):
     label = forms.CharField(label=_("Label"))
     set_labels = forms.FileField(label=_("Allocated Set labels"),
                                  required=False,
-                                 help_text=_('Labels already allocated in the LGR set, '
-                                             'that will be used to check for collisions '
-                                             'when evaluating labels on the LGR set'))
+                                 help_text=_('Optional list of labels already allocated '
+                                             'in the LGR set, that will be used to check '
+                                             'for collisions when evaluating labels using '
+                                             'the merged LGR set'))
     script = forms.ChoiceField(label=_("Script"),
                                required=False,
                                help_text=_('The script used to validate the label'))
