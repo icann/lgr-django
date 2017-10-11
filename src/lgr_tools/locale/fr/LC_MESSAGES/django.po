@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-03 21:02+0000\n"
-"PO-Revision-Date: 2017-06-28 15:39-0400\n"
+"POT-Creation-Date: 2017-10-11 17:07+0000\n"
+"PO-Revision-Date: 2017-10-11 13:07-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 2.0.3\n"
 
 #: forms.py:9
 msgid "Union"
@@ -54,11 +54,11 @@ msgstr "Action à effectuer sur les LGR"
 msgid "Choose the action to perform on selected LGRs"
 msgstr "Choisir l'action à exécuter sur les LGR"
 
-#: forms.py:61 forms.py:114 forms.py:146 forms.py:178 forms.py:192
+#: forms.py:61 forms.py:114 forms.py:146 forms.py:179 forms.py:193
 msgid "LGR"
 msgstr "LGR"
 
-#: forms.py:62 forms.py:179
+#: forms.py:62 forms.py:180
 msgid "LGR set"
 msgstr "Set LGR"
 
@@ -70,21 +70,21 @@ msgstr "Première LGR sur laquelle appliquer la différence"
 msgid "Second LGR to use in diff"
 msgstr "Seconde LGR sur laquelle appliquer la différence"
 
-#: forms.py:80 forms.py:118 forms.py:161 forms.py:196
+#: forms.py:80 forms.py:118 forms.py:162 forms.py:197
 msgid "Labels"
 msgstr "Labels"
 
-#: forms.py:81 forms.py:119 forms.py:162 forms.py:197
+#: forms.py:81 forms.py:119 forms.py:163 forms.py:198
 msgid "List of labels to use in diff. File must be encoded in UNIX format."
 msgstr ""
 "Liste de labels sur lesquels tester les différences. Le fichier doit être "
 "encodé au format UNIX."
 
-#: forms.py:85 forms.py:123 forms.py:166 forms.py:201
+#: forms.py:85 forms.py:123 forms.py:167 forms.py:202
 msgid "E-mail"
 msgstr "E-mail"
 
-#: forms.py:86 forms.py:124 forms.py:167 forms.py:202
+#: forms.py:86 forms.py:124 forms.py:168 forms.py:203
 msgid "Provide your e-mail address"
 msgstr "Fournir une adresse e-mail"
 
@@ -113,7 +113,7 @@ msgid "Show rules in output (this can be very verbose)"
 msgstr ""
 "Affiche les règles dans le fichier de sortie (cela peut être très verbeux)"
 
-#: forms.py:115 forms.py:193
+#: forms.py:115 forms.py:194
 msgid "LGR to use for collisions"
 msgstr "LGR sur laquelle vérifier les collisions"
 
@@ -127,17 +127,18 @@ msgstr "Labels du set alloués"
 
 #: forms.py:153
 msgid ""
-"Labels already allocated in the LGR set, that will be used to check for "
-"collisions when evaluating labels on the LGR set"
+"Optional list of labels already allocated in the LGR set, that will be used "
+"to check for collisions when evaluating labels using the merged LGR set"
 msgstr ""
-"Labels déjà alloué dans le set LGR, qui seront utilisés pour vérifier les "
-"collisions lors de l'évaluation de labels sur le set LGR"
+"List optionelle de labels déjà alloués dans le set LGR, qui seront utilisés "
+"pour vérifier les collisions lors de l'évaluation de labels en utilisant le "
+"set LGR fusionné"
 
-#: forms.py:157
+#: forms.py:158
 msgid "Script"
 msgstr "Script"
 
-#: forms.py:158
+#: forms.py:159
 msgid "The script used to validate the label"
 msgstr "Script utilisé pour valider le label"
 
