@@ -1,5 +1,23 @@
 # LGR-Toolset Release notes
 
+## 1.8 (2017-10-18)
+Fixes:
+ - Merge LGR containing the same code point.
+ - Improve HTML formatting for description in HTML output.
+ - Improve merge for metadata's description element: if all descriptions are using HTML, then output will be in HTML.
+ - Include references in WLE table in HTML output.
+ - Better display of regex for WLE in HTML output.
+ - Order metadata section per language then per script.
+ - Fix size of variant set in HTML output.
+ - Download result links are now ordered with newest on top.
+ - Emphasize that the "Allocated set labels" file is optional.
+ - Fix typo on homepage.
+ - Update links to published RFC.
+ - Allow import of an LGR part of a set as a standalone LGR.
+ - Improve cross-script variants tool: generate the variants using the merged LGR,
+   and list element LGRs used by the variants' code points.
+ - Use redis as default Celery's broker for better stability.
+
 ## 1.7 (2017-06-26)
 New features:
  - Handling of LGR sets: import multiple LGR documents to create a set (merged LGR).
