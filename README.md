@@ -65,6 +65,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
   * [picu](https://pypi.python.org/pypi/picu) [MIT/X License]
   * [munidata](https://github.com/icann/munidata) [BSD License]
   * [natsort](https://pypi.python.org/pypi/natsort) [MIT License]
+* A [redis](https://redis.io/) server for asynchronous computations
 
  For documentation generation:
 
@@ -160,8 +161,8 @@ Both the session engine and result files may need a periodical cleaning. Conside
 
 #### Celery
 
-Celery is used to handle asynchronous processing for long operations in background. A broker is used to transport messages. See Celery documentation on [broker configuration](http://docs.celeryproject.org/en/latest/getting-started/brokers/).
-The default broker used is the (experimental) [Django Database broker](http://docs.celeryproject.org/en/latest/getting-started/brokers/django.html).
+Celery is used to handle asynchronous processing for long operations in background. A broker is used to transport messages. See Celery documentation on [broker configuration](http://docs.celeryproject.org/en/3.1/getting-started/brokers/).
+The default broker used is the [redis broker](http://docs.celeryproject.org/en/3.1/getting-started/brokers/redis.html).
 
 To launch celery, in a venv-enabled console:
 

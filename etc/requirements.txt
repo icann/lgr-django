@@ -2,7 +2,7 @@
 Django==1.8.4
 django-widget-tweaks==1.4.1
 django-multiupload==0.5.2
-celery==3.1.23
+celery[redis]==3.1.23
 
 # LGR/Unicode modules
 picu==0.8
