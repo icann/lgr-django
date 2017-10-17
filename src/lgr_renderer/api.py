@@ -188,7 +188,8 @@ def _generate_context_classes(lgr, udata):
     :return: Context to be used in template.
     """
     ctx = []
-    for clz in lgr.classes_lookup.values():
+    for clz_name in lgr.classes:
+        clz = lgr.classes_lookup[clz_name]
         ctx.append({
             'name': clz.name,
             'definition': _generate_clz_definition(clz),
