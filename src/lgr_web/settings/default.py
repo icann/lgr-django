@@ -250,6 +250,6 @@ CELERY_QUEUES = (
           delivery_mode=1),
 )
 
-BROKER_URL = 'django://'
+BROKER_URL = 'redis://localhost:6379/0'
 
 ##### /Celery configuration parameters #####

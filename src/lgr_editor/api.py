@@ -371,7 +371,7 @@ def session_list_storage(request):
     except OSError:
         return []
 
-    return sorted(files[1])
+    return sorted(files[1], reverse=True)
 
 
 def session_get_file(request, filename):

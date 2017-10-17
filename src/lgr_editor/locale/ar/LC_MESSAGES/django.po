@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-29 15:36+0000\n"
+"POT-Creation-Date: 2017-10-11 17:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,19 +92,19 @@ msgstr ""
 
 #: forms/codepoints.py:94
 msgid ""
-"Labels already allocated in the LGR set, that will be used to check for "
-"collisions when evaluating labels on the LGR set"
+"Optional list of labels already allocated in the LGR set, that will be used "
+"to check for collisions when evaluating labels using the merged LGR set"
 msgstr ""
 
-#: forms/codepoints.py:97
+#: forms/codepoints.py:98
 msgid "Script"
 msgstr ""
 
-#: forms/codepoints.py:99
+#: forms/codepoints.py:100
 msgid "The script used to validate the label"
 msgstr ""
 
-#: forms/codepoints.py:108
+#: forms/codepoints.py:109
 #, python-format
 msgid "Maximum length: %d code points"
 msgstr ""
@@ -374,9 +374,8 @@ msgstr ""
 msgid ""
 "This application provides a convenient interface for browsing and editing "
 "<abbr title=\"Label Generation Ruleset\">LGR</abbr>’s conforming to the <a "
-"href=\"https://tools.ietf.org/html/draft-davies-idntables-09\" target="
-"\"_blank\">Representing Label Generation Rulesets using XML</a> "
-"specification."
+"href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" target=\"_blank"
+"\">Representing Label Generation Rulesets using XML</a> specification."
 msgstr ""
 
 #: templates/lgr_editor/about.html:10
@@ -656,169 +655,163 @@ msgid ""
 msgstr ""
 
 #: views.py:137
-msgid "The LGR set name already exists. Please use another name."
-msgstr ""
-
-#: views.py:142
 msgid ""
 "The LGR you have tried to import already exists in your set. Please rename "
 "it before importing it."
 msgstr ""
 
-#: views.py:164
-msgid ""
-"The LGR set you have tried to import already exists in your working session. "
-"Please rename some LGR in set before importing it."
+#: views.py:160
+msgid "The LGR set name already exists. Please use another name."
 msgstr ""
 
-#: views.py:258
+#: views.py:253
 msgid "summary"
 msgstr ""
 
-#: views.py:285
+#: views.py:280
 #, python-format
 msgid "New code point %s added"
 msgstr ""
 
-#: views.py:373
+#: views.py:368
 msgid "New variant added"
 msgstr ""
 
-#: views.py:446
+#: views.py:441
 msgid "Code point edited"
 msgstr ""
 
-#: views.py:626 views.py:662
+#: views.py:621 views.py:657
 msgid "References updated successfully"
 msgstr ""
 
-#: views.py:665
+#: views.py:660
 #, python-format
 msgid ""
 "Variant %(var_codepoint)s for code point %(codepoint)s with when=%(when)s "
 "and not-when=%(not_when)s could not be found"
 msgstr ""
 
-#: views.py:701
+#: views.py:696
 #, python-format
 msgid "Code point %s has been deleted"
 msgstr ""
 
-#: views.py:723
+#: views.py:718
 #, python-format
 msgid "Variant %(var_cp)s with when='%(when)s' and not-when='%(not_when)s'"
 msgstr ""
 
-#: views.py:729
+#: views.py:724
 #, python-format
 msgid "%(var_msg_prefix)s has been deleted"
 msgstr ""
 
-#: views.py:732
+#: views.py:727
 #, python-format
 msgid "%(var_msg_prefix)s could not be deleted because it was not found"
 msgstr ""
 
-#: views.py:761
+#: views.py:756
 msgid "New reference created"
 msgstr ""
 
-#: views.py:948 views.py:1111 views.py:1195
+#: views.py:943 views.py:1106 views.py:1190
 msgid "No body specified"
 msgstr ""
 
-#: views.py:957
+#: views.py:952
 #, python-format
 msgid "Class \"%s\" does not exist"
 msgstr ""
 
-#: views.py:961
+#: views.py:956
 #, python-format
 msgid "Class \"%s\" deleted."
 msgstr ""
 
-#: views.py:966
+#: views.py:961
 msgid "No class element found"
 msgstr ""
 
-#: views.py:968 views.py:1131
+#: views.py:963 views.py:1126
 msgid "Name attribute must be present"
 msgstr ""
 
-#: views.py:972 views.py:989 views.py:1135 views.py:1152 views.py:1219
-#: views.py:1232
+#: views.py:967 views.py:984 views.py:1130 views.py:1147 views.py:1214
+#: views.py:1227
 #, python-format
 msgid ""
 "Encountered XML syntax error: %s (line number may be wrong, try subtracting "
 "one from the reported line number)"
 msgstr ""
 
-#: views.py:975 views.py:992 views.py:1138 views.py:1155 views.py:1222
-#: views.py:1235
+#: views.py:970 views.py:987 views.py:1133 views.py:1150 views.py:1217
+#: views.py:1230
 msgid "Your XML is not valid"
 msgstr ""
 
-#: views.py:980
+#: views.py:975
 #, python-format
 msgid "Class \"%s\" already exists"
 msgstr ""
 
-#: views.py:982
+#: views.py:977
 #, python-format
 msgid "Class \"%s\" saved."
 msgstr ""
 
-#: views.py:1120
+#: views.py:1115
 #, python-format
 msgid "Rule \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1124
+#: views.py:1119
 #, python-format
 msgid "Rule \"%s\" deleted."
 msgstr ""
 
-#: views.py:1129
+#: views.py:1124
 msgid "No rule element found"
 msgstr ""
 
-#: views.py:1143
+#: views.py:1138
 #, python-format
 msgid "Rule \"%s\" already exists"
 msgstr ""
 
-#: views.py:1145
+#: views.py:1140
 #, python-format
 msgid "Rule \"%s\" saved."
 msgstr ""
 
-#: views.py:1206
+#: views.py:1201
 #, python-format
 msgid "Action \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1210
+#: views.py:1205
 #, python-format
 msgid "Action \"%s\" deleted."
 msgstr ""
 
-#: views.py:1215
+#: views.py:1210
 msgid "No action element found"
 msgstr ""
 
-#: views.py:1225
+#: views.py:1220
 msgid "Action saved."
 msgstr ""
 
-#: views.py:1294 views.py:1440
+#: views.py:1289 views.py:1435
 #, python-format
 msgid "%d code points added"
 msgstr ""
 
-#: views.py:1409
+#: views.py:1404
 msgid "No code point in input file"
 msgstr ""
 
-#: views.py:1601
+#: views.py:1596
 msgid "Meta data saved"
 msgstr ""
