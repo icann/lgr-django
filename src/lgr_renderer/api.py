@@ -194,6 +194,7 @@ def _generate_context_classes(lgr, udata):
             'name': clz.name,
             'definition': _generate_clz_definition(clz),
             'references': _generate_references(clz.references),
+            'comment': clz.comment or '',
             'members': _generate_links(clz)
         })
 
