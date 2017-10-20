@@ -6,7 +6,7 @@ MAINTAINER ICANN
 RUN yum makecache \
   && yum install -y epel-release \
   && yum makecache \
-  && yum install -y nginx python-pip python-devel make gcc libxml2-devel libxslt-devel \
+  && yum install -y nginx python-pip python-devel make gcc libxml2-devel libxslt-devel redis \
   && yum clean all
 
 ENV HOME=/var/www/lgr

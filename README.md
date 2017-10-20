@@ -61,10 +61,11 @@ THE POSSIBILITY OF SUCH DAMAGE.
   * [django-widget-tweaks](https://github.com/kmike/django-widget-tweaks) [MIT License]
   * [Celery](http://www.celeryproject.org/) [BSD License]
   * [lxml](http://lxml.de/) [BSD License]
-  * lgr-core [TBD]
+  * [lgr-core](https://github.com/icann/lgr-core) [BSD License]
   * [picu](https://pypi.python.org/pypi/picu) [MIT/X License]
-  * munidata [TBD]
+  * [munidata](https://github.com/icann/munidata) [BSD License]
   * [natsort](https://pypi.python.org/pypi/natsort) [MIT License]
+* A [redis](https://redis.io/) server for asynchronous computations
 
  For documentation generation:
 
@@ -160,8 +161,8 @@ Both the session engine and result files may need a periodical cleaning. Conside
 
 #### Celery
 
-Celery is used to handle asynchronous processing for long operations in background. A broker is used to transport messages. See Celery documentation on [broker configuration](http://docs.celeryproject.org/en/latest/getting-started/brokers/).
-The default broker used is the (experimental) [Django Database broker](http://docs.celeryproject.org/en/latest/getting-started/brokers/django.html).
+Celery is used to handle asynchronous processing for long operations in background. A broker is used to transport messages. See Celery documentation on [broker configuration](http://docs.celeryproject.org/en/3.1/getting-started/brokers/).
+The default broker used is the [redis broker](http://docs.celeryproject.org/en/3.1/getting-started/brokers/redis.html).
 
 To launch celery, in a venv-enabled console:
 
@@ -180,6 +181,7 @@ Some notes for developers
 * `src/lgr_editor/templates` contains editor-specific templates
 * `src/lgr_validator/templates` contains validator-specific templates
 * `src/lgr_tools/templates` contains tool-specific templates
+* `src/lgr_renderer/templates` contains renderers (HTML output) templates
 
 
 #### Static Assets (CSS, Javascript, Images)
@@ -227,7 +229,7 @@ relevant container.
 The -h option should contain an allowed host specified in the hosts argument
 when building the container.
 
-    # docker run -h lgr.example -d -p 80:80 lgr-toolset 
+    # docker run -h lgr.example -d -p 80:80 lgr-toolset
 
 ### Debug the Docker image
 

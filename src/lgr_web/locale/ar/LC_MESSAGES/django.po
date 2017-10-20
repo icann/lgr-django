@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-29 15:36+0000\n"
+"POT-Creation-Date: 2017-10-11 17:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,8 +164,8 @@ msgstr ""
 msgid ""
 "This application provides a convenient interface for browsing and editing "
 "<abbr title=\"Label Generation Ruleset\">LGR</abbr>’s conforming to the <a "
-"href=\"https://tools.ietf.org/html/draft-davies-idntables-09\">Representing "
-"Label Generation Rulesets using XML</a> specification."
+"href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\">Representing Label "
+"Generation Rulesets using XML</a> specification."
 msgstr ""
 
 #: templates/index.html:22
@@ -196,7 +196,7 @@ msgid "View embedded LGRs"
 msgstr ""
 
 #: templates/index.html:74
-msgid "No LGR has been previously load."
+msgid "No LGR has been previously loaded."
 msgstr ""
 
 #: templates/index.html:83

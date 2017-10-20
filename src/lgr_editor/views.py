@@ -113,6 +113,7 @@ def import_lgr(request):
     """
     form = ImportLGRForm(request.POST or None, request.FILES or None)
     if form.is_valid():
+        lgr_names = [lgr['name'] for lgr in session_list_lgr(request)]
         is_set = len(form.cleaned_data['file']) > 1
         merged_id = None
         lgr_info_set = []
@@ -124,19 +125,13 @@ def import_lgr(request):
                 lgr_id = lgr_id.rsplit('.', 1)[0]
             lgr_id = slugify(lgr_id)
 
-            if lgr_id in [lgr['name'] for lgr in session_list_lgr(request)]:
-                if not is_set:
-                    logger.error("Import existing LGR")
-                    return render(request, 'lgr_editor/import_invalid.html',
-                                  context={'error': _("The LGR you have tried to import already exists in your working "
-                                                      "session. Please rename it before importing it.")})
-                else:
-                    logger.error("Import existing LGR set")
-                    return render(request, 'lgr_editor/import_invalid.html',
-                                  context={
-                                      'error': _("The LGR set name already exists. Please use another name.")})
+            if not is_set and lgr_id in lgr_names:
+                logger.error("Import existing LGR")
+                return render(request, 'lgr_editor/import_invalid.html',
+                              context={'error': _("The LGR you have tried to import already exists in your working "
+                                                  "session. Please rename it before importing it.")})
 
-            if is_set and lgr_id in map(lambda x: x.name, lgr_info_set):
+            if is_set and lgr_id in [lgr.name for lgr in lgr_info_set]:
                 logger.error("Import existing LGR in set")
                 return render(request, 'lgr_editor/import_invalid.html',
                               context={'error': _("The LGR you have tried to import already exists in your set. "
@@ -158,11 +153,11 @@ def import_lgr(request):
             lgr_info_set.append(lgr_info)
 
         if is_set:
-            if merged_id in [lgr['name'] for lgr in session_list_lgr(request)]:
+            merged_id = slugify(form.cleaned_data['set_name'])
+            if merged_id in lgr_names:
                 logger.error("Import existing LGR set")
                 return render(request, 'lgr_editor/import_invalid.html',
-                              context={'error': _("The LGR set you have tried to import already exists in your working "
-                                                  "session. Please rename some LGR in set before importing it.")})
+                              context={'error': _("The LGR set name already exists. Please use another name.")})
 
             try:
                 merged_id = session_merge_set(request, lgr_info_set,

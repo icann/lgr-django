@@ -44,8 +44,8 @@ def _lgr_tool_task(storage_path, base_filename, email_subject,
             for line in cb(**cb_kwargs):
                 gzf.write(line.encode('utf-8'))
 
-        filename = '{0}_{1}.txt.gz'.format(base_filename,
-                                           time.strftime('%Y%m%d_%H%M%S'))
+        filename = '{0}_{1}.txt.gz'.format(time.strftime('%Y%m%d_%H%M%S'),
+                                           base_filename)
 
         storage = FileSystemStorage(location=storage_path,
                                     file_permissions_mode=0o440)
@@ -243,6 +243,7 @@ def cross_script_variants_task(lgr_json, labels_json, email_address, storage_pat
                    email_body=body,
                    email_address=email_address,
                    cb=lgr_cross_script_variants,
-                   lgr_set=[s.lgr for s in lgr_info.lgr_set],
+                   merged_lgr=lgr_info.lgr,
+                   lgr_set=[l.lgr for l in lgr_info.lgr_set],
                    unidb=lgr_info.lgr.unicode_database,
                    labels_file=labels_info.labels)

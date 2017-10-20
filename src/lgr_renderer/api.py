@@ -7,12 +7,13 @@ Responsible for creating the proper context to render the HTML view of an LGR do
 from __future__ import unicode_literals
 
 import logging
+import re
 from itertools import izip
 
 from natsort import natsorted
 
 from django.utils.translation import ugettext_lazy as _
-from django.utils.html import format_html_join, format_html
+from django.utils.html import format_html_join, format_html, mark_safe
 
 from lgr.matcher import AnchorMatcher
 from lgr.validate.lgr_stats import generate_stats
@@ -67,6 +68,7 @@ def _generate_context_metadata(metadata):
 
     if metadata.description is not None:
         context['description'] = metadata.description.value
+        context['description_type'] = metadata.description.description_type
 
     return context
 
@@ -186,12 +188,14 @@ def _generate_context_classes(lgr, udata):
     :return: Context to be used in template.
     """
     ctx = []
-    for clz in lgr.classes_lookup.values():
+    for clz_name in lgr.classes:
+        clz = lgr.classes_lookup[clz_name]
         ctx.append({
             'name': clz.name,
             'definition': _generate_clz_definition(clz),
-            'references': _generate_references(clz.ref),
-            'members': clz.get_pattern(lgr.rules_lookup, lgr.classes_lookup, udata, as_set=True)
+            'references': _generate_references(clz.references),
+            'comment': clz.comment or '',
+            'members': _generate_links(clz)
         })
 
     return ctx
@@ -221,13 +225,31 @@ def _generate_context_rules(lgr, udata, context_rules, trigger_rules):
         ctx.append({
             'name': rule.name,
             'regex': rule.get_pattern(lgr.rules_lookup, lgr.classes_lookup, udata),
+            'readable_regex': _generate_links(rule),
             'context': rule.name in context_rules,
             'trigger': rule.name in trigger_rules,
             'anchor': _has_anchor_rule(rule),
             'comment': rule.comment,
+            'references': _generate_references(rule.references),
         })
 
     return ctx
+
+
+def _generate_links(rule):
+    readable_rule = '{}'.format(rule)
+    # Add links in the rule
+    # - links on codepoints
+    for cp_match in re.finditer(r'U\+[0-9A-F]{4,}', readable_rule):
+        cp = cp_match.group(0)
+        ref = int(cp.lstrip('U+'), 16)
+        readable_rule = readable_rule.replace(cp, format_html('<a href="#{}">{}</a>', ref, cp))
+    # - links on classes references
+    for match in re.finditer(r':(class|rule)-ref-([^:]+):', readable_rule):
+        whole, obj, ref = match.group(0), match.group(1), match.group(2)
+        readable_rule = readable_rule.replace(whole.strip(':'), format_html('<a href="#{0}_{1}">{1}</a>', obj, ref))
+
+    return mark_safe(readable_rule)
 
 
 def _generate_action_condition_rule_variant_set(action):
@@ -268,7 +290,7 @@ def _generate_context_actions(lgr):
             'condition': condition,
             'rule_variant_set': rule_variant_set,
             'disposition': action.disp,
-            'references': _generate_references([]),
+            'references': _generate_references(action.references),
             'comment': action.comment or ''
         })
 
