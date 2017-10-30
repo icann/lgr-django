@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-11 17:06+0000\n"
+"POT-Creation-Date: 2017-10-30 20:24+0000\n"
 "PO-Revision-Date: 2017-10-03 17:02-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -79,75 +79,75 @@ msgstr "Diff labels entre deux LGR"
 msgid "Get collisions in a list of labels"
 msgstr "Calculer les collisions sur une liste de labels"
 
-#: templates/_base.html:105
+#: templates/_base.html:104
 msgid "Compute cross-script variants"
 msgstr "Calculer les variantes cross-script"
 
-#: templates/_base.html:108
+#: templates/_base.html:107
 msgid "Cross-script variants"
 msgstr "Variantes cross-script"
 
-#: templates/_base.html:114
+#: templates/_base.html:112
 msgid "Annotate list of labels with their disposition"
 msgstr "Annote une liste de labels avec leur disposition"
 
-#: templates/_base.html:117
+#: templates/_base.html:115
 msgid "Generate disp. annotations"
 msgstr "Génére les annotations de disposition"
 
-#: templates/_base.html:136
+#: templates/_base.html:134
 msgid "Validate label against LGR"
 msgstr "Valider un label avec une LGR"
 
-#: templates/_base.html:138 templates/_base.html.py:263
+#: templates/_base.html:136 templates/_base.html.py:261
 msgid "Validate label"
 msgstr "Valider un label"
 
-#: templates/_base.html:142
+#: templates/_base.html:140
 msgid "Analyze current file for errors and statistics"
 msgstr "Analyser le fichier courant pour les erreurs et les statistiques"
 
-#: templates/_base.html:145
+#: templates/_base.html:143
 msgid "Summary"
 msgstr "Résumé"
 
-#: templates/_base.html:148
+#: templates/_base.html:146
 msgid "Preview LGR file"
 msgstr "Prévisualiser le fichier LGR"
 
-#: templates/_base.html:151
+#: templates/_base.html:149
 msgid "View XML"
 msgstr "Voir le XML"
 
-#: templates/_base.html:154 templates/_base.html.py:157
+#: templates/_base.html:152 templates/_base.html.py:155
 msgid "HTML Output"
 msgstr "Sortie HTML"
 
-#: templates/_base.html:160
+#: templates/_base.html:158
 msgid "Download LGR file"
 msgstr "Télécharger le fichier LGR"
 
-#: templates/_base.html:162
+#: templates/_base.html:160
 msgid "Download"
 msgstr "Télécharger"
 
-#: templates/_base.html:167
+#: templates/_base.html:165
 msgid "About LGR Toolset"
 msgstr "À propos de l'application LGR"
 
-#: templates/_base.html:168 templates/_base.html.py:279
+#: templates/_base.html:166 templates/_base.html.py:277
 msgid "About"
 msgstr "À propos"
 
-#: templates/_base.html:232
+#: templates/_base.html:230
 msgid "LGR Summary"
 msgstr "Résumé de la LGR"
 
-#: templates/_base.html:242
+#: templates/_base.html:240
 msgid "Save summary"
 msgstr "Sauvegarder"
 
-#: templates/_base.html:244 templates/_base.html.py:285
+#: templates/_base.html:242 templates/_base.html.py:283
 msgid "Close"
 msgstr "Fermer"
 

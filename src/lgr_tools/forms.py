@@ -142,37 +142,22 @@ class LGRCollisionSelector(forms.Form):
         self.fields['lgr'].initial = lgr_id
 
 
-class LGRAnnotateSelector(forms.Form):
+class LGRSetCompatibleForm(forms.Form):
     lgr = forms.ChoiceField(label=_("LGR"),
                             help_text=_('LGR to use for annotation'),
                             required=True,
                             widget=DataSelectWidget)
 
-    set_labels = forms.FileField(label=_("Allocated Set labels"),
-                                 required=False,
-                                 help_text=_('Optional list of labels already allocated '
-                                             'in the LGR set, that will be used to check '
-                                             'for collisions when evaluating labels using '
-                                             'the merged LGR set'))
-
     script = forms.ChoiceField(label=_("Script"),
                                help_text=_('The script used to validate the label'),
                                required=False)
 
-    labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in diff. '
-                                         'File must be encoded in UNIX format.'),
-                             required=True)
-
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=True)
-
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', {})
+        lgr_id = kwargs.pop('lgr_id', '')
         lgr_info = kwargs.pop('lgr_info', None)
         scripts = kwargs.pop('scripts', [])
-        super(LGRAnnotateSelector, self).__init__(*args, **kwargs)
+        super(LGRSetCompatibleForm, self).__init__(*args, **kwargs)
         lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
         lgrs = [lgr for lgr in session_lgrs if not lgr['is_set']]
         # dynamically append the session LGRs (by copy, not by reference)
@@ -180,19 +165,21 @@ class LGRAnnotateSelector(forms.Form):
                                       (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
         self.fields['lgr'].widget.data = {lgr['name']: {'lgr-set': ','.join([l['name'] for l in lgr['lgr_set_dct']])}
                                           for lgr in lgr_sets}
+        self.fields['lgr'].initial = lgr_id
         if lgr_info is not None:
             self.fields['lgr'].initial = lgr_info.name
-            if lgr_info.set_labels_info is not None:
-                self.fields['set_labels'].initial = lgr_info.set_labels_info.name
 
         if scripts:
             self.fields['script'].choices = scripts
 
 
-class LGRCrossScriptVariantsSelector(forms.Form):
-    lgr = forms.ChoiceField(label=_("LGR"),
-                            help_text=_('LGR to use for collisions'),
-                            required=True)
+class LGRAnnotateSelector(LGRSetCompatibleForm):
+    set_labels = forms.FileField(label=_("Allocated Set labels"),
+                                 required=False,
+                                 help_text=_('Optional list of labels already allocated '
+                                             'in the LGR set, that will be used to check '
+                                             'for collisions when evaluating labels using '
+                                             'the merged LGR set'))
 
     labels = forms.FileField(label=_("Labels"),
                              help_text=_('List of labels to use in diff. '
@@ -204,10 +191,18 @@ class LGRCrossScriptVariantsSelector(forms.Form):
                              required=True)
 
     def __init__(self, *args, **kwargs):
-        session_lgrs = kwargs.pop('session_lgrs', [])
-        lgr_id = kwargs.pop('lgr_id', '')
-        super(LGRCrossScriptVariantsSelector, self).__init__(*args, **kwargs)
-        lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
-        # dynamically append the session LGRs (by copy, not by reference)
-        self.fields['lgr'].choices = ((lgr['name'], lgr['name']) for lgr in lgr_sets)
-        self.fields['lgr'].initial = lgr_id
+        lgr_info = kwargs.get('lgr_info', None)
+        super(LGRAnnotateSelector, self).__init__(*args, **kwargs)
+        if lgr_info is not None and lgr_info.set_labels_info is not None:
+            self.fields['set_labels'].initial = lgr_info.set_labels_info.name
+
+
+class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
+    labels = forms.FileField(label=_("Labels"),
+                             help_text=_('List of labels to use in diff. '
+                                         'File must be encoded in UNIX format.'),
+                             required=True)
+
+    email = forms.EmailField(label=_("E-mail"),
+                             help_text=_('Provide your e-mail address'),
+                             required=True)
