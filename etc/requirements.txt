@@ -7,7 +7,7 @@ celery[redis]==3.1.23
 # LGR/Unicode modules
 picu==0.8
 munidata==1.2
-lgr-core==1.8
+lgr-core==1.8.1
 
 # Natural sorting implementation
 natsort==5.0.3

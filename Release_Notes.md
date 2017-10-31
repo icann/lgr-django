@@ -1,5 +1,11 @@
 # LGR-Toolset Release notes
 
+## 1.8.1 (2017-11-15)
+Fixes:
+ - Remove script/mimetype from merged description when all descriptions use the text/html mimetype.
+ - Fix cross-script variants tool: output variants composed of code point which are in other scripts
+   than the one(s) defined in the LGR.
+
 ## 1.8 (2017-10-18)
 Fixes:
  - Merge LGR containing the same code point.
