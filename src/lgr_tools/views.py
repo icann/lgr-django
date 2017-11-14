@@ -180,7 +180,7 @@ def lgr_collisions(request, lgr_id):
     return render(request, 'lgr_tools/collision.html', context=ctx)
 
 
-def lgr_annotate(request, lgr_id):
+def _create_set_compatible_form_instance(form_class, request, lgr_id):
     # Retrieve complete list of all scripts defined in all sets
     lgr_scripts = set()
     for lgr_dct in session_list_lgr(request):
@@ -199,11 +199,20 @@ def lgr_annotate(request, lgr_id):
     if lgr_id is not None:
         lgr_info = session_select_lgr(request, lgr_id)
 
-    form = LGRAnnotateSelector(request.POST or None, request.FILES or None,
-                               session_lgrs=session_list_lgr(request),
-                               lgr_info=lgr_info,
-                               scripts=list(lgr_scripts))
+    form = form_class(request.POST or None, request.FILES or None,
+                      session_lgrs=session_list_lgr(request),
+                      lgr_info=lgr_info,
+                      scripts=list(lgr_scripts))
+    return form
 
+
+def lgr_annotate(request, lgr_id):
+    lgr_info = None
+    if lgr_id is not None:
+        lgr_info = session_select_lgr(request, lgr_id)
+
+    form = _create_set_compatible_form_instance(LGRAnnotateSelector,
+                                                request, lgr_id)
     if form.is_valid():
         ctx = {}
         lgr_id = form.cleaned_data['lgr']
@@ -256,9 +265,12 @@ def lgr_annotate(request, lgr_id):
 
 
 def lgr_cross_script_variants(request, lgr_id):
-    form = LGRCrossScriptVariantsSelector(request.POST or None, request.FILES or None,
-                                          session_lgrs=session_list_lgr(request),
-                                          lgr_id=lgr_id)
+    lgr_info = None
+    if lgr_id is not None:
+        lgr_info = session_select_lgr(request, lgr_id)
+
+    form = _create_set_compatible_form_instance(LGRCrossScriptVariantsSelector,
+                                                request, lgr_id)
 
     if form.is_valid():
         ctx = {}
@@ -273,21 +285,28 @@ def lgr_cross_script_variants(request, lgr_id):
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
                                           labels_file.read()).to_dict()
-        if not lgr_info.is_set:
-            messages.add_message(request, messages.ERROR, 'Please select an LGR set.')
-        else:
-            lgr_json = lgr_info.to_dict()
-            cross_script_variants_task.delay(lgr_json, labels_json, email_address, storage_path)
 
-            ctx.update({
-                'lgr_info': lgr_info,
-                'labels_file': labels_file.name,
-                'email': email_address,
-            })
-            return render(request, 'lgr_tools/wait_cross_scripts.html', context=ctx)
+        if lgr_info.is_set:
+            script_lgr_id = form.cleaned_data['script']
+            script_lgr = session_select_lgr(request, script_lgr_id,
+                                            lgr_set_id=lgr_id)
+            lgr_info = script_lgr
+
+        cross_script_variants_task.delay(lgr_info.to_dict(), labels_json,
+                                         email_address, storage_path)
+
+        ctx.update({
+            'lgr_info': lgr_info,
+            'labels_file': labels_file.name,
+            'email': email_address,
+        })
+        return render(request, 'lgr_tools/wait_cross_scripts.html', context=ctx)
 
     ctx = {
         'form': form,
+        'lgr_id': lgr_id if lgr_id is not None else '',
+        'lgr': lgr_info.lgr if lgr_info is not None else '',
+        'is_set': lgr_info.is_set if lgr_info is not None else '',
     }
 
     return render(request, 'lgr_tools/cross_script_variants.html', context=ctx)

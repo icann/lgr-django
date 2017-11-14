@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-11 17:07+0000\n"
+"POT-Creation-Date: 2017-10-30 20:24+0000\n"
 "PO-Revision-Date: 2017-10-11 13:07-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -54,11 +54,11 @@ msgstr "Action à effectuer sur les LGR"
 msgid "Choose the action to perform on selected LGRs"
 msgstr "Choisir l'action à exécuter sur les LGR"
 
-#: forms.py:61 forms.py:114 forms.py:146 forms.py:179 forms.py:193
+#: forms.py:61 forms.py:114 forms.py:146 forms.py:164
 msgid "LGR"
 msgstr "LGR"
 
-#: forms.py:62 forms.py:180
+#: forms.py:62 forms.py:165
 msgid "LGR set"
 msgstr "Set LGR"
 
@@ -70,21 +70,21 @@ msgstr "Première LGR sur laquelle appliquer la différence"
 msgid "Second LGR to use in diff"
 msgstr "Seconde LGR sur laquelle appliquer la différence"
 
-#: forms.py:80 forms.py:118 forms.py:162 forms.py:197
+#: forms.py:80 forms.py:118 forms.py:184 forms.py:201
 msgid "Labels"
 msgstr "Labels"
 
-#: forms.py:81 forms.py:119 forms.py:163 forms.py:198
+#: forms.py:81 forms.py:119 forms.py:185 forms.py:202
 msgid "List of labels to use in diff. File must be encoded in UNIX format."
 msgstr ""
 "Liste de labels sur lesquels tester les différences. Le fichier doit être "
 "encodé au format UNIX."
 
-#: forms.py:85 forms.py:123 forms.py:167 forms.py:202
+#: forms.py:85 forms.py:123 forms.py:189 forms.py:206
 msgid "E-mail"
 msgstr "E-mail"
 
-#: forms.py:86 forms.py:124 forms.py:168 forms.py:203
+#: forms.py:86 forms.py:124 forms.py:190 forms.py:207
 msgid "Provide your e-mail address"
 msgstr "Fournir une adresse e-mail"
 
@@ -113,7 +113,7 @@ msgid "Show rules in output (this can be very verbose)"
 msgstr ""
 "Affiche les règles dans le fichier de sortie (cela peut être très verbeux)"
 
-#: forms.py:115 forms.py:194
+#: forms.py:115
 msgid "LGR to use for collisions"
 msgstr "LGR sur laquelle vérifier les collisions"
 
@@ -122,10 +122,18 @@ msgid "LGR to use for annotation"
 msgstr "LGR sur laquelle effectuer les annotations"
 
 #: forms.py:151
+msgid "Script"
+msgstr "Script"
+
+#: forms.py:152
+msgid "The script used to validate the label"
+msgstr "Script utilisé pour valider le label"
+
+#: forms.py:177
 msgid "Allocated Set labels"
 msgstr "Labels du set alloués"
 
-#: forms.py:153
+#: forms.py:179
 msgid ""
 "Optional list of labels already allocated in the LGR set, that will be used "
 "to check for collisions when evaluating labels using the merged LGR set"
@@ -134,16 +142,8 @@ msgstr ""
 "pour vérifier les collisions lors de l'évaluation de labels en utilisant le "
 "set LGR fusionné"
 
-#: forms.py:158
-msgid "Script"
-msgstr "Script"
-
-#: forms.py:159
-msgid "The script used to validate the label"
-msgstr "Script utilisé pour valider le label"
-
 #: templates/lgr_tools/annotate.html:15 templates/lgr_tools/collision.html:11
-#: templates/lgr_tools/cross_script_variants.html:11
+#: templates/lgr_tools/cross_script_variants.html:14
 #: templates/lgr_tools/diff.html:12
 msgid ""
 "As the computing may be very long, we will warn by e-mail once the result "
@@ -219,7 +219,7 @@ msgstr ""
 "simples, l'union et la comparaison ne sont pas disponibles pour les set LGR."
 "</strong>"
 
-#: templates/lgr_tools/cross_script_variants.html:17
+#: templates/lgr_tools/cross_script_variants.html:20
 msgid "Launch"
 msgstr "Démarrer"
 

@@ -220,7 +220,7 @@ def lgr_set_annotate_task(lgr_json, script_lgr_json, labels_json, email_address,
 @shared_task
 def cross_script_variants_task(lgr_json, labels_json, email_address, storage_path):
     """
-    Compute cross-script variants of labels in a LGR set.
+    Compute cross-script variants of labels in a LGR.
 
     :param lgr_json: The LGRInfo as a JSON object.
     :param labels_json: The LabelInfo as a JSON object.
@@ -243,7 +243,5 @@ def cross_script_variants_task(lgr_json, labels_json, email_address, storage_pat
                    email_body=body,
                    email_address=email_address,
                    cb=lgr_cross_script_variants,
-                   merged_lgr=lgr_info.lgr,
-                   lgr_set=[l.lgr for l in lgr_info.lgr_set],
-                   unidb=lgr_info.lgr.unicode_database,
+                   lgr=lgr_info.lgr,
                    labels_file=labels_info.labels)

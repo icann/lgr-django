@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-11 17:07+0000\n"
+"POT-Creation-Date: 2017-10-30 20:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,13 +63,13 @@ msgstr ""
 
 #: templates/lgr_validator/validator.html:70
 #: templates/lgr_validator/validator.html:122
-#: templates/lgr_validator/validator.html:182
+#: templates/lgr_validator/validator.html:183
 msgid "Show / hide rule"
 msgstr ""
 
 #: templates/lgr_validator/validator.html:80
 #: templates/lgr_validator/validator.html:132
-#: templates/lgr_validator/validator.html:192
+#: templates/lgr_validator/validator.html:193
 #, python-format
 msgid "[Action index: %(action_idx)s] %(action)s"
 msgstr ""
@@ -90,33 +90,33 @@ msgstr ""
 msgid "No collision."
 msgstr ""
 
-#: templates/lgr_validator/validator.html:151
+#: templates/lgr_validator/validator.html:152
 msgid "Variant labels"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:151
+#: templates/lgr_validator/validator.html:152
 msgid " (including original as last)"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:156
+#: templates/lgr_validator/validator.html:157
 #, python-format
 msgid "%(num_variants)s variant label(s) generated."
 msgstr ""
 
-#: templates/lgr_validator/validator.html:158
+#: templates/lgr_validator/validator.html:159
 msgid "By disposition: "
 msgstr ""
 
-#: templates/lgr_validator/validator.html:160
+#: templates/lgr_validator/validator.html:161
 msgid "No variant labels generated."
 msgstr ""
 
-#: templates/lgr_validator/validator.html:205
+#: templates/lgr_validator/validator.html:207
 msgid ""
 "Too many variant labels to be displayed in the browser. Please download the "
 "results in .csv instead."
 msgstr ""
 
-#: templates/lgr_validator/validator.html:223
+#: templates/lgr_validator/validator.html:227
 msgid "Download results in CSV"
 msgstr ""

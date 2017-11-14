@@ -130,14 +130,12 @@ def lgr_set_annotate_labels(lgr, script_lgr, set_labels, labels_file):
     return lgr_set_annotate(lgr, script_lgr, set_labels, labels_file)
 
 
-def lgr_cross_script_variants(merged_lgr, lgr_set, unidb, labels_file):
+def lgr_cross_script_variants(lgr, labels_file):
     """
     Compute cross-script variants of a list of labels in a LGR.
 
-    :param merged_lgr: The merged LGR object.
-    :param lgr_set: The LGR set object.
-    :param unidb: The unicode database to use.
+    :param lgr: The LGR to use for variant generation.
     :param labels_file: The file containing the list of labels
     :return: Text log to be displayed
     """
-    return cross_script_variants(merged_lgr, lgr_set, unidb, labels_file)
+    return cross_script_variants(lgr, labels_file)
