@@ -1,0 +1,122 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "label-generation-ruleset"
+  labels:
+    name: "label-generation-ruleset"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: lgrtool-example-com
+  namespace: label-generation-ruleset
+  labels:
+    vhost: lgrtool.example.com
+    app: lgrtool-181
+spec:
+  type: LoadBalancer 
+  ports:
+  - name: http
+    targetPort: 80
+    protocol: TCP
+    port: 80
+  - name: https
+    targetPort: 443
+    protocol: TCP
+    port: 443
+  selector:
+    vhost: lgrtool.example.com
+    app: lgrtool-181
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: lgrtool-example-com
+  namespace: label-generation-ruleset
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  minReadySeconds: 7
+  template:
+    metadata:
+      labels:
+        vhost: lgrtool.example.com
+        app: lgrtool-181
+      annotations:
+        contact: "github.com/ptudor"
+    spec:
+      #nodeSelector:
+        #nodetype: "worker"
+      #imagePullSecrets:
+        #- name: lgrtool-pull-secret
+      containers:
+        - image: quay.io/ptudor/lgrtool-kubernetes:latest
+          name: lgrtool-httpd
+          command: ["/usr/sbin/httpd"]
+          args: ["-DFOREGROUND","-DLGRTOOL"]
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 400m
+              memory: 512Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+              httpHeaders:
+                - name: Host
+                  value: lgrtool.example.com
+                - name: User-Agent
+                  value: kubernetes-livenessProbe
+            initialDelaySeconds: 7
+            timeoutSeconds: 13
+          lifecycle:
+            preStop:
+              exec:
+                # SIGTERM triggers a quick exit; gracefully terminate instead
+                command: ["/usr/bin/killall","-WINCH","httpd"]
+          env:
+            - name: "META_K8S_NAMESPACE"
+              valueFrom:
+                fieldRef:
+                  fieldPath: "metadata.namespace"
+            - name: META_K8S_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+        - image: quay.io/ptudor/lgrtool-kubernetes:latest
+          imagePullPolicy: Always
+          name: lgrtool-gunicorn
+          command: ["/usr/bin/supervisord"]
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          resources:
+            limits:
+              #cpu: 4
+              cpu: 1
+              #memory: 8192Mi
+              memory: 1024Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+              memory: 64Mi
+        - image: quay.io/ptudor/lgrtool-kubernetes:latest
+          name: lgrtool-redis
+          command: ["redis-server"]
+          args: ["/etc/redis.conf"]
+          ports:
+            - containerPort: 6379
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
