@@ -141,9 +141,11 @@ def _generate_context_variant_sets(repertoire, variant_sets_sorted, udata):
             'id': set_id,
             'variants': []
         }
+        members = set()
         for cp in variant_set:
             char = repertoire.get_char(cp)
             for var in char.get_variants():
+                members.add(var.cp)
                 set_ctx['variants'].append({
                     'source_cp': cp_to_slug(char.cp),
                     'source_cp_disp': render_cp(char),
@@ -157,6 +159,7 @@ def _generate_context_variant_sets(repertoire, variant_sets_sorted, udata):
                     'references': _generate_references(var.references),
                     'comment': var.comment or ''
                 })
+        set_ctx['number_members'] = len(members)
         ctx.append(set_ctx)
 
     return ctx
