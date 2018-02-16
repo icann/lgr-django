@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 
 import logging
 import re
-from itertools import izip
+from itertools import izip, islice
 
 from natsort import natsorted
 
@@ -17,11 +17,19 @@ from django.utils.html import format_html_join, format_html, mark_safe
 
 from lgr.matcher import AnchorMatcher
 from lgr.validate.lgr_stats import generate_stats
+from lgr.classes import TAG_CLASSNAME_PREFIX
 
 from lgr_editor import unidb
-from lgr_editor.utils import render_cp, render_glyph, render_name, cp_to_slug
+from lgr_editor.utils import (render_cp,
+                              render_glyph,
+                              render_name,
+                              cp_to_slug,
+                              cp_to_str)
 
 logger = logging.getLogger(__name__)
+
+# Number of class members to display
+MAX_MEMBERS = 15
 
 
 def _generate_references(references):
@@ -178,6 +186,9 @@ def _generate_clz_definition(clz):
         return format_html("Unicode property=&nbsp;<strong>{}</strong>", clz.unicode_property)
     if clz.by_ref is not None:
         return format_html("By Ref=&nbsp;<strong></strong>", clz.by_ref)
+    if clz.implicit:
+        # Implicit tag-based class
+        return format_html("Tag=&nbsp;<strong>{}</strong>", clz.name)
 
     return ''
 
@@ -191,14 +202,28 @@ def _generate_context_classes(lgr, udata):
     :return: Context to be used in template.
     """
     ctx = []
-    for clz_name in lgr.classes:
+    repertoire = udata.get_set((c.cp[0] for c in lgr.repertoire.all_repertoire(include_sequences=False)),
+                               freeze=True)
+    for clz_name in sorted(lgr.classes_lookup.keys(), key=lambda x: (x.startswith(TAG_CLASSNAME_PREFIX), x)):
         clz = lgr.classes_lookup[clz_name]
+        if clz.implicit and clz.name in lgr.classes:
+            # Class is implicit for existing named class, ignore
+            continue
+        clz_members = clz.get_pattern(lgr.rules_lookup, lgr.classes_lookup,
+                                       udata, as_set=True) & repertoire
+        clz_members_len = len(clz_members)
+        clz_members_display = ' '.join(('U+' + cp_to_str(c) for c in islice(clz_members, MAX_MEMBERS)))
+        if clz_members_len > MAX_MEMBERS:
+            clz_members_display += ' &hellip;'
+        clz_members_display = mark_safe('{' + clz_members_display + '}')
+
         ctx.append({
-            'name': clz.name,
-            'definition': _generate_clz_definition(clz),
+            'name': clz.name if not clz.implicit else mark_safe('<i>implicit</i>'),
+            'definition': _generate_clz_definition(clz) or _generate_links(clz),
             'references': _generate_references(clz.references),
-            'comment': clz.comment or '',
-            'members': _generate_links(clz)
+            'comment': clz.comment or '' if not clz.implicit else '',
+            'members': clz_members_display,
+            'members_count': clz_members_len
         })
 
     return ctx
