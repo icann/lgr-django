@@ -49,7 +49,10 @@ class CodepointVariantForm(forms.Form):
                                                                                      'cols': '30',
                                                                                      'class': 'form-control'}))
     # whether the variant codepoint is in LGR or not
-    in_lgr = forms.BooleanField(widget=forms.HiddenInput)
+    # Need required=False as we expect False values
+    # See https://docs.djangoproject.com/en/1.8/ref/forms/fields/#booleanfield
+    # for explanation on stupid behaviour...
+    in_lgr = forms.BooleanField(widget=forms.HiddenInput, required=False)
 
     def to_slug(self):
         return '{},{},{}'.format(

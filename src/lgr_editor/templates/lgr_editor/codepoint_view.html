@@ -57,6 +57,7 @@
                         {% endif %}
                     </tr>
                     {% for char in variants_form %}
+                        {{ char.in_lgr }}
                     <tr>
                         {% if lgr_set_id %}
                             {% url 'codepoint_view' lgr_set_id=lgr_set_id lgr_id=lgr_id codepoint_id=char.cp.value as cp_url %}
