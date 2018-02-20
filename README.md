@@ -65,7 +65,8 @@ THE POSSIBILITY OF SUCH DAMAGE.
   * [picu](https://pypi.python.org/pypi/picu) [MIT/X License]
   * [munidata](https://github.com/icann/munidata) [BSD License]
   * [natsort](https://pypi.python.org/pypi/natsort) [MIT License]
-* A [redis](https://redis.io/) server for asynchronous computations
+  * [django-redis-cache](https://github.com/sebleier/django-redis-cache) [BSD License]
+* A [redis](https://redis.io/) server for cache and asynchronous computations
 
  For documentation generation:
 

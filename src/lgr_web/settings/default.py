@@ -167,8 +167,19 @@ CSRF_COOKIE_SECURE = True  # Secure setting for CSRF cookie - turn off for devel
 # How long to set the Session cookie for
 SESSION_COOKIE_AGE = 60*60*24*14  # 2 weeks
 
-# Where to store session data - use the database ("django.contrib.sessions.backends.db") for now
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# Where to store session data - use the cached database:
+# Read from memory, write to DB
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+# Cache
+# https://docs.djangoproject.com/fr/1.8/topics/cache/
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        # DB 0 is used for Celery broker
+        'LOCATION': 'redis://localhost:6379/1',
+    }
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
