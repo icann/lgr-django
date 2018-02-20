@@ -282,9 +282,9 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
             # redirect to myself to refresh display
+            # Note: cannot add code point in set mode
             return redirect('codepoint_list',
-                            lgr_id=lgr_id,
-                            lgr_set_id=lgr_set_id)
+                            lgr_id=lgr_id)
 
     repertoire = [{
         'cp': cp_to_slug(char.cp),
