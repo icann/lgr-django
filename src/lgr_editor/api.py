@@ -15,6 +15,8 @@ from django.utils import six
 from django.utils.text import slugify
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.core.cache.utils import make_template_fragment_key
+from django.core.cache import cache
 
 from lgr.core import LGR
 from lgr.metadata import Metadata, Version
@@ -31,6 +33,18 @@ OLD_LGR_NS = 'http://www.iana.org/lgr/0.1'
 LGRS_SESSION_KEY = 'lgr'
 
 logger = logging.getLogger(__name__)
+
+
+def clean_repertoire_fragment_cache(request, lgr_id):
+    """
+    Clean the cache associated to the repertoire fragment.
+
+    :param request: Django request object
+    :param lgr_id: a slug identifying the LGR
+    """
+    cache.delete(make_template_fragment_key('repertoire',
+                                            [request.session.session_key,
+                                             lgr_id]))
 
 
 class LGRInfo(object):
@@ -302,6 +316,8 @@ def session_save_lgr(request, lgr_info, lgr_id=None, update_xml=True):
     request.session.setdefault(LGRS_SESSION_KEY, {})[lgr_id] = lgr_info.to_dict()
     # mark session as modified because we are possibly only changing the content of a dict
     request.session.modified = True
+    # As LGR has been modified, need to invalidate the template repertoire cache
+    clean_repertoire_fragment_cache(request, lgr_id)
 
 
 def session_delete_lgr(request, lgr_id):
@@ -316,6 +332,8 @@ def session_delete_lgr(request, lgr_id):
         raise Http404
     # mark session as modified because we are possibly only changing the content of a dict
     request.session.modified = True
+    # Remove cached repertoire
+    clean_repertoire_fragment_cache(request, lgr_id)
 
 
 def session_merge_set(request, lgr_info_set, lgr_set_name):
