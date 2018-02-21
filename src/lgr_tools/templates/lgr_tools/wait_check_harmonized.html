@@ -1,0 +1,18 @@
+{% extends base_template|default:"_base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h2>
+    {% blocktrans %}Checking harmonization on LGRs{% endblocktrans %}
+</h2>
+<ul>
+    {% for lgr_info in lgrs_info %}
+        {% url 'codepoint_list' lgr_id=lgr_info.name as lgr_url %}
+        <li>{% blocktrans with lgr_name=lgr_info.name %}<a href="{{ lgr_url }}">{{ lgr_name }}</a>{% endblocktrans %}</li>
+    {% endfor %}
+</ul>
+<div>
+{% blocktrans %}As the computing may be very long, once completed, an e-mail will be sent at the provided address: {{ email }}{% endblocktrans %}
+</div>
+
+{% endblock content %}

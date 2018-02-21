@@ -15,7 +15,12 @@ from lgr.exceptions import LGRException
 
 from lgr_editor.api import LabelInfo, LGRInfo
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
-from lgr_tools.api import lgr_diff_labels, lgr_collision_labels, lgr_annotate_labels, lgr_set_annotate_labels, lgr_cross_script_variants
+from lgr_tools.api import (lgr_diff_labels,
+                           lgr_collision_labels,
+                           lgr_annotate_labels,
+                           lgr_set_annotate_labels,
+                           lgr_cross_script_variants,
+                           lgr_check_harmonization)
 
 logger = logging.getLogger(__name__)
 
@@ -245,3 +250,25 @@ def cross_script_variants_task(lgr_json, labels_json, email_address, storage_pat
                    cb=lgr_cross_script_variants,
                    lgr=lgr_info.lgr,
                    labels_file=labels_info.labels)
+
+
+@shared_task
+def check_harmonization_task(lgrs_json, email_address, storage_path):
+    """
+    Check variants symmetry and transitivity in each LGR and harmonization between some LGRs
+
+    :param lgrs_json: The list of LGRInfo as JSON objects
+    """
+    lgrs_info = [LGRInfo.from_dict(l) for l in lgrs_json]
+    names = [l.name for l in lgrs_info]
+    logger.info("Starting task 'check harmonization' for %s", ', '.join(names))
+
+    body = "Hi,\nThe processing of harmonization check for LGRs {lgrs} has".format(lgrs=', '.join(names))
+
+    _lgr_tool_task(storage_path,
+                   base_filename='harmonization_check_{0}'.format('_'.join(names)),
+                   email_subject='LGR Toolset LGRs harmonization check result',
+                   email_body=body,
+                   email_address=email_address,
+                   cb=lgr_check_harmonization,
+                   lgrs=[l.lgr for l in lgrs_info])

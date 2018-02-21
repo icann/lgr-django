@@ -8,6 +8,7 @@ from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_se
 from lgr.tools.annotate import annotate, lgr_set_annotate
 from lgr.tools.diff_collisions import diff, collision
 from lgr.tools.cross_script_variants import cross_script_variants
+from lgr.tools.check_harmonized import check_harmonized
 
 from lgr_editor.api import LGRInfo, session_open_lgr
 
@@ -139,3 +140,13 @@ def lgr_cross_script_variants(lgr, labels_file):
     :return: Text log to be displayed
     """
     return cross_script_variants(lgr, labels_file)
+
+
+def lgr_check_harmonization(lgrs):
+    """
+    Check variants symmetry and transitivity in each LGR and harmonization between some LGRs
+
+    :param lgrs: The LGRs to check
+    :return: Text log to be displayed
+    """
+    return check_harmonized(lgrs)
