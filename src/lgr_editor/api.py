@@ -325,25 +325,27 @@ def session_select_lgr(request, lgr_id, lgr_set_id=None):
     for lgr in lgr_dct.get('lgr_set_dct'):
         if lgr['name'] == lgr_id:
             return LGRInfo.from_dict(lgr,
-                                     lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
+                                     lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request),
+                                     request=request)
     raise Http404
 
 
-def session_save_lgr(request, lgr_info, lgr_id=None, update_xml=True):
+def session_save_lgr(request, lgr_info, lgr_id=None, invalidate_cache=False):
     """
     Save the LGR object in session
     :param request: Django request object
     :param lgr_info: `LGRInfo` instance
     :param lgr_id: a slug identifying the LGR
+    :param invalidate_cache: If True, then invalidate fragment cache.
     """
     lgr_id = lgr_id if lgr_id is not None else lgr_info.name
-    if update_xml:
-        lgr_info.update_xml()  # make sure we have updated XML before saving
+    lgr_info.update_xml()  # make sure we have updated XML before saving
     request.session.setdefault(LGRS_SESSION_KEY, {})[lgr_id] = lgr_info.to_dict(request)
     # mark session as modified because we are possibly only changing the content of a dict
     request.session.modified = True
-    # As LGR has been modified, need to invalidate the template repertoire cache
-    clean_repertoire_fragment_cache(request, lgr_id)
+    if invalidate_cache:
+        # As LGR has been modified, need to invalidate the template repertoire cache
+        clean_repertoire_fragment_cache(request, lgr_id)
 
 
 def session_delete_lgr(request, lgr_id):

@@ -277,7 +277,7 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
             lgr_info.lgr.add_cp(cp_or_sequence,
                                 validating_repertoire=lgr_info.validating_repertoire,
                                 override_repertoire=override_repertoire)
-            session_save_lgr(request, lgr_info)
+            session_save_lgr(request, lgr_info, invalidate_cache=True)
             messages.success(request, _('New code point %s added') % format_cp(cp_or_sequence))
         except LGRException as ex:
             messages.add_message(request, messages.ERROR,
@@ -381,7 +381,7 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
                     lgr_info.lgr.add_cp(var_cp_sequence,
                                         comment="Automatically added from out-of-script variant")
                     messages.success(request, _('Automatically added codepoint %s from out-of-script variant') % format_cp(codepoint))
-                session_save_lgr(request, lgr_info)
+                session_save_lgr(request, lgr_info, invalidate_cache=True)
                 messages.success(request, _('New variant %s added') % format_cp(var_cp_sequence))
             except LGRException as ex:
                 messages.add_message(request, messages.ERROR,
@@ -454,7 +454,7 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
                         logger.error(variants_form.errors)
 
                 # Save edition
-                session_save_lgr(request, lgr_info)
+                session_save_lgr(request, lgr_info, invalidate_cache=True)
                 messages.success(request, _('Code point edited'))
                 # redirect to myself to refresh display
                 return redirect('codepoint_view',
@@ -555,7 +555,7 @@ def expand_ranges(request, lgr_id):
         messages.add_message(request, messages.ERROR,
                              lgr_exception_to_text(ex))
 
-    session_save_lgr(request, lgr_info)
+    session_save_lgr(request, lgr_info, invalidate_cache=True)
     # Redirect to code point list
     return redirect('codepoint_list',
                     lgr_id=lgr_id)
@@ -583,7 +583,7 @@ def expand_range(request, lgr_id, codepoint_id):
         messages.add_message(request, messages.ERROR,
                              lgr_exception_to_text(ex))
 
-    session_save_lgr(request, lgr_info)
+    session_save_lgr(request, lgr_info, invalidate_cache=True)
     # Redirect to code point list
     return redirect('codepoint_list',
                     lgr_id=lgr_id)
@@ -605,7 +605,7 @@ def populate_variants(request, lgr_id):
     lgr.populate_variants()
     messages.add_message(request, messages.INFO, log_output.getvalue())
     messages.add_message(request, messages.SUCCESS, _("Variants populated"))
-    session_save_lgr(request, lgr_info)
+    session_save_lgr(request, lgr_info, invalidate_cache=True)
     return redirect('codepoint_list', lgr_id)
 
 
@@ -654,7 +654,7 @@ def codepoint_update_refs(request, lgr_id, codepoint_id):
                                          not_when=var.not_when,
                                          comment=var.comment,
                                          ref=var.references)
-        session_save_lgr(request, lgr_info)
+        session_save_lgr(request, lgr_info, invalidate_cache=True)
         messages.success(request, _('References updated successfully'))
     except LGRException as ex:
         messages.add_message(request, messages.ERROR,
@@ -729,7 +729,7 @@ def codepoint_delete(request, lgr_id, codepoint_id):
             lgr_info.lgr.del_range(char.first_cp, char.last_cp)
         else:
             lgr_info.lgr.del_cp(codepoint)
-        session_save_lgr(request, lgr_info)
+        session_save_lgr(request, lgr_info, invalidate_cache=True)
         messages.info(request, _("Code point %s has been deleted") % format_cp(codepoint))
     except LGRException as ex:
         messages.add_message(request, messages.ERROR,
@@ -757,7 +757,7 @@ def variant_delete(request, lgr_id, codepoint_id, var_slug):
                             'when': var_when,
                             'not_when': var_not_when}
         if r:
-            session_save_lgr(request, lgr_info)
+            session_save_lgr(request, lgr_info, invalidate_cache=True)
             messages.info(request, _("%(var_msg_prefix)s has been deleted") % {'var_msg_prefix': var_msg_prefix})
         else:
             messages.error(request,
@@ -1320,7 +1320,7 @@ class MultiCodepointsView(FormView):
                 codepoints = map(lambda x: x[0], codepoints)
                 self.lgr_info.lgr.add_codepoints(codepoints)
                 # no variants in range
-            session_save_lgr(request, self.lgr_info)
+            session_save_lgr(request, self.lgr_info, invalidate_cache=True)
             messages.add_message(self.request,
                                  messages.SUCCESS,
                                  _("%d code points added") % len(codepoints))
@@ -1396,7 +1396,7 @@ class MultiCodepointsView(FormView):
                                                lgr.metadata.unicode_version,
                                                self.lgr_info.validating_repertoire.name if self.lgr_info.validating_repertoire else None)
                 self._copy_characters(tmp_lgr_info.lgr, input_lgr, force=True)
-                session_save_lgr(self.request, tmp_lgr_info)
+                session_save_lgr(self.request, tmp_lgr_info, invalidate_cache=True)
 
             range_form.fields['codepoint'].choices = codepoint
             range_form.fields['disabled_codepoint'].choices = disabled_codepoint
@@ -1406,7 +1406,7 @@ class MultiCodepointsView(FormView):
         # Automatic import
         logger.debug("Import: Copy characters")
         nb_codepoints = self._copy_characters(lgr, input_lgr)
-        session_save_lgr(self.request, self.lgr_info)
+        session_save_lgr(self.request, self.lgr_info, invalidate_cache=True)
         messages.add_message(self.request,
                              messages.SUCCESS,
                              _("%d code points added") % nb_codepoints)
