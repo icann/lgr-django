@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-30 20:24+0000\n"
+"POT-Creation-Date: 2018-02-22 15:15+0000\n"
 "PO-Revision-Date: 2017-10-11 13:11-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -177,7 +177,7 @@ msgstr "Fin de la validité"
 msgid "Unicode version"
 msgstr "Version d'Unicode"
 
-#: forms/metadata.py:47 templates/lgr_editor/codepoint_view.html:212
+#: forms/metadata.py:47 templates/lgr_editor/codepoint_view.html:213
 #: templates/lgr_editor/references.html:14
 #: templates/lgr_editor/references.html:50
 msgid "Description"
@@ -361,7 +361,7 @@ msgid "%(lgr_name)s"
 msgstr "%(lgr_name)s"
 
 #: templates/lgr_editor/_rule_editor_widgets.html:5
-#: templates/lgr_editor/codepoint_view.html:229
+#: templates/lgr_editor/codepoint_view.html:230
 #: templates/lgr_editor/metadata.html:32
 #: templates/lgr_editor/rules_edit.html:40
 #: templates/lgr_editor/rules_edit.html:71
@@ -379,7 +379,7 @@ msgid "Save"
 msgstr "Sauvegarder"
 
 #: templates/lgr_editor/_rule_editor_widgets.html:11
-#: templates/lgr_editor/codepoint_view.html:160
+#: templates/lgr_editor/codepoint_view.html:161
 msgid "Edit"
 msgstr "Modifier"
 
@@ -487,78 +487,78 @@ msgstr "Type"
 msgid "Not When"
 msgstr "Not When"
 
-#: templates/lgr_editor/codepoint_view.html:73
+#: templates/lgr_editor/codepoint_view.html:74
 msgid "Code point is not in LGR"
 msgstr "Le code point n'est pas dans la LGR"
 
-#: templates/lgr_editor/codepoint_view.html:103
+#: templates/lgr_editor/codepoint_view.html:104
 msgid "Are you sure you want delete this variant?"
 msgstr "Êtes-vous sûr(e) de vouloir supprimer cette variante ?"
 
-#: templates/lgr_editor/codepoint_view.html:103
+#: templates/lgr_editor/codepoint_view.html:104
 msgid "Delete variant"
 msgstr "Supprimer la variante"
 
-#: templates/lgr_editor/codepoint_view.html:104
+#: templates/lgr_editor/codepoint_view.html:105
 msgid "Edit references"
 msgstr "Modifier les références"
 
-#: templates/lgr_editor/codepoint_view.html:113
+#: templates/lgr_editor/codepoint_view.html:114
 msgid "Range characters do not have variants."
 msgstr "Les ensembles de caractères n'ont pas de variantes."
 
-#: templates/lgr_editor/codepoint_view.html:115
+#: templates/lgr_editor/codepoint_view.html:116
 msgid "Code point has not variant"
 msgstr "Le code point n'a pas de variante"
 
-#: templates/lgr_editor/codepoint_view.html:132
+#: templates/lgr_editor/codepoint_view.html:133
 msgid "Save variants, tags, context rules and comment"
 msgstr "Sauvegarder les variantes, tags, règles contextuelles et commentaires"
 
-#: templates/lgr_editor/codepoint_view.html:154
+#: templates/lgr_editor/codepoint_view.html:155
 msgid "No references associated with code point."
 msgstr "Aucune référence associée au code point."
 
-#: templates/lgr_editor/codepoint_view.html:167
+#: templates/lgr_editor/codepoint_view.html:168
 msgid "Are you sure you want delete this code point?"
 msgstr "Êtes-vous sûr(e) de vouloir supprimer ce code point ?"
 
-#: templates/lgr_editor/codepoint_view.html:169
+#: templates/lgr_editor/codepoint_view.html:170
 msgid "Delete code point"
 msgstr "Supprimer le code point"
 
-#: templates/lgr_editor/codepoint_view.html:180
+#: templates/lgr_editor/codepoint_view.html:181
 msgid "Edit References for <span></span>"
 msgstr "Modifier les références pour <span></span>"
 
-#: templates/lgr_editor/codepoint_view.html:186
+#: templates/lgr_editor/codepoint_view.html:187
 msgctxt "button title"
 msgid "Delete reference"
 msgstr "Supprimer la référence"
 
-#: templates/lgr_editor/codepoint_view.html:195
+#: templates/lgr_editor/codepoint_view.html:196
 msgid "Add an existing reference"
 msgstr "Ajouter un référence existante"
 
-#: templates/lgr_editor/codepoint_view.html:204
+#: templates/lgr_editor/codepoint_view.html:205
 #: templates/lgr_editor/references.html:58
 msgid "Add"
 msgstr "Ajouter"
 
-#: templates/lgr_editor/codepoint_view.html:210
+#: templates/lgr_editor/codepoint_view.html:211
 msgid "Create a new reference"
 msgstr "Créer une nouvelle référence"
 
-#: templates/lgr_editor/codepoint_view.html:216
+#: templates/lgr_editor/codepoint_view.html:217
 msgid "URL (optional)"
 msgstr "URL (optionnelle)"
 
-#: templates/lgr_editor/codepoint_view.html:222
+#: templates/lgr_editor/codepoint_view.html:223
 #: templates/lgr_editor/references.html:44
 msgid "New reference"
 msgstr "Nouvelle référence"
 
-#: templates/lgr_editor/codepoint_view.html:230
+#: templates/lgr_editor/codepoint_view.html:231
 msgid "Save changes"
 msgstr "Sauvegarder les changements"
 
@@ -698,28 +698,28 @@ msgstr ""
 msgid "The LGR set name already exists. Please use another name."
 msgstr "Ce nom de set LGR existe déjà. Merci d'utiliser un autre nom."
 
-#: views.py:253
+#: views.py:255
 msgid "summary"
 msgstr "résumé"
 
-#: views.py:280
+#: views.py:282
 #, python-format
 msgid "New code point %s added"
 msgstr "Nouveau code point ajouté %s"
 
-#: views.py:368
+#: views.py:370
 msgid "New variant added"
 msgstr "Nouvelle variante ajoutée"
 
-#: views.py:441
+#: views.py:443
 msgid "Code point edited"
 msgstr "Code point modifié"
 
-#: views.py:621 views.py:657
+#: views.py:623 views.py:659
 msgid "References updated successfully"
 msgstr "Les références ont été correctement mises à jour"
 
-#: views.py:660
+#: views.py:662
 #, python-format
 msgid ""
 "Variant %(var_codepoint)s for code point %(codepoint)s with when=%(when)s "
@@ -728,56 +728,56 @@ msgstr ""
 "La variante %(var_codepoint)s du code point  %(codepoint)s avec when="
 "%(when)s et not-when=%(not_when)s n'a pas été trouvée"
 
-#: views.py:696
+#: views.py:698
 #, python-format
 msgid "Code point %s has been deleted"
 msgstr "Le code point  %s a été supprimé"
 
-#: views.py:718
+#: views.py:720
 #, python-format
 msgid "Variant %(var_cp)s with when='%(when)s' and not-when='%(not_when)s'"
 msgstr ""
 "La variante %(var_cp)s avec when='%(when)s' and not-when='%(not_when)s'"
 
-#: views.py:724
+#: views.py:726
 #, python-format
 msgid "%(var_msg_prefix)s has been deleted"
 msgstr "%(var_msg_prefix)s a été supprimée"
 
-#: views.py:727
+#: views.py:729
 #, python-format
 msgid "%(var_msg_prefix)s could not be deleted because it was not found"
 msgstr ""
 "%(var_msg_prefix)s n'a pas pu être supprimée car elle n'a pas été trouvée"
 
-#: views.py:756
+#: views.py:758
 msgid "New reference created"
 msgstr "Nouvelle référence créée"
 
-#: views.py:943 views.py:1106 views.py:1190
+#: views.py:945 views.py:1108 views.py:1192
 msgid "No body specified"
 msgstr "Aucun contenu spécifié"
 
-#: views.py:952
+#: views.py:954
 #, python-format
 msgid "Class \"%s\" does not exist"
 msgstr "La classe \"%s\" n'existe pas"
 
-#: views.py:956
+#: views.py:958
 #, python-format
 msgid "Class \"%s\" deleted."
 msgstr "Classe \"%s\" supprimée."
 
-#: views.py:961
+#: views.py:963
 msgid "No class element found"
 msgstr "Aucune classe trouvée"
 
-#: views.py:963 views.py:1126
+#: views.py:965 views.py:1128
 msgid "Name attribute must be present"
 msgstr "L'attribut name est obligatoire"
 
-#: views.py:967 views.py:984 views.py:1130 views.py:1147 views.py:1214
-#: views.py:1227
+#: views.py:969 views.py:986 views.py:1132 views.py:1149 views.py:1216
+#: views.py:1229
 #, python-format
 msgid ""
 "Encountered XML syntax error: %s (line number may be wrong, try subtracting "
@@ -786,72 +786,72 @@ msgstr ""
 "Erreur de syntaxe XML : %s (le numéro de ligne peut-être incorrect, essayer "
 "de soustraire un au numéro reporté)"
 
-#: views.py:970 views.py:987 views.py:1133 views.py:1150 views.py:1217
-#: views.py:1230
+#: views.py:972 views.py:989 views.py:1135 views.py:1152 views.py:1219
+#: views.py:1232
 msgid "Your XML is not valid"
 msgstr "Votre XML n'est pas valide"
 
-#: views.py:975
+#: views.py:977
 #, python-format
 msgid "Class \"%s\" already exists"
 msgstr "La classe \"%s\" existe déjà"
 
-#: views.py:977
+#: views.py:979
 #, python-format
 msgid "Class \"%s\" saved."
 msgstr "Classe \"%s\" sauvegardée."
 
-#: views.py:1115
+#: views.py:1117
 #, python-format
 msgid "Rule \"%s\" does not exist"
 msgstr "La règle \"%s\" n'existe pas"
 
-#: views.py:1119
+#: views.py:1121
 #, python-format
 msgid "Rule \"%s\" deleted."
 msgstr "Règle \"%s\" supprimée."
 
-#: views.py:1124
+#: views.py:1126
 msgid "No rule element found"
 msgstr "Aucune règle trouvée"
 
-#: views.py:1138
+#: views.py:1140
 #, python-format
 msgid "Rule \"%s\" already exists"
 msgstr "La règle \"%s\" existe déjà"
 
-#: views.py:1140
+#: views.py:1142
 #, python-format
 msgid "Rule \"%s\" saved."
 msgstr "Règle \"%s\" sauvegardée."
 
-#: views.py:1201
+#: views.py:1203
 #, python-format
 msgid "Action \"%s\" does not exist"
 msgstr "Action \"%s\" n'existe pas"
 
-#: views.py:1205
+#: views.py:1207
 #, python-format
 msgid "Action \"%s\" deleted."
 msgstr "Action \"%s\" supprimée."
 
-#: views.py:1210
+#: views.py:1212
 msgid "No action element found"
 msgstr "Aucune action trouvée"
 
-#: views.py:1220
+#: views.py:1222
 msgid "Action saved."
 msgstr "Action sauvée."
 
-#: views.py:1289 views.py:1435
+#: views.py:1291 views.py:1437
 #, python-format
 msgid "%d code points added"
 msgstr "%d code points ont été ajoutés"
 
-#: views.py:1404
+#: views.py:1406
 msgid "No code point in input file"
 msgstr "Le fichier d'entrée ne contient aucun code point"
 
-#: views.py:1596
+#: views.py:1598
 msgid "Meta data saved"
 msgstr "Metadonnées sauvegardées"

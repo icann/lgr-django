@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-30 20:24+0000\n"
-"PO-Revision-Date: 2017-10-03 17:02-0400\n"
+"POT-Creation-Date: 2018-02-22 15:15+0000\n"
+"PO-Revision-Date: 2018-02-22 10:16-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: settings/default.py:152
 msgid "Arabic"
@@ -58,96 +58,108 @@ msgstr "Nouvelle"
 msgid "Tools"
 msgstr "Outils"
 
-#: templates/_base.html:79
+#: templates/_base.html:81
 msgid "Compare two LGR"
 msgstr "Comparer deux LGR"
 
-#: templates/_base.html:81
+#: templates/_base.html:83
 msgid "Compare two LGRs"
 msgstr "Comparer deux LGR"
 
-#: templates/_base.html:88
+#: templates/_base.html:90
 msgid "Get differences for a list of labels for two LGRs versions"
 msgstr ""
 "Calculer les différences sur une liste de labels entre deux versions de LGR"
 
-#: templates/_base.html:91
+#: templates/_base.html:93
 msgid "Diff labels of two LGRs"
 msgstr "Diff labels entre deux LGR"
 
-#: templates/_base.html:96 templates/_base.html.py:99
+#: templates/_base.html:98 templates/_base.html.py:101
 msgid "Get collisions in a list of labels"
 msgstr "Calculer les collisions sur une liste de labels"
 
-#: templates/_base.html:104
+#: templates/_base.html:106
 msgid "Compute cross-script variants"
 msgstr "Calculer les variantes cross-script"
 
-#: templates/_base.html:107
+#: templates/_base.html:109
 msgid "Cross-script variants"
 msgstr "Variantes cross-script"
 
-#: templates/_base.html:112
+#: templates/_base.html:114
 msgid "Annotate list of labels with their disposition"
 msgstr "Annote une liste de labels avec leur disposition"
 
-#: templates/_base.html:115
+#: templates/_base.html:117
 msgid "Generate disp. annotations"
 msgstr "Génére les annotations de disposition"
 
-#: templates/_base.html:134
+#: templates/_base.html:122
+msgid ""
+"Check variants symmetry and transitivity for LGRs and harmonization between "
+"some LGRs"
+msgstr ""
+"Vérification de la symétrie et de la transitivité des variants pour les LGRs "
+"and de l'harmonisation entre les LGRs"
+
+#: templates/_base.html:125
+msgid "Check harmonization"
+msgstr "Vérification de l'harmonisation"
+
+#: templates/_base.html:144
 msgid "Validate label against LGR"
 msgstr "Valider un label avec une LGR"
 
-#: templates/_base.html:136 templates/_base.html.py:261
+#: templates/_base.html:146 templates/_base.html.py:271
 msgid "Validate label"
 msgstr "Valider un label"
 
-#: templates/_base.html:140
+#: templates/_base.html:150
 msgid "Analyze current file for errors and statistics"
 msgstr "Analyser le fichier courant pour les erreurs et les statistiques"
 
-#: templates/_base.html:143
+#: templates/_base.html:153
 msgid "Summary"
 msgstr "Résumé"
 
-#: templates/_base.html:146
+#: templates/_base.html:156
 msgid "Preview LGR file"
 msgstr "Prévisualiser le fichier LGR"
 
-#: templates/_base.html:149
+#: templates/_base.html:159
 msgid "View XML"
 msgstr "Voir le XML"
 
-#: templates/_base.html:152 templates/_base.html.py:155
+#: templates/_base.html:162 templates/_base.html.py:165
 msgid "HTML Output"
 msgstr "Sortie HTML"
 
-#: templates/_base.html:158
+#: templates/_base.html:168
 msgid "Download LGR file"
 msgstr "Télécharger le fichier LGR"
 
-#: templates/_base.html:160
+#: templates/_base.html:170
 msgid "Download"
 msgstr "Télécharger"
 
-#: templates/_base.html:165
+#: templates/_base.html:175
 msgid "About LGR Toolset"
 msgstr "À propos de l'application LGR"
 
-#: templates/_base.html:166 templates/_base.html.py:277
+#: templates/_base.html:176 templates/_base.html.py:287
 msgid "About"
 msgstr "À propos"
 
-#: templates/_base.html:230
+#: templates/_base.html:240
 msgid "LGR Summary"
 msgstr "Résumé de la LGR"
 
-#: templates/_base.html:240
+#: templates/_base.html:250
 msgid "Save summary"
 msgstr "Sauvegarder"
 
-#: templates/_base.html:242 templates/_base.html.py:283
+#: templates/_base.html:252 templates/_base.html.py:293
 msgid "Close"
 msgstr "Fermer"
 

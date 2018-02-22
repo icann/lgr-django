@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-30 20:24+0000\n"
+"POT-Creation-Date: 2018-02-22 15:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,11 +53,11 @@ msgstr ""
 msgid "Choose the action to perform on selected LGRs"
 msgstr ""
 
-#: forms.py:61 forms.py:114 forms.py:146 forms.py:164
+#: forms.py:61 forms.py:114 forms.py:146 forms.py:164 forms.py:227
 msgid "LGR"
 msgstr ""
 
-#: forms.py:62 forms.py:165
+#: forms.py:62 forms.py:165 forms.py:228
 msgid "LGR set"
 msgstr ""
 
@@ -77,11 +77,11 @@ msgstr ""
 msgid "List of labels to use in diff. File must be encoded in UNIX format."
 msgstr ""
 
-#: forms.py:85 forms.py:123 forms.py:189 forms.py:206
+#: forms.py:85 forms.py:123 forms.py:189 forms.py:206 forms.py:216
 msgid "E-mail"
 msgstr ""
 
-#: forms.py:86 forms.py:124 forms.py:190 forms.py:207
+#: forms.py:86 forms.py:124 forms.py:190 forms.py:207 forms.py:217
 msgid "Provide your e-mail address"
 msgstr ""
 
@@ -135,7 +135,17 @@ msgid ""
 "to check for collisions when evaluating labels using the merged LGR set"
 msgstr ""
 
-#: templates/lgr_tools/annotate.html:15 templates/lgr_tools/collision.html:11
+#: forms.py:212
+msgid "LGRs"
+msgstr ""
+
+#: forms.py:213
+msgid "LGRs to use for harmonization check"
+msgstr ""
+
+#: templates/lgr_tools/annotate.html:15
+#: templates/lgr_tools/check_harmonized.html:10
+#: templates/lgr_tools/collision.html:11
 #: templates/lgr_tools/cross_script_variants.html:14
 #: templates/lgr_tools/diff.html:12
 msgid ""
@@ -145,6 +155,11 @@ msgstr ""
 
 #: templates/lgr_tools/annotate.html:21
 msgid "Annotate"
+msgstr ""
+
+#: templates/lgr_tools/check_harmonized.html:16
+#: templates/lgr_tools/cross_script_variants.html:20
+msgid "Launch"
 msgstr ""
 
 #: templates/lgr_tools/collision.html:19
@@ -196,10 +211,6 @@ msgid ""
 "simple LGRs, union and intersection are not available for LGR sets.</strong>"
 msgstr ""
 
-#: templates/lgr_tools/cross_script_variants.html:20
-msgid "Launch"
-msgstr ""
-
 #: templates/lgr_tools/diff.html:23
 msgid "Get diff"
 msgstr ""
@@ -223,6 +234,7 @@ msgid " with script from <a href=\"%(lgr_script_url)s\">%(script)s</a>"
 msgstr ""
 
 #: templates/lgr_tools/wait_annotate.html:14
+#: templates/lgr_tools/wait_check_harmonized.html:15
 #: templates/lgr_tools/wait_coll.html:8
 #: templates/lgr_tools/wait_cross_scripts.html:10
 #: templates/lgr_tools/wait_diff.html:9
@@ -230,6 +242,10 @@ msgstr ""
 msgid ""
 "As the computing may be very long, once completed, an e-mail will be sent at "
 "the provided address: %(email)s"
+msgstr ""
+
+#: templates/lgr_tools/wait_check_harmonized.html:6
+msgid "Checking harmonization on LGRs"
 msgstr ""
 
 #: templates/lgr_tools/wait_coll.html:6

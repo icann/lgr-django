@@ -8,7 +8,7 @@
 <ul>
     {% for lgr_info in lgrs_info %}
         {% url 'codepoint_list' lgr_id=lgr_info.name as lgr_url %}
-        <li>{% blocktrans with lgr_name=lgr_info.name %}<a href="{{ lgr_url }}">{{ lgr_name }}</a>{% endblocktrans %}</li>
+        <li><a href="{{ lgr_url }}">{{ lgr_info.name }}</a></li>
     {% endfor %}
 </ul>
 <div>

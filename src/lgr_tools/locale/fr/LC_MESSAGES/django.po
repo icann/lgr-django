@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-30 20:24+0000\n"
-"PO-Revision-Date: 2017-10-11 13:07-0400\n"
+"POT-Creation-Date: 2018-02-22 15:15+0000\n"
+"PO-Revision-Date: 2018-02-22 10:18-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.6\n"
 
 #: forms.py:9
 msgid "Union"
@@ -54,11 +54,11 @@ msgstr "Action à effectuer sur les LGR"
 msgid "Choose the action to perform on selected LGRs"
 msgstr "Choisir l'action à exécuter sur les LGR"
 
-#: forms.py:61 forms.py:114 forms.py:146 forms.py:164
+#: forms.py:61 forms.py:114 forms.py:146 forms.py:164 forms.py:227
 msgid "LGR"
 msgstr "LGR"
 
-#: forms.py:62 forms.py:165
+#: forms.py:62 forms.py:165 forms.py:228
 msgid "LGR set"
 msgstr "Set LGR"
 
@@ -80,11 +80,11 @@ msgstr ""
 "Liste de labels sur lesquels tester les différences. Le fichier doit être "
 "encodé au format UNIX."
 
-#: forms.py:85 forms.py:123 forms.py:189 forms.py:206
+#: forms.py:85 forms.py:123 forms.py:189 forms.py:206 forms.py:216
 msgid "E-mail"
 msgstr "E-mail"
 
-#: forms.py:86 forms.py:124 forms.py:190 forms.py:207
+#: forms.py:86 forms.py:124 forms.py:190 forms.py:207 forms.py:217
 msgid "Provide your e-mail address"
 msgstr "Fournir une adresse e-mail"
 
@@ -142,7 +142,17 @@ msgstr ""
 "pour vérifier les collisions lors de l'évaluation de labels en utilisant le "
 "set LGR fusionné"
 
-#: templates/lgr_tools/annotate.html:15 templates/lgr_tools/collision.html:11
+#: forms.py:212
+msgid "LGRs"
+msgstr "LGRs"
+
+#: forms.py:213
+msgid "LGRs to use for harmonization check"
+msgstr "LGR sur lesquelles vérifier l'harmonisation"
+
+#: templates/lgr_tools/annotate.html:15
+#: templates/lgr_tools/check_harmonized.html:10
+#: templates/lgr_tools/collision.html:11
 #: templates/lgr_tools/cross_script_variants.html:14
 #: templates/lgr_tools/diff.html:12
 msgid ""
@@ -156,6 +166,11 @@ msgstr ""
 #: templates/lgr_tools/annotate.html:21
 msgid "Annotate"
 msgstr "Annoter"
+
+#: templates/lgr_tools/check_harmonized.html:16
+#: templates/lgr_tools/cross_script_variants.html:20
+msgid "Launch"
+msgstr "Démarrer"
 
 #: templates/lgr_tools/collision.html:19
 msgid "Get collisions"
@@ -219,10 +234,6 @@ msgstr ""
 "simples, l'union et la comparaison ne sont pas disponibles pour les set LGR."
 "</strong>"
 
-#: templates/lgr_tools/cross_script_variants.html:20
-msgid "Launch"
-msgstr "Démarrer"
-
 #: templates/lgr_tools/diff.html:23
 msgid "Get diff"
 msgstr "Calculer les différences"
@@ -250,6 +261,7 @@ msgid " with script from <a href=\"%(lgr_script_url)s\">%(script)s</a>"
 msgstr " avec le script <a href=\"%(lgr_script_url)s\">%(script)s</a>"
 
 #: templates/lgr_tools/wait_annotate.html:14
+#: templates/lgr_tools/wait_check_harmonized.html:15
 #: templates/lgr_tools/wait_coll.html:8
 #: templates/lgr_tools/wait_cross_scripts.html:10
 #: templates/lgr_tools/wait_diff.html:9
@@ -260,6 +272,10 @@ msgid ""
 msgstr ""
 "Le temps de calcul peut être très long, une fois terminé, un e-mail vous "
 "sera envoyé à l'adresse suivante : %(email)s"
+
+#: templates/lgr_tools/wait_check_harmonized.html:6
+msgid "Checking harmonization on LGRs"
+msgstr "Vérification de l'harmonisation des LGRs"
 
 #: templates/lgr_tools/wait_coll.html:6
 #, python-format
@@ -289,3 +305,8 @@ msgstr ""
 "Calcul des différences sur les labels fournis dans le fichier "
 "%(labels_file)s entre les LGR <a href=\"%(lgr_1_url)s\">%(lgr_1_name)s</a> "
 "et <a href=\"%(lgr_2_url)s\">%(lgr_2_name)s</a> "
+
+#, fuzzy
+#~| msgid " with script from <a href=\"%(lgr_script_url)s\">%(script)s</a>"
+#~ msgid "<a href=\"%(lgr_url)s\">%(lgr_name)s</a>"
+#~ msgstr " avec le script <a href=\"%(lgr_script_url)s\">%(script)s</a>"
