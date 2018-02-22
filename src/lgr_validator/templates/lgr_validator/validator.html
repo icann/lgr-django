@@ -67,17 +67,23 @@
                     <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-main"
                        aria-expanded="false" aria-controls="rule-detail-main">
                         {% blocktrans trimmed %}
-                            Show / hide rule
+                            Show / hide log
                         {% endblocktrans %}
                     </a>
                 </td>
             </tr>
             <tr>
                 <td colspan="4" class="rule-detail-cell">
-                    <div class="collapse rule-detail" id="rule-detail-main">
-                        {% if action_idx >= 0 %}
-                            {% blocktrans %}[Action index: {{ action_idx }}] {{ action }}{% endblocktrans %}
+                    {% if action_idx >= 0 %}
+                        {% if eligible %}
+                            <div class="alert alert-info" role="alert">
+                        {% else %}
+                            <div class="alert alert-danger" role="alert">
                         {% endif %}
+                            {% blocktrans %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
+                        </div>
+                    {% endif %}
+                    <div class="collapse rule-detail" id="rule-detail-main">
                         <textarea style="width: 100%" rows="10" disabled="disabled">{{ logs }}</textarea>
                     </div>
                 </td>
@@ -119,19 +125,21 @@
                             <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-collision"
                                aria-expanded="false" aria-controls="rule-detail-collision">
                                 {% blocktrans trimmed %}
-                                    Show / hide rule
+                                    Show / hide log
                                 {% endblocktrans %}
                             </a>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="4" class="rule-detail-cell">
+                            {% if collision.action_idx >= 0 %}
+                            <div class="alert alert-warning" role="alert">
+                                {% blocktrans with action_idx=collision.action_idx action=collision.action trimmed %}
+                                    <b>[Action index: {{ action_idx }}]</b> {{ action }}
+                                {% endblocktrans %}
+                            </div>
+                            {% endif %}
                             <div class="collapse rule-detail" id="rule-detail-collision">
-                                {% if collision.action_idx >= 0 %}
-                                    {% blocktrans with action_idx=collision.action_idx action=collision.action trimmed %}
-                                        [Action index: {{ action_idx }}] {{ action }}
-                                    {% endblocktrans %}
-                                {% endif %}
                                 <textarea style="width: 100%" rows="10" disabled="disabled">{{ collision.rules }}</textarea>
                             </div>
                         </td>
@@ -180,19 +188,21 @@
                                 <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-v-{{ forloop.counter }}"
                                    aria-expanded="false" aria-controls="rule-detail-v-{{ forloop.counter }}">
                                     {% blocktrans trimmed %}
-                                        Show / hide rule
+                                        Show / hide log
                                     {% endblocktrans %}
                                 </a>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="4" class="rule-detail-cell">
+                                {% if v.action_idx >= 0 %}
+                                <div class="alert alert-info" role="alert">
+                                    {% blocktrans with action_idx=v.action_idx action=v.action trimmed %}
+                                        <b>[Action index: {{ action_idx }}]</b> {{ action }}
+                                    {% endblocktrans %}
+                                </div>
+                                {% endif %}
                                 <div class="collapse rule-detail" id="rule-detail-v-{{ forloop.counter }}">
-                                    {% if v.action_idx >= 0 %}
-                                        {% blocktrans with action_idx=v.action_idx action=v.action trimmed %}
-                                            [Action index: {{ action_idx }}] {{ action }}
-                                        {% endblocktrans %}
-                                    {% endif %}
                                     <textarea style="width: 100%" rows="10" disabled="disabled">{{ v.logs }}</textarea>
                                 </div>
                             </td>
