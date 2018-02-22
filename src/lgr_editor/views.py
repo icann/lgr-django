@@ -23,6 +23,7 @@ from django.http import (HttpResponse,
                          HttpResponseBadRequest,
                          FileResponse,
                          JsonResponse)
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.template.loader import render_to_string
@@ -77,6 +78,9 @@ from .utils import (render_char,
                     slug_to_cp,
                     slug_to_var,
                     var_to_slug,
+                    make_lgr_session_key,
+                    LGR_REPERTOIRE_CACHE_KEY,
+                    LGR_CACHE_TIMEOUT,
                     list_validating_repertoires)
 from . import unidb
 
@@ -315,29 +319,35 @@ def codepoint_list_json(request, lgr_id, lgr_set_id=None):
     lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
     udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
 
-    # Generate repertoire
-    repertoire = []
-    for char in lgr_info.lgr.repertoire:
-        cp_slug = cp_to_slug(char.cp)
-        kwargs = {'lgr_id': lgr_id, 'codepoint_id': cp_slug}
-        if lgr_set_id is not None:
-            kwargs['lgr_set_id'] = lgr_set_id
-        cp_view_url = reverse('codepoint_view', kwargs=kwargs)
-        actions = [cp_view_url]
-        is_range = isinstance(char, RangeChar)
-        if is_range:
-            expand_url = reverse('expand_range', kwargs={'lgr_id': lgr_id,
-                                                         'codepoint_id': cp_slug})
-            actions.append(expand_url)
+    repertoire_cache_key = make_lgr_session_key(LGR_REPERTOIRE_CACHE_KEY,
+                                                request,
+                                                lgr_id)
+    repertoire = cache.get(repertoire_cache_key)
+    if repertoire is None:
+        # Generate repertoire
+        repertoire = []
+        for char in lgr_info.lgr.repertoire:
+            cp_slug = cp_to_slug(char.cp)
+            kwargs = {'lgr_id': lgr_id, 'codepoint_id': cp_slug}
+            if lgr_set_id is not None:
+                kwargs['lgr_set_id'] = lgr_set_id
+            cp_view_url = reverse('codepoint_view', kwargs=kwargs)
+            actions = [cp_view_url]
+            is_range = isinstance(char, RangeChar)
+            if is_range:
+                expand_url = reverse('expand_range', kwargs={'lgr_id': lgr_id,
+                                                             'codepoint_id': cp_slug})
+                actions.append(expand_url)
 
-        repertoire.append({
-            'cp_disp': render_char(char),
-            'comment': char.comment or '',
-            'name': render_name(char, udata),
-            'variant_number': len(list(char.get_variants())),
-            'is_range': is_range,
-            'actions': actions
-        })
+            repertoire.append({
+                'cp_disp': render_char(char),
+                'comment': char.comment or '',
+                'name': render_name(char, udata),
+                'variant_number': len(list(char.get_variants())),
+                'is_range': is_range,
+                'actions': actions
+            })
+        cache.set(repertoire_cache_key, repertoire, LGR_CACHE_TIMEOUT)
 
     response = {'data': repertoire}
 
