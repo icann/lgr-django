@@ -3,17 +3,26 @@
 utils.py - utility functions for LGR Editor.
 """
 from __future__ import unicode_literals
+
+import hashlib
 from urllib import quote_plus
 import os
 import logging
 
 from django.conf import settings
+from django.core.cache import cache
+from django.utils.encoding import force_bytes
 from django.utils.html import mark_safe, format_html, format_html_join
 
 from lgr.char import RangeChar
 from lgr.utils import cp_to_str
 
 HTML_UNICODE_FORMAT = '<bdi>&#x%06X;</bdi>'
+
+LGR_CACHE_TIMEOUT = 3600  # Cache timeout for serialized LGRs
+LGR_CACHE_KEY_PREFIX = 'lgr-cache'
+LGR_OBJECT_CACHE_KEY = 'lgr-obj'
+LGR_REPERTOIRE_CACHE_KEY = 'repertoire'
 
 logger = logging.getLogger(__name__)
 
@@ -194,3 +203,20 @@ def list_built_in_lgr():
     """
     return _list_files(settings.LGR_STORAGE_LOCATION)
 
+
+def make_lgr_session_key(key, request, lgr_id):
+    key = "{}:{}:{}".format(key, request.session.session_key, lgr_id)
+    args = hashlib.md5(force_bytes(key))
+    return "{}.{}".format(LGR_CACHE_KEY_PREFIX, args.hexdigest())
+
+
+def clean_repertoire_cache(request, lgr_id):
+    """
+    Clean all repertoire-related caches.
+
+    :param request: Django request object
+    :param lgr_id: a slug identifying the LGR
+    """
+    cache.delete(make_lgr_session_key(LGR_REPERTOIRE_CACHE_KEY,
+                                      request,
+                                      lgr_id))

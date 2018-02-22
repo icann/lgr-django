@@ -7,15 +7,12 @@ from StringIO import StringIO
 import errno
 import os
 from uuid import uuid4
-import hashlib
 
 from django.http import Http404
 from django.utils import six
-from django.utils.encoding import force_bytes
 from django.utils.text import slugify
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.core.cache.utils import make_template_fragment_key
 from django.core.cache import cache
 
 from lgr.core import LGR
@@ -24,6 +21,10 @@ from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.tools.merge_set import merge_lgr_set
 
+from .utils import (LGR_CACHE_TIMEOUT,
+                    LGR_OBJECT_CACHE_KEY,
+                    clean_repertoire_cache,
+                    make_lgr_session_key)
 from .exceptions import LGRValidationException
 from .repertoires import get_by_name
 from . import unidb
@@ -31,27 +32,8 @@ from . import unidb
 
 OLD_LGR_NS = 'http://www.iana.org/lgr/0.1'
 LGRS_SESSION_KEY = 'lgr'
-LGR_CACHE_TIMEOUT = 3600  # Cache timeout for serialized LGRs
 
 logger = logging.getLogger(__name__)
-
-
-def make_lgr_session_key(request, lgr_id):
-    key = "{}:{}".format(request.session.session_key, lgr_id)
-    args = hashlib.md5(force_bytes(key))
-    return "{}.{}".format(LGRS_SESSION_KEY, args.hexdigest())
-
-
-def clean_repertoire_fragment_cache(request, lgr_id):
-    """
-    Clean the cache associated to the repertoire fragment.
-
-    :param request: Django request object
-    :param lgr_id: a slug identifying the LGR
-    """
-    cache.delete(make_template_fragment_key('repertoire',
-                                            [request.session.session_key,
-                                             lgr_id]))
 
 
 class LGRInfo(object):
@@ -151,10 +133,16 @@ class LGRInfo(object):
         if request is None:
             lgr = cls._parse_lgr(name, xml, dct.get('validate', False))
         else:
-            lgr = cache.get(make_lgr_session_key(request, name))
+            lgr = cache.get(make_lgr_session_key(LGR_OBJECT_CACHE_KEY,
+                                                 request,
+                                                 name))
             if lgr is None:
                 lgr = cls._parse_lgr(name, xml, dct.get('validate', False))
-                cache.set(make_lgr_session_key(request, name), lgr, LGR_CACHE_TIMEOUT)
+                cache.set(make_lgr_session_key(LGR_OBJECT_CACHE_KEY,
+                                               request,
+                                               name),
+                          lgr,
+                          LGR_CACHE_TIMEOUT)
 
         validating_repertoire = dct.get('validating_repertoire')
         val_lgr = lgr_loader_func(validating_repertoire) if (validating_repertoire and lgr_loader_func is not None) else None
@@ -178,7 +166,11 @@ class LGRInfo(object):
             dct['set_labels_info'] = self.set_labels_info.to_dict()
 
         if request is not None:
-            cache.set(make_lgr_session_key(request, self.name), self.lgr, LGR_CACHE_TIMEOUT)
+            cache.set(make_lgr_session_key(LGR_OBJECT_CACHE_KEY,
+                                           request,
+                                           self.name),
+                      self.lgr,
+                      LGR_CACHE_TIMEOUT)
 
         return dct
 
@@ -345,7 +337,7 @@ def session_save_lgr(request, lgr_info, lgr_id=None, invalidate_cache=False):
     request.session.modified = True
     if invalidate_cache:
         # As LGR has been modified, need to invalidate the template repertoire cache
-        clean_repertoire_fragment_cache(request, lgr_id)
+        clean_repertoire_cache(request, lgr_id)
 
 
 def session_delete_lgr(request, lgr_id):
@@ -361,7 +353,7 @@ def session_delete_lgr(request, lgr_id):
     # mark session as modified because we are possibly only changing the content of a dict
     request.session.modified = True
     # Remove cached repertoire
-    clean_repertoire_fragment_cache(request, lgr_id)
+    clean_repertoire_cache(request, lgr_id)
 
 
 def session_merge_set(request, lgr_info_set, lgr_set_name):
