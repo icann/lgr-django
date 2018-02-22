@@ -19,7 +19,10 @@ from django.utils.text import slugify
 from django.views.generic import FormView
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join
-from django.http import HttpResponse, HttpResponseBadRequest, FileResponse
+from django.http import (HttpResponse,
+                         HttpResponseBadRequest,
+                         FileResponse,
+                         JsonResponse)
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.template.loader import render_to_string
@@ -264,7 +267,6 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
     List the codepoints defined in an LGR.
     """
     lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
-    udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
 
     # instantiate form
     cp_form = AddCodepointForm(request.POST or None, prefix='add_cp')
@@ -287,26 +289,16 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
             return redirect('codepoint_list',
                             lgr_id=lgr_id)
 
-    repertoire = []
     has_range = False
-    for char in lgr_info.lgr.repertoire:
-        is_range = isinstance(char, RangeChar)
-        if is_range:
+    for char in lgr_info.lgr.repertoire.all_repertoire():
+        if isinstance(char, RangeChar):
             has_range = True
-        repertoire.append({
-            'cp': cp_to_slug(char.cp),
-            'cp_disp': render_char(char),
-            'comment': char.comment or '',
-            'name': render_name(char, udata),
-            'variant_number': len(list(char.get_variants())),
-            'is_range': is_range
-        })
+            break
 
     ctx = {
         'cp_form': cp_form,
         'lgr': lgr_info.lgr,
         'lgr_id': lgr_id,
-        'repertoire': repertoire,
         'is_set': lgr_info.is_set or lgr_set_id is not None,
         'variants_ok': check_symmetry(lgr_info.lgr, None)[0] and check_transitivity(lgr_info.lgr, None)[0],
         'has_range': has_range
@@ -317,6 +309,39 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
         ctx['lgr_set_id'] = lgr_set_id
 
     return render(request, 'lgr_editor/codepoint_list.html', context=ctx)
+
+
+def codepoint_list_json(request, lgr_id, lgr_set_id=None):
+    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
+
+    # Generate repertoire
+    repertoire = []
+    for char in lgr_info.lgr.repertoire:
+        cp_slug = cp_to_slug(char.cp)
+        kwargs = {'lgr_id': lgr_id, 'codepoint_id': cp_slug}
+        if lgr_set_id is not None:
+            kwargs['lgr_set_id'] = lgr_set_id
+        cp_view_url = reverse('codepoint_view', kwargs=kwargs)
+        actions = [cp_view_url]
+        is_range = isinstance(char, RangeChar)
+        if is_range:
+            expand_url = reverse('expand_range', kwargs={'lgr_id': lgr_id,
+                                                         'codepoint_id': cp_slug})
+            actions.append(expand_url)
+
+        repertoire.append({
+            'cp_disp': render_char(char),
+            'comment': char.comment or '',
+            'name': render_name(char, udata),
+            'variant_number': len(list(char.get_variants())),
+            'is_range': is_range,
+            'actions': actions
+        })
+
+    response = {'data': repertoire}
+
+    return JsonResponse(response)
 
 
 def delete_lgr(request, lgr_id):

@@ -136,6 +136,9 @@ urlpatterns = patterns(
     url(r'^lgr/{}/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.codepoint_list,
         name='codepoint_list'),
+    url(r'lgr/{}/json$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
+        views.codepoint_list_json,
+        name='codepoint_list_json'),
 
     url(r'^label_forms/$',
         views.label_forms,

@@ -18,38 +18,15 @@
             <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#add-codepoint-modal">{% trans "Add code point(s)" %}</a>
         </div>
     {% endif %}
-    <table id="codepoints" class="table table-hover table-striped table-bordered">
-        <tr>
-            <th>{% trans "Code point" %}</th>
-            <th>{% trans "Character Name" %}</th>
-            <th>{% trans "Comments" %}</th>
-            <th>{% trans "Action" %}</th>
-        </tr>
-        {% block repertoire %}
-            {# Need to include session_key as part of the cache key since multiple users could have the same LGR id with different content #}
-            {% cache 3600 repertoire request.session.session_key lgr_id %}
-                {% for char in repertoire %}
-                    {% if lgr_set_id %}
-                        {% url 'codepoint_view' lgr_set_id=lgr_set_id lgr_id=lgr_id codepoint_id=char.cp as cp_url %}
-                    {% else %}
-                        {% url 'codepoint_view' lgr_id=lgr_id codepoint_id=char.cp as cp_url %}
-                    {% endif %}
-                    {% url 'expand_range' lgr_id=lgr_id codepoint_id=char.cp as expand_range_url %}
-                    <tr data-url="{{ cp_url }}">
-                        <td><a href="{{ cp_url }}">{{ char.cp_disp }}</a> {% if not char.is_range %}<span class="variant_count">{{ char.variant_number }}&nbsp;{% trans "Variant(s)" %}</span>{% endif %}</td>
-                        <td><a href="{{ cp_url }}">{{ char.name }}</a></td>
-                        <td><a href="{{ cp_url }}">{{ char.comment }}</a></td>
-                        <td><a href="{{ cp_url }}" class="btn btn-primary btn-block">{% trans "See code point" %}</a>
-                        {% if char.is_range %}
-                            {% if not is_set %}
-                                <a href="{{ expand_range_url }}" class="btn btn-primary btn-block"> {% trans "Expand range" %}</a>
-                            {% endif %}
-                        {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            {% endcache %}
-        {% endblock repertoire %}
+    <table id="codepoints" class="display">
+        <thead>
+            <tr>
+                <th>{% trans "Code point" %}</th>
+                <th>{% trans "Character Name" %}</th>
+                <th>{% trans "Comments" %}</th>
+                <th>{% trans "Action" %}</th>
+            </tr>
+        </thead>
     </table>
 
 
@@ -145,6 +122,22 @@
                 window.location.href = $(this).data('url');
             });
 
+            $('#codepoints').DataTable({
+                "ajax": "{% url 'codepoint_list_json' lgr_id=lgr_id %}",
+                "paging": false,
+                'responsive': true,
+                "paging": false,
+                "info": false,
+                "searching": false,
+                "scrollX": false,
+                "ordering": false,
+                "columns": [
+                    { "data": "cp_disp" },
+                    { "data": "name" },
+                    { "data": "comment" },
+                    { "data": "actions" },
+                ]
+            });
         });
     </script>
 {% endblock html_body_more %}
