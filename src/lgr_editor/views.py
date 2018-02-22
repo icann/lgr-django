@@ -1639,11 +1639,14 @@ def validate_label(request, lgr_id, lgr_set_id=None, noframe=False):
         except LGRException as ex:
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
+            kwargs = {'lgr_id': lgr_id}
+            if lgr_set_id is not None:
+                kwargs['lgr_set_id'] = lgr_set_id
             # redirect to myself to refresh display
             if noframe:
-                return redirect('lgr_validate_label_noframe', lgr_id=lgr_id, lgr_set_id=lgr_set_id)
+                return redirect('lgr_validate_label_noframe', **kwargs)
             else:
-                return redirect('lgr_validate_label', lgr_id=lgr_id, lgr_set_id=lgr_set_id)
+                return redirect('lgr_validate_label', **kwargs)
 
     ctx['form'] = form
     ctx['lgr_id'] = lgr_id
