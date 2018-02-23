@@ -97,10 +97,6 @@ body {
 	width: 100%;
 }
 
-#codepoints tr {
-	cursor: pointer;
-}
-
 #edit_cp_button {
 	margin-top: 20px;
 	margin-bottom: 5px;

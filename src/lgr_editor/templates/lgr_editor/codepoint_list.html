@@ -136,8 +136,20 @@
                     { "data": "name" },
                     { "data": "comment" },
                     { "data": "actions" },
-                ]
+                ],
+                "rowCallback": function( row, data, index ) {
+                    {% trans "See code point" as see_cp_trans %}
+                    $('td:eq(3)', row).html( '<a href="' + data.actions[0] + '" class="btn btn-primary btn-block">{{ see_cp_trans|escapejs }}</a>' );
+                    if ( ! data.is_range ) {
+                        {% trans "Variant(s)" as variant_trans %}
+                        $('td:eq(0)', row).append( ' <span class="variant_count">' + data.variant_number + '&nbsp;{{ variant_trans|escapejs }}</span>' );
+                    } else {
+                        {% trans "Expand range" as expand_range_trans %}
+                        $('td:eq(3)', row).append( '<a href="' + data.actions[1] + '" class="btn btn-primary btn-block">{{ expand_range_trans|escapejs }}</a>' );
+                    }
+                }
             });
+            $('#codepoints').addClass('table table-striped table-bordered');
         });
     </script>
 {% endblock html_body_more %}
