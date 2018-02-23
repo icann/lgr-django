@@ -6,8 +6,14 @@
 {% block content-pane %}
     {% if not is_set %}
         <div class="text-right" id="add-codepoint">
-            {% url 'expand_ranges' lgr_id=lgr_id as expand_ranges_url %}
-            <a href="{{ expand_ranges_url }}" class="btn btn-primary" >{% trans "Expand range(s)" %}</a>
+            {% if not variants_ok %}
+                {% url 'populate_variants' lgr_id=lgr_id as populate_variants_url %}
+                <a href="{{ populate_variants_url }}" class="btn btn-primary" title="Populate the symmetric and transitive variants"> {% trans "Populate variants" %}</a>
+            {% endif %}
+            {% if has_range %}
+                {% url 'expand_ranges' lgr_id=lgr_id as expand_ranges_url %}
+                <a href="{{ expand_ranges_url }}" class="btn btn-primary" title="Expand all ranges" >{% trans "Expand range(s)" %}</a>
+            {% endif %}
             <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#add-codepoint-modal">{% trans "Add code point(s)" %}</a>
         </div>
     {% endif %}

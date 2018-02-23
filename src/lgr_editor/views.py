@@ -8,6 +8,7 @@ import os
 import re
 import logging
 from io import BytesIO
+from cStringIO import StringIO
 
 from django.core.exceptions import SuspiciousOperation
 from django.contrib import messages
@@ -28,6 +29,8 @@ from lgr.metadata import Scope, Description, Metadata, Version
 from lgr.char import RangeChar
 from lgr.parser.xml_parser import LGR_NS
 from lgr.utils import format_cp
+from lgr.validate.transitivity import check_transitivity
+from lgr.validate.symmetry import check_symmetry
 from lgr.parser.rfc3743_parser import RFC3743Parser
 from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.parser.line_parser import LineParser
@@ -286,21 +289,29 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
             return redirect('codepoint_list',
                             lgr_id=lgr_id)
 
-    repertoire = [{
-        'cp': cp_to_slug(char.cp),
-        'cp_disp': render_char(char),
-        'comment': char.comment or '',
-        'name': render_name(char, udata),
-        'variant_number': len(list(char.get_variants())),
-        'is_range': isinstance(char, RangeChar)
-    } for char in lgr_info.lgr.repertoire]
+    repertoire = []
+    has_range = False
+    for char in lgr_info.lgr.repertoire:
+        is_range = isinstance(char, RangeChar)
+        if is_range:
+            has_range = True
+        repertoire.append({
+            'cp': cp_to_slug(char.cp),
+            'cp_disp': render_char(char),
+            'comment': char.comment or '',
+            'name': render_name(char, udata),
+            'variant_number': len(list(char.get_variants())),
+            'is_range': is_range
+        })
 
     ctx = {
         'cp_form': cp_form,
         'lgr': lgr_info.lgr,
         'lgr_id': lgr_id,
         'repertoire': repertoire,
-        'is_set': lgr_info.is_set or lgr_set_id is not None
+        'is_set': lgr_info.is_set or lgr_set_id is not None,
+        'variants_ok': check_symmetry(lgr_info.lgr, None) and check_transitivity(lgr_info.lgr, None),
+        'has_range': has_range
     }
     if lgr_set_id:
         lgr_set_info = session_select_lgr(request, lgr_set_id)
@@ -570,6 +581,26 @@ def expand_range(request, lgr_id, codepoint_id):
     # Redirect to code point list
     return redirect('codepoint_list',
                     lgr_id=lgr_id)
+
+
+def populate_variants(request, lgr_id):
+    lgr_info = session_select_lgr(request, lgr_id)
+    lgr = lgr_info.lgr
+
+    log_output = StringIO()
+    ch = logging.StreamHandler(log_output)
+    ch.setLevel(logging.INFO)
+    populate_logger = logging.getLogger('lgr.populate')
+
+    # Configure module logger - since user may have disabled the 'lgr' logger,
+    # reset its level
+    populate_logger.addHandler(ch)
+    populate_logger.setLevel('INFO')
+    lgr.populate_variants()
+    messages.add_message(request, messages.INFO, log_output.getvalue())
+    messages.add_message(request, messages.SUCCESS, _("Variants populated"))
+    session_save_lgr(request, lgr_info)
+    return redirect('codepoint_list', lgr_id)
 
 
 def codepoint_update_refs(request, lgr_id, codepoint_id):
