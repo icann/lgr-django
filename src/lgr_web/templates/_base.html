@@ -152,34 +152,47 @@
                                     <i class="glyphicon glyphicon-list-alt"></i>
                                     {% trans "Summary" %}
                                 </a>
-                                <a class="btn btn-default show-tooltip"
-                                   title="{% trans 'Preview LGR file' %}" data-placement="bottom"
-                                   href="{{ view_lgr_xml_url }}" target="_blank">
-                                    <i class="glyphicon glyphicon-eye-open"></i>
-                                    {% trans "View XML" %}
-                                </a>
-                                <a class="btn btn-default show-tooltip"
-                                   title="{% trans 'HTML Output' %}" data-placement="bottom"
-                                   href="{{ lgr_render_url }}" target="_blank">
-                                    <i class="glyphicon glyphicon-globe"></i>
-                                    {% trans "HTML Output" %}
-                                </a>
-                                <a class="btn btn-default show-tooltip"
-                                   title="{% trans 'Download LGR file' %}" data-placement="bottom"
-                                   href="{{ download_lgr_xml_url }}">
-                                    <i class="glyphicon glyphicon-save"></i> {% trans "Download" %}
-                                </a>
-                            {% else %}
-                                <a class="btn btn-default show-tooltip"
-                                   data-toggle="modal" data-target="#about-modal"
-                                   title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
-                                    <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
-                                </a>
+                                <div class="dropdown form-group">
+                                    <a href="" class="btn btn-default dropdown-toggle"
+                                       data-toggle="dropdown" title="{% trans 'Output' %}" data-placement="bottom">
+                                        <i class="glyphicon glyphicon-share"></i>
+                                        {% trans "Output" %}
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="btn btn-block show-tooltip">
+                                            <a title="{% trans 'Preview LGR file' %}" data-placement="bottom"
+                                               href="{{ view_lgr_xml_url }}" target="_blank">
+                                                <i class="glyphicon glyphicon-eye-open"></i>
+                                                {% trans "View XML" %}
+                                            </a>
+                                        </li>
+                                        <li class="btn btn-block show-tooltip">
+                                            <a title="{% trans 'Download LGR file' %}" data-placement="bottom"
+                                               href="{{ download_lgr_xml_url }}">
+                                                <i class="glyphicon glyphicon-save"></i> {% trans "Download" %}
+                                            </a>
+                                        </li>
+                                        <li class="btn btn-block show-tooltip">
+                                            <a title="{% trans 'HTML Output' %}" data-placement="bottom"
+                                               href="{{ lgr_render_url }}" target="_blank">
+                                                <i class="glyphicon glyphicon-globe"></i>
+                                                {% trans "HTML Output" %}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
                             {% endif %}
                             <a class="btn btn-default show-tooltip"
                                data-toggle="modal" data-target="#label-forms-modal"
                                title="{% trans 'Display all label forms' %}" data-placement="bottom">
                                 <i class="glyphicon glyphicon-resize-full"></i> {% trans "Label forms" %}
+                            </a>
+
+                            <a class="btn btn-default show-tooltip"
+                                   data-toggle="modal" data-target="#about-modal"
+                                   title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
+                                    <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
                             </a>
                         </div>
                     </div><!--/.nav-collapse -->
