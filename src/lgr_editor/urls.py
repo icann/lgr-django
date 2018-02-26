@@ -134,6 +134,10 @@ urlpatterns = patterns(
         views.codepoint_list,
         name='codepoint_list'),
 
+    url(r'^label_forms/$',
+        views.label_forms,
+        name='lgr_label_forms'),
+
     url(r'^about/$',
         views.about,
         name='about'),
