@@ -176,6 +176,11 @@
                                     <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
                                 </a>
                             {% endif %}
+                            <a class="btn btn-default show-tooltip"
+                               data-toggle="modal" data-target="#label-forms-modal"
+                               title="{% trans 'Display all label forms' %}" data-placement="bottom">
+                                <i class="glyphicon glyphicon-resize-full"></i> {% trans "Label forms" %}
+                            </a>
                         </div>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -291,6 +296,21 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <!-- Label forms Modal -->
+        <div class="modal fade" id="label-forms-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{% trans "Display all label forms" %}</h4>
+                    </div>
+                    <div id="label-forms-modal-body" class="modal-body" style="height: 85vh;">
+                        <iframe id="label-forms-modal-iframe" data-url="{% url 'lgr_label_forms' %}" src="{% url 'lgr_label_forms' %}" frameborder="0" width="100%" height="98%"></iframe>
                     </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->

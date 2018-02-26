@@ -34,6 +34,7 @@ from lgr.validate.symmetry import check_symmetry
 from lgr.parser.rfc3743_parser import RFC3743Parser
 from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.parser.line_parser import LineParser
+
 from lgr_editor.api import LabelInfo
 from lgr_validator.views import evaluate_label_from_info
 
@@ -50,7 +51,8 @@ from .forms import (AddCodepointForm,
                     CreateLGRForm,
                     AddMultiCodepointsForm,
                     LanguageFormSet,
-                    ValidateLabelForm)
+                    ValidateLabelForm,
+                    LabelFormsForm)
 
 from .lgr_exceptions import lgr_exception_to_text
 from .api import (session_open_lgr,
@@ -1696,6 +1698,27 @@ def validate_label(request, lgr_id, lgr_set_id=None, noframe=False):
 
 def validate_label_noframe(request, lgr_id, lgr_set_id=None):
     return validate_label(request, lgr_id, lgr_set_id, noframe=True)
+
+
+def label_forms(request):
+    unicode_versions = ((v, v) for v in settings.SUPPORTED_UNICODE_VERSIONS)
+    form = LabelFormsForm(request.POST or None,
+                          unicode_versions=unicode_versions)
+    ctx = {}
+    if form.is_bound and form.is_valid():
+        label = form.cleaned_data['label']
+        unicode_version = form.cleaned_data['unicode_version']
+        udata = unidb.manager.get_db_by_version(unicode_version)
+        try:
+            ctx['cp_list'] = format_cp(label)
+            ctx['u_label'] = ''.join([unichr(c) for c in label])
+            ctx['a_label'] = udata.idna_encode_label(ctx['u_label'])
+        except UnicodeError as ex:
+            messages.add_message(request, messages.ERROR,
+                                 lgr_exception_to_text(ex))
+
+    ctx['form'] = form
+    return render(request, 'lgr_editor/label_forms.html', context=ctx)
 
 
 def embedded_lgrs(request, lgr_id):

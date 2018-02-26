@@ -5,3 +5,4 @@ from .importer import *
 from .metadata import *
 from .references import *
 from .codepoint import *
+from .labels import *

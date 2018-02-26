@@ -1,0 +1,30 @@
+{% extends "_base_noframe.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <form method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group{% if form.label.errors %} has-error{% endif %} clearfix">
+            {% include "lgr_editor/_form_field.html" with field=form.label %}
+            {% include "lgr_editor/_form_field.html" with field=form.unicode_version %}
+            <button class="col-sm-2 btn btn-primary" type="submit">{% trans "Display all forms" %}</button>
+        </div>
+    </form>
+
+    {% if u_label %}
+        <table class="table table-responsive">
+            <tr>
+                <th>{% trans "Code point sequence" %}</th>
+                <th>{% trans "U-label" %}</th>
+                <th>{% trans "A-label" %}</th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <td>{{ cp_list }}</td>
+                <td>{{ u_label }}</td>
+                <td>{{ a_label }}</td>
+            </tr>
+        </table>
+    {% endif %}
+{% endblock content %}
