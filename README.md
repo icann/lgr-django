@@ -9,8 +9,8 @@ The following modules are reusable Django apps that can be included in other Dja
 
 * `lgr_editor` contains the code related to the LGR web-editor.
 * `lgr_validator` contains the code related the label validation module.
-* `lgr_tools` contains the code related to all utilities: testing LGR and
-  label sets, LGR comparisons, etc.
+* `lgr_tools` contains the code related to all utilities: testing LGR and label sets, LGR comparisons, etc.
+* `lgr_renderer` contains the code and templates used to generate the static exports of the LGR (HTML only for now).
 
 ## Acknowledgment
 
