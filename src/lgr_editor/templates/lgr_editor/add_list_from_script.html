@@ -1,0 +1,14 @@
+{% extends "_base_noframe.html" %}
+{% load i18n %}
+
+{% block content %}
+    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.script %}
+        {% include "lgr_editor/_form_field.html" with field=form.validating_repertoire %}
+        {% include "lgr_editor/_form_field_checkbox.html" with field=form.manual_import %}
+        <div class="col-sm-12 text-right">
+            <button id="btn-add-range" type="submit" class="btn btn-primary">{% trans "Next" %}</button>
+        </div>
+    </form>
+{% endblock content %}

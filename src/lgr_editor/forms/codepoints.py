@@ -6,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from django import forms
 
 from lgr.tools.utils import parse_label_input, parse_single_cp_input, parse_codepoint_input
+from .fields import (VALIDATING_REPERTOIRES,
+                     DEFAULT_VALIDATING_REPERTOIRE)
 
 SUPPORTED_CODEPOINT_INPUT_FILES = [
     ('rfc3743', 'RFC3743'),
@@ -65,12 +67,25 @@ class AddRangeForm(forms.Form):
     def clean(self):
         cd = super(AddRangeForm, self).clean()
         # TODO check that we don't get sequences
-        if 'first_cp' in cd \
-                and 'last_cp' in cd \
-                and cd['first_cp'] > cd['last_cp']:
+        if 'first_cp' in cd and 'last_cp' in cd and cd['first_cp'] > cd['last_cp']:
             raise ValidationError(_('Last code point (%(last_cp)s) must not be '
                                     'smaller than the first code point '
                                     '(%(first_cp)s)') % cd)
+
+
+class AddCodepointFromScriptForm(forms.Form):
+    validating_repertoire = forms.ChoiceField(label=_("Validating repertoire"),
+                                              required=True,
+                                              choices=VALIDATING_REPERTOIRES,
+                                              initial=DEFAULT_VALIDATING_REPERTOIRE)
+    script = forms.ChoiceField(label=_("Script"),
+                               required=True)
+    manual_import = forms.BooleanField(label=_("Manual import"),
+                                       required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(AddCodepointFromScriptForm, self).__init__(*args, **kwargs)
+        self.fields['script'].choices = self.initial['scripts']
 
 
 class ImportCodepointsFromFileForm(forms.Form):

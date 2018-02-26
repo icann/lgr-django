@@ -50,7 +50,7 @@
     {#### BEGIN add codepoint modal ####}
     <div class="modal fade" id="add-codepoint-modal">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content" style="width: 800px;">
                 <div class="modal-header">
                     <button type="button" id="close-modal" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">{% trans "Add code point(s)" %}</h4>
@@ -63,6 +63,9 @@
                         </li>
                         <li role="presentation">
                             <a href="#addrange" aria-controls="addrange" role="tab" data-toggle="tab">{% trans "Code point range" %}</a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#addfromscript" aria-controls="addfromscript" role="tab" data-toggle="tab">{% trans "Code point from script" %}</a>
                         </li>
                         <li role="presentation">
                             <a href="#import" aria-controls="import" role="tab" data-toggle="tab">{% trans "Import from file" %}</a>
@@ -83,6 +86,9 @@
                         </div>
                         <div role="tabpanel" class="tab-pane" id="addrange">
                             <iframe id="range-iframe" data-url="{% url 'add_range' lgr_id %}" src="{% url 'add_range' lgr_id %}" frameborder="0" width="100%"></iframe>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="addfromscript">
+                            <iframe id="from-script-iframe" data-url="{% url 'add_from_script' lgr_id %}" src="{% url 'add_from_script' lgr_id %}" frameborder="0" width="100%" style="height: 400px;"></iframe>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="import">
                             <iframe id="import-file-iframe" data-url="{% url 'import_from_file' lgr_id %}" src="{% url 'import_from_file' lgr_id %}" frameborder="0" width="100%"></iframe>
@@ -113,17 +119,20 @@
                         var modal_body = $(this).find(".modal-body");
                         $("#range-iframe").outerHeight(modal_body.height() - modal_body.find(".nav-tabs").outerHeight() - 5);
                         $("#import-file-iframe").outerHeight(modal_body.height() - modal_body.find(".nav-tabs").outerHeight() - 5);
+                        $("#from-script-iframe").outerHeight(modal_body.height() - modal_body.find(".nav-tabs").outerHeight() - 5);
                     })
                     .on('hide.bs.modal', function(event) {
-			            var iframe = $('#import-file-iframe');
-		                var tmp_lgr = $('#id_tmp_lgr', iframe.contents()).attr('value');
-		                var url = '{% url "delete_lgr" "TODO_REPLACE" %}'.replace('TODO_REPLACE', tmp_lgr);
-		                if (tmp_lgr) {
-		                    $.ajax({
-		                        type: "GET",
-		                        url: url,
-		                    });
-		                };
+                        ['import-file-iframe', 'from-script-iframe'].forEach(function(frame) {
+                            var iframe = $('#' + frame);
+                            var tmp_lgr = $('#id_tmp_lgr', iframe.contents()).attr('value');
+                            var url = '{% url "delete_lgr" "TODO_REPLACE" %}'.replace('TODO_REPLACE', tmp_lgr);
+                            if (tmp_lgr) {
+                                $.ajax({
+                                    type: "GET",
+                                    url: url,
+                                });
+                            };
+                        })
                     });
 
             $("#codepoints tr[data-url]").click(function() {
