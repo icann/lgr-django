@@ -36,10 +36,10 @@ def render_char(char):
             last_u=HTML_UNICODE_FORMAT % char.last_cp,
         ))
     else:
-        return format_html_join(" ", "U+{} ({})",
-                                ((cp_to_str(c),
-                                  mark_safe(HTML_UNICODE_FORMAT % c))
-                                 for c in char.cp))
+        out = format_html_join(" ", "U+{} ({})", ((cp_to_str(c), mark_safe(HTML_UNICODE_FORMAT % c)) for c in char.cp))
+        if len(char.cp) > 1:
+            out += mark_safe(" [<bdi>{}</bdi>]".format("".join("&#x{:06X};".format(c) for c in char.cp)))
+        return out
 
 
 def render_cp(char):
