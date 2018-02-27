@@ -533,7 +533,7 @@
         {% for ref in references %}
           <tr>
             <td style="vertical-align:top">[<a name="ref_{{ ref.id }}">{{ ref.id }}</a>]</td>
-            <td>{{ ref.value }} {% if ref.comment %}<br/><i>{{ ref.comment }}</i>{% endif %}</td>
+            <td>{{ ref.value|urlize }} {% if ref.comment %}<br/><i>{{ ref.comment|urlize }}</i>{% endif %}</td>
           </tr>
         {% endfor %}
       </table>
