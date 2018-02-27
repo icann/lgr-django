@@ -343,21 +343,37 @@
         <!--</tr>-->
       </table>
 
-      <p>The following tables list each pair of variant mappings on one row.
-        <!--For each pair of code points, by convention,-->
-      <!--the lower code point is taken as the source of the mapping in the forward → direction and the reverse direction ← is not-->
-      <!--listed separately. The variant mappings defined in an LGR are required to be symmetric, that is, both the forward and reverse-->
-      <!--mappings must be specified.-->
-      </p>
-      <!--<p>A mapping where source and target are the same is <i>reflexive</i>. Variant sets consisting of only a single reflexive-->
-      <!--mapping are not shown as a set. Instead, the variant type of the mapping is listed in the Variants column of the Repertoire-->
-      <!--by Code Point table. Reflexive mappings that are part of a larger set are indicated with a “≡”.</p>-->
-      <!--<p>Where the <i>type</i> of both forward and reverse mappings are the same, a single value is given in the Type(s) column,-->
-      <!--otherwise the types for forward and reverse mapping are given in that order, as indicated by the arrows. The same applies to-->
-      <!--any comments.</p>-->
-      <p>In a properly specified LGR, all members of each variant set are variants of each other, a property called transitivity.
-      Because of that, all variant sets are necessarily disjoint. In each set, shading is used to group mappings from the same source
-      code point or sequence.</p>
+      <p>The following tables list all variant sets defined in this LGR, except for singleton sets. Each table lists all variant mapping pairs of the set; one per row. Mappings are assumed to be symmetric: each row documents both forward (→) and reverse (←) mapping directions. In each table, the mappings are sorted by Source value in ascending code point order; shading is used to group mappings from the same source code point or sequence.</p>
+      <p>Where the <i>type</i> of both forward and reverse mappings are the same, a single value is given in the Type(s) column, otherwise the types for forward and reverse mappings, as well as comments and references are listed above one another.</p>
+      <p>A mapping where source and target are the same is <i>reflexive</i>. Variant sets consisting of only a single reflexive mapping are not shown as a set. Instead, the variant type of the mapping is listed in the Variants column of the Repertoire by Code Point table. Reflexive mappings that are part of a larger set are indicated with a “≡”.</p>
+      <p>In any LGR with variant specifications that are well behaved, all members within each variant set are defined as variants of each other; the mappings in each set are symmetric and transitive; and all variant sets are disjoint.</p>
+      <div class="legend">
+        <p class="caption">Common Legend</p>
+        <dl>
+          <dt>Source</dt>
+          <dd>By convention, the smaller of the two code points in a variant mapping pair.</dd>
+          <dt>Target</dt>
+          <dd>By convention, the larger of the two code points in a variant mapping pair.</dd>
+          <dt>Glyph</dt>
+          <dd>The shape displayed for <b>source</b> or <b>target</b> depends on the fonts available to your browser.</dd>
+          <dt><span style="font-size:larger">→</span> - forward</dt>
+          <dd>Indicates that variant Type, Ref and Comment apply to the mapping from <b>source</b> to <b>target</b>.</dd>
+          <dt><span style="font-size:larger">←</span> - reverse</dt>
+          <dd>Indicates that variant Type, Ref and Comment apply to the reverse mapping from <b>target</b> to <b>source</b>.</dd>
+          <dt><span style="font-size:larger">↔</span> - both</dt>
+          <dd>Indicates that variant Type, Ref and Comment apply to <b>both</b> forward and reverse mapping.</dd>
+          <dt><span style="font-size:larger">≡</span> - reflexive</dt>
+          <dd>Indicates that variant Type, Ref and Comment are for a reflexive mapping where source <b>equals</b> target.</dd>
+          <dt><span style="font-size:larger">x</span> - not in LGR</dt>
+          <dd>Indicates that variant is <b>not</b> in LGR.</dd>
+          <dt>Type</dt>
+          <dd>The type of the variant mapping. There are some predefined variant types such as “allocatable” and “blocked”, while others are defined specifically for each LGR.</dd>
+          <dt>Ref</dt>
+          <dd>One or more reference IDs (optional). A "/" separates references for reverse / forward mappings, if different.</dd>
+          <dt>Comment</dt>
+          <dd>A descriptive comment (optional). A "/" separates comments for reverse / forward mappings, if different.</dd>
+        </dl>
+      </div>
 
       {% for variant_set in variant_sets %}
         <h3 class="varsetheader"><a name='varset_{{ variant_set.id }}'>Variant Set {{ forloop.counter }} — {{ variant_set.number_members }} Members - {{ variant_set.variants|length }} Mappings</a></h3>
@@ -368,23 +384,43 @@
             <th>Glyph</th>
             <th>Target</th>
             <th>Glyph</th>
-            <!--<th>&nbsp;</th>-->
+            <th>&nbsp;</th>
             <th>Type(s)</th>
             <th>References</th>
             <th>Comment</th>
           </tr>
           {% for var in variant_set.variants %}
-            <tr style="background-color:#F8F4EC">
-              <td>{{ forloop.counter }}</td>
-              <td><a href='#{{ var.source_cp }}' title='{{ var.source_name }}'>{{ var.source_cp_disp }}</a></td>
-              <td style="text-align:center">{{ var.source_glyph }}</td>
-              <td><a href='#{{ var.dest_cp }}' title='{{ var.dest_name }}'>{{ var.dest_cp_disp }}</a></td>
-              <td style="text-align:center">{{ var.dest_glyph }}</td>
-              <!--<td style="text-align:center">TODO</td>-->
-              <td>{{ var.type }}</td>
-              <td>{{ var.references }}</td>
-              <td>{{ var.comment }}</td>
-            </tr>
+            {% if var.symmetric %}
+              <tr style="background-color:#F8F4EC">
+                <td style="text-align:center">{{ forloop.counter }}</td>
+                <td style="text-align:center"><a href='#{{ var.source_cp }}' title='{{ var.source_name }}'>{{ var.source_cp_disp }}</a></td>
+                <td style="text-align:center">{{ var.source_glyph }}</td>
+                <td style="text-align:center"><a href='#{{ var.dest_cp }}' title='{{ var.dest_name }}'>{{ var.dest_cp_disp }}</a></td>
+                <td style="text-align:center">{{ var.dest_glyph }}</td>
+                <td style="text-align:center">{% if var.source_cp != var.dest_cp %}↔{% else %}≡{% endif %}</td>
+                <td style="text-align:center">{{ var.fwd_type }}</td>
+                <td style="text-align:center">{{ var.fwd_references }}{% if var.fwd_references != var.rev_references %} / {{ var.rev_references }}{% endif %}</td>
+                <td style="text-align:center">{{ var.fwd_comment }}{% if var.fwd_comment != var.rev_comment %} / {{ var.rev_comment }}{% endif %}</td>
+              </tr>
+            {% else %}
+              <tr style="background-color:#F8F4EC">
+                <td rowspan="2" style="text-align:center">{{ forloop.counter }}</td>
+                <td rowspan="2" style="text-align:center"><a href='#{{ var.source_cp }}' title='{{ var.source_name }}'>{{ var.source_cp_disp }}</a></td>
+                <td rowspan="2" style="text-align:center">{{ var.source_glyph }}</td>
+                <td rowspan="2" style="text-align:center"><a href='#{{ var.dest_cp }}' title='{{ var.dest_name }}'>{{ var.dest_cp_disp }}</a></td>
+                <td rowspan="2" style="text-align:center">{{ var.dest_glyph }}</td>
+                <td style="text-align:center">→</td>
+                <td style="text-align:center">{{ var.fwd_type }}</td>
+                <td style="text-align:center">{{ var.fwd_references }}</td>
+                <td style="text-align:center">{{ var.fwd_comment }}</td>
+              </tr>
+              <tr style="background-color:#F8F4EC">
+                <td style="text-align:center">{% if var.dest_in_lgr %}←{% else %}x{% endif %}</td>
+                <td style="text-align:center">{{ var.rev_type }}</td>
+                <td style="text-align:center">{{ var.rev_references }}</td>
+                <td style="text-align:center">{% if var.dest_in_lgr %}{{ var.rev_comment }}{% else %}Not in LGR{% endif %}</td>
+              </tr>
+            {% endif %}
           {% endfor %}
         </table>
       {% endfor %}

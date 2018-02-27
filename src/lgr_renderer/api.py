@@ -18,6 +18,7 @@ from django.utils.html import format_html_join, format_html, mark_safe
 from lgr.matcher import AnchorMatcher
 from lgr.validate.lgr_stats import generate_stats
 from lgr.classes import TAG_CLASSNAME_PREFIX
+from lgr.exceptions import NotInLGR
 
 from lgr_editor import unidb
 from lgr_editor.utils import (render_cp,
@@ -150,23 +151,44 @@ def _generate_context_variant_sets(repertoire, variant_sets_sorted, udata):
             'variants': []
         }
         members = set()
+        reversed_variants = {}
         for cp in variant_set:
             char = repertoire.get_char(cp)
             for var in char.get_variants():
+                in_lgr = True
                 members.add(var.cp)
-                set_ctx['variants'].append({
-                    'source_cp': cp_to_slug(char.cp),
-                    'source_cp_disp': render_cp(char),
-                    'source_glyph': render_glyph(char),
-                    'source_name': render_name(char, udata),
-                    'dest_cp': cp_to_slug(var.cp),
-                    'dest_cp_disp': render_cp(var),
-                    'dest_glyph': render_glyph(var),
-                    'dest_name': render_name(var, udata),
-                    'type': var.type,
-                    'references': _generate_references(var.references),
-                    'comment': var.comment or ''
-                })
+                if var.cp in reversed_variants.get(char.cp, []):
+                    continue
+                try:
+                    var_var = repertoire.get_variant(var.cp, char.cp)
+                except NotInLGR:
+                    in_lgr = False
+                    var_var = [None]
+                else:
+                    if not var_var:
+                        var_var = [None]
+                    reversed_variants.setdefault(var.cp, []).append(char.cp)
+                for vv in var_var:
+                    fwd_ref = _generate_references(var.references)
+                    rev_ref = _generate_references(vv.references) if vv else ''
+                    set_ctx['variants'].append(({
+                        'source_cp': cp_to_slug(char.cp),
+                        'source_cp_disp': render_cp(char),
+                        'source_glyph': render_glyph(char),
+                        'source_name': render_name(char, udata),
+                        'dest_cp': cp_to_slug(var.cp),
+                        'dest_cp_disp': render_cp(var),
+                        'dest_glyph': render_glyph(var),
+                        'dest_name': render_name(var, udata),
+                        'fwd_type': var.type or '',
+                        'rev_type': vv.type or '' if vv else '',
+                        'fwd_references': fwd_ref,
+                        'rev_references': rev_ref,
+                        'fwd_comment': var.comment or '',
+                        'rev_comment': vv.comment or '' if vv else '',
+                        'dest_in_lgr': in_lgr,
+                        'symmetric': vv and var.type == vv.type
+                    }))
         set_ctx['number_members'] = len(members)
         ctx.append(set_ctx)
 
