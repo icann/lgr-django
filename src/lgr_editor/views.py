@@ -8,15 +8,14 @@ import os
 import re
 import logging
 from io import BytesIO
-from cStringIO import StringIO
 
 from django.core.exceptions import SuspiciousOperation
 from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect
+from django.utils.six import StringIO, iteritems
 from django.utils.encoding import force_text
 from django.utils.text import slugify
-from django.views.generic import FormView
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join
 from django.http import (HttpResponse,
@@ -24,6 +23,7 @@ from django.http import (HttpResponse,
                          FileResponse,
                          JsonResponse)
 from django.core.cache import cache
+from django.views.generic import FormView
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.template.loader import render_to_string
@@ -41,6 +41,7 @@ from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.parser.line_parser import LineParser
 from lgr_validator.views import evaluate_label_from_info
 from lgr.core import LGR
+from lgr import wide_unichr
 
 from .repertoires import get_by_name
 from .forms import (AddCodepointForm,
@@ -204,7 +205,7 @@ def import_reference_lgr(request, filename):
     if lgr_id.endswith('.xml'):
         lgr_id = lgr_id.rsplit('.', 1)[0]
     lgr_id = slugify(lgr_id)
-    with open(os.path.join(settings.LGR_STORAGE_LOCATION, filename + '.xml')) as f:
+    with open(os.path.join(settings.LGR_STORAGE_LOCATION, filename + '.xml'), 'rb') as f:
         session_open_lgr(request, lgr_id, f.read())
     return redirect('codepoint_list', lgr_id=lgr_id)
 
@@ -291,7 +292,8 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
             # redirect to myself to refresh display
             # Note: cannot add code point in set mode
             return redirect('codepoint_list',
-                            lgr_id=lgr_id)
+                            lgr_id=lgr_id,
+                            lgr_set_id=lgr_set_id)
 
     has_range = False
     for char in lgr_info.lgr.repertoire.all_repertoire():
@@ -866,7 +868,7 @@ def reference_list(request, lgr_id, lgr_set_id=None):
         'ref_id': ref_id,
         'description': ref.get('value', ''),
         'comment': ref.get('comment', '')
-    } for (ref_id, ref) in lgr_info.lgr.reference_manager.iteritems()]
+    } for (ref_id, ref) in iteritems(lgr_info.lgr.reference_manager)]
     references_form = ReferenceFormSet(initial=references, prefix='references',
                                        disabled=lgr_info.is_set or lgr_set_id is not None)
 
@@ -895,7 +897,7 @@ def reference_list_json(request, lgr_id, lgr_set_id=None):
         'ref_id': ref_id,
         'description': ref.get('value', ''),
         'comment': ref.get('comment', '')
-    } for (ref_id, ref) in lgr_info.lgr.reference_manager.iteritems()]
+    } for (ref_id, ref) in iteritems(lgr_info.lgr.reference_manager)]
 
     return HttpResponse(json.dumps(references), content_type='application/json', charset='UTF-8')
 
@@ -920,7 +922,7 @@ def add_reference_ajax(request, lgr_id):
                               'ref_id': ref_id,
                               'description': ref.get('value', ''),
                               'comment': ref.get('comment', '')
-                          } for (ref_id, ref) in lgr_info.lgr.reference_manager.iteritems()]
+                          } for (ref_id, ref) in iteritems(lgr_info.lgr.reference_manager)]
             rv = {'ok': True, 'data': references}
         except LGRException as ex:
             rv = {'ok': False, 'error': lgr_exception_to_text(ex)}
@@ -1088,7 +1090,7 @@ def _parse_class(xml):
         lgr_loader_func=None
     )
     if lgr_info.lgr.classes_lookup:
-        return lgr_info.lgr.classes_lookup.values()[0]
+        return list(lgr_info.lgr.classes_lookup.values())[0]
     else:
         return None
 
@@ -1164,7 +1166,7 @@ def _parse_rule(xml):
         lgr_loader_func=None
     )
     if lgr_info.lgr.rules_lookup:
-        return lgr_info.lgr.rules_lookup.values()[0]
+        return list(lgr_info.lgr.rules_lookup.values())[0]
     else:
         return None
 
@@ -1352,7 +1354,7 @@ class MultiCodepointsView(FormView):
                 # slug_to_cp returns a list of tuples, add codepoints need a
                 # list. There is not variant here so taking first element of the
                 # tuple is correct
-                codepoints = map(lambda x: x[0], codepoints)
+                codepoints = [x[0] for x in codepoints]
                 self.lgr_info.lgr.add_codepoints(codepoints)
                 # no variants in range
             session_save_lgr(request, self.lgr_info)
@@ -1382,7 +1384,7 @@ class MultiCodepointsView(FormView):
     def _handle_discrete(self, lgr, input_lgr, manual):
         logger.debug("Import: Copy references")
         # No choice here, we have to import references
-        for (ref_id, ref) in input_lgr.reference_manager.iteritems():
+        for (ref_id, ref) in iteritems(input_lgr.reference_manager):
             value = ref['value']
             comment = ref.get('comment', None)
             try:
@@ -1564,7 +1566,7 @@ class AddCodepointFromScriptView(MultiCodepointsView):
     template_name = 'lgr_editor/add_list_from_script.html'
 
     def get(self, request, *args, **kwargs):
-        self.lgr_info = session_select_lgr(self.request, self.kwargs['lgr_id'])
+        self.lgr_info = session_select_lgr(request, kwargs['lgr_id'])
         if self.lgr_info.is_set:
             return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -1814,7 +1816,7 @@ def label_forms(request):
         udata = unidb.manager.get_db_by_version(unicode_version)
         try:
             ctx['cp_list'] = format_cp(label)
-            ctx['u_label'] = ''.join([unichr(c) for c in label])
+            ctx['u_label'] = ''.join([wide_unichr(c) for c in label])
             ctx['a_label'] = udata.idna_encode_label(ctx['u_label'])
         except UnicodeError as ex:
             messages.add_message(request, messages.ERROR,

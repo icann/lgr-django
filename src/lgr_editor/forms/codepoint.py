@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from urllib import quote_plus
 
+from django.utils.six.moves.urllib_parse import quote_plus
 from django.utils import six
 from django import forms
 from django.forms.formsets import formset_factory

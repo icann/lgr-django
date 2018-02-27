@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.forms.widgets import Select
+from django.utils.six import iteritems
 from django.utils.translation import ugettext_lazy as _
 
 LGR_COMPARE_ACTIONS = (
@@ -25,7 +26,7 @@ class DataSelectWidget(Select):
     def render_option(self, selected_choices, option_value, option_label):
         option = super(DataSelectWidget, self).render_option(selected_choices, option_value, option_label)
         str_data = ''
-        for key, val in self.data.get(option_value, {}).iteritems():
+        for key, val in iteritems(self.data.get(option_value, {})):
             str_data += 'data-%s="%s" ' % (key, val)
         return option.replace("value=", str_data + "value=")  # XXX is there a better way without rewriting all method from scratch
 

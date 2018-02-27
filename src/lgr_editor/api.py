@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from functools import partial
+
 import logging
+
 import base64
-from StringIO import StringIO
+
 import errno
 import os
 from uuid import uuid4
+from functools import partial
 
 from django.http import Http404
 from django.utils import six
@@ -62,8 +64,8 @@ class LGRInfo(object):
 
     @classmethod
     def _parse_lgr(cls, name, xml, validate):
-        # Create parser
-        parser = XMLParser(StringIO(xml.encode('utf-8')), name)
+        # Create parser - Assume xml is unicode data
+        parser = XMLParser(six.BytesIO(xml.encode('utf-8')), name)
 
         # Do we need to validate the schema?
         if validate:
@@ -120,15 +122,12 @@ class LGRInfo(object):
                                              request=request))
 
         xml = dct['xml']
-        # check if xml is of unicode type
-        if isinstance(xml, six.text_type):
-            # convert to a str (bytes in PY3) to be consistent
-            xml = xml.encode('utf-8')
+        if not isinstance(xml, six.text_type):
+            xml = six.text_type(xml, 'utf-8')
 
         # Parse XML #
-        # Replace old namespace by the new one for compatibility purpose with
-        # old LGR
-        xml = unicode(xml, 'utf-8').replace(OLD_LGR_NS, LGR_NS)
+        # Replace old namespace by the new one for compatibility purpose with old LGR
+        xml = xml.replace(OLD_LGR_NS, LGR_NS)
 
         if request is None:
             lgr = cls._parse_lgr(name, xml, dct.get('validate', False))
@@ -160,6 +159,9 @@ class LGRInfo(object):
         return lgr_info
 
     def to_dict(self, request=None):
+        if not isinstance(self.xml, six.text_type):
+            self.xml = six.text_type(self.xml, 'utf-8')
+
         dct = {
             'name': self.name,
             'xml': self.xml,
@@ -193,13 +195,15 @@ class LabelInfo(object):
 
     @classmethod
     def from_dict(cls, dct):
-        return cls(dct['name'], StringIO(base64.decodestring(dct['data']).decode('utf-8')), dct['data'])
+        return cls(dct['name'],
+                   six.StringIO(base64.decodestring(dct['data'].encode('utf-8')).decode('utf-8')),
+                   dct['data'])
 
     @classmethod
     def from_form(cls, name, label_input):
-        data = label_input
-        labels = StringIO(data.decode('utf-8'))
-        b64data = base64.encodestring(label_input)
+        data = label_input.decode('utf-8')
+        labels = six.StringIO(data)
+        b64data = base64.encodestring(label_input).decode('utf-8')
 
         return cls(name, labels, b64data)
 
@@ -216,7 +220,7 @@ def get_builtin_or_session_repertoire(repertoire_id, request):
 
     :param repertoire_id: a slug identifying the LGR
     :param request: Django request object
-    :return: `LGR` isntance
+    :return: `LGR` instance
     """
     try:
         return get_by_name(repertoire_id)
@@ -279,7 +283,7 @@ def session_open_lgr(request, lgr_id, lgr_xml,
             'xml': lgr_xml,
             'validating_repertoire': validating_repertoire_name,
             'validate': validate,
-            'lgr_set_dct': map(lambda x: x.to_dict(), lgr_set) if lgr_set else None,
+            'lgr_set_dct': [lgr.to_dict() for lgr in lgr_set] if lgr_set else None,
             'set_labels': set_labels
         },
         lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request)
@@ -368,7 +372,7 @@ def session_merge_set(request, lgr_info_set, lgr_set_name):
     :param lgr_set_name: The name of the LGR set
     :return: The LGR set merge id
     """
-    merged_lgr = merge_lgr_set(map(lambda x: x.lgr, lgr_info_set), lgr_set_name)
+    merged_lgr = merge_lgr_set([l.lgr for l in lgr_info_set], lgr_set_name)
     merged_id = slugify(merged_lgr.name)
 
     merged_lgr_xml = serialize_lgr_xml(merged_lgr)

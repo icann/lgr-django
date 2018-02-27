@@ -8,10 +8,11 @@ from __future__ import unicode_literals
 
 import logging
 import re
-from itertools import izip, islice
+from itertools import islice
 
 from natsort import natsorted
 
+from django.utils.six.moves import zip
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join, format_html, mark_safe
 from django.utils import six
@@ -385,7 +386,7 @@ def generate_context(lgr):
     udata = unidb.manager.get_db_by_version(lgr.metadata.unicode_version)
 
     variant_sets = lgr.repertoire.get_variant_sets()
-    variant_sets_sorted = {idx: s for idx, s in izip(range(1, len(variant_sets) + 1), variant_sets)}
+    variant_sets_sorted = {idx: s for idx, s in zip(range(1, len(variant_sets) + 1), variant_sets)}
 
     context.update(_generate_context_metadata(lgr.metadata))
     context['repertoire'], ctxt_rules = _generate_context_repertoire(lgr.repertoire, variant_sets_sorted, udata)

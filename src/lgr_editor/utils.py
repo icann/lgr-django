@@ -5,11 +5,11 @@ utils.py - utility functions for LGR Editor.
 from __future__ import unicode_literals
 
 import hashlib
-from urllib import quote_plus
 import os
 import logging
 
 from django.conf import settings
+from django.utils.six.moves.urllib_parse import quote_plus
 from django.core.cache import cache
 from django.utils.encoding import force_bytes
 from django.utils.html import mark_safe, format_html, format_html_join

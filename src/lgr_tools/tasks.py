@@ -4,10 +4,10 @@ from __future__ import unicode_literals
 
 import logging
 import time
-from cStringIO import StringIO
 from gzip import GzipFile
 
 from celery import shared_task
+from io import BytesIO
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 
@@ -39,7 +39,7 @@ def _lgr_tool_task(storage_path, base_filename, email_subject,
     :param cb: The callback to launch the tool
     :param cb_kwargs: The argument for the callback
     """
-    sio = StringIO()
+    sio = BytesIO()
     email = EmailMessage(subject='{}'.format(email_subject),
                          to=[email_address])
 

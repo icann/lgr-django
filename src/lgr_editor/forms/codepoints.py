@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from django.utils.six import text_type
 from django import forms
 
 from lgr.tools.utils import parse_label_input, parse_single_cp_input, parse_codepoint_input
@@ -38,7 +39,7 @@ class CodepointField(forms.CharField):
             else:
                 value = parse_codepoint_input(value)
         except ValueError as e:
-            raise ValidationError(unicode(e))
+            raise ValidationError(text_type(e))
 
         return value
 
@@ -136,6 +137,6 @@ class ValidateLabelForm(forms.Form):
         try:
             value = parse_label_input(value, **kwargs)
         except ValueError as e:
-            raise ValidationError(unicode(e))
+            raise ValidationError(text_type(e))
         return value
 

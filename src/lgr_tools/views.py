@@ -13,12 +13,12 @@ from lgr_tools.forms import (LGRCompareSelector,
                              LGRCrossScriptVariantsSelector,
                              LGRCheckHarmonizedSelector)
 
-from tasks import (diff_task,
-                   collision_task,
-                   annotate_task,
-                   lgr_set_annotate_task,
-                   cross_script_variants_task,
-                   check_harmonization_task)
+from .tasks import (diff_task,
+                    collision_task,
+                    annotate_task,
+                    lgr_set_annotate_task,
+                    cross_script_variants_task,
+                    check_harmonization_task)
 
 select_lgr = getattr(__import__(settings.LGR_SELECTOR_FUNC.rpartition('.')[0],
                                 fromlist=[settings.LGR_SELECTOR_FUNC.rpartition('.')[0]]),
