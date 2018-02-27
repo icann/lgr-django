@@ -80,13 +80,13 @@ urlpatterns = patterns(
         views.embedded_lgrs,
         name='embedded_lgrs'),
 
-    # Summary function
-    url(r'^lgr/{}/summary/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
+    # Validation function
+    url(r'^lgr/{}/validate_lgr/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.validate_lgr,
-        name='summary'),
-    url(r'^lgr/{}/summary/s/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.save_summary,
-        name='summary_save'),
+        name='validate_lgr'),
+    url(r'^lgr/{}/validate_lgr/s/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
+        views.validate_lgr_save,
+        name='validate_lgr_save'),
 
     # Validation function
     url(r'^lgr/{}/validate/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),

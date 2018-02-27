@@ -233,7 +233,7 @@ def validate_lgr(request, lgr_id, output_func=None, lgr_set_id=None):
     options['rng_filepath'] = settings.LGR_RNG_FILE
 
     results = lgr_info.lgr.validate(options)
-    tpl_name = 'lgr_editor/summary_output.html'
+    tpl_name = 'lgr_editor/validate_lgr.html'
     context = {
         'results': results,
         'name': lgr_id
@@ -244,14 +244,14 @@ def validate_lgr(request, lgr_id, output_func=None, lgr_set_id=None):
         return render(request, tpl_name, context)
 
 
-def save_summary(request, lgr_id, lgr_set_id=None):
+def validate_lgr_save(request, lgr_id, lgr_set_id=None):
     return validate_lgr(request, lgr_id, lgr_set_id=lgr_set_id,
                         output_func=_prepare_html_file_response)
 
 
 def _prepare_html_file_response(name, out):
     response = HttpResponse(content_type='text/html')
-    cd = 'attachment; filename="{0}-{1}.html"'.format(name, _('summary'))
+    cd = 'attachment; filename="{0}-{1}.html"'.format(name, 'validation-results')
     response['Content-Disposition'] = cd
 
     response.write(out)
