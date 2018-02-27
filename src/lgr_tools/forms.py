@@ -46,6 +46,9 @@ class LGRCompareSelector(forms.Form):
                                required=True,
                                choices=LGR_COMPARE_ACTIONS,
                                initial="UNION")
+    full_dump = forms.BooleanField(label=_("Full dump"),
+                                   help_text=_('Print a full dump (i.e. with identical code points as well)'),
+                                   required=False)
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', [])

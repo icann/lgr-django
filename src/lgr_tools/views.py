@@ -65,7 +65,7 @@ def lgr_compare(request, lgr_id):
             else:
                 return redirect('codepoint_list', lgr_id)
         else:
-            content = lgr_comp_diff(request, lgr_info_1, lgr_info_2)
+            content = lgr_comp_diff(request, lgr_info_1, lgr_info_2, form.cleaned_data['full_dump'])
             ctx = {
                 'content': content,
                 'lgr_1': lgr_info_1,
