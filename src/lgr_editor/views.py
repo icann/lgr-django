@@ -22,6 +22,7 @@ from django.utils.html import format_html_join
 from django.http import HttpResponse, HttpResponseBadRequest, FileResponse
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
 from lgr.exceptions import LGRException, NotInLGR
@@ -231,36 +232,29 @@ def validate_lgr(request, lgr_id, output_func=None, lgr_set_id=None):
         options['validating_repertoire'] = lgr_info.validating_repertoire
     options['rng_filepath'] = settings.LGR_RNG_FILE
 
-    output = ''
-    if lgr_info.is_set:
-        output += 'LGR is a set containning the following LGRs:\n'
-        for lgr in lgr_info.lgr_set:
-            output += lgr.name + '\n'
-        output += '\n'
-    elif lgr_set_id:
-        output += 'LGR belong to the LGR set: "{}"\n\n'.format(lgr_set_id)
-
-    output += lgr_info.lgr.validate(options)
+    results = lgr_info.lgr.validate(options)
+    tpl_name = 'lgr_editor/summary_output.html'
+    context = {
+        'results': results,
+        'name': lgr_id
+    }
     if output_func:
-        return output_func(ctx={'output': output,
-                                'name': lgr_id})
+        return output_func(lgr_id, render_to_string(tpl_name, context))
     else:
-        return render(request,
-                      'lgr_editor/summary_output.html',
-                      context={'output': output})
+        return render(request, tpl_name, context)
 
 
 def save_summary(request, lgr_id, lgr_set_id=None):
     return validate_lgr(request, lgr_id, lgr_set_id=lgr_set_id,
-                        output_func=_prepare_txt_response)
+                        output_func=_prepare_html_file_response)
 
 
-def _prepare_txt_response(ctx):
-    response = HttpResponse(content_type='text/plain')
-    cd = 'attachment; filename="{0}-{1}.txt"'.format(ctx['name'], _('summary'))
+def _prepare_html_file_response(name, out):
+    response = HttpResponse(content_type='text/html')
+    cd = 'attachment; filename="{0}-{1}.html"'.format(name, _('summary'))
     response['Content-Disposition'] = cd
 
-    response.write(ctx['output'])
+    response.write(out)
 
     return response
 

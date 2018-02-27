@@ -1,0 +1,16 @@
+{% extends "lgr_editor/summary/_base.html" %}
+{% load lgr_editor %}
+
+{% block result_contents %}
+  {{ result }}
+  {% if result.repertoire %}
+    <h4>Missing variants</h4>
+    <ul>
+      {% for entry in result.repertoire %}
+        <li>Code point {{ entry.char|render_char }} is missing variant {{ entry.variant|render_char }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    Transitivity OK
+  {% endif %}
+{% endblock %}

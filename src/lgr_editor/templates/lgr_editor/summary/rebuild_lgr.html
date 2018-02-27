@@ -1,0 +1,22 @@
+{% extends "lgr_editor/summary/_base.html" %}
+{% load lgr_editor %}
+
+{% block result_contents %}
+  {{ result }}
+  {% if result.repertoire %}
+    <h4>Invalid characters</h4>
+    <ul>
+      {% for entry in result.repertoire %}
+        <li>
+          <ul>
+            <li>Invalid character {{ entry.char|render_char }}</li>
+            {% if entry.variant %}
+              <li>Variant: {{ entry.variant|render_char }}</li>
+            {% endif %}
+            <li>Exception: {{ entry.exc | exc_to_text }}</li>
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

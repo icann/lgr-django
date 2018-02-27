@@ -1,0 +1,16 @@
+{% extends "lgr_editor/summary/_base.html" %}
+{% load lgr_editor %}
+
+{% block result_contents %}
+  {{ result }}
+  {% if result.repertoire %}
+    <h4>Erroneous conditional code points</h4>
+    <ul>
+      {% for entry in result.repertoire %}
+        <li>Code point {{ entry.char|render_char }} has invalid {{ entry.rule_type }} rule {{ entry.rule }} for variant {{ entry.variant|render_char }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    Conditional variants OK
+  {% endif %}
+{% endblock %}

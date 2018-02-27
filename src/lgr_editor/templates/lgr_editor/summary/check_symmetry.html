@@ -1,0 +1,22 @@
+{% extends "lgr_editor/summary/_base.html" %}
+{% load lgr_editor %}
+
+{% block result_contents %}
+  {{ result }}
+  {% if result.repertoire %}
+    <h4>Missing code points</h4>
+    <ul>
+      {% for entry in result.repertoire %}
+        <li>Code point {{ entry.char|render_char }}:
+          {% if entry.type == 'not-in-repertoire' %}
+            {{ entry.variant|render_char }} is not in repertoire
+          {% else %}
+            {{ entry.variant|render_char }} has not original code point in its variants
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    Symmetry OK
+  {% endif %}
+{% endblock %}

@@ -1,3 +1,5 @@
 <div class="summary-body">
-    {{ output|linebreaksbr }}
+    {% for test_name, result in results %}
+        {% include "lgr_editor/summary/"|add:test_name|add:".html" %}
+    {% endfor %}
 </div>

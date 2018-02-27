@@ -1,0 +1,45 @@
+{% extends "lgr_editor/summary/_base.html" %}
+
+{% block result_contents %}
+  {{ result }}
+  <h4>General stats</h4>
+  <ul>
+    <li>Number of code points: {{ result.stats.codepoint_number }}</li>
+
+    <li>Number of ranges: {{ result.stats.range_number }}</li>
+    <li>Largest range: {{ result.stats.largest_range }} (length: {{ result.stats.largest_range_len }})</li>
+    <li>Largest range: {{ result.stats.largest_range }} (length: {{ result.stats.largest_range_len }})</li>
+
+    <li>Number of sequences: {{ result.stats.sequence_number }}</li>
+    <li>Largest sequence: {{ result.stats.largest_sequence }} (length: {{ result.stats.largest_sequence_len }})</li>
+  </ul>
+
+  <h4>Variants</h4>
+  <ul>
+    <li>Total number of variants: {{ result.stats.variant_number }}</li>
+    <li>Average number of variants per code point: {{ result.stats.average_variants }}</li>
+    <li>Largest variant set: {{ result.stats.largest_variant_set }}</li>
+    {% if result.stats.variants_by_type %}
+      <li>
+        Variants per type:
+        <ul>
+          {% for variant_type, number in result.stats.variants_by_type %}
+            <li>Number of variants for type {{ variant_type }}: {{ number }}</li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+  </ul>
+
+  <h4>Tags</h4>
+  <ul>
+    {% for tag_name, number in result.stats.codepoints_by_tag %}
+      <li>Number of code points for tag {{ tag_name }}: {{ number }}</li>
+    {% endfor %}
+  </ul>
+
+  <h4>Rules</h4>
+  <ul>
+    <li>Number of defined rules: {{ result.stats.rule_number }}</li>
+  </ul>
+{% endblock %}
