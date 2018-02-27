@@ -124,13 +124,9 @@
 
             $('#codepoints').DataTable({
                 "ajax": "{% url 'codepoint_list_json' lgr_id=lgr_id %}",
-                "paging": false,
                 'responsive': true,
-                "paging": false,
                 "info": false,
-                "searching": false,
                 "scrollX": false,
-                "ordering": false,
                 "columns": [
                     { "data": "cp_disp" },
                     { "data": "name" },
