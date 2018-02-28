@@ -373,14 +373,22 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
         if add_variant_form.is_valid():
             var_cp_sequence = add_variant_form.cleaned_data['codepoint']
             override_repertoire = add_variant_form.cleaned_data['override_repertoire']
+            char_script = udata.get_script(codepoint[0])
+            var_script = udata.get_script(var_cp_sequence[0])
             try:
                 lgr_info.lgr.add_variant(codepoint,
                                          var_cp_sequence,
                                          variant_type=settings.DEFAULT_VARIANT_TYPE,
                                          validating_repertoire=lgr_info.validating_repertoire,
                                          override_repertoire=override_repertoire)
+                if char_script != var_script and var_cp_sequence not in lgr_info.lgr.repertoire:
+                    # Added variant code point from other script, not in repertoire
+                    # -> add it to the LGR
+                    lgr_info.lgr.add_cp(var_cp_sequence,
+                                        comment="Automatically added from out-of-script variant")
+                    messages.success(request, _('Automatically added codepoint %s from out-of-script variant') % format_cp(codepoint))
                 session_save_lgr(request, lgr_info)
-                messages.success(request, _('New variant added'))
+                messages.success(request, _('New variant %s added') % format_cp(var_cp_sequence))
             except LGRException as ex:
                 messages.add_message(request, messages.ERROR,
                                      lgr_exception_to_text(ex))
