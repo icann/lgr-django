@@ -6,14 +6,18 @@
   {% if result.repertoire %}
     <h4>Invalid characters</h4>
     <ul>
-      {% for entry in result.repertoire %}
-        <li>
+      {% for char, entries in result.repertoire.items %}
+        <li>Invalid character {{ char|render_char }}:
           <ul>
-            <li>Invalid character {{ entry.char|render_char }}</li>
-            {% if entry.variant %}
-              <li>Variant: {{ entry.variant|render_char }}</li>
-            {% endif %}
-            <li>Exception: {{ entry.exc | exc_to_text }}</li>
+            {% for error in entries.errors %}
+              <li>Error: {{ error|exc_to_text }}</li>
+            {% endfor %}
+            {% for variant, errors in entries.variants %}
+              <li>Variant: {{ variant|render_char }}</li>
+              {% for error in errors %}
+                <li>Error: {{ error|exc_to_text }}</li>
+              {% endfor %}
+            {% endfor %}
           </ul>
         </li>
       {% endfor %}
