@@ -308,7 +308,7 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
         'lgr_id': lgr_id,
         'repertoire': repertoire,
         'is_set': lgr_info.is_set or lgr_set_id is not None,
-        'variants_ok': check_symmetry(lgr_info.lgr, None) and check_transitivity(lgr_info.lgr, None),
+        'variants_ok': check_symmetry(lgr_info.lgr, None)[0] and check_transitivity(lgr_info.lgr, None)[0],
         'has_range': has_range
     }
     if lgr_set_id:
