@@ -322,22 +322,20 @@ def session_select_lgr(request, lgr_id, lgr_set_id=None):
     raise Http404
 
 
-def session_save_lgr(request, lgr_info, lgr_id=None, invalidate_cache=False):
+def session_save_lgr(request, lgr_info, lgr_id=None):
     """
     Save the LGR object in session
     :param request: Django request object
     :param lgr_info: `LGRInfo` instance
     :param lgr_id: a slug identifying the LGR
-    :param invalidate_cache: If True, then invalidate fragment cache.
     """
     lgr_id = lgr_id if lgr_id is not None else lgr_info.name
     lgr_info.update_xml()  # make sure we have updated XML before saving
     request.session.setdefault(LGRS_SESSION_KEY, {})[lgr_id] = lgr_info.to_dict(request)
     # mark session as modified because we are possibly only changing the content of a dict
     request.session.modified = True
-    if invalidate_cache:
-        # As LGR has been modified, need to invalidate the template repertoire cache
-        clean_repertoire_cache(request, lgr_id)
+    # As LGR has been modified, need to invalidate the template repertoire cache
+    clean_repertoire_cache(request, lgr_id)
 
 
 def session_delete_lgr(request, lgr_id):
