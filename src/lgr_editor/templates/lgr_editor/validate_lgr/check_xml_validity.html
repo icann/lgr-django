@@ -2,10 +2,9 @@
 {% load lgr_editor %}
 
 {% block result_contents %}
-  {{ result }}
   {% if result.rng_result %}
     XML is valid and complies with RNG.
   {% else %}
-    Invalid XML for lgr: {{ result.validation_result }}
+    Invalid XML for lgr: {{ result.validation_result|linebreaks }}
   {% endif %}
 {% endblock %}
