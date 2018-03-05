@@ -1391,6 +1391,8 @@ class MultiCodepointsView(FormView):
                 logger.warning("Cannot add reference: '%s'", ref_id)
 
         if manual:
+            # Start by expanding all ranges in manual mode
+            input_lgr.expand_ranges()
             # we now use `AddMultiCodepointsForm` to present the list of code points
             range_form = AddMultiCodepointsForm()
 
@@ -1450,13 +1452,22 @@ class MultiCodepointsView(FormView):
     def _copy_characters(self, lgr, input_lgr, force=False):
         nb_codepoints = 0
         for char in input_lgr.repertoire:
+            char_len = 1
+            add_fct = lambda c: lgr.add_cp(c.cp,
+                                           comment=c.comment,
+                                           ref=c.references,
+                                           validating_repertoire=self.lgr_info.validating_repertoire,
+                                           force=force)
+            if isinstance(char, RangeChar):
+                char_len = char.last_cp - char.first_cp + 1
+                add_fct = lambda c: lgr.add_range(c.first_cp, c.last_cp,
+                                                  comment=c.comment,
+                                                  ref=c.references,
+                                                  validating_repertoire=self.lgr_info.validating_repertoire,
+                                                  force=force)
             try:
-                lgr.add_cp(char.cp,
-                           comment=char.comment,
-                           ref=char.references,
-                           validating_repertoire=self.lgr_info.validating_repertoire,
-                           force=force)
-                nb_codepoints += 1
+                add_fct(char)
+                nb_codepoints += char_len
             except LGRException as exc:
                 logger.warning("Cannot add code point '%s': %s",
                                format_cp(char.cp),
@@ -1552,9 +1563,6 @@ class AddCodepointFromScriptView(MultiCodepointsView):
     form_class = AddCodepointFromScriptForm
     template_name = 'lgr_editor/add_list_from_script.html'
 
-    def __init__(self):
-        super(AddCodepointFromScriptView, self).__init__(discrete_cp=True)
-
     def get(self, request, *args, **kwargs):
         self.lgr_info = session_select_lgr(self.request, self.kwargs['lgr_id'])
         if self.lgr_info.is_set:
@@ -1583,14 +1591,18 @@ class AddCodepointFromScriptView(MultiCodepointsView):
         validating_repertoire.expand_ranges()  # need to get through all code points
 
         # TODO use the association of unicode_database / validating_repertoire / script / associated cp from cache
-        fake_lgr = LGR(name=script)
+        codepoints = []
         for char in validating_repertoire.repertoire.all_repertoire():
-            for cp in char.cp:
-                if script != self.lgr_info.lgr.unicode_database.get_script(cp, alpha4=True):
-                    break
-            else:
-                fake_lgr.add_cp(char.cp)
+            # XXX: Assume validating repertoire only contains single CP
+            cp = char.cp[0]
+            if script == self.lgr_info.lgr.unicode_database.get_script(cp, alpha4=True):
+                try:
+                    lgr.get_char(cp)
+                except LGRException:
+                    codepoints.append(cp)
 
+        fake_lgr = LGR(name=script)
+        fake_lgr.add_codepoints(codepoints)
         return self._handle_discrete(lgr, fake_lgr, cd['manual_import'])
 
 
