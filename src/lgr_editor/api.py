@@ -143,6 +143,11 @@ class LGRInfo(object):
                                                name),
                           lgr,
                           LGR_CACHE_TIMEOUT)
+            else:
+                # Need to manually load unicode database because
+                # it is stripped during serialization
+                unicode_version = lgr.metadata.unicode_version
+                lgr.unicode_database = unidb.manager.get_db_by_version(unicode_version)
 
         validating_repertoire = dct.get('validating_repertoire')
         val_lgr = lgr_loader_func(validating_repertoire) if (validating_repertoire and lgr_loader_func is not None) else None
