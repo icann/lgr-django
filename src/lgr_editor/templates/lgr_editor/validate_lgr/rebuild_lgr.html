@@ -11,7 +11,7 @@
             {% for error in entries.errors %}
               <li>Error: {{ error|exc_to_text }}</li>
             {% endfor %}
-            {% for variant, errors in entries.variants %}
+            {% for variant, errors in entries.variants.items %}
               <li>Variant: {{ variant|render_char }}</li>
               {% for error in errors %}
                 <li>Error: {{ error|exc_to_text }}</li>
