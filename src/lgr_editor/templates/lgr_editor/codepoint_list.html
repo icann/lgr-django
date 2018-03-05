@@ -29,8 +29,8 @@
         </thead>
     </table>
 
-
     {#### BEGIN add codepoint modal ####}
+    {% if not is_set %}
     <div class="modal fade" id="add-codepoint-modal">
         <div class="modal-dialog">
             <div class="modal-content" style="width: 800px;">
@@ -82,6 +82,7 @@
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    {% endif %}
     {#### END add codepoint modal ####}
 
 {% endblock content-pane %}
