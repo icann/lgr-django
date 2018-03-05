@@ -122,8 +122,14 @@
                 window.location.href = $(this).data('url');
             });
 
+            {% if lgr_set_id %}
+                {% url 'codepoint_list_json' lgr_set_id=lgr_set_id lgr_id=lgr_id as json_url %}
+            {% else %}
+                {% url 'codepoint_list_json' lgr_id=lgr_id as json_url %}
+            {% endif %}
+
             $('#codepoints').DataTable({
-                "ajax": "{% url 'codepoint_list_json' lgr_id=lgr_id %}",
+                "ajax": "{{ json_url }}",
                 'responsive': true,
                 "info": false,
                 "scrollX": false,
