@@ -101,7 +101,7 @@
   div#description h4+p {
           margin-top:.1em;
       }
-  body h1:first-child + p {
+  #disclaimer {
           color:#999;;
           float:right;;
           border:solid 1px #999;;
@@ -195,9 +195,9 @@
   </head>
   <body>
     <div id="lgr">
-
       <h1>{{ name|title }}</h1>
-      <p>This document is mechanically formatted from the XML file for the LGR. It provides additional summary data and explanatory text.
+      <p><a href="?save">Save as HTML</a></p>
+      <p id="disclaimer">This document is mechanically formatted from the XML file for the LGR. It provides additional summary data and explanatory text.
         The XML file remains the sole normative specification of the LGR.</p>
       <table id="metadata" class="simple">
         {% for header, value in metadata %}
