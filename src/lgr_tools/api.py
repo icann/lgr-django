@@ -67,11 +67,13 @@ def lgr_comp_diff(request, lgr_info_1, lgr_info_2, full_dump=True):
     """
     # if lgr_info_1 is a set then lgr_info_2 also and reciprocally
     if not lgr_info_1.is_set:
-        content = diff_lgrs(lgr_info_1.lgr, lgr_info_2.lgr, full_dump=full_dump)
+        content = diff_lgrs(lgr_info_1.lgr, lgr_info_2.lgr,
+                            show_same=full_dump)
     else:
         content = diff_lgr_sets(lgr_info_1.lgr, lgr_info_2.lgr,
                                 [lgr.lgr for lgr in lgr_info_1.lgr_set],
-                                [lgr.lgr for lgr in lgr_info_2.lgr_set], full_dump=full_dump)
+                                [lgr.lgr for lgr in lgr_info_2.lgr_set],
+                                show_same=full_dump)
 
     return content
 
