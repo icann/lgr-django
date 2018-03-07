@@ -183,6 +183,7 @@ def _generate_context_variant_sets(repertoire, variant_sets_sorted, udata):
                         'dest_glyph': render_glyph(var),
                         'dest_name': render_name(var, udata),
                         'fwd_type': var.type or '',
+                        'reverse': vv is not None,
                         'rev_type': vv.type or '' if vv else '',
                         'fwd_references': fwd_ref,
                         'rev_references': rev_ref,

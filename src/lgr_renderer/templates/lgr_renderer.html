@@ -404,22 +404,24 @@
               </tr>
             {% else %}
               <tr style="background-color:#F8F4EC">
-                <td rowspan="2" style="text-align:center">{{ forloop.counter }}</td>
-                <td rowspan="2" style="text-align:center"><a href='#{{ var.source_cp }}' title='{{ var.source_name }}'>{{ var.source_cp_disp }}</a></td>
-                <td rowspan="2" style="text-align:center">{{ var.source_glyph }}</td>
-                <td rowspan="2" style="text-align:center"><a href='#{{ var.dest_cp }}' title='{{ var.dest_name }}'>{{ var.dest_cp_disp }}</a></td>
-                <td rowspan="2" style="text-align:center">{{ var.dest_glyph }}</td>
-                <td style="text-align:center">→</td>
+                <td {% if var.reverse %} rowspan="2" {% endif %} style="text-align:center">{{ forloop.counter }}</td>
+                <td {% if var.reverse %} rowspan="2" {% endif %} style="text-align:center"><a href='#{{ var.source_cp }}' title='{{ var.source_name }}'>{{ var.source_cp_disp }}</a></td>
+                <td {% if var.reverse %} rowspan="2" {% endif %} style="text-align:center">{{ var.source_glyph }}</td>
+                <td {% if var.reverse %} rowspan="2" {% endif %} style="text-align:center"><a href='#{{ var.dest_cp }}' title='{{ var.dest_name }}'>{{ var.dest_cp_disp }}</a></td>
+                <td {% if var.reverse %} rowspan="2" {% endif %} style="text-align:center">{{ var.dest_glyph }}</td>
+                <td style="text-align:center">→{% if not var.dest_in_lgr %}🞩{% endif %}</td>
                 <td style="text-align:center">{{ var.fwd_type }}</td>
                 <td style="text-align:center">{{ var.fwd_references }}</td>
                 <td style="text-align:center">{{ var.fwd_comment }}</td>
               </tr>
-              <tr style="background-color:#F8F4EC">
-                <td style="text-align:center">{% if var.dest_in_lgr %}←{% else %}x{% endif %}</td>
-                <td style="text-align:center">{{ var.rev_type }}</td>
-                <td style="text-align:center">{{ var.rev_references }}</td>
-                <td style="text-align:center">{% if var.dest_in_lgr %}{{ var.rev_comment }}{% else %}Not in LGR{% endif %}</td>
-              </tr>
+              {% if var.reverse %}
+                <tr style="background-color:#F8F4EC">
+                  <td style="text-align:center">←</td>
+                  <td style="text-align:center">{{ var.rev_type }}</td>
+                  <td style="text-align:center">{{ var.rev_references }}</td>
+                  <td style="text-align:center">{{ var.rev_comment }}</td>
+                </tr>
+              {% endif %}
             {% endif %}
           {% endfor %}
         </table>
