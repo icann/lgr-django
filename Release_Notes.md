@@ -1,4 +1,25 @@
-# LGR-Toolset Release notes
+# lgr-django Release notes
+
+## 1.9 (2017-03-09)
+New features:
+- New interface to view all forms of a label: display the U-label, A-label and code point sequence.
+- Display the combined form of sequences.
+- New tool to check that multiple LGRs are harmonized.
+- New function to populate the missing symmetric and transitive variants.
+- New function to add code point from a script.
+- When adding a variant from another script, automatically add it to the repertoire if not present.
+Fixes:
+- Improve handling of large LGR.
+- Fix variant type that could be be changed from "blocked".
+- Fix label validation with ranges.
+- Always display failed rule when validating a label.
+- Improve display for summary (now renamed to LGR validation).
+- Fix tag count in HTML output.
+- Fix variant member count in HTML output.
+- Use hyperlinks for the table of references in HTML output.
+- Reduce number of rows in the variant set table in HTML output.
+- Add number of mappings on variant set table in HTML output.
+- Add link to save HTML output.
 
 ## 1.8.1 (2017-11-15)
 Fixes:

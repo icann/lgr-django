@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='lgr-django',
-    version='1.8.1',
+    version='1.9',
     author='Viagenie and Wil Tan',
     author_email='support@viagenie.ca',
     packages=find_packages('src'),
