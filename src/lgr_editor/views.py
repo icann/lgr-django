@@ -415,7 +415,7 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
                     # -> add it to the LGR
                     lgr_info.lgr.add_cp(var_cp_sequence,
                                         comment="Automatically added from out-of-script variant")
-                    messages.success(request, _('Automatically added codepoint %s from out-of-script variant') % format_cp(codepoint))
+                    messages.success(request, _('Automatically added codepoint %s from out-of-script variant') % format_cp(var_cp_sequence))
                 session_save_lgr(request, lgr_info)
                 messages.success(request, _('New variant %s added') % format_cp(var_cp_sequence))
             except LGRException as ex:
