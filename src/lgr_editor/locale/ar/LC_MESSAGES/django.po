@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-22 15:15+0000\n"
+"POT-Creation-Date: 2018-03-08 16:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,31 +35,31 @@ msgstr ""
 msgid "space-separated tags"
 msgstr ""
 
-#: forms/codepoints.py:45 forms/codepoints.py:85
-#: templates/lgr_editor/codepoint_list.html:16
-#: templates/lgr_editor/codepoint_list.html:56
+#: forms/codepoints.py:47 forms/codepoints.py:100
+#: templates/lgr_editor/codepoint_list.html:24
+#: templates/lgr_editor/codepoint_list.html:45
 #: templates/lgr_editor/codepoint_view.html:49
 msgid "Code point"
 msgstr ""
 
-#: forms/codepoints.py:46 forms/codepoints.py:86
+#: forms/codepoints.py:48 forms/codepoints.py:101
 msgid "Override repertoire"
 msgstr ""
 
-#: forms/codepoints.py:51 templates/lgr_editor/_editor_base.html:20
+#: forms/codepoints.py:53 templates/lgr_editor/_editor_base.html:20
 #: templates/lgr_editor/codepoint_view.html:22
 msgid "Code points"
 msgstr ""
 
-#: forms/codepoints.py:55
+#: forms/codepoints.py:57
 msgid "Disabled code points"
 msgstr ""
 
-#: forms/codepoints.py:62
+#: forms/codepoints.py:64
 msgid "First code point"
 msgstr ""
 
-#: forms/codepoints.py:63
+#: forms/codepoints.py:65
 msgid "Last code point"
 msgstr ""
 
@@ -70,51 +70,52 @@ msgid ""
 "(%(first_cp)s)"
 msgstr ""
 
-#: forms/codepoints.py:77
-msgid "Select a file"
+#: forms/codepoints.py:77 forms/importer.py:14 forms/importer.py:27
+#: forms/metadata.py:50
+msgid "Validating repertoire"
 msgstr ""
 
-#: forms/codepoints.py:78
-msgid "File type"
+#: forms/codepoints.py:81 forms/codepoints.py:113
+msgid "Script"
 msgstr ""
 
-#: forms/codepoints.py:80
+#: forms/codepoints.py:83 forms/codepoints.py:95
 msgid "Manual import"
 msgstr ""
 
-#: forms/codepoints.py:91
+#: forms/codepoints.py:92
+msgid "Select a file"
+msgstr ""
+
+#: forms/codepoints.py:93
+msgid "File type"
+msgstr ""
+
+#: forms/codepoints.py:106 forms/labels.py:13
 msgid "Label"
 msgstr ""
 
-#: forms/codepoints.py:92
+#: forms/codepoints.py:107
 msgid "Allocated Set labels"
 msgstr ""
 
-#: forms/codepoints.py:94
+#: forms/codepoints.py:109
 msgid ""
 "Optional list of labels already allocated in the LGR set, that will be used "
 "to check for collisions when evaluating labels using the merged LGR set"
 msgstr ""
 
-#: forms/codepoints.py:98
-msgid "Script"
-msgstr ""
-
-#: forms/codepoints.py:100
+#: forms/codepoints.py:115
 msgid "The script used to validate the label"
 msgstr ""
 
-#: forms/codepoints.py:109
+#: forms/codepoints.py:124
 #, python-format
 msgid "Maximum length: %d code points"
 msgstr ""
 
 #: forms/importer.py:13
 msgid "Name"
-msgstr ""
-
-#: forms/importer.py:14 forms/importer.py:27 forms/metadata.py:50
-msgid "Validating repertoire"
 msgstr ""
 
 #: forms/importer.py:15 forms/importer.py:28
@@ -137,6 +138,14 @@ msgstr ""
 
 #: forms/importer.py:41
 msgid "The name of the set"
+msgstr ""
+
+#: forms/labels.py:14 forms/metadata.py:46
+msgid "Unicode version"
+msgstr ""
+
+#: forms/labels.py:16
+msgid "The unicode version used"
 msgstr ""
 
 #: forms/metadata.py:39
@@ -165,10 +174,6 @@ msgstr ""
 
 #: forms/metadata.py:45
 msgid "Validity end"
-msgstr ""
-
-#: forms/metadata.py:46
-msgid "Unicode version"
 msgstr ""
 
 #: forms/metadata.py:47 templates/lgr_editor/codepoint_view.html:213
@@ -388,6 +393,7 @@ msgid ""
 msgstr ""
 
 #: templates/lgr_editor/add_list.html:8
+#: templates/lgr_editor/add_list_from_script.html:11
 #: templates/lgr_editor/add_list_import.html:11
 #: templates/lgr_editor/add_list_range.html:11
 msgid "Next"
@@ -400,52 +406,60 @@ msgid ""
 "are not redirected automatically."
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:10
+#: templates/lgr_editor/codepoint_list.html:12
+msgid "Populate variants"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:16
 msgid "Expand range(s)"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:11
-#: templates/lgr_editor/codepoint_list.html:50
+#: templates/lgr_editor/codepoint_list.html:18
+#: templates/lgr_editor/codepoint_list.html:39
 msgid "Add code point(s)"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:17
+#: templates/lgr_editor/codepoint_list.html:25
 msgid "Character Name"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:18
+#: templates/lgr_editor/codepoint_list.html:26
 #: templates/lgr_editor/codepoint_view.html:51
 msgid "Comments"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:19
+#: templates/lgr_editor/codepoint_list.html:27
 #: templates/lgr_editor/codepoint_view.html:56
 #: templates/lgr_editor/references.html:17
 msgid "Action"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:29
-msgid "Variant(s)"
-msgstr ""
-
-#: templates/lgr_editor/codepoint_list.html:32
-msgid "See code point"
-msgstr ""
-
-#: templates/lgr_editor/codepoint_list.html:35
-msgid "Expand range"
-msgstr ""
-
-#: templates/lgr_editor/codepoint_list.html:59
+#: templates/lgr_editor/codepoint_list.html:48
 msgid "Code point range"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:62
+#: templates/lgr_editor/codepoint_list.html:51
+msgid "Code point from script"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:54
 msgid "Import from file"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:74
+#: templates/lgr_editor/codepoint_list.html:66
 msgid "Add Code Point"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:145
+msgid "See code point"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:148
+msgid "Variant(s)"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:151
+msgid "Expand range"
 msgstr ""
 
 #: templates/lgr_editor/codepoint_view.html:26
@@ -573,6 +587,22 @@ msgstr ""
 msgid "Cannot import LGR file(s):"
 msgstr ""
 
+#: templates/lgr_editor/label_forms.html:11
+msgid "Display forms"
+msgstr ""
+
+#: templates/lgr_editor/label_forms.html:18
+msgid "Code point sequence"
+msgstr ""
+
+#: templates/lgr_editor/label_forms.html:19
+msgid "U-label"
+msgstr ""
+
+#: templates/lgr_editor/label_forms.html:20
+msgid "A-label"
+msgstr ""
+
 #: templates/lgr_editor/metadata.html:11
 msgid "There was an error saving; please see error(s) below"
 msgstr ""
@@ -642,176 +672,182 @@ msgstr ""
 msgid "New action"
 msgstr ""
 
-#: views.py:97
+#: views.py:112
 msgid ""
 "The LGR you have tried to create already exists in your working session. "
 "Please use a new name."
 msgstr ""
 
-#: views.py:131
+#: views.py:146
 msgid ""
 "The LGR you have tried to import already exists in your working session. "
 "Please rename it before importing it."
 msgstr ""
 
-#: views.py:137
+#: views.py:152
 msgid ""
 "The LGR you have tried to import already exists in your set. Please rename "
 "it before importing it."
 msgstr ""
 
-#: views.py:160
+#: views.py:175
 msgid "The LGR set name already exists. Please use another name."
 msgstr ""
 
-#: views.py:255
-msgid "summary"
-msgstr ""
-
-#: views.py:282
+#: views.py:287
 #, python-format
 msgid "New code point %s added"
 msgstr ""
 
-#: views.py:370
-msgid "New variant added"
+#: views.py:418
+#, python-format
+msgid "Automatically added codepoint %s from out-of-script variant"
 msgstr ""
 
-#: views.py:443
+#: views.py:420
+#, python-format
+msgid "New variant %s added"
+msgstr ""
+
+#: views.py:493
 msgid "Code point edited"
 msgstr ""
 
-#: views.py:623 views.py:659
+#: views.py:642
+msgid "Variants populated"
+msgstr ""
+
+#: views.py:693 views.py:729
 msgid "References updated successfully"
 msgstr ""
 
-#: views.py:662
+#: views.py:732
 #, python-format
 msgid ""
 "Variant %(var_codepoint)s for code point %(codepoint)s with when=%(when)s "
 "and not-when=%(not_when)s could not be found"
 msgstr ""
 
-#: views.py:698
+#: views.py:768
 #, python-format
 msgid "Code point %s has been deleted"
 msgstr ""
 
-#: views.py:720
+#: views.py:790
 #, python-format
 msgid "Variant %(var_cp)s with when='%(when)s' and not-when='%(not_when)s'"
 msgstr ""
 
-#: views.py:726
+#: views.py:796
 #, python-format
 msgid "%(var_msg_prefix)s has been deleted"
 msgstr ""
 
-#: views.py:729
+#: views.py:799
 #, python-format
 msgid "%(var_msg_prefix)s could not be deleted because it was not found"
 msgstr ""
 
-#: views.py:758
+#: views.py:828
 msgid "New reference created"
 msgstr ""
 
-#: views.py:945 views.py:1108 views.py:1192
+#: views.py:1015 views.py:1178 views.py:1262
 msgid "No body specified"
 msgstr ""
 
-#: views.py:954
+#: views.py:1024
 #, python-format
 msgid "Class \"%s\" does not exist"
 msgstr ""
 
-#: views.py:958
+#: views.py:1028
 #, python-format
 msgid "Class \"%s\" deleted."
 msgstr ""
 
-#: views.py:963
+#: views.py:1033
 msgid "No class element found"
 msgstr ""
 
-#: views.py:965 views.py:1128
+#: views.py:1035 views.py:1198
 msgid "Name attribute must be present"
 msgstr ""
 
-#: views.py:969 views.py:986 views.py:1132 views.py:1149 views.py:1216
-#: views.py:1229
+#: views.py:1039 views.py:1056 views.py:1202 views.py:1219 views.py:1286
+#: views.py:1299
 #, python-format
 msgid ""
 "Encountered XML syntax error: %s (line number may be wrong, try subtracting "
 "one from the reported line number)"
 msgstr ""
 
-#: views.py:972 views.py:989 views.py:1135 views.py:1152 views.py:1219
-#: views.py:1232
+#: views.py:1042 views.py:1059 views.py:1205 views.py:1222 views.py:1289
+#: views.py:1302
 msgid "Your XML is not valid"
 msgstr ""
 
-#: views.py:977
+#: views.py:1047
 #, python-format
 msgid "Class \"%s\" already exists"
 msgstr ""
 
-#: views.py:979
+#: views.py:1049
 #, python-format
 msgid "Class \"%s\" saved."
 msgstr ""
 
-#: views.py:1117
+#: views.py:1187
 #, python-format
 msgid "Rule \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1121
+#: views.py:1191
 #, python-format
 msgid "Rule \"%s\" deleted."
 msgstr ""
 
-#: views.py:1126
+#: views.py:1196
 msgid "No rule element found"
 msgstr ""
 
-#: views.py:1140
+#: views.py:1210
 #, python-format
 msgid "Rule \"%s\" already exists"
 msgstr ""
 
-#: views.py:1142
+#: views.py:1212
 #, python-format
 msgid "Rule \"%s\" saved."
 msgstr ""
 
-#: views.py:1203
+#: views.py:1273
 #, python-format
 msgid "Action \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1207
+#: views.py:1277
 #, python-format
 msgid "Action \"%s\" deleted."
 msgstr ""
 
-#: views.py:1212
+#: views.py:1282
 msgid "No action element found"
 msgstr ""
 
-#: views.py:1222
+#: views.py:1292
 msgid "Action saved."
 msgstr ""
 
-#: views.py:1291 views.py:1437
+#: views.py:1361 views.py:1449
 #, python-format
 msgid "%d code points added"
 msgstr ""
 
-#: views.py:1406
+#: views.py:1418
 msgid "No code point in input file"
 msgstr ""
 
-#: views.py:1598
+#: views.py:1732
 msgid "Meta data saved"
 msgstr ""
