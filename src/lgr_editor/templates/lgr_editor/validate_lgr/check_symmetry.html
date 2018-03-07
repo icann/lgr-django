@@ -8,7 +8,7 @@
       {% for entry in result.repertoire %}
         <li>Code point {{ entry.char|render_char }}:
           {% if entry.type == 'not-in-repertoire' %}
-            {{ entry.variant|render_char }} is not in repertoire
+            Variant {{ entry.variant|render_char }} is not in repertoire
           {% else %}
             {{ entry.variant|render_char }} has not original code point in its variants
           {% endif %}
