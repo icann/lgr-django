@@ -196,14 +196,14 @@ class LabelInfo(object):
     @classmethod
     def from_dict(cls, dct):
         return cls(dct['name'],
-                   six.StringIO(base64.decodestring(dct['data'].encode('utf-8')).decode('utf-8')),
+                   six.StringIO(base64.b64decode(dct['data']).decode('utf-8')),
                    dct['data'])
 
     @classmethod
     def from_form(cls, name, label_input):
         data = label_input.decode('utf-8')
         labels = six.StringIO(data)
-        b64data = base64.encodestring(label_input).decode('utf-8')
+        b64data = base64.b64encode(label_input).decode('utf-8')
 
         return cls(name, labels, b64data)
 

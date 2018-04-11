@@ -1,5 +1,4 @@
 from .default import *
-import sys
 
 DEBUG = True
 
@@ -63,8 +62,7 @@ if SECRET_KEY == 'PLEASE GENERATE ONE':
     import os
     thisfile = __file__[:-1] if __file__.endswith('pyc') else __file__
     path = os.path.join(os.path.dirname(thisfile), '..', '..', '..', 'bin', 'gen_secret_key')
-    execfile(path, locals())
+    exec(open(path).read())
     secret_key = write_secret_key(thisfile) # overwrite me
     SECRET_KEY = secret_key
-    print >> sys.stderr, "generating SECRET_KEY (and writing to %s)" % __file__
 # DELETE_TO_HERE_AFTER_GENERATION
