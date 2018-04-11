@@ -5,9 +5,9 @@ from __future__ import unicode_literals
 import logging
 import time
 from gzip import GzipFile
+from io import BytesIO
 
 from celery import shared_task
-from io import BytesIO
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 

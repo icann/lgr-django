@@ -2,9 +2,7 @@
 from __future__ import unicode_literals
 
 import logging
-
 import base64
-
 import errno
 import os
 from uuid import uuid4
