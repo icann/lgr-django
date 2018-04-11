@@ -33,7 +33,7 @@ from lgr.exceptions import LGRException, NotInLGR
 from lgr.metadata import Scope, Description, Metadata, Version
 from lgr.char import RangeChar
 from lgr.parser.xml_parser import LGR_NS
-from lgr.utils import format_cp
+from lgr.utils import format_cp, cp_to_ulabel
 from lgr.validate.transitivity import check_transitivity
 from lgr.validate.symmetry import check_symmetry
 from lgr.parser.rfc3743_parser import RFC3743Parser
@@ -41,7 +41,6 @@ from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.parser.line_parser import LineParser
 from lgr_validator.views import evaluate_label_from_info
 from lgr.core import LGR
-from lgr import wide_unichr
 
 from .repertoires import get_by_name
 from .forms import (AddCodepointForm,
@@ -1816,7 +1815,7 @@ def label_forms(request):
         udata = unidb.manager.get_db_by_version(unicode_version)
         try:
             ctx['cp_list'] = format_cp(label)
-            ctx['u_label'] = ''.join([wide_unichr(c) for c in label])
+            ctx['u_label'] = cp_to_ulabel(label)
             ctx['a_label'] = udata.idna_encode_label(ctx['u_label'])
         except UnicodeError as ex:
             messages.add_message(request, messages.ERROR,
