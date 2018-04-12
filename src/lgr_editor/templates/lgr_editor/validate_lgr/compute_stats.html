@@ -7,10 +7,14 @@
     <li>Number of code points: {{ result.stats.codepoint_number }}</li>
 
     <li>Number of ranges: {{ result.stats.range_number }}</li>
-    <li>Largest range: {{ result.stats.largest_range|render_char }} (length: {{ result.stats.largest_range_len }})</li>
+    {% if result.stats.range_number > 0 %}
+      <li>Largest range: {{ result.stats.largest_range|render_char }} (length: {{ result.stats.largest_range_len }})</li>
+    {% endif %}
 
     <li>Number of sequences: {{ result.stats.sequence_number }}</li>
-    <li>Largest sequence: {{ result.stats.largest_sequence|render_char }} (length: {{ result.stats.largest_sequence_len }})</li>
+    {% if result.stats.sequence_number > 0 %}
+      <li>Largest sequence: {{ result.stats.largest_sequence|render_char }} (length: {{ result.stats.largest_sequence_len }})</li>
+    {% endif %}
   </ul>
 
   <h4>Variants</h4>
