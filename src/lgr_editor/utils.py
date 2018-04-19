@@ -183,7 +183,7 @@ def _list_files(location):
     except (OSError, IOError) as exc:
         logger.warning("Cannot access directory '%s': %s",
                        location, exc)
-    return xml_files
+    return sorted(xml_files)
 
 
 def list_validating_repertoires():
