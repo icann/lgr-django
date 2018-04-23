@@ -1752,7 +1752,7 @@ def validate_label(request, lgr_id, lgr_set_id=None, noframe=False):
                 scripts.append((lgr_set_info.name, lgr_set_info.lgr.metadata.languages[0]))
             except (AttributeError, IndexError):
                 pass
-    form = ValidateLabelForm(request.POST or None,
+    form = ValidateLabelForm(request.POST or request.GET or None,
                              files=request.FILES or None,
                              lgr_info=lgr_info,
                              max_label_len=max_label_len,
