@@ -56,8 +56,9 @@ def lgr_exception_to_text(exception):
             'codepoint': format_cp(exception.cp)
         }
     elif isinstance(exception, lgr.exceptions.CharInvalidContextRule):
-        message = _('Code point %(codepoint)s has invalid context rule') % {
-            'codepoint': format_cp(exception.cp)
+        message = _('Code point %(codepoint)s has invalid context rule %(rule)s') % {
+            'codepoint': format_cp(exception.cp),
+            'rule': exception.rule or ''
         }
     elif isinstance(exception, lgr.exceptions.RangeInvalidContextRule):
         message = _('Range %(first_cp)s - %(last_cp)s has invalid context rule') % {
