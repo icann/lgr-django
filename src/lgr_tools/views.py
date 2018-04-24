@@ -5,20 +5,20 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 
 from lgr_editor.api import session_list_lgr, session_select_lgr, session_get_storage, LabelInfo
-from lgr_tools.api import lgr_intersect_union, lgr_comp_diff, LGRCompInvalidException
+from lgr_editor.utils import cp_to_slug
+from lgr_tools.api import lgr_intersect_union, lgr_comp_diff, lgr_harmonization, LGRCompInvalidException
 from lgr_tools.forms import (LGRCompareSelector,
                              LGRDiffSelector,
                              LGRCollisionSelector,
                              LGRAnnotateSelector,
                              LGRCrossScriptVariantsSelector,
-                             LGRCheckHarmonizedSelector)
+                             LGRHarmonizeSelector)
 
 from .tasks import (diff_task,
                     collision_task,
                     annotate_task,
                     lgr_set_annotate_task,
-                    cross_script_variants_task,
-                    check_harmonization_task)
+                    cross_script_variants_task)
 
 select_lgr = getattr(__import__(settings.LGR_SELECTOR_FUNC.rpartition('.')[0],
                                 fromlist=[settings.LGR_SELECTOR_FUNC.rpartition('.')[0]]),
@@ -317,37 +317,35 @@ def lgr_cross_script_variants(request, lgr_id):
     return render(request, 'lgr_tools/cross_script_variants.html', context=ctx)
 
 
-def lgr_check_harmonization(request, lgr_id):
-    form = LGRCheckHarmonizedSelector(request.POST or None, request.FILES or None,
-                                      session_lgrs=session_list_lgr(request),
-                                      lgr_id=lgr_id)
-
-    lgr_info = None
-    if lgr_id is not None:
-        lgr_info = session_select_lgr(request, lgr_id)
+def lgr_harmonize(request, lgr_id):
+    form = LGRHarmonizeSelector(request.POST or None,
+                                session_lgrs=session_list_lgr(request),
+                                lgr_id=lgr_id)
 
     if form.is_valid():
         ctx = {}
-        lgrs_id = form.cleaned_data['lgrs']
-        email_address = form.cleaned_data['email']
+        lgr_1_id, lgr_2_id = form.cleaned_data['lgr_1'], form.cleaned_data['lgr_2']
+        rz_lgr_id = form.cleaned_data['rz_lgr'] or None
+        script = form.cleaned_data['script'] or None
 
-        lgrs_info = [session_select_lgr(request, l) for l in lgrs_id]
+        lgr_1_info, lgr_2_info = (session_select_lgr(request, l) for l in (lgr_1_id, lgr_2_id))
+        rz_lgr = session_select_lgr(request, rz_lgr_id).lgr if rz_lgr_id is not None else None
 
-        storage_path = session_get_storage(request)
-
-        check_harmonization_task.delay([l.to_dict() for l in lgrs_info],
-                                       email_address, storage_path)
+        h_lgr_1_id, h_lgr_2_id, cp_review = lgr_harmonization(request, lgr_1_info.lgr, lgr_2_info.lgr, rz_lgr, script)
 
         ctx.update({
-            'lgrs_info': lgrs_info,
-            'email': email_address,
+            'lgr_1': lgr_1_info,
+            'lgr_2': lgr_2_info,
+            'h_lgr_1_id': h_lgr_1_id,
+            'h_lgr_2_id': h_lgr_2_id,
+            'cp_review': ((h_lgr_1_id, ((c, cp_to_slug(c)) for c in cp_review[0])),
+                          (h_lgr_2_id, ((c, cp_to_slug(c)) for c in cp_review[1])))
         })
-        return render(request, 'lgr_tools/wait_check_harmonized.html', context=ctx)
+        return render(request, 'lgr_tools/harmonization_result.html', context=ctx)
 
     ctx = {
         'form': form,
-        'lgr_id': lgr_id if lgr_id is not None else '',
-        'lgr': lgr_info.lgr if lgr_info is not None else '',
+        'lgr_id': lgr_id if lgr_id is not None else ''
     }
 
-    return render(request, 'lgr_tools/check_harmonized.html', context=ctx)
+    return render(request, 'lgr_tools/harmonize.html', context=ctx)

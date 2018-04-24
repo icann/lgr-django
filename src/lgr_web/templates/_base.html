@@ -67,14 +67,13 @@
                                     {% url 'lgr_tools_collisions' lgr_set_id as lgr_tools_collisions_url %}
                                     {% url 'lgr_tools_annotate' lgr_set_id as lgr_tools_annotate_url %}
                                     {% url 'lgr_tools_cross_script' lgr_set_id as lgr_tools_cross_script_url %}
-                                    {% url 'lgr_tools_check_harmonization' lgr_set_id as lgr_tools_check_harmonization_url %}
                                 {% else %}
                                     {% url 'lgr_tools_compare' lgr_id as lgr_tools_compare_url %}
                                     {% url 'lgr_tools_diff' lgr_id as lgr_tools_diff_url %}
                                     {% url 'lgr_tools_collisions' lgr_id as lgr_tools_collisions_url %}
                                     {% url 'lgr_tools_annotate' lgr_id as lgr_tools_annotate_url %}
                                     {% url 'lgr_tools_cross_script' lgr_id as lgr_tools_cross_script_url %}
-                                    {% url 'lgr_tools_check_harmonization' lgr_id as lgr_tools_check_harmonization_url %}
+                                    {% url 'lgr_tools_harmonize' lgr_id as lgr_tools_harmonize_url %}
                                 {% endif %}
                                 <ul class="dropdown-menu">
                                     <li class="btn btn-block show-tooltip">
@@ -118,14 +117,16 @@
                                             {% trans "Generate disp. annotations" %}
                                         </a>
                                     </li>
-                                    <li class="btn btn-block show-tooltip">
-                                        <a href="{{ lgr_tools_check_harmonization_url }}"
-                                           title="{% trans 'Check variants symmetry and transitivity for LGRs and harmonization between some LGRs' %}"
-                                           data-placement="bottom">
-                                            <i class="glyphicon glyphicon-stats"></i>
-                                            {% trans "Check harmonization" %}
-                                        </a>
-                                    </li>
+                                    {% if not lgr_id or not is_set %}
+                                        <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_tools_harmonize_url }}"
+                                               title="{% trans 'Perform harmonization on LGRs' %}"
+                                               data-placement="bottom">
+                                                <i class="glyphicon glyphicon-stats"></i>
+                                                {% trans "Harmonization" %}
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </form>

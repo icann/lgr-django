@@ -212,24 +212,33 @@ class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
                              required=True)
 
 
-class LGRCheckHarmonizedSelector(forms.Form):
-    lgrs = forms.MultipleChoiceField(label=_("LGRs"),
-                                     help_text=_('LGRs to use for harmonization check'),
-                                     required=True)
+class LGRHarmonizeSelector(forms.Form):
+    lgr_1 = forms.ChoiceField(label=_('First LGR'),
+                              help_text=_('First LGR to use for harmonization check'),
+                              required=True)
 
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=True)
+    lgr_2 = forms.ChoiceField(label=_('Second LGR'),
+                              help_text=_('Second LGR to use for harmonization check'),
+                              required=True)
+
+    rz_lgr = forms.ChoiceField(label=_('Root Zone LGR'),
+                               help_text=_('The (optional) RootZone LGR to infer new variant sets from'),
+                               required=False)
+
+    script = forms.CharField(label=_('Script'),
+                             help_text=_('The script used to infer new variant sets'),
+                             required=False)
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', {})
         lgr_id = kwargs.pop('lgr_id', '')
-        super(LGRCheckHarmonizedSelector, self).__init__(*args, **kwargs)
+        super(LGRHarmonizeSelector, self).__init__(*args, **kwargs)
         lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
         lgrs = [lgr for lgr in session_lgrs if not lgr['is_set']]
-        # dynamically append the session LGRs (by copy, not by reference)
-        self.fields['lgrs'].choices = ((_('LGR'), [(lgr['name'], lgr['name']) for lgr in lgrs]),
-                                       (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
-        self.fields['lgrs'].widget.data = {lgr['name']: {'lgr-set': ','.join([l['name'] for l in lgr['lgr_set_dct']])}
-                                           for lgr in lgr_sets}
-        self.fields['lgrs'].initial = lgr_id
+        # dynamically append the session LGRs
+        for field_name in ('lgr_1', 'lgr_2', 'rz_lgr'):
+            self.fields[field_name].choices = ((_('LGR'), [(lgr['name'], lgr['name']) for lgr in lgrs]),
+                                               (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
+            self.fields[field_name].widget.data = {lgr['name']: {'lgr-set': ','.join([l['name'] for l in lgr['lgr_set_dct']])}
+                                                   for lgr in lgr_sets}
+        self.fields['lgr_1'].initial = lgr_id

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import time
+
 from django.utils.text import slugify
 
 from lgr_editor.exceptions import LGRValidationException
@@ -8,9 +10,9 @@ from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_se
 from lgr.tools.annotate import annotate, lgr_set_annotate
 from lgr.tools.diff_collisions import diff, collision
 from lgr.tools.cross_script_variants import cross_script_variants
-from lgr.tools.check_harmonized import check_harmonized
+from lgr.tools.harmonize import harmonize
 
-from lgr_editor.api import LGRInfo, session_open_lgr
+from lgr_editor.api import LGRInfo, session_open_lgr, session_save_lgr
 
 
 class LGRCompInvalidException(LGRValidationException):
@@ -145,11 +147,27 @@ def lgr_cross_script_variants(lgr, labels_file):
     return cross_script_variants(lgr, labels_file)
 
 
-def lgr_check_harmonization(lgrs):
+def lgr_harmonization(request, lgr_1, lgr_2, rz_lgr, script):
     """
-    Check variants symmetry and transitivity in each LGR and harmonization between some LGRs
+    Perform variant harmonization between 2 LGRs
 
-    :param lgrs: The LGRs to check
-    :return: Text log to be displayed
+    :param request: The request object.
+    :param lgr_1: First LGR.
+    :param lgr_2: Second LGR.
+    :param rz_lgr: Optional related Rootzone LGR.
+    :param script: Optional script to consider in `rz_lgr`.
     """
-    return check_harmonized(lgrs)
+    h_lgr_1, h_lgr_2, cp_review = harmonize(lgr_1, lgr_2, rz_lgr, script)
+
+    def _save_resulting_lgr(l):
+        # Generate new slug (LGR id)
+        lgr_id = slugify("{}_{}".format(l.name, time.strftime('%Y%m%d_%H%M%S')))
+
+        lgr_info = LGRInfo(name=lgr_id,
+                           lgr=l)
+        lgr_info.update_xml(pretty_print=True)
+        session_save_lgr(request, lgr_info)
+        return lgr_id
+
+    (h_lgr_1_id, h_lgr_2_id) = (_save_resulting_lgr(l) for l in (h_lgr_1, h_lgr_2))
+    return h_lgr_1_id, h_lgr_2_id, cp_review

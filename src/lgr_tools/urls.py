@@ -21,6 +21,6 @@ urlpatterns = patterns('',
         views.lgr_cross_script_variants,
         name='lgr_tools_cross_script'),
     url(r'^harmonization/(?P<lgr_id>[\w\_\-\.]+)?$',
-        views.lgr_check_harmonization,
-        name='lgr_tools_check_harmonization'),
+        views.lgr_harmonize,
+        name='lgr_tools_harmonize'),
 )

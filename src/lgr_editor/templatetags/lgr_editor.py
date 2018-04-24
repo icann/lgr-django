@@ -8,7 +8,7 @@ from django import template
 
 from ..lgr_exceptions import lgr_exception_to_text
 from ..utils import render_char as render_char_lgr
-from lgr.utils import format_cp
+from lgr.utils import format_cp as format_cp_utils
 
 register = template.Library()
 
@@ -19,8 +19,13 @@ def exc_to_text(exc):
 
 
 @register.filter()
+def format_cp(cp):
+    return format_cp_utils(cp)
+
+
+@register.filter()
 def format_char(char):
-    return format_cp(char.cp)
+    return format_cp_utils(char.cp)
 
 
 @register.filter()
