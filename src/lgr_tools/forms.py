@@ -148,7 +148,7 @@ class LGRCollisionSelector(forms.Form):
 
 class LGRSetCompatibleForm(forms.Form):
     lgr = forms.ChoiceField(label=_("LGR"),
-                            help_text=_('LGR to use for annotation'),
+                            help_text=_('LGR to use for tool'),
                             required=True,
                             widget=DataSelectWidget)
 
