@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from kombu import Exchange, Queue
+from kombu import Queue
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -50,6 +50,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'lgr_tools.middleware.UnicodeDecodeErrorMiddleWare'
 ]
 
 ROOT_URLCONF = 'lgr_web.urls'
