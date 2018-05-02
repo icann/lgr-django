@@ -30,7 +30,7 @@ from django.template.response import TemplateResponse
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
-from lgr.exceptions import LGRException, NotInLGR
+from lgr.exceptions import LGRException, NotInLGR, CharInvalidContextRule
 from lgr.metadata import Scope, Description, Metadata, Version
 from lgr.char import RangeChar
 from lgr.parser.xml_parser import LGR_NS
@@ -59,7 +59,8 @@ from .forms import (AddCodepointForm,
                     AddMultiCodepointsForm,
                     LanguageFormSet,
                     ValidateLabelForm,
-                    LabelFormsForm)
+                    LabelFormsForm,
+                    EditCodepointsForm)
 
 from .lgr_exceptions import lgr_exception_to_text
 from .api import (session_open_lgr,
@@ -296,6 +297,38 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
             return redirect('codepoint_list',
                             lgr_id=lgr_id)
 
+    rule_names = (('', ''),) + tuple((v, v) for v in lgr_info.lgr.rules)
+    edit_codepoints_form = EditCodepointsForm(request.POST or None, prefix='edit_codepoints', rule_names=rule_names)
+    if ('add-rules' in request.POST or 'add-tags' in request.POST) and edit_codepoints_form.is_valid():
+        logger.debug('Edit codepoints')
+        cd = edit_codepoints_form.cleaned_data
+        when = cd['when']
+        not_when = cd['not_when']
+        tags = cd['tags'].split()
+        edited = cd['cp_id']
+        invalid = []
+        for cp in [slug_to_cp(c) for c in edited]:
+            char = lgr_info.lgr.get_char(cp)
+            if when or not_when:
+                try:
+                    char.add_rules(when=when, not_when=not_when)
+                except CharInvalidContextRule:
+                    invalid.append(char)
+            if tags:
+                lgr_info.lgr.add_cp_to_tag_classes(cp, tags)
+
+        session_save_lgr(request, lgr_info)
+        if len(edited) - len(invalid):
+            messages.add_message(request,
+                                 messages.SUCCESS,
+                                 _("{} successfully added to {} code point(s)").format(
+                                     _('Rule') if 'add-rules' in request.POST else _('Tag(s)'),
+                                     len(edited) - len(invalid)))
+        if invalid:
+            messages.add_message(request,
+                                 messages.WARNING,
+                                 _("{} code points were not updated to avoid invalid context rule").format(len(invalid)))
+
     has_range = False
     for char in lgr_info.lgr.repertoire.all_repertoire():
         if isinstance(char, RangeChar):
@@ -304,6 +337,7 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
 
     ctx = {
         'cp_form': cp_form,
+        'edit_codepoints_form': edit_codepoints_form,
         'lgr': lgr_info.lgr,
         'lgr_id': lgr_id,
         'is_set': lgr_info.is_set or lgr_set_id is not None,
@@ -343,6 +377,7 @@ def codepoint_list_json(request, lgr_id, lgr_set_id=None):
                 actions.append(expand_url)
 
             repertoire.append({
+                'codepoint_id': cp_slug,
                 'cp_disp': render_char(char),
                 'comment': char.comment or '',
                 'name': render_name(char, udata),

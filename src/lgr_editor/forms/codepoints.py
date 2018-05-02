@@ -140,3 +140,37 @@ class ValidateLabelForm(forms.Form):
             raise ValidationError(text_type(e))
         return value
 
+
+class MultipleChoiceFieldNoValidation(forms.MultipleChoiceField):
+
+    def validate(self, value):
+        # do not enable default validation as it will refuse our values as they are not in form choices
+        # XXX we could validate that cp are in lgr
+        pass
+
+
+class EditCodepointsForm(forms.Form):
+    when = forms.ChoiceField(label='when', required=False)
+    not_when = forms.ChoiceField(label='not-when', required=False)
+    tags = forms.CharField(label='Tags', required=False, help_text='space-separated tags')
+    cp_id = MultipleChoiceFieldNoValidation()  # will contain a list of code points
+
+    def __init__(self, *args, **kwargs):
+        rule_names = kwargs.pop('rule_names', None)
+        super(EditCodepointsForm, self).__init__(*args, **kwargs)
+
+        if rule_names:
+            self.fields['when'].choices = rule_names
+            self.fields['not_when'].choices = rule_names
+
+    def clean(self):
+        cleaned_data = super(EditCodepointsForm, self).clean()
+        if cleaned_data['when'] and cleaned_data['not_when']:
+            self.add_error('when', 'Cannot add when and not-when rules simultaneously')
+            self.add_error('not_when', 'Cannot add when and not-when rules simultaneously')
+        elif not cleaned_data.get('when') and not cleaned_data.get('not_when') and not cleaned_data.get('tags'):
+            self.add_error('when', 'Please provide at least one value')
+            self.add_error('not_when', 'Please provide at least one value')
+            self.add_error('tags', 'Please provide at least one value')
+
+        return cleaned_data
