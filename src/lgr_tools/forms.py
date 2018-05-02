@@ -83,7 +83,7 @@ class LGRDiffSelector(forms.Form):
 
     labels = forms.FileField(label=_("Labels"),
                              help_text=_('List of labels to use in diff. '
-                                         'File must be encoded in UNIX format.'),
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
     email = forms.EmailField(label=_("E-mail"),
@@ -121,7 +121,7 @@ class LGRCollisionSelector(forms.Form):
 
     labels = forms.FileField(label=_("Labels"),
                              help_text=_('List of labels to use in diff. '
-                                         'File must be encoded in UNIX format.'),
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
     email = forms.EmailField(label=_("E-mail"),
@@ -183,11 +183,12 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
                                  help_text=_('Optional list of labels already allocated '
                                              'in the LGR set, that will be used to check '
                                              'for collisions when evaluating labels using '
-                                             'the merged LGR set'))
+                                             'the merged LGR set. '
+                                             'File must be encoded in UTF-8 and using UNIX line ending.'))
 
     labels = forms.FileField(label=_("Labels"),
                              help_text=_('List of labels to use in diff. '
-                                         'File must be encoded in UNIX format.'),
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
     email = forms.EmailField(label=_("E-mail"),
@@ -204,7 +205,7 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
 class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
     labels = forms.FileField(label=_("Labels"),
                              help_text=_('List of labels to use in diff. '
-                                         'File must be encoded in UNIX format.'),
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
     email = forms.EmailField(label=_("E-mail"),
