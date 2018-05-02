@@ -135,23 +135,31 @@
                 "info": false,
                 "scrollX": false,
                 "lengthMenu": [[500, 1000, -1], [500, 1000, "All"]],
-                "columns": [
-                    { "data": "cp_disp" },
-                    { "data": "name" },
-                    { "data": "comment" },
-                    { "data": "actions" },
-                ],
-                "rowCallback": function( row, data, index ) {
-                    {% trans "See code point" as see_cp_trans %}
-                    $('td:eq(3)', row).html( '<a href="' + data.actions[0] + '" class="btn btn-primary btn-block">{{ see_cp_trans|escapejs }}</a>' );
-                    if ( ! data.is_range ) {
-                        {% trans "Variant(s)" as variant_trans %}
-                        $('td:eq(0)', row).html( data.cp_disp + ' <span class="variant_count">' + data.variant_number + '&nbsp;{{ variant_trans|escapejs }}</span>' );
-                    } else {
-                        {% trans "Expand range" as expand_range_trans %}
-                        $('td:eq(3)', row).append( '<a href="' + data.actions[1] + '" class="btn btn-primary btn-block">{{ expand_range_trans|escapejs }}</a>' );
+                "columns": [{
+                    "data": "cp_disp",
+                    "render": function(data, type, row) {
+                        if (!row.is_range) {
+                            {% trans "Variant(s)" as variant_trans %}
+                            return data + ' <span class="variant_count">' + row.variant_number + '&nbsp;{{ variant_trans|escapejs }}</span>'
+                        }
+                        return data
                     }
-                }
+                }, {
+                    "data": "name"
+                }, {
+                    "data": "comment"
+                }, {
+                    "data": "actions",
+                    "render": function(data, type, row) {
+                        {% trans "See code point" as see_cp_trans %}
+                        out = '<a href="' + row.actions[0] + '" class="btn btn-primary btn-block">{{ see_cp_trans|escapejs }}</a>'
+                        if (row.is_range) {
+                            {% trans "Expand range" as expand_range_trans %}
+                            out += '<a href="' + row.actions[1] + '" class="btn btn-primary btn-block">{{ expand_range_trans|escapejs }}</a>'
+                        }
+                        return out
+                    }
+                }]
             });
             $('#codepoints').addClass('table table-striped table-bordered');
         });
