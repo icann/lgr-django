@@ -5,7 +5,7 @@ from io import open
 
 setup(
     name='lgr-django',
-    version='1.9',
+    version='2.0.0',
     author='Viagenie and Wil Tan',
     author_email='support@viagenie.ca',
     packages=find_packages('src'),
