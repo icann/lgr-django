@@ -1,0 +1,41 @@
+{% extends "lgr_editor/_editor_base.html" %}
+{% load i18n %}
+
+{% block pane-tag-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h3>{% trans 'Existing tags' %}</h3>
+    <table id="tags-table" class="table table-hover table-striped">
+        <tr>
+            <th>{% trans "Tag name" %}</th>
+            <th>{% trans "Associated code points" %}</th>
+            {% if not is_set %}
+                <th>{% trans "Action" %}</th>
+            {% endif %}
+        </tr>
+        {% for tag in tags %}
+            <tr id="tag_{{ tag.value }}">
+                <td class="tag-name">{{ tag.name }}</td>
+                <td class="tag-cp-list">{% for cp in  tag.codepoints %}<a href="{%  url 'codepoint_view' lgr_id=lgr_id codepoint_id=cp.cp_id %}">{{ cp.cp_disp }}</a> {% endfor %}</td>
+                {% if not is_set %}
+                <td class="text-right">
+                    <a class="btn btn-default confirm-prompt"
+                       title="{% trans 'Delete Tag' %}"
+                       data-confirmation-prompt="{% blocktrans with tag=tag.name %}Are you sure you want delete tag {{ tag }}?{% endblocktrans %}"
+                       href="{% url 'tag_delete' lgr_id=lgr_id tag_id=tag.name %}">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% if not is_set %}
+        <div>
+            <i class="glyphicon glyphicon-info-sign"></i> {% blocktrans %}<span style="font-weight: bold">To create a new tag:</span>
+                Add it to a code point first to find it back in this list{% endblocktrans %}
+        </div>
+    {% endif %}
+
+{% endblock content-pane %}

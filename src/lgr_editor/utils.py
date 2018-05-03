@@ -69,6 +69,22 @@ def render_cp(char):
                                  for c in char.cp))
 
 
+def render_cp_or_sequence(cp_or_sequence):
+    """
+    Render the code point(s) of a list unique or list of code points..
+
+    :param cp_or_sequence: Sequence of code point to add to the class.
+    :returns: HTML string of the code point sequence
+    """
+    if isinstance(cp_or_sequence, int):
+        cp_or_sequence = [cp_or_sequence]
+
+    out = format_html_join(" ", "U+{} ({})", ((cp_to_str(c), mark_safe(HTML_UNICODE_FORMAT % c)) for c in cp_or_sequence))
+    if len(cp_or_sequence) > 1:
+        out += mark_safe(" [<bdi>{}</bdi>]".format("".join("&#x{:06X};".format(c) for c in cp_or_sequence)))
+    return out
+
+
 def render_glyph(char):
     """
     Render the glyph corresponding to a char in HTML.

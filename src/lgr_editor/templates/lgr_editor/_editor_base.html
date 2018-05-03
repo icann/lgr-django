@@ -8,11 +8,13 @@
         {% url 'codepoint_list' lgr_set_id lgr_id as codepoint_list_url %}
         {% url 'references' lgr_set_id lgr_id as references_url %}
         {% url 'metadata' lgr_set_id lgr_id as metadata_url %}
+        {% url 'tags' lgr_set_id lgr_id as tags_url %}
         {% url 'rules' lgr_set_id lgr_id as rules_url %}
     {% else %}
         {% url 'codepoint_list' lgr_id as codepoint_list_url %}
         {% url 'references' lgr_id as references_url %}
         {% url 'metadata' lgr_id as metadata_url %}
+        {% url 'tags' lgr_id as tags_url %}
         {% url 'rules' lgr_id as rules_url %}
     {% endif %}
     <ul class="nav nav-tabs">
@@ -24,6 +26,9 @@
         </li>
         <li role="presentation" class="{% block pane-md-active %}{% endblock %}">
             <a href="{{ metadata_url }}">{% trans "Meta data" %}</a>
+        </li>
+        <li role="presentation" class="{% block pane-tag-active %}{% endblock %}">
+            <a href="{{ tags_url }}">{% trans "Tags" %}</a>
         </li>
         <li role="presentation" class="{% block pane-rules-active %}{% endblock %}">
             <a href="{{ rules_url }}">{% trans "Rules" %}</a>

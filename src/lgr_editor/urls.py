@@ -60,6 +60,14 @@ urlpatterns = patterns(
         views.MetadataView.as_view(),
         name='metadata'),
 
+    # Tags management functions
+    url(r'^lgr/{}/tags/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
+        views.tag_list,
+        name='tags'),
+    url(r'^lgr/{}/d/tags/(?P<tag_id>[\w\_\-\.\s]+)$'.format(LGR_SLUG_FORMAT),
+        views.delete_tag,
+        name='tag_delete'),
+
     # Rules functions
     url(r'^lgr/{}/rules/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.rule_list,

@@ -74,6 +74,7 @@ from .api import (session_open_lgr,
 from .utils import (render_char,
                     render_name,
                     render_age,
+                    render_cp_or_sequence,
                     cp_to_slug,
                     slug_to_cp,
                     slug_to_var,
@@ -947,6 +948,59 @@ def delete_reference(request, lgr_id, ref_id):
                              lgr_exception_to_text(ex))
 
     return redirect('references', lgr_id)
+
+
+def tag_list(request, lgr_id, lgr_set_id=None):
+    """
+        List/edit tags of an LGR.
+    """
+    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+
+    tag_classes = lgr_info.lgr.get_tag_classes()
+
+    tags = [{
+        'name': tag,
+        'codepoints': [{
+            'cp_disp': render_cp_or_sequence(c),
+            'cp_id': cp_to_slug((c, )),
+        } for c in clz.codepoints]
+    } for tag, clz in tag_classes.items()]
+
+    ctx = {
+        'tags': tags,
+        'lgr': lgr_info.lgr,
+        'lgr_id': lgr_id,
+        'is_set': lgr_info.is_set or lgr_set_id is not None
+    }
+    if lgr_set_id:
+        lgr_set_info = session_select_lgr(request, lgr_set_id)
+        ctx['lgr_set'] = lgr_set_info.lgr
+        ctx['lgr_set_id'] = lgr_set_id
+
+    return render(request, 'lgr_editor/tags.html', context=ctx)
+
+
+def delete_tag(request, lgr_id, tag_id):
+    """
+    Delete a tag from an LGR.
+    """
+    logger.debug("Delete tag %s'", tag_id)
+    lgr_info = session_select_lgr(request, lgr_id)
+    if lgr_info.is_set:
+        return HttpResponseBadRequest('Cannot edit LGR set')
+
+    try:
+        lgr_info.lgr.del_tag(tag_id)
+        session_save_lgr(request, lgr_info)
+    except LGRException as ex:
+        messages.add_message(request, messages.ERROR,
+                             lgr_exception_to_text(ex))
+    else:
+        messages.add_message(request, messages.INFO,
+                             _("References to tag %(tag)s have been removed from the repertoire. "
+                               "Do not forget to update any WLE that might reference it") % {'tag': tag_id})
+
+    return redirect('tags', lgr_id)
 
 
 def rule_list_simple(request, lgr_id, lgr_set_id=None):
