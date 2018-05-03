@@ -8,6 +8,7 @@ import os
 import re
 import logging
 from io import BytesIO
+from itertools import islice
 
 from django.core.exceptions import SuspiciousOperation
 from django.contrib import messages
@@ -86,6 +87,7 @@ from .utils import (render_char,
 from . import unidb
 
 
+TRUNCATE_AFTER_N_CP_TAGS = 10
 RE_SAFE_FILENAME = re.compile(r'[a-zA-Z0-9. _\-()]+')
 logger = logging.getLogger(__name__)
 
@@ -960,10 +962,12 @@ def tag_list(request, lgr_id, lgr_set_id=None):
 
     tags = [{
         'name': tag,
+        'nb_cp':  len(clz.codepoints),
+        'view_more': len(clz.codepoints) > TRUNCATE_AFTER_N_CP_TAGS,
         'codepoints': [{
             'cp_disp': render_cp_or_sequence(c),
             'cp_id': cp_to_slug((c, )),
-        } for c in clz.codepoints]
+        } for c in islice(clz.codepoints, TRUNCATE_AFTER_N_CP_TAGS)]
     } for tag, clz in tag_classes.items()]
 
     ctx = {
@@ -978,6 +982,40 @@ def tag_list(request, lgr_id, lgr_set_id=None):
         ctx['lgr_set_id'] = lgr_set_id
 
     return render(request, 'lgr_editor/tags.html', context=ctx)
+
+
+def tag_list_json(request, tag_id, lgr_id, lgr_set_id=None):
+    """
+    Return the full list of code points associated with a tag in JSON.
+    """
+    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+
+    tag_classes = lgr_info.lgr.get_tag_classes()
+    if tag_id not in tag_classes:
+        # Error
+        return
+
+    clz = tag_classes[tag_id]
+
+    data = []
+    cp_list = []
+    for c in clz.codepoints:
+        cp_slug = cp_to_slug((c, ))
+        kwargs = {'lgr_id': lgr_id, 'codepoint_id': cp_slug}
+        if lgr_set_id is not None:
+            kwargs['lgr_set_id'] = lgr_set_id
+        cp_view_url = reverse('codepoint_view', kwargs=kwargs)
+        obj = {'cp_disp': render_cp_or_sequence(c), 'cp_view': cp_view_url}
+        cp_list.append(obj)
+        if len(cp_list) == 10:
+            data.append(cp_list)
+            cp_list = []
+    # Do not forget to add the remaining code points, if any
+    if cp_list:
+        data.append(cp_list)
+
+    response = {'data': data}
+    return JsonResponse(response)
 
 
 def delete_tag(request, lgr_id, tag_id):
