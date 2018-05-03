@@ -45,6 +45,10 @@ DEFAULT_VARIANT_TYPE = "block"
 
 SUPPORTED_UNICODE_VERSIONS = (
     '6.3.0',
+    '7.0.0',
+    '8.0.0',
+    '9.0.0',
+    '10.0.0'
 )
 
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
@@ -62,6 +66,26 @@ UNICODE_DATABASES = {
         'icu_i18n_lib': '/usr/local/lib/libicui18n.so.52',
         'version_tag': 52,
     },
+    '7.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.54',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.54',
+        'version_tag': 54,
+    },
+    '8.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.56',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.56',
+        'version_tag': 56,
+    },
+    '9.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.58',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.58',
+        'version_tag': 58,
+    },
+    '10.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.60',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.60',
+        'version_tag': 60,
+    }
 }
 ##### /LGR Toolset Project-specific settings #####
 
