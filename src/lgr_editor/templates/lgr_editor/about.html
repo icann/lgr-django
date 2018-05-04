@@ -1,6 +1,6 @@
 {% load i18n %}
 <p>
-    {% blocktrans trimmed %}
+    {% blocktrans %}
         This application provides a convenient interface for browsing
         and editing <abbr title="Label Generation Ruleset">LGR</abbr>’s conforming to the
         <a href="https://www.rfc-editor.org/rfc/rfc7940.txt" target="_blank">Representing Label Generation Rulesets using XML</a>
@@ -13,5 +13,14 @@
         <li>{{ version }}</li>
     {% endfor %}
 </ul>
+
+    <table style="border: solid 1px black; padding:10px;" bgcolor="#d3d3d3" width="100%">
+      <tr>
+        <td>
+            {% trans 'Please note that Unicode versions &ge; 7.0.0 have not been officially approved yet.' %}
+        </td>
+      </tr>
+    </table>
+
 <br/>
 <p><i>{% trans 'This toolset was implemented by <a href="http://www.viagenie.ca/" target="_blank">Viagénie</a> and Wil Tan on an ICANN contract.' %}</i></p>
