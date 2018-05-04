@@ -943,7 +943,7 @@ def delete_reference(request, lgr_id, ref_id):
         return HttpResponseBadRequest('Cannot edit LGR set')
 
     try:
-        lgr_info.lgr.reference_manager.del_reference(ref_id)
+        lgr_info.lgr.del_reference(ref_id)
         session_save_lgr(request, lgr_info)
     except LGRException as ex:
         messages.add_message(request, messages.ERROR,
