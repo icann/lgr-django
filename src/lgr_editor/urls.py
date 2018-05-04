@@ -7,7 +7,7 @@ LGR_SLUG_FORMAT_WITH_OPT_SET = r'(?:(?P<lgr_set_id>[\w\_\-\.]+)/)?(?P<lgr_id>[\w
 LGR_SLUG_FORMAT = r'(?P<lgr_id>[\w\_\-\.]+)'
 CP_SLUG_FORMAT = r'(?P<codepoint_id>[0-9a-z-A-Z]{1,6}(-[0-9a-z-A-Z]{1,6})*)'
 VAR_SLUG_FORMAT = r'(?P<var_slug>[0-9a-z-A-Z]{1,6}(-[0-9a-z-A-Z]{1,6})*,.*,.*)'
-TAG_SLUG_FORMAT = r'(?P<tag_id>[0-9a-zA-Z.-_:]+)'
+TAG_SLUG_FORMAT = r'(?P<tag_id>[0-9a-zA-Z._:\-]+)'
 
 urlpatterns = patterns(
     '',
@@ -65,12 +65,12 @@ urlpatterns = patterns(
     url(r'^lgr/{}/tags$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.tag_list,
         name='tags'),
-    url(r'^lgr/{}/tags/{}$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET, TAG_SLUG_FORMAT),
-        views.tag_list_json,
-        name='tag_list_json'),
     url(r'^lgr/{}/d/tags/{}$'.format(LGR_SLUG_FORMAT, TAG_SLUG_FORMAT),
         views.delete_tag,
         name='tag_delete'),
+    url(r'^lgr/{}/tags/{}$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET, TAG_SLUG_FORMAT),
+        views.tag_list_json,
+        name='tag_list_json'),
 
     # Rules functions
     url(r'^lgr/{}/rules/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
