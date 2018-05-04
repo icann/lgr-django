@@ -86,7 +86,7 @@
                     <div class="modal-body" id="add-tags-model-body">
                         {% include "lgr_editor/_form_field.html" with field=edit_codepoints_form.tags %}
                         <div class="col-sm-12 text-right">
-                            {%  blocktrans %}
+                            {% blocktrans %}
                                 <p>These tags will be added to <b><span class="nbr-selected"></span> codepoint(s)</b></p>
                             {% endblocktrans %}
                             <button name="add-tags" id="btn-add-tags" type="submit" class="btn btn-primary">{% trans "Next" %}</button>
@@ -324,6 +324,14 @@
                     $(modal_id).modal('show')
                     $(this).val('-1')
                 })
+                var tag_input = $('input[name="edit_codepoints-tags"]')
+                tag_input.select2({
+                    tags: $.parseJSON('{{ all_tags_json|escapejs }}'),
+                    separator: " ",
+                    tokenSeparators: [" "]
+                });
+                // Reset selection
+                tag_input.val(null).trigger('change');
             {% endif %}
         });
     </script>

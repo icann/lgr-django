@@ -342,7 +342,8 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
         'lgr_id': lgr_id,
         'is_set': lgr_info.is_set or lgr_set_id is not None,
         'variants_ok': check_symmetry(lgr_info.lgr, None)[0] and check_transitivity(lgr_info.lgr, None)[0],
-        'has_range': has_range
+        'has_range': has_range,
+        'all_tags_json': json.dumps(lgr_info.lgr.all_tags()),
     }
     if lgr_set_id:
         lgr_set_info = session_select_lgr(request, lgr_set_id)
