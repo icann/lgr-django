@@ -30,7 +30,7 @@ from django.template.response import TemplateResponse
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
-from lgr.exceptions import LGRException, NotInLGR, CharInvalidContextRule
+from lgr.exceptions import LGRException, NotInLGR, CharInvalidContextRule, LGRFormatException
 from lgr.metadata import Scope, Description, Metadata, Version
 from lgr.char import RangeChar
 from lgr.parser.xml_parser import LGR_NS
@@ -302,32 +302,76 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
     if ('add-rules' in request.POST or 'add-tags' in request.POST) and edit_codepoints_form.is_valid():
         logger.debug('Edit codepoints')
         cd = edit_codepoints_form.cleaned_data
-        when = cd['when']
-        not_when = cd['not_when']
+        when = cd['when'] or None
+        not_when = cd['not_when'] or None
         tags = cd['tags'].split()
         edited = cd['cp_id']
         invalid = []
         for cp in [slug_to_cp(c) for c in edited]:
             char = lgr_info.lgr.get_char(cp)
-            if when or not_when:
-                try:
-                    char.add_rules(when=when, not_when=not_when)
-                except CharInvalidContextRule:
-                    invalid.append(char)
-            if tags:
-                lgr_info.lgr.add_cp_to_tag_classes(cp, tags)
+            new_tags = char.tags + tags
+
+            try:
+                if isinstance(char, RangeChar):
+                    # Delete codepoint range from LGR, then add it
+                    lgr_info.lgr.del_range(char.first_cp, char.last_cp)
+                    lgr_info.lgr.add_range(char.first_cp,
+                                           char.last_cp,
+                                           comment=char.comment,
+                                           when=when or char.when, not_when=not_when or char.not_when,
+                                           ref=char.references,
+                                           tag=new_tags)
+                else:
+                    # Delete codepoint from LGR, then add it + its variants
+                    lgr_info.lgr.del_cp(char.cp)
+                    lgr_info.lgr.add_cp(char.cp,
+                                        comment=char.comment,
+                                        ref=char.references,
+                                        tag=new_tags,
+                                        when=when or char.when, not_when=not_when or char.not_when)
+                    for variant in char.get_variants():
+                        lgr_info.lgr.add_variant(char.cp,
+                                                 variant.cp,
+                                                 variant_type=variant.type,
+                                                 when=variant.when, not_when=variant.not_when,
+                                                 comment=variant.comment, ref=variant.references)
+            except (LGRFormatException, CharInvalidContextRule) as e:
+                logger.warning('Cannot update char tags/wle:', exc_info=e)
+                invalid.append(char)
+                # Need to revert the deletion
+                if isinstance(char, RangeChar):
+                    lgr_info.lgr.add_range(char.first_cp,
+                                           char.last_cp,
+                                           comment=char.comment,
+                                           when=char.when, not_when=char.not_when,
+                                           ref=char.references,
+                                           tag=char.tags)
+                else:
+                    lgr_info.lgr.add_cp(char.cp,
+                                        comment=char.comment,
+                                        ref=char.references,
+                                        tag=char.tags,
+                                        when=char.when, not_when=char.not_when)
+                    for variant in char.get_variants():
+                        lgr_info.lgr.add_variant(char.cp,
+                                                 variant.cp,
+                                                 variant_type=variant.type,
+                                                 when=variant.when, not_when=variant.not_when,
+                                                 comment=variant.comment, ref=variant.references)
 
         session_save_lgr(request, lgr_info)
+        operation = _('Rule') if 'add-rules' in request.POST else _('Tag(s)')
+        operation_lowercase = _('rule') if 'add-rules' in request.POST else _('tag(s)')
         if len(edited) - len(invalid):
             messages.add_message(request,
                                  messages.SUCCESS,
-                                 _("{} successfully added to {} code point(s)").format(
-                                     _('Rule') if 'add-rules' in request.POST else _('Tag(s)'),
-                                     len(edited) - len(invalid)))
+                                 _("%(operation)s successfully added to %(nb_cp)s code point(s)") % {'operation': operation,
+                                                                                                     'nb_cp': len(edited) - len(invalid)})
         if invalid:
             messages.add_message(request,
                                  messages.WARNING,
-                                 _("{} code points were not updated to avoid invalid context rule").format(len(invalid)))
+                                 _("%(nb_cp)s code points were not updated to avoid invalid %(operation)s ") % {'operation': operation_lowercase,
+                                                                                                               'nb_cp': len(invalid)})
 
     has_range = False
     for char in lgr_info.lgr.repertoire.all_repertoire():
