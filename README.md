@@ -53,7 +53,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
 ### Pre-requisites
 
 * Operating system: Tested on Linux and Mac OS X 
-* Python 2.7
+* Python 2.7, >= 3.4
 * [LibXML2](http://www.xmlsoft.org/) [MIT License] used by the lxml Python bindings
 * [ICU4C](http://site.icu-project.org/) [ICU License]
 * Python modules (listed in `etc/requirements.txt`, or dependencies thereof)
@@ -203,47 +203,6 @@ of each Unicode version that we support.
 
 Keys are the Unicode version, like '6.3.0' Values are a dict of the kwargs to pass to the `munidata.manager.register`
 function along with the version.
-
-## Deploying application on a Docker image
-
-### Pre-requisites
-
-* Install Docker (version 1.9).
-* Copy the tarball archives of the project (lgr-core, lgr-django, munidata, picu) in the docker folder.
-
-### Create the Docker image
-
-The Docker image name and tag are set with the -t option name:tag.
-Tag is optional (default: latest).
-
-Build arguments are specific options for our Docker image.
-At the moment you can configure the allowed hosts for Django with the hosts argument and some e-mail parameters (server address and sender).
-
-    # cd docker
-    # docker build -t lgr-toolset --build-arg hosts="lgr.example" --build-arg email_srv="email-srv.lgr.example" --build-arg email_from="webmaster@lgr.example" .
-
-### Run the Docker image
-
-The Docker image name and tag should be the same as in build command to run the
-relevant container.
-
-The -h option should contain an allowed host specified in the hosts argument
-when building the container.
-
-    # docker run -h lgr.example -d -p 80:80 lgr-toolset
-
-### Debug the Docker image
-
-The following command allows to get a bash shell in the Docker image in order to perform debug operations:
-
-    # docker run -h lgr.example -p 80:80 -i -t lgr-toolset bash
-
-Then to launch the server in the Docker image run:
-
-    # ./start.sh &
-
-You can now debug the Docker image.
-
 
 ## Deploying application to production
 

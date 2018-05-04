@@ -25,15 +25,11 @@ Install the nginx webserver used to serve as a frontend. On CentOS, you need to
 enable the EPEL repository before:
 
 	# yum install epel-release
-	# yum install nginx
+	# yum install nginx redis
 
 Install virtualenv, used to create the Python environment:
 
-	# yum install python-virtualenv
-
-Install the dependencies needed to build the lxml module:
-
-	# yum install make gcc libxml2-devel libxslt-devel
+	# yum install python34-virtualenv
 
 Create a new user/group that will be used to run the application, as well as the
 log directory where log files will be placed:
@@ -55,7 +51,7 @@ and `lgr-django`) in a specific directory, and extract web-application:
 
 Create and configure the virtualenv:
 
-	$ virtualenv-2.7 /var/www/lgr/venv
+	$ virtualenv-3 /var/www/lgr/venv
 	$ source /var/www/lgr/venv/bin/activate
 	(venv)$ cd /var/www/lgr/lgr-django
 	(venv)$ pip install -r etc/requirements.txt -f /var/www/lgr/packages
@@ -63,17 +59,6 @@ Create and configure the virtualenv:
 Also install the application server:
 
 	(venv)$ pip install gunicorn
-
-Note: you may see the following error during the installation:
-
-	File "/var/www/lgr/venv/lib/python2.7/site-packages/gunicorn/workers/_gaiohttp.py", line 68
-	    yield from self.wsgi.close()
-	             ^
-	SyntaxError: invalid syntax
-
-The error can be ignored, and gunicorn will still be installed sucessfully.
-See [https://github.com/benoitc/gunicorn/issues/788](https://github.com/benoitc/gunicorn/issues/788).
-
 
 ## ICU installation
 
@@ -93,6 +78,10 @@ For example, to install ICU 52 (Unicode 6.3), as root:
 
 The current supported ICU versions (and their corresponding Unicode version) are:
 
+* ICU 60 (Unicode 10.0)
+* ICU 58 (Unicode 9.0)
+* ICU 56 (Unicode 8.0)
+* ICU 54 (Unicode 7.0)
 * ICU 52 (Unicode 6.3)
 * ICU 50 (Unicode 6.2)
 * ICU 49 (Unicode 6.1)
@@ -106,6 +95,21 @@ binary packages from ICU website):
 
 	# echo "/usr/local/lib" > /etc/ld.so.conf.d/lgr.conf
 	# ldconfig
+
+### Latest ICU versions
+
+Starting from ICU 58 (Unicode 9.0.0), binary distributions of ICU require a newer C++ runtime that what is available on Centos7.
+You will need to recompile the library in order to support the newer versions.
+
+	# yum install gcc gcc-c++
+	# mkdir icu-60 ; cd icu-60
+	# wget http://download.icu-project.org/files/icu4c/60.2/icu4c-60_2-src.tgz
+	# tar xvf icu4c-60_2-src.tgz
+	# mkdir build ; cd build
+	# # You should switch to an unpriviledged user to compile
+	# ../icu/source/runConfigureICU Linux
+	# make check
+	# make install
 
 ## Django Configuration
 
@@ -169,6 +173,7 @@ To serve the application, the following architecture in used:
 
 * The celery application is used to launch background tasks.
 * The gunicorn application server is used to run the python code.
+* A redis server is used to store messages between the webapp interface and the celery application.
 * The nginx webserver will act as a frontend proxy as well as serving static content.
 * Requests related to the application are relayed to the gunicorn server.
 
@@ -195,7 +200,7 @@ Also copy the temporary files configuration and create them:
 	# cp /var/www/lgr/lgr-django/etc/systemd/lgr-django.conf /etc/tmpfiles.d/
 	# systemd-tmpfiles --create
 
-Reload systemd daemon and enable and start the gunicorn process:
+Reload systemd daemon and enable and enable/start the following processes:
 
 	# systemctl daemon-reload
 	# systemctl enable lgr-django
