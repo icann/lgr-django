@@ -277,7 +277,7 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
     lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
 
     # instantiate form
-    cp_form = AddCodepointForm(request.POST or None, prefix='add_cp')
+    cp_form = AddCodepointForm(request.POST if 'add_cp' in request.POST else None, prefix='add_cp')
     if 'add_cp' in request.POST and cp_form.is_valid():
         logger.debug("Add CP")
         # form was submitted, we parse the value from the form field
@@ -298,7 +298,8 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
                             lgr_id=lgr_id)
 
     rule_names = (('', ''),) + tuple((v, v) for v in lgr_info.lgr.rules)
-    edit_codepoints_form = EditCodepointsForm(request.POST or None, prefix='edit_codepoints', rule_names=rule_names)
+    edit_codepoints_form = EditCodepointsForm(request.POST if ('add-rules' in request.POST or 'add-tags' in request.POST)
+                                              else None, prefix='edit_codepoints', rule_names=rule_names)
     if ('add-rules' in request.POST or 'add-tags' in request.POST) and edit_codepoints_form.is_valid():
         logger.debug('Edit codepoints')
         cd = edit_codepoints_form.cleaned_data

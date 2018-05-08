@@ -155,22 +155,29 @@ class EditCodepointsForm(forms.Form):
     tags = forms.CharField(label='Tags', required=False, help_text='space-separated tags')
     cp_id = MultipleChoiceFieldNoValidation()  # will contain a list of code points
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, post, *args, **kwargs):
         rule_names = kwargs.pop('rule_names', None)
-        super(EditCodepointsForm, self).__init__(*args, **kwargs)
+        self.post = post
+        super(EditCodepointsForm, self).__init__(post, *args, **kwargs)
 
+        self.fields['when'].initial = None
+        self.fields['not_when'].initial = None
+        self.fields['tags'].initial = ''
         if rule_names:
             self.fields['when'].choices = rule_names
             self.fields['not_when'].choices = rule_names
 
     def clean(self):
         cleaned_data = super(EditCodepointsForm, self).clean()
-        if cleaned_data['when'] and cleaned_data['not_when']:
-            self.add_error('when', 'Cannot add when and not-when rules simultaneously')
-            self.add_error('not_when', 'Cannot add when and not-when rules simultaneously')
-        elif not cleaned_data.get('when') and not cleaned_data.get('not_when') and not cleaned_data.get('tags'):
-            self.add_error('when', 'Please provide at least one value')
-            self.add_error('not_when', 'Please provide at least one value')
+        if self.post and 'add-rules' in self.post:
+            if cleaned_data['when'] and cleaned_data['not_when']:
+                self.add_error('when', 'Cannot add when and not-when rules simultaneously')
+                self.add_error('not_when', 'Cannot add when and not-when rules simultaneously')
+            elif not cleaned_data.get('when') and not cleaned_data.get('not_when'):
+                self.add_error('when', 'Please provide at least one value')
+                self.add_error('not_when', 'Please provide at least one value')
+
+        if self.post and 'add-tags' in self.post and not cleaned_data.get('tags'):
             self.add_error('tags', 'Please provide at least one value')
 
         return cleaned_data

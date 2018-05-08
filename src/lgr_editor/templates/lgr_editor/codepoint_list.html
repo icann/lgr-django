@@ -206,6 +206,10 @@
                 "info": false,
                 "scrollX": false,
                 "lengthMenu": [[500, 1000, -1], [500, 1000, "All"]],
+                "fnCreatedRow": function (row, data, idx) {
+                    // Add ids on rows to be able to select then on reload after post
+                    $(row).attr('id', 'cp-' + data['codepoint_id'])
+                },
                 "columns": [
                 {% if not is_set %}
                 {
@@ -223,11 +227,11 @@
                             return data + ' <span class="variant_count">' + row.variant_number + '&nbsp;{{ variant_trans|escapejs }}</span>'
                         }
                         return data
-                    },
+                    }
                 }, {
-                    "data": "name",
+                    "data": "name"
                 }, {
-                    "data": "comment",
+                    "data": "comment"
                 }, {
                     "data": "actions",
                     "orderable": false,
@@ -240,7 +244,7 @@
                             out += '<a href="' + row.actions[1] + '" class="btn btn-primary btn-block">{{ expand_range_trans|escapejs }}</a>'
                         }
                         return out
-                    },
+                    }
                 }],
                 {% if not is_set %}
                     "select": {
@@ -249,7 +253,17 @@
                     },
                     "order": [[ 1, "asc" ]],
                 {% endif %}
-                "dom": '<"action-buttons">lfrtip'
+                "dom": '<"action-buttons">lfrtip',
+                {% if edit_codepoints_form.cp_id.value %}
+                    // select previously selected rows when reloading after post
+                    "initComplete": function(rows) {
+                        var selected = {{ edit_codepoints_form.cp_id.value|safe }}
+                        for (var row_id in selected) {
+                            var row = this.api().row('#cp-' + selected[row_id])
+                            row.select()
+                        }
+                }
+                {% endif %}
             });
             $('#codepoints').addClass('table table-striped table-bordered')
             {% if not is_set %}
@@ -313,11 +327,16 @@
                                 .attr('type', 'hidden')
                                 .attr('name', 'edit_codepoints-cp_id')
                                 .val(row['codepoint_id'])
-                        );
-                    });
-                });
-                {% if edit_codepoints_form.errors %}
-                    $('#add-rule-modal').modal('show')
+                        )
+                    })
+                })
+                {% if edit_codepoints_form.errors and request.POST %}
+                    {% if 'add-rules' in request.POST %}
+                        $('#add-rule-modal').modal('show')
+                    {% endif %}
+                    {% if 'add-tags' in request.POST %}
+                        $('#add-tags-modal').modal('show')
+                    {% endif %}
                 {% endif %}
                 $('#codepoints_actions').on('change', function (event) {
                     var modal_id = '#' + $(this).val() + '-modal'
