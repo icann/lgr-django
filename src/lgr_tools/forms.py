@@ -215,11 +215,11 @@ class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
 
 class LGRHarmonizeSelector(forms.Form):
     lgr_1 = forms.ChoiceField(label=_('First LGR'),
-                              help_text=_('First LGR to use for harmonization check'),
+                              help_text=_('First LGR to harmonize'),
                               required=True)
 
     lgr_2 = forms.ChoiceField(label=_('Second LGR'),
-                              help_text=_('Second LGR to use for harmonization check'),
+                              help_text=_('Second LGR to harmonize'),
                               required=True)
 
     rz_lgr = forms.ChoiceField(label=_('Root Zone LGR'),

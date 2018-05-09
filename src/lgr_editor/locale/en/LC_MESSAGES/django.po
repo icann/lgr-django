@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-08 16:04+0000\n"
+"POT-Creation-Date: 2018-05-09 15:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Not-When"
 msgstr ""
 
-#: forms/codepoint.py:16
+#: forms/codepoint.py:16 templates/lgr_editor/_editor_base.html:31
 msgid "Tags"
 msgstr ""
 
@@ -33,81 +33,81 @@ msgstr ""
 msgid "space-separated tags"
 msgstr ""
 
-#: forms/codepoints.py:47 forms/codepoints.py:100
-#: templates/lgr_editor/codepoint_list.html:24
-#: templates/lgr_editor/codepoint_list.html:45
+#: forms/codepoints.py:48 forms/codepoints.py:101
+#: templates/lgr_editor/codepoint_list.html:38
+#: templates/lgr_editor/codepoint_list.html:111
 #: templates/lgr_editor/codepoint_view.html:49
 msgid "Code point"
 msgstr ""
 
-#: forms/codepoints.py:48 forms/codepoints.py:101
+#: forms/codepoints.py:49 forms/codepoints.py:102
 msgid "Override repertoire"
 msgstr ""
 
-#: forms/codepoints.py:53 templates/lgr_editor/_editor_base.html:20
+#: forms/codepoints.py:54 templates/lgr_editor/_editor_base.html:22
 #: templates/lgr_editor/codepoint_view.html:22
 msgid "Code points"
 msgstr ""
 
-#: forms/codepoints.py:57
+#: forms/codepoints.py:58
 msgid "Disabled code points"
 msgstr ""
 
-#: forms/codepoints.py:64
+#: forms/codepoints.py:65
 msgid "First code point"
 msgstr ""
 
-#: forms/codepoints.py:65
+#: forms/codepoints.py:66
 msgid "Last code point"
 msgstr ""
 
-#: forms/codepoints.py:71
+#: forms/codepoints.py:72
 #, python-format
 msgid ""
 "Last code point (%(last_cp)s) must not be smaller than the first code point "
 "(%(first_cp)s)"
 msgstr ""
 
-#: forms/codepoints.py:77 forms/importer.py:14 forms/importer.py:27
+#: forms/codepoints.py:78 forms/importer.py:14 forms/importer.py:27
 #: forms/metadata.py:50
 msgid "Validating repertoire"
 msgstr ""
 
-#: forms/codepoints.py:81 forms/codepoints.py:113
+#: forms/codepoints.py:82 forms/codepoints.py:114
 msgid "Script"
 msgstr ""
 
-#: forms/codepoints.py:83 forms/codepoints.py:95
+#: forms/codepoints.py:84 forms/codepoints.py:96
 msgid "Manual import"
 msgstr ""
 
-#: forms/codepoints.py:92
+#: forms/codepoints.py:93
 msgid "Select a file"
 msgstr ""
 
-#: forms/codepoints.py:93
+#: forms/codepoints.py:94
 msgid "File type"
 msgstr ""
 
-#: forms/codepoints.py:106 forms/labels.py:13
+#: forms/codepoints.py:107 forms/labels.py:14
 msgid "Label"
 msgstr ""
 
-#: forms/codepoints.py:107
+#: forms/codepoints.py:108
 msgid "Allocated Set labels"
 msgstr ""
 
-#: forms/codepoints.py:109
+#: forms/codepoints.py:110
 msgid ""
 "Optional list of labels already allocated in the LGR set, that will be used "
 "to check for collisions when evaluating labels using the merged LGR set"
 msgstr ""
 
-#: forms/codepoints.py:115
+#: forms/codepoints.py:116
 msgid "The script used to validate the label"
 msgstr ""
 
-#: forms/codepoints.py:124
+#: forms/codepoints.py:125
 #, python-format
 msgid "Maximum length: %d code points"
 msgstr ""
@@ -138,11 +138,11 @@ msgstr ""
 msgid "The name of the set"
 msgstr ""
 
-#: forms/labels.py:14 forms/metadata.py:46
+#: forms/labels.py:15 forms/metadata.py:46
 msgid "Unicode version"
 msgstr ""
 
-#: forms/labels.py:16
+#: forms/labels.py:17
 msgid "The unicode version used"
 msgstr ""
 
@@ -174,7 +174,7 @@ msgstr ""
 msgid "Validity end"
 msgstr ""
 
-#: forms/metadata.py:47 templates/lgr_editor/codepoint_view.html:213
+#: forms/metadata.py:47 templates/lgr_editor/codepoint_view.html:217
 #: templates/lgr_editor/references.html:14
 #: templates/lgr_editor/references.html:50
 msgid "Description"
@@ -236,107 +236,107 @@ msgstr ""
 
 #: lgr_exceptions.py:59
 #, python-format
-msgid "Code point %(codepoint)s has invalid context rule"
+msgid "Code point %(codepoint)s has invalid context rule %(rule)s"
 msgstr ""
 
-#: lgr_exceptions.py:63
+#: lgr_exceptions.py:64
 #, python-format
 msgid "Range %(first_cp)s - %(last_cp)s has invalid context rule"
 msgstr ""
 
-#: lgr_exceptions.py:68
+#: lgr_exceptions.py:69
 #, python-format
 msgid ""
 "Variant %(variant_codepoint)s of code point %(codepoint)shas invalid context "
 "rule"
 msgstr ""
 
-#: lgr_exceptions.py:74
+#: lgr_exceptions.py:75
 #, python-format
 msgid "Duplicate reference for code point %(codepoint)s"
 msgstr ""
 
-#: lgr_exceptions.py:78
+#: lgr_exceptions.py:79
 #, python-format
 msgid "Unspecified exception for input code point %(codepoint)s"
 msgstr ""
 
-#: lgr_exceptions.py:85
+#: lgr_exceptions.py:86
 msgid "Invalid date value"
 msgstr ""
 
-#: lgr_exceptions.py:87
+#: lgr_exceptions.py:88
 msgid "Invalid language"
 msgstr ""
 
-#: lgr_exceptions.py:89
+#: lgr_exceptions.py:90
 msgid "Invalid Unicode version"
 msgstr ""
 
-#: lgr_exceptions.py:91
+#: lgr_exceptions.py:92
 msgid "Invalid LGR XML file"
 msgstr ""
 
-#: lgr_exceptions.py:93
+#: lgr_exceptions.py:94
 #, python-format
 msgid "Reference %(ref_id)s is not defined"
 msgstr ""
 
-#: lgr_exceptions.py:97
+#: lgr_exceptions.py:98
 #, python-format
 msgid "Reference %(ref_id)s already exists"
 msgstr ""
 
-#: lgr_exceptions.py:101
+#: lgr_exceptions.py:102
 #, python-format
 msgid "Rule \"%(rule_name)s\" cannot be processed (%(message)s)"
 msgstr ""
 
-#: lgr_exceptions.py:106
+#: lgr_exceptions.py:107
 msgid "Input parameter has invalid format"
 msgstr ""
 
-#: lgr_exceptions.py:108
+#: lgr_exceptions.py:109
 msgid "A general exception occurred in the LGR API"
 msgstr ""
 
-#: lgr_exceptions.py:110
+#: lgr_exceptions.py:111
 #, python-format
 msgid "LGR is not valid (%(args)s)"
 msgstr ""
 
-#: lgr_exceptions.py:112
+#: lgr_exceptions.py:113
 #, python-format
 msgid "Label %(label)s is not valid in the LGR (%(message)s)"
 msgstr ""
 
-#: lgr_exceptions.py:117
+#: lgr_exceptions.py:118
 msgid "Input label file contains collision(s)"
 msgstr ""
 
-#: lgr_exceptions.py:119
+#: lgr_exceptions.py:120
 msgid "The LGR contains a variant that do not have symmetric relations"
 msgstr ""
 
-#: lgr_exceptions.py:122
+#: lgr_exceptions.py:123
 msgid "An unknown exception occurred in the LGR API"
 msgstr ""
 
-#: templates/lgr_editor/_editor_base.html:23
+#: templates/lgr_editor/_editor_base.html:25
 #: templates/lgr_editor/codepoint_view.html:54
 msgid "References"
 msgstr ""
 
-#: templates/lgr_editor/_editor_base.html:26
+#: templates/lgr_editor/_editor_base.html:28
 msgid "Meta data"
 msgstr ""
 
-#: templates/lgr_editor/_editor_base.html:29 templates/lgr_editor/rules.html:18
+#: templates/lgr_editor/_editor_base.html:34 templates/lgr_editor/rules.html:18
 #: templates/lgr_editor/rules_edit.html:57
 msgid "Rules"
 msgstr ""
 
-#: templates/lgr_editor/_editor_base.html:34
+#: templates/lgr_editor/_editor_base.html:39
 msgid "Embedded LGRs"
 msgstr ""
 
@@ -351,7 +351,7 @@ msgid "%(lgr_name)s"
 msgstr ""
 
 #: templates/lgr_editor/_rule_editor_widgets.html:5
-#: templates/lgr_editor/codepoint_view.html:230
+#: templates/lgr_editor/codepoint_view.html:234
 #: templates/lgr_editor/metadata.html:32
 #: templates/lgr_editor/rules_edit.html:40
 #: templates/lgr_editor/rules_edit.html:71
@@ -369,31 +369,44 @@ msgid "Save"
 msgstr ""
 
 #: templates/lgr_editor/_rule_editor_widgets.html:11
-#: templates/lgr_editor/codepoint_view.html:161
+#: templates/lgr_editor/codepoint_view.html:165
 msgid "Edit"
 msgstr ""
 
 #: templates/lgr_editor/about.html:3
 msgid ""
-"This application provides a convenient interface for browsing and editing "
-"<abbr title=\"Label Generation Ruleset\">LGR</abbr>’s conforming to the <a "
-"href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" target=\"_blank"
-"\">Representing Label Generation Rulesets using XML</a> specification."
+"\n"
+"        This application provides a convenient interface for browsing\n"
+"        and editing <abbr title=\"Label Generation Ruleset\">LGR</abbr>’s "
+"conforming to the\n"
+"        <a href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" target="
+"\"_blank\">Representing Label Generation Rulesets using XML</a>\n"
+"        specification.\n"
+"    "
 msgstr ""
 
 #: templates/lgr_editor/about.html:10
 msgid "Supported Unicode versions:"
 msgstr ""
 
-#: templates/lgr_editor/about.html:17
+#: templates/lgr_editor/about.html:20
 msgid ""
-"This toolset was implemented by Viagenie and Wil Tan on an ICANN contract."
+"Please note that Unicode versions &ge; 7.0.0 have not been officially "
+"approved yet."
+msgstr ""
+
+#: templates/lgr_editor/about.html:26
+msgid ""
+"This toolset was implemented by <a href=\"http://www.viagenie.ca/\" target="
+"\"_blank\">Viagénie</a> and Wil Tan on an ICANN contract."
 msgstr ""
 
 #: templates/lgr_editor/add_list.html:8
 #: templates/lgr_editor/add_list_from_script.html:11
 #: templates/lgr_editor/add_list_import.html:11
 #: templates/lgr_editor/add_list_range.html:11
+#: templates/lgr_editor/codepoint_list.html:68
+#: templates/lgr_editor/codepoint_list.html:89
 msgid "Next"
 msgstr ""
 
@@ -404,60 +417,97 @@ msgid ""
 "are not redirected automatically."
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:12
+#: templates/lgr_editor/codepoint_list.html:21
 msgid "Populate variants"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:16
+#: templates/lgr_editor/codepoint_list.html:25
 msgid "Expand range(s)"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:18
-#: templates/lgr_editor/codepoint_list.html:39
+#: templates/lgr_editor/codepoint_list.html:27
+#: templates/lgr_editor/codepoint_list.html:105
 msgid "Add code point(s)"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:25
+#: templates/lgr_editor/codepoint_list.html:39
 msgid "Character Name"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:26
+#: templates/lgr_editor/codepoint_list.html:40
 #: templates/lgr_editor/codepoint_view.html:51
 msgid "Comments"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:27
+#: templates/lgr_editor/codepoint_list.html:41
 #: templates/lgr_editor/codepoint_view.html:56
-#: templates/lgr_editor/references.html:17
+#: templates/lgr_editor/references.html:17 templates/lgr_editor/tags.html:14
 msgid "Action"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:48
+#: templates/lgr_editor/codepoint_list.html:51
+#: templates/lgr_editor/codepoint_list.html:81
+msgid "Add Rule"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:56
+msgid "There is no rule in the current LGR"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:59
+msgid "Close"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:65
+msgid ""
+"\n"
+"                                    <p>This rule will be added to <b><span "
+"class=\"nbr-selected\"></span> codepoint(s)</b></p>\n"
+"                                "
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:86
+msgid ""
+"\n"
+"                                <p>These tags will be added to <b><span "
+"class=\"nbr-selected\"></span> codepoint(s)</b></p>\n"
+"                            "
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:114
 msgid "Code point range"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:51
+#: templates/lgr_editor/codepoint_list.html:117
 msgid "Code point from script"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:54
+#: templates/lgr_editor/codepoint_list.html:120
 msgid "Import from file"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:66
+#: templates/lgr_editor/codepoint_list.html:132
 msgid "Add Code Point"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:145
-msgid "See code point"
-msgstr ""
-
-#: templates/lgr_editor/codepoint_list.html:148
+#: templates/lgr_editor/codepoint_list.html:223
 msgid "Variant(s)"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_list.html:151
+#: templates/lgr_editor/codepoint_list.html:237
+msgid "See code point"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:240
 msgid "Expand range"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:271
+msgid "Add WLE"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:272
+msgid "Add Tags"
 msgstr ""
 
 #: templates/lgr_editor/codepoint_view.html:26
@@ -501,54 +551,54 @@ msgstr ""
 msgid "Code point has not variant"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:133
+#: templates/lgr_editor/codepoint_view.html:137
 msgid "Save variants, tags, context rules and comment"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:155
+#: templates/lgr_editor/codepoint_view.html:159
 msgid "No references associated with code point."
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:168
+#: templates/lgr_editor/codepoint_view.html:172
 msgid "Are you sure you want delete this code point?"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:170
+#: templates/lgr_editor/codepoint_view.html:174
 msgid "Delete code point"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:181
+#: templates/lgr_editor/codepoint_view.html:185
 msgid "Edit References for <span></span>"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:187
+#: templates/lgr_editor/codepoint_view.html:191
 msgctxt "button title"
 msgid "Delete reference"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:196
+#: templates/lgr_editor/codepoint_view.html:200
 msgid "Add an existing reference"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:205
+#: templates/lgr_editor/codepoint_view.html:209
 #: templates/lgr_editor/references.html:58
 msgid "Add"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:211
+#: templates/lgr_editor/codepoint_view.html:215
 msgid "Create a new reference"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:217
+#: templates/lgr_editor/codepoint_view.html:221
 msgid "URL (optional)"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:223
+#: templates/lgr_editor/codepoint_view.html:227
 #: templates/lgr_editor/references.html:44
 msgid "New reference"
 msgstr ""
 
-#: templates/lgr_editor/codepoint_view.html:231
+#: templates/lgr_editor/codepoint_view.html:235
 msgid "Save changes"
 msgstr ""
 
@@ -670,182 +720,247 @@ msgstr ""
 msgid "New action"
 msgstr ""
 
-#: views.py:112
+#: templates/lgr_editor/tags.html:7
+msgid "Existing tags"
+msgstr ""
+
+#: templates/lgr_editor/tags.html:11
+msgid "Tag name"
+msgstr ""
+
+#: templates/lgr_editor/tags.html:12
+msgid "Associated code points"
+msgstr ""
+
+#: templates/lgr_editor/tags.html:38
+#, python-format
+msgid "View all (%(nb_cp)s)"
+msgstr ""
+
+#: templates/lgr_editor/tags.html:56
+msgid "Delete Tag"
+msgstr ""
+
+#: templates/lgr_editor/tags.html:57
+#, python-format
+msgid "Are you sure you want delete tag %(tag)s?"
+msgstr ""
+
+#: templates/lgr_editor/tags.html:70
+msgid ""
+"<span style=\"font-weight: bold\">To create a new tag:</span>\n"
+"                Add it to a code point first to find it back in this list"
+msgstr ""
+
+#: views.py:116
 msgid ""
 "The LGR you have tried to create already exists in your working session. "
 "Please use a new name."
 msgstr ""
 
-#: views.py:146
+#: views.py:150
 msgid ""
 "The LGR you have tried to import already exists in your working session. "
 "Please rename it before importing it."
 msgstr ""
 
-#: views.py:152
+#: views.py:156
 msgid ""
 "The LGR you have tried to import already exists in your set. Please rename "
 "it before importing it."
 msgstr ""
 
-#: views.py:175
+#: views.py:179
 msgid "The LGR set name already exists. Please use another name."
 msgstr ""
 
-#: views.py:287
+#: views.py:291
 #, python-format
 msgid "New code point %s added"
 msgstr ""
 
-#: views.py:418
+#: views.py:364
+msgid "Rule"
+msgstr ""
+
+#: views.py:364
+msgid "Tag(s)"
+msgstr ""
+
+#: views.py:365
+msgid "rule"
+msgstr ""
+
+#: views.py:365
+msgid "tag(s)"
+msgstr ""
+
+#: views.py:369
+#, python-format
+msgid "%(operation)s successfully added to %(nb_cp)s code point(s)"
+msgstr ""
+
+#: views.py:374
+#, python-format
+msgid "%(nb_cp)s code points were not updated to avoid invalid %(operation)s"
+msgstr ""
+
+#: views.py:502
 #, python-format
 msgid "Automatically added codepoint %s from out-of-script variant"
 msgstr ""
 
-#: views.py:420
+#: views.py:504
 #, python-format
 msgid "New variant %s added"
 msgstr ""
 
-#: views.py:493
+#: views.py:577
 msgid "Code point edited"
 msgstr ""
 
-#: views.py:642
+#: views.py:726
 msgid "Variants populated"
 msgstr ""
 
-#: views.py:693 views.py:729
+#: views.py:777 views.py:813
 msgid "References updated successfully"
 msgstr ""
 
-#: views.py:732
+#: views.py:816
 #, python-format
 msgid ""
 "Variant %(var_codepoint)s for code point %(codepoint)s with when=%(when)s "
 "and not-when=%(not_when)s could not be found"
 msgstr ""
 
-#: views.py:768
+#: views.py:852
 #, python-format
 msgid "Code point %s has been deleted"
 msgstr ""
 
-#: views.py:790
+#: views.py:874
 #, python-format
 msgid "Variant %(var_cp)s with when='%(when)s' and not-when='%(not_when)s'"
 msgstr ""
 
-#: views.py:796
+#: views.py:880
 #, python-format
 msgid "%(var_msg_prefix)s has been deleted"
 msgstr ""
 
-#: views.py:799
+#: views.py:883
 #, python-format
 msgid "%(var_msg_prefix)s could not be deleted because it was not found"
 msgstr ""
 
-#: views.py:828
+#: views.py:912
 msgid "New reference created"
 msgstr ""
 
-#: views.py:1015 views.py:1178 views.py:1262
+#: views.py:1119
+#, python-format
+msgid ""
+"References to tag %(tag)s have been removed from the repertoire. Do not "
+"forget to update any WLE that might reference it."
+msgstr ""
+
+#: views.py:1188 views.py:1351 views.py:1435
 msgid "No body specified"
 msgstr ""
 
-#: views.py:1024
+#: views.py:1197
 #, python-format
 msgid "Class \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1028
+#: views.py:1201
 #, python-format
 msgid "Class \"%s\" deleted."
 msgstr ""
 
-#: views.py:1033
+#: views.py:1206
 msgid "No class element found"
 msgstr ""
 
-#: views.py:1035 views.py:1198
+#: views.py:1208 views.py:1371
 msgid "Name attribute must be present"
 msgstr ""
 
-#: views.py:1039 views.py:1056 views.py:1202 views.py:1219 views.py:1286
-#: views.py:1299
+#: views.py:1212 views.py:1229 views.py:1375 views.py:1392 views.py:1459
+#: views.py:1472
 #, python-format
 msgid ""
 "Encountered XML syntax error: %s (line number may be wrong, try subtracting "
 "one from the reported line number)"
 msgstr ""
 
-#: views.py:1042 views.py:1059 views.py:1205 views.py:1222 views.py:1289
-#: views.py:1302
+#: views.py:1215 views.py:1232 views.py:1378 views.py:1395 views.py:1462
+#: views.py:1475
 msgid "Your XML is not valid"
 msgstr ""
 
-#: views.py:1047
+#: views.py:1220
 #, python-format
 msgid "Class \"%s\" already exists"
 msgstr ""
 
-#: views.py:1049
+#: views.py:1222
 #, python-format
 msgid "Class \"%s\" saved."
 msgstr ""
 
-#: views.py:1187
+#: views.py:1360
 #, python-format
 msgid "Rule \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1191
+#: views.py:1364
 #, python-format
 msgid "Rule \"%s\" deleted."
 msgstr ""
 
-#: views.py:1196
+#: views.py:1369
 msgid "No rule element found"
 msgstr ""
 
-#: views.py:1210
+#: views.py:1383
 #, python-format
 msgid "Rule \"%s\" already exists"
 msgstr ""
 
-#: views.py:1212
+#: views.py:1385
 #, python-format
 msgid "Rule \"%s\" saved."
 msgstr ""
 
-#: views.py:1273
+#: views.py:1446
 #, python-format
 msgid "Action \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1277
+#: views.py:1450
 #, python-format
 msgid "Action \"%s\" deleted."
 msgstr ""
 
-#: views.py:1282
+#: views.py:1455
 msgid "No action element found"
 msgstr ""
 
-#: views.py:1292
+#: views.py:1465
 msgid "Action saved."
 msgstr ""
 
-#: views.py:1361 views.py:1449
+#: views.py:1534 views.py:1622
 #, python-format
 msgid "%d code points added"
 msgstr ""
 
-#: views.py:1418
+#: views.py:1591
 msgid "No code point in input file"
 msgstr ""
 
-#: views.py:1732
+#: views.py:1905
 msgid "Meta data saved"
 msgstr ""

@@ -53,10 +53,7 @@
                     <div class="modal-body" id="add-rule-model-body">
                         {% if edit_codepoints_form.fields.when.choices|length < 2 %}  {# even if no rule there is at least the empty choice #}
                             <p>
-                                <i class="glyphicon glyphicon-info-sign"></i>
-                                {% blocktrans %}
-                                    There is no rule in the current LGR
-                                {% endblocktrans %}
+                                <i class="glyphicon glyphicon-info-sign"></i>{% trans 'There is no rule in the current LGR' %}
                             <p>
                             <div class="col-sm-12 text-right">
                                 <button class="btn btn-primary" data-dismiss="modal">{% trans "Close" %}</button>

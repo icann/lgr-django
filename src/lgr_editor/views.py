@@ -371,7 +371,7 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
         if invalid:
             messages.add_message(request,
                                  messages.WARNING,
-                                 _("%(nb_cp)s code points were not updated to avoid invalid %(operation)s ") % {'operation': operation_lowercase,
+                                 _("%(nb_cp)s code points were not updated to avoid invalid %(operation)s") % {'operation': operation_lowercase,
                                                                                                                'nb_cp': len(invalid)})
 
     has_range = False
@@ -1117,7 +1117,7 @@ def delete_tag(request, lgr_id, tag_id):
     else:
         messages.add_message(request, messages.INFO,
                              _("References to tag %(tag)s have been removed from the repertoire. "
-                               "Do not forget to update any WLE that might reference it") % {'tag': tag_id})
+                               "Do not forget to update any WLE that might reference it.") % {'tag': tag_id})
 
     return redirect('tags', lgr_id)
 
