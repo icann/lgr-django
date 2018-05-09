@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-09 15:42+0000\n"
+"POT-Creation-Date: 2018-05-09 18:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -389,13 +389,7 @@ msgstr ""
 msgid "Supported Unicode versions:"
 msgstr ""
 
-#: templates/lgr_editor/about.html:20
-msgid ""
-"Please note that Unicode versions &ge; 7.0.0 have not been officially "
-"approved yet."
-msgstr ""
-
-#: templates/lgr_editor/about.html:26
+#: templates/lgr_editor/about.html:18
 msgid ""
 "This toolset was implemented by <a href=\"http://www.viagenie.ca/\" target="
 "\"_blank\">Viagénie</a> and Wil Tan on an ICANN contract."
