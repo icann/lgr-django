@@ -242,4 +242,6 @@ class LGRHarmonizeSelector(forms.Form):
                                                (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
             self.fields[field_name].widget.data = {lgr['name']: {'lgr-set': ','.join([l['name'] for l in lgr['lgr_set_dct']])}
                                                    for lgr in lgr_sets}
+        self.fields['rz_lgr'].choices = [('', ''), ] + self.fields['rz_lgr'].choices
         self.fields['lgr_1'].initial = lgr_id
+        self.fields['rz_lgr'].initial = ''
