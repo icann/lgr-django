@@ -160,9 +160,6 @@ class EditCodepointsForm(forms.Form):
         self.post = post
         super(EditCodepointsForm, self).__init__(post, *args, **kwargs)
 
-        self.fields['when'].initial = None
-        self.fields['not_when'].initial = None
-        self.fields['tags'].initial = ''
         if rule_names:
             self.fields['when'].choices = rule_names
             self.fields['not_when'].choices = rule_names
