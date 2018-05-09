@@ -18,15 +18,17 @@
         <li><a href="{{h_lgr_2_url}}">{% blocktrans with name=lgr_2.name %}View harmonized version of {{name}}{% endblocktrans %}</a></li>
     </ul>
 
-    <h3>{% trans 'Code points that need to be reviewed' %}</h3>
+    {%  if has_cp_review %}
+        <h3>{% trans 'Code points that need to be reviewed' %}</h3>
 
-    <ul>
-        {% for lgr_id, cp_list in cp_review %}
-            {% for cp, cp_id in cp_list %}
-                <li><a href="{% url 'codepoint_view' lgr_id=lgr_id codepoint_id=cp_id %}">{{cp|format_cp}}</a></li>
+        <ul>
+            {% for lgr_id, cp_list in cp_review %}
+                {% for cp, cp_id in cp_list %}
+                    <li><a href="{% url 'codepoint_view' lgr_id=lgr_id codepoint_id=cp_id %}">{{cp|format_cp}}</a></li>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </ul>
+        </ul>
+    {% endif %}
 
 
 {% endblock content %}

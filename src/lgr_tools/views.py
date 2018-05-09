@@ -339,7 +339,8 @@ def lgr_harmonize(request, lgr_id):
             'h_lgr_1_id': h_lgr_1_id,
             'h_lgr_2_id': h_lgr_2_id,
             'cp_review': ((h_lgr_1_id, ((c, cp_to_slug(c)) for c in cp_review[0])),
-                          (h_lgr_2_id, ((c, cp_to_slug(c)) for c in cp_review[1])))
+                          (h_lgr_2_id, ((c, cp_to_slug(c)) for c in cp_review[1]))),
+            'has_cp_review': bool(cp_review[0]) or bool(cp_review[1])
         })
         return render(request, 'lgr_tools/harmonization_result.html', context=ctx)
 

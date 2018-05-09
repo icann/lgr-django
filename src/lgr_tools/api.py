@@ -161,7 +161,7 @@ def lgr_harmonization(request, lgr_1, lgr_2, rz_lgr, script):
 
     def _save_resulting_lgr(l):
         # Generate new slug (LGR id)
-        lgr_id = slugify("{}_{}".format(l.name, time.strftime('%Y%m%d_%H%M%S')))
+        lgr_id = slugify("{}_harmonized_{}".format(l.name, time.strftime('%Y%m%d_%H%M%S')))
 
         lgr_info = LGRInfo(name=lgr_id,
                            lgr=l)
