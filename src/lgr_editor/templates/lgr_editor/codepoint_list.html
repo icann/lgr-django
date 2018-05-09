@@ -254,7 +254,7 @@
                 {% if edit_codepoints_form.cp_id.value %}
                     // select previously selected rows when reloading after post
                     "initComplete": function(rows) {
-                        var selected = {{ edit_codepoints_form.cp_id.value|safe }}
+                        var selected = [{% for v in edit_codepoints_form.cp_id.value %}'{{ v }}'{% if not forloop.last %},{% endif %}{% endfor %}]
                         for (var row_id in selected) {
                             var row = this.api().row('#cp-' + selected[row_id])
                             row.select()
