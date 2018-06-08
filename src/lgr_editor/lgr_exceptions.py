@@ -82,10 +82,12 @@ def lgr_exception_to_text(exception):
         }
     elif isinstance(exception, lgr.exceptions.LGRFormatException):
         reason = exception.reason
-        if reason == lgr.exceptions.LGRFormatException.LGRFormatReason.INVALID_DATE_TAG:
-            message = _('Invalid date value')
+        if reason == lgr.exceptions.LGRFormatException.LGRFormatReason.SEQUENCE_NO_TAG:
+            message = _('Sequence cannot have a tag')
         elif reason == lgr.exceptions.LGRFormatException.LGRFormatReason.INVALID_LANGUAGE_TAG:
             message = _('Invalid language')
+        elif reason == lgr.exceptions.LGRFormatException.LGRFormatReason.INVALID_DATE_TAG:
+            message = _('Invalid date value')
         elif reason == lgr.exceptions.LGRFormatException.LGRFormatReason.INVALID_UNICODE_VERSION_TAG:
             message = _('Invalid Unicode version')
         else:
