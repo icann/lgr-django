@@ -7,7 +7,7 @@ from lxml.etree import XMLSyntaxError
 import os
 import re
 import logging
-from io import BytesIO
+from io import StringIO
 from itertools import islice
 
 from django.core.exceptions import SuspiciousOperation
@@ -1716,7 +1716,8 @@ class ImportCodepointsFromFileView(MultiCodepointsView):
 
         logger.debug("Import CP from file")
         # Get the type of input file and send it to LGR Core
-        file = BytesIO(cd['file'].read())
+        # Assume encoded in UTF-8
+        file = StringIO(cd['file'].read().decode('utf-8'))
         type = cd['type']
 
         parser_cls = INPUT_FILE_PARSER.get(type, None)

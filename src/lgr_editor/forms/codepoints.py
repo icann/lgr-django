@@ -90,7 +90,9 @@ class AddCodepointFromScriptForm(forms.Form):
 
 
 class ImportCodepointsFromFileForm(forms.Form):
-    file = forms.FileField(label=_("Select a file"))
+    file = forms.FileField(label=_("Select a file"),
+                           help_text=_('File containing data to be imported. '
+                                       'File must be encoded in UTF-8 and using UNIX line ending.'))
     type = forms.ChoiceField(label=_("File type"),
                              choices=SUPPORTED_CODEPOINT_INPUT_FILES)
     manual_import = forms.BooleanField(label=_("Manual import"),
