@@ -86,7 +86,7 @@ class AddCodepointFromScriptForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(AddCodepointFromScriptForm, self).__init__(*args, **kwargs)
-        self.fields['script'].choices = self.initial['scripts']
+        self.fields['script'].choices = self.initial.get('scripts', [])
 
 
 class ImportCodepointsFromFileForm(forms.Form):

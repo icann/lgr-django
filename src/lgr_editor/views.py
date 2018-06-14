@@ -43,7 +43,7 @@ from lgr.parser.line_parser import LineParser
 from lgr_validator.views import evaluate_label_from_info
 from lgr.core import LGR
 
-from .repertoires import get_by_name
+from .repertoires import get_by_name, get_all_scripts_from_repertoire
 from .forms import (AddCodepointForm,
                     AddRangeForm,
                     AddCodepointFromScriptForm,
@@ -83,8 +83,7 @@ from .utils import (render_char,
                     var_to_slug,
                     make_lgr_session_key,
                     LGR_REPERTOIRE_CACHE_KEY,
-                    LGR_CACHE_TIMEOUT,
-                    list_validating_repertoires)
+                    LGR_CACHE_TIMEOUT)
 from . import unidb
 
 
@@ -1745,15 +1744,7 @@ class AddCodepointFromScriptView(MultiCodepointsView):
         if self.lgr_info.is_set:
             return HttpResponseBadRequest('Cannot edit LGR set')
 
-        scripts = set()
-        # TODO put an association of unicode_database / validating_repertoire / script / associated cp in cache
-        for rep in list_validating_repertoires():
-            validating_repertoire = get_by_name(rep)
-            validating_repertoire.expand_ranges()  # need to get through all code points
-            for char in validating_repertoire.repertoire.all_repertoire():
-                for cp in char.cp:
-                    scripts.add(self.lgr_info.lgr.unicode_database.get_script(cp, alpha4=True))
-
+        scripts = get_all_scripts_from_repertoire(self.lgr_info.lgr.unicode_database)
         self.initial['scripts'] = [(s, s) for s in sorted(scripts)]
 
         return super(AddCodepointFromScriptView, self).get(request, *args, **kwargs)
@@ -1767,7 +1758,6 @@ class AddCodepointFromScriptView(MultiCodepointsView):
         validating_repertoire = get_by_name(cd['validating_repertoire'])
         validating_repertoire.expand_ranges()  # need to get through all code points
 
-        # TODO use the association of unicode_database / validating_repertoire / script / associated cp from cache
         codepoints = []
         for char in validating_repertoire.repertoire.all_repertoire():
             # XXX: Assume validating repertoire only contains single CP
