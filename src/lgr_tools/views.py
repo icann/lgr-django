@@ -52,12 +52,23 @@ def lgr_compare(request, lgr_id):
                                              lgr_info_1, lgr_info_2,
                                              action)
             except LGRCompInvalidException as lgr_xml:
-                import base64
+                from io import BytesIO
+                from django.core.files.storage import FileSystemStorage
+                import time
+
+                sio = BytesIO(lgr_xml.content)
+                storage = FileSystemStorage(location=session_get_storage(request),
+                                            file_permissions_mode=0o440)
+                filename = storage.save('{comp_type}-of-{lgr1}-and-{lgr2}-{date}.xml'.format(
+                    comp_type=action.lower(),
+                    lgr1=lgr_info_1.name,
+                    lgr2=lgr_info_2.name,
+                    date=time.strftime('%Y%m%d_%H%M%S')), sio)
                 return render(request, 'lgr_tools/comp_invalid.html',
                               context={
                                   'lgr_1': lgr_info_1,
                                   'lgr_2': lgr_info_2,
-                                  'lgr_xml': base64.standard_b64encode(lgr_xml.content),
+                                  'lgr_file_name': filename,
                                   'comp_type': action.lower(),
                                   'lgr_id': lgr_id if lgr_id is not None else '',
                                   'lgr': lgr_info.lgr if lgr_info is not None else '',
