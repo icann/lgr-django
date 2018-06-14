@@ -12,7 +12,7 @@
         {% csrf_token %}
         <div class="col-sm-10">
             {% include "lgr_editor/_form_field.html" with field=form.label %}
-            {%  if email_required %}
+            {%  if email_required or launched_as_task %}
                 {% include "lgr_editor/_form_field.html" with field=form.email %}
             {% endif %}
             {% if is_set and not lgr_set_id %}
@@ -24,6 +24,10 @@
     </form>
 
     <div class="clearfix"></div>
+
+    {% if launched_as_task %}
+      {% blocktrans %}As the computing may be very long, once completed, an e-mail will be sent at the provided address{% endblocktrans %}</div>
+    {% endif %}
 
     {% if u_label %}
         {% if eligible %}

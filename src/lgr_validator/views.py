@@ -8,8 +8,9 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils.translation import ugettext as _
 
-from lgr_editor.api import LabelInfo
+from lgr_editor.api import LabelInfo, session_get_storage
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
+from lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
 
 from lgr.exceptions import LGRException
 
@@ -60,19 +61,30 @@ def evaluate_label_from_info(request,
             if script_lgr_name == set_lgr_info.name:
                 script_lgr_info = set_lgr_info
                 break
-        if lgr_info.set_labels_info is None:
-            set_labels = []
+        if not need_async:
+            if lgr_info.set_labels_info is None:
+                set_labels = []
+            else:
+                set_labels = lgr_info.set_labels_info.labels
+            # TODO if script_lgr_info is None
+            ctx = lgr_set_evaluate_label(lgr_info.lgr, script_lgr_info.lgr, label_cplist,
+                                         set_labels,
+                                         threshold_include_vars=threshold_include_vars,
+                                         idna_encoder=udata.idna_encode_label)
         else:
-            set_labels = lgr_info.set_labels_info.labels
-        # TODO if script_lgr_info is None
-        ctx = lgr_set_evaluate_label(lgr_info.lgr, script_lgr_info.lgr, label_cplist,
-                                     set_labels,
-                                     threshold_include_vars=threshold_include_vars,
-                                     idna_encoder=udata.idna_encode_label)
+            storage_path = session_get_storage(request)
+            lgr_set_validate_label_task.delay(lgr_info.to_dict(), script_lgr_info.to_dict(), label_cplist, email,
+                                              storage_path)
+            ctx['launched_as_task'] = True
     else:
-        ctx = evaluate_label(lgr_info.lgr, label_cplist,
-                             threshold_include_vars=threshold_include_vars,
-                             idna_encoder=udata.idna_encode_label)
+        if not need_async:
+            ctx = evaluate_label(lgr_info.lgr, label_cplist,
+                                 threshold_include_vars=threshold_include_vars,
+                                 idna_encoder=udata.idna_encode_label)
+        else:
+            storage_path = session_get_storage(request)
+            validate_label_task.delay(lgr_info.to_dict(), label_cplist, email, storage_path)
+            ctx['launched_as_task'] = True
 
     return ctx
 

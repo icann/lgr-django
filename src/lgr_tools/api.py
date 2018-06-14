@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import time
+from io import StringIO
 
 from django.utils.text import slugify
 
@@ -13,6 +14,7 @@ from lgr.tools.cross_script_variants import cross_script_variants
 from lgr.tools.harmonize import harmonize
 
 from lgr_editor.api import LGRInfo, session_open_lgr, session_save_lgr
+from lgr_validator.api import lgr_set_evaluate_label, evaluate_label, validation_results_to_csv
 
 
 class LGRCompInvalidException(LGRValidationException):
@@ -171,3 +173,45 @@ def lgr_harmonization(request, lgr_1, lgr_2, rz_lgr, script):
 
     (h_lgr_1_id, h_lgr_2_id) = (_save_resulting_lgr(l) for l in (h_lgr_1, h_lgr_2))
     return h_lgr_1_id, h_lgr_2_id, cp_review
+
+
+def _validate_label_task_helper(value):
+    """
+    Helper method for validate label tasks.
+
+    Convert results to CSV format.
+
+    :param value: Result of label validation.
+    :return: A CSV as a string.
+    """
+    out = StringIO()
+    validation_results_to_csv(value, out)
+    return out.getvalue()
+
+
+def lgr_validate_label(lgr, label, udata):
+    """
+    Validate a label for an LGR.
+
+    :param lgr: The LGR to use for variant generation.
+    :param label: Label to validate.
+    :param udata: The associated Unicode database.
+    :return: CSV containing the label validation output.
+    """
+    return _validate_label_task_helper(evaluate_label(lgr, label,
+                                                      -1, udata.idna_encode_label))
+
+
+def lgr_set_validate_label(lgr, script_lgr, set_labels, label, udata):
+    """
+        Validate a label for an LGR set.
+
+        :param lgr: The LGR to use for variant generation.
+        :param label: Label to validate.
+        :param script_lgr: The LGR fo the script used to check label validity
+        :param set_labels: The label of the LGR set
+        :param udata: The associated Unicode database.
+        :return: CSV containing the label validation output.
+        """
+    return _validate_label_task_helper(lgr_set_evaluate_label(lgr, script_lgr, label, set_labels,
+                                                              -1, udata.idna_encode_label))

@@ -12,14 +12,18 @@ from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 
 from lgr.exceptions import LGRException
+from lgr.utils import cp_to_ulabel
 
 from lgr_editor.api import LabelInfo, LGRInfo
+from lgr_editor.unidb import get_db_by_version
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
 from lgr_tools.api import (lgr_diff_labels,
                            lgr_collision_labels,
                            lgr_annotate_labels,
                            lgr_set_annotate_labels,
-                           lgr_cross_script_variants)
+                           lgr_cross_script_variants,
+                           lgr_validate_label,
+                           lgr_set_validate_label)
 
 logger = logging.getLogger(__name__)
 
@@ -249,3 +253,74 @@ def cross_script_variants_task(lgr_json, labels_json, email_address, storage_pat
                    cb=lgr_cross_script_variants,
                    lgr=lgr_info.lgr,
                    labels_file=labels_info.labels)
+
+
+@shared_task
+def validate_label_task(lgr_json, label, email_address, storage_path):
+    """
+    Compute label validation variants of labels in a LGR.
+
+    :param lgr_json: The LGRInfo as a JSON object.
+    :param label: The label to validate, as a list of code points.
+    :param email_address: The e-mail address where the results will be sent
+    :param storage_path: The place where results will be stored
+    """
+    lgr_info = LGRInfo.from_dict(lgr_json)
+    udata = get_db_by_version(lgr_info.lgr.metadata.unicode_version)
+
+    logger.info("Starting task 'validate label' for %s, for input label '%s'",
+                lgr_info.name, label)
+
+    u_label = cp_to_ulabel(label)
+    body = "Hi,\nThe processing of label validation for label '{label}' in LGR '{lgr}' has".format(label=u_label,
+                                                                                                   lgr=lgr_info.name)
+
+    _lgr_tool_task(storage_path,
+                   base_filename='label_validation_{0}'.format(lgr_info.name),
+                   email_subject='LGR Toolset label validation result',
+                   email_body=body,
+                   email_address=email_address,
+                   cb=lgr_validate_label,
+                   lgr=lgr_info.lgr,
+                   label=label,
+                   udata=udata)
+
+
+@shared_task
+def lgr_set_validate_label_task(lgr_json, script_lgr_json, label, email_address, storage_path):
+    """
+    Compute label validation variants of labels in a LGR.
+
+    :param lgr_json: The LGRInfo as a JSON object.
+    :param script_lgr_json: The LGRInfo for the script used to check label validity as a JSON object.
+    :param label: The label to validate, as a list of code points.
+    :param email_address: The e-mail address where the results will be sent
+    :param storage_path: The place where results will be stored
+    """
+    lgr_info = LGRInfo.from_dict(lgr_json)
+    udata = get_db_by_version(lgr_info.lgr.metadata.unicode_version)
+    script_lgr = LGRInfo.from_dict(script_lgr_json).lgr
+    set_labels_info = lgr_info.set_labels_info
+    if set_labels_info is None:
+        set_labels_info = LabelInfo(name='None', labels=[])
+
+    logger.info("Starting task 'validate label' for %s, for input label '%s'",
+                lgr_info.name, label)
+
+    u_label = cp_to_ulabel(label)
+    body = "Hi,\nThe processing of label validation for label '{label}'" \
+           " in LGR set '{lgr}' with script '{script}' has".format(label=u_label,
+                                                                   lgr=lgr_info.lgr.name,
+                                                                   script=script_lgr.name)
+
+    _lgr_tool_task(storage_path,
+                   base_filename='label_validation_{0}'.format(lgr_info.name),
+                   email_subject='LGR Toolset label validation result',
+                   email_body=body,
+                   email_address=email_address,
+                   cb=lgr_set_validate_label,
+                   lgr=lgr_info.lgr,
+                   script_lgr=script_lgr,
+                   set_labels=set_labels_info.labels,
+                   label=label,
+                   udata=udata)
