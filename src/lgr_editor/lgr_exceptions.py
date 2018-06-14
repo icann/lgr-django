@@ -121,6 +121,8 @@ def lgr_exception_to_text(exception):
     elif isinstance(exception, lgr.exceptions.InvalidSymmetry):
         message = _('The LGR contains a variant that do not have symmetric '
                     'relations')
+    elif isinstance(exception, lgr.exceptions.MissingLanguage):
+        message = _('The LGR does not contain language (%(message)s)' % {'message': exception.message})
     elif isinstance(exception, lgr.exceptions.LGRException):
         message = _('An unknown exception occurred in the LGR API')
     else:
