@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import json
-import csv
+
 from django.http import HttpResponse
-from django.utils.encoding import force_bytes
 from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect
-
-from lgr_validator.api import evaluate_label, lgr_set_evaluate_label
 
 from lgr_editor.api import LabelInfo
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
@@ -16,6 +13,7 @@ from lgr_editor.lgr_exceptions import lgr_exception_to_text
 from lgr.exceptions import LGRException
 
 from .forms import ValidateLabelForm
+from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
 
 select_lgr = getattr(__import__(settings.LGR_SELECTOR_FUNC.rpartition('.')[0],
                                 fromlist=[settings.LGR_SELECTOR_FUNC.rpartition('.')[0]]),
@@ -134,24 +132,10 @@ def validate_label_csv(request, lgr_id, lgr_set_id=None,):
 
 
 def _prepare_csv_response(ctx):
-    response = HttpResponse(content_type='text/csv')
+    response = HttpResponse(content_type='text/csv', charset='utf-8')
     cd = 'attachment; filename="lgr-val-{0}.csv"'.format(ctx['a_label'])
     response['Content-Disposition'] = cd
 
-    writer = csv.writer(response)
-    writer.writerow([b'Type', b'U-label', b'A-label', b'Disposition',
-                     b'Code point sequence', b'Action index', b'Action XML'])
-    writer.writerow(map(force_bytes,
-                        ['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
-                         ctx['cp_display'], ctx['action_idx'], ctx['action']]))
-    col = ctx.get('collision', None)
-    if col:
-        writer.writerow(map(force_bytes,
-                            ['collision', col['u_label'], col['a_label'], col['disposition'],
-                             col['cp_display'], col['action_idx'], col['action']]))
-    for var in ctx.get('variants', []):
-        writer.writerow(map(force_bytes,
-                            ['varlabel', var['u_label'], var['a_label'], var['disposition'],
-                             var['cp_display'], var['action_idx'], var['action']]))
+    validation_results_to_csv(ctx, response)
 
     return response

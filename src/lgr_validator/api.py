@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import csv
+
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
@@ -201,3 +203,21 @@ def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
         res.update(_get_variants(script_lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions))
 
     return res
+
+
+def validation_results_to_csv(ctx, fileobj):
+    """
+    Convert validation results to a CSV.
+    """
+    writer = csv.writer(fileobj)
+    writer.writerow(['Type', 'U-label', 'A-label', 'Disposition',
+                     'Code point sequence', 'Action index', 'Action XML'])
+    writer.writerow(['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
+                     ctx['cp_display'], ctx['action_idx'], ctx['action']])
+    col = ctx.get('collision', None)
+    if col:
+        writer.writerow(['collision', col['u_label'], col['a_label'], col['disposition'],
+                         col['cp_display'], col['action_idx'], col['action']])
+    for var in ctx.get('variants', []):
+        writer.writerow(['varlabel', var['u_label'], var['a_label'], var['disposition'],
+                         var['cp_display'], var['action_idx'], var['action']])
