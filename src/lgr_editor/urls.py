@@ -100,14 +100,6 @@ urlpatterns = patterns(
         views.validate_lgr_save,
         name='validate_lgr_save'),
 
-    # Validation function
-    url(r'^lgr/{}/validate/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.validate_label,
-        name='lgr_validate_label'),
-    url(r'^lgr/{}/validate-nf/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.validate_label_noframe,
-        name='lgr_validate_label_noframe'),
-
     # Codepoint functions
     url(r'^lgr/default/$',
         views.codepoint_list,

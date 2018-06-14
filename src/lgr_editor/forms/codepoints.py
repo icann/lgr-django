@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.six import text_type
 from django import forms
 
-from lgr.tools.utils import parse_label_input, parse_single_cp_input, parse_codepoint_input
+from lgr.tools.utils import parse_single_cp_input, parse_codepoint_input
 from .fields import (VALIDATING_REPERTOIRES,
                      DEFAULT_VALIDATING_REPERTOIRE)
 
@@ -103,44 +103,6 @@ class AddVariantForm(forms.Form):
     codepoint = CodepointField(label=_("Code point"))
     override_repertoire = forms.BooleanField(label=_("Override repertoire"),
                                              required=False)
-
-
-class ValidateLabelForm(forms.Form):
-    label = forms.CharField(label=_("Label"))
-    set_labels = forms.FileField(label=_("Allocated Set labels"),
-                                 required=False,
-                                 help_text=_('Optional list of labels already allocated '
-                                             'in the LGR set, that will be used to check '
-                                             'for collisions when evaluating labels using '
-                                             'the merged LGR set'))
-    script = forms.ChoiceField(label=_("Script"),
-                               required=False,
-                               help_text=_('The script used to validate the label'))
-
-    def __init__(self, *args, **kwargs):
-        lgr_info = kwargs.pop('lgr_info', None)
-        max_label_len = kwargs.pop('max_label_len', None)
-        self.idna_decoder = kwargs.pop('idna_decoder', None)
-        scripts = kwargs.pop('scripts', None)
-        super(ValidateLabelForm, self).__init__(*args, **kwargs)
-        if max_label_len is not None:
-            self.fields['label'].help_text = _("Maximum length: %d code points" % max_label_len)
-        if scripts:
-            self.fields['script'].choices = scripts
-            self.fields['script'].required = True
-        if lgr_info is not None and lgr_info.set_labels_info is not None:
-                self.fields['set_labels'].initial = lgr_info.set_labels_info.name
-
-    def clean_label(self):
-        value = self.cleaned_data['label']
-        kwargs = {}
-        if self.idna_decoder:
-            kwargs['idna_decoder'] = self.idna_decoder
-        try:
-            value = parse_label_input(value, **kwargs)
-        except ValueError as e:
-            raise ValidationError(text_type(e))
-        return value
 
 
 class MultipleChoiceFieldNoValidation(forms.MultipleChoiceField):

@@ -40,7 +40,6 @@ from lgr.validate.symmetry import check_symmetry
 from lgr.parser.rfc3743_parser import RFC3743Parser
 from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.parser.line_parser import LineParser
-from lgr_validator.views import evaluate_label_from_info
 from lgr.core import LGR
 
 from .repertoires import get_by_name, get_all_scripts_from_repertoire
@@ -58,7 +57,6 @@ from .forms import (AddCodepointForm,
                     CreateLGRForm,
                     AddMultiCodepointsForm,
                     LanguageFormSet,
-                    ValidateLabelForm,
                     LabelFormsForm,
                     EditCodepointsForm)
 
@@ -72,7 +70,8 @@ from .api import (session_open_lgr,
                   session_get_file,
                   session_delete_file,
                   session_merge_set,
-                  get_builtin_or_session_repertoire, LGRInfo, LabelInfo)
+                  get_builtin_or_session_repertoire,
+                  LGRInfo)
 from .utils import (render_char,
                     render_name,
                     render_age,
@@ -1149,7 +1148,6 @@ def rule_list_simple(request, lgr_id, lgr_set_id=None):
     return render(request, 'lgr_editor/rules.html', context=ctx)
 
 
-
 # TODO - warn if the LGR already has duplicate classes or rules, we cannot reliably work on them
 # TODO - prevent class or rule from being deleted if it is being referenced
 # TODO - convert functional views into into CBV
@@ -1235,10 +1233,9 @@ def rule_edit_class_ajax(request, lgr_id, clsname):
     return _json_response(True, msg)
 
 
-
 NEW_ELEMENT_NAME_PARAM = '__new__'
 
-# In `LGR_SKEL` below, the content preceeding `{xml}` should be on a single line, so that the line
+# In `LGR_SKEL` below, the content preceding `{xml}` should be on a single line, so that the line
 # number reported in error messages can be more consistent.
 LGR_SKEL = '''<lgr xmlns="{ns}"><meta /><rules>
 {xml}
@@ -1904,70 +1901,6 @@ class MetadataView(FormView):
 
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
-
-
-def validate_label(request, lgr_id, lgr_set_id=None, noframe=False):
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
-    udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
-    max_label_len = lgr_info.lgr.max_label_length()
-    scripts = None
-    if lgr_info.is_set:
-        scripts = []
-        for lgr_set_info in lgr_info.lgr_set:
-            try:
-                scripts.append((lgr_set_info.name, lgr_set_info.lgr.metadata.languages[0]))
-            except (AttributeError, IndexError):
-                pass
-    form = ValidateLabelForm(request.POST or request.GET or None,
-                             files=request.FILES or None,
-                             lgr_info=lgr_info,
-                             max_label_len=max_label_len,
-                             idna_decoder=udata.idna_decode_label,
-                             scripts=scripts)
-    ctx = {}
-    if form.is_bound and form.is_valid():
-        label_cplist = form.cleaned_data['label']
-        script_lgr_name = form.cleaned_data.get('script', None)
-        if lgr_info.is_set:
-            set_labels_file = form.cleaned_data['set_labels']
-            if set_labels_file is not None:
-                if lgr_info.set_labels_info is None or lgr_info.set_labels_info.name != set_labels_file.name:
-                    lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
-                                                                   set_labels_file.read())
-        try:
-            ctx = evaluate_label_from_info(lgr_info, label_cplist, script_lgr_name, udata)
-        except UnicodeError as ex:
-            messages.add_message(request, messages.ERROR,
-                                 lgr_exception_to_text(ex))
-        except LGRException as ex:
-            messages.add_message(request, messages.ERROR,
-                                 lgr_exception_to_text(ex))
-            kwargs = {'lgr_id': lgr_id}
-            if lgr_set_id is not None:
-                kwargs['lgr_set_id'] = lgr_set_id
-            # redirect to myself to refresh display
-            if noframe:
-                return redirect('lgr_validate_label_noframe', **kwargs)
-            else:
-                return redirect('lgr_validate_label', **kwargs)
-
-    ctx['form'] = form
-    ctx['lgr_id'] = lgr_id
-    ctx['max_label_len'] = max_label_len
-    ctx['is_set'] = lgr_info.is_set or lgr_set_id is not None
-
-    if lgr_set_id:
-        lgr_set_info = session_select_lgr(request, lgr_set_id)
-        ctx['lgr_set'] = lgr_set_info.lgr
-        ctx['lgr_set_id'] = lgr_set_id
-
-    if noframe:
-        ctx['base_template'] = '_base_noframe.html'
-    return render(request, 'lgr_validator/validator.html', context=ctx)
-
-
-def validate_label_noframe(request, lgr_id, lgr_set_id=None):
-    return validate_label(request, lgr_id, lgr_set_id, noframe=True)
 
 
 def label_forms(request):
