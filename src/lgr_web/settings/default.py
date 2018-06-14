@@ -242,6 +242,9 @@ UNIDB_LOADER_FUNC = 'lgr_editor.unidb.get_db_by_version'
 # Otherwise, only a .csv download link is offered.
 LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE = 100
 
+# If estimated number of variants is greater, then switch to asynchronous mode
+LGR_VALIDATION_MAX_VARS_SYNCHRONOUS = 10000
+
 
 ##### /LGR Toolset Project-specific settings #####
 

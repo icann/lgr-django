@@ -8,7 +8,11 @@ from lgr.tools.utils import parse_label_input
 
 
 class ValidateLabelForm(forms.Form):
-    label = forms.CharField(label=_("Label"))
+    label = forms.CharField(label=_("Label"),
+                            help_text=_("Maximum length: 63 code points"))
+    email = forms.EmailField(label=_("E-mail"),
+                             help_text=_('Provide your e-mail address'),
+                             required=False)
     set_labels = forms.FileField(label=_("Allocated Set labels"),
                                  required=False,
                                  help_text=_('Optional list of labels already allocated '
@@ -21,12 +25,9 @@ class ValidateLabelForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         lgr_info = kwargs.pop('lgr_info', None)
-        max_label_len = kwargs.pop('max_label_len', None)
         self.idna_decoder = kwargs.pop('idna_decoder', None)
         scripts = kwargs.pop('scripts', None)
         super(ValidateLabelForm, self).__init__(*args, **kwargs)
-        if max_label_len is not None:
-            self.fields['label'].help_text = _("Maximum length: %d code points" % max_label_len)
         if scripts:
             self.fields['script'].choices = scripts
             self.fields['script'].required = True

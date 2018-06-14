@@ -12,6 +12,9 @@
         {% csrf_token %}
         <div class="col-sm-10">
             {% include "lgr_editor/_form_field.html" with field=form.label %}
+            {%  if email_required %}
+                {% include "lgr_editor/_form_field.html" with field=form.email %}
+            {% endif %}
             {% if is_set and not lgr_set_id %}
                 {% include "lgr_editor/_form_field.html" with field=form.set_labels %}
                 {% include "lgr_editor/_form_field.html" with field=form.script %}

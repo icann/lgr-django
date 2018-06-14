@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect
+from django.utils.translation import ugettext as _
 
 from lgr_editor.api import LabelInfo
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
@@ -24,8 +25,35 @@ get_unidb = getattr(__import__(settings.UNIDB_LOADER_FUNC.rpartition('.')[0],
                     settings.UNIDB_LOADER_FUNC.rpartition('.')[2])
 
 
-def evaluate_label_from_info(lgr_info, label_cplist, script_lgr_name,
-                             udata, threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE):
+class NeedAsyncProcess(Exception):
+    """Exception used to notify that we need an async process"""
+    pass
+
+
+def evaluate_label_from_info(request,
+                             lgr_info, label_cplist, script_lgr_name,
+                             email,
+                             threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE):
+    """
+    Evaluate a label in an LGR.
+
+    This function is responsible to determine whether or not the evaluation process should be blocking/synchronous,
+    or launched as a celery task.
+
+    :param lgr_info: The LGR Info object
+    :param label_cplist: The label to test, as an array of codepoints.
+    :param script_lgr_name: Name of the LGR to use as the script LGR.
+    :param email: Required to launch processing in task queue.
+    :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.
+                                   Set to negative to always return variants.
+    :return: a dict containing results of the evaluation, empty if process is asynchronous.
+    """
+    ctx = {}
+    need_async = lgr_info.lgr.estimate_variant_number(label_cplist) > settings.LGR_VALIDATION_MAX_VARS_SYNCHRONOUS
+    if need_async and not email:
+        raise NeedAsyncProcess
+
+    udata = get_unidb(lgr_info.lgr.metadata.unicode_version)
     if lgr_info.is_set:
         script_lgr_info = None
         for set_lgr_info in lgr_info.lgr_set:
@@ -54,7 +82,6 @@ def validate_label(request, lgr_id, lgr_set_id=None,
                    output_func=None, noframe=False):
     lgr_info = select_lgr(request, lgr_id, lgr_set_id)
     udata = get_unidb(lgr_info.lgr.metadata.unicode_version)
-    max_label_len = lgr_info.lgr.max_label_length()
     scripts = None
     if lgr_info.is_set:
         scripts = []
@@ -66,13 +93,13 @@ def validate_label(request, lgr_id, lgr_set_id=None,
     form = ValidateLabelForm(request.POST or request.GET or None,
                              files=request.FILES or None,
                              lgr_info=lgr_info,
-                             max_label_len=max_label_len,
                              idna_decoder=udata.idna_decode_label,
                              scripts=scripts)
     ctx = {}
     if form.is_bound and form.is_valid():
         label_cplist = form.cleaned_data['label']
         script_lgr_name = form.cleaned_data.get('script', None)
+        email = form.cleaned_data['email']
         if lgr_info.is_set:
             set_labels_file = form.cleaned_data['set_labels']
             if set_labels_file is not None:
@@ -80,11 +107,16 @@ def validate_label(request, lgr_id, lgr_set_id=None,
                     lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
                                                                    set_labels_file.read())
         try:
-            ctx = evaluate_label_from_info(lgr_info, label_cplist, script_lgr_name, udata,
+            ctx = evaluate_label_from_info(request, lgr_info, label_cplist, script_lgr_name, email,
                                            threshold_include_vars=threshold_include_vars)
         except UnicodeError as ex:
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
+        except NeedAsyncProcess:
+            messages.add_message(request, messages.INFO,
+                                 _('Input label generates too many variants to compute them all quickly.'
+                                   'You need to enter your email address and will receive a notification once process is done'))
+            ctx['email_required'] = True
         except LGRException as ex:
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
