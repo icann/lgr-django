@@ -52,7 +52,7 @@ urlpatterns = patterns(
     url(r'^lgr/{}/a/references/$'.format(LGR_SLUG_FORMAT),
         views.add_reference_ajax,
         name='reference_add_ajax'),
-    url(r'^lgr/{}/d/references/(?P<ref_id>[\w\_\-\.\s]+)$'.format(LGR_SLUG_FORMAT),
+    url(r'^lgr/{}/d/references/(?P<ref_id>[\w\_\-\.\s\:]+)$'.format(LGR_SLUG_FORMAT),
         views.delete_reference,
         name='reference_delete'),
 

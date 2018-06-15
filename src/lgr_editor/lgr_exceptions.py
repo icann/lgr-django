@@ -100,6 +100,10 @@ def lgr_exception_to_text(exception):
         message = _('Reference %(ref_id)s already exists') % {
             'ref_id': exception.ref_id
         }
+    elif isinstance(exception, lgr.exceptions.ReferenceInvalidId):
+        message = _('Invalid reference id %(ref_id)s ') % {
+            'ref_id': exception.ref_id
+        }
     elif isinstance(exception, lgr.exceptions.RuleError):
         message = _('Rule "%(rule_name)s" cannot be processed (%(message)s)') % {
             'rule_name': exception.rule_name,

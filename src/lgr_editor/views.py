@@ -898,7 +898,7 @@ def reference_list(request, lgr_id, lgr_set_id=None):
     lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
 
     add_reference_form = ReferenceForm(request.POST or None,
-                                       prefix='add_reference')
+                                       prefix='add_reference', ro_id=False)
     if 'add_reference' in request.POST:
         if lgr_info.is_set or lgr_set_id:
             return HttpResponseBadRequest('Cannot edit LGR set')
@@ -906,10 +906,11 @@ def reference_list(request, lgr_id, lgr_set_id=None):
         logger.debug('Add reference')
         if add_reference_form.is_valid():
             # form was submitted, we parse the value from the form field
+            ref_id = add_reference_form.cleaned_data['ref_id']
             description = add_reference_form.cleaned_data['description']
             url = add_reference_form.cleaned_data['comment']
             try:
-                lgr_info.lgr.reference_manager.add_reference(description, url)
+                lgr_info.lgr.reference_manager.add_reference(description, url, ref_id=ref_id or None)
                 session_save_lgr(request, lgr_info)
                 messages.success(request, _('New reference created'))
             except LGRException as ex:
