@@ -425,6 +425,7 @@ def codepoint_list_json(request, lgr_id, lgr_set_id=None):
                 'cp_disp': render_char(char),
                 'comment': char.comment or '',
                 'name': render_name(char, udata),
+                'tags': char.tags,
                 'variant_number': len(list(char.get_variants())),
                 'is_range': is_range,
                 'actions': actions

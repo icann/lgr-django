@@ -37,6 +37,7 @@
                     {% if not is_set %}<th><input type="checkbox" name="select_all" id="select-all-cp"></th>{% endif %}
                     <th>{% trans "Code point" %}</th>
                     <th>{% trans "Character Name" %}</th>
+                    <th>{% trans "Tags" %}</th>
                     <th>{% trans "Comments" %}</th>
                     <th>{% trans "Action" %}</th>
                 </tr>
@@ -181,9 +182,9 @@
                             if (tmp_lgr) {
                                 $.ajax({
                                     type: "GET",
-                                    url: url,
+                                    url: url
                                 });
-                            };
+                            }
                         })
                     });
 
@@ -213,7 +214,7 @@
                     "data": null,
                     "defaultContent": "",
                     "orderable": false,
-                    "className": "select-checkbox",
+                    "className": "select-checkbox"
                 },
                     {% endif %}
                 {
@@ -227,6 +228,8 @@
                     }
                 }, {
                     "data": "name"
+                }, {
+                    "data": "tags"
                 }, {
                     "data": "comment"
                 }, {
