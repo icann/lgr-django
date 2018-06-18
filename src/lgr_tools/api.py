@@ -188,13 +188,15 @@ def _validate_label_task_helper(value):
     if sys.version_info.major > 2:
         from io import StringIO
         outIO = StringIO
+        out_fn = lambda x: x
     else:
         from io import BytesIO
         outIO = BytesIO
+        out_fn = lambda x: x.decode('utf-8')
 
     out = outIO()
     validation_results_to_csv(value, out)
-    return out.getvalue()
+    return out_fn(out.getvalue())
 
 
 def lgr_validate_label(lgr, label, udata):
