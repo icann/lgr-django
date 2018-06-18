@@ -50,6 +50,10 @@ body {
 	margin-bottom: 10px;
 }
 
+#populate-button {
+	display: inline;
+}
+
 .ref-entry {
 	margin-top: 5px;
 	margin-bottom: 5px;

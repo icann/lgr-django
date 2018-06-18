@@ -16,10 +16,10 @@
 {% block content-pane %}
     {% if not is_set %}
         <div class="text-right" id="add-codepoint">
-            {% if not variants_ok %}
+            <div id="populate-button" style="display: none">
                 {% url 'populate_variants' lgr_id=lgr_id as populate_variants_url %}
                 <a href="{{ populate_variants_url }}" class="btn btn-primary" title="Populate the symmetric and transitive variants"> {% trans "Populate variants" %}</a>
-            {% endif %}
+            </div>
             {% if has_range %}
                 {% url 'expand_ranges' lgr_id=lgr_id as expand_ranges_url %}
                 <a href="{{ expand_ranges_url }}" class="btn btn-primary" title="Expand all ranges" >{% trans "Expand range(s)" %}</a>
@@ -351,6 +351,13 @@
                 });
                 // Reset selection
                 tag_input.val(null).trigger('change');
+                // Test if we need to display the "Populate variants" button
+                $.get('{% url "populate_variants" lgr_id %}' + '?test',
+                    function(json) {
+                        if (!json.result) {
+                            $('#populate-button').show(200);
+                        }
+                    });
             {% endif %}
         });
     </script>

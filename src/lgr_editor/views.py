@@ -384,7 +384,6 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
         'lgr': lgr_info.lgr,
         'lgr_id': lgr_id,
         'is_set': lgr_info.is_set or lgr_set_id is not None,
-        'variants_ok': check_symmetry(lgr_info.lgr, None)[0] and check_transitivity(lgr_info.lgr, None)[0],
         'has_range': has_range,
         'all_tags_json': json.dumps(lgr_info.lgr.all_tags()),
     }
@@ -712,6 +711,9 @@ def expand_range(request, lgr_id, codepoint_id):
 def populate_variants(request, lgr_id):
     lgr_info = session_select_lgr(request, lgr_id)
     lgr = lgr_info.lgr
+
+    if 'test' in request.GET:
+        return JsonResponse({'result': check_symmetry(lgr_info.lgr, None)[0] and check_transitivity(lgr_info.lgr, None)[0]})
 
     log_output = StringIO()
     ch = logging.StreamHandler(log_output)
