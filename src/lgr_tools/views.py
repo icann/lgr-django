@@ -54,16 +54,22 @@ def lgr_compare(request, lgr_id):
             except LGRCompInvalidException as lgr_xml:
                 from io import BytesIO
                 from django.core.files.storage import FileSystemStorage
-                import time
+                from gzip import GzipFile
+                from time import strftime
 
-                sio = BytesIO(lgr_xml.content)
-                storage = FileSystemStorage(location=session_get_storage(request),
-                                            file_permissions_mode=0o440)
-                filename = storage.save('{comp_type}-of-{lgr1}-and-{lgr2}-{date}.xml'.format(
+                sio = BytesIO()
+                base_filename = '{comp_type}-of-{lgr1}-and-{lgr2}-{date}.xml'.format(
                     comp_type=action.lower(),
                     lgr1=lgr_info_1.name,
                     lgr2=lgr_info_2.name,
-                    date=time.strftime('%Y%m%d_%H%M%S')), sio)
+                    date=strftime('%Y%m%d_%H%M%S'))
+                with GzipFile(filename=base_filename,
+                              fileobj=sio, mode='w') as gzf:
+                    gzf.write(lgr_xml.content)
+
+                storage = FileSystemStorage(location=session_get_storage(request),
+                                            file_permissions_mode=0o440)
+                filename = storage.save('{}.gz'.format(base_filename), sio)
                 return render(request, 'lgr_tools/comp_invalid.html',
                               context={
                                   'lgr_1': lgr_info_1,
