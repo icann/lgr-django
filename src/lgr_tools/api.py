@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 import time
-from io import StringIO
 
 from django.utils.text import slugify
 
@@ -184,7 +183,16 @@ def _validate_label_task_helper(value):
     :param value: Result of label validation.
     :return: A CSV as a string.
     """
-    out = StringIO()
+    # Define some py2/3 compat stuff
+    import sys
+    if sys.version_info.major > 2:
+        from io import StringIO
+        outIO = StringIO
+    else:
+        from io import BytesIO
+        outIO = BytesIO
+
+    out = outIO()
     validation_results_to_csv(value, out)
     return out.getvalue()
 

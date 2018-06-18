@@ -7,6 +7,14 @@ from django.utils.translation import ugettext_lazy as _
 from lgr.tools.diff_collisions import get_collisions
 from lgr.utils import cp_to_ulabel
 
+# Define some py2/3 compat stuff
+import sys
+if sys.version_info.major > 2:
+    to_row_format = str
+else:
+    from django.utils.encoding import force_bytes
+    to_row_format = force_bytes
+
 
 def _get_validity(lgr, label_cplist, idna_encoder):
     label_u = cp_to_ulabel(label_cplist)
@@ -210,14 +218,14 @@ def validation_results_to_csv(ctx, fileobj):
     Convert validation results to a CSV.
     """
     writer = csv.writer(fileobj)
-    writer.writerow(['Type', 'U-label', 'A-label', 'Disposition',
-                     'Code point sequence', 'Action index', 'Action XML'])
-    writer.writerow(['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
-                     ctx['cp_display'], ctx['action_idx'], ctx['action']])
+    writer.writerow(map(to_row_format, ['Type', 'U-label', 'A-label', 'Disposition',
+                                        'Code point sequence', 'Action index', 'Action XML']))
+    writer.writerow(map(to_row_format, ['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
+                                        ctx['cp_display'], ctx['action_idx'], ctx['action']]))
     col = ctx.get('collision', None)
     if col:
-        writer.writerow(['collision', col['u_label'], col['a_label'], col['disposition'],
-                         col['cp_display'], col['action_idx'], col['action']])
+        writer.writerow(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
+                                            col['cp_display'], col['action_idx'], col['action']]))
     for var in ctx.get('variants', []):
-        writer.writerow(['varlabel', var['u_label'], var['a_label'], var['disposition'],
-                         var['cp_display'], var['action_idx'], var['action']])
+        writer.writerow(map(to_row_format, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
+                                            var['cp_display'], var['action_idx'], var['action']]))
