@@ -43,15 +43,15 @@ urlpatterns = patterns(
         name='download_lgr_xml'),
 
     # Reference management functions
+    url(r'^lgr/{}/a/references/$'.format(LGR_SLUG_FORMAT),
+        views.add_reference_ajax,
+        name='reference_add_ajax'),
     url(r'^lgr/{}/references/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.reference_list,
         name='references'),
     url(r'^lgr/{}/references.json/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.reference_list_json,
         name='references_json'),
-    url(r'^lgr/{}/a/references/$'.format(LGR_SLUG_FORMAT),
-        views.add_reference_ajax,
-        name='reference_add_ajax'),
     url(r'^lgr/{}/d/references/(?P<ref_id>[\w\_\-\.\s\:]+)$'.format(LGR_SLUG_FORMAT),
         views.delete_reference,
         name='reference_delete'),
