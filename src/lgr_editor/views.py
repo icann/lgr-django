@@ -898,7 +898,7 @@ def reference_list(request, lgr_id, lgr_set_id=None):
     """
     lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
 
-    add_reference_form = ReferenceForm(request.POST or None,
+    add_reference_form = ReferenceForm(request.POST if 'add_reference' in request.POST else None,
                                        prefix='add_reference', ro_id=False)
     if 'add_reference' in request.POST:
         if lgr_info.is_set or lgr_set_id:
