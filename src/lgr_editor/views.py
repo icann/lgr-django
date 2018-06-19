@@ -1442,9 +1442,9 @@ def rule_edit_action_ajax(request, lgr_id, action_idx):
 
     lgr = lgr_info.lgr
 
-    action_idx = int(action_idx)
+    action_idx = int(action_idx) # 0-based
     # negative action_idx means to add new
-    if action_idx > lgr.actions:
+    if action_idx + 1 > len(lgr.actions):
         return _json_response(False, _('Action "%s" does not exist') % action_idx)
 
     if delete_action:
