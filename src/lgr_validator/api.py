@@ -218,14 +218,15 @@ def validation_results_to_csv(ctx, fileobj):
     Convert validation results to a CSV.
     """
     writer = csv.writer(fileobj)
-    writer.writerow(map(to_row_format, ['Type', 'U-label', 'A-label', 'Disposition',
-                                        'Code point sequence', 'Action index', 'Action XML']))
-    writer.writerow(map(to_row_format, ['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
-                                        ctx['cp_display'], ctx['action_idx'], ctx['action']]))
+    # Need list(map) for python3.4 that does not like map object (needs sequence)
+    writer.writerow(list(map(to_row_format, ['Type', 'U-label', 'A-label', 'Disposition',
+                                             'Code point sequence', 'Action index', 'Action XML'])))
+    writer.writerow(list(map(to_row_format, ['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
+                                             ctx['cp_display'], ctx['action_idx'], ctx['action']])))
     col = ctx.get('collision', None)
     if col:
-        writer.writerow(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
-                                            col['cp_display'], col['action_idx'], col['action']]))
+        writer.writerow(list(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
+                                                 col['cp_display'], col['action_idx'], col['action']])))
     for var in ctx.get('variants', []):
-        writer.writerow(map(to_row_format, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
-                                            var['cp_display'], var['action_idx'], var['action']]))
+        writer.writerow(list(map(to_row_format, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
+                                                 var['cp_display'], var['action_idx'], var['action']])))
