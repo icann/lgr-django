@@ -8,6 +8,8 @@ import hashlib
 import os
 import logging
 
+from natsort import natsorted
+
 from django.conf import settings
 from django.utils.six.moves.urllib_parse import quote_plus
 from django.core.cache import cache
@@ -202,7 +204,7 @@ def _list_files(location):
     except (OSError, IOError) as exc:
         logger.warning("Cannot access directory '%s': %s",
                        location, exc)
-    return sorted(xml_files)
+    return natsorted(xml_files, reverse=True)
 
 
 def list_validating_repertoires():
