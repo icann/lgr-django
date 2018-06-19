@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-09 18:58+0000\n"
+"POT-Creation-Date: 2018-06-19 14:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -179,7 +179,7 @@ msgstr ""
 #: templates/index.html:10
 msgid ""
 "This application provides a convenient interface for browsing and editing "
-"<abbr title=\"Label Generation Ruleset\">LGR</abbr>’s conforming to the <a "
+"<abbr title=\"Label Generation Ruleset\">LGR</abbr>s conforming to the <a "
 "href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\">Representing Label "
 "Generation Rulesets using XML</a> specification."
 msgstr ""
@@ -216,7 +216,7 @@ msgid "No LGR has been previously loaded."
 msgstr ""
 
 #: templates/index.html:83
-msgid "Start a new LGR file or import an existing one"
+msgid "Create a new LGR file or import an existing one"
 msgstr ""
 
 #: templates/index.html:86

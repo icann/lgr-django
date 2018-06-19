@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-09 18:58+0000\n"
-"PO-Revision-Date: 2018-05-09 11:37-0400\n"
+"POT-Creation-Date: 2018-06-19 14:33+0000\n"
+"PO-Revision-Date: 2018-06-19 10:29-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.0.8\n"
 
 #: settings/default.py:153
 msgid "Arabic"
@@ -179,7 +179,7 @@ msgstr "Bienvenue dans l'éditeur de LGR (Label Generation Ruleset)"
 #: templates/index.html:10
 msgid ""
 "This application provides a convenient interface for browsing and editing "
-"<abbr title=\"Label Generation Ruleset\">LGR</abbr>’s conforming to the <a "
+"<abbr title=\"Label Generation Ruleset\">LGR</abbr>s conforming to the <a "
 "href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\">Representing Label "
 "Generation Rulesets using XML</a> specification."
 msgstr ""
@@ -222,7 +222,7 @@ msgid "No LGR has been previously loaded."
 msgstr "Aucune LGR n'a été précédemment chargée."
 
 #: templates/index.html:83
-msgid "Start a new LGR file or import an existing one"
+msgid "Create a new LGR file or import an existing one"
 msgstr "Commencer une nouvelle LGR ou importer une existante"
 
 #: templates/index.html:86

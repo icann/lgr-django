@@ -126,7 +126,7 @@ def validate_label(request, lgr_id, lgr_set_id=None,
                                  lgr_exception_to_text(ex))
         except NeedAsyncProcess:
             messages.add_message(request, messages.INFO,
-                                 _('Input label generates too many variants to compute them all quickly.'
+                                 _('Input label generates too many variants to compute them all quickly. '
                                    'You need to enter your email address and will receive a notification once process is done'))
             ctx['email_required'] = True
         except LGRException as ex:

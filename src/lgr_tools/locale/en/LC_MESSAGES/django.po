@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-09 18:58+0000\n"
+"POT-Creation-Date: 2018-06-19 14:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -212,12 +212,12 @@ msgid ""
 "Please download and edit it manually before importing it in LGR Toolset."
 msgstr ""
 
-#: templates/lgr_tools/comp_invalid.html:11
+#: templates/lgr_tools/comp_invalid.html:12
 #, python-format
 msgid "Download invalid LGR %(comp_type)s file"
 msgstr ""
 
-#: templates/lgr_tools/comp_invalid.html:15
+#: templates/lgr_tools/comp_invalid.html:14
 msgid "Download"
 msgstr ""
 
