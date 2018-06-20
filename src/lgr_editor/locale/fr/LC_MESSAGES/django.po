@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-19 14:33+0000\n"
-"PO-Revision-Date: 2018-06-19 10:19-0400\n"
+"POT-Creation-Date: 2018-06-20 16:46+0000\n"
+"PO-Revision-Date: 2018-06-20 12:46-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -530,6 +530,12 @@ msgstr "Voir le code point"
 #: templates/lgr_editor/codepoint_list.html:243
 msgid "Expand range"
 msgstr "Convertir l'ensemble"
+
+#: templates/lgr_editor/codepoint_list.html:273
+msgid "&#x27A1; Select code point(s) to apply batch action..."
+msgstr ""
+"&#x27A1; Sélectionner le(s) code point(s) sur le(s)quel(s) appliquer une "
+"action par lots"
 
 #: templates/lgr_editor/codepoint_list.html:274
 msgid "Add WLE"
