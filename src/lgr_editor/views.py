@@ -999,10 +999,11 @@ def add_reference_ajax(request, lgr_id):
 
     add_reference_form = ReferenceForm(request.POST)
     if add_reference_form.is_valid():
+        ref_id = add_reference_form.cleaned_data['ref_id'] or None
         description = add_reference_form.cleaned_data['description']
         url = add_reference_form.cleaned_data['comment']
         try:
-            lgr_info.lgr.reference_manager.add_reference(description, url)
+            lgr_info.lgr.reference_manager.add_reference(description, url, ref_id=ref_id)
             session_save_lgr(request, lgr_info)
             references = [{
                               'ref_id': ref_id,

@@ -213,6 +213,16 @@
 
                     <div>
                         <p class="modal-section-title">{% trans "Create a new reference" %}</p>
+                        <div id="ref-form-error" class="form-group has-error clearfix">
+                            <span class="help-block has-error hidden" id="create-new-ref">
+                                {# TODO be more precise with error #}
+                                {% trans "Error when adding reference" %}
+                            </span>
+                        </div>
+                        <p>
+                            <label for="new-ref-id">{% trans "Reference ID (optional)" %}</label>
+                            <input type="text" name="new_ref_id" id="new-ref-id"/>
+                        </p>
                         <p>
                             <label for="new-ref-desc">{% trans "Description" %}</label>
                             <input type="text" name="new_ref_desc" id="new-ref-desc"/>
@@ -333,21 +343,26 @@
             });
             $(".btn.new-ref").click(function() {
                 var url = $(this).data('url');
+                var ref_id = $.trim($('#new-ref-id').val());
                 var desc = $.trim($('#new-ref-desc').val());
-                if (desc.length === 0) {
-                    return;
-                }
                 var com = $.trim($('#new-ref-comment').val());
                 $.ajax({
                     url: url,
                     method: 'POST',
-                    data: {description: desc, comment: com},
+                    data: {ref_id: ref_id, description: desc, comment: com},
                     beforeSend: function(xhr, settings) {
                         xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
+                    },
+                    error: function(xhr) {
+                        $('#create-new-ref').removeClass('hidden')
+                    },
+                    success: function(xhr) {
+                        $('#create-new-ref').addClass('hidden')
                     }
                 }).done(function(data) {
                     populate_all_references($, data.data, desc);
                     // clear the text box to indicated that it has been added
+                    $('#new-ref-id').val('');
                     $('#new-ref-desc').val('');
                     $('#new-ref-comment').val('');
                 });

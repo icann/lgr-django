@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import re
+
 from django import forms
 from django.forms.formsets import formset_factory
 
+from lgr.metadata import ReferenceManager
 from .utils import BaseDisableableFormSet, ReadOnlyTextInput
 
 
@@ -22,6 +25,13 @@ class ReferenceForm(forms.Form):
 
         if ro_id:
             self.fields['ref_id'].widget = ReadOnlyTextInput()
+
+    def clean(self):
+        cleaned_data = super(ReferenceForm, self).clean()
+        if cleaned_data['ref_id'] and not re.match(ReferenceManager.REFERENCE_REGEX, str(cleaned_data['ref_id'])):
+            self.add_error('ref_id', 'Invalid format')
+
+        return cleaned_data
 
 
 ReferenceFormSet = formset_factory(ReferenceForm,
