@@ -78,7 +78,8 @@ def lgr_compare(request, lgr_id):
                                   'comp_type': action.lower(),
                                   'lgr_id': lgr_id if lgr_id is not None else '',
                                   'lgr': lgr_info.lgr if lgr_info is not None else '',
-                                  'is_set': lgr_info.is_set if lgr_info is not None else ''})
+                                  'is_set': lgr_info.is_set if lgr_info is not None else '',
+                                  'error': lgr_xml.error})
             else:
                 return redirect('codepoint_list', lgr_id)
         else:

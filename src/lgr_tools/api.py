@@ -21,8 +21,9 @@ class LGRCompInvalidException(LGRValidationException):
     Raised when the XML validation against schema fails and contains the
     invalid XML.
     """
-    def __init__(self, content):
+    def __init__(self, content, error):
         self.content = content
+        self.error = error
 
 
 def lgr_intersect_union(request, lgr_info_1, lgr_info_2, action):
@@ -52,8 +53,8 @@ def lgr_intersect_union(request, lgr_info_1, lgr_info_2, action):
         session_open_lgr(request, lgr_id, lgr_info.xml,
                          validating_repertoire_name=None,
                          validate=True)
-    except LGRValidationException:
-        raise LGRCompInvalidException(lgr_info.xml)
+    except LGRValidationException as e:
+        raise LGRCompInvalidException(lgr_info.xml, e.args[0])
 
     return lgr_id
 
