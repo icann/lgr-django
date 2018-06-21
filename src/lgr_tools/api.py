@@ -149,7 +149,7 @@ def lgr_cross_script_variants(lgr, labels_file):
     return cross_script_variants(lgr, labels_file)
 
 
-def lgr_harmonization(request, lgr_1, lgr_2, rz_lgr, script):
+def lgr_harmonization(request, lgr_1, lgr_2, rz_lgr):
     """
     Perform variant harmonization between 2 LGRs
 
@@ -157,9 +157,8 @@ def lgr_harmonization(request, lgr_1, lgr_2, rz_lgr, script):
     :param lgr_1: First LGR.
     :param lgr_2: Second LGR.
     :param rz_lgr: Optional related Rootzone LGR.
-    :param script: Optional script to consider in `rz_lgr`.
     """
-    h_lgr_1, h_lgr_2, cp_review = harmonize(lgr_1, lgr_2, rz_lgr, script)
+    h_lgr_1, h_lgr_2, cp_review = harmonize(lgr_1, lgr_2, rz_lgr)
 
     def _save_resulting_lgr(l):
         # Generate new slug (LGR id)

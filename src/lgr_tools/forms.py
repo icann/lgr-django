@@ -226,10 +226,6 @@ class LGRHarmonizeSelector(forms.Form):
                                help_text=_('The (optional) RootZone LGR to infer new variant sets from'),
                                required=False)
 
-    script = forms.CharField(label=_('Script'),
-                             help_text=_('The script used to infer new variant sets. Required if RZ LGR is present.'),
-                             required=False)
-
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', {})
         lgr_id = kwargs.pop('lgr_id', '')
@@ -245,13 +241,3 @@ class LGRHarmonizeSelector(forms.Form):
         self.fields['rz_lgr'].choices = [('', ''), ] + self.fields['rz_lgr'].choices
         self.fields['lgr_1'].initial = lgr_id
         self.fields['rz_lgr'].initial = ''
-
-    def clean(self):
-        cleaned_data = super(LGRHarmonizeSelector, self).clean()
-        rz_lgr = cleaned_data.get('rz_lgr')
-        script = cleaned_data.get('script')
-
-        if rz_lgr and not script:
-            self.add_error('script', _('Script is mandatory if RZ LGR is present'))
-
-        return cleaned_data

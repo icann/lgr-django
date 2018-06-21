@@ -344,12 +344,11 @@ def lgr_harmonize(request, lgr_id):
         ctx = {}
         lgr_1_id, lgr_2_id = form.cleaned_data['lgr_1'], form.cleaned_data['lgr_2']
         rz_lgr_id = form.cleaned_data['rz_lgr'] or None
-        script = form.cleaned_data['script'] or None
 
         lgr_1_info, lgr_2_info = (session_select_lgr(request, l) for l in (lgr_1_id, lgr_2_id))
         rz_lgr = session_select_lgr(request, rz_lgr_id).lgr if rz_lgr_id is not None else None
 
-        h_lgr_1_id, h_lgr_2_id, cp_review = lgr_harmonization(request, lgr_1_info.lgr, lgr_2_info.lgr, rz_lgr, script)
+        h_lgr_1_id, h_lgr_2_id, cp_review = lgr_harmonization(request, lgr_1_info.lgr, lgr_2_info.lgr, rz_lgr)
 
         ctx.update({
             'lgr_1': lgr_1_info,
