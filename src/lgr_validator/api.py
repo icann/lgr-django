@@ -23,9 +23,9 @@ def _get_validity(lgr, label_cplist, idna_encoder):
     except UnicodeError as e:
         label_a = '!ERROR - {}!'.format(e)
 
-    (eligible, label_valid_part, label_invalid_part, disp, action_idx, logs) = lgr.test_label_eligible(label_cplist)
+    (eligible, label_valid_parts, label_invalid_parts, disp, action_idx, logs) = lgr.test_label_eligible(label_cplist)
 
-    invalid_codepoints = set(label_invalid_part)
+    invalid_codepoints = set([c for c, _ in label_invalid_parts])
 
     def format_cphex(c, want_html=True):
         if want_html and c in invalid_codepoints:
@@ -42,8 +42,8 @@ def _get_validity(lgr, label_cplist, idna_encoder):
         'cp_display_html': label_display_html,
         'cp_display': label_display_text,
         'eligible': eligible,
-        'invalid_codepoint': label_invalid_part,
         'disposition': disp,
+        'label_invalid_parts': label_invalid_parts,
         'action_idx': action_idx,
         'action': lgr_actions[action_idx] if action_idx >= 0 else None,
         'logs': logs
@@ -220,9 +220,18 @@ def validation_results_to_csv(ctx, fileobj):
     writer = csv.writer(fileobj)
     # Need list(map) for python3.4 that does not like map object (needs sequence)
     writer.writerow(list(map(to_row_format, ['Type', 'U-label', 'A-label', 'Disposition',
-                                             'Code point sequence', 'Action index', 'Action XML'])))
+                                             'Code point sequence', 'Invalid code points',
+                                             'Action index', 'Action XML'])))
+
+    invalid_formatted = []
+    for cp, rules in ctx['label_invalid_parts']:
+        reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
+        invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
+    invalid_formatted = '-'.join(invalid_formatted) or '-'
+
     writer.writerow(list(map(to_row_format, ['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
-                                             ctx['cp_display'], ctx['action_idx'], ctx['action']])))
+                                             ctx['cp_display'], invalid_formatted,
+                                             ctx['action_idx'], ctx['action']])))
     col = ctx.get('collision', None)
     if col:
         writer.writerow(list(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
