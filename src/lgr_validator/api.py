@@ -58,9 +58,18 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
     res['num_variants'] = len(label_dispositions)
     res['threshold_include_vars'] = threshold_include_vars
     if threshold_include_vars < 0 or len(label_dispositions) <= threshold_include_vars:
-        for (variant_cp, var_disp, action_idx, disp_set, logs) in label_dispositions:
+        for (variant_cp, var_disp, var_invalid_parts, action_idx, disp_set, logs) in label_dispositions:
+
+            invalid_codepoints = set([c for c, _ in var_invalid_parts or []])
+
+            def format_cphex(c, want_html=True):
+                if want_html and c in invalid_codepoints:
+                    return u'<span class="text-danger not-in-rep">U+{:04X} (&#{};)</span>'.format(c, c)
+                else:
+                    return u"U+{:04X} (&#{};)".format(c, c)
+
             variant_u = cp_to_ulabel(variant_cp)
-            variant_display_html = mark_safe(u' '.join(u"U+{:04X} ({})".format(cp, cp_to_ulabel(cp)) for cp in variant_cp))
+            variant_display_html = mark_safe(u' '.join(map(format_cphex, variant_cp)))
             variant_display = u' '.join(u"U+{:04X}".format(cp, cp_to_ulabel(cp)) for cp in variant_cp)
             variant_input = u' '.join(u"U+{:04X}".format(cp) for cp in variant_cp)
             variant_a = idna_encoder(variant_u)
@@ -72,6 +81,7 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
                 'cp_display': variant_display,
                 'cp_input': variant_input,
                 'disposition': var_disp,
+                'label_invalid_parts': var_invalid_parts,
                 'action_idx': action_idx,
                 'action': lgr_actions[action_idx] if action_idx >= 0 else None,
                 'disp_set': disp_set,
@@ -237,5 +247,11 @@ def validation_results_to_csv(ctx, fileobj):
         writer.writerow(list(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
                                                  col['cp_display'], col['action_idx'], col['action']])))
     for var in ctx.get('variants', []):
+        invalid_formatted = []
+        for cp, rules in var['label_invalid_parts'] or []:
+            reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
+            invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
+        invalid_formatted = '-'.join(invalid_formatted) or '-'
         writer.writerow(list(map(to_row_format, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
-                                                 var['cp_display'], var['action_idx'], var['action']])))
+                                                 var['cp_display'], invalid_formatted,
+                                                 var['action_idx'], var['action']])))
