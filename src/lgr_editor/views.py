@@ -1553,7 +1553,7 @@ class MultiCodepointsView(FormView):
     def format_cp_choice(self, cp):
         slug = cp_to_slug(cp)
         return (slug, format_html_join('', 'U+{} {}',
-                                       ((c, self.unidata.get_char_name(c)) for c in cp)))
+                                       (('{:04X}'.format(c), self.unidata.get_char_name(c)) for c in cp)))
 
     def _handle_discrete(self, lgr, input_lgr, manual):
         logger.debug("Import: Copy references")
