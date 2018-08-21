@@ -268,9 +268,9 @@
             $('#codepoints').addClass('table table-striped table-bordered')
             {% if not is_set %}
                 $("div.action-buttons").html(`
-                    <div style="float: left; margin-bottom: 10px;">
+                    <div style="float: left; margin-bottom: 10px; padding-right: 10px; border-right: 2px solid silver;">
                         <select class="form-control" id="codepoints_actions" name="actions" aria-controls="codepoints">
-                            <option value="-1" disabled selected>{%  trans "&#x27A1; Select code point(s) to apply batch action..." %}</option>
+                            <option value="-1" disabled selected>{%  trans "➡ Select code point(s) to apply batch action..." %}</option>
                             <option value="add-rule">{% trans "Add WLE" %}</option>
                             <option value="add-tags">{% trans "Add Tags" %}</option>
                         </select>
@@ -290,6 +290,12 @@
                     $('.nbr-selected').text(total_selected)
                     // handle select all button
                     var nbr_selected = cp_table.rows({'search': 'applied', 'selected': true}).count()
+                    // handle button display
+                    if (nbr_selected > 0){
+                        $('#codepoints_actions option')[0].text = '{%  trans "➡ Apply batch action..." %}'
+                    } else {
+                        $('#codepoints_actions option')[0].text = '{%  trans "➡ Select code point(s) to apply batch action..." %}'
+                    }
                     var select_all = $('#select-all-cp')
                     if(nbr_selected === cp_table.rows({'search': 'applied'}).count()) {
                         select_all.get(0).indeterminate = false
