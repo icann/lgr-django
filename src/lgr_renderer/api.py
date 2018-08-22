@@ -238,7 +238,7 @@ def _generate_context_classes(lgr, udata):
         try:
             clz_members = clz.get_pattern(lgr.rules_lookup, lgr.classes_lookup,
                                            udata, as_set=True) & repertoire
-        except RecursionError:
+        except RuntimeError:
             clz_members = []
         clz_members_len = len(clz_members)
         clz_members_display = ' '.join(('U+' + cp_to_str(c) for c in islice(clz_members, MAX_MEMBERS)))
@@ -281,7 +281,7 @@ def _generate_context_rules(lgr, udata, context_rules, trigger_rules):
     for rule in lgr.rules_lookup.values():
         try:
             regex = rule.get_pattern(lgr.rules_lookup, lgr.classes_lookup, udata)
-        except RecursionError:
+        except RuntimeError:
             regex = 'Invalid WLE'
         ctx.append({
             'name': rule.name,
