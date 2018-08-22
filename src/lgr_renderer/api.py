@@ -235,8 +235,11 @@ def _generate_context_classes(lgr, udata):
         if clz.implicit and clz.name in lgr.classes:
             # Class is implicit for existing named class, ignore
             continue
-        clz_members = clz.get_pattern(lgr.rules_lookup, lgr.classes_lookup,
-                                       udata, as_set=True) & repertoire
+        try:
+            clz_members = clz.get_pattern(lgr.rules_lookup, lgr.classes_lookup,
+                                           udata, as_set=True) & repertoire
+        except RecursionError:
+            clz_members = []
         clz_members_len = len(clz_members)
         clz_members_display = ' '.join(('U+' + cp_to_str(c) for c in islice(clz_members, MAX_MEMBERS)))
         if clz_members_len > MAX_MEMBERS:
@@ -276,9 +279,13 @@ def _generate_context_rules(lgr, udata, context_rules, trigger_rules):
 
     ctx = []
     for rule in lgr.rules_lookup.values():
+        try:
+            regex = rule.get_pattern(lgr.rules_lookup, lgr.classes_lookup, udata)
+        except RecursionError:
+            regex = 'Invalid WLE'
         ctx.append({
             'name': rule.name,
-            'regex': rule.get_pattern(lgr.rules_lookup, lgr.classes_lookup, udata),
+            'regex': regex,
             'readable_regex': _generate_links(rule),
             'context': rule.name in context_rules,
             'trigger': rule.name in trigger_rules,
