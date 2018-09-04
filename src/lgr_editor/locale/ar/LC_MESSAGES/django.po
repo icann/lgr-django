@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-21 19:20+0000\n"
+"POT-Creation-Date: 2018-09-04 16:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -319,7 +319,7 @@ msgstr ""
 
 #: lgr_exceptions.py:129
 #, python-format
-msgid "The LGR does not contain language (%(message)s)"
+msgid "The LGR does not contain a valid language (%(message)s)"
 msgstr ""
 
 #: lgr_exceptions.py:131
@@ -501,7 +501,8 @@ msgid "Expand range"
 msgstr ""
 
 #: templates/lgr_editor/codepoint_list.html:273
-msgid "&#x27A1; Select code point(s) to apply batch action..."
+#: templates/lgr_editor/codepoint_list.html:297
+msgid "➡ Select code point(s) to apply batch action..."
 msgstr ""
 
 #: templates/lgr_editor/codepoint_list.html:274
@@ -510,6 +511,10 @@ msgstr ""
 
 #: templates/lgr_editor/codepoint_list.html:275
 msgid "Add Tags"
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:295
+msgid "➡ Apply batch action..."
 msgstr ""
 
 #: templates/lgr_editor/codepoint_view.html:26
@@ -824,162 +829,162 @@ msgstr ""
 msgid "%(nb_cp)s code points were not updated to avoid invalid %(operation)s"
 msgstr ""
 
-#: views.py:501
+#: views.py:504
 #, python-format
 msgid "Automatically added codepoint %s from out-of-repertoire variant"
 msgstr ""
 
-#: views.py:504
+#: views.py:507
 #, python-format
 msgid "New variant %s added"
 msgstr ""
 
-#: views.py:577
+#: views.py:580
 msgid "Code point edited"
 msgstr ""
 
-#: views.py:729
+#: views.py:732
 msgid "Variants populated"
 msgstr ""
 
-#: views.py:780 views.py:816
+#: views.py:783 views.py:819
 msgid "References updated successfully"
 msgstr ""
 
-#: views.py:819
+#: views.py:822
 #, python-format
 msgid ""
 "Variant %(var_codepoint)s for code point %(codepoint)s with when=%(when)s "
 "and not-when=%(not_when)s could not be found"
 msgstr ""
 
-#: views.py:855
+#: views.py:858
 #, python-format
 msgid "Code point %s has been deleted"
 msgstr ""
 
-#: views.py:877
+#: views.py:880
 #, python-format
 msgid "Variant %(var_cp)s with when='%(when)s' and not-when='%(not_when)s'"
 msgstr ""
 
-#: views.py:883
+#: views.py:886
 #, python-format
 msgid "%(var_msg_prefix)s has been deleted"
 msgstr ""
 
-#: views.py:886
+#: views.py:889
 #, python-format
 msgid "%(var_msg_prefix)s could not be deleted because it was not found"
 msgstr ""
 
-#: views.py:916
+#: views.py:919
 msgid "New reference created"
 msgstr ""
 
-#: views.py:1124
+#: views.py:1127
 #, python-format
 msgid ""
 "References to tag %(tag)s have been removed from the repertoire. Do not "
 "forget to update any WLE that might reference it."
 msgstr ""
 
-#: views.py:1192 views.py:1354 views.py:1438
+#: views.py:1195 views.py:1357 views.py:1441
 msgid "No body specified"
 msgstr ""
 
-#: views.py:1201
+#: views.py:1204
 #, python-format
 msgid "Class \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1205
+#: views.py:1208
 #, python-format
 msgid "Class \"%s\" deleted."
 msgstr ""
 
-#: views.py:1210
+#: views.py:1213
 msgid "No class element found"
 msgstr ""
 
-#: views.py:1212 views.py:1374
+#: views.py:1215 views.py:1377
 msgid "Name attribute must be present"
 msgstr ""
 
-#: views.py:1216 views.py:1233 views.py:1378 views.py:1395 views.py:1462
-#: views.py:1475
+#: views.py:1219 views.py:1236 views.py:1381 views.py:1398 views.py:1465
+#: views.py:1478
 #, python-format
 msgid ""
 "Encountered XML syntax error: %s (line number may be wrong, try subtracting "
 "one from the reported line number)"
 msgstr ""
 
-#: views.py:1219 views.py:1236 views.py:1381 views.py:1398 views.py:1465
-#: views.py:1478
+#: views.py:1222 views.py:1239 views.py:1384 views.py:1401 views.py:1468
+#: views.py:1481
 msgid "Your XML is not valid"
 msgstr ""
 
-#: views.py:1224
+#: views.py:1227
 #, python-format
 msgid "Class \"%s\" already exists"
 msgstr ""
 
-#: views.py:1226
+#: views.py:1229
 #, python-format
 msgid "Class \"%s\" saved."
 msgstr ""
 
-#: views.py:1363
+#: views.py:1366
 #, python-format
 msgid "Rule \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1367
+#: views.py:1370
 #, python-format
 msgid "Rule \"%s\" deleted."
 msgstr ""
 
-#: views.py:1372
+#: views.py:1375
 msgid "No rule element found"
 msgstr ""
 
-#: views.py:1386
+#: views.py:1389
 #, python-format
 msgid "Rule \"%s\" already exists"
 msgstr ""
 
-#: views.py:1388
+#: views.py:1391
 #, python-format
 msgid "Rule \"%s\" saved."
 msgstr ""
 
-#: views.py:1449
+#: views.py:1452
 #, python-format
 msgid "Action \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1453
+#: views.py:1456
 #, python-format
 msgid "Action \"%s\" deleted."
 msgstr ""
 
-#: views.py:1458
+#: views.py:1461
 msgid "No action element found"
 msgstr ""
 
-#: views.py:1468
+#: views.py:1471
 msgid "Action saved."
 msgstr ""
 
-#: views.py:1537 views.py:1625
+#: views.py:1540 views.py:1628
 #, python-format
 msgid "%d code points added"
 msgstr ""
 
-#: views.py:1594
+#: views.py:1597
 msgid "No code point in input file"
 msgstr ""
 
-#: views.py:1900
+#: views.py:1903
 msgid "Meta data saved"
 msgstr ""

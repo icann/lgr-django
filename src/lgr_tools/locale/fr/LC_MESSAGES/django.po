@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-21 19:20+0000\n"
-"PO-Revision-Date: 2018-06-21 15:21-0400\n"
+"POT-Creation-Date: 2018-09-04 16:04+0000\n"
+"PO-Revision-Date: 2018-09-04 12:05-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #: forms.py:10
 msgid "Union"
@@ -34,17 +34,17 @@ msgstr "Différence"
 msgid "First LGR"
 msgstr "Première LGR"
 
-#: forms.py:36
-msgid "First LGR to use in comparison"
-msgstr "Première LGR à comparer"
+#: forms.py:36 forms.py:77 forms.py:218
+msgid "First LGR to use in tool"
+msgstr "Première LGR à utiliser dans l'outil"
 
 #: forms.py:40 forms.py:80 forms.py:221
 msgid "Second LGR"
 msgstr "Seconde LGR"
 
-#: forms.py:41
-msgid "Second LGR to use in comparison"
-msgstr "Seconde LGR à comparer"
+#: forms.py:41 forms.py:81 forms.py:222
+msgid "Second LGR to use in tool"
+msgstr "Seconde LGR à utiliser dans l'outil"
 
 #: forms.py:45
 msgid "Action to perform on LGRs"
@@ -70,25 +70,17 @@ msgstr "LGR"
 msgid "LGR set"
 msgstr "Set LGR"
 
-#: forms.py:77
-msgid "First LGR to use in diff"
-msgstr "Première LGR sur laquelle appliquer la différence"
-
-#: forms.py:81
-msgid "Second LGR to use in diff"
-msgstr "Seconde LGR sur laquelle appliquer la différence"
-
 #: forms.py:84 forms.py:122 forms.py:189 forms.py:206
 msgid "Labels"
 msgstr "Labels"
 
 #: forms.py:85 forms.py:123 forms.py:190 forms.py:207
 msgid ""
-"List of labels to use in diff. File must be encoded in UTF-8 and using UNIX "
+"List of labels to use in tool. File must be encoded in UTF-8 and using UNIX "
 "line ending."
 msgstr ""
-"Liste de labels sur lesquels tester les différences. Le fichier doit être "
-"encodé en UTF-8, et utiliser des retours à la ligne UNIX."
+"Liste de labels à utiliser dans l'outil. Le fichier doit être encodé en "
+"UTF-8, et utiliser des retours à la ligne UNIX."
 
 #: forms.py:89 forms.py:127 forms.py:194 forms.py:211
 msgid "E-mail"
@@ -119,13 +111,9 @@ msgid "Show rules in output (this can be very verbose)"
 msgstr ""
 "Affiche les règles dans le fichier de sortie (cela peut être très verbeux)"
 
-#: forms.py:119
-msgid "LGR to use for collisions"
-msgstr "LGR sur laquelle vérifier les collisions"
-
-#: forms.py:151
-msgid "LGR to use for tool"
-msgstr "LGR à utiliser pour l'outil"
+#: forms.py:119 forms.py:151
+msgid "LGR to use in tool"
+msgstr "LGR à utiliser dans l'outil"
 
 #: forms.py:155
 msgid "Script"
@@ -149,14 +137,6 @@ msgstr ""
 "utilisés pour vérifier les collisions lors de l'évaluation de labels en "
 "utilisant le set LGR fusionné. Le fichier doit être encodé en UTF-8, et "
 "utiliser des retours à la ligne UNIX."
-
-#: forms.py:218
-msgid "First LGR to harmonize"
-msgstr "Première LGR à harmoniser"
-
-#: forms.py:222
-msgid "Second LGR to harmonize"
-msgstr "Seconde LGR à harmoniser"
 
 #: forms.py:225
 msgid "Root Zone LGR"
@@ -283,10 +263,6 @@ msgstr "LGR résultantes"
 #, python-format
 msgid "View harmonized version of %(name)s"
 msgstr "Voir la version harmonisée de %(name)s"
-
-#: templates/lgr_tools/harmonization_result.html:22
-msgid "Code points that need to be reviewed"
-msgstr "Code points nécessitant une relecture manuelle"
 
 #: templates/lgr_tools/harmonize.html:17
 msgid "Harmonize"

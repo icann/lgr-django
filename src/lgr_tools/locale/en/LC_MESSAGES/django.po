@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-21 19:20+0000\n"
+"POT-Creation-Date: 2018-09-04 16:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,16 +33,16 @@ msgstr ""
 msgid "First LGR"
 msgstr ""
 
-#: forms.py:36
-msgid "First LGR to use in comparison"
+#: forms.py:36 forms.py:77 forms.py:218
+msgid "First LGR to use in tool"
 msgstr ""
 
 #: forms.py:40 forms.py:80 forms.py:221
 msgid "Second LGR"
 msgstr ""
 
-#: forms.py:41
-msgid "Second LGR to use in comparison"
+#: forms.py:41 forms.py:81 forms.py:222
+msgid "Second LGR to use in tool"
 msgstr ""
 
 #: forms.py:45
@@ -69,21 +69,13 @@ msgstr ""
 msgid "LGR set"
 msgstr ""
 
-#: forms.py:77
-msgid "First LGR to use in diff"
-msgstr ""
-
-#: forms.py:81
-msgid "Second LGR to use in diff"
-msgstr ""
-
 #: forms.py:84 forms.py:122 forms.py:189 forms.py:206
 msgid "Labels"
 msgstr ""
 
 #: forms.py:85 forms.py:123 forms.py:190 forms.py:207
 msgid ""
-"List of labels to use in diff. File must be encoded in UTF-8 and using UNIX "
+"List of labels to use in tool. File must be encoded in UTF-8 and using UNIX "
 "line ending."
 msgstr ""
 
@@ -115,12 +107,8 @@ msgstr ""
 msgid "Show rules in output (this can be very verbose)"
 msgstr ""
 
-#: forms.py:119
-msgid "LGR to use for collisions"
-msgstr ""
-
-#: forms.py:151
-msgid "LGR to use for tool"
+#: forms.py:119 forms.py:151
+msgid "LGR to use in tool"
 msgstr ""
 
 #: forms.py:155
@@ -140,14 +128,6 @@ msgid ""
 "Optional list of labels already allocated in the LGR set, that will be used "
 "to check for collisions when evaluating labels using the merged LGR set. "
 "File must be encoded in UTF-8 and using UNIX line ending."
-msgstr ""
-
-#: forms.py:218
-msgid "First LGR to harmonize"
-msgstr ""
-
-#: forms.py:222
-msgid "Second LGR to harmonize"
 msgstr ""
 
 #: forms.py:225
@@ -254,10 +234,6 @@ msgstr ""
 #: templates/lgr_tools/harmonization_result.html:18
 #, python-format
 msgid "View harmonized version of %(name)s"
-msgstr ""
-
-#: templates/lgr_tools/harmonization_result.html:22
-msgid "Code points that need to be reviewed"
 msgstr ""
 
 #: templates/lgr_tools/harmonize.html:17
