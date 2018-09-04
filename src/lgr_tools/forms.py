@@ -33,12 +33,12 @@ class DataSelectWidget(Select):
 
 class LGRCompareSelector(forms.Form):
     lgr_1 = forms.ChoiceField(label=_("First LGR"),
-                              help_text=_('First LGR to use in comparison'),
+                              help_text=_('First LGR to use in tool'),
                               required=True,
                               widget=DataSelectWidget)
 
     lgr_2 = forms.ChoiceField(label=_("Second LGR"),
-                              help_text=_('Second LGR to use in comparison'),
+                              help_text=_('Second LGR to use in tool'),
                               required=True,
                               widget=DataSelectWidget)
 
@@ -74,15 +74,15 @@ class LGRCompareSelector(forms.Form):
 
 class LGRDiffSelector(forms.Form):
     lgr_1 = forms.ChoiceField(label=_("First LGR"),
-                              help_text=_('First LGR to use in diff'),
+                              help_text=_('First LGR to use in tool'),
                               required=True)
 
     lgr_2 = forms.ChoiceField(label=_("Second LGR"),
-                              help_text=_('Second LGR to use in diff'),
+                              help_text=_('Second LGR to use in tool'),
                               required=True)
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in diff. '
+                             help_text=_('List of labels to use in tool. '
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
@@ -116,11 +116,11 @@ class LGRDiffSelector(forms.Form):
 
 class LGRCollisionSelector(forms.Form):
     lgr = forms.ChoiceField(label=_("LGR"),
-                            help_text=_('LGR to use for collisions'),
+                            help_text=_('LGR to use in tool'),
                             required=True)
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in diff. '
+                             help_text=_('List of labels to use in tool. '
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
@@ -148,7 +148,7 @@ class LGRCollisionSelector(forms.Form):
 
 class LGRSetCompatibleForm(forms.Form):
     lgr = forms.ChoiceField(label=_("LGR"),
-                            help_text=_('LGR to use for tool'),
+                            help_text=_('LGR to use in tool'),
                             required=True,
                             widget=DataSelectWidget)
 
@@ -187,7 +187,7 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
                                              'File must be encoded in UTF-8 and using UNIX line ending.'))
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in diff. '
+                             help_text=_('List of labels to use in tool. '
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
@@ -204,7 +204,7 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
 
 class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in diff. '
+                             help_text=_('List of labels to use in tool. '
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
@@ -215,11 +215,11 @@ class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
 
 class LGRHarmonizeSelector(forms.Form):
     lgr_1 = forms.ChoiceField(label=_('First LGR'),
-                              help_text=_('First LGR to harmonize'),
+                              help_text=_('First LGR to use in tool'),
                               required=True)
 
     lgr_2 = forms.ChoiceField(label=_('Second LGR'),
-                              help_text=_('Second LGR to harmonize'),
+                              help_text=_('Second LGR to use in tool'),
                               required=True)
 
     rz_lgr = forms.ChoiceField(label=_('Root Zone LGR'),
