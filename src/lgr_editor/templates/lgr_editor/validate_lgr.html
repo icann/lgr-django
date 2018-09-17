@@ -1,0 +1,5 @@
+<div class="summary-body">
+    {% for test_name, result in results %}
+        {% include "lgr_editor/validate_lgr/"|add:test_name|add:".html" %}
+    {% endfor %}
+</div>

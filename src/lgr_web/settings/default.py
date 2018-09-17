@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from kombu import Exchange, Queue
+from kombu import Queue
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -41,16 +41,17 @@ INSTALLED_APPS = (
     'lgr_tools',
     'lgr_renderer',
     'widget_tweaks',
-)
+]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+    'lgr_tools.middleware.UnicodeDecodeErrorMiddleWare'
+]
 
 ROOT_URLCONF = 'lgr_web.urls'
 
@@ -167,8 +168,19 @@ CSRF_COOKIE_SECURE = True  # Secure setting for CSRF cookie - turn off for devel
 # How long to set the Session cookie for
 SESSION_COOKIE_AGE = 60*60*24*14  # 2 weeks
 
-# Where to store session data - use the database ("django.contrib.sessions.backends.db") for now
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# Where to store session data - use the cached database:
+# Read from memory, write to DB
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+# Cache
+# https://docs.djangoproject.com/fr/1.8/topics/cache/
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        # DB 0 is used for Celery broker
+        'LOCATION': 'redis://localhost:6379/1',
+    }
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
@@ -229,6 +241,9 @@ UNIDB_LOADER_FUNC = 'lgr_editor.unidb.get_db_by_version'
 # Validator will display variants inline if there are no more than the specified number of variants
 # Otherwise, only a .csv download link is offered.
 LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE = 100
+
+# If estimated number of variants is greater, then switch to asynchronous mode
+LGR_VALIDATION_MAX_VARS_SYNCHRONOUS = 10000
 
 
 ##### /LGR Toolset Project-specific settings #####

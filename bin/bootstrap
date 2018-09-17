@@ -5,7 +5,7 @@ DSITE="src/lgr_web"
 
 if [ ! -e venv ]; then
 	echo "==> Creating virtualenv"
-	virtualenv2 venv || exit 3
+	virtualenv venv || exit 3
 fi
 
 # activate virtualenv

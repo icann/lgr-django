@@ -8,20 +8,31 @@ from __future__ import unicode_literals
 
 import logging
 import re
-from itertools import izip
+from itertools import islice
 
 from natsort import natsorted
 
+from django.utils.six.moves import zip
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join, format_html, mark_safe
+from django.utils import six
 
 from lgr.matcher import AnchorMatcher
 from lgr.validate.lgr_stats import generate_stats
+from lgr.classes import TAG_CLASSNAME_PREFIX
+from lgr.exceptions import NotInLGR
 
 from lgr_editor import unidb
-from lgr_editor.utils import render_cp, render_glyph, render_name, cp_to_slug
+from lgr_editor.utils import (render_cp,
+                              render_glyph,
+                              render_name,
+                              cp_to_slug,
+                              cp_to_str)
 
 logger = logging.getLogger(__name__)
+
+# Number of class members to display
+MAX_MEMBERS = 15
 
 
 def _generate_references(references):
@@ -103,9 +114,10 @@ def _generate_context_repertoire(repertoire, variant_sets_sorted, udata):
         ctx_rules.add(char.when)
         ctx_rules.add(char.not_when)
         variant_id = ''
-        for var_id, variant_set in variant_sets_sorted.items():
+        for var_id, variant_set in six.iteritems(variant_sets_sorted):
             if char.cp in variant_set:
                 variant_id = var_id
+                break
         ctx.append({
             'cp': cp_to_slug(char.cp),
             'cp_disp': render_cp(char),
@@ -141,22 +153,47 @@ def _generate_context_variant_sets(repertoire, variant_sets_sorted, udata):
             'id': set_id,
             'variants': []
         }
+        members = set()
+        reversed_variants = {}
         for cp in variant_set:
             char = repertoire.get_char(cp)
             for var in char.get_variants():
-                set_ctx['variants'].append({
-                    'source_cp': cp_to_slug(char.cp),
-                    'source_cp_disp': render_cp(char),
-                    'source_glyph': render_glyph(char),
-                    'source_name': render_name(char, udata),
-                    'dest_cp': cp_to_slug(var.cp),
-                    'dest_cp_disp': render_cp(var),
-                    'dest_glyph': render_glyph(var),
-                    'dest_name': render_name(var, udata),
-                    'type': var.type,
-                    'references': _generate_references(var.references),
-                    'comment': var.comment or ''
-                })
+                in_lgr = True
+                members.add(var.cp)
+                if var.cp in reversed_variants.get(char.cp, []):
+                    continue
+                try:
+                    var_var = repertoire.get_variant(var.cp, char.cp)
+                except NotInLGR:
+                    in_lgr = False
+                    var_var = [None]
+                else:
+                    if not var_var:
+                        var_var = [None]
+                    reversed_variants.setdefault(var.cp, []).append(char.cp)
+                for vv in var_var:
+                    fwd_ref = _generate_references(var.references)
+                    rev_ref = _generate_references(vv.references) if vv else ''
+                    set_ctx['variants'].append(({
+                        'source_cp': cp_to_slug(char.cp),
+                        'source_cp_disp': render_cp(char),
+                        'source_glyph': render_glyph(char),
+                        'source_name': render_name(char, udata),
+                        'dest_cp': cp_to_slug(var.cp),
+                        'dest_cp_disp': render_cp(var),
+                        'dest_glyph': render_glyph(var),
+                        'dest_name': render_name(var, udata),
+                        'fwd_type': var.type or '',
+                        'reverse': vv is not None,
+                        'rev_type': vv.type or '' if vv else '',
+                        'fwd_references': fwd_ref,
+                        'rev_references': rev_ref,
+                        'fwd_comment': var.comment or '',
+                        'rev_comment': vv.comment or '' if vv else '',
+                        'dest_in_lgr': in_lgr,
+                        'symmetric': vv and var.type == vv.type
+                    }))
+        set_ctx['number_members'] = len(members)
         ctx.append(set_ctx)
 
     return ctx
@@ -175,6 +212,9 @@ def _generate_clz_definition(clz):
         return format_html("Unicode property=&nbsp;<strong>{}</strong>", clz.unicode_property)
     if clz.by_ref is not None:
         return format_html("By Ref=&nbsp;<strong></strong>", clz.by_ref)
+    if clz.implicit:
+        # Implicit tag-based class
+        return format_html("Tag=&nbsp;<strong>{}</strong>", clz.name)
 
     return ''
 
@@ -188,14 +228,31 @@ def _generate_context_classes(lgr, udata):
     :return: Context to be used in template.
     """
     ctx = []
-    for clz_name in lgr.classes:
+    repertoire = udata.get_set((c.cp[0] for c in lgr.repertoire.all_repertoire(include_sequences=False)),
+                               freeze=True)
+    for clz_name in sorted(lgr.classes_lookup.keys(), key=lambda x: (x.startswith(TAG_CLASSNAME_PREFIX), x)):
         clz = lgr.classes_lookup[clz_name]
+        if clz.implicit and clz.name in lgr.classes:
+            # Class is implicit for existing named class, ignore
+            continue
+        try:
+            clz_members = clz.get_pattern(lgr.rules_lookup, lgr.classes_lookup,
+                                           udata, as_set=True) & repertoire
+        except RuntimeError:
+            clz_members = []
+        clz_members_len = len(clz_members)
+        clz_members_display = ' '.join(('U+' + cp_to_str(c) for c in islice(clz_members, MAX_MEMBERS)))
+        if clz_members_len > MAX_MEMBERS:
+            clz_members_display += ' &hellip;'
+        clz_members_display = mark_safe('{' + clz_members_display + '}')
+
         ctx.append({
-            'name': clz.name,
-            'definition': _generate_clz_definition(clz),
+            'name': clz.name if not clz.implicit else mark_safe('<i>implicit</i>'),
+            'definition': _generate_clz_definition(clz) or _generate_links(clz),
             'references': _generate_references(clz.references),
-            'comment': clz.comment or '',
-            'members': _generate_links(clz)
+            'comment': clz.comment or '' if not clz.implicit else '',
+            'members': clz_members_display,
+            'members_count': clz_members_len
         })
 
     return ctx
@@ -222,9 +279,13 @@ def _generate_context_rules(lgr, udata, context_rules, trigger_rules):
 
     ctx = []
     for rule in lgr.rules_lookup.values():
+        try:
+            regex = rule.get_pattern(lgr.rules_lookup, lgr.classes_lookup, udata)
+        except RuntimeError:
+            regex = 'Invalid WLE'
         ctx.append({
             'name': rule.name,
-            'regex': rule.get_pattern(lgr.rules_lookup, lgr.classes_lookup, udata),
+            'regex': regex,
             'readable_regex': _generate_links(rule),
             'context': rule.name in context_rules,
             'trigger': rule.name in trigger_rules,
@@ -332,7 +393,7 @@ def generate_context(lgr):
     udata = unidb.manager.get_db_by_version(lgr.metadata.unicode_version)
 
     variant_sets = lgr.repertoire.get_variant_sets()
-    variant_sets_sorted = {idx: s for idx, s in izip(range(1, len(variant_sets) + 1), variant_sets)}
+    variant_sets_sorted = {idx: s for idx, s in zip(range(1, len(variant_sets) + 1), variant_sets)}
 
     context.update(_generate_context_metadata(lgr.metadata))
     context['repertoire'], ctxt_rules = _generate_context_repertoire(lgr.repertoire, variant_sets_sorted, udata)

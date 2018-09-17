@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.forms.widgets import Select
+from django.utils.six import iteritems
 from django.utils.translation import ugettext_lazy as _
 
 LGR_COMPARE_ACTIONS = (
@@ -25,19 +26,19 @@ class DataSelectWidget(Select):
     def render_option(self, selected_choices, option_value, option_label):
         option = super(DataSelectWidget, self).render_option(selected_choices, option_value, option_label)
         str_data = ''
-        for key, val in self.data.get(option_value, {}).iteritems():
+        for key, val in iteritems(self.data.get(option_value, {})):
             str_data += 'data-%s="%s" ' % (key, val)
         return option.replace("value=", str_data + "value=")  # XXX is there a better way without rewriting all method from scratch
 
 
 class LGRCompareSelector(forms.Form):
     lgr_1 = forms.ChoiceField(label=_("First LGR"),
-                              help_text=_('First LGR to use in comparison'),
+                              help_text=_('First LGR to use in tool'),
                               required=True,
                               widget=DataSelectWidget)
 
     lgr_2 = forms.ChoiceField(label=_("Second LGR"),
-                              help_text=_('Second LGR to use in comparison'),
+                              help_text=_('Second LGR to use in tool'),
                               required=True,
                               widget=DataSelectWidget)
 
@@ -46,6 +47,9 @@ class LGRCompareSelector(forms.Form):
                                required=True,
                                choices=LGR_COMPARE_ACTIONS,
                                initial="UNION")
+    full_dump = forms.BooleanField(label=_("Full dump"),
+                                   help_text=_('Print a full dump (i.e. with identical code points as well)'),
+                                   required=False)
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', [])
@@ -70,16 +74,16 @@ class LGRCompareSelector(forms.Form):
 
 class LGRDiffSelector(forms.Form):
     lgr_1 = forms.ChoiceField(label=_("First LGR"),
-                              help_text=_('First LGR to use in diff'),
+                              help_text=_('First LGR to use in tool'),
                               required=True)
 
     lgr_2 = forms.ChoiceField(label=_("Second LGR"),
-                              help_text=_('Second LGR to use in diff'),
+                              help_text=_('Second LGR to use in tool'),
                               required=True)
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in diff. '
-                                         'File must be encoded in UNIX format.'),
+                             help_text=_('List of labels to use in tool. '
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
     email = forms.EmailField(label=_("E-mail"),
@@ -112,12 +116,12 @@ class LGRDiffSelector(forms.Form):
 
 class LGRCollisionSelector(forms.Form):
     lgr = forms.ChoiceField(label=_("LGR"),
-                            help_text=_('LGR to use for collisions'),
+                            help_text=_('LGR to use in tool'),
                             required=True)
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in diff. '
-                                         'File must be encoded in UNIX format.'),
+                             help_text=_('List of labels to use in tool. '
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
     email = forms.EmailField(label=_("E-mail"),
@@ -144,7 +148,7 @@ class LGRCollisionSelector(forms.Form):
 
 class LGRSetCompatibleForm(forms.Form):
     lgr = forms.ChoiceField(label=_("LGR"),
-                            help_text=_('LGR to use for annotation'),
+                            help_text=_('LGR to use in tool'),
                             required=True,
                             widget=DataSelectWidget)
 
@@ -179,11 +183,12 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
                                  help_text=_('Optional list of labels already allocated '
                                              'in the LGR set, that will be used to check '
                                              'for collisions when evaluating labels using '
-                                             'the merged LGR set'))
+                                             'the merged LGR set. '
+                                             'File must be encoded in UTF-8 and using UNIX line ending.'))
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in diff. '
-                                         'File must be encoded in UNIX format.'),
+                             help_text=_('List of labels to use in tool. '
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
     email = forms.EmailField(label=_("E-mail"),
@@ -199,10 +204,40 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
 
 class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in diff. '
-                                         'File must be encoded in UNIX format.'),
+                             help_text=_('List of labels to use in tool. '
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
     email = forms.EmailField(label=_("E-mail"),
                              help_text=_('Provide your e-mail address'),
                              required=True)
+
+
+class LGRHarmonizeSelector(forms.Form):
+    lgr_1 = forms.ChoiceField(label=_('First LGR'),
+                              help_text=_('First LGR to use in tool'),
+                              required=True)
+
+    lgr_2 = forms.ChoiceField(label=_('Second LGR'),
+                              help_text=_('Second LGR to use in tool'),
+                              required=True)
+
+    rz_lgr = forms.ChoiceField(label=_('Root Zone LGR'),
+                               help_text=_('The (optional) RootZone LGR to infer new variant sets from'),
+                               required=False)
+
+    def __init__(self, *args, **kwargs):
+        session_lgrs = kwargs.pop('session_lgrs', {})
+        lgr_id = kwargs.pop('lgr_id', '')
+        super(LGRHarmonizeSelector, self).__init__(*args, **kwargs)
+        lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
+        lgrs = [lgr for lgr in session_lgrs if not lgr['is_set']]
+        # dynamically append the session LGRs
+        for field_name in ('lgr_1', 'lgr_2', 'rz_lgr'):
+            self.fields[field_name].choices = ((_('LGR'), [(lgr['name'], lgr['name']) for lgr in lgrs]),
+                                               (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
+            self.fields[field_name].widget.data = {lgr['name']: {'lgr-set': ','.join([l['name'] for l in lgr['lgr_set_dct']])}
+                                                   for lgr in lgr_sets}
+        self.fields['rz_lgr'].choices = [('', ''), ] + self.fields['rz_lgr'].choices
+        self.fields['lgr_1'].initial = lgr_id
+        self.fields['rz_lgr'].initial = ''

@@ -27,7 +27,7 @@
     <char cp="006E" ref="0"/>
     <char cp="006F" ref="0"/>
     <char cp="006F 0065">
-      <var cp="0153" type="block"/>
+      <var cp="0153" type="blocked"/>
     </char>
     <char cp="0070" ref="0"/>
     <char cp="0071" ref="0"/>
@@ -41,7 +41,7 @@
     <char cp="0079"/>
     <char cp="007A" ref="0"/>
     <char cp="0153">
-      <var cp="006F 0065" type="block"/>
+      <var cp="006F 0065" type="blocked"/>
     </char>
   </data>
   <rules/>

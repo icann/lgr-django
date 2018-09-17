@@ -7,6 +7,7 @@ LGR_SLUG_FORMAT_WITH_OPT_SET = r'(?:(?P<lgr_set_id>[\w\_\-\.]+)/)?(?P<lgr_id>[\w
 LGR_SLUG_FORMAT = r'(?P<lgr_id>[\w\_\-\.]+)'
 CP_SLUG_FORMAT = r'(?P<codepoint_id>[0-9a-z-A-Z]{1,6}(-[0-9a-z-A-Z]{1,6})*)'
 VAR_SLUG_FORMAT = r'(?P<var_slug>[0-9a-z-A-Z]{1,6}(-[0-9a-z-A-Z]{1,6})*,.*,.*)'
+TAG_SLUG_FORMAT = r'(?P<tag_id>[0-9a-zA-Z._:\-]+)'
 
 urlpatterns = patterns(
     '',
@@ -42,16 +43,16 @@ urlpatterns = patterns(
         name='download_lgr_xml'),
 
     # Reference management functions
+    url(r'^lgr/{}/a/references/$'.format(LGR_SLUG_FORMAT),
+        views.add_reference_ajax,
+        name='reference_add_ajax'),
     url(r'^lgr/{}/references/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.reference_list,
         name='references'),
     url(r'^lgr/{}/references.json/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.reference_list_json,
         name='references_json'),
-    url(r'^lgr/{}/a/references/$'.format(LGR_SLUG_FORMAT),
-        views.add_reference_ajax,
-        name='reference_add_ajax'),
-    url(r'^lgr/{}/d/references/(?P<ref_id>[\w\_\-\.\s]+)$'.format(LGR_SLUG_FORMAT),
+    url(r'^lgr/{}/d/references/(?P<ref_id>[\w\_\-\.\s\:]+)$'.format(LGR_SLUG_FORMAT),
         views.delete_reference,
         name='reference_delete'),
 
@@ -59,6 +60,17 @@ urlpatterns = patterns(
     url(r'^lgr/{}/metadata/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.MetadataView.as_view(),
         name='metadata'),
+
+    # Tags management functions
+    url(r'^lgr/{}/tags$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
+        views.tag_list,
+        name='tags'),
+    url(r'^lgr/{}/d/tags/{}$'.format(LGR_SLUG_FORMAT, TAG_SLUG_FORMAT),
+        views.delete_tag,
+        name='tag_delete'),
+    url(r'^lgr/{}/tags/{}$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET, TAG_SLUG_FORMAT),
+        views.tag_list_json,
+        name='tag_list_json'),
 
     # Rules functions
     url(r'^lgr/{}/rules/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
@@ -80,21 +92,13 @@ urlpatterns = patterns(
         views.embedded_lgrs,
         name='embedded_lgrs'),
 
-    # Summary function
-    url(r'^lgr/{}/summary/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.validate_lgr,
-        name='summary'),
-    url(r'^lgr/{}/summary/s/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.save_summary,
-        name='summary_save'),
-
     # Validation function
-    url(r'^lgr/{}/validate/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.validate_label,
-        name='lgr_validate_label'),
-    url(r'^lgr/{}/validate-nf/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.validate_label_noframe,
-        name='lgr_validate_label_noframe'),
+    url(r'^lgr/{}/validate_lgr/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
+        views.validate_lgr,
+        name='validate_lgr'),
+    url(r'^lgr/{}/validate_lgr/s/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
+        views.validate_lgr_save,
+        name='validate_lgr_save'),
 
     # Codepoint functions
     url(r'^lgr/default/$',
@@ -109,6 +113,9 @@ urlpatterns = patterns(
     url(r'^lgr/{}/e/$'.format(LGR_SLUG_FORMAT),
         views.expand_ranges,
         name='expand_ranges'),
+    url(r'^lgr/{}/p/$'.format(LGR_SLUG_FORMAT),
+        views.populate_variants,
+        name='populate_variants'),
     url(r'^lgr/{}/r/{}/$'.format(LGR_SLUG_FORMAT, CP_SLUG_FORMAT),
         views.codepoint_update_refs,
         name='codepoint_update_refs'),
@@ -124,12 +131,22 @@ urlpatterns = patterns(
     url(r'^lgr/{}/r/$'.format(LGR_SLUG_FORMAT),
         views.AddRangeView.as_view(),
         name='add_range'),
+    url(r'^lgr/{}/rs/$'.format(LGR_SLUG_FORMAT),
+        views.AddCodepointFromScriptView.as_view(),
+        name='add_from_script'),
     url(r'^lgr/{}/i/$'.format(LGR_SLUG_FORMAT),
         views.ImportCodepointsFromFileView.as_view(),
         name='import_from_file'),
     url(r'^lgr/{}/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.codepoint_list,
         name='codepoint_list'),
+    url(r'lgr/{}/json$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
+        views.codepoint_list_json,
+        name='codepoint_list_json'),
+
+    url(r'^label_forms/$',
+        views.label_forms,
+        name='lgr_label_forms'),
 
     url(r'^about/$',
         views.about,

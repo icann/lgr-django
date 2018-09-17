@@ -3,17 +3,22 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.contrib import messages
 
 from lgr_editor.api import session_list_lgr, session_select_lgr, session_get_storage, LabelInfo
-from lgr_tools.api import lgr_intersect_union, lgr_comp_diff, LGRCompInvalidException
+from lgr_editor.utils import cp_to_slug
+from lgr_tools.api import lgr_intersect_union, lgr_comp_diff, lgr_harmonization, LGRCompInvalidException
 from lgr_tools.forms import (LGRCompareSelector,
                              LGRDiffSelector,
                              LGRCollisionSelector,
                              LGRAnnotateSelector,
-                             LGRCrossScriptVariantsSelector)
+                             LGRCrossScriptVariantsSelector,
+                             LGRHarmonizeSelector)
 
-from tasks import diff_task, collision_task, annotate_task, lgr_set_annotate_task, cross_script_variants_task
+from .tasks import (diff_task,
+                    collision_task,
+                    annotate_task,
+                    lgr_set_annotate_task,
+                    cross_script_variants_task)
 
 select_lgr = getattr(__import__(settings.LGR_SELECTOR_FUNC.rpartition('.')[0],
                                 fromlist=[settings.LGR_SELECTOR_FUNC.rpartition('.')[0]]),
@@ -47,20 +52,38 @@ def lgr_compare(request, lgr_id):
                                              lgr_info_1, lgr_info_2,
                                              action)
             except LGRCompInvalidException as lgr_xml:
-                import base64
+                from io import BytesIO
+                from django.core.files.storage import FileSystemStorage
+                from gzip import GzipFile
+                from time import strftime
+
+                sio = BytesIO()
+                base_filename = '{comp_type}-of-{lgr1}-and-{lgr2}-{date}.xml'.format(
+                    comp_type=action.lower(),
+                    lgr1=lgr_info_1.name,
+                    lgr2=lgr_info_2.name,
+                    date=strftime('%Y%m%d_%H%M%S'))
+                with GzipFile(filename=base_filename,
+                              fileobj=sio, mode='w') as gzf:
+                    gzf.write(lgr_xml.content)
+
+                storage = FileSystemStorage(location=session_get_storage(request),
+                                            file_permissions_mode=0o440)
+                filename = storage.save('{}.gz'.format(base_filename), sio)
                 return render(request, 'lgr_tools/comp_invalid.html',
                               context={
                                   'lgr_1': lgr_info_1,
                                   'lgr_2': lgr_info_2,
-                                  'lgr_xml': base64.standard_b64encode(lgr_xml.content),
+                                  'lgr_file_name': filename,
                                   'comp_type': action.lower(),
                                   'lgr_id': lgr_id if lgr_id is not None else '',
                                   'lgr': lgr_info.lgr if lgr_info is not None else '',
-                                  'is_set': lgr_info.is_set if lgr_info is not None else ''})
+                                  'is_set': lgr_info.is_set if lgr_info is not None else '',
+                                  'error': lgr_xml.error})
             else:
                 return redirect('codepoint_list', lgr_id)
         else:
-            content = lgr_comp_diff(request, lgr_info_1, lgr_info_2)
+            content = lgr_comp_diff(request, lgr_info_1, lgr_info_2, form.cleaned_data['full_dump'])
             ctx = {
                 'content': content,
                 'lgr_1': lgr_info_1,
@@ -310,3 +333,37 @@ def lgr_cross_script_variants(request, lgr_id):
     }
 
     return render(request, 'lgr_tools/cross_script_variants.html', context=ctx)
+
+
+def lgr_harmonize(request, lgr_id):
+    form = LGRHarmonizeSelector(request.POST or None,
+                                session_lgrs=session_list_lgr(request),
+                                lgr_id=lgr_id)
+
+    if form.is_valid():
+        ctx = {}
+        lgr_1_id, lgr_2_id = form.cleaned_data['lgr_1'], form.cleaned_data['lgr_2']
+        rz_lgr_id = form.cleaned_data['rz_lgr'] or None
+
+        lgr_1_info, lgr_2_info = (session_select_lgr(request, l) for l in (lgr_1_id, lgr_2_id))
+        rz_lgr = session_select_lgr(request, rz_lgr_id).lgr if rz_lgr_id is not None else None
+
+        h_lgr_1_id, h_lgr_2_id, cp_review = lgr_harmonization(request, lgr_1_info.lgr, lgr_2_info.lgr, rz_lgr)
+
+        ctx.update({
+            'lgr_1': lgr_1_info,
+            'lgr_2': lgr_2_info,
+            'h_lgr_1_id': h_lgr_1_id,
+            'h_lgr_2_id': h_lgr_2_id,
+            'cp_review': ((h_lgr_1_id, ((c, cp_to_slug(c)) for c in cp_review[0])),
+                          (h_lgr_2_id, ((c, cp_to_slug(c)) for c in cp_review[1]))),
+            'has_cp_review': bool(cp_review[0]) or bool(cp_review[1])
+        })
+        return render(request, 'lgr_tools/harmonization_result.html', context=ctx)
+
+    ctx = {
+        'form': form,
+        'lgr_id': lgr_id if lgr_id is not None else ''
+    }
+
+    return render(request, 'lgr_tools/harmonize.html', context=ctx)

@@ -8,6 +8,14 @@
             To import LGR set, select the XML files composing the LGR set. The set will automatically be created.
         {% endblocktrans %}
     </p>
+    <p>
+        {% blocktrans trimmed %}
+          <strong>
+            <i class="glyphicon glyphicon-info-sign"></i> Import function will only perfom some basic checking (example: XML validity).
+            Once the LGR has been imported, you need to use the <emph>Validate LGR</emph> button to do a complete check.
+          </strong>
+        {% endblocktrans %}
+    </p>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.file %}

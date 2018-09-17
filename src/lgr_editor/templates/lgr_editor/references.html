@@ -19,9 +19,9 @@
                 </tr>
                 {% for ref in references_form %}
                     <tr id="ref_{{ ref.ref_id.value }}">
-                        <td class="ref-id">{{ ref.ref_id }}</td>
-                        <td class="ref-desc">{{ ref.description }}</td>
-                        <td class="ref-comment">{{ ref.comment }}</td>
+                        <td class="ref-id">{% include "lgr_editor/_form_field_no_label.html" with field=ref.ref_id %}</td>
+                        <td class="ref-desc">{% include "lgr_editor/_form_field_no_label.html" with field=ref.description %}</td>
+                        <td class="ref-comment">{% include "lgr_editor/_form_field_no_label.html" with field=ref.comment %}</td>
                         {% if not is_set %}
                         <td class="text-right">
                             <a class="btn btn-default confirm-prompt"
@@ -42,17 +42,19 @@
 
     {% if not is_set %}
     <h3>{% trans 'New reference' %}</h3>
-    <form class="form-inline" method="post">
+    <form class="form-horizontal" method="post">
         {% csrf_token %}
         {{add_reference_form.error}}
         <table class="table table-hover table-striped">
             <tr>
+                <th>{% trans "Reference id" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "URL" %}</th>
             </tr>
             <tr>
-                <td class="ref-desc">{{add_reference_form.description}}</td>
-                <td>{{add_reference_form.comment}}</td>
+                <td class="new-ref-id">{% include "lgr_editor/_form_field_no_label.html" with field=add_reference_form.ref_id %}</td>
+                <td class="ref-desc">{% include "lgr_editor/_form_field_no_label.html" with field=add_reference_form.description %}</td>
+                <td>{% include "lgr_editor/_form_field_no_label.html" with field=add_reference_form.comment %}</td>
             </tr>
          </table>
         <button type="submit" class="btn btn-primary" name="add_reference">{% trans "Add" %}</button>

@@ -1,20 +1,31 @@
 # -*- coding: utf-8 -*-
+import csv
+
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.diff_collisions import get_collisions
+from lgr.utils import cp_to_ulabel
+
+# Define some py2/3 compat stuff
+import sys
+if sys.version_info.major > 2:
+    to_row_format = str
+else:
+    from django.utils.encoding import force_bytes
+    to_row_format = force_bytes
 
 
 def _get_validity(lgr, label_cplist, idna_encoder):
-    label_u = u''.join([unichr(c) for c in label_cplist])
+    label_u = cp_to_ulabel(label_cplist)
     try:
         label_a = idna_encoder(label_u)
     except UnicodeError as e:
         label_a = '!ERROR - {}!'.format(e)
 
-    (eligible, label_valid_part, label_invalid_part, disp, action_idx, logs) = lgr.test_label_eligible(label_cplist)
+    (eligible, label_valid_parts, label_invalid_parts, disp, action_idx, logs) = lgr.test_label_eligible(label_cplist)
 
-    invalid_codepoints = set(label_invalid_part)
+    invalid_codepoints = set([c for c, _ in label_invalid_parts])
 
     def format_cphex(c, want_html=True):
         if want_html and c in invalid_codepoints:
@@ -31,8 +42,8 @@ def _get_validity(lgr, label_cplist, idna_encoder):
         'cp_display_html': label_display_html,
         'cp_display': label_display_text,
         'eligible': eligible,
-        'invalid_codepoint': label_invalid_part,
         'disposition': disp,
+        'label_invalid_parts': label_invalid_parts,
         'action_idx': action_idx,
         'action': lgr_actions[action_idx] if action_idx >= 0 else None,
         'logs': logs
@@ -47,10 +58,19 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
     res['num_variants'] = len(label_dispositions)
     res['threshold_include_vars'] = threshold_include_vars
     if threshold_include_vars < 0 or len(label_dispositions) <= threshold_include_vars:
-        for (variant_cp, var_disp, action_idx, disp_set, logs) in label_dispositions:
-            variant_u = ''.join([unichr(c) for c in variant_cp])
-            variant_display_html = mark_safe(u' '.join(u"U+{:04X} ({})".format(cp, unichr(cp)) for cp in variant_cp))
-            variant_display = u' '.join(u"U+{:04X}".format(cp, unichr(cp)) for cp in variant_cp)
+        for (variant_cp, var_disp, var_invalid_parts, action_idx, disp_set, logs) in label_dispositions:
+
+            invalid_codepoints = set([c for c, _ in var_invalid_parts or []])
+
+            def format_cphex(c, want_html=True):
+                if want_html and c in invalid_codepoints:
+                    return u'<span class="text-danger not-in-rep">U+{:04X} (&#{};)</span>'.format(c, c)
+                else:
+                    return u"U+{:04X} (&#{};)".format(c, c)
+
+            variant_u = cp_to_ulabel(variant_cp)
+            variant_display_html = mark_safe(u' '.join(map(format_cphex, variant_cp)))
+            variant_display = u' '.join(u"U+{:04X}".format(cp, cp_to_ulabel(cp)) for cp in variant_cp)
             variant_input = u' '.join(u"U+{:04X}".format(cp) for cp in variant_cp)
             variant_a = idna_encoder(variant_u)
 
@@ -61,6 +81,7 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
                 'cp_display': variant_display,
                 'cp_input': variant_input,
                 'disposition': var_disp,
+                'label_invalid_parts': var_invalid_parts,
                 'action_idx': action_idx,
                 'action': lgr_actions[action_idx] if action_idx >= 0 else None,
                 'disp_set': disp_set,
@@ -73,7 +94,7 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
 
 def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
     res = {}
-    label_u = u''.join([unichr(c) for c in label_cplist])
+    label_u = cp_to_ulabel(label_cplist)
     set_labels = [l.strip() for l in set_labels]
 
     # if label is in the LGR set labels skip
@@ -91,7 +112,7 @@ def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
     if len(indexes) == 0:
         return res
 
-    collisions = indexes[indexes.keys()[0]]
+    collisions = indexes[list(indexes.keys())[0]]
     collision = None
     collide_with = []
     # retrieve label in collision list
@@ -113,8 +134,8 @@ def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
 
     collide_with = collide_with[0]
     variant_u = idna_encoder(collide_with['label'])
-    variant_display_html = mark_safe(u' '.join(u"U+{:04X} ({})".format(cp, unichr(cp)) for cp in collide_with['cp']))
-    variant_display = u' '.join(u"U+{:04X}".format(cp, unichr(cp)) for cp in collide_with['cp'])
+    variant_display_html = mark_safe(u' '.join(u"U+{:04X} ({})".format(cp, cp_to_ulabel(cp)) for cp in collide_with['cp']))
+    variant_display = u' '.join(u"U+{:04X}".format(cp) for cp in collide_with['cp'])
     try:
         variant_a = idna_encoder(variant_u)
     except UnicodeError as e:
@@ -200,3 +221,37 @@ def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
         res.update(_get_variants(script_lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions))
 
     return res
+
+
+def validation_results_to_csv(ctx, fileobj):
+    """
+    Convert validation results to a CSV.
+    """
+    writer = csv.writer(fileobj)
+    # Need list(map) for python3.4 that does not like map object (needs sequence)
+    writer.writerow(list(map(to_row_format, ['Type', 'U-label', 'A-label', 'Disposition',
+                                             'Code point sequence', 'Invalid code points',
+                                             'Action index', 'Action XML'])))
+
+    invalid_formatted = []
+    for cp, rules in ctx['label_invalid_parts']:
+        reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
+        invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
+    invalid_formatted = '-'.join(invalid_formatted) or '-'
+
+    writer.writerow(list(map(to_row_format, ['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
+                                             ctx['cp_display'], invalid_formatted,
+                                             ctx['action_idx'], ctx['action']])))
+    col = ctx.get('collision', None)
+    if col:
+        writer.writerow(list(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
+                                                 col['cp_display'], col['action_idx'], col['action']])))
+    for var in ctx.get('variants', []):
+        invalid_formatted = []
+        for cp, rules in var['label_invalid_parts'] or []:
+            reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
+            invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
+        invalid_formatted = '-'.join(invalid_formatted) or '-'
+        writer.writerow(list(map(to_row_format, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
+                                                 var['cp_display'], invalid_formatted,
+                                                 var['action_idx'], var['action']])))

@@ -6,11 +6,16 @@
 {% url 'codepoint_list' lgr_id=lgr_2.name as lgr_2_url %}
 <h2>{% blocktrans with lgr_1_name=lgr_1.name lgr_2_name=lgr_2.name %}The {{ comp_type }} of <a href="{{ lgr_1_url }}">{{ lgr_1_name }}</a> with <a href="{{ lgr_2_url }}">{{ lgr_2_name }}</a> need editing to be valid.{% endblocktrans %}</h2>
 <p>{% trans "Please download and edit it manually before importing it in LGR Toolset." %}</p>
+
+<div>
+  <p>{% trans "To help, here is the error log from the validation:" %}</p>
+  <div class="alert alert-error">{{ error|linebreaks }}</div>
+</div>
+
 <div class="text-right">
-    <a class="btn btn-default show-tooltip"
-       title="{% blocktrans %}Download invalid LGR {{ comp_type }} file{% endblocktrans %}" data-placement="bottom"
-       href="data:text/xml;charset=utf-8;base64,{{ lgr_xml }}" target="_blank"
-       download="{{ comp_type }}-of-{{ lgr_1.name }}-and-{{ lgr_2.name }}.xml">
+    <a href="{% url 'download_file' lgr_file_name %}"
+       class="btn btn-default show-tooltip"
+       title="{% blocktrans %}Download invalid LGR {{ comp_type }} file{% endblocktrans %}" data-placement="bottom">
         <i class="glyphicon glyphicon-save"></i>
         {% trans "Download" %}
     </a>

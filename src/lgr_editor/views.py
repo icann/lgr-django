@@ -7,35 +7,45 @@ from lxml.etree import XMLSyntaxError
 import os
 import re
 import logging
-from io import BytesIO
+from io import StringIO
+from itertools import islice
 
 from django.core.exceptions import SuspiciousOperation
 from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect
+from django.utils.six import StringIO, iteritems
 from django.utils.encoding import force_text
 from django.utils.text import slugify
-from django.views.generic import FormView
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join
-from django.http import HttpResponse, HttpResponseBadRequest, FileResponse
+from django.http import (HttpResponse,
+                         HttpResponseBadRequest,
+                         FileResponse,
+                         JsonResponse)
+from django.core.cache import cache
+from django.views.generic import FormView
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 
-from lgr.exceptions import LGRException, NotInLGR
+from lgr.exceptions import LGRException, NotInLGR, CharInvalidContextRule, LGRFormatException
 from lgr.metadata import Scope, Description, Metadata, Version
 from lgr.char import RangeChar
 from lgr.parser.xml_parser import LGR_NS
-from lgr.utils import format_cp
+from lgr.utils import format_cp, cp_to_ulabel
+from lgr.validate.transitivity import check_transitivity
+from lgr.validate.symmetry import check_symmetry
 from lgr.parser.rfc3743_parser import RFC3743Parser
 from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.parser.line_parser import LineParser
-from lgr_editor.api import LabelInfo
-from lgr_validator.views import evaluate_label_from_info
+from lgr.core import LGR
 
+from .repertoires import get_by_name, get_all_scripts_from_repertoire
 from .forms import (AddCodepointForm,
                     AddRangeForm,
+                    AddCodepointFromScriptForm,
                     ImportCodepointsFromFileForm,
                     AddVariantForm,
                     CodepointForm,
@@ -47,7 +57,8 @@ from .forms import (AddCodepointForm,
                     CreateLGRForm,
                     AddMultiCodepointsForm,
                     LanguageFormSet,
-                    ValidateLabelForm)
+                    LabelFormsForm,
+                    EditCodepointsForm)
 
 from .lgr_exceptions import lgr_exception_to_text
 from .api import (session_open_lgr,
@@ -59,17 +70,23 @@ from .api import (session_open_lgr,
                   session_get_file,
                   session_delete_file,
                   session_merge_set,
-                  get_builtin_or_session_repertoire, LGRInfo)
+                  get_builtin_or_session_repertoire,
+                  LGRInfo)
 from .utils import (render_char,
                     render_name,
                     render_age,
+                    render_cp_or_sequence,
                     cp_to_slug,
                     slug_to_cp,
                     slug_to_var,
-                    var_to_slug)
+                    var_to_slug,
+                    make_lgr_session_key,
+                    LGR_REPERTOIRE_CACHE_KEY,
+                    LGR_CACHE_TIMEOUT)
 from . import unidb
 
 
+TRUNCATE_AFTER_N_CP_TAGS = 10
 RE_SAFE_FILENAME = re.compile(r'[a-zA-Z0-9. _\-()]+')
 logger = logging.getLogger(__name__)
 
@@ -189,7 +206,7 @@ def import_reference_lgr(request, filename):
     if lgr_id.endswith('.xml'):
         lgr_id = lgr_id.rsplit('.', 1)[0]
     lgr_id = slugify(lgr_id)
-    with open(os.path.join(settings.LGR_STORAGE_LOCATION, filename + '.xml')) as f:
+    with open(os.path.join(settings.LGR_STORAGE_LOCATION, filename + '.xml'), 'rb') as f:
         session_open_lgr(request, lgr_id, f.read())
     return redirect('codepoint_list', lgr_id=lgr_id)
 
@@ -224,36 +241,29 @@ def validate_lgr(request, lgr_id, output_func=None, lgr_set_id=None):
         options['validating_repertoire'] = lgr_info.validating_repertoire
     options['rng_filepath'] = settings.LGR_RNG_FILE
 
-    output = ''
-    if lgr_info.is_set:
-        output += 'LGR is a set containning the following LGRs:\n'
-        for lgr in lgr_info.lgr_set:
-            output += lgr.name + '\n'
-        output += '\n'
-    elif lgr_set_id:
-        output += 'LGR belong to the LGR set: "{}"\n\n'.format(lgr_set_id)
-
-    output += lgr_info.lgr.validate(options)
+    results = lgr_info.lgr.validate(options)
+    tpl_name = 'lgr_editor/validate_lgr.html'
+    context = {
+        'results': results,
+        'name': lgr_id
+    }
     if output_func:
-        return output_func(ctx={'output': output,
-                                'name': lgr_id})
+        return output_func(lgr_id, render_to_string(tpl_name, context))
     else:
-        return render(request,
-                      'lgr_editor/summary_output.html',
-                      context={'output': output})
+        return render(request, tpl_name, context)
 
 
-def save_summary(request, lgr_id, lgr_set_id=None):
+def validate_lgr_save(request, lgr_id, lgr_set_id=None):
     return validate_lgr(request, lgr_id, lgr_set_id=lgr_set_id,
-                        output_func=_prepare_txt_response)
+                        output_func=_prepare_html_file_response)
 
 
-def _prepare_txt_response(ctx):
-    response = HttpResponse(content_type='text/plain')
-    cd = 'attachment; filename="{0}-{1}.txt"'.format(ctx['name'], _('summary'))
+def _prepare_html_file_response(name, out):
+    response = HttpResponse(content_type='text/html')
+    cd = 'attachment; filename="{0}-{1}.html"'.format(name, 'validation-results')
     response['Content-Disposition'] = cd
 
-    response.write(ctx['output'])
+    response.write(out)
 
     return response
 
@@ -263,10 +273,9 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
     List the codepoints defined in an LGR.
     """
     lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
-    udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
 
     # instantiate form
-    cp_form = AddCodepointForm(request.POST or None, prefix='add_cp')
+    cp_form = AddCodepointForm(request.POST if 'add_cp' in request.POST else None, prefix='add_cp')
     if 'add_cp' in request.POST and cp_form.is_valid():
         logger.debug("Add CP")
         # form was submitted, we parse the value from the form field
@@ -282,25 +291,101 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
             # redirect to myself to refresh display
+            # Note: cannot add code point in set mode
             return redirect('codepoint_list',
-                            lgr_id=lgr_id,
-                            lgr_set_id=lgr_set_id)
+                            lgr_id=lgr_id)
 
-    repertoire = [{
-        'cp': cp_to_slug(char.cp),
-        'cp_disp': render_char(char),
-        'comment': char.comment or '',
-        'name': render_name(char, udata),
-        'variant_number': len(list(char.get_variants())),
-        'is_range': isinstance(char, RangeChar)
-    } for char in lgr_info.lgr.repertoire]
+    rule_names = (('', ''),) + tuple((v, v) for v in lgr_info.lgr.rules)
+    edit_codepoints_form = EditCodepointsForm(request.POST if ('add-rules' in request.POST or 'add-tags' in request.POST)
+                                              else None, prefix='edit_codepoints', rule_names=rule_names)
+    if ('add-rules' in request.POST or 'add-tags' in request.POST) and edit_codepoints_form.is_valid():
+        logger.debug('Edit codepoints')
+        cd = edit_codepoints_form.cleaned_data
+        when = cd['when'] or None
+        not_when = cd['not_when'] or None
+        tags = cd['tags'].split()
+        edited = cd['cp_id']
+        invalid = []
+        for cp in [slug_to_cp(c) for c in edited]:
+            char = lgr_info.lgr.get_char(cp)
+            new_tags = char.tags + tags
+
+            try:
+                if isinstance(char, RangeChar):
+                    # Delete codepoint range from LGR, then add it
+                    lgr_info.lgr.del_range(char.first_cp, char.last_cp)
+                    lgr_info.lgr.add_range(char.first_cp,
+                                           char.last_cp,
+                                           comment=char.comment,
+                                           when=when or char.when, not_when=not_when or char.not_when,
+                                           ref=char.references,
+                                           tag=new_tags)
+                else:
+                    # Delete codepoint from LGR, then add it + its variants
+                    lgr_info.lgr.del_cp(char.cp)
+                    lgr_info.lgr.add_cp(char.cp,
+                                        comment=char.comment,
+                                        ref=char.references,
+                                        tag=new_tags,
+                                        when=when or char.when, not_when=not_when or char.not_when)
+                    for variant in char.get_variants():
+                        lgr_info.lgr.add_variant(char.cp,
+                                                 variant.cp,
+                                                 variant_type=variant.type,
+                                                 when=variant.when, not_when=variant.not_when,
+                                                 comment=variant.comment, ref=variant.references)
+            except (LGRFormatException, CharInvalidContextRule) as e:
+                logger.warning('Cannot update char tags/wle:', exc_info=e)
+                invalid.append(char)
+                # Need to revert the deletion
+                if isinstance(char, RangeChar):
+                    lgr_info.lgr.add_range(char.first_cp,
+                                           char.last_cp,
+                                           comment=char.comment,
+                                           when=char.when, not_when=char.not_when,
+                                           ref=char.references,
+                                           tag=char.tags)
+                else:
+                    lgr_info.lgr.add_cp(char.cp,
+                                        comment=char.comment,
+                                        ref=char.references,
+                                        tag=char.tags,
+                                        when=char.when, not_when=char.not_when)
+                    for variant in char.get_variants():
+                        lgr_info.lgr.add_variant(char.cp,
+                                                 variant.cp,
+                                                 variant_type=variant.type,
+                                                 when=variant.when, not_when=variant.not_when,
+                                                 comment=variant.comment, ref=variant.references)
+
+        session_save_lgr(request, lgr_info)
+        operation = _('Rule') if 'add-rules' in request.POST else _('Tag(s)')
+        operation_lowercase = _('rule') if 'add-rules' in request.POST else _('tag(s)')
+        if len(edited) - len(invalid):
+            messages.add_message(request,
+                                 messages.SUCCESS,
+                                 _("%(operation)s successfully added to %(nb_cp)s code point(s)") % {'operation': operation,
+                                                                                                     'nb_cp': len(edited) - len(invalid)})
+        if invalid:
+            messages.add_message(request,
+                                 messages.WARNING,
+                                 _("%(nb_cp)s code points were not updated to avoid invalid %(operation)s") % {'operation': operation_lowercase,
+                                                                                                               'nb_cp': len(invalid)})
+
+    has_range = False
+    for char in lgr_info.lgr.repertoire.all_repertoire():
+        if isinstance(char, RangeChar):
+            has_range = True
+            break
 
     ctx = {
         'cp_form': cp_form,
+        'edit_codepoints_form': edit_codepoints_form,
         'lgr': lgr_info.lgr,
         'lgr_id': lgr_id,
-        'repertoire': repertoire,
-        'is_set': lgr_info.is_set or lgr_set_id is not None
+        'is_set': lgr_info.is_set or lgr_set_id is not None,
+        'has_range': has_range,
+        'all_tags_json': json.dumps(lgr_info.lgr.all_tags()),
     }
     if lgr_set_id:
         lgr_set_info = session_select_lgr(request, lgr_set_id)
@@ -308,6 +393,47 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
         ctx['lgr_set_id'] = lgr_set_id
 
     return render(request, 'lgr_editor/codepoint_list.html', context=ctx)
+
+
+def codepoint_list_json(request, lgr_id, lgr_set_id=None):
+    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
+
+    repertoire_cache_key = make_lgr_session_key(LGR_REPERTOIRE_CACHE_KEY,
+                                                request,
+                                                lgr_id)
+    repertoire = cache.get(repertoire_cache_key)
+    if repertoire is None:
+        # Generate repertoire
+        repertoire = []
+        for char in lgr_info.lgr.repertoire:
+            cp_slug = cp_to_slug(char.cp)
+            kwargs = {'lgr_id': lgr_id, 'codepoint_id': cp_slug}
+            if lgr_set_id is not None:
+                kwargs['lgr_set_id'] = lgr_set_id
+            cp_view_url = reverse('codepoint_view', kwargs=kwargs)
+            actions = [cp_view_url]
+            is_range = isinstance(char, RangeChar)
+            if is_range:
+                expand_url = reverse('expand_range', kwargs={'lgr_id': lgr_id,
+                                                             'codepoint_id': cp_slug})
+                actions.append(expand_url)
+
+            repertoire.append({
+                'codepoint_id': cp_slug,
+                'cp_disp': render_char(char),
+                'comment': char.comment or '',
+                'name': render_name(char, udata),
+                'tags': char.tags,
+                'variant_number': len(list(char.get_variants())),
+                'is_range': is_range,
+                'actions': actions
+            })
+        cache.set(repertoire_cache_key, repertoire, LGR_CACHE_TIMEOUT)
+
+    response = {'data': repertoire}
+
+    return JsonResponse(response)
 
 
 def delete_lgr(request, lgr_id):
@@ -364,8 +490,21 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
                                          variant_type=settings.DEFAULT_VARIANT_TYPE,
                                          validating_repertoire=lgr_info.validating_repertoire,
                                          override_repertoire=override_repertoire)
+                if var_cp_sequence not in lgr_info.lgr.repertoire:
+                    # Added variant code point not in repertoire
+                    # -> add it to the LGR
+                    lgr_info.lgr.add_cp(var_cp_sequence,
+                                        comment="Automatically added from out-of-repertoire variant")
+                    lgr_info.lgr.add_variant(var_cp_sequence, codepoint,
+                                             variant_type=settings.DEFAULT_VARIANT_TYPE,
+                                             comment="Automatically added to map back to out-of-repertoire variant")
+                    # Add identity mapping for newly added code point
+                    lgr_info.lgr.add_variant(var_cp_sequence, var_cp_sequence, variant_type='out-of-repertoire',
+                                             comment='Out-of-repertoire')
+                    messages.success(request, _('Automatically added codepoint %s from out-of-repertoire variant') %
+                                     format_cp(var_cp_sequence))
                 session_save_lgr(request, lgr_info)
-                messages.success(request, _('New variant added'))
+                messages.success(request, _('New variant %s added') % format_cp(var_cp_sequence))
             except LGRException as ex:
                 messages.add_message(request, messages.ERROR,
                                      lgr_exception_to_text(ex))
@@ -572,6 +711,29 @@ def expand_range(request, lgr_id, codepoint_id):
                     lgr_id=lgr_id)
 
 
+def populate_variants(request, lgr_id):
+    lgr_info = session_select_lgr(request, lgr_id)
+    lgr = lgr_info.lgr
+
+    if 'test' in request.GET:
+        return JsonResponse({'result': check_symmetry(lgr_info.lgr, None)[0] and check_transitivity(lgr_info.lgr, None)[0]})
+
+    log_output = StringIO()
+    ch = logging.StreamHandler(log_output)
+    ch.setLevel(logging.INFO)
+    populate_logger = logging.getLogger('lgr.populate')
+
+    # Configure module logger - since user may have disabled the 'lgr' logger,
+    # reset its level
+    populate_logger.addHandler(ch)
+    populate_logger.setLevel('INFO')
+    lgr.populate_variants()
+    messages.add_message(request, messages.INFO, log_output.getvalue())
+    messages.add_message(request, messages.SUCCESS, _("Variants populated"))
+    session_save_lgr(request, lgr_info)
+    return redirect('codepoint_list', lgr_id)
+
+
 def codepoint_update_refs(request, lgr_id, codepoint_id):
     """
     Update a codepoint's references.
@@ -739,8 +901,8 @@ def reference_list(request, lgr_id, lgr_set_id=None):
     """
     lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
 
-    add_reference_form = ReferenceForm(request.POST or None,
-                                       prefix='add_reference')
+    add_reference_form = ReferenceForm(request.POST if 'add_reference' in request.POST else None,
+                                       prefix='add_reference', ro_id=False)
     if 'add_reference' in request.POST:
         if lgr_info.is_set or lgr_set_id:
             return HttpResponseBadRequest('Cannot edit LGR set')
@@ -748,10 +910,11 @@ def reference_list(request, lgr_id, lgr_set_id=None):
         logger.debug('Add reference')
         if add_reference_form.is_valid():
             # form was submitted, we parse the value from the form field
+            ref_id = add_reference_form.cleaned_data['ref_id']
             description = add_reference_form.cleaned_data['description']
             url = add_reference_form.cleaned_data['comment']
             try:
-                lgr_info.lgr.reference_manager.add_reference(description, url)
+                lgr_info.lgr.reference_manager.add_reference(description, url, ref_id=ref_id or None)
                 session_save_lgr(request, lgr_info)
                 messages.success(request, _('New reference created'))
             except LGRException as ex:
@@ -794,7 +957,7 @@ def reference_list(request, lgr_id, lgr_set_id=None):
         'ref_id': ref_id,
         'description': ref.get('value', ''),
         'comment': ref.get('comment', '')
-    } for (ref_id, ref) in lgr_info.lgr.reference_manager.iteritems()]
+    } for (ref_id, ref) in iteritems(lgr_info.lgr.reference_manager)]
     references_form = ReferenceFormSet(initial=references, prefix='references',
                                        disabled=lgr_info.is_set or lgr_set_id is not None)
 
@@ -823,7 +986,7 @@ def reference_list_json(request, lgr_id, lgr_set_id=None):
         'ref_id': ref_id,
         'description': ref.get('value', ''),
         'comment': ref.get('comment', '')
-    } for (ref_id, ref) in lgr_info.lgr.reference_manager.iteritems()]
+    } for (ref_id, ref) in iteritems(lgr_info.lgr.reference_manager)]
 
     return HttpResponse(json.dumps(references), content_type='application/json', charset='UTF-8')
 
@@ -839,16 +1002,17 @@ def add_reference_ajax(request, lgr_id):
 
     add_reference_form = ReferenceForm(request.POST)
     if add_reference_form.is_valid():
+        ref_id = add_reference_form.cleaned_data['ref_id'] or None
         description = add_reference_form.cleaned_data['description']
         url = add_reference_form.cleaned_data['comment']
         try:
-            lgr_info.lgr.reference_manager.add_reference(description, url)
+            lgr_info.lgr.reference_manager.add_reference(description, url, ref_id=ref_id)
             session_save_lgr(request, lgr_info)
             references = [{
                               'ref_id': ref_id,
                               'description': ref.get('value', ''),
                               'comment': ref.get('comment', '')
-                          } for (ref_id, ref) in lgr_info.lgr.reference_manager.iteritems()]
+                          } for (ref_id, ref) in iteritems(lgr_info.lgr.reference_manager)]
             rv = {'ok': True, 'data': references}
         except LGRException as ex:
             rv = {'ok': False, 'error': lgr_exception_to_text(ex)}
@@ -868,13 +1032,102 @@ def delete_reference(request, lgr_id, ref_id):
         return HttpResponseBadRequest('Cannot edit LGR set')
 
     try:
-        lgr_info.lgr.reference_manager.del_reference(ref_id)
+        lgr_info.lgr.del_reference(ref_id)
         session_save_lgr(request, lgr_info)
     except LGRException as ex:
         messages.add_message(request, messages.ERROR,
                              lgr_exception_to_text(ex))
 
     return redirect('references', lgr_id)
+
+
+def tag_list(request, lgr_id, lgr_set_id=None):
+    """
+        List/edit tags of an LGR.
+    """
+    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+
+    tag_classes = lgr_info.lgr.get_tag_classes()
+
+    tags = [{
+        'name': tag,
+        'nb_cp':  len(clz.codepoints),
+        'view_more': len(clz.codepoints) > TRUNCATE_AFTER_N_CP_TAGS,
+        'codepoints': [{
+            'cp_disp': render_cp_or_sequence(c),
+            'cp_id': cp_to_slug((c, )),
+        } for c in islice(clz.codepoints, TRUNCATE_AFTER_N_CP_TAGS)]
+    } for tag, clz in tag_classes.items()]
+
+    ctx = {
+        'tags': tags,
+        'lgr': lgr_info.lgr,
+        'lgr_id': lgr_id,
+        'is_set': lgr_info.is_set or lgr_set_id is not None
+    }
+    if lgr_set_id:
+        lgr_set_info = session_select_lgr(request, lgr_set_id)
+        ctx['lgr_set'] = lgr_set_info.lgr
+        ctx['lgr_set_id'] = lgr_set_id
+
+    return render(request, 'lgr_editor/tags.html', context=ctx)
+
+
+def tag_list_json(request, tag_id, lgr_id, lgr_set_id=None):
+    """
+    Return the full list of code points associated with a tag in JSON.
+    """
+    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+
+    tag_classes = lgr_info.lgr.get_tag_classes()
+    if tag_id not in tag_classes:
+        # Error
+        return
+
+    clz = tag_classes[tag_id]
+
+    data = []
+    cp_list = []
+    for c in clz.codepoints:
+        cp_slug = cp_to_slug((c, ))
+        kwargs = {'lgr_id': lgr_id, 'codepoint_id': cp_slug}
+        if lgr_set_id is not None:
+            kwargs['lgr_set_id'] = lgr_set_id
+        cp_view_url = reverse('codepoint_view', kwargs=kwargs)
+        obj = {'cp_disp': render_cp_or_sequence(c), 'cp_view': cp_view_url}
+        cp_list.append(obj)
+        if len(cp_list) == 10:
+            data.append(cp_list)
+            cp_list = []
+    # Do not forget to add the remaining code points, if any
+    if cp_list:
+        data.append(cp_list)
+
+    response = {'data': data}
+    return JsonResponse(response)
+
+
+def delete_tag(request, lgr_id, tag_id):
+    """
+    Delete a tag from an LGR.
+    """
+    logger.debug("Delete tag %s'", tag_id)
+    lgr_info = session_select_lgr(request, lgr_id)
+    if lgr_info.is_set:
+        return HttpResponseBadRequest('Cannot edit LGR set')
+
+    try:
+        lgr_info.lgr.del_tag(tag_id)
+        session_save_lgr(request, lgr_info)
+    except LGRException as ex:
+        messages.add_message(request, messages.ERROR,
+                             lgr_exception_to_text(ex))
+    else:
+        messages.add_message(request, messages.INFO,
+                             _("References to tag %(tag)s have been removed from the repertoire. "
+                               "Do not forget to update any WLE that might reference it.") % {'tag': tag_id})
+
+    return redirect('tags', lgr_id)
 
 
 def rule_list_simple(request, lgr_id, lgr_set_id=None):
@@ -900,7 +1153,6 @@ def rule_list_simple(request, lgr_id, lgr_set_id=None):
         ctx['lgr_set_id'] = lgr_set_id
 
     return render(request, 'lgr_editor/rules.html', context=ctx)
-
 
 
 # TODO - warn if the LGR already has duplicate classes or rules, we cannot reliably work on them
@@ -988,10 +1240,9 @@ def rule_edit_class_ajax(request, lgr_id, clsname):
     return _json_response(True, msg)
 
 
-
 NEW_ELEMENT_NAME_PARAM = '__new__'
 
-# In `LGR_SKEL` below, the content preceeding `{xml}` should be on a single line, so that the line
+# In `LGR_SKEL` below, the content preceding `{xml}` should be on a single line, so that the line
 # number reported in error messages can be more consistent.
 LGR_SKEL = '''<lgr xmlns="{ns}"><meta /><rules>
 {xml}
@@ -1016,7 +1267,7 @@ def _parse_class(xml):
         lgr_loader_func=None
     )
     if lgr_info.lgr.classes_lookup:
-        return lgr_info.lgr.classes_lookup.values()[0]
+        return list(lgr_info.lgr.classes_lookup.values())[0]
     else:
         return None
 
@@ -1092,7 +1343,7 @@ def _parse_rule(xml):
         lgr_loader_func=None
     )
     if lgr_info.lgr.rules_lookup:
-        return lgr_info.lgr.rules_lookup.values()[0]
+        return list(lgr_info.lgr.rules_lookup.values())[0]
     else:
         return None
 
@@ -1195,9 +1446,9 @@ def rule_edit_action_ajax(request, lgr_id, action_idx):
 
     lgr = lgr_info.lgr
 
-    action_idx = int(action_idx)
+    action_idx = int(action_idx) # 0-based
     # negative action_idx means to add new
-    if action_idx > lgr.actions:
+    if action_idx + 1 > len(lgr.actions):
         return _json_response(False, _('Action "%s" does not exist') % action_idx)
 
     if delete_action:
@@ -1280,7 +1531,7 @@ class MultiCodepointsView(FormView):
                 # slug_to_cp returns a list of tuples, add codepoints need a
                 # list. There is not variant here so taking first element of the
                 # tuple is correct
-                codepoints = map(lambda x: x[0], codepoints)
+                codepoints = [x[0] for x in codepoints]
                 self.lgr_info.lgr.add_codepoints(codepoints)
                 # no variants in range
             session_save_lgr(request, self.lgr_info)
@@ -1305,8 +1556,120 @@ class MultiCodepointsView(FormView):
     def format_cp_choice(self, cp):
         slug = cp_to_slug(cp)
         return (slug, format_html_join('', 'U+{} {}',
-                                       ((c, self.unidata.get_char_name(c))
-                                       for c in cp)))
+                                       (('{:04X}'.format(c), self.unidata.get_char_name(c)) for c in cp)))
+
+    def _handle_discrete(self, lgr, input_lgr, manual):
+        logger.debug("Import: Copy references")
+        # No choice here, we have to import references
+        for (ref_id, ref) in iteritems(input_lgr.reference_manager):
+            value = ref['value']
+            comment = ref.get('comment', None)
+            try:
+                lgr.add_reference(value, comment, ref_id=ref_id)
+            except LGRException:
+                logger.warning("Cannot add reference: '%s'", ref_id)
+
+        if manual:
+            # Start by expanding all ranges in manual mode
+            input_lgr.expand_ranges()
+            # we now use `AddMultiCodepointsForm` to present the list of code points
+            range_form = AddMultiCodepointsForm()
+
+            # Do note that importing codepoints from a file in manual mode
+            # will lose some data from the file:
+            #  - No codepoint attributes (comments, references, etc.)
+            codepoint = []
+            disabled_codepoint = []
+            for char in input_lgr.repertoire:
+                try:
+                    lgr.add_cp(char.cp,
+                               comment=char.comment,
+                               ref=char.references,
+                               validating_repertoire=self.lgr_info.validating_repertoire)
+                except LGRException:
+                    disabled_codepoint.append(self.format_cp_choice(char.cp))
+                else:
+                    codepoint.append(self.format_cp_choice(char.cp))
+
+            if len(codepoint) == 0:
+                messages.add_message(self.request,
+                                     messages.ERROR,
+                                     _("No code point in input file"))
+                return self.render_to_response(self.get_context_data())
+
+            # Save LGR in sessions in order to retrieve variants in post
+            tmp_lgr_id = input_lgr.name
+            tmp_lgr_id = tmp_lgr_id
+            if tmp_lgr_id.endswith('.txt'):
+                tmp_lgr_id = tmp_lgr_id.rsplit('.', 1)[0]
+            tmp_lgr_id += '_tmp'
+            tmp_lgr_id = slugify(tmp_lgr_id)
+            if tmp_lgr_id in [saved_lgr['name'] for saved_lgr in session_list_lgr(self.request)]:
+                # The temporary LGR already exists... This should not happen
+                logger.warning("Temporary LGR already exists...")
+            else:
+                tmp_lgr_info = session_new_lgr(self.request, tmp_lgr_id,
+                                               lgr.metadata.unicode_version,
+                                               self.lgr_info.validating_repertoire.name if self.lgr_info.validating_repertoire else None)
+                self._copy_characters(tmp_lgr_info.lgr, input_lgr, force=True)
+                session_save_lgr(self.request, tmp_lgr_info)
+
+            range_form.fields['codepoint'].choices = codepoint
+            range_form.fields['disabled_codepoint'].choices = disabled_codepoint
+            range_form.fields['tmp_lgr'].initial = tmp_lgr_id
+            return self.render_to_response(self.get_context_data(form=range_form))
+
+        # Automatic import
+        logger.debug("Import: Copy characters")
+        nb_codepoints = self._copy_characters(lgr, input_lgr)
+        session_save_lgr(self.request, self.lgr_info)
+        messages.add_message(self.request,
+                             messages.SUCCESS,
+                             _("%d code points added") % nb_codepoints)
+        return self.render_success_page()
+
+    def _copy_characters(self, lgr, input_lgr, force=False):
+        nb_codepoints = 0
+        for char in input_lgr.repertoire:
+            char_len = 1
+            add_fct = lambda c: lgr.add_cp(c.cp,
+                                           comment=c.comment,
+                                           ref=c.references,
+                                           validating_repertoire=self.lgr_info.validating_repertoire,
+                                           force=force)
+            if isinstance(char, RangeChar):
+                char_len = char.last_cp - char.first_cp + 1
+                add_fct = lambda c: lgr.add_range(c.first_cp, c.last_cp,
+                                                  comment=c.comment,
+                                                  ref=c.references,
+                                                  validating_repertoire=self.lgr_info.validating_repertoire,
+                                                  force=force)
+            try:
+                add_fct(char)
+                nb_codepoints += char_len
+            except LGRException as exc:
+                logger.warning("Cannot add code point '%s': %s",
+                               format_cp(char.cp),
+                               lgr_exception_to_text(exc))
+            else:
+                for variant in char.get_variants():
+                    try:
+                        lgr.add_variant(char.cp,
+                                        variant.cp,
+                                        variant_type=variant.type,
+                                        when=variant.when,
+                                        not_when=variant.not_when,
+                                        comment=variant.comment,
+                                        ref=variant.references,
+                                        validating_repertoire=self.lgr_info.validating_repertoire,
+                                        force=force)
+                    except LGRException as exc:
+                        logger.warning("Cannot add variant '%s' to "
+                                       "code point '%s': %s",
+                                       format_cp(variant.cp),
+                                       format_cp(char.cp),
+                                       lgr_exception_to_text(exc))
+        return nb_codepoints
 
 
 class AddRangeView(MultiCodepointsView):
@@ -1348,17 +1711,16 @@ class ImportCodepointsFromFileView(MultiCodepointsView):
 
     def __init__(self):
         # Importing codepoint from file should insert discrete codepoints
-        super(ImportCodepointsFromFileView, self).__init__(True)
+        super(ImportCodepointsFromFileView, self).__init__(discrete_cp=True)
 
     def form_valid(self, form):
-        # we now use `AddMultiCodepointsForm` to present the list of code points
         self.template_name = 'lgr_editor/add_list.html'
-        range_form = AddMultiCodepointsForm()
         cd = form.cleaned_data
 
         logger.debug("Import CP from file")
         # Get the type of input file and send it to LGR Core
-        file = BytesIO(cd['file'].read())
+        # Assume encoded in UTF-8
+        file = StringIO(cd['file'].read().decode('utf-8'))
         type = cd['type']
 
         parser_cls = INPUT_FILE_PARSER.get(type, None)
@@ -1368,106 +1730,51 @@ class ImportCodepointsFromFileView(MultiCodepointsView):
             return self.render_to_response(self.get_context_data(form=form))
 
         lgr = self.lgr_info.lgr
-        parser = parser_cls(file)
+        parser = parser_cls(file, filename=cd['file'].name)
         input_lgr = parser.parse_document()
+        return self._handle_discrete(lgr, input_lgr, cd['manual_import'])
 
-        logger.debug("Import: Copy references")
-        # No choice here, we have to import references
-        for (ref_id, ref) in input_lgr.reference_manager.iteritems():
-            value = ref['value']
-            comment = ref.get('comment', None)
-            try:
-                lgr.add_reference(value, comment, ref_id=ref_id)
-            except LGRException:
-                logger.warning("Cannot add reference: '%s'", ref_id)
 
-        if cd['manual_import']:
-            # Do note that importing codepoints from a file in manual mode
-            # will lose some data from the file:
-            #  - No codepoint attributes (comments, references, etc.)
-            codepoint = []
-            disabled_codepoint = []
-            for char in input_lgr.repertoire:
+class AddCodepointFromScriptView(MultiCodepointsView):
+    """
+    This view uses the `AddCodepointFromScriptForm` form to retrieve code points from script based on MSR or
+    IDNA2008.
+    """
+    form_class = AddCodepointFromScriptForm
+    template_name = 'lgr_editor/add_list_from_script.html'
+
+    def get(self, request, *args, **kwargs):
+        self.lgr_info = session_select_lgr(request, kwargs['lgr_id'])
+        if self.lgr_info.is_set:
+            return HttpResponseBadRequest('Cannot edit LGR set')
+
+        scripts = get_all_scripts_from_repertoire(self.lgr_info.lgr.unicode_database)
+        self.initial['scripts'] = [(s, s) for s in sorted(scripts)]
+
+        return super(AddCodepointFromScriptView, self).get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        self.template_name = 'lgr_editor/add_list.html'
+
+        lgr = self.lgr_info.lgr
+        cd = form.cleaned_data
+        script = cd['script']
+        validating_repertoire = get_by_name(cd['validating_repertoire'])
+        validating_repertoire.expand_ranges()  # need to get through all code points
+
+        codepoints = []
+        for char in validating_repertoire.repertoire.all_repertoire():
+            # XXX: Assume validating repertoire only contains single CP
+            cp = char.cp[0]
+            if script == self.lgr_info.lgr.unicode_database.get_script(cp, alpha4=True):
                 try:
-                    lgr.add_cp(char.cp,
-                               comment=char.comment,
-                               ref=char.references,
-                               validating_repertoire=self.lgr_info.validating_repertoire)
+                    lgr.get_char(cp)
                 except LGRException:
-                    disabled_codepoint.append(self.format_cp_choice(char.cp))
-                else:
-                    codepoint.append(self.format_cp_choice(char.cp))
+                    codepoints.append(cp)
 
-            if len(codepoint) == 0:
-                messages.add_message(self.request,
-                                     messages.ERROR,
-                                     _("No code point in input file"))
-                return self.render_to_response(self.get_context_data())
-
-            # Save LGR in sessions in order to retrieve variants in post
-            tmp_lgr_id = cd["file"].name
-            tmp_lgr_id = tmp_lgr_id
-            if tmp_lgr_id.endswith('.txt'):
-                tmp_lgr_id = tmp_lgr_id.rsplit('.', 1)[0]
-            tmp_lgr_id += '_tmp'
-            tmp_lgr_id = slugify(tmp_lgr_id)
-            if tmp_lgr_id in [saved_lgr['name'] for saved_lgr in session_list_lgr(self.request)]:
-                # The temporary LGR already exists... This should not happen
-                logger.warning("Temporary LGR already exists...")
-            else:
-                tmp_lgr_info = session_new_lgr(self.request, tmp_lgr_id,
-                                               lgr.metadata.unicode_version,
-                                               self.lgr_info.validating_repertoire.name if self.lgr_info.validating_repertoire else None)
-                self.copy_characters(tmp_lgr_info.lgr, input_lgr, force=True)
-                session_save_lgr(self.request, tmp_lgr_info)
-
-            range_form.fields['codepoint'].choices = codepoint
-            range_form.fields['disabled_codepoint'].choices = disabled_codepoint
-            range_form.fields['tmp_lgr'].initial = tmp_lgr_id
-            return self.render_to_response(self.get_context_data(form=range_form))
-
-        # Automatic import
-        logger.debug("Import: Copy characters")
-        nb_codepoints = self.copy_characters(lgr, input_lgr)
-        session_save_lgr(self.request, self.lgr_info)
-        messages.add_message(self.request,
-                             messages.SUCCESS,
-                             _("%d code points added") % nb_codepoints)
-        return self.render_success_page()
-
-    def copy_characters(self, lgr, input_lgr, force=False):
-        nb_codepoints = 0
-        for char in input_lgr.repertoire:
-            try:
-                lgr.add_cp(char.cp,
-                           comment=char.comment,
-                           ref=char.references,
-                           validating_repertoire=self.lgr_info.validating_repertoire,
-                           force=force)
-                nb_codepoints += 1
-            except LGRException as exc:
-                logger.warning("Cannot add code point '%s': %s",
-                               format_cp(char.cp),
-                               lgr_exception_to_text(exc))
-            else:
-                for variant in char.get_variants():
-                    try:
-                        lgr.add_variant(char.cp,
-                                        variant.cp,
-                                        variant_type=variant.type,
-                                        when=variant.when,
-                                        not_when=variant.not_when,
-                                        comment=variant.comment,
-                                        ref=variant.references,
-                                        validating_repertoire=self.lgr_info.validating_repertoire,
-                                        force=force)
-                    except LGRException as exc:
-                        logger.warning("Cannot add variant '%s' to "
-                                       "code point '%s': %s",
-                                       format_cp(variant.cp),
-                                       format_cp(char.cp),
-                                       lgr_exception_to_text(exc))
-        return nb_codepoints
+        fake_lgr = LGR(name=script)
+        fake_lgr.add_codepoints(codepoints)
+        return self._handle_discrete(lgr, fake_lgr, cd['manual_import'])
 
 
 class MetadataView(FormView):
@@ -1603,65 +1910,25 @@ class MetadataView(FormView):
         return self.render_to_response(context)
 
 
-def validate_label(request, lgr_id, lgr_set_id=None, noframe=False):
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
-    udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
-    max_label_len = lgr_info.lgr.max_label_length()
-    scripts = None
-    if lgr_info.is_set:
-        scripts = []
-        for lgr_set_info in lgr_info.lgr_set:
-            try:
-                scripts.append((lgr_set_info.name, lgr_set_info.lgr.metadata.languages[0]))
-            except (AttributeError, IndexError):
-                pass
-    form = ValidateLabelForm(request.POST or None,
-                             files=request.FILES or None,
-                             lgr_info=lgr_info,
-                             max_label_len=max_label_len,
-                             idna_decoder=udata.idna_decode_label,
-                             scripts=scripts)
+def label_forms(request):
+    unicode_versions = ((v, v) for v in settings.SUPPORTED_UNICODE_VERSIONS)
+    form = LabelFormsForm(request.POST or None,
+                          unicode_versions=unicode_versions)
     ctx = {}
     if form.is_bound and form.is_valid():
-        label_cplist = form.cleaned_data['label']
-        script_lgr_name = form.cleaned_data.get('script', None)
-        if lgr_info.is_set:
-            set_labels_file = form.cleaned_data['set_labels']
-            if set_labels_file is not None:
-                if lgr_info.set_labels_info is None or lgr_info.set_labels_info.name != set_labels_file.name:
-                    lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
-                                                                   set_labels_file.read())
+        label = form.cleaned_data['label']
+        unicode_version = form.cleaned_data['unicode_version']
+        udata = unidb.manager.get_db_by_version(unicode_version)
         try:
-            ctx = evaluate_label_from_info(lgr_info, label_cplist, script_lgr_name, udata)
+            ctx['cp_list'] = format_cp(label)
+            ctx['u_label'] = cp_to_ulabel(label)
+            ctx['a_label'] = udata.idna_encode_label(ctx['u_label'])
         except UnicodeError as ex:
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
-        except LGRException as ex:
-            messages.add_message(request, messages.ERROR,
-                                 lgr_exception_to_text(ex))
-            # redirect to myself to refresh display
-            if noframe:
-                return redirect('lgr_validate_label_noframe', lgr_id=lgr_id, lgr_set_id=lgr_set_id)
-            else:
-                return redirect('lgr_validate_label', lgr_id=lgr_id, lgr_set_id=lgr_set_id)
 
     ctx['form'] = form
-    ctx['lgr_id'] = lgr_id
-    ctx['max_label_len'] = max_label_len
-    ctx['is_set'] = lgr_info.is_set or lgr_set_id is not None
-
-    if lgr_set_id:
-        lgr_set_info = session_select_lgr(request, lgr_set_id)
-        ctx['lgr_set'] = lgr_set_info.lgr
-        ctx['lgr_set_id'] = lgr_set_id
-
-    if noframe:
-        ctx['base_template'] = '_base_noframe.html'
-    return render(request, 'lgr_validator/validator.html', context=ctx)
-
-
-def validate_label_noframe(request, lgr_id, lgr_set_id=None):
-    return validate_label(request, lgr_id, lgr_set_id, noframe=True)
+    return render(request, 'lgr_editor/label_forms.html', context=ctx)
 
 
 def embedded_lgrs(request, lgr_id):

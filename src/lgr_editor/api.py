@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from functools import partial
+
 import logging
 import base64
-from StringIO import StringIO
 import errno
 import os
 from uuid import uuid4
-from codecs import iterdecode
-
+from functools import partial
 
 from django.http import Http404
 from django.utils import six
 from django.utils.text import slugify
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.core.cache import cache
 
 from lgr.core import LGR
 from lgr.metadata import Metadata, Version
@@ -22,6 +21,10 @@ from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.tools.merge_set import merge_lgr_set
 
+from .utils import (LGR_CACHE_TIMEOUT,
+                    LGR_OBJECT_CACHE_KEY,
+                    clean_repertoire_cache,
+                    make_lgr_session_key)
 from .exceptions import LGRValidationException
 from .repertoires import get_by_name
 from . import unidb
@@ -58,31 +61,9 @@ class LGRInfo(object):
         return lgr_info
 
     @classmethod
-    def from_dict(cls, dct, lgr_loader_func=None):
-        name = dct.get('name', '')
-        xml = dct['xml']
-        validate = dct.get('validate', False)
-        set_labels_info = None
-        if 'set_labels_info' in dct:
-            set_labels_info = LabelInfo.from_dict(dct['set_labels_info'])
-        lgr_set_dct = dct.get('lgr_set_dct', None)
-        lgr_set = None
-        if lgr_set_dct:
-            lgr_set = []
-            for lgr_dct in lgr_set_dct:
-                lgr_set.append(cls.from_dict(lgr_dct, lgr_loader_func=lgr_loader_func))
-
-        # check if xml is of unicode type
-        if isinstance(xml, six.text_type):
-            # convert to a str (bytes in PY3) to be consistent
-            xml = xml.encode('utf-8')
-
-        # Parse XML #
-        # Replace old namespace by the new one for compatibility purpose with
-        # old LGR
-        xml = unicode(xml, 'utf-8').replace(OLD_LGR_NS, LGR_NS)
-        # Create parser
-        parser = XMLParser(StringIO(xml.encode('utf-8')), name)
+    def _parse_lgr(cls, name, xml, validate):
+        # Create parser - Assume xml is unicode data
+        parser = XMLParser(six.BytesIO(xml.encode('utf-8')), name)
 
         # Do we need to validate the schema?
         if validate:
@@ -109,7 +90,8 @@ class LGRInfo(object):
         if validate:
             # Retrieve Unicode version to set appropriate Unicode database
             unicode_version = parser.unicode_version()
-            parser.unicode_database = unidb.manager.get_db_by_version(unicode_version)
+            parser.unicode_database = unidb.manager.get_db_by_version(
+                unicode_version)
 
         # Actually parse document
         lgr = parser.parse_document()
@@ -118,7 +100,51 @@ class LGRInfo(object):
         if not validate:
             # Retrieve Unicode version to set appropriate Unicode database
             unicode_version = lgr.metadata.unicode_version
-            lgr.unicode_database = unidb.manager.get_db_by_version(unicode_version)
+            lgr.unicode_database = unidb.manager.get_db_by_version(
+                unicode_version)
+        return lgr
+
+    @classmethod
+    def from_dict(cls, dct, lgr_loader_func=None, request=None):
+        name = dct.get('name', '')
+        set_labels_info = None
+        if 'set_labels_info' in dct:
+            set_labels_info = LabelInfo.from_dict(dct['set_labels_info'])
+        lgr_set_dct = dct.get('lgr_set_dct', None)
+        lgr_set = None
+        if lgr_set_dct:
+            lgr_set = []
+            for lgr_dct in lgr_set_dct:
+                lgr_set.append(cls.from_dict(lgr_dct,
+                                             lgr_loader_func=lgr_loader_func,
+                                             request=request))
+
+        xml = dct['xml']
+        if not isinstance(xml, six.text_type):
+            xml = six.text_type(xml, 'utf-8')
+
+        # Parse XML #
+        # Replace old namespace by the new one for compatibility purpose with old LGR
+        xml = xml.replace(OLD_LGR_NS, LGR_NS)
+
+        if request is None:
+            lgr = cls._parse_lgr(name, xml, dct.get('validate', False))
+        else:
+            lgr = cache.get(make_lgr_session_key(LGR_OBJECT_CACHE_KEY,
+                                                 request,
+                                                 name))
+            if lgr is None:
+                lgr = cls._parse_lgr(name, xml, dct.get('validate', False))
+                cache.set(make_lgr_session_key(LGR_OBJECT_CACHE_KEY,
+                                               request,
+                                               name),
+                          lgr,
+                          LGR_CACHE_TIMEOUT)
+            else:
+                # Need to manually load unicode database because
+                # it is stripped during serialization
+                unicode_version = lgr.metadata.unicode_version
+                lgr.unicode_database = unidb.manager.get_db_by_version(unicode_version)
 
         validating_repertoire = dct.get('validating_repertoire')
         val_lgr = lgr_loader_func(validating_repertoire) if (validating_repertoire and lgr_loader_func is not None) else None
@@ -130,16 +156,26 @@ class LGRInfo(object):
                        set_labels_info=set_labels_info)
         return lgr_info
 
-    def to_dict(self):
+    def to_dict(self, request=None):
+        if not isinstance(self.xml, six.text_type):
+            self.xml = six.text_type(self.xml, 'utf-8')
+
         dct = {
             'name': self.name,
             'xml': self.xml,
             'validating_repertoire': self.validating_repertoire.name if self.validating_repertoire else None,
-            'lgr_set_dct': [l.to_dict() for l in self.lgr_set] if self.is_set else None,
+            'lgr_set_dct': [l.to_dict(request) for l in self.lgr_set] if self.is_set else None,
             'is_set': self.is_set  # for index.html
         }
         if self.set_labels_info is not None:
             dct['set_labels_info'] = self.set_labels_info.to_dict()
+
+        if request is not None:
+            cache.set(make_lgr_session_key(LGR_OBJECT_CACHE_KEY,
+                                           request,
+                                           self.name),
+                      self.lgr,
+                      LGR_CACHE_TIMEOUT)
 
         return dct
 
@@ -157,13 +193,15 @@ class LabelInfo(object):
 
     @classmethod
     def from_dict(cls, dct):
-        return cls(dct['name'], StringIO(base64.decodestring(dct['data']).decode('utf-8')), dct['data'])
+        return cls(dct['name'],
+                   six.StringIO(base64.b64decode(dct['data']).decode('utf-8')),
+                   dct['data'])
 
     @classmethod
     def from_form(cls, name, label_input):
-        data = label_input
-        labels = StringIO(data.decode('utf-8'))
-        b64data = base64.encodestring(label_input)
+        data = label_input.decode('utf-8')
+        labels = six.StringIO(data)
+        b64data = base64.b64encode(label_input).decode('utf-8')
 
         return cls(name, labels, b64data)
 
@@ -180,7 +218,7 @@ def get_builtin_or_session_repertoire(repertoire_id, request):
 
     :param repertoire_id: a slug identifying the LGR
     :param request: Django request object
-    :return: `LGR` isntance
+    :return: `LGR` instance
     """
     try:
         return get_by_name(repertoire_id)
@@ -243,7 +281,7 @@ def session_open_lgr(request, lgr_id, lgr_xml,
             'xml': lgr_xml,
             'validating_repertoire': validating_repertoire_name,
             'validate': validate,
-            'lgr_set_dct': map(lambda x: x.to_dict(), lgr_set) if lgr_set else None,
+            'lgr_set_dct': [lgr.to_dict() for lgr in lgr_set] if lgr_set else None,
             'set_labels': set_labels
         },
         lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request)
@@ -277,7 +315,8 @@ def session_select_lgr(request, lgr_id, lgr_set_id=None):
             raise Http404
         lgr_dct = known_lgrs[lgr_id]
         return LGRInfo.from_dict(lgr_dct,
-                                 lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
+                                 lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request),
+                                 request=request)
 
     if not lgr_dct.get('lgr_set_dct', None):
         raise Http404
@@ -285,11 +324,12 @@ def session_select_lgr(request, lgr_id, lgr_set_id=None):
     for lgr in lgr_dct.get('lgr_set_dct'):
         if lgr['name'] == lgr_id:
             return LGRInfo.from_dict(lgr,
-                                     lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request))
+                                     lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request),
+                                     request=request)
     raise Http404
 
 
-def session_save_lgr(request, lgr_info, lgr_id=None, update_xml=True):
+def session_save_lgr(request, lgr_info, lgr_id=None):
     """
     Save the LGR object in session
     :param request: Django request object
@@ -297,11 +337,12 @@ def session_save_lgr(request, lgr_info, lgr_id=None, update_xml=True):
     :param lgr_id: a slug identifying the LGR
     """
     lgr_id = lgr_id if lgr_id is not None else lgr_info.name
-    if update_xml:
-        lgr_info.update_xml()  # make sure we have updated XML before saving
-    request.session.setdefault(LGRS_SESSION_KEY, {})[lgr_id] = lgr_info.to_dict()
+    lgr_info.update_xml()  # make sure we have updated XML before saving
+    request.session.setdefault(LGRS_SESSION_KEY, {})[lgr_id] = lgr_info.to_dict(request)
     # mark session as modified because we are possibly only changing the content of a dict
     request.session.modified = True
+    # As LGR has been modified, need to invalidate the template repertoire cache
+    clean_repertoire_cache(request, lgr_id)
 
 
 def session_delete_lgr(request, lgr_id):
@@ -316,6 +357,8 @@ def session_delete_lgr(request, lgr_id):
         raise Http404
     # mark session as modified because we are possibly only changing the content of a dict
     request.session.modified = True
+    # Remove cached repertoire
+    clean_repertoire_cache(request, lgr_id)
 
 
 def session_merge_set(request, lgr_info_set, lgr_set_name):
@@ -327,7 +370,7 @@ def session_merge_set(request, lgr_info_set, lgr_set_name):
     :param lgr_set_name: The name of the LGR set
     :return: The LGR set merge id
     """
-    merged_lgr = merge_lgr_set(map(lambda x: x.lgr, lgr_info_set), lgr_set_name)
+    merged_lgr = merge_lgr_set([l.lgr for l in lgr_info_set], lgr_set_name)
     merged_id = slugify(merged_lgr.name)
 
     merged_lgr_xml = serialize_lgr_xml(merged_lgr)

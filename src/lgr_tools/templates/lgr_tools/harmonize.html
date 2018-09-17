@@ -1,0 +1,61 @@
+{% extends base_template|default:"_base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.lgr_1 %}
+        {% include "lgr_editor/_form_field.html" with field=form.lgr_2 %}
+        {% include "lgr_editor/_form_field.html" with field=form.rz_lgr %}
+        {% include "lgr_editor/_form_field.html" with field=form.script %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">{% trans "Harmonize" %}</button>
+        </div>
+    </form>
+
+{% endblock content %}
+
+{% block html_body_more %}
+<script type="text/javascript">
+        // TODO rewrite this....
+        // wrap and unwrap needed in replacement of hide and show for firefox (and others?..)
+        jQuery(document).ready(function($) {
+            function hide_option(selector) {
+                $(selector).wrap('<span/>');
+                $(selector).attr('data-hidden', true);
+                $(selector).removeAttr('selected');
+            };
+            function show_option(selector) {
+                $(selector + '[data-hidden=true]').unwrap();
+                $(selector).attr('data-hidden', false);
+            };
+            function update_choices() {
+                // unwrap each option to avoid double wraps
+                show_option('#id_lgr_2 option');
+                show_option('#id_rz_lgr option');
+
+                // remove selected LGR from LGR2 list
+                var lgr1_name = $('#id_lgr_1 option:selected').text();
+                $('#id_lgr_2 option').each(function() {
+                    if ($(this).text() == lgr1_name) {
+                        hide_option(this);
+                    };
+                });
+
+                // select an available value
+                if($('#id_lgr_2 option:selected').attr('data-hidden') && $('#id_lgr_2 option[data-hidden=false]').length > 0) {
+                    $('#id_lgr_2 option[data-hidden=false]')[0].selected = true;
+                };
+            };
+
+            $('#id_lgr_1').change(function(){update_choices()});
+            update_choices();
+        });
+    </script>
+{{ block.super }}
+{% endblock html_body_more %}

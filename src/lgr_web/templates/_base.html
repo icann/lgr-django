@@ -11,10 +11,12 @@
 
         <link rel="stylesheet" href="{% static 'chrome/bootstrap/css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.css"/>
+
         <link rel="stylesheet" href="{% static 'chrome/css/lgr.css' %}">
         {% block html_head_more %}{% endblock %}
     </head>
-    <body>
+    <body style="padding-top: 110px;">
         {% block navbar %}
             <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="container">
@@ -72,12 +74,13 @@
                                     {% url 'lgr_tools_collisions' lgr_id as lgr_tools_collisions_url %}
                                     {% url 'lgr_tools_annotate' lgr_id as lgr_tools_annotate_url %}
                                     {% url 'lgr_tools_cross_script' lgr_id as lgr_tools_cross_script_url %}
+                                    {% url 'lgr_tools_harmonize' lgr_id as lgr_tools_harmonize_url %}
                                 {% endif %}
                                 <ul class="dropdown-menu">
                                     <li class="btn btn-block show-tooltip">
                                         <a href="{{ lgr_tools_compare_url }}"
                                            title="{% trans 'Compare two LGR' %}" data-placement="bottom">
-                                            <i class="glyphicon glyphicon-transfer"></i>
+                                            <i class="glyphicon glyphicon-retweet"></i>
                                             {% trans "Compare two LGRs" %}
                                         </a>
                                     </li>
@@ -115,6 +118,16 @@
                                             {% trans "Generate disp. annotations" %}
                                         </a>
                                     </li>
+                                    {% if not lgr_id or not is_set %}
+                                        <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_tools_harmonize_url }}"
+                                               title="{% trans 'Perform harmonization on LGRs' %}"
+                                               data-placement="bottom">
+                                                <i class="glyphicon glyphicon-stats"></i>
+                                                {% trans "Harmonization" %}
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
                             </div>
                         </form>
@@ -136,36 +149,54 @@
                                     {% trans "Validate label" %}
                                 </a>
                                 <a class="btn btn-default show-tooltip"
-                                        data-toggle="modal" data-target="#lgr-summary-modal"
+                                        data-toggle="modal" data-target="#lgr-validate-modal"
                                         title="{% trans 'Analyze current file for errors and statistics' %}"
                                         data-placement="bottom">
                                     <i class="glyphicon glyphicon-list-alt"></i>
-                                    {% trans "Summary" %}
+                                    {% trans "Validate LGR" %}
                                 </a>
-                                <a class="btn btn-default show-tooltip"
-                                   title="{% trans 'Preview LGR file' %}" data-placement="bottom"
-                                   href="{{ view_lgr_xml_url }}" target="_blank">
-                                    <i class="glyphicon glyphicon-eye-open"></i>
-                                    {% trans "View XML" %}
-                                </a>
-                                <a class="btn btn-default show-tooltip"
-                                   title="{% trans 'HTML Output' %}" data-placement="bottom"
-                                   href="{{ lgr_render_url }}" target="_blank">
-                                    <i class="glyphicon glyphicon-globe"></i>
-                                    {% trans "HTML Output" %}
-                                </a>
-                                <a class="btn btn-default show-tooltip"
-                                   title="{% trans 'Download LGR file' %}" data-placement="bottom"
-                                   href="{{ download_lgr_xml_url }}">
-                                    <i class="glyphicon glyphicon-save"></i> {% trans "Download" %}
-                                </a>
-                            {% else %}
-                                <a class="btn btn-default show-tooltip"
+                                <div class="dropdown form-group">
+                                    <a href="" class="btn btn-default dropdown-toggle"
+                                       data-toggle="dropdown" title="{% trans 'Output' %}" data-placement="bottom">
+                                        <i class="glyphicon glyphicon-share"></i>
+                                        {% trans "Output" %}
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="btn btn-block show-tooltip">
+                                            <a title="{% trans 'Preview LGR file' %}" data-placement="bottom"
+                                               href="{{ view_lgr_xml_url }}" target="_blank">
+                                                <i class="glyphicon glyphicon-eye-open"></i>
+                                                {% trans "View XML" %}
+                                            </a>
+                                        </li>
+                                        <li class="btn btn-block show-tooltip">
+                                            <a title="{% trans 'Download LGR file' %}" data-placement="bottom"
+                                               href="{{ download_lgr_xml_url }}">
+                                                <i class="glyphicon glyphicon-save"></i> {% trans "Download" %}
+                                            </a>
+                                        </li>
+                                        <li class="btn btn-block show-tooltip">
+                                            <a title="{% trans 'HTML Output' %}" data-placement="bottom"
+                                               href="{{ lgr_render_url }}" target="_blank">
+                                                <i class="glyphicon glyphicon-globe"></i>
+                                                {% trans "HTML Output" %}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            <a class="btn btn-default show-tooltip"
+                               data-toggle="modal" data-target="#label-forms-modal"
+                               title="{% trans 'Display all label forms' %}" data-placement="bottom">
+                                <i class="glyphicon glyphicon-text-size"></i> {% trans "Label forms" %}
+                            </a>
+
+                            <a class="btn btn-default show-tooltip"
                                    data-toggle="modal" data-target="#about-modal"
                                    title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
                                     <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
-                                </a>
-                            {% endif %}
+                            </a>
                         </div>
                     </div><!--/.nav-collapse -->
                 </div>
@@ -213,31 +244,29 @@
         </div> <!-- /container -->
         {% endblock container %}
 
-        <!-- Summary Modal -->
+        <!-- LGR Validation Modal -->
         {% if lgr_id %}
             {% if lgr_set_id %}
-                {% url 'summary' lgr_set_id lgr_id as summary_url %}
-                {% url 'summary_save' lgr_set_id lgr_id as summary_save_url %}
+                {% url 'validate_lgr' lgr_set_id lgr_id as validate_lgr_url %}
+                {% url 'validate_lgr_save' lgr_set_id lgr_id as validate_lgr_save_url %}
             {% else %}
-                {% url 'summary' lgr_id as summary_url %}
-                {% url 'summary_save' lgr_id as summary_save_url %}
+                {% url 'validate_lgr' lgr_id as validate_lgr_url %}
+                {% url 'validate_lgr_save' lgr_id as validate_lgr_save_url %}
             {% endif %}
-        <div class="modal fade" id="lgr-summary-modal" data-summary-url="{{ summary_url }}">
+        <div class="modal fade" id="lgr-validate-modal" data-lgr-validate-modal-url="{{ validate_lgr_url }}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{% trans "LGR Summary" %}</h4>
+                        <h4 class="modal-title">{% trans "Validate LGR" %}</h4>
                     </div>
                     <div class="modal-body">
                         <div class="spinner"><img src="{% static 'chrome/img/spinner.gif' %}" alt=""></div>
-                        {% if lgr_id %}
-                        {% endif %}
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-info" href="{{ summary_save_url }}">
+                        <a class="btn btn-info" href="{{ validate_lgr_save_url }}">
                             <i class="glyphicon glyphicon-save"></i>
-                            {% blocktrans %}Save summary{% endblocktrans %}
+                            {% blocktrans %}Save results{% endblocktrans %}
                         </a>
                         <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
                     </div>
@@ -286,18 +315,34 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
 
+        <!-- Label forms Modal -->
+        <div class="modal fade" id="label-forms-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{% trans "Display all label forms" %}</h4>
+                    </div>
+                    <div id="label-forms-modal-body" class="modal-body" style="height: 85vh;">
+                        <iframe id="label-forms-modal-iframe" data-url="{% url 'lgr_label_forms' %}" src="{% url 'lgr_label_forms' %}" frameborder="0" width="100%" height="98%"></iframe>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+        <script src="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.js"></script>
         <script>window.jQuery || document.write('<script src="{% static 'chrome/js/vendor/jquery.min.js' %}"><\/script>')</script>
         <script src="{% static 'chrome/bootstrap/js/bootstrap.min.js' %}"></script>
         <script>
             jQuery(document).ready(function($) {
-                $("#lgr-summary-modal").on('show.bs.modal', function() {
+                $("#lgr-validate-modal").on('show.bs.modal', function() {
                     var spinner = $(this).find('.spinner');
                     spinner.show();
-                    var url = $("#lgr-summary-modal").data('summaryUrl');
+                    var url = $("#lgr-validate-modal").data('lgr-validate-modal-url');
                     var success = function(html) {
-                        $("#lgr-summary-modal .modal-body").html(html);
+                        $("#lgr-validate-modal .modal-body").html(html);
                         spinner.hide();
                     };
                     $.get(url, null, success, 'html');

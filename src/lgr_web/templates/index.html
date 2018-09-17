@@ -9,7 +9,7 @@
     <p>
     {% blocktrans trimmed %}
         This application provides a convenient interface for browsing
-        and editing <abbr title="Label Generation Ruleset">LGR</abbr>’s conforming to the
+        and editing <abbr title="Label Generation Ruleset">LGR</abbr>s conforming to the
         <a href="https://www.rfc-editor.org/rfc/rfc7940.txt">Representing Label Generation Rulesets using XML</a>
         specification.
     {% endblocktrans %}
@@ -80,10 +80,10 @@
 
         <hr class="body-sep"/>
 
-        <h3>{% trans "Start a new LGR file or import an existing one" %}</h3>
+        <h3>{% trans "Create a new LGR file or import an existing one" %}</h3>
 
         <p>
-            <a href="{% url 'import_lgr' %}" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;{% trans "Import an existing XML file" %}</a>
+            <a href="{% url 'import_lgr' %}" class="btn btn-default btn-sm" style="margin-bottom: 10px;"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;{% trans "Import an existing XML file" %}</a>
             <br/>
             <strong><i class="glyphicon glyphicon-alert"></i>&nbsp;{% trans "Note that importing large LGR files may take significant time to load on your browser." %}</strong>
         </p>

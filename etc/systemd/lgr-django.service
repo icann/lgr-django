@@ -1,7 +1,8 @@
 [Unit]
 Description=LGR Django application
 After=network.target
-Wants=lgr-celery.service
+Wants=lgr-celery.service redis.service
+After=redis.service
 
 [Service]
 WorkingDirectory=/var/www/lgr/lgr-django

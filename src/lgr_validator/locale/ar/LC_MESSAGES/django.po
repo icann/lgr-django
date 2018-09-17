@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-30 20:24+0000\n"
+"POT-Creation-Date: 2018-09-04 16:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,106 +19,144 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: api.py:81
+#: api.py:102
 msgid "The label is in the LGR set labels."
 msgstr ""
 
-#: api.py:88
+#: api.py:109
 msgid "ERROR more than one collision, please check your LGR set labels"
 msgstr ""
 
-#: api.py:106
+#: api.py:127
 msgid ""
 "ERROR cannot retrieve label in collisions, please check your LGR set labels"
 msgstr ""
 
-#: api.py:110
+#: api.py:131
 msgid ""
 "ERROR collision with more than one label in the LGR set labels,please check "
 "your LGR set labels"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:16
+#: forms.py:11
 msgid "Label"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:33
-#, python-format
-msgid "maximum length: %(max_label_len)s code points"
+#: forms.py:12
+msgid "Maximum length: 63 code points"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:42
+#: forms.py:13
+msgid "E-mail"
+msgstr ""
+
+#: forms.py:14
+msgid "Provide your e-mail address"
+msgstr ""
+
+#: forms.py:16
+msgid "Allocated Set labels"
+msgstr ""
+
+#: forms.py:18
+msgid ""
+"Optional list of labels already allocated in the LGR set, that will be used "
+"to check for collisions when evaluating labels using the merged LGR set"
+msgstr ""
+
+#: forms.py:22
+msgid "Script"
+msgstr ""
+
+#: forms.py:24
+msgid "The script used to validate the label"
+msgstr ""
+
+#: templates/lgr_validator/validator.html:24
 msgid "Validate"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:55
+#: templates/lgr_validator/validator.html:30
+msgid ""
+"As the computing may be very long, once completed, an e-mail will be sent at "
+"the provided address"
+msgstr ""
+
+#: templates/lgr_validator/validator.html:42
 msgid "U-label"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:56
+#: templates/lgr_validator/validator.html:43
 msgid "Disposition"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:57
+#: templates/lgr_validator/validator.html:44
 msgid "Code point sequence"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:70
-#: templates/lgr_validator/validator.html:122
-#: templates/lgr_validator/validator.html:183
-msgid "Show / hide rule"
+#: templates/lgr_validator/validator.html:57
+#: templates/lgr_validator/validator.html:115
+#: templates/lgr_validator/validator.html:178
+msgid "Show / hide log"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:80
-#: templates/lgr_validator/validator.html:132
-#: templates/lgr_validator/validator.html:193
+#: templates/lgr_validator/validator.html:71
+#: templates/lgr_validator/validator.html:125
+#: templates/lgr_validator/validator.html:188
 #, python-format
-msgid "[Action index: %(action_idx)s] %(action)s"
+msgid "<b>[Action index: %(action_idx)s]</b> %(action)s"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:92
+#: templates/lgr_validator/validator.html:85
 msgid "Collision(s) found"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:94
+#: templates/lgr_validator/validator.html:87
 msgid "No collision"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:99
+#: templates/lgr_validator/validator.html:92
 msgid "Collision"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:142
+#: templates/lgr_validator/validator.html:137
 msgid "No collision."
 msgstr ""
 
-#: templates/lgr_validator/validator.html:152
+#: templates/lgr_validator/validator.html:147
 msgid "Variant labels"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:152
+#: templates/lgr_validator/validator.html:147
 msgid " (including original as last)"
 msgstr ""
 
-#: templates/lgr_validator/validator.html:157
+#: templates/lgr_validator/validator.html:152
 #, python-format
 msgid "%(num_variants)s variant label(s) generated."
 msgstr ""
 
-#: templates/lgr_validator/validator.html:159
+#: templates/lgr_validator/validator.html:154
 msgid "By disposition: "
 msgstr ""
 
-#: templates/lgr_validator/validator.html:161
+#: templates/lgr_validator/validator.html:156
 msgid "No variant labels generated."
 msgstr ""
 
-#: templates/lgr_validator/validator.html:207
+#: templates/lgr_validator/validator.html:204
 msgid ""
 "Too many variant labels to be displayed in the browser. Please download the "
 "results in .csv instead."
 msgstr ""
 
-#: templates/lgr_validator/validator.html:227
+#: templates/lgr_validator/validator.html:224
 msgid "Download results in CSV"
+msgstr ""
+
+#: views.py:129
+msgid ""
+"Input label generates too many variants to compute them all quickly. You "
+"need to enter your email address and will receive a notification once "
+"process is done"
 msgstr ""

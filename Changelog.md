@@ -1,4 +1,67 @@
-# LGR-Toolset Release notes
+# Changelog for lgr-django
+
+## 2.0.0 (2018-09-06)
+### New features
+- Support of Python 3. Compatibility with python2 is preserved for this release.
+- Add MSR-3 validating repertoire.
+- Create a "Tag" management page.
+- Create a function to assign tags/WLE to code points.
+- Allow choosing reference id when adding reference in editor.
+- Add tags in code point list view.
+### Improvements
+- Improve display of LGR validation when rebuild is valid.
+- Catch exceptions generated when input file is not a UTF-8 encoded file.
+- Add required file encoding on label fields in forms.
+- Update harmonization tool.
+- When adding an out-of-repertoire variant, automatically add it to the repertoire + add the mapping to the code point.
+- Improve wording of landing page.
+- Improve handling of output for comparison tools for large LGRs.
+- Update variant type to blocked for sample French LGR.
+- Add notice that import function is permissive.
+- Remove length limitation on label validation. Process will be run asynchronously if label can generate too many variants.
+- Export testing of variant symmetry and transitivity in AJAX view.
+- Add combined form of sequences in HTML output.
+- Sort resource/repertoire file lists.
+- Remove script parameter for harmonization tools.
+- Display rule name(s) when a code point does not comply with a contextual rule.
+- Better notification for invalid language tags.
+- Better consistency on forms' labels.
+### Fixes
+- Fix redirection when adding a code point fails.
+- Fix link to label in "Validate label" view.
+- Remove references from repertoire on deletion.
+- Replace number of variants by number of variant mappings in LGR validation statistics.
+- Add proper error message when adding a tag to a sequence.
+- Add support for missing language exception.
+- Fix script retrievals from repertoires.
+- Do not display useless error message when editing existing references.
+- Fix creation of references from code point/variant edition screen.
+- Fix deletion of action.
+- Display code points in hexadecimal in HTML output.
+- Add identity mapping for newly added variants not present in repertoire.
+- Fix header hiding page content.
+- Catch error in HTML output on ill-formed LGR's WLE.
+
+## 1.9 (2017-03-09)
+New features:
+- New interface to view all forms of a label: display the U-label, A-label and code point sequence.
+- Display the combined form of sequences.
+- New tool to check that multiple LGRs are harmonized.
+- New function to populate the missing symmetric and transitive variants.
+- New function to add code point from a script.
+- When adding a variant from another script, automatically add it to the repertoire if not present.
+Fixes:
+- Improve handling of large LGR.
+- Fix variant type that could be be changed from "blocked".
+- Fix label validation with ranges.
+- Always display failed rule when validating a label.
+- Improve display for summary (now renamed to LGR validation).
+- Fix tag count in HTML output.
+- Fix variant member count in HTML output.
+- Use hyperlinks for the table of references in HTML output.
+- Reduce number of rows in the variant set table in HTML output.
+- Add number of mappings on variant set table in HTML output.
+- Add link to save HTML output.
 
 ## 1.8.1 (2017-11-15)
 Fixes:

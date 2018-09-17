@@ -3,17 +3,28 @@
 utils.py - utility functions for LGR Editor.
 """
 from __future__ import unicode_literals
-from urllib import quote_plus
+
+import hashlib
 import os
 import logging
 
+from natsort import natsorted
+
 from django.conf import settings
+from django.utils.six.moves.urllib_parse import quote_plus
+from django.core.cache import cache
+from django.utils.encoding import force_bytes
 from django.utils.html import mark_safe, format_html, format_html_join
 
 from lgr.char import RangeChar
 from lgr.utils import cp_to_str
 
 HTML_UNICODE_FORMAT = '<bdi>&#x%06X;</bdi>'
+
+LGR_CACHE_TIMEOUT = 3600  # Cache timeout for serialized LGRs
+LGR_CACHE_KEY_PREFIX = 'lgr-cache'
+LGR_OBJECT_CACHE_KEY = 'lgr-obj'
+LGR_REPERTOIRE_CACHE_KEY = 'repertoire'
 
 logger = logging.getLogger(__name__)
 
@@ -36,10 +47,10 @@ def render_char(char):
             last_u=HTML_UNICODE_FORMAT % char.last_cp,
         ))
     else:
-        return format_html_join(" ", "U+{} ({})",
-                                ((cp_to_str(c),
-                                  mark_safe(HTML_UNICODE_FORMAT % c))
-                                 for c in char.cp))
+        out = format_html_join(" ", "U+{} ({})", ((cp_to_str(c), mark_safe(HTML_UNICODE_FORMAT % c)) for c in char.cp))
+        if len(char.cp) > 1:
+            out += mark_safe(" [<bdi>{}</bdi>]".format("".join("&#x{:06X};".format(c) for c in char.cp)))
+        return out
 
 
 def render_cp(char):
@@ -60,6 +71,22 @@ def render_cp(char):
                                  for c in char.cp))
 
 
+def render_cp_or_sequence(cp_or_sequence):
+    """
+    Render the code point(s) of a list unique or list of code points..
+
+    :param cp_or_sequence: Sequence of code point to add to the class.
+    :returns: HTML string of the code point sequence
+    """
+    if isinstance(cp_or_sequence, int):
+        cp_or_sequence = [cp_or_sequence]
+
+    out = format_html_join(" ", "U+{} ({})", ((cp_to_str(c), mark_safe(HTML_UNICODE_FORMAT % c)) for c in cp_or_sequence))
+    if len(cp_or_sequence) > 1:
+        out += mark_safe(" [<bdi>{}</bdi>]".format("".join("&#x{:06X};".format(c) for c in cp_or_sequence)))
+    return out
+
+
 def render_glyph(char):
     """
     Render the glyph corresponding to a char in HTML.
@@ -73,9 +100,12 @@ def render_glyph(char):
             last_u=HTML_UNICODE_FORMAT % char.last_cp,
         ))
     else:
-        return format_html_join(" ", "{}",
+        out = format_html_join(" ", "{}",
                                 ((mark_safe(HTML_UNICODE_FORMAT % c), )
                                  for c in char.cp))
+        if len(char.cp) > 1:
+            out += mark_safe(" [<bdi>{}</bdi>]".format("".join("&#x{:06X};".format(c) for c in char.cp)))
+        return out
 
 
 def render_name(char, udata):
@@ -174,7 +204,7 @@ def _list_files(location):
     except (OSError, IOError) as exc:
         logger.warning("Cannot access directory '%s': %s",
                        location, exc)
-    return xml_files
+    return natsorted(xml_files, reverse=True)
 
 
 def list_validating_repertoires():
@@ -194,3 +224,20 @@ def list_built_in_lgr():
     """
     return _list_files(settings.LGR_STORAGE_LOCATION)
 
+
+def make_lgr_session_key(key, request, lgr_id):
+    key = "{}:{}:{}".format(key, request.session.session_key, lgr_id)
+    args = hashlib.md5(force_bytes(key))
+    return "{}.{}".format(LGR_CACHE_KEY_PREFIX, args.hexdigest())
+
+
+def clean_repertoire_cache(request, lgr_id):
+    """
+    Clean all repertoire-related caches.
+
+    :param request: Django request object
+    :param lgr_id: a slug identifying the LGR
+    """
+    cache.delete(make_lgr_session_key(LGR_REPERTOIRE_CACHE_KEY,
+                                      request,
+                                      lgr_id))

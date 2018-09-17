@@ -9,6 +9,9 @@
         {% include "lgr_editor/_form_field.html" with field=form.lgr_1 %}
         {% include "lgr_editor/_form_field.html" with field=form.lgr_2 %}
         {% include "lgr_editor/_form_field.html" with field=form.action %}
+        <div id='dump_box'>
+            {% include "lgr_editor/_form_field_checkbox.html" with field=form.full_dump label_width=7 field_width=8 %}
+        </div>
         {% for hidden in form.hidden_fields %}
             {{ hidden }}
         {% endfor %}
@@ -29,6 +32,13 @@
         // TODO rewrite this....
         // wrap and unwrap needed in replacement of hide and show for firefox (and others?..)
         jQuery(document).ready(function($) {
+            function show_full_dump() {
+                if($('#id_action option:selected').text() == 'Diff'){
+                    $('#dump_box').show(500);
+                } else {
+                    $('#dump_box').hide(500);
+                }
+            };
             function hide_option(selector) {
                 $(selector).wrap('<span/>');
                 $(selector).attr('data-hidden', true);
@@ -81,6 +91,8 @@
             $('form').bind('submit', function () {
                 $('#id_action').removeAttr('disabled');
             });
+            $('#id_action').click(function(){show_full_dump()});
+            show_full_dump();
             update_choices();
         });
     </script>

@@ -56,8 +56,9 @@ def lgr_exception_to_text(exception):
             'codepoint': format_cp(exception.cp)
         }
     elif isinstance(exception, lgr.exceptions.CharInvalidContextRule):
-        message = _('Code point %(codepoint)s has invalid context rule') % {
-            'codepoint': format_cp(exception.cp)
+        message = _('Code point %(codepoint)s has invalid context rule %(rule)s') % {
+            'codepoint': format_cp(exception.cp),
+            'rule': exception.rule or ''
         }
     elif isinstance(exception, lgr.exceptions.RangeInvalidContextRule):
         message = _('Range %(first_cp)s - %(last_cp)s has invalid context rule') % {
@@ -81,10 +82,12 @@ def lgr_exception_to_text(exception):
         }
     elif isinstance(exception, lgr.exceptions.LGRFormatException):
         reason = exception.reason
-        if reason == lgr.exceptions.LGRFormatException.LGRFormatReason.INVALID_DATE_TAG:
-            message = _('Invalid date value')
+        if reason == lgr.exceptions.LGRFormatException.LGRFormatReason.SEQUENCE_NO_TAG:
+            message = _('Sequence cannot have a tag')
         elif reason == lgr.exceptions.LGRFormatException.LGRFormatReason.INVALID_LANGUAGE_TAG:
             message = _('Invalid language')
+        elif reason == lgr.exceptions.LGRFormatException.LGRFormatReason.INVALID_DATE_TAG:
+            message = _('Invalid date value')
         elif reason == lgr.exceptions.LGRFormatException.LGRFormatReason.INVALID_UNICODE_VERSION_TAG:
             message = _('Invalid Unicode version')
         else:
@@ -95,6 +98,10 @@ def lgr_exception_to_text(exception):
         }
     elif isinstance(exception, lgr.exceptions.ReferenceAlreadyExists):
         message = _('Reference %(ref_id)s already exists') % {
+            'ref_id': exception.ref_id
+        }
+    elif isinstance(exception, lgr.exceptions.ReferenceInvalidId):
+        message = _('Invalid reference id %(ref_id)s ') % {
             'ref_id': exception.ref_id
         }
     elif isinstance(exception, lgr.exceptions.RuleError):
@@ -118,6 +125,8 @@ def lgr_exception_to_text(exception):
     elif isinstance(exception, lgr.exceptions.InvalidSymmetry):
         message = _('The LGR contains a variant that do not have symmetric '
                     'relations')
+    elif isinstance(exception, lgr.exceptions.MissingLanguage):
+        message = _('The LGR does not contain a valid language (%(message)s)' % {'message': exception.message})
     elif isinstance(exception, lgr.exceptions.LGRException):
         message = _('An unknown exception occurred in the LGR API')
     else:

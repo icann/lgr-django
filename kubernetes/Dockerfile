@@ -18,9 +18,9 @@ LABEL com.example.component="$COMPONENT" \
       run="/usr/bin/docker run -d -P 5000:5000 lgrtool-kubernetes"\
       maintainer="Patrick Tudor https://github.com/ptudor"
 
-ENV commit_lgr_django="v1.8.1" \
-    commit_lgr_core="v1.8.1" \
-    commit_munidata="v1.2"
+ENV commit_lgr_django="v2.0.0" \
+    commit_lgr_core="v2.0.0" \
+    commit_munidata="v2.0.0"
 
 RUN echo "== prepare apache, redis, and others." \
     && echo not with fedora, only centos: yum -y install epel-release \
@@ -92,6 +92,10 @@ ENV SHA256SUM_ICU442="8d3f5a0f7007b3863bfeeec4aa517e656b24972320995011e35bed4591
     SHA256SUM_ICU4912="7baea4a62db244267708947b52445fd11a69617180406734020a7991278a2bca" \
     SHA256SUM_ICU501="adbc30e891de409e1ff5c8a03ee925b60b3342742f6c6f41dc6684d821c18e6f" \
     SHA256SUM_ICU521="2a73302fa3556a113cd5e3de9c14cf6fc39e308fbe6970af6d84d723bf2c66a3" \
+    SHA256SUM_ICU541="c5ff22b96ecda87f2dd6e424346bedc6a6321c0bd56d8ad925f273f8361c7dd6" \
+    SHA256SUM_ICU561="c3f9f1d85d0f0d5e6416f28bf5bee833a01e48521b16a5f65760c025a4d4e18e" \
+    SHA256SUM_ICU582="daf5ec865026613d3da5309b47041ae7b581f3b601efcd4ddc23ad3afde2534f" \
+    SHA256SUM_ICU602="cbd8281ccfa2d70f72b5bd2d7a411ffe573c6684e9e23ee3b289f76de3a05e30" \
     LGR_HOME=/var/www/lgr
 
 # primary section for lgr-django and dependencies
@@ -133,6 +137,18 @@ RUN export CFLAGS="-O2 -mtune=generic" \
     && curl -OL http://download.icu-project.org/files/icu4c/52.1/icu4c-52_1-RHEL6-x64.tgz \
     &&    echo $SHA256SUM_ICU521 icu4c-52_1-RHEL6-x64.tgz | sha256sum -c - \
     &&    tar -xz -f icu4c-52_1-RHEL6-x64.tgz -C / --wildcards usr/local/lib/*.52* \
+    && curl -OL http://download.icu-project.org/files/icu4c/54.1/icu4c-54_1-RHEL6-x64.tgz \
+    &&    echo $SHA256SUM_ICU541 icu4c-54_1-RHEL6-x64.tgz | sha256sum -c - \
+    &&    tar -xz -f icu4c-54_1-RHEL6-x64.tgz -C / --wildcards usr/local/lib/*.54* \
+    && curl -OL http://download.icu-project.org/files/icu4c/56.1/icu4c-56_1-RHEL6-x64.tgz \
+    &&    echo $SHA256SUM_ICU561 icu4c-56_1-RHEL6-x64.tgz | sha256sum -c - \
+    &&    tar -xz -f icu4c-56_1-RHEL6-x64.tgz -C / --wildcards usr/local/lib/*.56* \
+    && curl -OL http://download.icu-project.org/files/icu4c/58.2/icu4c-58_2-Fedora24-x64.tgz \
+    &&    echo $SHA256SUM_ICU582 icu4c-58_2-Fedora24-x64.tgz | sha256sum -c - \
+    &&    tar -xz -f icu4c-58_2-Fedora24-x64.tgz -C / --wildcards ./icu/usr/local/lib/*.58* --strip-components=2 \
+    && curl -OL http://download.icu-project.org/files/icu4c/60.2/icu4c-60_2-Fedora27-x64.tgz \
+    &&    echo $SHA256SUM_ICU602 icu4c-60_2-Fedora27-x64.tgz | sha256sum -c - \
+    &&    tar -xz -f icu4c-60_2-Fedora27-x64.tgz -C / --wildcards ./icu/usr/local/lib/*.60* --strip-components=2 \
     && if [ -d $SAFE_TMP ]; then rm -Rf $SAFE_TMP; else echo "not a directory?"; fi \
     && echo "/usr/local/lib" > /etc/ld.so.conf.d/lgr.conf && ldconfig
 

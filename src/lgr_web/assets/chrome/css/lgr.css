@@ -50,6 +50,10 @@ body {
 	margin-bottom: 10px;
 }
 
+#populate-button {
+	display: inline;
+}
+
 .ref-entry {
 	margin-top: 5px;
 	margin-bottom: 5px;
@@ -95,10 +99,6 @@ body {
 
 .ref-desc > input {
 	width: 100%;
-}
-
-#codepoints tr {
-	cursor: pointer;
 }
 
 #edit_cp_button {

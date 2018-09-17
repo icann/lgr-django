@@ -1,0 +1,50 @@
+{% extends "lgr_editor/validate_lgr/_base.html" %}
+{% load lgr_editor %}
+
+{% block result_contents %}
+  <h4>General stats</h4>
+  <ul>
+    <li>Number of code points: {{ result.stats.codepoint_number }}</li>
+
+    <li>Number of ranges: {{ result.stats.range_number }}</li>
+    {% if result.stats.range_number > 0 %}
+      <li>Largest range: {{ result.stats.largest_range|render_char }} (length: {{ result.stats.largest_range_len }})</li>
+    {% endif %}
+
+    <li>Number of sequences: {{ result.stats.sequence_number }}</li>
+    {% if result.stats.sequence_number > 0 %}
+      <li>Largest sequence: {{ result.stats.largest_sequence|render_char }} (length: {{ result.stats.largest_sequence_len }})</li>
+    {% endif %}
+  </ul>
+
+  <h4>Variants</h4>
+  <ul>
+    <li>Total number of variant mappings: {{ result.stats.mapping_number }}</li>
+    <li>Average number of variants per code point: {{ result.stats.average_variants }}</li>
+    <li>Largest variant set: {{ result.stats.largest_variant_set }}</li>
+    {% if result.stats.variants_by_type %}
+      <li>
+        Variants per type:
+        <ul>
+          {% for variant_type, number in result.stats.variants_by_type.items %}
+            <li>Number of variants for type {{ variant_type }}: {{ number }}</li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% endif %}
+  </ul>
+
+  {% if result.stats.codepoints_by_tag %}
+    <h4>Tags</h4>
+    <ul>
+      {% for tag_name, number in result.stats.codepoints_by_tag.items %}
+        <li>Number of code points for tag {{ tag_name }}: {{ number }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <h4>Rules</h4>
+  <ul>
+    <li>Number of defined rules: {{ result.stats.rule_number }}</li>
+  </ul>
+{% endblock %}

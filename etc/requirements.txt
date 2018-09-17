@@ -3,11 +3,12 @@ Django==1.8.4
 django-widget-tweaks==1.4.1
 django-multiupload==0.5.2
 celery[redis]==3.1.23
+django-redis-cache==1.7.1
 
 # LGR/Unicode modules
-picu==0.8
-munidata==1.2
-lgr-core==1.8.1
+picu==1.0
+munidata==2.0.0
+lgr-core==2.0.0
 
 # Natural sorting implementation
 natsort==5.0.3

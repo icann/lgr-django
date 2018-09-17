@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from urllib import quote_plus
 
+from django.utils.six.moves.urllib_parse import quote_plus
 from django.utils import six
 from django import forms
 from django.forms.formsets import formset_factory
@@ -49,7 +49,10 @@ class CodepointVariantForm(forms.Form):
                                                                                      'cols': '30',
                                                                                      'class': 'form-control'}))
     # whether the variant codepoint is in LGR or not
-    in_lgr = forms.BooleanField(widget=forms.HiddenInput)
+    # Need required=False as we expect False values
+    # See https://docs.djangoproject.com/en/1.8/ref/forms/fields/#booleanfield
+    # for explanation on stupid behaviour...
+    in_lgr = forms.BooleanField(widget=forms.HiddenInput, required=False)
 
     def to_slug(self):
         return '{},{},{}'.format(

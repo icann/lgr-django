@@ -1,0 +1,113 @@
+{% extends "lgr_editor/_editor_base.html" %}
+{% load i18n %}
+
+{% block pane-tag-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h3>{% trans 'Existing tags' %}</h3>
+    <table id="tags-table" class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th>{% trans "Tag name" %}</th>
+                <th>{% trans "Associated code points" %}</th>
+                {% if not is_set %}
+                    <th>{% trans "Action" %}</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for tag in tags %}
+                {% if lgr_set_id %}
+                    {% url 'tag_list_json' lgr_id=lgr_id lgr_set_id=lgr_set_id tag_id=tag.name as tag_list_json_url %}
+                {% else %}
+                    {% url 'tag_list_json' lgr_id=lgr_id tag_id=tag.name as tag_list_json_url %}
+                {% endif %}
+
+                <tr id="tag_{{ tag.name }}">
+                    <td class="tag-name">{{ tag.name }}</td>
+                    <td class="tag-cp-list">
+                        {% for cp in tag.codepoints %}
+                            {% if lgr_set_id %}
+                                {% url 'codepoint_view' lgr_id=lgr_id lgr_set_id=lgr_set_id codepoint_id=cp.cp_id as cp_view_url %}
+                            {% else %}
+                                {% url 'codepoint_view' lgr_id=lgr_id codepoint_id=cp.cp_id as cp_view_url %}
+                            {% endif %}
+                            <a href="{{ cp_view_url }}">{{ cp.cp_disp }}</a> {# keep space #}
+                        {% endfor %}
+                        {% if tag.view_more %}
+                            <a href="javascript:" onClick="toggleTable($('#table-full-{{ forloop.counter }}'))" style="float: right">{% blocktrans with nb_cp=tag.nb_cp %}View all ({{ nb_cp }}){% endblocktrans %}</a>
+                            <div id="table-full-{{ forloop.counter }}" style="display: none; margin-top: 10px; border-top: 1px silver solid; padding-top: 10px">
+                                <table class="full_cp display" data-list-url="{{ tag_list_json_url }}">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        {% endif %}
+                    </td>
+                    {% if not is_set %}
+                    <td class="text-right">
+                        <a class="btn btn-default confirm-prompt"
+                           title="{% trans 'Delete Tag' %}"
+                           data-confirmation-prompt="{% blocktrans with tag=tag.name %}Are you sure you want delete tag {{ tag }}?{% endblocktrans %}"
+                           href="{% url 'tag_delete' lgr_id=lgr_id tag_id=tag.name %}">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                    </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if not is_set %}
+        <div>
+            <i class="glyphicon glyphicon-info-sign"></i> {% blocktrans %}<span style="font-weight: bold">To create a new tag:</span>
+                Add it to a code point first to find it back in this list{% endblocktrans %}
+        </div>
+    {% endif %}
+
+{% endblock content-pane %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        function toggleTable (tableDiv) {
+            if ( tableDiv.is( ":hidden" ) ){
+                tableDiv.slideDown(1000)
+                tableDiv.find('table').css('width', '100%')
+            } else {
+                tableDiv.slideUp();
+            }
+        }
+
+        jQuery(document).ready(function($) {
+            $('.full_cp').each(function() {
+                var table = $( this );
+                table.DataTable({
+                    "ajax": table.data('list-url'),
+                    'responsive': true,
+                    "info": false,
+                    "filter": false,
+                    "scrollX": false,
+                    "ordering": false,
+                    "rowCallback": function( row, data, index ) {
+                        $(data).each(function (idx) {
+                            if (idx === 0) {
+                                $('td:eq(0)', row).html('<a href="' + data[idx].cp_view + '">' + data[idx].cp_disp + '</a>');
+                            } else {
+                                $('td:eq(0)', row).append(' <a href="' + data[idx].cp_view + '">' + data[idx].cp_disp + '</a>');
+                            }
+
+                        })
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock html_body_more %}

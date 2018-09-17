@@ -1,0 +1,1097 @@
+<lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
+  <meta>
+    <unicode-version>8.0.0</unicode-version>
+  </meta>
+  <data>
+    <char cp="002D"/>
+    <range first-cp="0030" last-cp="0039"/>
+    <range first-cp="0061" last-cp="007A"/>
+    <char cp="00B7"/>
+    <range first-cp="00DF" last-cp="00F6"/>
+    <range first-cp="00F8" last-cp="00FF"/>
+    <char cp="0101"/>
+    <char cp="0103"/>
+    <char cp="0105"/>
+    <char cp="0107"/>
+    <char cp="0109"/>
+    <char cp="010B"/>
+    <char cp="010D"/>
+    <char cp="010F"/>
+    <char cp="0111"/>
+    <char cp="0113"/>
+    <char cp="0115"/>
+    <char cp="0117"/>
+    <char cp="0119"/>
+    <char cp="011B"/>
+    <char cp="011D"/>
+    <char cp="011F"/>
+    <char cp="0121"/>
+    <char cp="0123"/>
+    <char cp="0125"/>
+    <char cp="0127"/>
+    <char cp="0129"/>
+    <char cp="012B"/>
+    <char cp="012D"/>
+    <char cp="012F"/>
+    <char cp="0131"/>
+    <char cp="0135"/>
+    <range first-cp="0137" last-cp="0138"/>
+    <char cp="013A"/>
+    <char cp="013C"/>
+    <char cp="013E"/>
+    <char cp="0142"/>
+    <char cp="0144"/>
+    <char cp="0146"/>
+    <char cp="0148"/>
+    <char cp="014B"/>
+    <char cp="014D"/>
+    <char cp="014F"/>
+    <char cp="0151"/>
+    <char cp="0153"/>
+    <char cp="0155"/>
+    <char cp="0157"/>
+    <char cp="0159"/>
+    <char cp="015B"/>
+    <char cp="015D"/>
+    <char cp="015F"/>
+    <char cp="0161"/>
+    <char cp="0163"/>
+    <char cp="0165"/>
+    <char cp="0167"/>
+    <char cp="0169"/>
+    <char cp="016B"/>
+    <char cp="016D"/>
+    <char cp="016F"/>
+    <char cp="0171"/>
+    <char cp="0173"/>
+    <char cp="0175"/>
+    <char cp="0177"/>
+    <char cp="017A"/>
+    <char cp="017C"/>
+    <char cp="017E"/>
+    <char cp="0180"/>
+    <char cp="0183"/>
+    <char cp="0185"/>
+    <char cp="0188"/>
+    <range first-cp="018C" last-cp="018D"/>
+    <char cp="0192"/>
+    <char cp="0195"/>
+    <range first-cp="0199" last-cp="019B"/>
+    <char cp="019E"/>
+    <char cp="01A1"/>
+    <char cp="01A3"/>
+    <char cp="01A5"/>
+    <char cp="01A8"/>
+    <range first-cp="01AA" last-cp="01AB"/>
+    <char cp="01AD"/>
+    <char cp="01B0"/>
+    <char cp="01B4"/>
+    <char cp="01B6"/>
+    <range first-cp="01B9" last-cp="01BB"/>
+    <range first-cp="01BD" last-cp="01C3"/>
+    <char cp="01CE"/>
+    <char cp="01D0"/>
+    <char cp="01D2"/>
+    <char cp="01D4"/>
+    <char cp="01D6"/>
+    <char cp="01D8"/>
+    <char cp="01DA"/>
+    <range first-cp="01DC" last-cp="01DD"/>
+    <char cp="01DF"/>
+    <char cp="01E1"/>
+    <char cp="01E3"/>
+    <char cp="01E5"/>
+    <char cp="01E7"/>
+    <char cp="01E9"/>
+    <char cp="01EB"/>
+    <char cp="01ED"/>
+    <range first-cp="01EF" last-cp="01F0"/>
+    <char cp="01F5"/>
+    <char cp="01F9"/>
+    <char cp="01FB"/>
+    <char cp="01FD"/>
+    <char cp="01FF"/>
+    <char cp="0201"/>
+    <char cp="0203"/>
+    <char cp="0205"/>
+    <char cp="0207"/>
+    <char cp="0209"/>
+    <char cp="020B"/>
+    <char cp="020D"/>
+    <char cp="020F"/>
+    <char cp="0211"/>
+    <char cp="0213"/>
+    <char cp="0215"/>
+    <char cp="0217"/>
+    <char cp="0219"/>
+    <char cp="021B"/>
+    <char cp="021D"/>
+    <char cp="021F"/>
+    <char cp="0221"/>
+    <char cp="0223"/>
+    <char cp="0225"/>
+    <char cp="0227"/>
+    <char cp="0229"/>
+    <char cp="022B"/>
+    <char cp="022D"/>
+    <char cp="022F"/>
+    <char cp="0231"/>
+    <range first-cp="0233" last-cp="0239"/>
+    <char cp="023C"/>
+    <range first-cp="023F" last-cp="0240"/>
+    <char cp="0242"/>
+    <char cp="0247"/>
+    <char cp="0249"/>
+    <char cp="024B"/>
+    <char cp="024D"/>
+    <range first-cp="024F" last-cp="02AF"/>
+    <range first-cp="02B9" last-cp="02C1"/>
+    <range first-cp="02C6" last-cp="02D1"/>
+    <char cp="02EC"/>
+    <char cp="02EE"/>
+    <range first-cp="0300" last-cp="033F"/>
+    <char cp="0342"/>
+    <range first-cp="0346" last-cp="034E"/>
+    <range first-cp="0350" last-cp="036F"/>
+    <char cp="0371"/>
+    <char cp="0373"/>
+    <char cp="0375"/>
+    <char cp="0377"/>
+    <range first-cp="037B" last-cp="037D"/>
+    <char cp="0390"/>
+    <range first-cp="03AC" last-cp="03CE"/>
+    <char cp="03D7"/>
+    <char cp="03D9"/>
+    <char cp="03DB"/>
+    <char cp="03DD"/>
+    <char cp="03DF"/>
+    <char cp="03E1"/>
+    <char cp="03E3"/>
+    <char cp="03E5"/>
+    <char cp="03E7"/>
+    <char cp="03E9"/>
+    <char cp="03EB"/>
+    <char cp="03ED"/>
+    <char cp="03EF"/>
+    <char cp="03F3"/>
+    <char cp="03F8"/>
+    <range first-cp="03FB" last-cp="03FC"/>
+    <range first-cp="0430" last-cp="045F"/>
+    <char cp="0461"/>
+    <char cp="0463"/>
+    <char cp="0465"/>
+    <char cp="0467"/>
+    <char cp="0469"/>
+    <char cp="046B"/>
+    <char cp="046D"/>
+    <char cp="046F"/>
+    <char cp="0471"/>
+    <char cp="0473"/>
+    <char cp="0475"/>
+    <char cp="0477"/>
+    <char cp="0479"/>
+    <char cp="047B"/>
+    <char cp="047D"/>
+    <char cp="047F"/>
+    <char cp="0481"/>
+    <range first-cp="0483" last-cp="0487"/>
+    <char cp="048B"/>
+    <char cp="048D"/>
+    <char cp="048F"/>
+    <char cp="0491"/>
+    <char cp="0493"/>
+    <char cp="0495"/>
+    <char cp="0497"/>
+    <char cp="0499"/>
+    <char cp="049B"/>
+    <char cp="049D"/>
+    <char cp="049F"/>
+    <char cp="04A1"/>
+    <char cp="04A3"/>
+    <char cp="04A5"/>
+    <char cp="04A7"/>
+    <char cp="04A9"/>
+    <char cp="04AB"/>
+    <char cp="04AD"/>
+    <char cp="04AF"/>
+    <char cp="04B1"/>
+    <char cp="04B3"/>
+    <char cp="04B5"/>
+    <char cp="04B7"/>
+    <char cp="04B9"/>
+    <char cp="04BB"/>
+    <char cp="04BD"/>
+    <char cp="04BF"/>
+    <char cp="04C2"/>
+    <char cp="04C4"/>
+    <char cp="04C6"/>
+    <char cp="04C8"/>
+    <char cp="04CA"/>
+    <char cp="04CC"/>
+    <range first-cp="04CE" last-cp="04CF"/>
+    <char cp="04D1"/>
+    <char cp="04D3"/>
+    <char cp="04D5"/>
+    <char cp="04D7"/>
+    <char cp="04D9"/>
+    <char cp="04DB"/>
+    <char cp="04DD"/>
+    <char cp="04DF"/>
+    <char cp="04E1"/>
+    <char cp="04E3"/>
+    <char cp="04E5"/>
+    <char cp="04E7"/>
+    <char cp="04E9"/>
+    <char cp="04EB"/>
+    <char cp="04ED"/>
+    <char cp="04EF"/>
+    <char cp="04F1"/>
+    <char cp="04F3"/>
+    <char cp="04F5"/>
+    <char cp="04F7"/>
+    <char cp="04F9"/>
+    <char cp="04FB"/>
+    <char cp="04FD"/>
+    <char cp="04FF"/>
+    <char cp="0501"/>
+    <char cp="0503"/>
+    <char cp="0505"/>
+    <char cp="0507"/>
+    <char cp="0509"/>
+    <char cp="050B"/>
+    <char cp="050D"/>
+    <char cp="050F"/>
+    <char cp="0511"/>
+    <char cp="0513"/>
+    <char cp="0515"/>
+    <char cp="0517"/>
+    <char cp="0519"/>
+    <char cp="051B"/>
+    <char cp="051D"/>
+    <char cp="051F"/>
+    <char cp="0521"/>
+    <char cp="0523"/>
+    <char cp="0525"/>
+    <char cp="0527"/>
+    <char cp="0529"/>
+    <char cp="052B"/>
+    <char cp="052D"/>
+    <char cp="052F"/>
+    <char cp="0559"/>
+    <range first-cp="0561" last-cp="0586"/>
+    <range first-cp="0591" last-cp="05BD"/>
+    <char cp="05BF"/>
+    <range first-cp="05C1" last-cp="05C2"/>
+    <range first-cp="05C4" last-cp="05C5"/>
+    <char cp="05C7"/>
+    <range first-cp="05D0" last-cp="05EA"/>
+    <range first-cp="05F0" last-cp="05F2"/>
+    <range first-cp="05F3" last-cp="05F4"/>
+    <range first-cp="0610" last-cp="061A"/>
+    <range first-cp="0620" last-cp="063F"/>
+    <range first-cp="0641" last-cp="065F"/>
+    <range first-cp="0660" last-cp="0669"/>
+    <range first-cp="066E" last-cp="0674"/>
+    <range first-cp="0679" last-cp="06D3"/>
+    <range first-cp="06D5" last-cp="06DC"/>
+    <range first-cp="06DF" last-cp="06E8"/>
+    <range first-cp="06EA" last-cp="06EF"/>
+    <range first-cp="06F0" last-cp="06F9"/>
+    <range first-cp="06FA" last-cp="06FF"/>
+    <range first-cp="0710" last-cp="074A"/>
+    <range first-cp="074D" last-cp="07B1"/>
+    <range first-cp="07C0" last-cp="07F5"/>
+    <range first-cp="0800" last-cp="082D"/>
+    <range first-cp="0840" last-cp="085B"/>
+    <range first-cp="08A0" last-cp="08B4"/>
+    <range first-cp="08E3" last-cp="0957"/>
+    <range first-cp="0960" last-cp="0963"/>
+    <range first-cp="0966" last-cp="096F"/>
+    <range first-cp="0971" last-cp="0983"/>
+    <range first-cp="0985" last-cp="098C"/>
+    <range first-cp="098F" last-cp="0990"/>
+    <range first-cp="0993" last-cp="09A8"/>
+    <range first-cp="09AA" last-cp="09B0"/>
+    <char cp="09B2"/>
+    <range first-cp="09B6" last-cp="09B9"/>
+    <range first-cp="09BC" last-cp="09C4"/>
+    <range first-cp="09C7" last-cp="09C8"/>
+    <range first-cp="09CB" last-cp="09CE"/>
+    <char cp="09D7"/>
+    <range first-cp="09E0" last-cp="09E3"/>
+    <range first-cp="09E6" last-cp="09F1"/>
+    <range first-cp="0A01" last-cp="0A03"/>
+    <range first-cp="0A05" last-cp="0A0A"/>
+    <range first-cp="0A0F" last-cp="0A10"/>
+    <range first-cp="0A13" last-cp="0A28"/>
+    <range first-cp="0A2A" last-cp="0A30"/>
+    <char cp="0A32"/>
+    <char cp="0A35"/>
+    <range first-cp="0A38" last-cp="0A39"/>
+    <char cp="0A3C"/>
+    <range first-cp="0A3E" last-cp="0A42"/>
+    <range first-cp="0A47" last-cp="0A48"/>
+    <range first-cp="0A4B" last-cp="0A4D"/>
+    <char cp="0A51"/>
+    <char cp="0A5C"/>
+    <range first-cp="0A66" last-cp="0A75"/>
+    <range first-cp="0A81" last-cp="0A83"/>
+    <range first-cp="0A85" last-cp="0A8D"/>
+    <range first-cp="0A8F" last-cp="0A91"/>
+    <range first-cp="0A93" last-cp="0AA8"/>
+    <range first-cp="0AAA" last-cp="0AB0"/>
+    <range first-cp="0AB2" last-cp="0AB3"/>
+    <range first-cp="0AB5" last-cp="0AB9"/>
+    <range first-cp="0ABC" last-cp="0AC5"/>
+    <range first-cp="0AC7" last-cp="0AC9"/>
+    <range first-cp="0ACB" last-cp="0ACD"/>
+    <char cp="0AD0"/>
+    <range first-cp="0AE0" last-cp="0AE3"/>
+    <range first-cp="0AE6" last-cp="0AEF"/>
+    <char cp="0AF9"/>
+    <range first-cp="0B01" last-cp="0B03"/>
+    <range first-cp="0B05" last-cp="0B0C"/>
+    <range first-cp="0B0F" last-cp="0B10"/>
+    <range first-cp="0B13" last-cp="0B28"/>
+    <range first-cp="0B2A" last-cp="0B30"/>
+    <range first-cp="0B32" last-cp="0B33"/>
+    <range first-cp="0B35" last-cp="0B39"/>
+    <range first-cp="0B3C" last-cp="0B44"/>
+    <range first-cp="0B47" last-cp="0B48"/>
+    <range first-cp="0B4B" last-cp="0B4D"/>
+    <range first-cp="0B56" last-cp="0B57"/>
+    <range first-cp="0B5F" last-cp="0B63"/>
+    <range first-cp="0B66" last-cp="0B6F"/>
+    <char cp="0B71"/>
+    <range first-cp="0B82" last-cp="0B83"/>
+    <range first-cp="0B85" last-cp="0B8A"/>
+    <range first-cp="0B8E" last-cp="0B90"/>
+    <range first-cp="0B92" last-cp="0B95"/>
+    <range first-cp="0B99" last-cp="0B9A"/>
+    <char cp="0B9C"/>
+    <range first-cp="0B9E" last-cp="0B9F"/>
+    <range first-cp="0BA3" last-cp="0BA4"/>
+    <range first-cp="0BA8" last-cp="0BAA"/>
+    <range first-cp="0BAE" last-cp="0BB9"/>
+    <range first-cp="0BBE" last-cp="0BC2"/>
+    <range first-cp="0BC6" last-cp="0BC8"/>
+    <range first-cp="0BCA" last-cp="0BCD"/>
+    <char cp="0BD0"/>
+    <char cp="0BD7"/>
+    <range first-cp="0BE6" last-cp="0BEF"/>
+    <range first-cp="0C00" last-cp="0C03"/>
+    <range first-cp="0C05" last-cp="0C0C"/>
+    <range first-cp="0C0E" last-cp="0C10"/>
+    <range first-cp="0C12" last-cp="0C28"/>
+    <range first-cp="0C2A" last-cp="0C39"/>
+    <range first-cp="0C3D" last-cp="0C44"/>
+    <range first-cp="0C46" last-cp="0C48"/>
+    <range first-cp="0C4A" last-cp="0C4D"/>
+    <range first-cp="0C55" last-cp="0C56"/>
+    <range first-cp="0C58" last-cp="0C5A"/>
+    <range first-cp="0C60" last-cp="0C63"/>
+    <range first-cp="0C66" last-cp="0C6F"/>
+    <range first-cp="0C81" last-cp="0C83"/>
+    <range first-cp="0C85" last-cp="0C8C"/>
+    <range first-cp="0C8E" last-cp="0C90"/>
+    <range first-cp="0C92" last-cp="0CA8"/>
+    <range first-cp="0CAA" last-cp="0CB3"/>
+    <range first-cp="0CB5" last-cp="0CB9"/>
+    <range first-cp="0CBC" last-cp="0CC4"/>
+    <range first-cp="0CC6" last-cp="0CC8"/>
+    <range first-cp="0CCA" last-cp="0CCD"/>
+    <range first-cp="0CD5" last-cp="0CD6"/>
+    <char cp="0CDE"/>
+    <range first-cp="0CE0" last-cp="0CE3"/>
+    <range first-cp="0CE6" last-cp="0CEF"/>
+    <range first-cp="0CF1" last-cp="0CF2"/>
+    <range first-cp="0D01" last-cp="0D03"/>
+    <range first-cp="0D05" last-cp="0D0C"/>
+    <range first-cp="0D0E" last-cp="0D10"/>
+    <range first-cp="0D12" last-cp="0D3A"/>
+    <range first-cp="0D3D" last-cp="0D44"/>
+    <range first-cp="0D46" last-cp="0D48"/>
+    <range first-cp="0D4A" last-cp="0D4E"/>
+    <char cp="0D57"/>
+    <range first-cp="0D5F" last-cp="0D63"/>
+    <range first-cp="0D66" last-cp="0D6F"/>
+    <range first-cp="0D7A" last-cp="0D7F"/>
+    <range first-cp="0D82" last-cp="0D83"/>
+    <range first-cp="0D85" last-cp="0D96"/>
+    <range first-cp="0D9A" last-cp="0DB1"/>
+    <range first-cp="0DB3" last-cp="0DBB"/>
+    <char cp="0DBD"/>
+    <range first-cp="0DC0" last-cp="0DC6"/>
+    <char cp="0DCA"/>
+    <range first-cp="0DCF" last-cp="0DD4"/>
+    <char cp="0DD6"/>
+    <range first-cp="0DD8" last-cp="0DDF"/>
+    <range first-cp="0DE6" last-cp="0DEF"/>
+    <range first-cp="0DF2" last-cp="0DF3"/>
+    <range first-cp="0E01" last-cp="0E32"/>
+    <range first-cp="0E34" last-cp="0E3A"/>
+    <range first-cp="0E40" last-cp="0E4E"/>
+    <range first-cp="0E50" last-cp="0E59"/>
+    <range first-cp="0E81" last-cp="0E82"/>
+    <char cp="0E84"/>
+    <range first-cp="0E87" last-cp="0E88"/>
+    <char cp="0E8A"/>
+    <char cp="0E8D"/>
+    <range first-cp="0E94" last-cp="0E97"/>
+    <range first-cp="0E99" last-cp="0E9F"/>
+    <range first-cp="0EA1" last-cp="0EA3"/>
+    <char cp="0EA5"/>
+    <char cp="0EA7"/>
+    <range first-cp="0EAA" last-cp="0EAB"/>
+    <range first-cp="0EAD" last-cp="0EB2"/>
+    <range first-cp="0EB4" last-cp="0EB9"/>
+    <range first-cp="0EBB" last-cp="0EBD"/>
+    <range first-cp="0EC0" last-cp="0EC4"/>
+    <char cp="0EC6"/>
+    <range first-cp="0EC8" last-cp="0ECD"/>
+    <range first-cp="0ED0" last-cp="0ED9"/>
+    <range first-cp="0EDE" last-cp="0EDF"/>
+    <char cp="0F00"/>
+    <char cp="0F0B"/>
+    <range first-cp="0F18" last-cp="0F19"/>
+    <range first-cp="0F20" last-cp="0F29"/>
+    <char cp="0F35"/>
+    <char cp="0F37"/>
+    <char cp="0F39"/>
+    <range first-cp="0F3E" last-cp="0F42"/>
+    <range first-cp="0F44" last-cp="0F47"/>
+    <range first-cp="0F49" last-cp="0F4C"/>
+    <range first-cp="0F4E" last-cp="0F51"/>
+    <range first-cp="0F53" last-cp="0F56"/>
+    <range first-cp="0F58" last-cp="0F5B"/>
+    <range first-cp="0F5D" last-cp="0F68"/>
+    <range first-cp="0F6A" last-cp="0F6C"/>
+    <range first-cp="0F71" last-cp="0F72"/>
+    <char cp="0F74"/>
+    <range first-cp="0F7A" last-cp="0F80"/>
+    <range first-cp="0F82" last-cp="0F84"/>
+    <range first-cp="0F86" last-cp="0F92"/>
+    <range first-cp="0F94" last-cp="0F97"/>
+    <range first-cp="0F99" last-cp="0F9C"/>
+    <range first-cp="0F9E" last-cp="0FA1"/>
+    <range first-cp="0FA3" last-cp="0FA6"/>
+    <range first-cp="0FA8" last-cp="0FAB"/>
+    <range first-cp="0FAD" last-cp="0FB8"/>
+    <range first-cp="0FBA" last-cp="0FBC"/>
+    <char cp="0FC6"/>
+    <range first-cp="1000" last-cp="1049"/>
+    <range first-cp="1050" last-cp="109D"/>
+    <range first-cp="10D0" last-cp="10FA"/>
+    <range first-cp="10FD" last-cp="10FF"/>
+    <range first-cp="1200" last-cp="1248"/>
+    <range first-cp="124A" last-cp="124D"/>
+    <range first-cp="1250" last-cp="1256"/>
+    <char cp="1258"/>
+    <range first-cp="125A" last-cp="125D"/>
+    <range first-cp="1260" last-cp="1288"/>
+    <range first-cp="128A" last-cp="128D"/>
+    <range first-cp="1290" last-cp="12B0"/>
+    <range first-cp="12B2" last-cp="12B5"/>
+    <range first-cp="12B8" last-cp="12BE"/>
+    <char cp="12C0"/>
+    <range first-cp="12C2" last-cp="12C5"/>
+    <range first-cp="12C8" last-cp="12D6"/>
+    <range first-cp="12D8" last-cp="1310"/>
+    <range first-cp="1312" last-cp="1315"/>
+    <range first-cp="1318" last-cp="135A"/>
+    <range first-cp="135D" last-cp="135F"/>
+    <range first-cp="1380" last-cp="138F"/>
+    <range first-cp="13A0" last-cp="13F5"/>
+    <range first-cp="1401" last-cp="166C"/>
+    <range first-cp="166F" last-cp="167F"/>
+    <range first-cp="1681" last-cp="169A"/>
+    <range first-cp="16A0" last-cp="16EA"/>
+    <range first-cp="16F1" last-cp="16F8"/>
+    <range first-cp="1700" last-cp="170C"/>
+    <range first-cp="170E" last-cp="1714"/>
+    <range first-cp="1720" last-cp="1734"/>
+    <range first-cp="1740" last-cp="1753"/>
+    <range first-cp="1760" last-cp="176C"/>
+    <range first-cp="176E" last-cp="1770"/>
+    <range first-cp="1772" last-cp="1773"/>
+    <range first-cp="1780" last-cp="17B3"/>
+    <range first-cp="17B6" last-cp="17D3"/>
+    <char cp="17D7"/>
+    <range first-cp="17DC" last-cp="17DD"/>
+    <range first-cp="17E0" last-cp="17E9"/>
+    <range first-cp="1810" last-cp="1819"/>
+    <range first-cp="1820" last-cp="1877"/>
+    <range first-cp="1880" last-cp="18AA"/>
+    <range first-cp="18B0" last-cp="18F5"/>
+    <range first-cp="1900" last-cp="191E"/>
+    <range first-cp="1920" last-cp="192B"/>
+    <range first-cp="1930" last-cp="193B"/>
+    <range first-cp="1946" last-cp="196D"/>
+    <range first-cp="1970" last-cp="1974"/>
+    <range first-cp="1980" last-cp="19AB"/>
+    <range first-cp="19B0" last-cp="19C9"/>
+    <range first-cp="19D0" last-cp="19D9"/>
+    <range first-cp="1A00" last-cp="1A1B"/>
+    <range first-cp="1A20" last-cp="1A5E"/>
+    <range first-cp="1A60" last-cp="1A7C"/>
+    <range first-cp="1A7F" last-cp="1A89"/>
+    <range first-cp="1A90" last-cp="1A99"/>
+    <char cp="1AA7"/>
+    <range first-cp="1AB0" last-cp="1ABD"/>
+    <range first-cp="1B00" last-cp="1B4B"/>
+    <range first-cp="1B50" last-cp="1B59"/>
+    <range first-cp="1B6B" last-cp="1B73"/>
+    <range first-cp="1B80" last-cp="1BF3"/>
+    <range first-cp="1C00" last-cp="1C37"/>
+    <range first-cp="1C40" last-cp="1C49"/>
+    <range first-cp="1C4D" last-cp="1C7D"/>
+    <range first-cp="1CD0" last-cp="1CD2"/>
+    <range first-cp="1CD4" last-cp="1CF6"/>
+    <range first-cp="1CF8" last-cp="1CF9"/>
+    <range first-cp="1D00" last-cp="1D2B"/>
+    <char cp="1D2F"/>
+    <char cp="1D3B"/>
+    <char cp="1D4E"/>
+    <range first-cp="1D6B" last-cp="1D77"/>
+    <range first-cp="1D79" last-cp="1D9A"/>
+    <range first-cp="1DC0" last-cp="1DF5"/>
+    <range first-cp="1DFC" last-cp="1DFF"/>
+    <char cp="1E01"/>
+    <char cp="1E03"/>
+    <char cp="1E05"/>
+    <char cp="1E07"/>
+    <char cp="1E09"/>
+    <char cp="1E0B"/>
+    <char cp="1E0D"/>
+    <char cp="1E0F"/>
+    <char cp="1E11"/>
+    <char cp="1E13"/>
+    <char cp="1E15"/>
+    <char cp="1E17"/>
+    <char cp="1E19"/>
+    <char cp="1E1B"/>
+    <char cp="1E1D"/>
+    <char cp="1E1F"/>
+    <char cp="1E21"/>
+    <char cp="1E23"/>
+    <char cp="1E25"/>
+    <char cp="1E27"/>
+    <char cp="1E29"/>
+    <char cp="1E2B"/>
+    <char cp="1E2D"/>
+    <char cp="1E2F"/>
+    <char cp="1E31"/>
+    <char cp="1E33"/>
+    <char cp="1E35"/>
+    <char cp="1E37"/>
+    <char cp="1E39"/>
+    <char cp="1E3B"/>
+    <char cp="1E3D"/>
+    <char cp="1E3F"/>
+    <char cp="1E41"/>
+    <char cp="1E43"/>
+    <char cp="1E45"/>
+    <char cp="1E47"/>
+    <char cp="1E49"/>
+    <char cp="1E4B"/>
+    <char cp="1E4D"/>
+    <char cp="1E4F"/>
+    <char cp="1E51"/>
+    <char cp="1E53"/>
+    <char cp="1E55"/>
+    <char cp="1E57"/>
+    <char cp="1E59"/>
+    <char cp="1E5B"/>
+    <char cp="1E5D"/>
+    <char cp="1E5F"/>
+    <char cp="1E61"/>
+    <char cp="1E63"/>
+    <char cp="1E65"/>
+    <char cp="1E67"/>
+    <char cp="1E69"/>
+    <char cp="1E6B"/>
+    <char cp="1E6D"/>
+    <char cp="1E6F"/>
+    <char cp="1E71"/>
+    <char cp="1E73"/>
+    <char cp="1E75"/>
+    <char cp="1E77"/>
+    <char cp="1E79"/>
+    <char cp="1E7B"/>
+    <char cp="1E7D"/>
+    <char cp="1E7F"/>
+    <char cp="1E81"/>
+    <char cp="1E83"/>
+    <char cp="1E85"/>
+    <char cp="1E87"/>
+    <char cp="1E89"/>
+    <char cp="1E8B"/>
+    <char cp="1E8D"/>
+    <char cp="1E8F"/>
+    <char cp="1E91"/>
+    <char cp="1E93"/>
+    <range first-cp="1E95" last-cp="1E99"/>
+    <range first-cp="1E9C" last-cp="1E9D"/>
+    <char cp="1E9F"/>
+    <char cp="1EA1"/>
+    <char cp="1EA3"/>
+    <char cp="1EA5"/>
+    <char cp="1EA7"/>
+    <char cp="1EA9"/>
+    <char cp="1EAB"/>
+    <char cp="1EAD"/>
+    <char cp="1EAF"/>
+    <char cp="1EB1"/>
+    <char cp="1EB3"/>
+    <char cp="1EB5"/>
+    <char cp="1EB7"/>
+    <char cp="1EB9"/>
+    <char cp="1EBB"/>
+    <char cp="1EBD"/>
+    <char cp="1EBF"/>
+    <char cp="1EC1"/>
+    <char cp="1EC3"/>
+    <char cp="1EC5"/>
+    <char cp="1EC7"/>
+    <char cp="1EC9"/>
+    <char cp="1ECB"/>
+    <char cp="1ECD"/>
+    <char cp="1ECF"/>
+    <char cp="1ED1"/>
+    <char cp="1ED3"/>
+    <char cp="1ED5"/>
+    <char cp="1ED7"/>
+    <char cp="1ED9"/>
+    <char cp="1EDB"/>
+    <char cp="1EDD"/>
+    <char cp="1EDF"/>
+    <char cp="1EE1"/>
+    <char cp="1EE3"/>
+    <char cp="1EE5"/>
+    <char cp="1EE7"/>
+    <char cp="1EE9"/>
+    <char cp="1EEB"/>
+    <char cp="1EED"/>
+    <char cp="1EEF"/>
+    <char cp="1EF1"/>
+    <char cp="1EF3"/>
+    <char cp="1EF5"/>
+    <char cp="1EF7"/>
+    <char cp="1EF9"/>
+    <char cp="1EFB"/>
+    <char cp="1EFD"/>
+    <range first-cp="1EFF" last-cp="1F07"/>
+    <range first-cp="1F10" last-cp="1F15"/>
+    <range first-cp="1F20" last-cp="1F27"/>
+    <range first-cp="1F30" last-cp="1F37"/>
+    <range first-cp="1F40" last-cp="1F45"/>
+    <range first-cp="1F50" last-cp="1F57"/>
+    <range first-cp="1F60" last-cp="1F67"/>
+    <char cp="1F70"/>
+    <char cp="1F72"/>
+    <char cp="1F74"/>
+    <char cp="1F76"/>
+    <char cp="1F78"/>
+    <char cp="1F7A"/>
+    <char cp="1F7C"/>
+    <range first-cp="1FB0" last-cp="1FB1"/>
+    <char cp="1FB6"/>
+    <char cp="1FC6"/>
+    <range first-cp="1FD0" last-cp="1FD2"/>
+    <range first-cp="1FD6" last-cp="1FD7"/>
+    <range first-cp="1FE0" last-cp="1FE2"/>
+    <range first-cp="1FE4" last-cp="1FE7"/>
+    <char cp="1FF6"/>
+    <range first-cp="200C" last-cp="200D"/>
+    <char cp="214E"/>
+    <char cp="2184"/>
+    <range first-cp="2C30" last-cp="2C5E"/>
+    <char cp="2C61"/>
+    <range first-cp="2C65" last-cp="2C66"/>
+    <char cp="2C68"/>
+    <char cp="2C6A"/>
+    <char cp="2C6C"/>
+    <char cp="2C71"/>
+    <range first-cp="2C73" last-cp="2C74"/>
+    <range first-cp="2C76" last-cp="2C7B"/>
+    <char cp="2C81"/>
+    <char cp="2C83"/>
+    <char cp="2C85"/>
+    <char cp="2C87"/>
+    <char cp="2C89"/>
+    <char cp="2C8B"/>
+    <char cp="2C8D"/>
+    <char cp="2C8F"/>
+    <char cp="2C91"/>
+    <char cp="2C93"/>
+    <char cp="2C95"/>
+    <char cp="2C97"/>
+    <char cp="2C99"/>
+    <char cp="2C9B"/>
+    <char cp="2C9D"/>
+    <char cp="2C9F"/>
+    <char cp="2CA1"/>
+    <char cp="2CA3"/>
+    <char cp="2CA5"/>
+    <char cp="2CA7"/>
+    <char cp="2CA9"/>
+    <char cp="2CAB"/>
+    <char cp="2CAD"/>
+    <char cp="2CAF"/>
+    <char cp="2CB1"/>
+    <char cp="2CB3"/>
+    <char cp="2CB5"/>
+    <char cp="2CB7"/>
+    <char cp="2CB9"/>
+    <char cp="2CBB"/>
+    <char cp="2CBD"/>
+    <char cp="2CBF"/>
+    <char cp="2CC1"/>
+    <char cp="2CC3"/>
+    <char cp="2CC5"/>
+    <char cp="2CC7"/>
+    <char cp="2CC9"/>
+    <char cp="2CCB"/>
+    <char cp="2CCD"/>
+    <char cp="2CCF"/>
+    <char cp="2CD1"/>
+    <char cp="2CD3"/>
+    <char cp="2CD5"/>
+    <char cp="2CD7"/>
+    <char cp="2CD9"/>
+    <char cp="2CDB"/>
+    <char cp="2CDD"/>
+    <char cp="2CDF"/>
+    <char cp="2CE1"/>
+    <range first-cp="2CE3" last-cp="2CE4"/>
+    <char cp="2CEC"/>
+    <range first-cp="2CEE" last-cp="2CF1"/>
+    <char cp="2CF3"/>
+    <range first-cp="2D00" last-cp="2D25"/>
+    <char cp="2D27"/>
+    <char cp="2D2D"/>
+    <range first-cp="2D30" last-cp="2D67"/>
+    <range first-cp="2D7F" last-cp="2D96"/>
+    <range first-cp="2DA0" last-cp="2DA6"/>
+    <range first-cp="2DA8" last-cp="2DAE"/>
+    <range first-cp="2DB0" last-cp="2DB6"/>
+    <range first-cp="2DB8" last-cp="2DBE"/>
+    <range first-cp="2DC0" last-cp="2DC6"/>
+    <range first-cp="2DC8" last-cp="2DCE"/>
+    <range first-cp="2DD0" last-cp="2DD6"/>
+    <range first-cp="2DD8" last-cp="2DDE"/>
+    <range first-cp="2DE0" last-cp="2DFF"/>
+    <char cp="2E2F"/>
+    <range first-cp="3005" last-cp="3007"/>
+    <range first-cp="302A" last-cp="302D"/>
+    <char cp="303C"/>
+    <range first-cp="3041" last-cp="3096"/>
+    <range first-cp="3099" last-cp="309A"/>
+    <range first-cp="309D" last-cp="309E"/>
+    <range first-cp="30A1" last-cp="30FA"/>
+    <char cp="30FB"/>
+    <range first-cp="30FC" last-cp="30FE"/>
+    <range first-cp="3105" last-cp="312D"/>
+    <range first-cp="31A0" last-cp="31BA"/>
+    <range first-cp="31F0" last-cp="31FF"/>
+    <range first-cp="3400" last-cp="4DB5"/>
+    <range first-cp="4E00" last-cp="9FD5"/>
+    <range first-cp="A000" last-cp="A48C"/>
+    <range first-cp="A4D0" last-cp="A4FD"/>
+    <range first-cp="A500" last-cp="A60C"/>
+    <range first-cp="A610" last-cp="A62B"/>
+    <char cp="A641"/>
+    <char cp="A643"/>
+    <char cp="A645"/>
+    <char cp="A647"/>
+    <char cp="A649"/>
+    <char cp="A64B"/>
+    <char cp="A64D"/>
+    <char cp="A64F"/>
+    <char cp="A651"/>
+    <char cp="A653"/>
+    <char cp="A655"/>
+    <char cp="A657"/>
+    <char cp="A659"/>
+    <char cp="A65B"/>
+    <char cp="A65D"/>
+    <char cp="A65F"/>
+    <char cp="A661"/>
+    <char cp="A663"/>
+    <char cp="A665"/>
+    <char cp="A667"/>
+    <char cp="A669"/>
+    <char cp="A66B"/>
+    <range first-cp="A66D" last-cp="A66F"/>
+    <range first-cp="A674" last-cp="A67D"/>
+    <char cp="A67F"/>
+    <char cp="A681"/>
+    <char cp="A683"/>
+    <char cp="A685"/>
+    <char cp="A687"/>
+    <char cp="A689"/>
+    <char cp="A68B"/>
+    <char cp="A68D"/>
+    <char cp="A68F"/>
+    <char cp="A691"/>
+    <char cp="A693"/>
+    <char cp="A695"/>
+    <char cp="A697"/>
+    <char cp="A699"/>
+    <char cp="A69B"/>
+    <range first-cp="A69E" last-cp="A6E5"/>
+    <range first-cp="A6F0" last-cp="A6F1"/>
+    <range first-cp="A717" last-cp="A71F"/>
+    <char cp="A723"/>
+    <char cp="A725"/>
+    <char cp="A727"/>
+    <char cp="A729"/>
+    <char cp="A72B"/>
+    <char cp="A72D"/>
+    <range first-cp="A72F" last-cp="A731"/>
+    <char cp="A733"/>
+    <char cp="A735"/>
+    <char cp="A737"/>
+    <char cp="A739"/>
+    <char cp="A73B"/>
+    <char cp="A73D"/>
+    <char cp="A73F"/>
+    <char cp="A741"/>
+    <char cp="A743"/>
+    <char cp="A745"/>
+    <char cp="A747"/>
+    <char cp="A749"/>
+    <char cp="A74B"/>
+    <char cp="A74D"/>
+    <char cp="A74F"/>
+    <char cp="A751"/>
+    <char cp="A753"/>
+    <char cp="A755"/>
+    <char cp="A757"/>
+    <char cp="A759"/>
+    <char cp="A75B"/>
+    <char cp="A75D"/>
+    <char cp="A75F"/>
+    <char cp="A761"/>
+    <char cp="A763"/>
+    <char cp="A765"/>
+    <char cp="A767"/>
+    <char cp="A769"/>
+    <char cp="A76B"/>
+    <char cp="A76D"/>
+    <char cp="A76F"/>
+    <range first-cp="A771" last-cp="A778"/>
+    <char cp="A77A"/>
+    <char cp="A77C"/>
+    <char cp="A77F"/>
+    <char cp="A781"/>
+    <char cp="A783"/>
+    <char cp="A785"/>
+    <range first-cp="A787" last-cp="A788"/>
+    <char cp="A78C"/>
+    <range first-cp="A78E" last-cp="A78F"/>
+    <char cp="A791"/>
+    <range first-cp="A793" last-cp="A795"/>
+    <char cp="A797"/>
+    <char cp="A799"/>
+    <char cp="A79B"/>
+    <char cp="A79D"/>
+    <char cp="A79F"/>
+    <char cp="A7A1"/>
+    <char cp="A7A3"/>
+    <char cp="A7A5"/>
+    <char cp="A7A7"/>
+    <char cp="A7A9"/>
+    <char cp="A7B5"/>
+    <char cp="A7B7"/>
+    <char cp="A7F7"/>
+    <range first-cp="A7FA" last-cp="A827"/>
+    <range first-cp="A840" last-cp="A873"/>
+    <range first-cp="A880" last-cp="A8C4"/>
+    <range first-cp="A8D0" last-cp="A8D9"/>
+    <range first-cp="A8E0" last-cp="A8F7"/>
+    <char cp="A8FB"/>
+    <char cp="A8FD"/>
+    <range first-cp="A900" last-cp="A92D"/>
+    <range first-cp="A930" last-cp="A953"/>
+    <range first-cp="A980" last-cp="A9C0"/>
+    <range first-cp="A9CF" last-cp="A9D9"/>
+    <range first-cp="A9E0" last-cp="A9FE"/>
+    <range first-cp="AA00" last-cp="AA36"/>
+    <range first-cp="AA40" last-cp="AA4D"/>
+    <range first-cp="AA50" last-cp="AA59"/>
+    <range first-cp="AA60" last-cp="AA76"/>
+    <range first-cp="AA7A" last-cp="AAC2"/>
+    <range first-cp="AADB" last-cp="AADD"/>
+    <range first-cp="AAE0" last-cp="AAEF"/>
+    <range first-cp="AAF2" last-cp="AAF6"/>
+    <range first-cp="AB01" last-cp="AB06"/>
+    <range first-cp="AB09" last-cp="AB0E"/>
+    <range first-cp="AB11" last-cp="AB16"/>
+    <range first-cp="AB20" last-cp="AB26"/>
+    <range first-cp="AB28" last-cp="AB2E"/>
+    <range first-cp="AB30" last-cp="AB5A"/>
+    <range first-cp="AB60" last-cp="AB65"/>
+    <range first-cp="ABC0" last-cp="ABEA"/>
+    <range first-cp="ABEC" last-cp="ABED"/>
+    <range first-cp="ABF0" last-cp="ABF9"/>
+    <range first-cp="AC00" last-cp="D7A3"/>
+    <range first-cp="FA0E" last-cp="FA0F"/>
+    <char cp="FA11"/>
+    <range first-cp="FA13" last-cp="FA14"/>
+    <char cp="FA1F"/>
+    <char cp="FA21"/>
+    <range first-cp="FA23" last-cp="FA24"/>
+    <range first-cp="FA27" last-cp="FA29"/>
+    <char cp="FB1E"/>
+    <range first-cp="FE20" last-cp="FE2F"/>
+    <char cp="FE73"/>
+    <range first-cp="10000" last-cp="1000B"/>
+    <range first-cp="1000D" last-cp="10026"/>
+    <range first-cp="10028" last-cp="1003A"/>
+    <range first-cp="1003C" last-cp="1003D"/>
+    <range first-cp="1003F" last-cp="1004D"/>
+    <range first-cp="10050" last-cp="1005D"/>
+    <range first-cp="10080" last-cp="100FA"/>
+    <char cp="101FD"/>
+    <range first-cp="10280" last-cp="1029C"/>
+    <range first-cp="102A0" last-cp="102D0"/>
+    <char cp="102E0"/>
+    <range first-cp="10300" last-cp="1031F"/>
+    <range first-cp="10330" last-cp="10340"/>
+    <range first-cp="10342" last-cp="10349"/>
+    <range first-cp="10350" last-cp="1037A"/>
+    <range first-cp="10380" last-cp="1039D"/>
+    <range first-cp="103A0" last-cp="103C3"/>
+    <range first-cp="103C8" last-cp="103CF"/>
+    <range first-cp="10428" last-cp="1049D"/>
+    <range first-cp="104A0" last-cp="104A9"/>
+    <range first-cp="10500" last-cp="10527"/>
+    <range first-cp="10530" last-cp="10563"/>
+    <range first-cp="10600" last-cp="10736"/>
+    <range first-cp="10740" last-cp="10755"/>
+    <range first-cp="10760" last-cp="10767"/>
+    <range first-cp="10800" last-cp="10805"/>
+    <char cp="10808"/>
+    <range first-cp="1080A" last-cp="10835"/>
+    <range first-cp="10837" last-cp="10838"/>
+    <char cp="1083C"/>
+    <range first-cp="1083F" last-cp="10855"/>
+    <range first-cp="10860" last-cp="10876"/>
+    <range first-cp="10880" last-cp="1089E"/>
+    <range first-cp="108E0" last-cp="108F2"/>
+    <range first-cp="108F4" last-cp="108F5"/>
+    <range first-cp="10900" last-cp="10915"/>
+    <range first-cp="10920" last-cp="10939"/>
+    <range first-cp="10980" last-cp="109B7"/>
+    <range first-cp="109BE" last-cp="109BF"/>
+    <range first-cp="10A00" last-cp="10A03"/>
+    <range first-cp="10A05" last-cp="10A06"/>
+    <range first-cp="10A0C" last-cp="10A13"/>
+    <range first-cp="10A15" last-cp="10A17"/>
+    <range first-cp="10A19" last-cp="10A33"/>
+    <range first-cp="10A38" last-cp="10A3A"/>
+    <char cp="10A3F"/>
+    <range first-cp="10A60" last-cp="10A7C"/>
+    <range first-cp="10A80" last-cp="10A9C"/>
+    <range first-cp="10AC0" last-cp="10AC7"/>
+    <range first-cp="10AC9" last-cp="10AE6"/>
+    <range first-cp="10B00" last-cp="10B35"/>
+    <range first-cp="10B40" last-cp="10B55"/>
+    <range first-cp="10B60" last-cp="10B72"/>
+    <range first-cp="10B80" last-cp="10B91"/>
+    <range first-cp="10C00" last-cp="10C48"/>
+    <range first-cp="10CC0" last-cp="10CF2"/>
+    <range first-cp="11000" last-cp="11046"/>
+    <range first-cp="11066" last-cp="1106F"/>
+    <range first-cp="1107F" last-cp="110BA"/>
+    <range first-cp="110D0" last-cp="110E8"/>
+    <range first-cp="110F0" last-cp="110F9"/>
+    <range first-cp="11100" last-cp="11134"/>
+    <range first-cp="11136" last-cp="1113F"/>
+    <range first-cp="11150" last-cp="11173"/>
+    <char cp="11176"/>
+    <range first-cp="11180" last-cp="111C4"/>
+    <range first-cp="111CA" last-cp="111CC"/>
+    <range first-cp="111D0" last-cp="111DA"/>
+    <char cp="111DC"/>
+    <range first-cp="11200" last-cp="11211"/>
+    <range first-cp="11213" last-cp="11237"/>
+    <range first-cp="11280" last-cp="11286"/>
+    <char cp="11288"/>
+    <range first-cp="1128A" last-cp="1128D"/>
+    <range first-cp="1128F" last-cp="1129D"/>
+    <range first-cp="1129F" last-cp="112A8"/>
+    <range first-cp="112B0" last-cp="112EA"/>
+    <range first-cp="112F0" last-cp="112F9"/>
+    <range first-cp="11300" last-cp="11303"/>
+    <range first-cp="11305" last-cp="1130C"/>
+    <range first-cp="1130F" last-cp="11310"/>
+    <range first-cp="11313" last-cp="11328"/>
+    <range first-cp="1132A" last-cp="11330"/>
+    <range first-cp="11332" last-cp="11333"/>
+    <range first-cp="11335" last-cp="11339"/>
+    <range first-cp="1133C" last-cp="11344"/>
+    <range first-cp="11347" last-cp="11348"/>
+    <range first-cp="1134B" last-cp="1134D"/>
+    <char cp="11350"/>
+    <char cp="11357"/>
+    <range first-cp="1135D" last-cp="11363"/>
+    <range first-cp="11366" last-cp="1136C"/>
+    <range first-cp="11370" last-cp="11374"/>
+    <range first-cp="11480" last-cp="114C5"/>
+    <char cp="114C7"/>
+    <range first-cp="114D0" last-cp="114D9"/>
+    <range first-cp="11580" last-cp="115B5"/>
+    <range first-cp="115B8" last-cp="115C0"/>
+    <range first-cp="115D8" last-cp="115DD"/>
+    <range first-cp="11600" last-cp="11640"/>
+    <char cp="11644"/>
+    <range first-cp="11650" last-cp="11659"/>
+    <range first-cp="11680" last-cp="116B7"/>
+    <range first-cp="116C0" last-cp="116C9"/>
+    <range first-cp="11700" last-cp="11719"/>
+    <range first-cp="1171D" last-cp="1172B"/>
+    <range first-cp="11730" last-cp="11739"/>
+    <range first-cp="118C0" last-cp="118E9"/>
+    <char cp="118FF"/>
+    <range first-cp="11AC0" last-cp="11AF8"/>
+    <range first-cp="12000" last-cp="12399"/>
+    <range first-cp="12480" last-cp="12543"/>
+    <range first-cp="13000" last-cp="1342E"/>
+    <range first-cp="14400" last-cp="14646"/>
+    <range first-cp="16800" last-cp="16A38"/>
+    <range first-cp="16A40" last-cp="16A5E"/>
+    <range first-cp="16A60" last-cp="16A69"/>
+    <range first-cp="16AD0" last-cp="16AED"/>
+    <range first-cp="16AF0" last-cp="16AF4"/>
+    <range first-cp="16B00" last-cp="16B36"/>
+    <range first-cp="16B40" last-cp="16B43"/>
+    <range first-cp="16B50" last-cp="16B59"/>
+    <range first-cp="16B63" last-cp="16B77"/>
+    <range first-cp="16B7D" last-cp="16B8F"/>
+    <range first-cp="16F00" last-cp="16F44"/>
+    <range first-cp="16F50" last-cp="16F7E"/>
+    <range first-cp="16F8F" last-cp="16F9F"/>
+    <range first-cp="1B000" last-cp="1B001"/>
+    <range first-cp="1BC00" last-cp="1BC6A"/>
+    <range first-cp="1BC70" last-cp="1BC7C"/>
+    <range first-cp="1BC80" last-cp="1BC88"/>
+    <range first-cp="1BC90" last-cp="1BC99"/>
+    <range first-cp="1BC9D" last-cp="1BC9E"/>
+    <range first-cp="1DA00" last-cp="1DA36"/>
+    <range first-cp="1DA3B" last-cp="1DA6C"/>
+    <char cp="1DA75"/>
+    <char cp="1DA84"/>
+    <range first-cp="1DA9B" last-cp="1DA9F"/>
+    <range first-cp="1DAA1" last-cp="1DAAF"/>
+    <range first-cp="1E800" last-cp="1E8C4"/>
+    <range first-cp="1E8D0" last-cp="1E8D6"/>
+    <range first-cp="20000" last-cp="2A6D6"/>
+    <range first-cp="2A700" last-cp="2B734"/>
+    <range first-cp="2B740" last-cp="2B81D"/>
+    <range first-cp="2B820" last-cp="2CEA1"/>
+  </data>
+  <rules/>
+</lgr>
+

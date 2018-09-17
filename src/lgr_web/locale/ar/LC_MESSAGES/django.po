@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-30 20:24+0000\n"
+"POT-Creation-Date: 2018-09-04 16:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,135 +19,151 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: settings/default.py:152
+#: settings/default.py:153
 msgid "Arabic"
 msgstr ""
 
-#: settings/default.py:153
+#: settings/default.py:154
 msgid "English"
 msgstr ""
 
-#: settings/default.py:154
+#: settings/default.py:155
 msgid "French"
 msgstr ""
 
-#: templates/_base.html:8 templates/_base.html.py:32
+#: templates/_base.html:8 templates/_base.html.py:34
 msgid "LGR Tool"
 msgstr ""
 
-#: templates/_base.html:31 templates/_base.html.py:32
+#: templates/_base.html:33 templates/_base.html.py:34
 msgid "Go to home screen"
 msgstr ""
 
-#: templates/_base.html:47
+#: templates/_base.html:49
 msgid "Import an existing LGR file or set"
 msgstr ""
 
-#: templates/_base.html:49
+#: templates/_base.html:51
 msgid "Import"
 msgstr ""
 
-#: templates/_base.html:52
+#: templates/_base.html:54
 msgid "Create a new LGR file"
 msgstr ""
 
-#: templates/_base.html:54
+#: templates/_base.html:56
 msgid "New"
 msgstr ""
 
-#: templates/_base.html:58 templates/_base.html.py:60
+#: templates/_base.html:60 templates/_base.html.py:62
 msgid "Tools"
 msgstr ""
 
-#: templates/_base.html:79
+#: templates/_base.html:82
 msgid "Compare two LGR"
 msgstr ""
 
-#: templates/_base.html:81
+#: templates/_base.html:84
 msgid "Compare two LGRs"
 msgstr ""
 
-#: templates/_base.html:88
+#: templates/_base.html:91
 msgid "Get differences for a list of labels for two LGRs versions"
 msgstr ""
 
-#: templates/_base.html:91
+#: templates/_base.html:94
 msgid "Diff labels of two LGRs"
 msgstr ""
 
-#: templates/_base.html:96 templates/_base.html.py:99
+#: templates/_base.html:99 templates/_base.html.py:102
 msgid "Get collisions in a list of labels"
 msgstr ""
 
-#: templates/_base.html:104
+#: templates/_base.html:107
 msgid "Compute cross-script variants"
 msgstr ""
 
-#: templates/_base.html:107
+#: templates/_base.html:110
 msgid "Cross-script variants"
 msgstr ""
 
-#: templates/_base.html:112
+#: templates/_base.html:115
 msgid "Annotate list of labels with their disposition"
 msgstr ""
 
-#: templates/_base.html:115
+#: templates/_base.html:118
 msgid "Generate disp. annotations"
 msgstr ""
 
-#: templates/_base.html:134
+#: templates/_base.html:124
+msgid "Perform harmonization on LGRs"
+msgstr ""
+
+#: templates/_base.html:127
+msgid "Harmonization"
+msgstr ""
+
+#: templates/_base.html:147
 msgid "Validate label against LGR"
 msgstr ""
 
-#: templates/_base.html:136 templates/_base.html.py:261
+#: templates/_base.html:149 templates/_base.html.py:290
 msgid "Validate label"
 msgstr ""
 
-#: templates/_base.html:140
+#: templates/_base.html:153
 msgid "Analyze current file for errors and statistics"
 msgstr ""
 
-#: templates/_base.html:143
-msgid "Summary"
+#: templates/_base.html:156 templates/_base.html.py:261
+msgid "Validate LGR"
 msgstr ""
 
-#: templates/_base.html:146
+#: templates/_base.html:160 templates/_base.html.py:162
+msgid "Output"
+msgstr ""
+
+#: templates/_base.html:167
 msgid "Preview LGR file"
 msgstr ""
 
-#: templates/_base.html:149
+#: templates/_base.html:170
 msgid "View XML"
 msgstr ""
 
-#: templates/_base.html:152 templates/_base.html.py:155
-msgid "HTML Output"
-msgstr ""
-
-#: templates/_base.html:158
+#: templates/_base.html:174
 msgid "Download LGR file"
 msgstr ""
 
-#: templates/_base.html:160
+#: templates/_base.html:176
 msgid "Download"
 msgstr ""
 
-#: templates/_base.html:165
+#: templates/_base.html:180 templates/_base.html.py:183
+msgid "HTML Output"
+msgstr ""
+
+#: templates/_base.html:191 templates/_base.html.py:324
+msgid "Display all label forms"
+msgstr ""
+
+#: templates/_base.html:192
+msgid "Label forms"
+msgstr ""
+
+#: templates/_base.html:197
 msgid "About LGR Toolset"
 msgstr ""
 
-#: templates/_base.html:166 templates/_base.html.py:277
+#: templates/_base.html:198 templates/_base.html.py:306
 msgid "About"
 msgstr ""
 
-#: templates/_base.html:230
-msgid "LGR Summary"
+#: templates/_base.html:269
+msgid "Save results"
 msgstr ""
 
-#: templates/_base.html:240
-msgid "Save summary"
-msgstr ""
-
-#: templates/_base.html:242 templates/_base.html.py:283
+#: templates/_base.html:271 templates/_base.html.py:312
 msgid "Close"
 msgstr ""
 
@@ -163,7 +179,7 @@ msgstr ""
 #: templates/index.html:10
 msgid ""
 "This application provides a convenient interface for browsing and editing "
-"<abbr title=\"Label Generation Ruleset\">LGR</abbr>’s conforming to the <a "
+"<abbr title=\"Label Generation Ruleset\">LGR</abbr>s conforming to the <a "
 "href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\">Representing Label "
 "Generation Rulesets using XML</a> specification."
 msgstr ""
@@ -200,7 +216,7 @@ msgid "No LGR has been previously loaded."
 msgstr ""
 
 #: templates/index.html:83
-msgid "Start a new LGR file or import an existing one"
+msgid "Create a new LGR file or import an existing one"
 msgstr ""
 
 #: templates/index.html:86

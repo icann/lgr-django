@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-30 20:24+0000\n"
+"POT-Creation-Date: 2018-09-04 16:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,122 +17,129 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms.py:9
+#: forms.py:10
 msgid "Union"
 msgstr ""
 
-#: forms.py:10
+#: forms.py:11
 msgid "Intersection"
 msgstr ""
 
-#: forms.py:11
+#: forms.py:12
 msgid "Diff"
 msgstr ""
 
-#: forms.py:34 forms.py:72
+#: forms.py:35 forms.py:76 forms.py:217
 msgid "First LGR"
 msgstr ""
 
-#: forms.py:35
-msgid "First LGR to use in comparison"
+#: forms.py:36 forms.py:77 forms.py:218
+msgid "First LGR to use in tool"
 msgstr ""
 
-#: forms.py:39 forms.py:76
+#: forms.py:40 forms.py:80 forms.py:221
 msgid "Second LGR"
 msgstr ""
 
-#: forms.py:40
-msgid "Second LGR to use in comparison"
-msgstr ""
-
-#: forms.py:44
-msgid "Action to perform on LGRs"
+#: forms.py:41 forms.py:81 forms.py:222
+msgid "Second LGR to use in tool"
 msgstr ""
 
 #: forms.py:45
+msgid "Action to perform on LGRs"
+msgstr ""
+
+#: forms.py:46
 msgid "Choose the action to perform on selected LGRs"
 msgstr ""
 
-#: forms.py:61 forms.py:114 forms.py:146 forms.py:164
-msgid "LGR"
-msgstr ""
-
-#: forms.py:62 forms.py:165
-msgid "LGR set"
-msgstr ""
-
-#: forms.py:73
-msgid "First LGR to use in diff"
-msgstr ""
-
-#: forms.py:77
-msgid "Second LGR to use in diff"
-msgstr ""
-
-#: forms.py:80 forms.py:118 forms.py:184 forms.py:201
-msgid "Labels"
-msgstr ""
-
-#: forms.py:81 forms.py:119 forms.py:185 forms.py:202
-msgid "List of labels to use in diff. File must be encoded in UNIX format."
-msgstr ""
-
-#: forms.py:85 forms.py:123 forms.py:189 forms.py:206
-msgid "E-mail"
-msgstr ""
-
-#: forms.py:86 forms.py:124 forms.py:190 forms.py:207
-msgid "Provide your e-mail address"
-msgstr ""
-
-#: forms.py:89
-msgid "Check collisions"
-msgstr ""
-
-#: forms.py:90
-msgid "Also check for collision of labels in both LGR"
-msgstr ""
-
-#: forms.py:94 forms.py:127
+#: forms.py:50 forms.py:98 forms.py:131
 msgid "Full dump"
 msgstr ""
 
-#: forms.py:95 forms.py:128
-msgid "Print a full dump"
+#: forms.py:51
+msgid "Print a full dump (i.e. with identical code points as well)"
 msgstr ""
 
-#: forms.py:98 forms.py:131
-msgid "Output rules"
+#: forms.py:65 forms.py:118 forms.py:150 forms.py:168 forms.py:237
+msgid "LGR"
+msgstr ""
+
+#: forms.py:66 forms.py:169 forms.py:238
+msgid "LGR set"
+msgstr ""
+
+#: forms.py:84 forms.py:122 forms.py:189 forms.py:206
+msgid "Labels"
+msgstr ""
+
+#: forms.py:85 forms.py:123 forms.py:190 forms.py:207
+msgid ""
+"List of labels to use in tool. File must be encoded in UTF-8 and using UNIX "
+"line ending."
+msgstr ""
+
+#: forms.py:89 forms.py:127 forms.py:194 forms.py:211
+msgid "E-mail"
+msgstr ""
+
+#: forms.py:90 forms.py:128 forms.py:195 forms.py:212
+msgid "Provide your e-mail address"
+msgstr ""
+
+#: forms.py:93
+msgid "Check collisions"
+msgstr ""
+
+#: forms.py:94
+msgid "Also check for collision of labels in both LGR"
 msgstr ""
 
 #: forms.py:99 forms.py:132
+msgid "Print a full dump"
+msgstr ""
+
+#: forms.py:102 forms.py:135
+msgid "Output rules"
+msgstr ""
+
+#: forms.py:103 forms.py:136
 msgid "Show rules in output (this can be very verbose)"
 msgstr ""
 
-#: forms.py:115
-msgid "LGR to use for collisions"
+#: forms.py:119 forms.py:151
+msgid "LGR to use in tool"
 msgstr ""
 
-#: forms.py:147
-msgid "LGR to use for annotation"
-msgstr ""
-
-#: forms.py:151
+#: forms.py:155
 msgid "Script"
 msgstr ""
 
-#: forms.py:152
+#: forms.py:156
 msgid "The script used to validate the label"
 msgstr ""
 
-#: forms.py:177
+#: forms.py:181
 msgid "Allocated Set labels"
 msgstr ""
 
-#: forms.py:179
+#: forms.py:183
 msgid ""
 "Optional list of labels already allocated in the LGR set, that will be used "
-"to check for collisions when evaluating labels using the merged LGR set"
+"to check for collisions when evaluating labels using the merged LGR set. "
+"File must be encoded in UTF-8 and using UNIX line ending."
+msgstr ""
+
+#: forms.py:225
+msgid "Root Zone LGR"
+msgstr ""
+
+#: forms.py:226
+msgid "The (optional) RootZone LGR to infer new variant sets from"
+msgstr ""
+
+#: middleware.py:25
+msgid "Cannot decode input file. Make sure it is encoded in UTF-8"
 msgstr ""
 
 #: templates/lgr_tools/annotate.html:15 templates/lgr_tools/collision.html:11
@@ -177,19 +184,23 @@ msgid ""
 msgstr ""
 
 #: templates/lgr_tools/comp_invalid.html:11
+msgid "To help, here is the error log from the validation:"
+msgstr ""
+
+#: templates/lgr_tools/comp_invalid.html:18
 #, python-format
 msgid "Download invalid LGR %(comp_type)s file"
 msgstr ""
 
-#: templates/lgr_tools/comp_invalid.html:15
+#: templates/lgr_tools/comp_invalid.html:20
 msgid "Download"
 msgstr ""
 
-#: templates/lgr_tools/compare.html:16
+#: templates/lgr_tools/compare.html:19
 msgid "Compare"
 msgstr ""
 
-#: templates/lgr_tools/compare.html:20
+#: templates/lgr_tools/compare.html:23
 msgid ""
 "<strong class=\"text-danger\"><i class=\"glyphicon glyphicon-alert\"></i> "
 "Note that comparison will be performed only between two LGR sets or two "
@@ -208,6 +219,25 @@ msgstr ""
 msgid ""
 "<strong class=\"text-danger\"><i class=\"glyphicon glyphicon-alert\"></i> "
 "Note that diff tool is not available for LGR sets.</strong>"
+msgstr ""
+
+#: templates/lgr_tools/harmonization_result.html:12
+#, python-format
+msgid "Results of harmonization for %(lgr_1_name)s and %(lgr_2_name)s"
+msgstr ""
+
+#: templates/lgr_tools/harmonization_result.html:14
+msgid "Resulting LGRs"
+msgstr ""
+
+#: templates/lgr_tools/harmonization_result.html:17
+#: templates/lgr_tools/harmonization_result.html:18
+#, python-format
+msgid "View harmonized version of %(name)s"
+msgstr ""
+
+#: templates/lgr_tools/harmonize.html:17
+msgid "Harmonize"
 msgstr ""
 
 #: templates/lgr_tools/wait_annotate.html:10
