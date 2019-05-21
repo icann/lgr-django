@@ -18,23 +18,23 @@ LABEL com.example.component="$COMPONENT" \
       run="/usr/bin/docker run -d -P 5000:5000 lgrtool-kubernetes"\
       maintainer="Patrick Tudor https://github.com/ptudor"
 
-ENV commit_lgr_django="v2.0.0" \
-    commit_lgr_core="v2.0.0" \
+ENV commit_lgr_django="v2.0.1" \
+    commit_lgr_core="v2.0.1" \
     commit_munidata="v2.0.0"
 
 RUN echo "== prepare apache, redis, and others." \
     && echo not with fedora, only centos: yum -y install epel-release \
     && yum -y --setopt=tsflags=nodocs update \
     && yum -y install httpd httpd-devel httpd-tools mod_ssl openssl \
-              redis python-pip python-devel make gcc redhat-rpm-config nc \
+              redis python3-pip python3-devel make gcc redhat-rpm-config nc \
               libxml2-devel libxslt-devel gettext procps-ng httpd-tools \
               curl file unzip tar git ssmtp wget mailx xz patch supervisor \
     && yum clean all \
-    && /sbin/alternatives --install /usr/bin/python python /usr/bin/python2.7 270 \
-    && /sbin/alternatives --install /usr/bin/python python /usr/bin/python3.6 36 \
+    && /sbin/alternatives --install /usr/bin/python python /usr/bin/python2.7 27 \
+    && /sbin/alternatives --install /usr/bin/python python /usr/bin/python3.7 37 \
+    && /sbin/alternatives --auto python \
     && /sbin/alternatives --display python \
     && python -V \
-    && pip install --upgrade pip \
     && groupadd -g 4901 gunicorn \
     && useradd -s /sbin/nologin -d /var/www/lgr -u 4901 -g 4901 gunicorn \
     && chmod a+x /var/www/lgr
@@ -107,14 +107,14 @@ RUN export CFLAGS="-O2 -mtune=generic" \
     && git clone -b "${target:-master}" https://github.com/icann/lgr-core.git ${LGR_HOME}/lgr-core \
     && cd ${LGR_HOME}/lgr-core && git pull && git checkout ${commit_lgr_core:-master} && git status \
     && echo "== 2. First install munidata." \
-    && cd ${LGR_HOME}/munidata && pip install -r requirements.txt && pip install . \
+    && cd ${LGR_HOME}/munidata && pip3 install -r requirements.txt && pip3 install . \
     && echo "== 3. Then install lgr-core." \
-    && cd ${LGR_HOME}/lgr-core && pip install -r requirements.txt && pip install . \
+    && cd ${LGR_HOME}/lgr-core && pip3 install -r requirements.txt && pip3 install . \
     && echo "== 4. Now take care of lgr-django." \
     && git clone -b "${target:-master}" https://github.com/icann/lgr-django.git ${LGR_HOME}/lgr-django \
     && cd ${LGR_HOME}/lgr-django && git pull && git checkout ${commit_lgr_django:-master} && git status \
-    && pip install -r etc/requirements.txt -f ${LGR_HOME}/lgr-django \
-    && pip install gunicorn tornado Sphinx \
+    && pip3 install -r etc/requirements.txt -f ${LGR_HOME}/lgr-django \
+    && pip3 install gunicorn tornado Sphinx \
     && cd ${LGR_HOME}/lgr-django/doc && make html \
     && echo cd ${LGR_HOME}/lgr-django/doc && echo make html \
     && rm -Rf ${LGR_HOME}/lgr-core ${LGR_HOME}/munidata \
