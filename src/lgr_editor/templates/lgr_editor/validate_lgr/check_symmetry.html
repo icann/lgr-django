@@ -9,8 +9,14 @@
         <li>Code point {{ entry.char|render_char }}:
           {% if entry.type == 'not-in-repertoire' %}
             Variant {{ entry.variant|render_char }} is not in repertoire
-          {% else %}
+          {% elif entry.type == 'missing-symmetric-variant' %}
             {{ entry.variant|render_char }} has not original code point in its variants
+          {% elif entry.type == 'variant-contextual-rule-when-missing' %}
+            {{ entry.variant|render_char }} has not symmetric when rule {{ entry.when }} on its symmetric variants
+          {% elif entry.type == 'variant-contextual-rule-not-when-missing' %}
+            {{ entry.variant|render_char }} has not symmetric not-when rule {{ entry.not_when }} on its symmetric variants
+          {% else %}
+            {{ entry.variant|render_char }} unknown symmetry problem, please report
           {% endif %}
         </li>
       {% endfor %}
