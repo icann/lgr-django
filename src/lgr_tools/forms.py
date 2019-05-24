@@ -119,10 +119,14 @@ class LGRCollisionSelector(forms.Form):
                             help_text=_('LGR to use in tool'),
                             required=True)
 
+    download_tlds = forms.BooleanField(label=_("Use downloaded TLDs"),
+                                       help_text=_('Use the ICANN list of TLDs as input'),
+                                       required=False)
+
     labels = forms.FileField(label=_("Labels"),
                              help_text=_('List of labels to use in tool. '
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
-                             required=True)
+                             required=False)
 
     email = forms.EmailField(label=_("E-mail"),
                              help_text=_('Provide your e-mail address'),
@@ -144,6 +148,13 @@ class LGRCollisionSelector(forms.Form):
         # dynamically append the session LGRs (by copy, not by reference)
         self.fields['lgr'].choices = ((name, name) for name in session_lgrs)
         self.fields['lgr'].initial = lgr_id
+
+    def clean(self):
+        cleaned_data = super(LGRCollisionSelector, self).clean()
+        if not cleaned_data.get('download_tlds') and not cleaned_data.get('labels'):
+            self.add_error('labels', _('Please provide a file containing labels to test or click the download TLDs box'))
+
+        return cleaned_data
 
 
 class LGRSetCompatibleForm(forms.Form):

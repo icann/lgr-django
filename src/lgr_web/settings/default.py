@@ -215,6 +215,9 @@ SUPPORTED_UNICODE_VERSIONS = (
     '6.3.0',
 )
 
+# ICANN TLDs URL
+ICANN_TLDS = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
+
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'
 # Values are a dict of the kwargs to pass to the munidata.manager.register function along with the version.
@@ -244,9 +247,6 @@ LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE = 100
 
 # If estimated number of variants is greater, then switch to asynchronous mode
 LGR_VALIDATION_MAX_VARS_SYNCHRONOUS = 10000
-
-
-##### /LGR Toolset Project-specific settings #####
 
 
 ##### Celery configuration parameters #####

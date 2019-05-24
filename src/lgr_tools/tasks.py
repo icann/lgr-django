@@ -142,9 +142,9 @@ def collision_task(lgr_json, labels_json, email_address, full_dump,
     logger.info("Starting task 'collision' for %s, for file %s",
                 lgr.name, labels_info.name)
 
-    body = "Hi,\nThe processing of collisions from labels provided in the " \
-           "file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
-                                                  lgr=lgr.name)
+    body = "Hi,\nThe processing of collisions from labels provided in {input} in LGR '{lgr}' has".format(
+        input="the file '{}'".format(labels_info.name) if labels_info.name else 'ICANN tlds',
+        lgr=lgr.name)
     _lgr_tool_task(storage_path,
                    base_filename='collisions_{0}'.format(lgr.name),
                    email_subject='LGR Toolset collisions result',

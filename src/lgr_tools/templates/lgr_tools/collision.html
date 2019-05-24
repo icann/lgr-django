@@ -7,7 +7,10 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.lgr %}
-        {% include "lgr_editor/_form_field.html" with field=form.labels %}
+        {% include "lgr_editor/_form_field_checkbox.html" with field=form.download_tlds %}
+        <div id='labels-box'>
+            {% include "lgr_editor/_form_field.html" with field=form.labels %}
+        </div>
         <p>{% blocktrans %}As the computing may be very long, we will warn by e-mail once the result can be downloaded. Please provide a valid e-mail address:{% endblocktrans %}</p>
         {% include "lgr_editor/_form_field.html" with field=form.email %}
         {% include "lgr_editor/_form_field_checkbox.html" with field=form.full_dump label_width=7 field_width=8 %}
@@ -25,3 +28,30 @@
         {% endblocktrans %}
     </p>
 {% endblock content %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            function check_download_tlds() {
+                if($('#id_download_tlds').is(':checked')){
+                    $('#labels-box').hide(500);
+                } else {
+                    $('#labels-box').show(500);
+                }
+            };
+            function hide_option(selector) {
+                $(selector).wrap('<span/>');
+                $(selector).attr('data-hidden', true);
+                $(selector).removeAttr('selected');
+            };
+            function show_option(selector) {
+                $(selector + '[data-hidden=true]').unwrap();
+                $(selector).attr('data-hidden', false);
+            };
+
+            $('#id_download_tlds').click(function(){check_download_tlds()});
+            $('#id_download_tlds').show(function(){check_download_tlds()});
+        });
+    </script>
+{% endblock html_body_more %}
