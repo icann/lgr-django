@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 from . import views
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^comp/(?P<lgr_id>[\w\_\-\.]+)?$',
         views.lgr_compare,
         name='lgr_tools_compare'),
@@ -23,4 +23,4 @@ urlpatterns = patterns('',
     url(r'^harmonization/(?P<lgr_id>[\w\_\-\.]+)?$',
         views.lgr_harmonize,
         name='lgr_tools_harmonize'),
-)
+]

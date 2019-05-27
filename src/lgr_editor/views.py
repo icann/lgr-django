@@ -25,7 +25,7 @@ from django.http import (HttpResponse,
                          JsonResponse)
 from django.core.cache import cache
 from django.views.generic import FormView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.response import TemplateResponse
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST

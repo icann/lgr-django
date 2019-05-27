@@ -343,7 +343,7 @@ def lgr_cross_script_variants(request, lgr_id):
 
 def lgr_harmonize(request, lgr_id):
     form = LGRHarmonizeSelector(request.POST or None,
-                                session_lgrs=session_list_lgr(request),
+                                session_lgrs=[lgr['name'] for lgr in session_list_lgr(request) if not lgr['is_set']],
                                 lgr_id=lgr_id)
 
     if form.is_valid():

@@ -23,12 +23,17 @@ class DataSelectWidget(Select):
         super(DataSelectWidget, self).__init__(attrs)
         self.data = data
 
-    def render_option(self, selected_choices, option_value, option_label):
-        option = super(DataSelectWidget, self).render_option(selected_choices, option_value, option_label)
-        str_data = ''
-        for key, val in iteritems(self.data.get(option_value, {})):
-            str_data += 'data-%s="%s" ' % (key, val)
-        return option.replace("value=", str_data + "value=")  # XXX is there a better way without rewriting all method from scratch
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        """
+        Yield all "subwidgets" of this widget. Used to enable iterating
+        options from a BoundField for choice widgets.
+        """
+        option = super(DataSelectWidget, self).create_option(name, value, label, selected, index, subindex, attrs)
+        for key, val in iteritems(self.data.get(value, {})):
+            # attrs won't be displayed if val is False and will be displayed without argument if val is True
+            option['attrs']['data-{}'.format(key)] = val
+
+        return option
 
 
 class LGRCompareSelector(forms.Form):
@@ -65,7 +70,8 @@ class LGRCompareSelector(forms.Form):
         self.fields['lgr_1'].choices = ((_('LGR'), [(lgr['name'], lgr['name']) for lgr in lgrs]),
                                         (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
         self.fields['lgr_2'].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs)
-        self.fields['lgr_1'].widget.data = {lgr['name']: {'is-set': lgr['is_set']} for lgr in session_lgrs}
+        self.fields['lgr_1'].widget.data = {lgr['name']: {'is-set': 'yes' if lgr['is_set'] else 'no'} for lgr in
+                                            session_lgrs}
         self.fields['lgr_2'].widget.data = self.fields['lgr_1'].widget.data
         if need_empty:
             self.fields['lgr_2'].empty = True

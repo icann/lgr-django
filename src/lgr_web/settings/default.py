@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'kombu.transport.django',
     'lgr_editor',
     'lgr_validator',
     'lgr_tools',
@@ -43,7 +42,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
