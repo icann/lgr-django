@@ -1244,7 +1244,8 @@ NEW_ELEMENT_NAME_PARAM = '__new__'
 
 # In `LGR_SKEL` below, the content preceding `{xml}` should be on a single line, so that the line
 # number reported in error messages can be more consistent.
-LGR_SKEL = '''<lgr xmlns="{ns}"><meta /><rules>
+# Skel contains fake char in order to get a valid RNG
+LGR_SKEL = '''<lgr xmlns="{ns}"><meta /><data><char cp="0061"/></data><rules>
 {xml}
 </rules></lgr>'''
 
@@ -1338,7 +1339,7 @@ def _parse_rule(xml):
     lgr_info = LGRInfo.from_dict(
         {
             'xml': lgr_xml,
-            'validate': False
+            'validate': True
         },
         lgr_loader_func=None
     )
@@ -1373,8 +1374,6 @@ def rule_edit_rule_ajax(request, lgr_id, rulename):
             rule = _parse_rule(body)
             if not rule:
                 return _json_response(False, _('No rule element found'))
-            if rule.name is None:
-                return _json_response(False, _('Name attribute must be present'))
         except LGRException as e:
             return _json_response(False, lgr_exception_to_text(e))
         except XMLSyntaxError as e:
