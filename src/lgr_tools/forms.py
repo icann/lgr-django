@@ -241,14 +241,9 @@ class LGRHarmonizeSelector(forms.Form):
         session_lgrs = kwargs.pop('session_lgrs', {})
         lgr_id = kwargs.pop('lgr_id', '')
         super(LGRHarmonizeSelector, self).__init__(*args, **kwargs)
-        lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
-        lgrs = [lgr for lgr in session_lgrs if not lgr['is_set']]
         # dynamically append the session LGRs
         for field_name in ('lgr_1', 'lgr_2', 'rz_lgr'):
-            self.fields[field_name].choices = ((_('LGR'), [(lgr['name'], lgr['name']) for lgr in lgrs]),
-                                               (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
-            self.fields[field_name].widget.data = {lgr['name']: {'lgr-set': ','.join([l['name'] for l in lgr['lgr_set_dct']])}
-                                                   for lgr in lgr_sets}
+            self.fields[field_name].choices = ((name, name) for name in session_lgrs)
         self.fields['rz_lgr'].choices = [('', ''), ] + self.fields['rz_lgr'].choices
         self.fields['lgr_1'].initial = lgr_id
         self.fields['rz_lgr'].initial = ''
