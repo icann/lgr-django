@@ -5,14 +5,15 @@ from django.utils.six import text_type
 from django import forms
 
 from lgr.tools.utils import parse_label_input
+from lgr_tools.forms import UAEmailField
 
 
 class ValidateLabelForm(forms.Form):
     label = forms.CharField(label=_("Label"),
                             help_text=_("Maximum length: 63 code points"))
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=False)
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=False)
     set_labels = forms.FileField(label=_("Allocated Set labels"),
                                  required=False,
                                  help_text=_('Optional list of labels already allocated '

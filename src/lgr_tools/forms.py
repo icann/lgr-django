@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import re
+
 from django import forms
-from django.forms.widgets import Select
+from django.core import validators
+from django.forms.widgets import Select, TextInput
 from django.utils.six import iteritems
 from django.utils.translation import ugettext_lazy as _
 
@@ -10,6 +13,19 @@ LGR_COMPARE_ACTIONS = (
     ("UNION", _("Union")),
     ("INTERSECTION", _("Intersection")),
     ("DIFF", _("Diff")))
+
+
+class UAEmailValidator(validators.EmailValidator):
+    # same Email Validator class with unicode characters instead of a-z0-9
+    user_regex = validators._lazy_re_compile(
+        r"(^[-!#$%&'*+/=?^_`{}|~\w]+(\.[-!#$%&'*+/=?^_`{}|~\w]+)*\Z"  # dot-atom
+        r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177\w]|\\[\001-\011\013\014\016-\177\w])*"\Z)',  # quoted-string
+        re.IGNORECASE)
+
+
+class UAEmailField(forms.EmailField):
+    widget = TextInput
+    default_validators = [UAEmailValidator()]
 
 
 class DataSelectWidget(Select):
@@ -92,9 +108,9 @@ class LGRDiffSelector(forms.Form):
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=True)
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=True)
 
     collision = forms.BooleanField(label=_("Check collisions"),
                                    help_text=_('Also check for collision of '
@@ -134,9 +150,9 @@ class LGRCollisionSelector(forms.Form):
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=False)
 
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=True)
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=True)
 
     full_dump = forms.BooleanField(label=_("Full dump"),
                                    help_text=_('Print a full dump'),
@@ -208,9 +224,9 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=True)
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=True)
 
     def __init__(self, *args, **kwargs):
         lgr_info = kwargs.get('lgr_info', None)
@@ -225,9 +241,9 @@ class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=True)
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=True)
 
 
 class LGRHarmonizeSelector(forms.Form):
