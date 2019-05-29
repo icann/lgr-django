@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 16:04+0000\n"
-"PO-Revision-Date: 2018-09-04 11:47-0400\n"
+"POT-Creation-Date: 2019-05-29 17:23+0000\n"
+"PO-Revision-Date: 2019-05-29 13:14-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.1.1\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: forms/codepoint.py:14 templates/lgr_editor/codepoint_view.html:52
 msgid "When"
@@ -28,6 +28,7 @@ msgstr "Not When"
 
 #: forms/codepoint.py:16 templates/lgr_editor/_editor_base.html:31
 #: templates/lgr_editor/codepoint_list.html:40
+#: templates/lgr_editor/validate_lgr/compute_stats.html:71
 msgid "Tags"
 msgstr "Tags"
 
@@ -349,6 +350,7 @@ msgstr "Métadonnées"
 
 #: templates/lgr_editor/_editor_base.html:34 templates/lgr_editor/rules.html:18
 #: templates/lgr_editor/rules_edit.html:57
+#: templates/lgr_editor/validate_lgr/compute_stats.html:79
 msgid "Rules"
 msgstr "Règles"
 
@@ -821,6 +823,191 @@ msgstr ""
 "                Ajouter le tag à un code point afin de le retrouver dans "
 "cette list"
 
+#: templates/lgr_editor/validate_lgr/check_conditional_variants.html:7
+msgid "Erroneous conditional code points"
+msgstr "Erreur dans les code points conditionels"
+
+#: templates/lgr_editor/validate_lgr/check_conditional_variants.html:11
+#, python-format
+msgid ""
+"Code point %(cp)s has invalid %(rule_type)s rule %(rule)s for variant "
+"%(variant)s"
+msgstr ""
+"Le code point %(cp)s a la règle %(rule_type)s %(rule)s invalide pour les "
+"variantes %(variant)s"
+
+#: templates/lgr_editor/validate_lgr/check_conditional_variants.html:18
+msgid "Conditional variants OK"
+msgstr "Variantes conditionnelles OK"
+
+#: templates/lgr_editor/validate_lgr/check_symmetry.html:7
+msgid "Missing code points or rules"
+msgstr "Code points ou règles manquants"
+
+#: templates/lgr_editor/validate_lgr/check_symmetry.html:11
+#, python-format
+msgid "Code point %(cp)s:"
+msgstr "Code point %(cp)s:"
+
+#: templates/lgr_editor/validate_lgr/check_symmetry.html:15
+#, python-format
+msgid "Variant %(variant)s is not in repertoire"
+msgstr "La variante %(variant)s n'est pas dans le répertoire"
+
+#: templates/lgr_editor/validate_lgr/check_symmetry.html:19
+#, python-format
+msgid "%(variant)s has not original code point in its variants"
+msgstr "%(variant)s n'a pas le code point original dans ses variantes"
+
+#: templates/lgr_editor/validate_lgr/check_symmetry.html:23
+#, python-format
+msgid ""
+"%(variant)s has not symmetric %(rule_type)s rule %(rule)s on its symmetric "
+"variants"
+msgstr ""
+"%(variant)s n'a pas la règle %(rule_type)s %(rule)s dans ses variantes "
+"symmétriques"
+
+#: templates/lgr_editor/validate_lgr/check_symmetry.html:27
+#, python-format
+msgid "%(variant)s unknown symmetry problem, please report"
+msgstr ""
+"%(variant)s problème de symétrie inconnu, veuillez contacter le support"
+
+#: templates/lgr_editor/validate_lgr/check_symmetry.html:35
+msgid "Symmetry OK"
+msgstr "Symétrie OK"
+
+#: templates/lgr_editor/validate_lgr/check_transitivity.html:7
+msgid "Missing variants"
+msgstr "Variantes manquantes"
+
+#: templates/lgr_editor/validate_lgr/check_transitivity.html:11
+#, python-format
+msgid "Code point %(cp)s is missing variant %(variant)s"
+msgstr "Le code point %(cp)s n'a pas la variante %(variant)s"
+
+#: templates/lgr_editor/validate_lgr/check_transitivity.html:18
+msgid "Transitivity OK"
+msgstr "Transitivité OK"
+
+#: templates/lgr_editor/validate_lgr/check_xml_validity.html:7
+msgid "XML is valid and complies with RNG."
+msgstr "XML valide et conforme au RNG."
+
+#: templates/lgr_editor/validate_lgr/check_xml_validity.html:9
+#, python-format
+msgid "Invalid XML for lgr: %(res)s"
+msgstr "Fichier XML invalide pour la LGR: %(res)s"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:6
+msgid "General stats"
+msgstr "Statistiques générales"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:9
+#, python-format
+msgid "Number of code points: %(nbr)s"
+msgstr "Nombre de code points: %(nbr)s"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:15
+#, python-format
+msgid "Number of ranges: %(nbr)s"
+msgstr "Nombre d'intervalles: %(nbr)s"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:21
+#, python-format
+msgid "Largest range: %(largest)s (length: %(largest_len)s)"
+msgstr "Plus grand intervalle: %(largest)s (longueur: %(largest_len)s)"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:28
+#, python-format
+msgid "Number of sequences: %(nbr)s"
+msgstr "Nombre de séquences: %(nbr)s"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:34
+#, python-format
+msgid "Largest sequence: %(largest)s (length: %(largest_len)s)"
+msgstr "Plus grande séquence: %(largest)s (longueur: %(largest_len)s)"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:41
+msgid "Variants"
+msgstr "Variante(s)"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:44
+#, fuzzy, python-format
+msgid "Total number of variant mappings: %(nbr)s"
+msgstr "Nombre total de mapping de variantes: %(nbr)s"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:49
+#, python-format
+msgid "Average number of variants per code point: %(nbr)s"
+msgstr "Nombre moyen de variantes par code point: %(nbr)s"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:54
+#, python-format
+msgid "Largest variant set: %(largest_set)s"
+msgstr "Plus grand ensemble de variantes: %(largest_set)s"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:60
+msgid "Variants per type:"
+msgstr "Variantes par type:"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:63
+#, python-format
+msgid "Number of variants for type %(variant_type)s: %(number)s"
+msgstr "Nombre de variantes pour le type %(variant_type)s: %(number)s"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:74
+#, python-format
+msgid "Number of code points for tag %(tag_name)s: %(number)s"
+msgstr "Nombre de code points pour le tag %(tag_name)s: %(number)s"
+
+#: templates/lgr_editor/validate_lgr/compute_stats.html:82
+#, python-format
+msgid "Number of defined rules: %(nbr)s"
+msgstr "Nombre de règles définies: %(nbr)s"
+
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:6
+#, python-format
+msgid "Unicode version %(version)s"
+msgstr "Version d'Unicode %(version)s"
+
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:8
+#, python-format
+msgid "Validating repertoire '%(repertoire)s'"
+msgstr "Répertoire de validation '%(repertoire)s'"
+
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:13
+#, python-format
+msgid ""
+"Target Unicode version %(version)s differs from UnicodeDatabase %(database)s"
+msgstr ""
+"La version Unicode cible %(version)s diffère de UnicodeDatabase %(database)s"
+
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:19
+msgid "Invalid characters"
+msgstr "Caractères invalides"
+
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:23
+#, python-format
+msgid "Invalid character %(cp)s:"
+msgstr "Caractère invalide %(cp)s:"
+
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:29
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:42
+#, python-format
+msgid "Error: %(err)s"
+msgstr "Erreur: %(err)s"
+
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:36
+#, python-format
+msgid "Variant: %(variant|render_char)s"
+msgstr "Variante: %(variant|render_char)s"
+
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:53
+msgid "LGR rebuild OK"
+msgstr "Reconstruction de la LGR OK"
+
 #: views.py:114
 msgid ""
 "The LGR you have tried to create already exists in your working session. "
@@ -849,63 +1036,87 @@ msgstr ""
 msgid "The LGR set name already exists. Please use another name."
 msgstr "Ce nom de set LGR existe déjà. Merci d'utiliser un autre nom."
 
-#: views.py:289
+#: views.py:248
+msgid "Testing XML validity using RNG"
+msgstr "Validation du XML par le RNG"
+
+#: views.py:249
+msgid "Testing symmetry"
+msgstr "Test de la symmétrie"
+
+#: views.py:250
+msgid "Testing transitivity"
+msgstr "Test de la transitivité"
+
+#: views.py:251
+msgid "Testing conditional variants"
+msgstr "Test des variantes conditionnelles"
+
+#: views.py:252
+msgid "Generate stats"
+msgstr "Génération des statistiques"
+
+#: views.py:253
+msgid "Rebuilding LGR"
+msgstr "Reconstruction de la LGR"
+
+#: views.py:301
 #, python-format
 msgid "New code point %s added"
 msgstr "Nouveau code point ajouté %s"
 
-#: views.py:362
+#: views.py:374
 msgid "Rule"
 msgstr "Règle"
 
-#: views.py:362
+#: views.py:374
 msgid "Tag(s)"
 msgstr "Tag(s)"
 
-#: views.py:363
+#: views.py:375
 msgid "rule"
 msgstr "règle"
 
-#: views.py:363
+#: views.py:375
 msgid "tag(s)"
 msgstr "tag(s)"
 
-#: views.py:367
+#: views.py:379
 #, python-format
 msgid "%(operation)s successfully added to %(nb_cp)s code point(s)"
 msgstr "%(operation)s ajouté(s) avec succès à %(nb_cp)s code point(s)"
 
-#: views.py:372
+#: views.py:384
 #, python-format
 msgid "%(nb_cp)s code points were not updated to avoid invalid %(operation)s"
 msgstr ""
 "%(nb_cp)s code points n'ont pas été mis à jour pour éviter des %(operation)s "
 "invalides"
 
-#: views.py:504
+#: views.py:516
 #, python-format
 msgid "Automatically added codepoint %s from out-of-repertoire variant"
 msgstr ""
 "Code point %s automatiquement ajouté depuis une variante hors-répertoire"
 
-#: views.py:507
+#: views.py:519
 #, python-format
 msgid "New variant %s added"
 msgstr "Nouvelle variante %s ajoutée"
 
-#: views.py:580
+#: views.py:592
 msgid "Code point edited"
 msgstr "Code point modifié"
 
-#: views.py:732
+#: views.py:744
 msgid "Variants populated"
 msgstr "Les variantes ont été peuplées"
 
-#: views.py:783 views.py:819
+#: views.py:795 views.py:831
 msgid "References updated successfully"
 msgstr "Les références ont été correctement mises à jour"
 
-#: views.py:822
+#: views.py:834
 #, python-format
 msgid ""
 "Variant %(var_codepoint)s for code point %(codepoint)s with when=%(when)s "
@@ -914,33 +1125,33 @@ msgstr ""
 "La variante %(var_codepoint)s du code point  %(codepoint)s avec when="
 "%(when)s et not-when=%(not_when)s n'a pas été trouvée"
 
-#: views.py:858
+#: views.py:870
 #, python-format
 msgid "Code point %s has been deleted"
 msgstr "Le code point  %s a été supprimé"
 
-#: views.py:880
+#: views.py:892
 #, python-format
 msgid "Variant %(var_cp)s with when='%(when)s' and not-when='%(not_when)s'"
 msgstr ""
 "La variante %(var_cp)s avec when='%(when)s' and not-when='%(not_when)s'"
 
-#: views.py:886
+#: views.py:898
 #, python-format
 msgid "%(var_msg_prefix)s has been deleted"
 msgstr "%(var_msg_prefix)s a été supprimée"
 
-#: views.py:889
+#: views.py:901
 #, python-format
 msgid "%(var_msg_prefix)s could not be deleted because it was not found"
 msgstr ""
 "%(var_msg_prefix)s n'a pas pu être supprimée car elle n'a pas été trouvée"
 
-#: views.py:919
+#: views.py:931
 msgid "New reference created"
 msgstr "Nouvelle référence créée"
 
-#: views.py:1127
+#: views.py:1139
 #, python-format
 msgid ""
 "References to tag %(tag)s have been removed from the repertoire. Do not "
@@ -949,30 +1160,30 @@ msgstr ""
 "Les références au %(tag)s ont été supprimées du répertoire. N'oubliez pas de "
 "mettre à jour les WLE qui pourraient les utiliser."
 
-#: views.py:1195 views.py:1357 views.py:1441
+#: views.py:1207 views.py:1370 views.py:1452
 msgid "No body specified"
 msgstr "Aucun contenu spécifié"
 
-#: views.py:1204
+#: views.py:1216
 #, python-format
 msgid "Class \"%s\" does not exist"
 msgstr "La classe \"%s\" n'existe pas"
 
-#: views.py:1208
+#: views.py:1220
 #, python-format
 msgid "Class \"%s\" deleted."
 msgstr "Classe \"%s\" supprimée."
 
-#: views.py:1213
+#: views.py:1225
 msgid "No class element found"
 msgstr "Aucune classe trouvée"
 
-#: views.py:1215 views.py:1377
+#: views.py:1227
 msgid "Name attribute must be present"
 msgstr "L'attribut name est obligatoire"
 
-#: views.py:1219 views.py:1236 views.py:1381 views.py:1398 views.py:1465
-#: views.py:1478
+#: views.py:1231 views.py:1248 views.py:1392 views.py:1409 views.py:1476
+#: views.py:1489
 #, python-format
 msgid ""
 "Encountered XML syntax error: %s (line number may be wrong, try subtracting "
@@ -981,72 +1192,86 @@ msgstr ""
 "Erreur de syntaxe XML : %s (le numéro de ligne peut-être incorrect, essayer "
 "de soustraire un au numéro reporté)"
 
-#: views.py:1222 views.py:1239 views.py:1384 views.py:1401 views.py:1468
-#: views.py:1481
+#: views.py:1234 views.py:1251 views.py:1395 views.py:1412 views.py:1479
+#: views.py:1492
 msgid "Your XML is not valid"
 msgstr "Votre XML n'est pas valide"
 
-#: views.py:1227
+#: views.py:1239
 #, python-format
 msgid "Class \"%s\" already exists"
 msgstr "La classe \"%s\" existe déjà"
 
-#: views.py:1229
+#: views.py:1241
 #, python-format
 msgid "Class \"%s\" saved."
 msgstr "Classe \"%s\" sauvegardée."
 
-#: views.py:1366
+#: views.py:1379
 #, python-format
 msgid "Rule \"%s\" does not exist"
 msgstr "La règle \"%s\" n'existe pas"
 
-#: views.py:1370
+#: views.py:1383
 #, python-format
 msgid "Rule \"%s\" deleted."
 msgstr "Règle \"%s\" supprimée."
 
-#: views.py:1375
+#: views.py:1388
 msgid "No rule element found"
 msgstr "Aucune règle trouvée"
 
-#: views.py:1389
+#: views.py:1400
 #, python-format
 msgid "Rule \"%s\" already exists"
 msgstr "La règle \"%s\" existe déjà"
 
-#: views.py:1391
+#: views.py:1402
 #, python-format
 msgid "Rule \"%s\" saved."
 msgstr "Règle \"%s\" sauvegardée."
 
-#: views.py:1452
+#: views.py:1463
 #, python-format
 msgid "Action \"%s\" does not exist"
 msgstr "Action \"%s\" n'existe pas"
 
-#: views.py:1456
+#: views.py:1467
 #, python-format
 msgid "Action \"%s\" deleted."
 msgstr "Action \"%s\" supprimée."
 
-#: views.py:1461
+#: views.py:1472
 msgid "No action element found"
 msgstr "Aucune action trouvée"
 
-#: views.py:1471
+#: views.py:1482
 msgid "Action saved."
 msgstr "Action sauvée."
 
-#: views.py:1540 views.py:1628
+#: views.py:1551 views.py:1639
 #, python-format
 msgid "%d code points added"
 msgstr "%d code points ont été ajoutés"
 
-#: views.py:1597
+#: views.py:1608
 msgid "No code point in input file"
 msgstr "Le fichier d'entrée ne contient aucun code point"
 
-#: views.py:1903
+#: views.py:1914
 msgid "Meta data saved"
 msgstr "Metadonnées sauvegardées"
+
+#, fuzzy
+#~| msgid "Description"
+#~ msgid "%(description)s"
+#~ msgstr "Description"
+
+#~ msgid " with Unicode version {}"
+#~ msgstr " avec la version d'Unicode {}"
+
+#~ msgid " and validating repertoire '{}'"
+#~ msgstr " et le repertoire de validation '{}'"
+
+#~ msgid " "
+#~ msgstr " "

@@ -1,15 +1,20 @@
 {% extends "lgr_editor/validate_lgr/_base.html" %}
+{% load i18n static %}
 {% load lgr_editor %}
 
 {% block result_contents %}
   {% if result.repertoire %}
-    <h4>Erroneous conditional code points</h4>
+    <h4>{% trans "Erroneous conditional code points" %}</h4>
     <ul>
       {% for entry in result.repertoire %}
-        <li>Code point {{ entry.char|render_char }} has invalid {{ entry.rule_type }} rule {{ entry.rule }} for variant {{ entry.variant|render_char }}</li>
+        <li>
+        {% blocktrans trimmed with cp=entry.char|render_char rule_type=entry.rule_type rule=entry.rule variant=entry.variant|render_char %}
+          Code point {{ cp }} has invalid {{ rule_type }} rule {{ rule }} for variant {{ variant }}
+        {% endblocktrans %}
+        </li>
       {% endfor %}
     </ul>
   {% else %}
-    Conditional variants OK
+    {% trans "Conditional variants OK" %}
   {% endif %}
 {% endblock %}

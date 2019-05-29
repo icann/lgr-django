@@ -243,6 +243,18 @@ def validate_lgr(request, lgr_id, output_func=None, lgr_set_id=None):
 
     results = lgr_info.lgr.validate(options)
     tpl_name = 'lgr_editor/validate_lgr.html'
+
+    # XXX hack to get translation in validation descriptions and process them automatically by makemessages
+    _("Testing XML validity using RNG"),
+    _("Testing symmetry"),
+    _("Testing transitivity"),
+    _("Testing conditional variants"),
+    _("Generate stats"),
+    _("Rebuilding LGR")
+    for r in results:
+        r[1]['description'] = _(r[1]['description'])
+    # end hack
+
     context = {
         'results': results,
         'name': lgr_id

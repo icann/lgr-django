@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 16:04+0000\n"
+"POT-Creation-Date: 2019-05-29 17:23+0000\n"
 "PO-Revision-Date: 2018-06-19 10:29-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,23 +18,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.0.8\n"
 
-#: settings/default.py:153
+#: settings/default.py:152
 msgid "Arabic"
 msgstr "Arabe"
 
-#: settings/default.py:154
+#: settings/default.py:153
 msgid "English"
 msgstr "Anglais"
 
-#: settings/default.py:155
+#: settings/default.py:154
 msgid "French"
 msgstr "Français"
 
-#: templates/_base.html:8 templates/_base.html.py:34
+#: templates/_base.html:8 templates/_base.html:34
 msgid "LGR Tool"
 msgstr "Outil de gestion de LGR"
 
-#: templates/_base.html:33 templates/_base.html.py:34
+#: templates/_base.html:33 templates/_base.html:34
 msgid "Go to home screen"
 msgstr "Retourner à l'écran d'accueil"
 
@@ -54,7 +54,7 @@ msgstr "Créer un nouveau fichier LGR"
 msgid "New"
 msgstr "Nouvelle"
 
-#: templates/_base.html:60 templates/_base.html.py:62
+#: templates/_base.html:60 templates/_base.html:62
 msgid "Tools"
 msgstr "Outils"
 
@@ -75,7 +75,7 @@ msgstr ""
 msgid "Diff labels of two LGRs"
 msgstr "Diff labels entre deux LGR"
 
-#: templates/_base.html:99 templates/_base.html.py:102
+#: templates/_base.html:99 templates/_base.html:102
 msgid "Get collisions in a list of labels"
 msgstr "Calculer les collisions sur une liste de labels"
 
@@ -107,7 +107,7 @@ msgstr "Harmonisation"
 msgid "Validate label against LGR"
 msgstr "Valider un label avec une LGR"
 
-#: templates/_base.html:149 templates/_base.html.py:290
+#: templates/_base.html:149 templates/_base.html:290
 msgid "Validate label"
 msgstr "Valider un label"
 
@@ -115,11 +115,11 @@ msgstr "Valider un label"
 msgid "Analyze current file for errors and statistics"
 msgstr "Analyser le fichier courant pour les erreurs et les statistiques"
 
-#: templates/_base.html:156 templates/_base.html.py:261
+#: templates/_base.html:156 templates/_base.html:261
 msgid "Validate LGR"
 msgstr "Valider la LGR"
 
-#: templates/_base.html:160 templates/_base.html.py:162
+#: templates/_base.html:160 templates/_base.html:162
 msgid "Output"
 msgstr "Sorties"
 
@@ -139,11 +139,11 @@ msgstr "Télécharger le fichier LGR"
 msgid "Download"
 msgstr "Télécharger"
 
-#: templates/_base.html:180 templates/_base.html.py:183
+#: templates/_base.html:180 templates/_base.html:183
 msgid "HTML Output"
 msgstr "Sortie HTML"
 
-#: templates/_base.html:191 templates/_base.html.py:324
+#: templates/_base.html:191 templates/_base.html:324
 msgid "Display all label forms"
 msgstr "Afficher toutes les formes d'un label"
 
@@ -155,7 +155,7 @@ msgstr "Formes"
 msgid "About LGR Toolset"
 msgstr "À propos de l'application LGR"
 
-#: templates/_base.html:198 templates/_base.html.py:306
+#: templates/_base.html:198 templates/_base.html:306
 msgid "About"
 msgstr "À propos"
 
@@ -163,7 +163,7 @@ msgstr "À propos"
 msgid "Save results"
 msgstr "Sauvegarde le résultat"
 
-#: templates/_base.html:271 templates/_base.html.py:312
+#: templates/_base.html:271 templates/_base.html:312
 msgid "Close"
 msgstr "Fermer"
 
@@ -204,7 +204,7 @@ msgstr ""
 msgid "LGRs"
 msgstr "Vos LGR"
 
-#: templates/index.html:37 templates/index.html.py:47 templates/index.html:59
+#: templates/index.html:37 templates/index.html:47 templates/index.html:59
 #, python-format
 msgid "View %(lgr_name)s"
 msgstr "Voir %(lgr_name)s"

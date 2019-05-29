@@ -1,23 +1,55 @@
 {% extends "lgr_editor/validate_lgr/_base.html" %}
+{% load i18n static %}
 {% load lgr_editor %}
 
 {% block result_contents %}
+  <p>{% blocktrans with version=result.unicode_version %}Unicode version {{ version }}{% endblocktrans %}</p>
+  {% if result.validating_repertoire %}
+    <p>{% blocktrans with repertoire=result.validating_repertoire %}Validating repertoire '{{ repertoire }}'{% endblocktrans %}</p>
+  {% endif %}
+
+  {% if result.unicode_version != result.unidb_version %}
+    <p>
+    {% blocktrans trimmed with version=result.unicode_version database=result.unidb_version %}
+      Target Unicode version {{ version }} differs from UnicodeDatabase {{ database }}
+    {% endblocktrans %}}
+    </p>
+  {% endif %}
   {% if result.repertoire %}
-    <h4>Possibly erroneous characters</h4>
+    <h4>{% trans "Possibly erroneous characters" %}</h4>
     <ul>
       {% for char, entries in result.repertoire.items %}
-        <li>Character {{ char|render_char }}:
+        <li>
+          {% blocktrans trimmed with cp=char|render_char %}
+            Character {{ cp }}:
+          {% endblocktrans %}
           <ul>
             {% for warning in entries.warnings %}
-              <li>Warning: {{ warning|exc_to_text }}</li>
+              <li>
+              {% blocktrans trimmed with warn=warning|exc_to_text %}
+                Warning: {{ warn }}
+              {% endblocktrans %}
+              </li>
             {% endfor %}
             {% for error in entries.errors %}
-              <li>Error: {{ error|exc_to_text }}</li>
+              <li>
+              {% blocktrans trimmed with err=error|exc_to_text %}
+                Error: {{ err }}
+              {% endblocktrans %}
+              </li>
             {% endfor %}
             {% for variant, errors in entries.variants.items %}
-              <li>Variant: {{ variant|render_char }}</li>
+              <li>
+              {% blocktrans trimmed with cp=char|render_char %}
+                Variant: {{ variant|render_char }}
+              {% endblocktrans %}
+              </li>
               {% for error in errors %}
-                <li>Error: {{ error|exc_to_text }}</li>
+                <li>
+                {% blocktrans trimmed with err=error|exc_to_text %}
+                  Error: {{ err }}
+                {% endblocktrans %}
+                </li>
               {% endfor %}
             {% endfor %}
           </ul>
@@ -25,6 +57,6 @@
       {% endfor %}
     </ul>
   {% else %}
-    <p>LGR rebuild OK</p>
+    <p>{% trans "LGR rebuild OK" %}</p>
   {% endif %}
 {% endblock %}
