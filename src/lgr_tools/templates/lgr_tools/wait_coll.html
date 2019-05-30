@@ -4,7 +4,7 @@
 {% block content %}
 {% url 'codepoint_list' lgr_id=lgr_info.name as lgr_url %}
 <h2>
-{% if label_file %}
+{% if labels_file %}
     {% blocktrans with lgr_name=lgr_info.name %}Computing collisions on labels provided in file {{ labels_file }} in LGR <a href="{{ lgr_url }}">{{ lgr_name }}</a>{% endblocktrans %}
 {% else %}
     {% blocktrans with lgr_name=lgr_info.name %}Computing collisions on labels provided in <a href="{{ icann_tlds }}">ICANN TLDs</a> in LGR <a href="{{ lgr_url }}">{{ lgr_name }}</a>{% endblocktrans %}
