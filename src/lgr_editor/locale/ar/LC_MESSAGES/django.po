@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-29 17:23+0000\n"
+"POT-Creation-Date: 2019-05-30 15:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -446,7 +446,6 @@ msgid "Action"
 msgstr ""
 
 #: templates/lgr_editor/codepoint_list.html:52
-#: templates/lgr_editor/codepoint_list.html:82
 msgid "Add Rule"
 msgstr ""
 
@@ -464,6 +463,11 @@ msgid ""
 "                                    <p>This rule will be added to <b><span "
 "class=\"nbr-selected\"></span> codepoint(s)</b></p>\n"
 "                                "
+msgstr ""
+
+#: templates/lgr_editor/codepoint_list.html:82
+#: templates/lgr_editor/codepoint_list.html:275
+msgid "Add Tags"
 msgstr ""
 
 #: templates/lgr_editor/codepoint_list.html:87
@@ -509,10 +513,6 @@ msgstr ""
 
 #: templates/lgr_editor/codepoint_list.html:274
 msgid "Add WLE"
-msgstr ""
-
-#: templates/lgr_editor/codepoint_list.html:275
-msgid "Add Tags"
 msgstr ""
 
 #: templates/lgr_editor/codepoint_list.html:295

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-29 17:23+0000\n"
+"POT-Creation-Date: 2019-05-30 15:40+0000\n"
 "PO-Revision-Date: 2019-05-29 13:14-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -469,7 +469,6 @@ msgid "Action"
 msgstr "Action"
 
 #: templates/lgr_editor/codepoint_list.html:52
-#: templates/lgr_editor/codepoint_list.html:82
 msgid "Add Rule"
 msgstr "Ajouter une règle"
 
@@ -492,6 +491,11 @@ msgstr ""
 "                                    <p>Cette règle va être ajoutée à "
 "<b><span class=\"nbr-selected\"></span> code point(s)</b></p>\n"
 "                                "
+
+#: templates/lgr_editor/codepoint_list.html:82
+#: templates/lgr_editor/codepoint_list.html:275
+msgid "Add Tags"
+msgstr "Ajouter des Tags"
 
 #: templates/lgr_editor/codepoint_list.html:87
 msgid ""
@@ -542,10 +546,6 @@ msgstr ""
 #: templates/lgr_editor/codepoint_list.html:274
 msgid "Add WLE"
 msgstr "Ajouter une WLE"
-
-#: templates/lgr_editor/codepoint_list.html:275
-msgid "Add Tags"
-msgstr "Ajouter des Tags"
 
 #: templates/lgr_editor/codepoint_list.html:295
 msgid "➡ Apply batch action..."
