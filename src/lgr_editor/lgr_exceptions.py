@@ -127,6 +127,10 @@ def lgr_exception_to_text(exception):
                     'relations')
     elif isinstance(exception, lgr.exceptions.MissingLanguage):
         message = _('The LGR does not contain a valid language (%(message)s)' % {'message': exception.message})
+    elif isinstance(exception, lgr.exceptions.LGRCrossScriptMissingDataException):
+        message = _('Cannot generate cross-script variant for LGR without (%(message)s)' % {
+            'message': exception.missing_part
+        })
     elif isinstance(exception, lgr.exceptions.LGRException):
         message = _('An unknown exception occurred in the LGR API')
     else:
