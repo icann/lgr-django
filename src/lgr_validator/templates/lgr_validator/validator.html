@@ -51,12 +51,14 @@
                 <td>{{ disposition }}</td>
                 <td>{{ cp_display_html }}</td>
                 <td>
-                    <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-main"
-                       aria-expanded="false" aria-controls="rule-detail-main">
+                    {% if logs|length %}
+                        <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-main"
+                        aria-expanded="false" aria-controls="rule-detail-main">
                         {% blocktrans trimmed %}
                             Show / hide log
                         {% endblocktrans %}
-                    </a>
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
             <tr>
@@ -109,12 +111,14 @@
                             </a>
                         </td>
                         <td>
-                            <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-collision"
-                               aria-expanded="false" aria-controls="rule-detail-collision">
-                                {% blocktrans trimmed %}
-                                    Show / hide log
-                                {% endblocktrans %}
-                            </a>
+                            {% if collision.rules|length %}
+                                <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-collision"
+                                aria-expanded="false" aria-controls="rule-detail-collision">
+                                    {% blocktrans trimmed %}
+                                        Show / hide log
+                                    {% endblocktrans %}
+                                </a>
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
@@ -172,12 +176,14 @@
                                 </a>
                             </td>
                             <td>
-                                <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-v-{{ forloop.counter }}"
-                                   aria-expanded="false" aria-controls="rule-detail-v-{{ forloop.counter }}">
-                                    {% blocktrans trimmed %}
-                                        Show / hide log
-                                    {% endblocktrans %}
-                                </a>
+                                {% if v.logs|length %}
+                                    <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-v-{{ forloop.counter }}"
+                                    aria-expanded="false" aria-controls="rule-detail-v-{{ forloop.counter }}">
+                                        {% blocktrans trimmed %}
+                                            Show / hide log
+                                        {% endblocktrans %}
+                                    </a>
+                                {% endif %}
                             </td>
                         </tr>
                         <tr>
