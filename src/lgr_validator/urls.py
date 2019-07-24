@@ -19,4 +19,7 @@ urlpatterns = [
     url(r'^eval/{}/validate-nf/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
         views.validate_label_noframe,
         name='lgr_validate_label_noframe'),
+    url(r'^eval/validate-simple/$',
+        views.validate_label_simple,
+        name='lgr_validate_label_simple'),
 ]

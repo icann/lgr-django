@@ -189,7 +189,7 @@ def slug_to_var(var_slug):
     return slug_to_cp(cp_slug), var_when, var_not_when
 
 
-def _list_files(location):
+def _list_files(location, startswith=''):
     """
     List XML file in a given directory.
 
@@ -199,12 +199,21 @@ def _list_files(location):
     xml_files = []
     try:
         for file in os.listdir(location):
-            if file.endswith(".xml"):
+            if file.endswith(".xml") and file.startswith(startswith):
                 xml_files.append(file.rsplit('.', 1)[0])
     except (OSError, IOError) as exc:
         logger.warning("Cannot access directory '%s': %s",
                        location, exc)
     return natsorted(xml_files, reverse=True)
+
+
+def list_root_zones():
+    """
+    List XML LGR root zone files
+
+    :return: List of root zone LGRs.
+    """
+    return _list_files(settings.REPERTOIRE_STORAGE_LOCATION, startswith='lgr')
 
 
 def list_validating_repertoires():

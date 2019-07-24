@@ -123,13 +123,14 @@ def diff_task(lgr_json_1, lgr_json_2, labels_json, email_address, collision, ful
 
 
 @shared_task
-def collision_task(lgr_json, labels_json, email_address, full_dump,
+def collision_task(lgr_json, labels_json, tld_json, email_address, full_dump,
                    with_rules, storage_path):
     """
     Compute collision between labels in an LGR
 
     :param lgr_json: The LGRInfo as a JSON object.
-    :param labels_json: The LabelInfo as a JSON object.
+    :param labels_json: The LabelInfo as a JSON object containing labels to check for coliision.
+    :param tld_json: The LabelInfo as a JSON object containing TLDs.
     :param email_address: The e-mail address where the results will be sent
     :param full_dump: Whether we also output a full dump
     :param with_rules: Whether we also output rules
@@ -153,6 +154,7 @@ def collision_task(lgr_json, labels_json, email_address, full_dump,
                    cb=lgr_collision_labels,
                    lgr=lgr,
                    labels_file=labels_info.labels,
+                   tld_file=tld_json.labels if tld_json else None,
                    full_dump=full_dump,
                    with_rules=with_rules)
 

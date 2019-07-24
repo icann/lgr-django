@@ -8,9 +8,11 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from django.utils.translation import ugettext as _
 
-from lgr_editor.api import LabelInfo, session_get_storage
+from lgr.tools.utils import download_file, read_labels
+from lgr_editor.api import LabelInfo, session_get_storage, LGRInfo
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
-from lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
+from lgr_editor.repertoires import get_by_name
+from lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task, collision_task
 
 from lgr.exceptions import LGRException
 
@@ -183,3 +185,52 @@ def _prepare_csv_response(ctx):
     validation_results_to_csv(ctx, response)
 
     return response
+
+
+def validate_label_simple(request):
+    form = ValidateLabelForm(request.POST or request.GET or None)
+    ctx = {}
+    if form.is_valid():
+        labels = form.cleaned_data['labels']
+        labels_file = form.cleaned_data.get('labels_file')
+        if labels_file:
+            labels_json = LabelInfo.from_form(
+                labels_file.name,
+                labels_file.read()).to_dict()
+            labels = []
+            for label, valid, error in read_labels(labels_json.labels, as_cp=True):
+                labels.append(label)
+        else:
+            labels_json = LabelInfo.from_form('labels', '\n'.join(labels)).to_dict()
+
+        email_address = form.cleaned_data['email']
+        rz_lgr = form.cleaned_data['rz_lgr']
+        collisions = form.cleaned_data['collisions']
+        lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr))
+        lgr_info.update_xml()
+        results = []
+        for label_cplist in labels:
+            try:
+                results.append(evaluate_label_from_info(request, lgr_info, label_cplist, None, email_address))
+            except UnicodeError as ex:
+                messages.add_message(request, messages.ERROR, lgr_exception_to_text(ex))
+            except NeedAsyncProcess:
+                messages.add_message(request, messages.INFO,
+                                     _('Input label generates too many variants to compute them all quickly. '
+                                       'You need to enter your email address and will receive a notification once '
+                                       'process is done'))
+                ctx['email_required'] = True
+            except LGRException as ex:
+                messages.add_message(request, messages.ERROR, lgr_exception_to_text(ex))
+                # redirect to myself to refresh display
+                return redirect('lgr_validate_label_simple')
+        ctx['results'] = results
+
+        if collisions:
+            tld_json = LabelInfo.from_form('TLDs', download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
+            lgr_json = lgr_info.to_dict()
+            collision_task.delay(lgr_json, labels_json, tld_json, email_address,
+                                 False, False, session_get_storage(request))
+
+    ctx['form'] = form
+    return render(request, 'lgr_validator/validator_simple.html', context=ctx)

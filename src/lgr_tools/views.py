@@ -168,10 +168,7 @@ def lgr_collisions(request, lgr_id):
 
     if form.is_valid():
         lgr_id = form.cleaned_data['lgr']
-        if form.cleaned_data['download_tlds']:
-            labels_file = None
-        else:
-            labels_file = form.cleaned_data['labels']
+        labels_file = form.cleaned_data['labels']
         email_address = form.cleaned_data['email']
         full_dump = form.cleaned_data['full_dump']
         with_rules = form.cleaned_data['with_rules']
@@ -181,16 +178,16 @@ def lgr_collisions(request, lgr_id):
         storage_path = session_get_storage(request)
 
         # need to transmit json serializable data
-        labels_json = LabelInfo.from_form(
-            labels_file.name if labels_file else None,
-            labels_file.read() if labels_file else download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
+        labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
+        tld_json = None
+        if form.cleaned_data['download_tlds']:
+            tld_json = LabelInfo.from_form('TLDs', download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
         lgr_json = lgr_info.to_dict()
-        collision_task.delay(lgr_json, labels_json, email_address,
-                             full_dump, with_rules, storage_path)
+        collision_task.delay(lgr_json, labels_json, tld_json, email_address, full_dump, with_rules, storage_path)
 
         ctx = {
             'lgr_info': lgr_info,
-            'labels_file': labels_file.name if labels_file else None,
+            'labels_file': labels_file.name,
             'icann_tlds': settings.ICANN_TLDS,
             'email': email_address,
             'lgr_id': lgr_id if lgr_id is not None else '',

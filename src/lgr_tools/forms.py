@@ -142,13 +142,12 @@ class LGRCollisionSelector(forms.Form):
                             required=True)
 
     download_tlds = forms.BooleanField(label=_("Use downloaded TLDs"),
-                                       help_text=_('Use the ICANN list of TLDs as input'),
+                                       help_text=_('Check labels with the existing ICANN list of TLDs as well'),
                                        required=False)
 
     labels = forms.FileField(label=_("Labels"),
                              help_text=_('List of labels to use in tool. '
-                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
-                             required=False)
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'))
 
     email = UAEmailField(label=_("E-mail"),
                          help_text=_('Provide your e-mail address'),

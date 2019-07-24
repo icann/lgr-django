@@ -5,6 +5,7 @@ from django.utils.six import text_type
 from django import forms
 
 from lgr.tools.utils import parse_label_input
+from lgr_editor.forms.fields import ROOT_ZONES
 from lgr_tools.forms import UAEmailField
 
 
@@ -45,3 +46,50 @@ class ValidateLabelForm(forms.Form):
         except ValueError as e:
             raise ValidationError(text_type(e))
         return value
+
+
+class ValidateLabelSimpleForm(forms.Form):
+    rz_lgr = forms.ChoiceField(required=True, choices=ROOT_ZONES)
+    labels = forms.CharField(required=False)
+    labels_file = forms.FileField(help_text=_('File must be encoded in UTF-8 and using UNIX line ending.'),
+                                  required=False)
+    email = UAEmailField(label=_("E-mail"), required=False,
+                         help_text=_("As the computing may be very long, we will warn by e-mail once the result can "
+                                     "be downloaded."))
+    collisions = forms.BooleanField(label=_("Check for collisions"),
+                                    required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.idna_decoder = kwargs.pop('idna_decoder', None)
+        super(ValidateLabelSimpleForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super(ValidateLabelSimpleForm, self).clean()
+        if self.cleaned_data.get('collisions'):
+            if not self.cleaned_data.get('email'):
+                self.add_error('email', _('E-mail is mandatory to get the collision test results'))
+
+        if not cleaned_data.get('labels') and not cleaned_data.get('label_file'):
+            self.add_error('labels', _('Required'))
+            self.add_error('label_file', _('Required'))
+
+        if cleaned_data.get('labels') and cleaned_data.get('label_file'):
+            # should not happen
+            self.add_error('labels', _('Unknown error, please report'))
+            self.add_error('label_file', _('Unknown error, please report'))
+
+        return cleaned_data
+
+    def clean_labels(self):
+        value = self.cleaned_data['labels']
+        kwargs = {}
+        if self.idna_decoder:
+            kwargs['idna_decoder'] = self.idna_decoder
+
+        labels = set()
+        for label in value.split(';'):
+            try:
+                labels.add(parse_label_input(label, **kwargs))
+            except ValueError as e:
+                raise ValidationError(text_type(e))
+        return list(labels)
