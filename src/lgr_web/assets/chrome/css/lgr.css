@@ -142,3 +142,9 @@ hr {
 input[type="text"].form-control {
 	padding: 6px 28px 6px 12px;
 }
+
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+	.btn-default {
+		font-size: 10px;
+	}
+}

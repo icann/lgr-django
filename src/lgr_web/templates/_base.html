@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="{% static 'chrome/css/lgr.css' %}">
         {% block html_head_more %}{% endblock %}
     </head>
-    <body style="padding-top: 110px;">
+    <body style="padding-top: 20px;">
         {% block navbar %}
             <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="container">
@@ -339,6 +339,10 @@
             function cleanInput (input) {
                 input.closest('.col').find('input').val('');
             }
+
+            $(window).resize(function() {
+                $(document.body).css("margin-top", $(".navbar").height());
+            }).resize();
 
             jQuery(document).ready(function($) {
                 $('#label-forms-modal').on('hidden.bs.modal', function (e) {
