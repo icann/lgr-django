@@ -49,14 +49,14 @@ class ValidateLabelForm(forms.Form):
 
 
 class ValidateLabelSimpleForm(forms.Form):
-    rz_lgr = forms.ChoiceField(required=True, choices=ROOT_ZONES)
-    labels = forms.CharField(required=False)
-    labels_file = forms.FileField(help_text=_('File must be encoded in UTF-8 and using UNIX line ending.'),
+    rz_lgr = forms.ChoiceField(label='', required=True, choices=ROOT_ZONES)
+    labels = forms.CharField(label='', required=False, widget=forms.TextInput(attrs={'name': '', 'class': 'form-label form-control', 'onkeyup': 'buttonValidateEnabled()', 'placeholder': 'Label'}))
+    labels_file = forms.FileField(label='', help_text=_('File must be encoded in UTF-8 and using UNIX line ending.'),
                                   required=False)
-    email = UAEmailField(label=_("E-mail"), required=False,
+    email = UAEmailField(label='', required=False, widget=forms.TextInput(attrs={'id': 'email-collision', 'placeholder': 'Email address for collision results'}),
                          help_text=_("As the computing may be very long, we will warn by e-mail once the result can "
                                      "be downloaded."))
-    collisions = forms.BooleanField(label=_("Check for collisions"),
+    collisions = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'id': 'check-for-collision'}),
                                     required=False)
 
     def clean(self):

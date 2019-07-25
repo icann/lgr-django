@@ -25,6 +25,8 @@ body {
 	font-size: x-large;
 }
 
+/* Header */
+
 .navbar p {
 	font-size: larger;
 	color: #eee;
@@ -34,9 +36,28 @@ body {
 	color: #eee;
 }
 
+.navbar .header-link {
+	padding-right: 10px;
+}
+
+.navbar-simple .container #navbar p {
+	display: inline-block;
+	margin-top: 15px;
+}
+
 .navbar-form.navbar-left {
 	/* remove the left padding to flush align with title */
 	padding-left: 0;
+}
+
+.navbar a.header-link {
+	color: #FFF;
+	text-decoration: underline;
+	font-size: 1.5rem;
+	vertical-align: middle;
+}
+.navbar a.header-link:hover {
+	text-decoration: none;
 }
 
 .variant_count {
@@ -147,4 +168,92 @@ input[type="text"].form-control {
 	.btn-default {
 		font-size: 10px;
 	}
+}
+
+
+/* Simple label validator */
+.validate-label #form-email-collision {
+	display: none;
+}
+
+.validate-label .control-label {
+	text-align: left;
+}
+
+.validate-label .info-submit {
+	padding-top: 10px;
+	text-align: center;
+	display: block;
+}
+.validate-label #form-upload-label {
+	display: none;
+}
+.validate-label .upload-labels-list {
+	display: inline-block;
+	padding-bottom: 10px;
+	text-decoration: underline;
+}
+.validate-label .upload-labels-list span {
+	padding-right: 5px;
+}
+
+.validate-label .upload-labels-list:hover {
+	text-decoration: none;
+}
+.validate-label .labels-text-action {
+	padding-top: 7px;
+	font-size: 20px;
+}
+.validate-label .labels-col {
+	padding-right: 0;
+}
+.validate-label .labels-text-list .label-text {
+	padding-bottom: 25px;
+}
+.validate-label .add-label {
+	display: none;
+}
+.validate-label .label-text > div:first-child {
+	margin-bottom: 10px;
+}
+.validate-label .control-label:empty {
+	display: none;
+}
+.validate-label .control-label:empty + div {
+	width: 100%;
+}
+.validate-label input[type="checkbox"] {
+	width: auto;
+	height: auto;
+	margin: 0;
+	display: inline-block;
+	position: relative;
+}
+.validate-label .checkbox label {
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	padding-left: 0;
+}
+
+.validate-label .checkbox label .form-group {
+	width: auto;
+}
+
+.validate-label .checkbox label >span {
+	padding-left: 10px;
+}
+
+.validate-label .checkbox label .form-group  >*{
+	width: auto;
+}
+
+/* Global classes */
+.text-secondary {
+	color: #b8b6b6;
+}
+
+.action {
+	cursor: pointer;
+	user-select: none;
 }
