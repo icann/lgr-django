@@ -16,7 +16,7 @@ from lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task, co
 
 from lgr.exceptions import LGRException
 
-from .forms import ValidateLabelForm
+from .forms import ValidateLabelForm, ValidateLabelSimpleForm
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
 
 select_lgr = getattr(__import__(settings.LGR_SELECTOR_FUNC.rpartition('.')[0],
@@ -188,7 +188,7 @@ def _prepare_csv_response(ctx):
 
 
 def validate_label_simple(request):
-    form = ValidateLabelForm(request.POST or request.GET or None)
+    form = ValidateLabelSimpleForm(request.POST or request.GET or None)
     ctx = {}
     if form.is_valid():
         labels = form.cleaned_data['labels']
