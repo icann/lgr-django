@@ -84,7 +84,7 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
                 'label_invalid_parts': var_invalid_parts,
                 'action_idx': action_idx,
                 'action': lgr_actions[action_idx] if action_idx >= 0 else None,
-                'disp_set': disp_set,
+                'disp_set': list(disp_set),
                 'logs': logs,
             })
         res['variants'] = var_results
