@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.utils.translation import ugettext as _
 
 from lgr.tools.utils import download_file, read_labels
+from lgr.utils import cp_to_ulabel
 from lgr_editor.api import LabelInfo, session_get_storage, LGRInfo
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
 from lgr_editor.repertoires import get_by_name
@@ -188,20 +189,21 @@ def _prepare_csv_response(ctx):
 
 
 def validate_label_simple(request):
-    form = ValidateLabelSimpleForm(request.POST or request.GET or None)
+    form = ValidateLabelSimpleForm(request.POST or request.GET or None,
+                                   files=request.FILES or None)
     ctx = {}
     if form.is_valid():
-        labels = form.cleaned_data['labels']
+        labels_cp = form.cleaned_data['labels']
         labels_file = form.cleaned_data.get('labels_file')
         if labels_file:
             labels_json = LabelInfo.from_form(
                 labels_file.name,
-                labels_file.read()).to_dict()
-            labels = []
+                labels_file.read())
+            labels_cp = []
             for label, valid, error in read_labels(labels_json.labels, as_cp=True):
-                labels.append(label)
+                labels_cp.append(label)
         else:
-            labels_json = LabelInfo.from_form('labels', '\n'.join(labels)).to_dict()
+            labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp])
 
         email_address = form.cleaned_data['email']
         rz_lgr = form.cleaned_data['rz_lgr']
@@ -209,7 +211,7 @@ def validate_label_simple(request):
         lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr))
         lgr_info.update_xml()
         results = []
-        for label_cplist in labels:
+        for label_cplist in [l for l in labels_cp]:
             try:
                 results.append(evaluate_label_from_info(request, lgr_info, label_cplist, None, email_address))
             except UnicodeError as ex:
@@ -229,7 +231,7 @@ def validate_label_simple(request):
         if collisions:
             tld_json = LabelInfo.from_form('TLDs', download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
             lgr_json = lgr_info.to_dict()
-            collision_task.delay(lgr_json, labels_json, tld_json, email_address,
+            collision_task.delay(lgr_json, labels_json.to_dict(), tld_json, email_address,
                                  False, False, session_get_storage(request))
 
     ctx['form'] = form

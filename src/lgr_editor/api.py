@@ -205,6 +205,14 @@ class LabelInfo(object):
 
         return cls(name, labels, b64data)
 
+    @classmethod
+    def from_list(cls, name, labels):
+        data = '\n'.join(labels)
+        labels = six.StringIO(data)
+        b64data = base64.b64encode(data.encode('utf-8')).decode('utf-8')
+
+        return cls(name, labels, b64data)
+
     def to_dict(self):
         return {
             'name': self.name,
