@@ -122,8 +122,8 @@ def validate_label(request, lgr_id, lgr_set_id=None,
                     lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
                                                                    set_labels_file.read())
         try:
-            ctx = evaluate_label_from_info(request, lgr_info, label_cplist, script_lgr_name, email,
-                                           threshold_include_vars=threshold_include_vars)
+            ctx['result'] = evaluate_label_from_info(request, lgr_info, label_cplist, script_lgr_name, email,
+                                                     threshold_include_vars=threshold_include_vars)
         except UnicodeError as ex:
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
@@ -169,7 +169,8 @@ def validate_label_noframe(request, lgr_id, lgr_set_id=None):
 def validate_label_json(request, lgr_id, lgr_set_id=None):
     return validate_label(request, lgr_id,  lgr_set_id=lgr_set_id,
                           threshold_include_vars=-1,
-                          output_func=lambda ctx: HttpResponse(json.dumps(ctx), content_type='application/json'))
+                          output_func=lambda ctx: HttpResponse(json.dumps(ctx['result']),
+                                                               content_type='application/json'))
 
 
 def validate_label_csv(request, lgr_id, lgr_set_id=None,):
@@ -180,7 +181,7 @@ def validate_label_csv(request, lgr_id, lgr_set_id=None,):
 
 def _prepare_csv_response(ctx):
     response = HttpResponse(content_type='text/csv', charset='utf-8')
-    cd = 'attachment; filename="lgr-val-{0}.csv"'.format(ctx['a_label'])
+    cd = 'attachment; filename="lgr-val-{0}.csv"'.format(ctx['result']['a_label'])
     response['Content-Disposition'] = cd
 
     validation_results_to_csv(ctx, response)
