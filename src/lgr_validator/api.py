@@ -54,7 +54,7 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
     res = {}
     var_results = []
     summary, label_dispositions = lgr.compute_label_disposition_summary(label_cplist, include_invalid=True)
-    res['summary'] = summary
+    res['summary'] = ", ".join("{}: {}".format(k, v) for k, v in summary.items())
     res['num_variants'] = len(label_dispositions)
     res['threshold_include_vars'] = threshold_include_vars
     if threshold_include_vars < 0 or len(label_dispositions) <= threshold_include_vars:
