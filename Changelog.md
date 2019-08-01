@@ -1,5 +1,9 @@
 # Changelog for lgr-django
 
+## 2.0.1 (2019-08-01)
+### Improvements
+- Mark out-of-script codepoints as warnings instead of errors (Fixes icann/lgr-core#15).
+
 ## 2.0.0 (2018-09-06)
 ### New features
 - Support of Python 3. Compatibility with python2 is preserved for this release.

@@ -9,7 +9,7 @@ redis==2.10.6
 # LGR/Unicode modules
 picu==1.0
 munidata==2.0.0
-lgr-core==2.0.0
+lgr-core==2.0.1
 
 # Natural sorting implementation
 natsort==5.0.3
