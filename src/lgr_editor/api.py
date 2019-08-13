@@ -24,7 +24,7 @@ from lgr.tools.merge_set import merge_lgr_set
 from .utils import (LGR_CACHE_TIMEOUT,
                     LGR_OBJECT_CACHE_KEY,
                     clean_repertoire_cache,
-                    make_lgr_session_key)
+                    make_lgr_session_key, list_root_zones)
 from .exceptions import LGRValidationException
 from .repertoires import get_by_name
 from . import unidb
@@ -306,6 +306,7 @@ def session_open_lgr(request, lgr_id, lgr_xml,
 def session_select_lgr(request, lgr_id, lgr_set_id=None):
     """
     Find the LGR identified by `lgr_id` in the session.
+    Can also retrieve a root zone LGR.
 
     :param request: Django request object
     :param lgr_id: a slug identifying the LGR
@@ -313,6 +314,10 @@ def session_select_lgr(request, lgr_id, lgr_set_id=None):
     :return: `LGRInfo`
     """
     known_lgrs = request.session.get(LGRS_SESSION_KEY, {})
+
+    # handle RZ LGR selection
+    if lgr_id not in known_lgrs and lgr_id in list_root_zones():
+        return LGRInfo(lgr_id, lgr=get_by_name(lgr_id))
 
     if lgr_set_id:
         if lgr_set_id not in known_lgrs:
