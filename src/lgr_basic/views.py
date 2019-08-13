@@ -15,12 +15,18 @@ from lgr_editor.lgr_exceptions import lgr_exception_to_text
 from lgr_editor.repertoires import get_by_name
 from lgr_tools.tasks import collision_task
 from lgr_validator.views import evaluate_label_from_info, NeedAsyncProcess
+from lgr_web.views import ADVANCED_INTERFACE_SESSION_KEY
 from .forms import ValidateLabelSimpleForm
 
 
 class BasicModeView(FormView):
     form_class = ValidateLabelSimpleForm
     template_name = 'basic_mode.html'
+
+    def get(self, request, *args, **kwargs):
+        # we want to stay in basic mode
+        request.session[ADVANCED_INTERFACE_SESSION_KEY] = False
+        return super(BasicModeView, self).get(request, *args, **kwargs)
 
     def form_valid(self, form):
         ctx = {}
