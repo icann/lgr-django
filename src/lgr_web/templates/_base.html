@@ -189,7 +189,7 @@
 
                             {% with request.resolver_match.view_name as view_name %}
                                 {% if view_name == 'homepage' %}
-                                    <a class="header-link" href="{% url 'lgr_validate_label_simple' %}">{% trans "Basic mode" %}</a>
+                                    <a class="header-link" href="{% url 'lgr_basic_mode' %}">{% trans "Basic mode" %}</a>
                                 {% endif %}
                             {% endwith %}
 
