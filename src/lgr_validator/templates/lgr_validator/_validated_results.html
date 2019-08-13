@@ -43,9 +43,7 @@
                         {% else %}
                             <div class="alert alert-danger" role="alert">
                         {% endif %}
-                            {% blocktrans with action_idx=result.action_idx action=result.action %}
-                                <b>[Action index: {{ action_idx }}]</b> {{ action }}
-                            {% endblocktrans %}
+                            {% blocktrans with action_idx=result.action_idx action=result.action %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
                         </div>
                     {% endif %}
                     <div class="collapse rule-detail" id="rule-detail-main{{index}}">
@@ -101,9 +99,7 @@
                         <td colspan="4" class="rule-detail-cell">
                             {% if result.collision.action_idx >= 0 %}
                             <div class="alert alert-warning" role="alert">
-                                {% blocktrans with action_idx=result.collision.action_idx action=result.collision.action trimmed %}
-                                    <b>[Action index: {{ action_idx }}]</b> {{ action }}
-                                {% endblocktrans %}
+                                {% blocktrans with action_idx=result.collision.action_idx action=result.collision.action trimmed %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
                             </div>
                             {% endif %}
                             <div class="collapse rule-detail" id="rule-detail-collision">
@@ -166,9 +162,7 @@
                             <td colspan="4" class="rule-detail-cell">
                                 {% if v.action_idx >= 0 %}
                                 <div class="alert alert-info" role="alert">
-                                    {% blocktrans with action_idx=v.action_idx action=v.action trimmed %}
-                                        <b>[Action index: {{ action_idx }}]</b> {{ action }}
-                                    {% endblocktrans %}
+                                    {% blocktrans with action_idx=v.action_idx action=v.action trimmed %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
                                 </div>
                                 {% endif %}
                                 <div class="collapse rule-detail" id="rule-detail-v-{{ forloop.counter }}">

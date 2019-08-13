@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-30 15:40+0000\n"
-"PO-Revision-Date: 2019-05-29 13:14-0400\n"
+"POT-Creation-Date: 2019-08-14 15:13+0000\n"
+"PO-Revision-Date: 2019-08-14 11:15-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -336,6 +336,13 @@ msgid "The LGR does not contain a valid language (%(message)s)"
 msgstr "La LGR ne contient pas de langues valides (%(message)s)"
 
 #: lgr_exceptions.py:131
+#, python-format
+msgid "Cannot generate cross-script variant for LGR without (%(message)s)"
+msgstr ""
+"Impossible de générer les variantes cross-script pour la LGR sans "
+"(%(message)s)"
+
+#: lgr_exceptions.py:135
 msgid "An unknown exception occurred in the LGR API"
 msgstr "Une exception inconnue s'est produite dans l'API LGR"
 
@@ -934,9 +941,9 @@ msgid "Variants"
 msgstr "Variante(s)"
 
 #: templates/lgr_editor/validate_lgr/compute_stats.html:44
-#, fuzzy, python-format
+#, python-format
 msgid "Total number of variant mappings: %(nbr)s"
-msgstr "Nombre total de mapping de variantes: %(nbr)s"
+msgstr "Nombre total de variantes mappées: %(nbr)s"
 
 #: templates/lgr_editor/validate_lgr/compute_stats.html:49
 #, python-format
@@ -985,26 +992,31 @@ msgstr ""
 "La version Unicode cible %(version)s diffère de UnicodeDatabase %(database)s"
 
 #: templates/lgr_editor/validate_lgr/rebuild_lgr.html:19
-msgid "Invalid characters"
-msgstr "Caractères invalides"
+msgid "Possibly erroneous characters"
+msgstr "Caractères possiblement erronés"
 
 #: templates/lgr_editor/validate_lgr/rebuild_lgr.html:23
 #, python-format
-msgid "Invalid character %(cp)s:"
-msgstr "Caractère invalide %(cp)s:"
+msgid "Character %(cp)s:"
+msgstr "Caractère %(cp)s:"
 
 #: templates/lgr_editor/validate_lgr/rebuild_lgr.html:29
-#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:42
+#, python-format
+msgid "Warning: %(warn)s"
+msgstr "Attention : %(warn)s"
+
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:36
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:49
 #, python-format
 msgid "Error: %(err)s"
 msgstr "Erreur: %(err)s"
 
-#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:36
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:43
 #, python-format
 msgid "Variant: %(variant|render_char)s"
 msgstr "Variante: %(variant|render_char)s"
 
-#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:53
+#: templates/lgr_editor/validate_lgr/rebuild_lgr.html:60
 msgid "LGR rebuild OK"
 msgstr "Reconstruction de la LGR OK"
 
@@ -1261,6 +1273,9 @@ msgstr "Le fichier d'entrée ne contient aucun code point"
 #: views.py:1914
 msgid "Meta data saved"
 msgstr "Metadonnées sauvegardées"
+
+#~ msgid "Invalid characters"
+#~ msgstr "Caractères invalides"
 
 #, fuzzy
 #~| msgid "Description"

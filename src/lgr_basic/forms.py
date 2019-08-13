@@ -15,12 +15,12 @@ class ValidateLabelSimpleForm(forms.Form):
                              widget=forms.TextInput(attrs={'name': '',
                                                            'class': 'form-label form-control',
                                                            'onkeyup': 'buttonValidateEnabled()',
-                                                           'placeholder': 'Label'}))
+                                                           'placeholder': _('Label')}))
     labels_file = forms.FileField(label='', help_text=_('File must be encoded in UTF-8 and using UNIX line ending.'),
                                   required=False)
     email = UAEmailField(label='', required=False,
                          widget=forms.TextInput(attrs={'id': 'email-collision',
-                                                       'placeholder': 'Email address for collision results'}),
+                                                       'placeholder': _('Email address for collision results')}),
                          help_text=_("As the computing may be very long, we will warn by e-mail once the result can "
                                      "be downloaded."))
     collisions = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'id': 'check-for-collision'}),

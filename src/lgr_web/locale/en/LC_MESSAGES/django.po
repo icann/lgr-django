@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-30 15:40+0000\n"
+"POT-Creation-Date: 2019-08-14 15:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: settings/default.py:152
+#: settings/default.py:153
 msgid "Arabic"
 msgstr ""
 
-#: settings/default.py:153
+#: settings/default.py:154
 msgid "English"
 msgstr ""
 
-#: settings/default.py:154
+#: settings/default.py:155
 msgid "French"
 msgstr ""
 
@@ -105,7 +105,7 @@ msgstr ""
 msgid "Validate label against LGR"
 msgstr ""
 
-#: templates/_base.html:149 templates/_base.html:290
+#: templates/_base.html:149 templates/_base.html:299
 msgid "Validate label"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr ""
 msgid "Analyze current file for errors and statistics"
 msgstr ""
 
-#: templates/_base.html:156 templates/_base.html:261
+#: templates/_base.html:156 templates/_base.html:270
 msgid "Validate LGR"
 msgstr ""
 
@@ -141,27 +141,31 @@ msgstr ""
 msgid "HTML Output"
 msgstr ""
 
-#: templates/_base.html:191 templates/_base.html:324
+#: templates/_base.html:192
+msgid "Basic mode"
+msgstr ""
+
+#: templates/_base.html:200 templates/_base.html:333
 msgid "Display all label forms"
 msgstr ""
 
-#: templates/_base.html:192
+#: templates/_base.html:201
 msgid "Label forms"
 msgstr ""
 
-#: templates/_base.html:197
+#: templates/_base.html:206
 msgid "About LGR Toolset"
 msgstr ""
 
-#: templates/_base.html:198 templates/_base.html:306
+#: templates/_base.html:207 templates/_base.html:315
 msgid "About"
 msgstr ""
 
-#: templates/_base.html:269
+#: templates/_base.html:278
 msgid "Save results"
 msgstr ""
 
-#: templates/_base.html:271 templates/_base.html:312
+#: templates/_base.html:280 templates/_base.html:321
 msgid "Close"
 msgstr ""
 
