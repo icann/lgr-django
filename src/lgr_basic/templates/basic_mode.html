@@ -126,18 +126,28 @@
                         </span>
                     </form>
 
-                    <hr>
-
-                    <b>{% trans 'Your saved results' %}</b>
-                    <p>{% trans 'The following files contains your tools computation results.' %}</p>
-                    <b>
-                        <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-                        {% trans 'Note that these files could be cleaned up regularly.' %}
-                    </b>
-
                     {% for result in results %}
                         {% include "lgr_validator/_validated_results.html" with result=result index=forloop.counter only %}
                     {% endfor %}
+
+                    {% if storage %}
+                        <hr>
+                        <b>{% trans 'Your saved results' %}</b>
+                        <p>{% trans 'The following files contains your tools computation results.' %}</p>
+                        <b>
+                            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                            {% trans 'Note that these files could be cleaned up regularly.' %}
+                        </b>
+                    <ul>
+                        {% for file in storage %}
+                            <li>
+                                <a href="{% url 'download_file' file %}">{% blocktrans %}Download {{ file }}{% endblocktrans %}</a>
+                                <a href="{% url 'delete_file' file %}" class="delete_file"><i class="glyphicon glyphicon-trash"></i></a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <br>
+                    {% endif %}
                 </div>
             </div>
 
