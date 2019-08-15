@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Public Comment Release Root Zone LGR">3</version>
-    <date>2019-04-25</date>
+    <date>2019-07-10</date>
     <language>und-Arab</language>
     <language>und-Deva</language>
     <language>und-Ethi</language>
@@ -25,25 +25,19 @@
             <h1>Label Generation Rules for the Root Zone &#x2014; LGR-3</h1>
             <div>Note: this merged file is intended to be used for testing a label for conflicts with existing labels irrespective of their script.
              However, it can neither be used to conclusively establish the validity of any label nor to generate the set of allocatable variant 
-             labels (see Section 5.2, "Common LGR" in [LGR-3]).</div>
+             labels (see Section 5.2, "Common LGR" in [RZ-LGR-3-Overview]).</div>
 
             <h2>Overview</h2>
-            <!-- <p class="note"><span style="color:red">RELEASE CANDIDATE FOR LGR-3 PUBLIC COMMENT</span> &mdash; The data and files in this test represent draft contents for LGR-3 including files propagated from LGR-2.</p>-->
             
             <p>This document, together with the set of element LGRs, specifies an integrated
-             set of Label Generation Rules for the Root Zone. 
+             collection of Label Generation Rules for the Root Zone. 
              For more details on the Root Zone LGRs and their development see
-            "Root Zone Label Generation Rules - LGR-3: Overview and Summary [LGR-3].
-            The format of this file follows [RFC 7940].</p> 
-            
-            <p class="note"><span style="color:red">This version of the document and all associated files are released for Public Comment. Please see the announcement on the ICANN website for public comments on the Root Zone LGR-3 for details on how to submit comments.</p>
-            
+            "Root Zone Label Generation Rules - LGR-3: Overview and Summary" [RZ-LGR-3-Overview].
+            This file is one of a set of LGR files that together form an integrated LGR for the DNS Root Zone [RZ-LGR-3]. The format of this file follows [RFC 7940].</p>
+
             <h2>Element LGRs</h2>
             <p>The Label Generation Rules for the Root Zone (LGR-3) are integrated from the following set of 
             script-specific element LGRs:</p>
-            <!--<p style="color:red">THE FOLLOWING SET OF FILES REPRESENT THE PLANNED CONTENT OF LGR-3 BUT FILES MAY NOT BE FINALIZED &mdash; This boilerplate will not be 
-            updated to reflect the actual version / name / title of the preliminary file(s) used. THE NUMBERING of  references is NOT FINAL. For the
-            production run, all references must be numbered in the order the files are being integrated (alphabetically).--></p>
             <ul>
                 <li>Root Zone Label Generation Rules for the Arabic Script (und-Arab)
  [101]</li>
@@ -78,22 +72,14 @@
                 <li>Root Zone Label Generation Rules for the Thai Script (und-Thai)
  [116]</li>
             </ul>
-<!--
-            <p style="color:red">THE FOLLOWING FILES ARE NOT PART OF LGR-3 BUT MAY BE PRESENT FOR TEST PURPOSES</p>
-            <ul>
-                <li>DEFERRED Root Zone Label Generation Rules for the Armenian Script (und-Armn)
- [117]</li>
-                <li>DEFERRED Root Zone Label Generation Rules for the Cyrllic Script (und-Cyrl)
- [118]</li>
-                <li>DRAFT FILE Root Zone Label Generation Rules for the Bengali Script (und-Beng)
- [119]</li>
-                <li>DRAFT FILE Root Zone Label Generation Rules for the Myanmar Script (und-Mymr)
- [120]</li>
-            </ul> -->
-            <p>
-            <p>Each element LGR represents in full the underlying, proposal for the script-based LGR, except for 
+            
+            <p>Each element LGR provides the complete spefication for determining both
+            the validity of a label in the given script, as well as the set of allocatable (or blocked)
+            variant labels. See Section 5.2, "Steps in Processing a Label" in [RZ-LGR-3-Overview].</p>
+            
+            <p>Each LGR represents in full the underlying, proposal for the script-based LGR, except for 
             changes required by the integration process or for uniformity of presentation. 
-            See Section 3, "Integration and Contents of LGR-3" in [LGR-3].</p>
+            See Section 3, "Integration and Contents of LGR-3" in [RZ-LGR-3-Overview].</p>
             
             <h2>Merged LGR</h2>
             <p>This merged LGR contains the union of the repertoire, variant mappings and Whole
@@ -105,16 +91,16 @@
             specification needed for conflict checking with any existing label, independent of script, while each
             script-specific element LGR presents the complete data and specification to determine the validity
             and full set of allocatable variants for the label, when applied for under that script. See also Section 5,
-             "Using the LGR" in [LGR-3].</p>
+             "Using the LGR" in [RZ-LGR-3-Overview].</p>
             
-            <h2>Repertoire</h2> 
+<h2>Repertoire</h2> 
             <p>The repertoire of the integrated Root Zone LGR is the cumulative repertoire of all the Element 
             LGRs that have been integrated into this version. Those repertoires, in turn were
             developed based on [MSR-4], which is a subset of [Unicode 6.3].</p> 
             
             <p>As a Root Zone LGR, the repertoire includes neither digits nor the HYPHEN-MINUS.</p>
              
-            <p>For further details, see Section 3.2.1, "Repertoire" in [LGR-3].</p> 
+            <p>For further details, see Section 3.2.1, "Repertoire" in [RZ-LGR-3-Overview].</p> 
             
             <p>Each code point or range is tagged with the script or scripts that the code point is used with, and 
             a reference to the Unicode Standard in which the code point was first encoded, see "References" below.
@@ -127,7 +113,7 @@
             that have been integrated into this version of the Root Zone LGR. Because the
             disposition of variant labels, for example as "allocatable", is specific to each script, information related to that cannot be
             expressed in the script-neutral context of this merged file. Instead, all merged variant mappings are
-            labeled as "blocked" in this document as needed for conflict checking. See also Section 3.2.2, "Variants" in [LGR-3].</p>
+            labeled as "blocked" in this document as needed for conflict checking. See also Section 3.2.2, "Variants" in [RZ-LGR-3-Overview].</p>
             
             <p>Context Rules for Variants: some of the variants defined in this LGR are "effective null variants", that is,
             some code points in the source map to "nothing" in the target with all other code points unchanged.
@@ -146,13 +132,13 @@
             <h2>Character Classes</h2>
 
             <p>This merged LGR includes the cumulative set of character classes from all the Element LGRs
-            that have been integrated into this version of the Root Zone LGR. See Section 3.2.3, "Character Classes" in [LGR-3].
+            that have been integrated into this version of the Root Zone LGR. See Section 3.2.3, "Character Classes" in [RZ-LGR-3-Overview].
             The names for any script-specific character classes have been prefixed with the Unicode script identifier.</p>
 
             <h2>Whole Label Evaluation (WLE) and Context Rules</h2>
-            <p>This merged LGR includes the cumulative set of WLE and contextrules and actions from all the Element LGRs
-            that have been integrated into this version of the Root Zone LGR. See Section 3.2.4, "Whole Label EvaluationRules (WLE)"
-             [LGR-3]. See also the comments given for each rule or action. </p> 
+            <p>This merged LGR includes the cumulative set of WLE and context rules and actions from all the Element LGRs
+            that have been integrated into this version of the Root Zone LGR. See Section 3.2.4, "Whole Label Evaluation Rules (WLE)"
+             [RZ-LGR-3-Overview]. See also the comments given for each rule or action. </p> 
             
             <h3>Default Whole Label Evaluation Rules and Actions</h3> 
             <p>The integrated LGR includes the set of required default WLE rules and actions applicable to the Root Zone 
@@ -164,10 +150,10 @@
             
             <h2>Methodology and Contributors</h2>
 
-            <p>The Root Zone Label Generation Rules - LGR-3 [LGR-3] were integrated by the Integration Panel [IP], 
+            <p>The Root Zone Label Generation Rules - LGR-3 were integrated by the Integration Panel [IP] 
             from a set of proposals for script-based root zone LGRs developed by community-based Generation 
             Panels [GPs] in an open process with multiple public consultations defined in [Procedure] and [Guidelines]. 
-            For more information on the methodology and contributors, see [LGR-3], in particular Section 2 "Process of Integration" 
+            For more information on the methodology and contributors, see [RZ-LGR-3-Overview], in particular Section 2 "Process of Integration" 
             and Section 8, "Contributors".</p> 
             
             <h2>References</h2> 
@@ -176,7 +162,6 @@
             corresponding code points were initially encoded. References [100] and above correspond to the script-specific
             LGRs that include the repertoire item. Repertoire items may have more than one reference.</p> 
             
-            <!--<p style="color:red;">REFERENCE FILENAMES  are for LGR-3  BUT DATEs are PRELIMINARY for each test run.</p> -->
             <p>In addition the following references are cited in this document:</p>
             <dl class="references">
                 <dt>[GPs]</dt>
@@ -188,18 +173,13 @@
                 <dt>[IP]</dt>
                 <dd>Internet Corporation for Assigned Names and Numbers, (ICANN), "Integration Panel" https://community.icann.org/display/croscomlgrprocedure/Integration+Panel, 
                 (Accessed on 20 Nov. 2015)</dd>
-                <dt>[LGR-3]</dt>
-                <dd>Integration Panel, "Root Zone Label Generation Rules - LGR-3: Overview and Summary", 25 April 2019, https://www.icann.org/sites/default/files/lgr/lgr-3-overview-25apr19-en.pdf</dd>
                 <dt>[MSR-4]</dt>
                 <dd>Integration Panel, "Maximal Starting Repertoire - MSR-4: Overview and Rationale", 7 February 2019,
                 https://www.icann.org/en/system/files/files/msr-4-overview-25jan19-en.pdf</dd>
                 <dt>[Procedure]</dt>
                 <dd>Internet Corporation for Assigned Names and Numbers, "Procedure to Develop and Maintain the Label Generation Rules for the Root Zone in Respect of IDNA Labels." 
                  (Los Angeles, California: ICANN, March, 2013) http://www.icann.org/en/resources/idn/variant-tlds/draft-lgr-procedure-20mar13-en.pdf</dd>
-<!-- template
-                <dt>[Proposal-SCRIPT]</dt>
-                <dd>[Script] Generation Panel, "Proposal for the [SCRIPT] Script Root Zone LGR", [date] (PDF), https://www.icann.org/en/system/files/files/proposal-[script]-lgr-<date>-en.pdf</dd>
-                -->
+
                 <dt>[Proposal-Arabic]</dt>
                 <dd>TF-AIDN, "Proposal for Arabic Script Root Zone LGR", 18 November 2015 (PDF), https://www.icann.org/en/system/files/files/arabic-lgr-proposal-18nov15-en.pdf</dd> 
 
@@ -230,7 +210,7 @@
                 <dt>[Proposal-Tamil]</dt>
                 <dd>Neo-Brahmi Generation Panel, "Proposal for the Tamil Script Root Zone LGR", 6 March 2019 (PDF), https://www.icann.org/en/system/files/files/proposal-tamil-lgr-06mar19-en.pdf</dd>
                 <dt>[Proposal-Telugu]</dt>
-                <dd>Neo-Brahmi Generation Panel, "Proposal for the Telugu Script Root Zone LGR", 6 March 2019 (PDF), https://www.icann.org/en/system/files/files/proposal-telugu-lgr-06mar19-en.pdf</dd>
+                <dd>Neo-Brahmi Generation Panel, "Proposal for the Telugu Script Root Zone LGR", 7 June 2019 (PDF), https://www.icann.org/en/system/files/files/proposal-telugu-lgr-07jun19-en.pdf</dd>
                 <dt>[Proposal-Thai]</dt>
                 <dd>The Generation Panel for the Thai Script LGR, "Proposal for the Thai Script Root Zone LGR", 25 May 2017 (PDF), https://www.icann.org/en/system/files/files/proposal-thai-lgr-25may17-en.pdf</dd>
                 <dt>[RFC 5891]</dt> 
@@ -242,12 +222,17 @@
                 <dt>[RFC 8228]</dt>
                 <dd>A. Freytag, "Guidance on Designing Label Generation Rulesets (LGRs) Supporting Variant Labels", RFC 8228, August 2017,
                 https://www.rfc-editor.org/info/rfc8228</dd>
-                <dt>[Unicode 6.3]</dt>
+                <dt>[RZ-LGR-3-Overview]</dt>
+                <dd>Integration Panel, "Root Zone Label Generation Rules - LGR-3: Overview and Summary", 10 July 2019 (PDF), https://www.icann.org/sites/default/files/lgr/lgr-3-overview-10jul19-en.pdf</dd>
+     <dt>[RZ-LGR-3]</dt>
+     <dd>Integration Panel, "Label Generation Rules for the Root Zone &#x2014; LGR-3", 10 July 2019 (XML), https://www.icann.org/sites/default/files/lgr/lgr-3-common-10jul19-en.xml <br/>
+     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-common-10jul19-en.html</i></dd>
+     <dt>[Unicode 6.3]</dt>
                 <dd>The Unicode Consortium. The Unicode Standard, Version 6.3.0, (Mountain View, 
                 CA: The Unicode Consortium, 2013. ISBN 978-1-936213-08-5) http://www.unicode.org/versions/Unicode6.3.0/</dd>
             </dl>
-            <p>For more details for references [100] and up  and [0] and up refer to the <a href="#table_of_references">Table of References</a> below, as well as to [LGR-3].</p> 
-            <!--<p style="color:red;">REFERENCE NUMBERING IN THIS DOCUMENT IS PROVISIONAL AND LIKELY NOT CORRECT FOR TEST RUNS THAT EXCLUDE SOME LGRs.</p>--> 
+            <p>For more details for references [100] and up  and [0] and up refer to the <a href="#table_of_references">Table of References</a> below, as well as to [RZ-LGR-3-Overview].</p> 
+            
     ]]></description>
     <references>
       <reference id="0" comment="Any code point originally encoded in Unicode 1.1">The Unicode Standard 1.1</reference>
@@ -258,56 +243,56 @@
       <reference id="9" comment="Any code point originally encoded in Unicode 5.1">The Unicode Standard 5.1</reference>
       <reference id="11" comment="Any code point originally encoded in Unicode 6.0">The Unicode Standard 6.0</reference>
       <reference id="12" comment="Any code point originally encoded in Unicode 6.1">The Unicode Standard 6.1</reference>
-      <reference id="100">Integration Panel, "Maximal Starting Repertoire - MSR-4: Overview and Rationale", 25 January 2019
+      <reference id="100">Integration Panel, &amp;quot;Maximal Starting Repertoire - MSR-4: Overview and Rationale&amp;quot;, 25 January 2019
 				https://www.icann.org/en/system/files/files/msr-4-overview-25jan19-en.pdf</reference>
-      <reference id="101" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-arabic-script-25apr19-en.html">Root Zone Label Generation Rules for the Arabic Script (und-Arab)
-, %LONGDATE% (XML)
-			https://www.icann.org/sites/default/files/lgr/lgr-3-bengali-script-%FILEDATE%-en.xml</reference>
-      <reference id="102" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-devanagari-script-25apr19-en.html">Root Zone Label Generation Rules for the Devanagari Script (und-Deva)
-, %LONGDATE% (XML)
-	https://www.icann.org/sites/default/files/lgr/lgr-3-devanagari-script-%FILEDATE%-en.xml</reference>
-      <reference id="103" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-ethiopic-script-25apr19.html">Root Zone Label Generation Rules for the Ethiopic Script (und-Ethi)
-, %LONGDATE% (XML)
-			https://www.icann.org/sites/default/files/lgr/lgr-3-ethiopic-script-%FILEDATE%.xml</reference>
-      <reference id="104" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-georgian-script-25apr19.html">Root Zone Label Generation Rules for the Georgian Script (und-Geor)
-, %LONGDATE% (XML)
-			https://www.icann.org/sites/default/files/lgr/lgr-3-georgian-script-%FILEDATE%.xml</reference>
-      <reference id="105" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-gujarati-script-25apr19-en.html">Root Zone Label Generation Rules for the Gurjarati Script (und-Gujr)
-, %LONGDATE% (XML)
-	https://www.icann.org/sites/default/files/lgr/lgr-3-gujarati-script-%FILEDATE%-en.xml</reference>
-      <reference id="106" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-gurmukhi-script-25apr19-en.html">Root Zone Label Generation Rules for the Gurmukhi Script (und-Guru)
-, %LONGDATE% (XML)
-	https://www.icann.org/sites/default/files/lgr/lgr-3-gurmukhi-script-%FILEDATE%-en.xml</reference>
-      <reference id="107" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-hebrew-script-25apr19-en.html">Root Zone Label Generation Rules for the Hebrew Script (und-Hebr)
-, %LONGDATE% (XML)
-	https://www.icann.org/sites/default/files/lgr/lgr-3-hebrew-script-%FILEDATE%-en.xml</reference>
-      <reference id="108" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-kannada-script-25apr19-en.html">Root Zone Label Generation Rules for the Kannada Script (und-Knda)
-, %LONGDATE% (XML)
-	https://www.icann.org/sites/default/files/lgr/lgr-3-kannada-script-%FILEDATE%-en.xml</reference>
-      <reference id="109" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-khmer-script-25apr19.html">Root Zone Label Generation Rules for the Khmer Script (und-Khmr)
-, %LONGDATE% (XML)
-			https://www.icann.org/sites/default/files/lgr/lgr-3-khmer-script-%FILEDATE%.xml</reference>
-      <reference id="110" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-lao-script-25apr19.html">Root Zone Label Generation Ruleset for Script und-Laoo (Lao )
-			, %LONGDATE% (XML)
-			https://www.icann.org/sites/default/files/lgr/lgr-3-lao-script-%FILEDATE%.xml</reference>
-      <reference id="111" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-malayalam-script-25apr19-en.html">Root Zone Label Generation Rules for the Malayalam Script (und-Mlym)
-, %LONGDATE% (XML)
-			https://www.icann.org/sites/default/files/lgr/lgr-3-malayalam-script-%FILEDATE%-en.xml</reference>
-      <reference id="112" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-oriya-script-25apr19-en.html">Root Zone Label Generation Rules for the Oriya Script (und-Orya)
-, %LONGDATE% (XML)
-	https://www.icann.org/sites/default/files/lgr/lgr-3-oriya-script-%FILEDATE%-en.xml</reference>
-      <reference id="113" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-tamil-script-25apr19-en.html">Root Zone Label Generation Rules for the Sinhala Script (und-Sinh)
-, %LONGDATE% (XML)
-	https://www.icann.org/sites/default/files/lgr/lgr-3-tamil-script-%FILEDATE%-en.xml</reference>
-      <reference id="114" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-tamil-script-25apr19-en.html">Root Zone Label Generation Rules for the Tamil Script (und-Taml)
-, %LONGDATE% (XML)
-	https://www.icann.org/sites/default/files/lgr/lgr-3-tamil-script-%FILEDATE%-en.xml</reference>
-      <reference id="115" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-telugu-script-25apr19-en.html">Root Zone Label Generation Rules for the Telugu Script (und-Telu)
-, %LONGDATE% (XML)
-			https://www.icann.org/sites/default/files/lgr/lgr-3-telugu-script-%FILEDATE%-en.xml</reference>
-      <reference id="116" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-thai-script-25apr19.html">Root Zone Label Generation Rules for the Thai Script (und-Thai)
-, %LONGDATE% (XML)
-			https://www.icann.org/sites/default/files/lgr/lgr-3-thai-script-%FILEDATE%.xml</reference>
+      <reference id="101" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-arabic-script-10jul19-en.html">Root Zone Label Generation Rules for the Arabic Script (und-Arab)
+, 10 July 2019 (XML)
+			https://www.icann.org/sites/default/files/lgr/lgr-3-arabic-script-10jul19-en.xml</reference>
+      <reference id="102" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-devanagari-script-10jul19-en.html">Root Zone Label Generation Rules for the Devanagari Script (und-Deva)
+, 10 July 2019 (XML)
+	https://www.icann.org/sites/default/files/lgr/lgr-3-devanagari-script-10jul19-en.xml</reference>
+      <reference id="103" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-ethiopic-script-10jul19-en.html">Root Zone Label Generation Rules for the Ethiopic Script (und-Ethi)
+, 10 July 2019 (XML)
+			https://www.icann.org/sites/default/files/lgr/lgr-3-ethiopic-script-10jul19-en.xml</reference>
+      <reference id="104" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-georgian-script-10jul19-en.html">Root Zone Label Generation Rules for the Georgian Script (und-Geor)
+, 10 July 2019 (XML)
+			https://www.icann.org/sites/default/files/lgr/lgr-3-georgian-script-10jul19-en.xml</reference>
+      <reference id="105" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-gujarati-script-10jul19-en.html">Root Zone Label Generation Rules for the Gurjarati Script (und-Gujr)
+, 10 July 2019 (XML)
+	https://www.icann.org/sites/default/files/lgr/lgr-3-gujarati-script-10jul19-en.xml</reference>
+      <reference id="106" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-gurmukhi-script-10jul19-en.html">Root Zone Label Generation Rules for the Gurmukhi Script (und-Guru)
+, 10 July 2019 (XML)
+	https://www.icann.org/sites/default/files/lgr/lgr-3-gurmukhi-script-10jul19-en.xml</reference>
+      <reference id="107" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-hebrew-script-10jul19-en.html">Root Zone Label Generation Rules for the Hebrew Script (und-Hebr)
+, 10 July 2019 (XML)
+	https://www.icann.org/sites/default/files/lgr/lgr-3-hebrew-script-10jul19-en.xml</reference>
+      <reference id="108" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-kannada-script-10jul19-en.html">Root Zone Label Generation Rules for the Kannada Script (und-Knda)
+, 10 July 2019 (XML)
+	https://www.icann.org/sites/default/files/lgr/lgr-3-kannada-script-10jul19-en.xml</reference>
+      <reference id="109" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-khmer-script-10jul19-en.html">Root Zone Label Generation Rules for the Khmer Script (und-Khmr)
+, 10 July 2019 (XML)
+			https://www.icann.org/sites/default/files/lgr/lgr-3-khmer-script-10jul19-en.xml</reference>
+      <reference id="110" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-lao-script-10jul19-en.html">Root Zone Label Generation Ruleset for the Lao Script (und-Laoo)
+			, 10 July 2019 (XML)
+			https://www.icann.org/sites/default/files/lgr/lgr-3-lao-script-10jul19-en.xml</reference>
+      <reference id="111" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-malayalam-script-10jul19-en.html">Root Zone Label Generation Rules for the Malayalam Script (und-Mlym)
+, 10 July 2019 (XML)
+			https://www.icann.org/sites/default/files/lgr/lgr-3-malayalam-script-10jul19-en.xml</reference>
+      <reference id="112" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-oriya-script-10jul19-en.html">Root Zone Label Generation Rules for the Oriya Script (und-Orya)
+, 10 July 2019 (XML)
+	https://www.icann.org/sites/default/files/lgr/lgr-3-oriya-script-10jul19-en.xml</reference>
+      <reference id="113" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-sinhala-script-10jul19-en.html">Root Zone Label Generation Rules for the Sinhala Script (und-Sinh)
+, 10 July 2019 (XML)
+	https://www.icann.org/sites/default/files/lgr/lgr-3-sinhala-script-10jul19-en.xml</reference>
+      <reference id="114" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-tamil-script-10jul19-en.html">Root Zone Label Generation Rules for the Tamil Script (und-Taml)
+, 10 July 2019 (XML)
+	https://www.icann.org/sites/default/files/lgr/lgr-3-tamil-script-10jul19-en.xml</reference>
+      <reference id="115" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-telugu-script-10jul19-en.html">Root Zone Label Generation Rules for the Telugu Script (und-Telu)
+, 10 July 2019 (XML)
+			https://www.icann.org/sites/default/files/lgr/lgr-3-telugu-script-10jul19-en.xml</reference>
+      <reference id="116" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-3-thai-script-10jul19-en.html">Root Zone Label Generation Rules for the Thai Script (und-Thai)
+, 10 July 2019 (XML)
+			https://www.icann.org/sites/default/files/lgr/lgr-3-thai-script-10jul19-en.xml</reference>
     </references>
   </meta>
   <data>
@@ -732,22 +717,22 @@
     <char cp="08A9" tag="sc:Arab" ref="12 101" comment="Hausa">
       <var cp="0767" type="blocked" ref="101" />
     </char>
-    <char cp="0901" when="Deva-follows-V-or-C-or-N-or-M" tag="Deva:candrabindu sc:Deva" ref="0 102" comment="Bodo, Hindi, Kashmiri, Konkani, Maithili, Marathi, Nepali, Santali, Sanskrit">
+    <char cp="0901" when="Deva-follows-V-or-C-or-N-or-M" tag="Deva:Candrabindu sc:Deva" ref="0 102" comment="Bodo, Hindi, Kashmiri, Konkani, Maithili, Marathi, Nepali, Santali, Sanskrit">
       <var cp="0945 0902" when="Deva-follows-C-or-CN" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="0902" when="Deva-follows-V-or-C-or-N-or-M" tag="Deva:anusvara sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0902" when="Deva-follows-V-or-C-or-N-or-M" tag="Deva:Anusvara sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="093A" type="blocked" ref="102 106" comment="Devanagari variant added to ensure transitivity" />
       <var cp="0A02" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0903" when="Deva-follows-V-or-C-or-N-or-M" tag="Deva:visarga sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0905" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0903" when="Deva-follows-V-or-C-or-N-or-M" tag="Deva:Visarga sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0905" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
     <char cp="0905 0901" not-when="Deva-preceded-by-H" ref="102">
       <var cp="0972 0902" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
     <char cp="0905 0902" not-when="Deva-preceded-by-H" ref="102" comment="DEVANAGARI LETTER A + DEVANAGARI SIGN ANUSVARA">
       <var cp="0973" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="0906" not-when="Deva-preceded-by-H" tag="Deva:V1 Deva:vowel sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0906" not-when="Deva-preceded-by-H" tag="Deva:V1 Deva:vowel sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0906 093C" not-when="Deva-followed-by-N" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
     <char cp="0906 0901" not-when="Deva-preceded-by-H" ref="102" comment="DEVANAGARI LETTER AA + DEVANAGARI SIGN CANDRABINDU">
@@ -769,78 +754,78 @@
       <var cp="0906 0902" when="Deva-followed-by-V-C-or-end" type="blocked" ref="102" comment="Devanagari variant" />
       <var cp="0974" when="Deva-followed-by-V-C-or-end" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="0907" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0907" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A19" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0908" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0909" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0908" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0909" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A24" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="090A" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="090B" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Hindi, Marathi, Sanskrit" />
-    <char cp="090D" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Hindi" />
+    <char cp="090A" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="090B" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Hindi, Marathi, Sanskrit" />
+    <char cp="090D" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Hindi" />
     <char cp="090D 0902" not-when="Deva-preceded-by-H" ref="102">
       <var cp="090F 0901" type="blocked" ref="102" />
     </char>
-    <char cp="090E" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Kashmiri">
+    <char cp="090E" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Kashmiri">
       <var cp="0910" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="090F" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="090F" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
     <char cp="090F 0901" not-when="Deva-preceded-by-H" ref="102">
       <var cp="090D 0902" type="blocked" ref="102" />
     </char>
-    <char cp="0910" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0910" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="090E" type="blocked" ref="102" />
     </char>
-    <char cp="0911" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Hindi, Kashmiri, Konkani, Marathi, Kashmiri" />
+    <char cp="0911" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Hindi, Kashmiri, Konkani, Marathi, Kashmiri" />
     <char cp="0911 0902" not-when="Deva-preceded-by-H" ref="102">
       <var cp="0906 0901" type="blocked" ref="102" />
       <var cp="0906 093C 0901" type="blocked" ref="102" />
     </char>
-    <char cp="0912" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Kashmiri" />
-    <char cp="0913" not-when="Deva-preceded-by-H" tag="Deva:V1 Deva:vowel sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0912" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Kashmiri" />
+    <char cp="0913" not-when="Deva-preceded-by-H" tag="Deva:V1 Deva:vowel sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0913 093C" not-when="Deva-followed-by-N" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
     <char cp="0913 093C" not-when="Deva-preceded-by-H" ref="102" comment="DEVANAGARI LETTER O + DEVANAGARI SIGN NUKTA">
       <var cp="0913" not-when="Deva-followed-by-N" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="0914" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0914" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0975" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="0915" tag="Deva:C1 Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0916" tag="Deva:C1 Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0917" tag="Deva:C1 Deva:consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0915" tag="Deva:C1 Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0916" tag="Deva:C1 Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0917" tag="Deva:C1 Deva:Consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A17" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0918" tag="Deva:consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0918" tag="Deva:Consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A2C" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0919" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="091A" tag="Deva:C1 Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="091B" tag="Deva:C1 Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="091C" tag="Deva:C1 Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="091D" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="091E" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="091F" tag="Deva:consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0919" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="091A" tag="Deva:C1 Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="091B" tag="Deva:C1 Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="091C" tag="Deva:C1 Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="091D" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="091E" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="091F" tag="Deva:Consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A1F" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0920" tag="Deva:consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0920" tag="Deva:Consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A20" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0921" tag="Deva:C1 Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0922" tag="Deva:C1 Deva:consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0921" tag="Deva:C1 Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0922" tag="Deva:C1 Deva:Consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A2B" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0923" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0924" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0923" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0924" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
     <char cp="0924 094D 0924" ref="102 106" comment="DEVANAGARI LETTER TA + DEVANAGARI SIGN VIRAMA + DEVANAGARI LETTER TA: Sequence has cross-script variant">
       <var cp="0A1C" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0925" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0926" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0927" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0928" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="092A" tag="Deva:consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0925" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0926" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0927" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0928" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="092A" tag="Deva:Consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A27" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
     <char cp="092A 094D 091F 093F" ref="102 106" comment="DEVANAGARI LETTER PA + DEVANAGARI SIGN VIRAMA + DEVANAGARI LETTER TTA + DEVANAGARI VOWEL SIGN I, Sequence has cross-script variant">
@@ -857,41 +842,41 @@
       <var cp="092A 094D 091F 0946" type="blocked" ref="102 106" comment="Devanagari variant added to ensure transitivity" />
       <var cp="0A0F" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="092B" tag="Deva:C1 Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="092C" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="092D" tag="Deva:consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="092B" tag="Deva:C1 Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="092C" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="092D" tag="Deva:Consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A2E" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="092E" tag="Deva:consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="092E" tag="Deva:Consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A38" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="092F" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0930" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0931 094D 092F" ref="102" comment="Section 7, Case of Eyelash Reph: To enable Eyelash Reph Formation with Rra+Halanta+Ya and prevent stand-alone RRA from occuring; Konkani, Marathi, Nepali" />
-    <char cp="0931 094D 0939" ref="102" comment="Section 7, Case of Eyelash Reph: To enable Eyelash Reph Formation with Rra+Halanta+Ha and prevent stand-alone RRA from occuring; Konkani, Marathi, Nepali" />
-    <char cp="0932" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0933" tag="Deva:consonant sc:Deva" ref="0 102" comment="Bodo, Konkani, Marathi, Nepali, Sanskrit" />
-    <char cp="0935" tag="Deva:consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="092F" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0930" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0931 094D 092F" ref="102" comment="Section 7, Case of Eyelash Reph: To enable Eyelash Reph formation with Rra+Halanta+Ya and prevent stand-alone RRA from occurring; Konkani, Marathi, Nepali" />
+    <char cp="0931 094D 0939" ref="102" comment="Section 7, Case of Eyelash Reph: To enable Eyelash Reph formation with Rra+Halanta+Ha and prevent stand-alone RRA from occuring; Konkani, Marathi, Nepali" />
+    <char cp="0932" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0933" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Bodo, Konkani, Marathi, Nepali, Sanskrit" />
+    <char cp="0935" tag="Deva:Consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A15" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0936" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0937" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0938" tag="Deva:consonant sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0939" tag="Deva:consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0936" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0937" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0938" tag="Deva:Consonant sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0939" tag="Deva:Consonant sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A35" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="093A" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="11 102 106" comment="Kashmiri">
+    <char cp="093A" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="11 102 106" comment="Kashmiri">
       <var cp="0902" type="blocked" ref="102 106" comment="Devanagari variant added to ensure transitivity" />
       <var cp="0A02" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="093B" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="11 102" comment="Kashmiri">
+    <char cp="093B" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="11 102" comment="Kashmiri">
       <var cp="093E 0902" when="Deva-followed-by-V-C-or-end" type="blocked" ref="102" comment="Devanagari variant" />
       <var cp="093E 093C 0902" when="Deva-followed-by-V-C-or-end" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="093C" when="Deva-follows-either-C1-V1-or-M1" tag="Deva:nukta sc:Deva" ref="0 102 106" comment="Bodo, Hindi, Kashmiri, Maithili, Santali, Sindhi">
+    <char cp="093C" when="Deva-follows-either-C1-V1-or-M1" tag="Deva:Nukta sc:Deva" ref="0 102 106" comment="Bodo, Hindi, Kashmiri, Maithili, Santali, Sindhi">
       <var cp="0A3C" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="093E" when="Deva-follows-C-or-CN" tag="Deva:M1 Deva:matra sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="093E" when="Deva-follows-C-or-CN" tag="Deva:M1 Deva:matra sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="093E 093C" not-when="Deva-followed-by-N" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
     <char cp="093E 0901" when="Deva-follows-C-or-CN" ref="102">
@@ -913,79 +898,79 @@
       <var cp="093B" when="Deva-followed-by-V-C-or-end" type="blocked" ref="102" comment="Devanagari variant" />
       <var cp="093E 0902" when="Deva-followed-by-V-C-or-end" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="093F" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="093F" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A3F" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0940" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0940" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A40" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0941" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0942" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="0943" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102" comment="Hindi, Marathi, Sanskrit" />
-    <char cp="0945" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102 106" comment="= candra; Hindi, Kashmiri, Konkani, Marathi, Sanskrit">
+    <char cp="0941" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0942" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="0943" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102" comment="Hindi, Marathi, Sanskrit" />
+    <char cp="0945" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102 106" comment="= candra; Hindi, Kashmiri, Konkani, Marathi, Sanskrit">
       <var cp="0A71" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
     <char cp="0945 0902" when="Deva-follows-C-or-CN" ref="102">
       <var cp="0901" when="Deva-follows-C-or-CN" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="0946" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102 106" comment="Kashmiri">
+    <char cp="0946" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102 106" comment="Kashmiri">
       <var cp="0947" type="blocked" ref="102 106" comment="Devanagari variant added to ensure transitivity" />
       <var cp="0A47" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
       <var cp="0A4B" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0947" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0947" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0946" type="blocked" ref="102 106" comment="Devanagari variant added to ensure transitivity" />
       <var cp="0A47" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
       <var cp="0A4B" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0948" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102 106" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="0948" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102 106" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="0A48" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0949" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102" comment="Hindi, Kashmiri, Konkani, Marathi" />
+    <char cp="0949" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102" comment="Hindi, Kashmiri, Konkani, Marathi" />
     <char cp="0949 0902" when="Deva-follows-C-or-CN" ref="102">
       <var cp="093E 0901" type="blocked" ref="102" />
       <var cp="093E 093C 0901" type="blocked" ref="102" />
     </char>
-    <char cp="094A" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102" comment="Kashmiri" />
-    <char cp="094B" when="Deva-follows-C-or-CN" tag="Deva:M1 Deva:matra sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="094A" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102" comment="Kashmiri" />
+    <char cp="094B" when="Deva-follows-C-or-CN" tag="Deva:M1 Deva:matra sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="094B 093C" not-when="Deva-followed-by-N" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
     <char cp="094B 093C" when="Deva-follows-C-or-CN" ref="102" comment="DEVANAGARI VOWEL SIGN O + DEVANAGARI SIGN NUKTA">
       <var cp="094B" not-when="Deva-followed-by-N" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="094C" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="0 102" comment="Most of the languages given in section ‎3.2 of [Proposal-Devanagari].">
+    <char cp="094C" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="0 102" comment="Most of the languages given in Section ‎3.2 of [Proposal-Devanagari].">
       <var cp="094F" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="094D" when="Deva-follows-C-or-CN" tag="Deva:halant sc:Deva" ref="0 102" comment="= halant; suppresses inherent vowel: Most of the languages given in section ‎3.2 of [Proposal-Devanagari]." />
-    <char cp="094F" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="11 102" comment="Kashmiri">
+    <char cp="094D" when="Deva-follows-C-or-CN" tag="Deva:Halant sc:Deva" ref="0 102" comment="= halant; suppresses inherent vowel: Most of the languages given in Section ‎3.2 of [Proposal-Devanagari]." />
+    <char cp="094F" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="11 102" comment="Kashmiri">
       <var cp="094C" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="0956" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="11 102 106" comment="Kashmiri">
+    <char cp="0956" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="11 102 106" comment="Kashmiri">
       <var cp="0A41" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0957" when="Deva-follows-C-or-CN" tag="Deva:matra sc:Deva" ref="11 102 106" comment="Kashmiri">
+    <char cp="0957" when="Deva-follows-C-or-CN" tag="Deva:Matra sc:Deva" ref="11 102 106" comment="Kashmiri">
       <var cp="0A42" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0972" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="9 102" comment="Kashmiri, Konkani, Marathi" />
+    <char cp="0972" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="9 102" comment="Kashmiri, Konkani, Marathi" />
     <char cp="0972 0902" not-when="Deva-preceded-by-H" ref="102">
       <var cp="0905 0901" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="0973" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="11 102" comment="Kashmiri">
+    <char cp="0973" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="11 102" comment="Kashmiri">
       <var cp="0905 0902" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="0974" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="11 102" comment="Kashmiri">
+    <char cp="0974" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="11 102" comment="Kashmiri">
       <var cp="0906 0902" when="Deva-followed-by-V-C-or-end" type="blocked" ref="102" comment="Devanagari variant" />
       <var cp="0906 093C 0902" when="Deva-followed-by-V-C-or-end" type="blocked" ref="102" comment="Devanagari variant" />
     </char>
-    <char cp="0975" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="11 102" comment="Kashmiri">
+    <char cp="0975" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="11 102" comment="Kashmiri">
       <var cp="0914" type="blocked" ref="102" />
     </char>
-    <char cp="0976" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="11 102" comment="Kashmiri" />
-    <char cp="0977" not-when="Deva-preceded-by-H" tag="Deva:vowel sc:Deva" ref="11 102" comment="Kashmiri" />
-    <char cp="097B" tag="Deva:consonant sc:Deva" ref="8 102" comment="Sindhi" />
-    <char cp="097C" tag="Deva:consonant sc:Deva" ref="8 102" comment="Sindhi" />
-    <char cp="097E" tag="Deva:consonant sc:Deva" ref="8 102" comment="Sindhi" />
-    <char cp="097F" tag="Deva:consonant sc:Deva" ref="8 102" comment="Sindi" />
+    <char cp="0976" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="11 102" comment="Kashmiri" />
+    <char cp="0977" not-when="Deva-preceded-by-H" tag="Deva:Vowel sc:Deva" ref="11 102" comment="Kashmiri" />
+    <char cp="097B" tag="Deva:Consonant sc:Deva" ref="8 102" comment="Sindhi" />
+    <char cp="097C" tag="Deva:Consonant sc:Deva" ref="8 102" comment="Sindhi" />
+    <char cp="097E" tag="Deva:Consonant sc:Deva" ref="8 102" comment="Sindhi" />
+    <char cp="097F" tag="Deva:Consonant sc:Deva" ref="8 102" comment="Sindi" />
     <char cp="0A02" when="Guru-follows-specific-V-or-M" tag="Guru:Bindi sc:Guru" ref="0 102 106" comment="Punjabi">
       <var cp="0902" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
       <var cp="093A" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
@@ -1064,7 +1049,7 @@
       <var cp="092E" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
     <char cp="0A39" tag="Guru:C2 Guru:Consonant sc:Guru" ref="0 106" comment="Punjabi" />
-    <char cp="0A3C" when="Guru-follows-C1" tag="Guru:Nukta sc:Guru" ref="0 102 106" comment="pairin bindi; Punjabi">
+    <char cp="0A3C" when="Guru-follows-C1" tag="Guru:Nukta sc:Guru" ref="0 102 106" comment="= pairin bindi; Punjabi">
       <var cp="093C" type="blocked" ref="102 106" comment="Cross-script homoglyph" />
     </char>
     <char cp="0A3E" when="Guru-follows-C-or-N" tag="Guru:Matra sc:Guru" ref="0 106" comment="= kanna; Punjabi" />
@@ -1348,7 +1333,7 @@
       <var cp="0C97" type="blocked" ref="108 115" comment="Cross-script homoglyph" />
     </char>
     <char cp="0C18" tag="sc:Telu Telu:Consonant" ref="0 115" />
-    <char cp="0C19" tag="sc:Telu Telu:Consonant Telu:Nasal-Consonant" ref="0 115" />
+    <char cp="0C19" tag="sc:Telu Telu:Consonant" ref="0 115" />
     <char cp="0C1A" tag="sc:Telu Telu:Consonant" ref="0 115" />
     <char cp="0C1B" tag="sc:Telu Telu:Consonant" ref="0 115" />
     <char cp="0C1C" tag="sc:Telu Telu:Consonant" ref="0 108 115">
@@ -1357,7 +1342,7 @@
     <char cp="0C1D" tag="sc:Telu Telu:Consonant" ref="0 108 115">
       <var cp="0C9D" type="blocked" ref="108 115" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0C1E" tag="sc:Telu Telu:Consonant Telu:Nasal-Consonant" ref="0 108 115">
+    <char cp="0C1E" tag="sc:Telu Telu:Consonant" ref="0 108 115">
       <var cp="0C9E" type="blocked" ref="108 115" comment="Cross-script homoglyph" />
     </char>
     <char cp="0C1F" tag="sc:Telu Telu:Consonant" ref="0 108 115">
@@ -1372,7 +1357,7 @@
     <char cp="0C22" tag="sc:Telu Telu:Consonant" ref="0 108 115">
       <var cp="0CA2" type="blocked" ref="108 115" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0C23" tag="sc:Telu Telu:Consonant Telu:Nasal-Consonant" ref="0 108 115">
+    <char cp="0C23" tag="sc:Telu Telu:Consonant" ref="0 108 115">
       <var cp="0CA3" type="blocked" ref="108 115" comment="Cross-script homoglyph" />
     </char>
     <char cp="0C24" tag="sc:Telu Telu:Consonant" ref="0 115" />
@@ -1385,7 +1370,7 @@
     <char cp="0C27" tag="sc:Telu Telu:Consonant" ref="0 108 115">
       <var cp="0CA7" type="blocked" ref="108 115" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0C28" tag="sc:Telu Telu:Consonant Telu:Nasal-Consonant" ref="0 108 115">
+    <char cp="0C28" tag="sc:Telu Telu:Consonant" ref="0 108 115">
       <var cp="0CA8" type="blocked" ref="108 115" comment="Cross-script homoglyph" />
     </char>
     <char cp="0C2A" tag="sc:Telu Telu:Consonant" ref="0 115" />
@@ -1396,7 +1381,7 @@
     <char cp="0C2D" tag="sc:Telu Telu:Consonant" ref="0 108 115">
       <var cp="0CAD" type="blocked" ref="108 115" comment="Cross-script homoglyph" />
     </char>
-    <char cp="0C2E" tag="sc:Telu Telu:Consonant Telu:Nasal-Consonant" ref="0 108 115">
+    <char cp="0C2E" tag="sc:Telu Telu:Consonant" ref="0 108 115">
       <var cp="0CAE" type="blocked" ref="108 115" comment="Cross-script homoglyph" />
     </char>
     <char cp="0C2F" tag="sc:Telu Telu:Consonant" ref="0 108 115">
@@ -1435,7 +1420,7 @@
     <char cp="0C4A" when="Telu-follows-C" tag="sc:Telu Telu:Matra" ref="0 115" />
     <char cp="0C4B" when="Telu-follows-C" tag="sc:Telu Telu:Matra" ref="0 115" />
     <char cp="0C4C" when="Telu-follows-C" tag="sc:Telu Telu:Matra" ref="0 115" />
-    <char cp="0C4D" when="Telu-follows-C-except-Nasal-C" tag="sc:Telu Telu:Halant" ref="0 115" comment="= halant" />
+    <char cp="0C4D" when="Telu-follows-C" tag="sc:Telu Telu:Halant" ref="0 115" comment="= halant" />
     <char cp="0C82" when="Knda-follows-C-V-or-M" tag="Knda:Anusvara sc:Knda" ref="0 108 115">
       <var cp="0C02" type="blocked" ref="108 115" comment="Cross-script homoglyph" />
     </char>
@@ -1854,20 +1839,20 @@
     <char cp="0E37" when="Thai-follows-consonant" tag="sc:Thai Thai:av" ref="0 116" comment="Thai" />
     <char cp="0E38" when="Thai-follows-consonant" tag="sc:Thai Thai:bv" ref="0 116" comment="Thai" />
     <char cp="0E39" when="Thai-follows-consonant" tag="sc:Thai Thai:bv" ref="0 116" comment="Thai" />
-    <char cp="0E3A" when="Thai-follows-consonant" tag="sc:Thai Thai:bd" ref="0 116" comment="= phinthu, Thai" />
+    <char cp="0E3A" when="Thai-follows-consonant" tag="sc:Thai Thai:bd" ref="0 116" comment="= phinthu; Thai" />
     <char cp="0E40" when="Thai-precedes-consonant" tag="sc:Thai Thai:lv" ref="0 116" comment="Thai" />
     <char cp="0E41" when="Thai-precedes-consonant" tag="sc:Thai Thai:lv" ref="0 116" comment="Thai" />
     <char cp="0E42" when="Thai-precedes-consonant" tag="sc:Thai Thai:lv" ref="0 116" comment="Thai" />
     <char cp="0E43" when="Thai-precedes-consonant" tag="sc:Thai Thai:lv" ref="0 116" comment="Thai" />
     <char cp="0E44" when="Thai-precedes-consonant" tag="sc:Thai Thai:lv" ref="0 116" comment="Thai" />
-    <char cp="0E47" when="Thai-follows-consonant" tag="sc:Thai Thai:ad" ref="0 116" comment="= maitaikhu, Thai" />
+    <char cp="0E47" when="Thai-follows-consonant" tag="sc:Thai Thai:ad" ref="0 116" comment="= maitaikhu; Thai" />
     <char cp="0E48" when="Thai-follows-consonant-av-bv" tag="sc:Thai Thai:tone" ref="0 116" comment="Thai" />
     <char cp="0E49" when="Thai-follows-consonant-av-bv" tag="sc:Thai Thai:tone" ref="0 116" comment="Thai" />
     <char cp="0E4A" when="Thai-follows-consonant-av-bv" tag="sc:Thai Thai:tone" ref="0 116" comment="Thai" />
     <char cp="0E4B" when="Thai-follows-consonant-av-bv" tag="sc:Thai Thai:tone" ref="0 116" comment="Thai" />
-    <char cp="0E4C" when="Thai-follows-consonant-av-bv" tag="sc:Thai Thai:ad" ref="0 116" comment="= thanthakhat, Thai" />
-    <char cp="0E4D" when="Thai-follows-consonant-av-bv" tag="sc:Thai Thai:ad" ref="0 116" comment="= nikhahit, Thai" />
-    <char cp="0E4D 0E32" when="Thai-follows-consonant-tone" ref="116" comment="= sara am sequence, Thai" />
+    <char cp="0E4C" when="Thai-follows-consonant-av-bv" tag="sc:Thai Thai:ad" ref="0 116" comment="= thanthakhat; Thai" />
+    <char cp="0E4D" when="Thai-follows-consonant-av-bv" tag="sc:Thai Thai:ad" ref="0 116" comment="= nikhahit; Thai" />
+    <char cp="0E4D 0E32" when="Thai-follows-consonant-tone" ref="116" comment="= sara am sequence; Thai" />
     <char cp="0E81" tag="Laoo:Cf Laoo:consonant sc:Laoo" ref="0 110" comment="Lao" />
     <char cp="0E82" tag="Laoo:consonant sc:Laoo" ref="0 110" comment="Lao" />
     <char cp="0E84" tag="Laoo:consonant sc:Laoo" ref="0 110" comment="Lao" />
@@ -2512,14 +2497,14 @@
   <!--Rules section goes here-->
   <rules>
     <!--Character class definitions go here-->
-    <class name="Deva-C" from-tag="Deva:consonant" ref="102" comment="Any Devanagari consonant" />
+    <class name="Deva-C" from-tag="Deva:Consonant" ref="102" comment="Any Devanagari consonant" />
     <class name="Deva-C1" from-tag="Deva:C1" ref="102" comment="Consonants followed by Devanagari Nukta" />
-    <class name="Deva-V" from-tag="Deva:vowel" ref="102" comment="Any Devanagari independent vowel" />
+    <class name="Deva-V" from-tag="Deva:Vowel" ref="102" comment="Any Devanagari independent vowel" />
     <class name="Deva-V1" from-tag="Deva:V1" ref="102" comment="Vowels followed by Devanagari Nukta (Required for Santali language)" />
-    <class name="Deva-M" from-tag="Deva:matra" ref="102" comment="Any Devanagari vowel sign (matra)" />
+    <class name="Deva-M" from-tag="Deva:Matra" ref="102" comment="Any Devanagari vowel sign (matra)" />
     <class name="Deva-M1" from-tag="Deva:M1" ref="102" comment="Matras followed by Devanagari Nukta (Required for Santali language)" />
-    <class name="Deva-H" from-tag="Deva:halant" ref="102" comment="The Devanagari Halant (VIRAMA)" />
-    <class name="Deva-N" from-tag="Deva:nukta" ref="102" comment="The Devanagari Nukta" />
+    <class name="Deva-H" from-tag="Deva:Halant" ref="102" comment="The Devanagari Halant (VIRAMA)" />
+    <class name="Deva-N" from-tag="Deva:Nukta" ref="102" comment="The Devanagari Nukta" />
     <class name="Gujr-C" from-tag="Gujr:Consonant" ref="105" comment="Any Gujarati consonant" />
     <class name="Gujr-V" from-tag="Gujr:Vowel" ref="105" comment="Any Gujarati vowel letter" />
     <class name="Gujr-M" from-tag="Gujr:Matra" ref="105" comment="Any Gujarati vowel sign" />
@@ -2594,7 +2579,6 @@
     <class name="Telu-V" from-tag="Telu:Vowel" ref="115" comment="Any Telugu independent vowel" />
     <class name="Telu-M" from-tag="Telu:Matra" ref="115" comment="Any Telugu vowel sign (matra)" />
     <class name="Telu-H" from-tag="Telu:Halant" ref="115" comment="The Telugu Halant / Virama" />
-    <class name="Telu-Nasal-C" from-tag="Telu:Nasal-Consonant" ref="115" comment="Any nasal consonant" />
     <class name="Thai-above-vowel" from-tag="Thai:av" ref="116" comment="Any Thai above vowel" />
     <class name="Thai-below-vowel" from-tag="Thai:bv" ref="116" comment="Any Thai below vowel" />
     <class name="Thai-consonant" from-tag="Thai:cons" ref="116" comment="Any Thai consonant" />
@@ -2856,7 +2840,7 @@
       </look-behind>
       <anchor />
     </rule>
-    <rule name="Deva-follows-C-or-CN" ref="102" comment="Section 7, WLE 2, 3: Halant or matra characters can only be preceded by consonant or a nukta which is preceded by a consonant">
+    <rule name="Deva-follows-C-or-CN" ref="102" comment="Section 7, WLE 2, 3: Halant or matra characters can only be preceded by consonant or a Nukta which is preceded by a consonant">
       <look-behind>
         <choice>
           <class by-ref="Deva-C" />
@@ -2868,7 +2852,7 @@
       </look-behind>
       <anchor />
     </rule>
-    <rule name="Deva-follows-V-or-C-or-N-or-M" ref="102" comment="Section 7, WLE 4, 5, 6: Anusvara, Candrabindu or Visarga characters can only be preceded by either Vowel or Consonant or Nukta or matra">
+    <rule name="Deva-follows-V-or-C-or-N-or-M" ref="102" comment="Section 7, WLE 4, 5, 6: Anusvara, Candrabindu or Visarga characters can only be preceded by either vowel or consonant or Nukta or matra">
       <look-behind>
         <choice>
           <class by-ref="Deva-V" />
@@ -3388,16 +3372,7 @@
         </rule>
       </choice>
     </rule>
-    <rule name="Telu-follows-C-except-Nasal-C" ref="115" comment="Section 7, WLE 1: H must be preceded by a C; WLE 5: H cannot follow Nasal-C">
-      <look-behind>
-        <difference>
-          <class by-ref="Telu-C" />
-          <class by-ref="Telu-Nasal-C" />
-        </difference>
-      </look-behind>
-      <anchor />
-    </rule>
-    <rule name="Telu-follows-C" ref="115" comment="Section 7, WLE 2: M must be preceded by C">
+    <rule name="Telu-follows-C" ref="115" comment="Section 7, WLE 1: H must be preceded by a C; WLE 2: M must be preceded by C">
       <look-behind>
         <class by-ref="Telu-C" />
       </look-behind>
@@ -3460,9 +3435,9 @@
     </rule>
     <!--Action elements go here - order defines precedence-->
     <action disp="invalid" match="Common-leading-combining-mark" ref="100" comment="labels with leading combining marks are invalid &#x235F;" />
-    <action disp="invalid" match="Mlym-begins-with-L" ref="111" comment="Section 7, WLE 6: Label does not begin with L" />
     <action disp="invalid" any-variant="out-of-repertoire-var" ref="100" comment="any variant label with a code point out of repertoire is invalid &#x235F;" />
     <action disp="invalid" match="Taml-no-mix-sri-shri" ref="114" comment="do not mix two representations of 'Shri' in the same label" />
+    <action disp="invalid" match="Mlym-begins-with-L" ref="111" comment="Section 7, WLE 6: Label does not begin with L" />
     <action disp="invalid" match="Khmr-subscript-consonant-limit" ref="109" comment="any label with more than two subscript consonants in a row is invalid" />
     <action disp="invalid" match="Arab-no-mix-kaf-keheh" ref="101" comment="do not mix Arabic letters KAF and KEHEH in the same label" />
     <action disp="invalid" match="Arab-no-mix-kaf-swash" ref="101" comment="do not mix Arabic letters KAF and SWASH KAF in the same label" />
