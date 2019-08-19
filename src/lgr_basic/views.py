@@ -45,7 +45,7 @@ class BasicModeView(FormView):
         email_address = form.cleaned_data['email']
         rz_lgr = form.cleaned_data['rz_lgr']
         collisions = form.cleaned_data['collisions']
-        lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr))
+        lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr, with_unidb=True))
         lgr_info.update_xml()
         results = []
         for label_cplist in [l for l in labels_cp]:

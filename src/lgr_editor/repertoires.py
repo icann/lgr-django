@@ -12,6 +12,7 @@ from django.conf import settings
 
 from lgr.parser.xml_parser import XMLParser
 from .utils import list_validating_repertoires
+from . import unidb
 
 from django.core.cache import cache
 
@@ -21,7 +22,7 @@ SCRIPTS_CACHE_KEY = 'scripts'
 CACHE_TIMEOUT = 3600*24*30
 
 
-def get_by_name(repertoire_name):
+def get_by_name(repertoire_name, with_unidb=False):
     repertoire_cache_key = "{}{}".format(REPERTOIRE_CACHE_KEY, repertoire_name)
     repertoire = cache.get(repertoire_cache_key)
     logger.debug("Get repertoire by name %s", repertoire_name)
@@ -29,6 +30,9 @@ def get_by_name(repertoire_name):
         logger.info("%s parsing file as not in cache", repertoire_name)
         repertoire_path = os.path.join(settings.REPERTOIRE_STORAGE_LOCATION, '{}.xml'.format(repertoire_name))
         parser = XMLParser(repertoire_path, repertoire_name)
+        if with_unidb:
+            unicode_version = parser.unicode_version()
+            parser.unicode_database = unidb.manager.get_db_by_version(unicode_version)
         repertoire = parser.parse_document()
         repertoire.expand_ranges()  # need to get through all code points
         cache.set(repertoire_cache_key, repertoire, CACHE_TIMEOUT)
