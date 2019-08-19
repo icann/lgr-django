@@ -119,6 +119,10 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
+        'lgr_basic': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
         'lgr_editor': {
             'handlers': ['console'],
             'level': 'INFO',

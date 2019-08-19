@@ -24,7 +24,7 @@ DATABASES = {
 LOGGING['handlers']['file'] = {'level': 'DEBUG', 'class': 'logging.FileHandler', 'filename': '/var/log/lgr/lgr-django.log', 'formatter': 'default'}
 
 # Set handler for modules
-for mod in ['django.request', 'lgr_web', 'lgr_editor', 'lgr']:
+for mod in ['django.request', 'lgr_basic', 'lgr_web', 'lgr_editor', 'lgr']:
 	    LOGGING['loggers'][mod]['handlers'] += ['file']
 
 ##### e-mail settings #####

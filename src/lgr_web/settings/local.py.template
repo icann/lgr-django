@@ -18,6 +18,7 @@ if DEBUG:
         }
     }
 
+    LOGGING['loggers']['lgr_basic']['level'] = 'DEBUG'
     LOGGING['loggers']['lgr_web']['level'] = 'DEBUG'
     LOGGING['loggers']['lgr_editor']['level'] = 'DEBUG'
     LOGGING['loggers']['lgr']['level'] = 'DEBUG'
