@@ -306,6 +306,7 @@
             }).resize();
 
             function OnloadFunction () {
+                $('#check-for-collision').prop('checked', false)
                 $('.add-label').last().css('display', 'inline-block');
                 isEmailPartVisible($('#check-for-collision').is(':checked'));
                 parseLabelsStart($('#id_labels').val());
@@ -352,6 +353,8 @@
                         formData.append(el.name, el.value);
                     });
 
+                    $('#validate-label-form').attr('disabled', 'disabled');
+
                     $.ajax({
                         type: 'POST',
                         enctype: 'multipart/form-data',
@@ -362,6 +365,7 @@
                         dataType: "HTML",
                         success: (response) => {
                             $("#content-basic").html($(response).filter('#content-basic').html());
+                            $('#check-for-collision').prop('checked', false);
                             OnloadFunction();
                         },
                         error: (error) => {
