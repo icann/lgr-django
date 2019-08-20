@@ -36,6 +36,10 @@ def get_by_name(repertoire_name, with_unidb=False):
         repertoire = parser.parse_document()
         repertoire.expand_ranges()  # need to get through all code points
         cache.set(repertoire_cache_key, repertoire, CACHE_TIMEOUT)
+    elif with_unidb:
+        # need to retrieve unicode database as it is not retrieved from cache
+        unicode_version = repertoire.metadata.unicode_version
+        repertoire.unicode_database = unidb.manager.get_db_by_version(unicode_version)
 
     return repertoire
 
