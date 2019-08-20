@@ -69,12 +69,14 @@ class BasicModeView(FormView):
             lgr_json = lgr_info.to_dict()
             collision_task.delay(lgr_json, labels_json.to_dict(), tld_json, email_address,
                                  False, False, session_get_storage(self.request))
+            ctx['collision_to'] = email_address
 
-        return self.render_to_response(self.get_context_data(results=results))
+        return self.render_to_response(self.get_context_data(results=results, **ctx))
 
     def get_context_data(self, **kwargs):
         ctx = super(BasicModeView, self).get_context_data(**kwargs)
         if 'results' in kwargs:
-            ctx['results'] = kwargs['results']
+            ctx['results'] = kwargs.pop('results')
         ctx['storage'] = session_list_storage(self.request)
+        ctx.update(kwargs)
         return ctx
