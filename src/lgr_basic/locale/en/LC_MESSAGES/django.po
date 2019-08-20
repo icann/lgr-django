@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-14 15:19+0000\n"
+"POT-Creation-Date: 2019-08-20 17:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,52 +63,60 @@ msgstr ""
 msgid "About LGR Toolset"
 msgstr ""
 
-#: templates/basic_mode.html:43 templates/basic_mode.html:173
+#: templates/basic_mode.html:43 templates/basic_mode.html:184
 msgid "About"
 msgstr ""
 
-#: templates/basic_mode.html:64
+#: templates/basic_mode.html:63
 msgid "Validate label(s) against"
 msgstr ""
 
-#: templates/basic_mode.html:77
+#: templates/basic_mode.html:76
 msgid "Manually input label(s)"
 msgstr ""
 
-#: templates/basic_mode.html:88
+#: templates/basic_mode.html:87
 msgid "Upload a list of labels"
 msgstr ""
 
-#: templates/basic_mode.html:107
+#: templates/basic_mode.html:106
 msgid "Check for collisions"
 msgstr ""
 
-#: templates/basic_mode.html:119
+#: templates/basic_mode.html:120
+#, python-format
+msgid ""
+"Your request was sent successfully, the collision task processing can take "
+"minutes, even hours.<br> The result will be sent to %(email)s. Do not "
+"resubmit until you receive the report."
+msgstr ""
+
+#: templates/basic_mode.html:130
 msgid "Validate"
 msgstr ""
 
-#: templates/basic_mode.html:123
+#: templates/basic_mode.html:134
 msgid "View LGR as"
 msgstr ""
 
-#: templates/basic_mode.html:135
+#: templates/basic_mode.html:146
 msgid "Your saved results"
 msgstr ""
 
-#: templates/basic_mode.html:136
+#: templates/basic_mode.html:147
 msgid "The following files contains your tools computation results."
 msgstr ""
 
-#: templates/basic_mode.html:139
+#: templates/basic_mode.html:150
 msgid "Note that these files could be cleaned up regularly."
 msgstr ""
 
-#: templates/basic_mode.html:144
+#: templates/basic_mode.html:155
 #, python-format
 msgid "Download %(file)s"
 msgstr ""
 
-#: templates/basic_mode.html:179
+#: templates/basic_mode.html:190
 msgid "Close"
 msgstr ""
 
