@@ -1,0 +1,120 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-14 15:19+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: forms.py:18
+msgid "Label"
+msgstr ""
+
+#: forms.py:19
+msgid "File must be encoded in UTF-8 and using UNIX line ending."
+msgstr ""
+
+#: forms.py:23
+msgid "Email address for collision results"
+msgstr ""
+
+#: forms.py:24
+msgid ""
+"As the computing may be very long, we will warn by e-mail once the result "
+"can be downloaded."
+msgstr ""
+
+#: forms.py:33
+msgid "E-mail is mandatory to get the collision test results"
+msgstr ""
+
+#: forms.py:36 forms.py:37
+msgid "Required"
+msgstr ""
+
+#: forms.py:41 forms.py:42
+msgid "Unknown error, please report"
+msgstr ""
+
+#: templates/basic_mode.html:8 templates/basic_mode.html:34
+msgid "LGR Tool"
+msgstr ""
+
+#: templates/basic_mode.html:33 templates/basic_mode.html:34
+msgid "Go to home screen"
+msgstr ""
+
+#: templates/basic_mode.html:38
+msgid "Advanced mode"
+msgstr ""
+
+#: templates/basic_mode.html:42
+msgid "About LGR Toolset"
+msgstr ""
+
+#: templates/basic_mode.html:43 templates/basic_mode.html:173
+msgid "About"
+msgstr ""
+
+#: templates/basic_mode.html:64
+msgid "Validate label(s) against"
+msgstr ""
+
+#: templates/basic_mode.html:77
+msgid "Manually input label(s)"
+msgstr ""
+
+#: templates/basic_mode.html:88
+msgid "Upload a list of labels"
+msgstr ""
+
+#: templates/basic_mode.html:107
+msgid "Check for collisions"
+msgstr ""
+
+#: templates/basic_mode.html:119
+msgid "Validate"
+msgstr ""
+
+#: templates/basic_mode.html:123
+msgid "View LGR as"
+msgstr ""
+
+#: templates/basic_mode.html:135
+msgid "Your saved results"
+msgstr ""
+
+#: templates/basic_mode.html:136
+msgid "The following files contains your tools computation results."
+msgstr ""
+
+#: templates/basic_mode.html:139
+msgid "Note that these files could be cleaned up regularly."
+msgstr ""
+
+#: templates/basic_mode.html:144
+#, python-format
+msgid "Download %(file)s"
+msgstr ""
+
+#: templates/basic_mode.html:179
+msgid "Close"
+msgstr ""
+
+#: views.py:58
+msgid ""
+"Input label generates too many variants to compute them all quickly. You "
+"need to enter your email address and will receive a notification once "
+"process is done"
+msgstr ""
