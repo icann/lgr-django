@@ -10,7 +10,7 @@ from lgr_tools.forms import UAEmailField
 
 
 class ValidateLabelSimpleForm(forms.Form):
-    rz_lgr = forms.ChoiceField(label='', required=True, choices=ROOT_ZONES)
+    rz_lgr = forms.ChoiceField(label='', required=True, choices=ROOT_ZONES, initial=ROOT_ZONES[-1][0])
     labels = forms.CharField(label='', required=False,
                              widget=forms.TextInput(attrs={'name': '',
                                                            'class': 'form-label form-control',
