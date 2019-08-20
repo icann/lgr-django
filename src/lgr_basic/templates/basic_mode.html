@@ -53,8 +53,7 @@
         {% endblock messages %}
 
         {% block container %}
-        <div class="container">
-
+        <div class="container" id="content-basic">
             <div class="row">
                 <div class="col-lg-8 col-lg-offset-2 validate-label-simple-form">
                     <form class="form-horizontal validate-label" method="POST" enctype="multipart/form-data">
@@ -306,7 +305,7 @@
                 $(document.body).css("margin-top", $(".navbar").height());
             }).resize();
 
-            jQuery(document).ready(function($) {
+            function OnloadFunction () {
                 $('.add-label').last().css('display', 'inline-block');
                 isEmailPartVisible($('#check-for-collision').is(':checked'));
                 parseLabelsStart($('#id_labels').val());
@@ -360,8 +359,10 @@
                         data: formData,
                         contentType: false,
                         processData: false,
+                        dataType: "HTML",
                         success: (response) => {
-                            $('body').html(response);
+                            $("#content-basic").html($(response).filter('#content-basic').html());
+                            OnloadFunction();
                         },
                         error: (error) => {
                             console.error(error);
@@ -422,6 +423,11 @@
                     dateFormat: "yy-mm-dd"
                 });
                 $('.show-tooltip').tooltip();
+            }
+
+
+            jQuery(document).ready(function($) {
+                OnloadFunction();
             });
         </script>
         {% block html_body_more %}{% endblock %}
