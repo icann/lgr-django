@@ -179,11 +179,12 @@ def lgr_collisions(request, lgr_id):
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
-        tld_json = None
+        tlds_json = None
         if form.cleaned_data['download_tlds']:
-            tld_json = LabelInfo.from_form('TLDs', download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
+            tlds_json = LabelInfo.from_form('TLDs', download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
         lgr_json = lgr_info.to_dict()
-        collision_task.delay(lgr_json, labels_json, tld_json, email_address, full_dump, with_rules, storage_path)
+        collision_task.delay(lgr_json, labels_json, tlds_json, email_address, full_dump, with_rules,
+                             storage_path)
 
         ctx = {
             'lgr_info': lgr_info,

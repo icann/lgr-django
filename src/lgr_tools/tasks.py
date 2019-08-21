@@ -139,6 +139,7 @@ def collision_task(lgr_json, labels_json, tld_json, email_address, full_dump,
     """
     lgr = LGRInfo.from_dict(lgr_json).lgr
     labels_info = LabelInfo.from_dict(labels_json)
+    tlds_info = LabelInfo.from_dict(tld_json) if tld_json else None
 
     logger.info("Starting task 'collision' for %s, for file %s",
                 lgr.name, labels_info.name)
@@ -154,7 +155,7 @@ def collision_task(lgr_json, labels_json, tld_json, email_address, full_dump,
                    cb=lgr_collision_labels,
                    lgr=lgr,
                    labels_file=labels_info.labels,
-                   tld_file=tld_json.labels if tld_json else None,
+                   tlds_file=tlds_info.labels if tld_json else None,
                    full_dump=full_dump,
                    with_rules=with_rules)
 
