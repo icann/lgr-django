@@ -19,13 +19,15 @@ DATABASES = {
         'NAME': BASE_DIR + '/prod.db',
     }
 }
-
 # Configure file handler to output logs to specific file location
 LOGGING['handlers']['file'] = {'level': 'DEBUG', 'class': 'logging.FileHandler', 'filename': '/var/log/lgr/lgr-django.log', 'formatter': 'default'}
+LOGGING['handlers']['celery-file'] = {'level': 'DEBUG', 'class': 'logging.FileHandler', 'filename': '/var/log/lgr/lgr-celery.log', 'formatter': 'default'}
 
 # Set handler for modules
+LOGGING['loggers']['celery']['handlers'] += ['celery-file']
 for mod in ['django.request', 'lgr_basic', 'lgr_web', 'lgr_editor', 'lgr']:
-	    LOGGING['loggers'][mod]['handlers'] += ['file']
+    LOGGING['loggers'][mod]['handlers'] += ['file']
+
 
 ##### e-mail settings #####
 # The host for the use of sending email (default: localhost)
