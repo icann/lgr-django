@@ -138,6 +138,10 @@ LOGGING = {
         'lgr-rule-logger': {
             'handlers': ['console_rule_logger'],
             'level': 'INFO' # Need to be set to INFO!
+        },
+        'celery': {
+            'handlers': ['console'],
+            'level': 'INFO',
         }
     }
 }
