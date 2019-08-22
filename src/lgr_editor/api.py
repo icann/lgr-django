@@ -317,7 +317,7 @@ def session_select_lgr(request, lgr_id, lgr_set_id=None):
 
     # handle RZ LGR selection
     if lgr_id not in known_lgrs and lgr_id in list_root_zones():
-        return LGRInfo(lgr_id, lgr=get_by_name(lgr_id))
+        return LGRInfo(lgr_id, lgr=get_by_name(lgr_id, with_unidb=True))
 
     if lgr_set_id:
         if lgr_set_id not in known_lgrs:

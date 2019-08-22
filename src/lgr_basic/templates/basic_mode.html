@@ -138,7 +138,7 @@
                     </form>
 
                     {% for result in results %}
-                        {% include "lgr_validator/_validated_results.html" with result=result index=forloop.counter only %}
+                        {% include "lgr_validator/_validated_results.html" with result=result lgr_id=lgr_id index=forloop.counter only %}
                     {% endfor %}
 
                     {% if storage %}
