@@ -17,6 +17,11 @@
         {% block html_head_more %}{% endblock %}
     </head>
     <body style="padding-top: 20px;">
+        <div class="fade-blocking">
+            <div class="lds-spinner">
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+          </div>
         {% block navbar %}
             <nav class="navbar navbar-inverse navbar-fixed-top navbar-simple">
                 <div class="container">
@@ -366,6 +371,7 @@
                     });
 
                     $('#validate-label-form').attr('disabled', 'disabled');
+                    $('.fade-blocking').css('display', 'block');
 
                     $.ajax({
                         type: 'POST',
@@ -378,10 +384,13 @@
                         success: (response) => {
                             $("#content-basic").html($(response).filter('#content-basic').html());
                             $('#check-for-collision').prop('checked', false);
+                            $('.fade-blocking').css('display', 'none');
                             OnloadFunction();
                         },
                         error: (error) => {
                             console.error(error);
+                            $('.fade-blocking').css('display', 'none');
+                            OnloadFunction();
                         }
                     })
                 });
