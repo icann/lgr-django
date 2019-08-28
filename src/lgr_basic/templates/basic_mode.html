@@ -21,7 +21,7 @@
             <div class="lds-spinner">
                 <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
             </div>
-          </div>
+        </div>
         {% block navbar %}
             <nav class="navbar navbar-inverse navbar-fixed-top navbar-simple">
                 <div class="container">
@@ -142,9 +142,11 @@
                         </span>
                     </form>
 
-                    {% for result in results %}
-                        {% include "lgr_validator/_validated_results.html" with result=result lgr_id=lgr_id index=forloop.counter only %}
-                    {% endfor %}
+                    <div id ="results">
+                        {% for result in results %}
+                            {% include "lgr_validator/_validated_results.html" with result=result lgr_id=lgr_id index=forloop.counter only %}
+                        {% endfor %}
+                    </div>
 
                     {% if storage %}
                         <hr>
@@ -372,6 +374,7 @@
 
                     $('#validate-label-form').attr('disabled', 'disabled');
                     $('.fade-blocking').css('display', 'block');
+                    $('#results').css('display', 'none');
 
                     $.ajax({
                         type: 'POST',
