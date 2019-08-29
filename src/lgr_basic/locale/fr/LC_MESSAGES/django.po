@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-20 17:36+0000\n"
-"PO-Revision-Date: 2019-08-20 13:37-0400\n"
+"POT-Creation-Date: 2019-08-29 17:05+0000\n"
+"PO-Revision-Date: 2019-08-29 13:05-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -56,43 +56,69 @@ msgstr "Requis"
 msgid "Unknown error, please report"
 msgstr "Erreur inconnue, reportez l'erreur s'il vous plait"
 
-#: templates/basic_mode.html:8 templates/basic_mode.html:34
+#: templates/basic_mode.html:8 templates/basic_mode.html:39
 msgid "LGR Tool"
 msgstr "Outil de gestion de LGR"
 
-#: templates/basic_mode.html:33 templates/basic_mode.html:34
+#: templates/basic_mode.html:38 templates/basic_mode.html:39
 msgid "Go to home screen"
 msgstr "Retourner à l'écran d'accueil"
 
-#: templates/basic_mode.html:38
+#: templates/basic_mode.html:43
 msgid "Advanced mode"
 msgstr "Mode avancé"
 
-#: templates/basic_mode.html:42
+#: templates/basic_mode.html:47
 msgid "About LGR Toolset"
 msgstr "À propos de l'application LGR"
 
-#: templates/basic_mode.html:43 templates/basic_mode.html:184
+#: templates/basic_mode.html:48 templates/basic_mode.html:205
 msgid "About"
 msgstr "À propos"
 
-#: templates/basic_mode.html:63
+#: templates/basic_mode.html:68
+msgid ""
+"The server was unable to complete the request, most likely because too many "
+"resources were required to compute the query. If you check for collision, "
+"the result may be still processing and will be sent to your email. Please "
+"wait before submitting again."
+msgstr ""
+"Le serveur n'a pas pu compléter la requête, probablement parce que trop de "
+"ressources sont nécessaires pour calculer la requête. Si vous vérifiez une "
+"collision, le résultat peut être toujours en cours de traitement et vous "
+"sera envoyé par mail. Merci de patienter avant de soumettre à nouveau."
+
+#: templates/basic_mode.html:76
+msgid "A server error occurred."
+msgstr "Une erreur de serveur s'est produite."
+
+#: templates/basic_mode.html:76
+msgid "code:"
+msgstr "code :"
+
+#: templates/basic_mode.html:76
+msgid "Please contact the administrator before submitting again."
+msgstr ""
+"Veuillez contacter l'administrateur avant de soumettre votre requête à "
+"nouveau."
+
+#: templates/basic_mode.html:82
 msgid "Validate label(s) against"
 msgstr "Valider le(s) label(s) avec"
 
-#: templates/basic_mode.html:76
+#: templates/basic_mode.html:95
 msgid "Manually input label(s)"
 msgstr "Entrer le(s) label(s) manuellement"
 
-#: templates/basic_mode.html:87
+#: templates/basic_mode.html:106
 msgid "Upload a list of labels"
 msgstr "Télécharger une liste de labels"
 
-#: templates/basic_mode.html:106
+#: templates/basic_mode.html:125
 msgid "Check for collisions"
 msgstr "Vérifier les collisions"
 
-#: templates/basic_mode.html:120
+#: templates/basic_mode.html:139
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision task processing can take "
@@ -104,38 +130,38 @@ msgstr ""
 "%(email)s. Ne renvoyez pas de requête tant que vous n'avez pas reçu le "
 "rapport."
 
-#: templates/basic_mode.html:130
+#: templates/basic_mode.html:149
 msgid "Validate"
 msgstr "Valider"
 
-#: templates/basic_mode.html:134
+#: templates/basic_mode.html:153
 msgid "View LGR as"
 msgstr "Voir la LGR en"
 
-#: templates/basic_mode.html:146
+#: templates/basic_mode.html:167
 msgid "Your saved results"
 msgstr "Vos résultats sauvegardés"
 
-#: templates/basic_mode.html:147
+#: templates/basic_mode.html:168
 msgid "The following files contains your tools computation results."
 msgstr ""
 "Ces fichiers contiennent les résultats des calculs fournis par les outils."
 
-#: templates/basic_mode.html:150
+#: templates/basic_mode.html:171
 msgid "Note that these files could be cleaned up regularly."
 msgstr ""
 "Veuillez noter que ces fichiers pourraient être régulièrement supprimés."
 
-#: templates/basic_mode.html:155
+#: templates/basic_mode.html:176
 #, python-format
 msgid "Download %(file)s"
 msgstr "Télécharger %(file)s"
 
-#: templates/basic_mode.html:190
+#: templates/basic_mode.html:211
 msgid "Close"
 msgstr "Fermer"
 
-#: views.py:58
+#: views.py:59
 msgid ""
 "Input label generates too many variants to compute them all quickly. You "
 "need to enter your email address and will receive a notification once "

@@ -63,6 +63,20 @@
                 <div class="col-lg-8 col-lg-offset-2 validate-label-simple-form">
                     <form class="form-horizontal validate-label" method="POST" enctype="multipart/form-data">
                         {% csrf_token %}
+
+                        <div id="timeout-error" class="alert alert-danger" style="display: none;">
+                            {% blocktrans trimmed %}
+                                The server was unable to complete the request, most likely because too many resources were required to compute the query. 
+                                If you check for collision, the result may be still processing and will be sent to your email. 
+                                Please wait before submitting again.
+                            {% endblocktrans %}
+                        </div>
+
+                        <div id="general-error" class="alert alert-danger" style="display: none;">
+                            {% trans 'A server error occurred.' %} ({% trans 'code:' %} <span></span>). {% trans 'Please contact the administrator before submitting again.' %}
+                        </div>
+
+
                         <div class="form-group">
                             <label class="col-sm-4 col-lg-4 control-label">
                                 {% trans 'Validate label(s) against' %}
@@ -375,6 +389,8 @@
                     $('#validate-label-form').attr('disabled', 'disabled');
                     $('.fade-blocking').css('display', 'block');
                     $('#results').css('display', 'none');
+                    $('#timeout-error').css('display', 'none');
+                    $('#general-error').css('display', 'none');
 
                     $.ajax({
                         type: 'POST',
@@ -392,7 +408,16 @@
                         },
                         error: (error) => {
                             console.error(error);
+                            if (error && (error.status === 502 || error.status === 504)) {
+                                $('#timeout-error').css('display', 'block');
+                            } else {
+                                $('#timeout-error').css('display', 'none');
+                                $('#general-error').css('display', 'block');
+                                $('#general-error').find("span").html(error ? error.status : null);
+                            }
                             $('.fade-blocking').css('display', 'none');
+                            $("#content-basic").html($("#content-basic").filter('#content-basic').html());
+                            sessionStorage.setItem('isFormUploadActivated', false);
                             OnloadFunction();
                         }
                     })
