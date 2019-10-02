@@ -19,8 +19,8 @@ class ValidateLabelSimpleForm(forms.Form):
     labels_file = forms.FileField(label='', help_text=_('File must be encoded in UTF-8 and using UNIX line ending.'),
                                   required=False)
     email = UAEmailField(label='', required=False,
-                         widget=forms.TextInput(attrs={'id': 'email-collision',
-                                                       'placeholder': _('Email address for collision results')}),
+                         widget=forms.TextInput(attrs={'id': 'email-task',
+                                                       'placeholder': _('Email address for tasks results')}),
                          help_text=_("As the computing may be very long, we will warn by e-mail once the result can "
                                      "be downloaded."))
     collisions = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'id': 'check-for-collision'}),
@@ -28,9 +28,9 @@ class ValidateLabelSimpleForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(ValidateLabelSimpleForm, self).clean()
-        if self.cleaned_data.get('collisions'):
+        if self.cleaned_data.get('collisions') or self.cleaned_data.get('labels_file'):
             if not self.cleaned_data.get('email'):
-                self.add_error('email', _('E-mail is mandatory to get the collision test results'))
+                self.add_error('email', _('E-mail is mandatory to get the tasks results'))
 
         if not cleaned_data.get('labels') and not cleaned_data.get('labels_file'):
             self.add_error('labels', _('Required'))

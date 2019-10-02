@@ -232,27 +232,28 @@ def validation_results_to_csv(ctx, fileobj):
     writer.writerow(list(map(to_row_format, ['Type', 'U-label', 'A-label', 'Disposition',
                                              'Code point sequence', 'Invalid code points',
                                              'Action index', 'Action XML'])))
-    result = ctx['result']
-
-    invalid_formatted = []
-    for cp, rules in result['label_invalid_parts']:
-        reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
-        invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
-    invalid_formatted = '-'.join(invalid_formatted) or '-'
-
-    writer.writerow(list(map(to_row_format, ['original', result['u_label'], result['a_label'], result['disposition'],
-                                             result['cp_display'], invalid_formatted,
-                                             result['action_idx'], result['action']])))
-    col = result.get('collision', None)
-    if col:
-        writer.writerow(list(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
-                                                 col['cp_display'], col['action_idx'], col['action']])))
-    for var in result.get('variants', []):
+    for result in ctx['result']:
         invalid_formatted = []
-        for cp, rules in var['label_invalid_parts'] or []:
+        for cp, rules in result['label_invalid_parts']:
             reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
             invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
         invalid_formatted = '-'.join(invalid_formatted) or '-'
-        writer.writerow(list(map(to_row_format, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
-                                                 var['cp_display'], invalid_formatted,
-                                                 var['action_idx'], var['action']])))
+
+        writer.writerow(list(map(to_row_format, ['original', result['u_label'], result['a_label'], result['disposition'],
+                                                 result['cp_display'], invalid_formatted,
+                                                 result['action_idx'], result['action']])))
+        col = result.get('collision', None)
+        if col:
+            writer.writerow(list(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
+                                                     col['cp_display'], col['action_idx'], col['action']])))
+        for var in result.get('variants', []):
+            invalid_formatted = []
+            for cp, rules in var['label_invalid_parts'] or []:
+                reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
+                invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
+            invalid_formatted = '-'.join(invalid_formatted) or '-'
+            writer.writerow(list(map(to_row_format, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
+                                                     var['cp_display'], invalid_formatted,
+                                                     var['action_idx'], var['action']])))
+        # add empty row
+        writer.writerow([])

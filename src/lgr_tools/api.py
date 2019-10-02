@@ -5,6 +5,7 @@ import time
 
 from django.utils.text import slugify
 
+from lgr.tools.utils import read_labels
 from lgr_editor.exceptions import LGRValidationException
 from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_sets
 from lgr.tools.annotate import annotate, lgr_set_annotate
@@ -21,6 +22,7 @@ class LGRCompInvalidException(LGRValidationException):
     Raised when the XML validation against schema fails and contains the
     invalid XML.
     """
+
     def __init__(self, content, error):
         self.content = content
         self.error = error
@@ -209,8 +211,7 @@ def lgr_validate_label(lgr, label, udata):
     :param udata: The associated Unicode database.
     :return: CSV containing the label validation output.
     """
-    return _validate_label_task_helper(evaluate_label(lgr, label,
-                                                      -1, udata.idna_encode_label))
+    return _validate_label_task_helper({'result': [evaluate_label(lgr, label, -1, udata.idna_encode_label)]})
 
 
 def lgr_set_validate_label(lgr, script_lgr, set_labels, label, udata):
@@ -224,5 +225,21 @@ def lgr_set_validate_label(lgr, script_lgr, set_labels, label, udata):
         :param udata: The associated Unicode database.
         :return: CSV containing the label validation output.
         """
-    return _validate_label_task_helper(lgr_set_evaluate_label(lgr, script_lgr, label, set_labels,
-                                                              -1, udata.idna_encode_label))
+    return _validate_label_task_helper({'result': [lgr_set_evaluate_label(lgr, script_lgr, label, set_labels,
+                                                                          -1, udata.idna_encode_label)]})
+
+
+def lgr_validate_labels(lgr, labels_file, udata):
+    """
+    Validate labels for an LGR.
+
+    :param lgr: The LGR to use for variant generation.
+    :param labels_file: The file containing the list of labels
+    :param udata: The associated Unicode database.
+    :return: CSV containing the labels validation output.
+    """
+    result = {'result': []}
+    for label, _, _ in read_labels(labels_file, lgr.unicode_database):
+        label_cp = tuple([ord(c) for c in label])
+        result['result'].append(evaluate_label(lgr, label_cp, -1, udata.idna_encode_label))
+    return _validate_label_task_helper(result)

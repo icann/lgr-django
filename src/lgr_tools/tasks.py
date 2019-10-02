@@ -23,7 +23,7 @@ from lgr_tools.api import (lgr_diff_labels,
                            lgr_set_annotate_labels,
                            lgr_cross_script_variants,
                            lgr_validate_label,
-                           lgr_set_validate_label)
+                           lgr_set_validate_label, lgr_validate_labels)
 
 logger = logging.getLogger(__name__)
 
@@ -326,4 +326,35 @@ def lgr_set_validate_label_task(lgr_json, script_lgr_json, label, email_address,
                    script_lgr=script_lgr,
                    set_labels=set_labels_info.labels,
                    label=label,
+                   udata=udata)
+
+
+@shared_task
+def lgr_set_validate_labels_task(lgr_json, labels_json, email_address, storage_path):
+    """
+    Compute multiple labels validation variants of labels in a LGR.
+
+    :param lgr_json: The LGRInfo as a JSON object.
+    :param labels_json: The LabelInfo as a JSON object.
+    :param email_address: The e-mail address where the results will be sent
+    :param storage_path: The place where results will be stored
+    """
+    lgr_info = LGRInfo.from_dict(lgr_json)
+    labels_info = LabelInfo.from_dict(labels_json)
+    udata = get_db_by_version(lgr_info.lgr.metadata.unicode_version)
+
+    logger.info("Starting task 'validate label' for %s, for file '%s'",
+                lgr_info.name, labels_info.name)
+
+    body = "Hi,\nThe processing of labels validation for file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
+                                                                                               lgr=lgr_info.name)
+
+    _lgr_tool_task(storage_path,
+                   base_filename='labels_validation_{0}'.format(lgr_info.name),
+                   email_subject='LGR Toolset labels validation result',
+                   email_body=body,
+                   email_address=email_address,
+                   cb=lgr_validate_labels,
+                   lgr=lgr_info.lgr,
+                   labels_file=labels_info.labels,
                    udata=udata)
