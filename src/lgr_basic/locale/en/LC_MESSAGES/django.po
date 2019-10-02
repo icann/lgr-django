@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-29 16:37+0000\n"
+"POT-Creation-Date: 2019-10-02 20:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid "File must be encoded in UTF-8 and using UNIX line ending."
 msgstr ""
 
 #: forms.py:23
-msgid "Email address for collision results"
+msgid "Email address for tasks results"
 msgstr ""
 
 #: forms.py:24
@@ -36,7 +36,7 @@ msgid ""
 msgstr ""
 
 #: forms.py:33
-msgid "E-mail is mandatory to get the collision test results"
+msgid "E-mail is mandatory to get the tasks results"
 msgstr ""
 
 #: forms.py:36 forms.py:37
@@ -63,7 +63,7 @@ msgstr ""
 msgid "About LGR Toolset"
 msgstr ""
 
-#: templates/basic_mode.html:48 templates/basic_mode.html:205
+#: templates/basic_mode.html:48 templates/basic_mode.html:229
 msgid "About"
 msgstr ""
 
@@ -106,41 +106,58 @@ msgstr ""
 #: templates/basic_mode.html:139
 #, python-format
 msgid ""
+"Your request was sent successfully, the collision and validation tasks "
+"processing can take minutes, even hours.<br> Both results will be sent to "
+"%(email)s in two separate emails. Do not resubmit until you receive both "
+"reports."
+msgstr ""
+
+#: templates/basic_mode.html:151
+#, python-format
+msgid ""
+"Your request was sent successfully, the validation task processing can take "
+"minutes, even hours.<br> The result will be sent to %(email)s. Do not "
+"resubmit until you receive the report."
+msgstr ""
+
+#: templates/basic_mode.html:163
+#, python-format
+msgid ""
 "Your request was sent successfully, the collision task processing can take "
 "minutes, even hours.<br> The result will be sent to %(email)s. Do not "
 "resubmit until you receive the report."
 msgstr ""
 
-#: templates/basic_mode.html:149
+#: templates/basic_mode.html:173
 msgid "Validate"
 msgstr ""
 
-#: templates/basic_mode.html:153
+#: templates/basic_mode.html:177
 msgid "View LGR as"
 msgstr ""
 
-#: templates/basic_mode.html:167
+#: templates/basic_mode.html:191
 msgid "Your saved results"
 msgstr ""
 
-#: templates/basic_mode.html:168
+#: templates/basic_mode.html:192
 msgid "The following files contains your tools computation results."
 msgstr ""
 
-#: templates/basic_mode.html:171
+#: templates/basic_mode.html:195
 msgid "Note that these files could be cleaned up regularly."
 msgstr ""
 
-#: templates/basic_mode.html:176
+#: templates/basic_mode.html:200
 #, python-format
 msgid "Download %(file)s"
 msgstr ""
 
-#: templates/basic_mode.html:211
+#: templates/basic_mode.html:235
 msgid "Close"
 msgstr ""
 
-#: views.py:59
+#: views.py:60
 msgid ""
 "Input label generates too many variants to compute them all quickly. You "
 "need to enter your email address and will receive a notification once "

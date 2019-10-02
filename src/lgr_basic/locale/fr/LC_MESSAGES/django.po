@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-29 17:05+0000\n"
-"PO-Revision-Date: 2019-08-29 13:05-0400\n"
+"POT-Creation-Date: 2019-10-02 20:49+0000\n"
+"PO-Revision-Date: 2019-10-02 16:52-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -29,9 +29,8 @@ msgstr ""
 "UNIX."
 
 #: forms.py:23
-msgid "Email address for collision results"
-msgstr ""
-"Adresse e-mail utilisée pour recevoir le résultats du test de collisions"
+msgid "Email address for tasks results"
+msgstr "Adresse e-mail utilisée pour recevoir le résultats des tâches"
 
 #: forms.py:24
 msgid ""
@@ -43,10 +42,9 @@ msgstr ""
 "s'il vous plaît."
 
 #: forms.py:33
-msgid "E-mail is mandatory to get the collision test results"
+msgid "E-mail is mandatory to get the tasks results"
 msgstr ""
-"L'adresse e-mail est obligatoire pour recevoir les résultats de tests de "
-"collision"
+"L'adresse e-mail est obligatoire pour recevoir les résultats des tâches"
 
 #: forms.py:36 forms.py:37
 msgid "Required"
@@ -72,7 +70,7 @@ msgstr "Mode avancé"
 msgid "About LGR Toolset"
 msgstr "À propos de l'application LGR"
 
-#: templates/basic_mode.html:48 templates/basic_mode.html:205
+#: templates/basic_mode.html:48 templates/basic_mode.html:229
 msgid "About"
 msgstr "À propos"
 
@@ -121,6 +119,31 @@ msgstr "Vérifier les collisions"
 #: templates/basic_mode.html:139
 #, python-format
 msgid ""
+"Your request was sent successfully, the collision and validation tasks "
+"processing can take minutes, even hours.<br> Both results will be sent to "
+"%(email)s in two separate emails. Do not resubmit until you receive both "
+"reports."
+msgstr ""
+"Votre requête a bien été envoyée, les tâches de collision et de validation "
+"peuvent prendre plusieurs minutes, voire plusieurs heures.<br> Les deux "
+"résultats seront envoyés à %(email)s en deux e-mails distincts. Ne renvoyez "
+"pas de requête tant que vous n'avez pas reçu les deux rapports."
+
+#: templates/basic_mode.html:151
+#, python-format
+msgid ""
+"Your request was sent successfully, the validation task processing can take "
+"minutes, even hours.<br> The result will be sent to %(email)s. Do not "
+"resubmit until you receive the report."
+msgstr ""
+"Votre requête a bien été envoyée, la tâche de validation peut prendre "
+"plusieurs minutes, voire plusieurs heures.<br> Le résultat sera envoyé à "
+"%(email)s. Ne renvoyez pas de requête tant que vous n'avez pas reçu le "
+"rapport."
+
+#: templates/basic_mode.html:163
+#, python-format
+msgid ""
 "Your request was sent successfully, the collision task processing can take "
 "minutes, even hours.<br> The result will be sent to %(email)s. Do not "
 "resubmit until you receive the report."
@@ -130,38 +153,38 @@ msgstr ""
 "%(email)s. Ne renvoyez pas de requête tant que vous n'avez pas reçu le "
 "rapport."
 
-#: templates/basic_mode.html:149
+#: templates/basic_mode.html:173
 msgid "Validate"
 msgstr "Valider"
 
-#: templates/basic_mode.html:153
+#: templates/basic_mode.html:177
 msgid "View LGR as"
 msgstr "Voir la LGR en"
 
-#: templates/basic_mode.html:167
+#: templates/basic_mode.html:191
 msgid "Your saved results"
 msgstr "Vos résultats sauvegardés"
 
-#: templates/basic_mode.html:168
+#: templates/basic_mode.html:192
 msgid "The following files contains your tools computation results."
 msgstr ""
 "Ces fichiers contiennent les résultats des calculs fournis par les outils."
 
-#: templates/basic_mode.html:171
+#: templates/basic_mode.html:195
 msgid "Note that these files could be cleaned up regularly."
 msgstr ""
 "Veuillez noter que ces fichiers pourraient être régulièrement supprimés."
 
-#: templates/basic_mode.html:176
+#: templates/basic_mode.html:200
 #, python-format
 msgid "Download %(file)s"
 msgstr "Télécharger %(file)s"
 
-#: templates/basic_mode.html:211
+#: templates/basic_mode.html:235
 msgid "Close"
 msgstr "Fermer"
 
-#: views.py:59
+#: views.py:60
 msgid ""
 "Input label generates too many variants to compute them all quickly. You "
 "need to enter your email address and will receive a notification once "
