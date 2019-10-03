@@ -223,37 +223,38 @@ def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
     return res
 
 
-def validation_results_to_csv(ctx, fileobj):
+def validation_results_to_csv(ctx, fileobj, with_header=True):
     """
     Convert validation results to a CSV.
     """
     writer = csv.writer(fileobj)
-    # Need list(map) for python3.4 that does not like map object (needs sequence)
-    writer.writerow(list(map(to_row_format, ['Type', 'U-label', 'A-label', 'Disposition',
-                                             'Code point sequence', 'Invalid code points',
-                                             'Action index', 'Action XML'])))
-    for result in ctx['result']:
+    if with_header:
+        # Need list(map) for python3.4 that does not like map object (needs sequence)
+        writer.writerow(list(map(to_row_format, ['Type', 'U-label', 'A-label', 'Disposition',
+                                                 'Code point sequence', 'Invalid code points',
+                                                 'Action index', 'Action XML'])))
+
+    invalid_formatted = []
+    for cp, rules in ctx['label_invalid_parts']:
+        reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
+        invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
+    invalid_formatted = '-'.join(invalid_formatted) or '-'
+
+    writer.writerow(list(map(to_row_format, ['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
+                                             ctx['cp_display'], invalid_formatted,
+                                             ctx['action_idx'], ctx['action']])))
+    col = ctx.get('collision', None)
+    if col:
+        writer.writerow(list(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
+                                                 col['cp_display'], col['action_idx'], col['action']])))
+    for var in ctx.get('variants', []):
         invalid_formatted = []
-        for cp, rules in result['label_invalid_parts']:
+        for cp, rules in var['label_invalid_parts'] or []:
             reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
             invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
         invalid_formatted = '-'.join(invalid_formatted) or '-'
-
-        writer.writerow(list(map(to_row_format, ['original', result['u_label'], result['a_label'], result['disposition'],
-                                                 result['cp_display'], invalid_formatted,
-                                                 result['action_idx'], result['action']])))
-        col = result.get('collision', None)
-        if col:
-            writer.writerow(list(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
-                                                     col['cp_display'], col['action_idx'], col['action']])))
-        for var in result.get('variants', []):
-            invalid_formatted = []
-            for cp, rules in var['label_invalid_parts'] or []:
-                reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
-                invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
-            invalid_formatted = '-'.join(invalid_formatted) or '-'
-            writer.writerow(list(map(to_row_format, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
-                                                     var['cp_display'], invalid_formatted,
-                                                     var['action_idx'], var['action']])))
-        # add empty row
-        writer.writerow([])
+        writer.writerow(list(map(to_row_format, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
+                                                 var['cp_display'], invalid_formatted,
+                                                 var['action_idx'], var['action']])))
+    # add empty row
+    writer.writerow([])

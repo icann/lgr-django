@@ -177,13 +177,14 @@ def lgr_harmonization(request, lgr_1, lgr_2, rz_lgr):
     return h_lgr_1_id, h_lgr_2_id, cp_review
 
 
-def _validate_label_task_helper(value):
+def _validate_label_task_helper(value, with_header=True):
     """
     Helper method for validate label tasks.
 
     Convert results to CSV format.
 
-    :param value: Result of label validation.
+    :param value:       Result of label validation.
+    :param with_header: Whether CSV the output is returned with header or not
     :return: A CSV as a string.
     """
     # Define some py2/3 compat stuff
@@ -198,7 +199,7 @@ def _validate_label_task_helper(value):
         out_fn = lambda x: x.decode('utf-8')
 
     out = outIO()
-    validation_results_to_csv(value, out)
+    validation_results_to_csv(value, out, with_header=with_header)
     return out_fn(out.getvalue())
 
 
@@ -211,7 +212,7 @@ def lgr_validate_label(lgr, label, udata):
     :param udata: The associated Unicode database.
     :return: CSV containing the label validation output.
     """
-    return _validate_label_task_helper({'result': [evaluate_label(lgr, label, -1, udata.idna_encode_label)]})
+    return _validate_label_task_helper(evaluate_label(lgr, label, -1, udata.idna_encode_label))
 
 
 def lgr_set_validate_label(lgr, script_lgr, set_labels, label, udata):
@@ -225,8 +226,8 @@ def lgr_set_validate_label(lgr, script_lgr, set_labels, label, udata):
         :param udata: The associated Unicode database.
         :return: CSV containing the label validation output.
         """
-    return _validate_label_task_helper({'result': [lgr_set_evaluate_label(lgr, script_lgr, label, set_labels,
-                                                                          -1, udata.idna_encode_label)]})
+    return _validate_label_task_helper(lgr_set_evaluate_label(lgr, script_lgr, label, set_labels,
+                                                              -1, udata.idna_encode_label))
 
 
 def lgr_validate_labels(lgr, labels_file, udata):
@@ -238,8 +239,9 @@ def lgr_validate_labels(lgr, labels_file, udata):
     :param udata: The associated Unicode database.
     :return: CSV containing the labels validation output.
     """
-    result = {'result': []}
+    it = 0
     for label, _, _ in read_labels(labels_file, lgr.unicode_database):
         label_cp = tuple([ord(c) for c in label])
-        result['result'].append(evaluate_label(lgr, label_cp, -1, udata.idna_encode_label))
-    return _validate_label_task_helper(result)
+        yield _validate_label_task_helper(evaluate_label(lgr, label_cp, -1, udata.idna_encode_label),
+                                          with_header=not it)
+        it += 1

@@ -179,6 +179,6 @@ def _prepare_csv_response(ctx):
     cd = 'attachment; filename="lgr-val-{0}.csv"'.format(ctx['result']['a_label'])
     response['Content-Disposition'] = cd
 
-    validation_results_to_csv(ctx, response)
+    validation_results_to_csv(ctx['result'], response)
 
     return response
