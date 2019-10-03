@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic import FormView
 
 from lgr.exceptions import LGRException
-from lgr.tools.utils import download_file, read_labels
+from lgr.tools.utils import download_file
 from lgr.utils import cp_to_ulabel
 from lgr_editor.api import LabelInfo, session_get_storage, LGRInfo, session_list_storage
 from lgr_editor.lgr_exceptions import lgr_exception_to_text

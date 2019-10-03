@@ -742,6 +742,8 @@ def populate_variants(request, lgr_id):
     lgr.populate_variants()
     messages.add_message(request, messages.INFO, log_output.getvalue())
     messages.add_message(request, messages.SUCCESS, _("Variants populated"))
+    populate_logger.removeHandler(ch)
+    log_output.close()
     session_save_lgr(request, lgr_info)
     return redirect('codepoint_list', lgr_id)
 
