@@ -242,6 +242,10 @@ def lgr_validate_labels(lgr, labels_file, udata):
     it = 0
     for label, _, _ in read_labels(labels_file, lgr.unicode_database):
         label_cp = tuple([ord(c) for c in label])
-        yield _validate_label_task_helper(evaluate_label(lgr, label_cp, -1, udata.idna_encode_label),
-                                          with_header=not it)
-        it += 1
+        try:
+            yield _validate_label_task_helper(evaluate_label(lgr, label_cp, -1, udata.idna_encode_label),
+                                              with_header=not it)
+            it += 1
+        except Exception:
+            yield "\nError processing label {}\n".format(label)
+
