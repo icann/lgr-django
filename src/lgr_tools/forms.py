@@ -17,10 +17,8 @@ LGR_COMPARE_ACTIONS = (
 
 class UAEmailValidator(validators.EmailValidator):
     # same Email Validator class with unicode characters instead of a-z0-9
-    user_regex = validators._lazy_re_compile(
-        r"(^[-!#$%&'*+/=?^_`{}|~\w]+(\.[-!#$%&'*+/=?^_`{}|~\w]+)*\Z"  # dot-atom
-        r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177\w]|\\[\001-\011\013\014\016-\177\w])*"\Z)',  # quoted-string
-        re.IGNORECASE)
+    user_regex = validators._lazy_re_compile(r".+", re.IGNORECASE)
+    domain_regex = validators._lazy_re_compile(r".+", re.IGNORECASE)
 
 
 class UAEmailField(forms.EmailField):
