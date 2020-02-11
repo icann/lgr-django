@@ -13,7 +13,7 @@ from lgr.utils import cp_to_ulabel
 from lgr_editor.api import LabelInfo, session_get_storage, LGRInfo, session_list_storage
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
 from lgr_editor.repertoires import get_by_name
-from lgr_tools.tasks import collision_task, lgr_set_validate_labels_task
+from lgr_tools.tasks import collision_task, annotate_task
 from lgr_validator.views import evaluate_label_from_info, NeedAsyncProcess
 from lgr_web.views import ADVANCED_INTERFACE_SESSION_KEY
 from .forms import ValidateLabelSimpleForm
@@ -47,7 +47,7 @@ class BasicModeView(FormView):
             labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
             # data will be sent by email instead of on the ui
             ctx['validation_to'] = email_address
-            lgr_set_validate_labels_task.delay(lgr_json, labels_json, email_address, storage_path)
+            annotate_task.delay(lgr_json, labels_json, email_address, storage_path)
         else:
             labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp]).to_dict()
             for label_cplist in [l for l in labels_cp]:
