@@ -83,6 +83,11 @@
                             </label>
                             <div class="col-sm-8 col-lg-8">
                                 {% include "lgr_editor/_form_field.html" with field=form.rz_lgr %}
+                                <span class="text-secondary">
+                                    {% trans 'View LGR as' %}
+                                    <a href="" id="xmlLink" target="_blank">XML</a> |
+                                    <a href="" id="renderLink" target="_blank">HTML</a>
+                                </span>
                             </div>
                         </div>
 
@@ -173,11 +178,6 @@
                             {% trans 'Validate' %}
                         </button>
 
-                        <span class="text-secondary info-submit">
-                            {% trans 'View LGR as' %}
-                            <a href="" id="xmlLink">XML</a> |
-                            <a href="" id="renderLink">HTML</a>
-                        </span>
                     </form>
 
                     <div id ="results">
