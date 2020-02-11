@@ -13,17 +13,16 @@ from django.core.mail import EmailMessage
 
 from lgr.exceptions import LGRException
 from lgr.utils import cp_to_ulabel
-
 from lgr_editor.api import LabelInfo, LGRInfo
-from lgr_editor.unidb import get_db_by_version
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
+from lgr_editor.unidb import get_db_by_version
 from lgr_tools.api import (lgr_diff_labels,
                            lgr_collision_labels,
                            lgr_annotate_labels,
                            lgr_set_annotate_labels,
                            lgr_cross_script_variants,
                            lgr_validate_label,
-                           lgr_set_validate_label, lgr_validate_labels)
+                           lgr_set_validate_label, lgr_validate_labels, lgr_basic_collision_labels)
 
 logger = logging.getLogger(__name__)
 
@@ -135,7 +134,6 @@ def collision_task(lgr_json, labels_json, tld_json, email_address, full_dump,
     :param full_dump: Whether we also output a full dump
     :param with_rules: Whether we also output rules
     :param storage_path: The place where results will be stored
-    :return:
     """
     lgr = LGRInfo.from_dict(lgr_json).lgr
     labels_info = LabelInfo.from_dict(labels_json)
@@ -158,6 +156,44 @@ def collision_task(lgr_json, labels_json, tld_json, email_address, full_dump,
                    tlds_file=tlds_info.labels if tld_json else None,
                    full_dump=full_dump,
                    with_rules=with_rules)
+
+
+@shared_task
+def basic_collision_task(lgr_json, labels_json, tld_json, email_address, storage_path, annotate=False):
+    """
+    Compute collision between labels in an LGR
+
+    :param lgr_json: The LGRInfo as a JSON object.
+    :param labels_json: The LabelInfo as a JSON object containing labels to check for coliision.
+    :param tld_json: The LabelInfo as a JSON object containing TLDs.
+    :param email_address: The e-mail address where the results will be sent
+    :param storage_path: The place where results will be stored
+    :param annotate: Whether the labels should also be annotated
+    """
+    lgr = LGRInfo.from_dict(lgr_json).lgr
+    labels_info = LabelInfo.from_dict(labels_json)
+    tlds_info = LabelInfo.from_dict(tld_json) if tld_json else None
+    task_name = "collisions"
+    if annotate:
+        task_name += " and annotations"
+
+    logger.info("Starting task 'basic %s' for %s, for file %s",
+                task_name, lgr.name, labels_info.name)
+
+    body = "Hi,\nThe processing of {name} from labels provided in {input} in LGR '{lgr}' has".format(
+        name=task_name,
+        input="the file '{}'".format(labels_info.name) if labels_info.name else 'ICANN tlds',
+        lgr=lgr.name)
+    _lgr_tool_task(storage_path,
+                   base_filename='{}_{}'.format(task_name.replace(" ", "_"), lgr.name),
+                   email_subject='LGR Toolset {} result'.format(task_name),
+                   email_body=body,
+                   email_address=email_address,
+                   cb=lgr_basic_collision_labels,
+                   lgr=lgr,
+                   labels_file=labels_info.labels,
+                   tlds_file=tlds_info.labels if tld_json else None,
+                   with_annotate=annotate)
 
 
 @shared_task

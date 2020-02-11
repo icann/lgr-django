@@ -9,7 +9,7 @@ from lgr.tools.utils import read_labels
 from lgr_editor.exceptions import LGRValidationException
 from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_sets
 from lgr.tools.annotate import annotate, lgr_set_annotate
-from lgr.tools.diff_collisions import diff, collision
+from lgr.tools.diff_collisions import diff, collision, basic_collision
 from lgr.tools.cross_script_variants import cross_script_variants
 from lgr.tools.harmonize import harmonize
 
@@ -115,6 +115,19 @@ def lgr_collision_labels(lgr, labels_file, tlds_file, full_dump, with_rules):
     :return: Text log to be displayed
     """
     return collision(lgr, labels_file, tlds_file, full_dump, not with_rules)
+
+
+def lgr_basic_collision_labels(lgr, labels_file, tlds_file, with_annotate):
+    """
+    Show difference between two LGR for a list of labels
+
+    :param lgr: The LGR object.
+    :param labels_file: The file containing the list of labels
+    :param tlds_file: The file containing the TLDs
+    :param with_annotate: Whether we annotate labels
+    :return: Text log to be displayed
+    """
+    return basic_collision(lgr, labels_file, tlds_file, with_annotate)
 
 
 def lgr_annotate_labels(lgr, labels_file):
