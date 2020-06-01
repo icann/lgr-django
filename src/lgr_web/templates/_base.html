@@ -132,6 +132,7 @@
                             </div>
                         </form>
                         <div class="navbar-form navbar-right">
+                            <a class="header-link" href="{% url 'lgr_basic_mode' %}">{% trans "Basic mode" %}</a>
                             {% if lgr_id %}
                                 {% if lgr_set_id %}
                                     {% url 'view_lgr_xml' lgr_set_id lgr_id as view_lgr_xml_url %}
@@ -186,15 +187,6 @@
                                     </ul>
                                 </div>
                             {% endif %}
-
-                            {% with request.resolver_match.view_name as view_name %}
-                                {% if view_name == 'homepage' %}
-                                    <a class="header-link" href="{% url 'lgr_basic_mode' %}">{% trans "Basic mode" %}</a>
-                                {% endif %}
-                            {% endwith %}
-
-
-
                             <a class="btn btn-default show-tooltip"
                                data-toggle="modal" data-target="#label-forms-modal"
                                title="{% trans 'Display all label forms' %}" data-placement="bottom">
