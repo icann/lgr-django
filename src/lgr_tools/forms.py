@@ -139,8 +139,7 @@ class LGRCollisionSelector(forms.Form):
                             help_text=_('LGR to use in tool'),
                             required=True)
 
-    download_tlds = forms.BooleanField(label=_("Use downloaded TLDs"),
-                                       help_text=_('Check labels with the existing ICANN list of TLDs as well'),
+    download_tlds = forms.BooleanField(label=_("Also check for collision with existing TLDs"),
                                        required=False)
 
     labels = forms.FileField(label=_("Labels"),
