@@ -189,7 +189,7 @@ def slug_to_var(var_slug):
     return slug_to_cp(cp_slug), var_when, var_not_when
 
 
-def _list_files(location, startswith=''):
+def _list_files(location, startswith='', reverse=True):
     """
     List XML file in a given directory.
 
@@ -204,7 +204,7 @@ def _list_files(location, startswith=''):
     except (OSError, IOError) as exc:
         logger.warning("Cannot access directory '%s': %s",
                        location, exc)
-    return natsorted(xml_files, reverse=True)
+    return natsorted(xml_files, reverse=reverse)
 
 
 def list_root_zones():
@@ -231,7 +231,7 @@ def list_built_in_lgr():
 
     :return: List of built-in LGRs.
     """
-    return _list_files(settings.LGR_STORAGE_LOCATION)
+    return _list_files(settings.LGR_STORAGE_LOCATION, reverse=False)
 
 
 def make_lgr_session_key(key, request, lgr_id):

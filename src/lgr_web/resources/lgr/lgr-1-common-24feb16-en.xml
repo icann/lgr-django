@@ -1,0 +1,708 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
+  <meta>
+    <version comment="Root Zone LGR">1</version>
+    <date>2016-02-24</date>
+    <language>und-Zyyy</language>
+    <scope type="domain">.</scope>
+    <unicode-version>6.3.0</unicode-version>
+    <description type="text/html"><![CDATA[
+            <h1>Label Generation Rules for the Root Zone &#x2014; LGR-1</h1>
+            <h2>Overview</h2>
+            
+            <p>This document, together with the set of element LGRs, specifies an integrated
+             set of Label Generation Rules for the Root Zone. 
+             For more details on the Root Zone LGR and their development see
+            "Root Zone Label Generation Rules - LGR-1: Overview and Summary", Integration Panel, 24 February 2016 [LGR-1].</p>
+            
+            <h2>Element LGRs</h2>
+            <p>The Label Generation Rules for the Root Zone (LGR-1) are integrated from the following set of 
+            script-specific element LGRs:</p>
+                <ul>
+                    <li>Root Zone Label Generation Ruleset for the Arabic Script [100]</li>
+                </ul>
+            <p>Each element LGR represents in full the underlying, proposed script-based LGR, except for 
+            changes required by the integration process or for uniformity of presentation. See Section 3, "Integration" in [LGR-1].</p>
+            
+             <h2>Merged LGR</h2>
+            <p>This merged LGR contains the Union of the repertoire, variant mappings and Whole
+            Label Evaluation (WLE) rules as described in the following sections. Data that are necessarily
+            script-dependent, such as the type for variant mappings have been removed or replaced by
+            default values.</p>
+            
+            <p>When processing an applied for label, the integrated LGR presents the complete data and
+            specification needed for conflict checking with any existing label, independent of script, while each
+            script-specific element LGRs presents the complete data and specification to determine the validity
+            and full set of allocatable variants for the label, when applied for under that script.</p>
+             
+            <h2>Repertoire</h2>
+            <p>The repertoire of the integrated Root Zone LGR is the cumulative repertoire of all the Element 
+            LGRs that have been integrated into this version. Those repertoires, in turn were
+            developed based on [MSR-2], which is a subset of Unicode 6.3 [Unicode 6.3].</p>
+            
+            <p>As a Root Zone LGR, the repertoire includes neither digits nor the HYPHEN-MINUS.</p>
+             
+            <p>For further details, see Section 3.1.1, in [LGR-1].</p>
+            
+            <p>Each code point or range is tagged with the script or scripts that the code point is used with, and 
+            a reference to the Unicode Standard in which the code point was first encoded, see "References" below.</p>
+
+            <h2>Variants</h2>
+
+            <p>The variant mappings in this LGR are the union of the variant mappings from all the Element LGRs
+             that have been integrated into this version of the Root Zone LGR. Because the
+            disposition of variant labels, for example as "allocatable", is specific to each script, they cannot be
+            expressed in the script-neutral context of this integrated LGR. Instead. all variant mappings are
+            labeled as "blocked" in this document as needed for conflict checking. See also Section 3.1.2 in [LGR-1].</p>
+
+            <h2>Whole Label Evaluations Rules</h2>
+
+            <p>The integrated LGR includes the cumulative set of Whole Label Evaluation rules for all Element LGRs
+            that have been integrated into this version. See Section 3.1.3, in [LGR-1]. See also the comments given for 
+            each rule or action.</p>
+            
+            <h3>Default Whole Label Evaluation Rules</h3>
+            <p>The  integrated LGR includes the set of required default WLE rules and actions applicable to the Root Zone 
+            and defined in [MSR-2]. They are marked with &#x235F;.</p>
+            
+            <h2>Methodology and Contributors</h2>
+            <p>The Root Zone Label Generation Rules - LGR-1 [LGR-1] were integrated by the Integration Panel [IP], 
+            from a set of proposals for script-based root zone LGRs developed by community-based Generation 
+            Panels [GPS] in an open process with multiple public consultations defined in [Procedure] and [Guidelines]. 
+            For more information on the methodology and contributors see [LGR-1].</p>
+            
+            <h2>References</h2>
+
+            <p>In the <a href="#repertoire">listing of the repertoire</a>, references starting at [0] refer to Unicode Standard versions in which the
+            corresponding code points were initially encoded. References [100] and above correspond to the script-specific
+            LGRs that include the repertoire item. Repertoire items may have more than one reference.</p>
+            
+            <p>In addition the following references are cited in this document:</p>
+            <dl class="references">
+                <dt>[GPS]</dt>
+                <dd>Internet Corporation for Assigned Names and Numbers (ICANN), "Generation Panels" https://community.icann.org/display/croscomlgrprocedure/Generation+Panels
+                accessed on 2015-11-20</dd>
+                <dt>[Guidelines]</dt>
+                <dd>Internet Corporation for Assigned Names and Numbers, “Guidelines for Developing Script-Specific Label Generation Rules for Integration into the Root Zone LGR”.
+                 (Los Angeles, California: ICANN, December 2014) https://community.icann.org/download/attachments/43989034/Guidelines-for-LGR-2014-12-02.pdf</dd>
+                <dt>[IP]</dt>
+                <dd>Internet Corporation for Assigned Names and Numbers, (ICANN), "Integration Panel" https://community.icann.org/display/croscomlgrprocedure/Integration+Panel
+                accessed on 2015-11-20</dd>
+                <dt>[LGR-1]</dt>
+                <dd>Integration Panel, "Root Zone Label Generation Rules - LGR-1: Overview and Summary", https://www.icann.org/sites/default/files/lgr/lgr-1-overview-24feb16-en.pdf</dd>
+                <dt>[MSR-2]</dt>
+                <dd>Integration Panel, "Maximal Starting Repertoire - MSR-2: Overview and Rationale", 14 April 2015
+                 https://www.icann.org/en/system/files/files/msr-2-overview-14apr15-en.pdf</dd>
+                 <dt>[Procedure]</dt>
+                 <dd>Internet Corporation for Assigned Names and Numbers, "Procedure to Develop and Maintain the Label Generation Rules for the Root Zone in Respect of IDNA Labels." 
+                 (Los Angeles, California: ICANN, March, 2013) http://www.icann.org/en/resources/idn/variant-tlds/draft-lgr-procedure-20mar13-en.pdf</dd>
+                <dt>[Unicode 6.3]</dt>
+                <dd>The Unicode Consortium. The Unicode Standard, Version 6.3.0, (Mountain View, 
+                CA: The Unicode Consortium, 2013. ISBN 978-1-936213-08-5) http://www.unicode.org/versions/Unicode6.3.0/</dd>
+         </dl>
+         <p>For more details for references [100] and up  and [0] and up refer to the <a href="#table_of_references">Table of References</a> below, as well as to [LGR-1].</p>
+  ]]></description>
+    <references>
+      <reference id="0">The Unicode Standard 1.1</reference>
+      <reference id="3">The Unicode Standard 3.0</reference>
+      <reference id="7">The Unicode Standard 4.1</reference>
+      <reference id="9">The Unicode Standard 5.1</reference>
+      <reference id="11">The Unicode Standard 6.0</reference>
+      <reference id="12">The Unicode Standard 6.1</reference>
+      <reference id="100">TF-AIDN, "Root Zone Label Generation Ruleset For the Arabic Script", 18 November 2015 https://www.icann.org/en/system/files/files/arabic-lgr-proposal-18nov15-en.pdf</reference>
+    </references>
+  </meta>
+  <data>
+    <char cp="0620" tag="sc:Arab" ref="11 100" />
+    <char cp="0621" tag="sc:Arab" ref="0 100" />
+    <char cp="0622" tag="sc:Arab" ref="0 100">
+      <var cp="0623" type="blocked" ref="100" />
+      <var cp="0625" type="blocked" ref="100" />
+      <var cp="0627" type="blocked" ref="100" />
+      <var cp="0672" type="blocked" ref="100" />
+    </char>
+    <char cp="0623" tag="sc:Arab" ref="0 100">
+      <var cp="0622" type="blocked" ref="100" />
+      <var cp="0625" type="blocked" ref="100" />
+      <var cp="0627" type="blocked" ref="100" />
+      <var cp="0672" type="blocked" ref="100" />
+    </char>
+    <char cp="0624" tag="sc:Arab" ref="0 100">
+      <var cp="0648" type="blocked" ref="100" />
+    </char>
+    <char cp="0625" tag="sc:Arab" ref="0 100">
+      <var cp="0622" type="blocked" ref="100" />
+      <var cp="0623" type="blocked" ref="100" />
+      <var cp="0627" type="blocked" ref="100" />
+      <var cp="0672" type="blocked" ref="100" />
+    </char>
+    <char cp="0626" tag="sc:Arab" ref="0 100">
+      <var cp="0649" type="blocked" ref="100" />
+      <var cp="064A" type="blocked" ref="100" />
+      <var cp="067B" type="blocked" ref="100" />
+      <var cp="06CC" type="blocked" ref="100" />
+      <var cp="06CD" type="blocked" ref="100" />
+      <var cp="06D0" type="blocked" ref="100" />
+      <var cp="06D2" type="blocked" ref="100" />
+    </char>
+    <char cp="0627" tag="sc:Arab" ref="0 100">
+      <var cp="0622" type="blocked" ref="100" />
+      <var cp="0623" type="blocked" ref="100" />
+      <var cp="0625" type="blocked" ref="100" />
+      <var cp="0672" type="blocked" ref="100" />
+    </char>
+    <char cp="0628" tag="sc:Arab" ref="0 100" />
+    <char cp="0629" tag="sc:Arab" ref="0 100">
+      <var cp="0647" type="blocked" ref="100" />
+      <var cp="06BE" type="blocked" ref="100" />
+      <var cp="06C0" type="blocked" ref="100" />
+      <var cp="06C1" type="blocked" ref="100" />
+      <var cp="06C2" type="blocked" ref="100" />
+      <var cp="06C3" type="blocked" ref="100" />
+      <var cp="06D5" type="blocked" ref="100" />
+    </char>
+    <char cp="062A" tag="sc:Arab" ref="0 100">
+      <var cp="067A" type="blocked" ref="100" />
+    </char>
+    <char cp="062B" tag="sc:Arab" ref="0 100">
+      <var cp="067D" type="blocked" ref="100" />
+    </char>
+    <range first-cp="062C" last-cp="063A" tag="sc:Arab" ref="0 100" />
+    <char cp="0641" tag="sc:Arab" ref="0 100">
+      <var cp="0642" type="blocked" ref="100" />
+      <var cp="06A2" type="blocked" ref="100" />
+      <var cp="06A7" type="blocked" ref="100" />
+    </char>
+    <char cp="0642" tag="sc:Arab" ref="0 100">
+      <var cp="0641" type="blocked" ref="100" />
+      <var cp="06A2" type="blocked" ref="100" />
+      <var cp="06A7" type="blocked" ref="100" />
+    </char>
+    <char cp="0643" tag="sc:Arab" ref="0 100">
+      <var cp="06A9" type="blocked" ref="100" />
+      <var cp="06AA" type="blocked" ref="100" />
+    </char>
+    <range first-cp="0644" last-cp="0645" tag="sc:Arab" ref="0 100" />
+    <char cp="0646" tag="sc:Arab" ref="0 100">
+      <var cp="06BA" type="blocked" ref="100" />
+    </char>
+    <char cp="0647" tag="sc:Arab" ref="0 100">
+      <var cp="0629" type="blocked" ref="100" />
+      <var cp="06BE" type="blocked" ref="100" />
+      <var cp="06C0" type="blocked" ref="100" />
+      <var cp="06C1" type="blocked" ref="100" />
+      <var cp="06C2" type="blocked" ref="100" />
+      <var cp="06C3" type="blocked" ref="100" />
+      <var cp="06D5" type="blocked" ref="100" />
+    </char>
+    <char cp="0648" tag="sc:Arab" ref="0 100">
+      <var cp="0624" type="blocked" ref="100" />
+    </char>
+    <char cp="0649" tag="sc:Arab" ref="0 100">
+      <var cp="0626" type="blocked" ref="100" />
+      <var cp="064A" type="blocked" ref="100" />
+      <var cp="067B" type="blocked" ref="100" />
+      <var cp="06CC" type="blocked" ref="100" />
+      <var cp="06CD" type="blocked" ref="100" />
+      <var cp="06D0" type="blocked" ref="100" />
+      <var cp="06D2" type="blocked" ref="100" />
+    </char>
+    <char cp="064A" tag="sc:Arab" ref="0 100">
+      <var cp="0626" type="blocked" ref="100" />
+      <var cp="0649" type="blocked" ref="100" />
+      <var cp="067B" type="blocked" ref="100" />
+      <var cp="06CC" type="blocked" ref="100" />
+      <var cp="06CD" type="blocked" ref="100" />
+      <var cp="06D0" type="blocked" ref="100" />
+      <var cp="06D2" type="blocked" ref="100" />
+    </char>
+    <char cp="0672" tag="sc:Arab" ref="0 100">
+      <var cp="0622" type="blocked" ref="100" />
+      <var cp="0623" type="blocked" ref="100" />
+      <var cp="0625" type="blocked" ref="100" />
+      <var cp="0627" type="blocked" ref="100" />
+    </char>
+    <char cp="0679" tag="sc:Arab" ref="0 100">
+      <var cp="06BB" type="blocked" ref="100" />
+    </char>
+    <char cp="067A" tag="sc:Arab" ref="0 100">
+      <var cp="062A" type="blocked" ref="100" />
+    </char>
+    <char cp="067B" tag="sc:Arab" ref="0 100">
+      <var cp="0626" type="blocked" ref="100" />
+      <var cp="0649" type="blocked" ref="100" />
+      <var cp="064A" type="blocked" ref="100" />
+      <var cp="06CC" type="blocked" ref="100" />
+      <var cp="06CD" type="blocked" ref="100" />
+      <var cp="06D0" type="blocked" ref="100" />
+      <var cp="06D2" type="blocked" ref="100" />
+    </char>
+    <char cp="067C" tag="sc:Arab" ref="0 100" />
+    <char cp="067D" tag="sc:Arab" ref="0 100">
+      <var cp="062B" type="blocked" ref="100" />
+    </char>
+    <char cp="067E" tag="sc:Arab" ref="0 100">
+      <var cp="06BD" type="blocked" ref="100" />
+      <var cp="06D1" type="blocked" ref="100" />
+      <var cp="0752" type="blocked" ref="100" />
+    </char>
+    <range first-cp="067F" last-cp="0681" tag="sc:Arab" ref="0 100" />
+    <char cp="0683" tag="sc:Arab" ref="0 100">
+      <var cp="0684" type="blocked" ref="100" />
+    </char>
+    <char cp="0684" tag="sc:Arab" ref="0 100">
+      <var cp="0683" type="blocked" ref="100" />
+    </char>
+    <range first-cp="0685" last-cp="068D" tag="sc:Arab" ref="0 100" />
+    <char cp="068E" tag="sc:Arab" ref="0 100">
+      <var cp="068F" type="blocked" ref="100" />
+    </char>
+    <char cp="068F" tag="sc:Arab" ref="0 100">
+      <var cp="068E" type="blocked" ref="100" />
+    </char>
+    <char cp="0691" tag="sc:Arab" ref="0 100" />
+    <char cp="0693" tag="sc:Arab" ref="0 100" />
+    <range first-cp="0695" last-cp="069A" tag="sc:Arab" ref="0 100" />
+    <range first-cp="069F" last-cp="06A0" tag="sc:Arab" ref="0 100" />
+    <char cp="06A2" tag="sc:Arab" ref="0 100">
+      <var cp="0641" type="blocked" ref="100" />
+      <var cp="0642" type="blocked" ref="100" />
+      <var cp="06A7" type="blocked" ref="100" />
+    </char>
+    <char cp="06A4" tag="sc:Arab" ref="0 100">
+      <var cp="06A8" type="blocked" ref="100" />
+    </char>
+    <char cp="06A6" tag="sc:Arab" ref="0 100" />
+    <char cp="06A7" tag="sc:Arab" ref="0 100">
+      <var cp="0641" type="blocked" ref="100" />
+      <var cp="0642" type="blocked" ref="100" />
+      <var cp="06A2" type="blocked" ref="100" />
+    </char>
+    <char cp="06A8" tag="sc:Arab" ref="0 100">
+      <var cp="06A4" type="blocked" ref="100" />
+    </char>
+    <char cp="06A9" tag="sc:Arab" ref="0 100">
+      <var cp="0643" type="blocked" ref="100" />
+      <var cp="06AA" type="blocked" ref="100" />
+    </char>
+    <char cp="06AA" tag="sc:Arab" ref="0 100">
+      <var cp="0643" type="blocked" ref="100" />
+      <var cp="06A9" type="blocked" ref="100" />
+    </char>
+    <char cp="06AB" tag="sc:Arab" ref="0 100">
+      <var cp="06AD" type="blocked" ref="100" />
+      <var cp="06AF" type="blocked" ref="100" />
+      <var cp="0763" type="blocked" ref="100" />
+    </char>
+    <char cp="06AD" tag="sc:Arab" ref="0 100">
+      <var cp="06AB" type="blocked" ref="100" />
+      <var cp="06AF" type="blocked" ref="100" />
+      <var cp="0763" type="blocked" ref="100" />
+    </char>
+    <char cp="06AE" tag="sc:Arab" ref="0 100" />
+    <char cp="06AF" tag="sc:Arab" ref="0 100">
+      <var cp="06AB" type="blocked" ref="100" />
+      <var cp="06AD" type="blocked" ref="100" />
+      <var cp="0763" type="blocked" ref="100" />
+    </char>
+    <range first-cp="06B0" last-cp="06B1" tag="sc:Arab" ref="0 100" />
+    <char cp="06B3" tag="sc:Arab" ref="0 100" />
+    <char cp="06B5" tag="sc:Arab" ref="0 100" />
+    <char cp="06BA" tag="sc:Arab" ref="0 100">
+      <var cp="0646" type="blocked" ref="100" />
+    </char>
+    <char cp="06BB" tag="sc:Arab" ref="0 100">
+      <var cp="0679" type="blocked" ref="100" />
+    </char>
+    <char cp="06BC" tag="sc:Arab" ref="0 100" />
+    <char cp="06BD" tag="sc:Arab" ref="0 100">
+      <var cp="067E" type="blocked" ref="100" />
+      <var cp="06D1" type="blocked" ref="100" />
+      <var cp="0752" type="blocked" ref="100" />
+    </char>
+    <char cp="06BE" tag="sc:Arab" ref="0 100">
+      <var cp="0629" type="blocked" ref="100" />
+      <var cp="0647" type="blocked" ref="100" />
+      <var cp="06C0" type="blocked" ref="100" />
+      <var cp="06C1" type="blocked" ref="100" />
+      <var cp="06C2" type="blocked" ref="100" />
+      <var cp="06C3" type="blocked" ref="100" />
+      <var cp="06D5" type="blocked" ref="100" />
+    </char>
+    <char cp="06C0" tag="sc:Arab" ref="0 100">
+      <var cp="0629" type="blocked" ref="100" />
+      <var cp="0647" type="blocked" ref="100" />
+      <var cp="06BE" type="blocked" ref="100" />
+      <var cp="06C1" type="blocked" ref="100" />
+      <var cp="06C2" type="blocked" ref="100" />
+      <var cp="06C3" type="blocked" ref="100" />
+      <var cp="06D5" type="blocked" ref="100" />
+    </char>
+    <char cp="06C1" tag="sc:Arab" ref="0 100">
+      <var cp="0629" type="blocked" ref="100" />
+      <var cp="0647" type="blocked" ref="100" />
+      <var cp="06BE" type="blocked" ref="100" />
+      <var cp="06C0" type="blocked" ref="100" />
+      <var cp="06C2" type="blocked" ref="100" />
+      <var cp="06C3" type="blocked" ref="100" />
+      <var cp="06D5" type="blocked" ref="100" />
+    </char>
+    <char cp="06C2" tag="sc:Arab" ref="0 100">
+      <var cp="0629" type="blocked" ref="100" />
+      <var cp="0647" type="blocked" ref="100" />
+      <var cp="06BE" type="blocked" ref="100" />
+      <var cp="06C0" type="blocked" ref="100" />
+      <var cp="06C1" type="blocked" ref="100" />
+      <var cp="06C3" type="blocked" ref="100" />
+      <var cp="06D5" type="blocked" ref="100" />
+    </char>
+    <char cp="06C3" tag="sc:Arab" ref="0 100">
+      <var cp="0629" type="blocked" ref="100" />
+      <var cp="0647" type="blocked" ref="100" />
+      <var cp="06BE" type="blocked" ref="100" />
+      <var cp="06C0" type="blocked" ref="100" />
+      <var cp="06C1" type="blocked" ref="100" />
+      <var cp="06C2" type="blocked" ref="100" />
+      <var cp="06D5" type="blocked" ref="100" />
+    </char>
+    <char cp="06C4" tag="sc:Arab" ref="0 100" />
+    <char cp="06C6" tag="sc:Arab" ref="0 100" />
+    <char cp="06CB" tag="sc:Arab" ref="0 100" />
+    <char cp="06CC" tag="sc:Arab" ref="0 100">
+      <var cp="0626" type="blocked" ref="100" />
+      <var cp="0649" type="blocked" ref="100" />
+      <var cp="064A" type="blocked" ref="100" />
+      <var cp="067B" type="blocked" ref="100" />
+      <var cp="06CD" type="blocked" ref="100" />
+      <var cp="06D0" type="blocked" ref="100" />
+      <var cp="06D2" type="blocked" ref="100" />
+    </char>
+    <char cp="06CD" tag="sc:Arab" ref="0 100">
+      <var cp="0626" type="blocked" ref="100" />
+      <var cp="0649" type="blocked" ref="100" />
+      <var cp="064A" type="blocked" ref="100" />
+      <var cp="067B" type="blocked" ref="100" />
+      <var cp="06CC" type="blocked" ref="100" />
+      <var cp="06D0" type="blocked" ref="100" />
+      <var cp="06D2" type="blocked" ref="100" />
+    </char>
+    <char cp="06CE" tag="sc:Arab" ref="0 100" />
+    <char cp="06CF" tag="sc:Arab" ref="3 100" />
+    <char cp="06D0" tag="sc:Arab" ref="0 100">
+      <var cp="0626" type="blocked" ref="100" />
+      <var cp="0649" type="blocked" ref="100" />
+      <var cp="064A" type="blocked" ref="100" />
+      <var cp="067B" type="blocked" ref="100" />
+      <var cp="06CC" type="blocked" ref="100" />
+      <var cp="06CD" type="blocked" ref="100" />
+      <var cp="06D2" type="blocked" ref="100" />
+    </char>
+    <char cp="06D1" tag="sc:Arab" ref="0 100">
+      <var cp="067E" type="blocked" ref="100" />
+      <var cp="06BD" type="blocked" ref="100" />
+      <var cp="0752" type="blocked" ref="100" />
+    </char>
+    <char cp="06D2" tag="sc:Arab" ref="0 100">
+      <var cp="0626" type="blocked" ref="100" />
+      <var cp="0649" type="blocked" ref="100" />
+      <var cp="064A" type="blocked" ref="100" />
+      <var cp="067B" type="blocked" ref="100" />
+      <var cp="06CC" type="blocked" ref="100" />
+      <var cp="06CD" type="blocked" ref="100" />
+      <var cp="06D0" type="blocked" ref="100" />
+    </char>
+    <char cp="06D5" tag="sc:Arab" ref="0 100">
+      <var cp="0629" type="blocked" ref="100" />
+      <var cp="0647" type="blocked" ref="100" />
+      <var cp="06BE" type="blocked" ref="100" />
+      <var cp="06C0" type="blocked" ref="100" />
+      <var cp="06C1" type="blocked" ref="100" />
+      <var cp="06C2" type="blocked" ref="100" />
+      <var cp="06C3" type="blocked" ref="100" />
+    </char>
+    <char cp="0751" tag="sc:Arab" ref="7 100" />
+    <char cp="0752" tag="sc:Arab" ref="7 100">
+      <var cp="067E" type="blocked" ref="100" />
+      <var cp="06BD" type="blocked" ref="100" />
+      <var cp="06D1" type="blocked" ref="100" />
+    </char>
+    <char cp="0756" tag="sc:Arab" ref="7 100" />
+    <char cp="0760" tag="sc:Arab" ref="7 100" />
+    <char cp="0762" tag="sc:Arab" ref="7 100" />
+    <char cp="0763" tag="sc:Arab" ref="7 100">
+      <var cp="06AB" type="blocked" ref="100" />
+      <var cp="06AD" type="blocked" ref="100" />
+      <var cp="06AF" type="blocked" ref="100" />
+    </char>
+    <char cp="0766" tag="sc:Arab" ref="7 100" />
+    <char cp="0767" tag="sc:Arab" ref="7 100">
+      <var cp="08A9" type="blocked" ref="100" />
+    </char>
+    <char cp="0768" tag="sc:Arab" ref="7 100" />
+    <char cp="076A" tag="sc:Arab" ref="7 100" />
+    <range first-cp="076E" last-cp="0771" tag="sc:Arab" ref="9 100" />
+    <char cp="08A0" tag="sc:Arab" ref="12 100" />
+    <range first-cp="08A2" last-cp="08A8" tag="sc:Arab" ref="12 100" />
+    <char cp="08A9" tag="sc:Arab" ref="12 100">
+      <var cp="0767" type="blocked" ref="100" />
+    </char>
+  </data>
+  <!--Rules section goes here-->
+  <rules>
+    <!--Character class definitions go here-->
+    <!--Whole label evaluation and context rules go here-->
+    <rule name="leading-combining-mark" comment="default WLE rule matching labels with leading combining marks ⍟">
+      <start />
+      <union>
+        <class property="gc:Mn" />
+        <class property="gc:Mc" />
+      </union>
+    </rule>
+    <rule name="no-mix-teh-marbuta-goal" ref="100" comment="do not mix Arabic letters TEH MARBUTA and FEH WITH DOT MOVED BELOW in the same label">
+      <choice>
+        <rule>
+          <char cp="0629" />
+          <any count="0+" />
+          <char cp="06C3" />
+        </rule>
+        <rule>
+          <char cp="06C3" />
+          <any count="0+" />
+          <char cp="0629" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-feh-with-dot-moved-below" ref="100" comment="do not mix Arabic letters FEH and FEH WITH DOT MOVED BELOW in the same label">
+      <choice>
+        <rule>
+          <char cp="0641" />
+          <any count="0+" />
+          <char cp="06A2" />
+        </rule>
+        <rule>
+          <char cp="06A2" />
+          <any count="0+" />
+          <char cp="0641" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-feh-qaf-with-dot-above" ref="100" comment="do not mix Arabic letters FEH and QAF WITH DOT ABOVE in the same label">
+      <choice>
+        <rule>
+          <char cp="0641" />
+          <any count="0+" />
+          <char cp="06A7" />
+        </rule>
+        <rule>
+          <char cp="06A7" />
+          <any count="0+" />
+          <char cp="0641" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-qaf-with-dot-above" ref="100" comment="do not mix Arabic letters QAF and QAF WITH DOT ABOVE in the same label">
+      <choice>
+        <rule>
+          <char cp="0642" />
+          <any count="0+" />
+          <char cp="06A7" />
+        </rule>
+        <rule>
+          <char cp="06A7" />
+          <any count="0+" />
+          <char cp="0642" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-kaf-keheh" ref="100" comment="do not mix Arabic letters KAF and KEHEH in the same label">
+      <choice>
+        <rule>
+          <char cp="0643" />
+          <any count="0+" />
+          <char cp="06A9" />
+        </rule>
+        <rule>
+          <char cp="06A9" />
+          <any count="0+" />
+          <char cp="0643" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-kaf-swash" ref="100" comment="do not mix Arabic letters KAF and SWASH KAF in the same label">
+      <choice>
+        <rule>
+          <char cp="0643" />
+          <any count="0+" />
+          <char cp="06AA" />
+        </rule>
+        <rule>
+          <char cp="06AA" />
+          <any count="0+" />
+          <char cp="0643" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-heh-doachashmee" ref="100" comment="do not mix Arabic letters HEH and HEH DOACHASHMEE in the same label">
+      <choice>
+        <rule>
+          <char cp="0647" />
+          <any count="0+" />
+          <char cp="06BE" />
+        </rule>
+        <rule>
+          <char cp="06BE" />
+          <any count="0+" />
+          <char cp="0647" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-heh-goal" ref="100" comment="do not mix Arabic letters HEH and HEH GOAL in the same label">
+      <choice>
+        <rule>
+          <char cp="0647" />
+          <any count="0+" />
+          <char cp="06C1" />
+        </rule>
+        <rule>
+          <char cp="06C1" />
+          <any count="0+" />
+          <char cp="0647" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-heh-ae" ref="100" comment="do not mix Arabic letters HEH and AE in the same label">
+      <choice>
+        <rule>
+          <char cp="0647" />
+          <any count="0+" />
+          <char cp="06D5" />
+        </rule>
+        <rule>
+          <char cp="06D5" />
+          <any count="0+" />
+          <char cp="0647" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-alef-maksura-farsi-yeh" ref="100" comment="do not mix Arabic letters ALEF MAKSURA and FARSI YEH in the same label">
+      <choice>
+        <rule>
+          <char cp="0649" />
+          <any count="0+" />
+          <char cp="06CC" />
+        </rule>
+        <rule>
+          <char cp="06CC" />
+          <any count="0+" />
+          <char cp="0649" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-peh-noon-with-three-dots-above" ref="100" comment="do not mix Arabic letters PEH and NOON WITH THREE DOTS ABOVE in the same label">
+      <choice>
+        <rule>
+          <char cp="067E" />
+          <any count="0+" />
+          <char cp="06BD" />
+        </rule>
+        <rule>
+          <char cp="06BD" />
+          <any count="0+" />
+          <char cp="067E" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-kaf-with-ring-gaf" ref="100" comment="do not mix Arabic letters KAF WITH RING and GAF in the same label">
+      <choice>
+        <rule>
+          <char cp="06AB" />
+          <any count="0+" />
+          <char cp="06AF" />
+        </rule>
+        <rule>
+          <char cp="06AF" />
+          <any count="0+" />
+          <char cp="06AB" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-kaf-with-ring-keheh-with-three-dots-above" ref="100" comment="do not mix Arabic letters KAF WITH RING and KEHEH WITH THREE DOTS ABOVE">
+      <choice>
+        <rule>
+          <char cp="06AB" />
+          <any count="0+" />
+          <char cp="0763" />
+        </rule>
+        <rule>
+          <char cp="0763" />
+          <any count="0+" />
+          <char cp="06AB" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-gaf-keheh-with-three-dots-above" ref="100" comment="do not mix Arabic letters GAF and KEHEH WITH THREE DOTS ABOVE in the same label">
+      <choice>
+        <rule>
+          <char cp="06AF" />
+          <any count="0+" />
+          <char cp="0763" />
+        </rule>
+        <rule>
+          <char cp="0763" />
+          <any count="0+" />
+          <char cp="06AF" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-noon-with-three-dots-above-yeh-with-three-dots-below" ref="100" comment="do not mix Arabic letters NOON WITH THREE DOTS ABOVE and YEH WITH THREE DOTS BELOW in the same label">
+      <choice>
+        <rule>
+          <char cp="06BD" />
+          <any count="0+" />
+          <char cp="06D1" />
+        </rule>
+        <rule>
+          <char cp="06D1" />
+          <any count="0+" />
+          <char cp="06BD" />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="no-mix-heh-goal-ae" ref="100" comment="do not mix Arabic letters HEH GOAL and AE in the same label">
+      <choice>
+        <rule>
+          <char cp="06C1" />
+          <any count="0+" />
+          <char cp="06D5" />
+        </rule>
+        <rule>
+          <char cp="06D5" />
+          <any count="0+" />
+          <char cp="06C1" />
+        </rule>
+      </choice>
+    </rule>
+    <!--Action elements go here - order defines precedence-->
+    <action disp="invalid" match="leading-combining-mark" comment="labels with leading combining marks are invalid ⍟" />
+    <action disp="invalid" any-variant="out-of-repertoire-var" comment="any variant label with a code point out of repertoire is invalid ⍟" />
+    <action disp="invalid" match="no-mix-teh-marbuta-goal" ref="100" comment="do not mix Arabic letters TEH MARBUTA and FEH WITH DOT MOVED BELOW in the same label" />
+    <action disp="invalid" match="no-mix-feh-with-dot-moved-below" ref="100" comment="do not mix Arabic letters FEH and FEH WITH DOT MOVED BELOW in the same label" />
+    <action disp="invalid" match="no-mix-feh-qaf-with-dot-above" ref="100" comment="do not mix Arabic letters FEH and QAF WITH DOT ABOVE in the same label" />
+    <action disp="invalid" match="no-mix-qaf-with-dot-above" ref="100" comment="do not mix Arabic letters QAF and QAF WITH DOT ABOVE in the same label" />
+    <action disp="invalid" match="no-mix-kaf-keheh" ref="100" comment="do not mix Arabic letters KAF and KEHEH in the same label" />
+    <action disp="invalid" match="no-mix-kaf-swash" ref="100" comment="do not mix Arabic letters KAF and SWASH KAF in the same label" />
+    <action disp="invalid" match="no-mix-heh-doachashmee" ref="100" comment="do not mix Arabic letters HEH and HEH DOACHASHMEE in the same label" />
+    <action disp="invalid" match="no-mix-heh-goal" ref="100" comment="do not mix Arabic letters HEH and HEH GOAL in the same label" />
+    <action disp="invalid" match="no-mix-heh-ae" ref="100" comment="do not mix Arabic letters HEH and AE in the same label" />
+    <action disp="invalid" match="no-mix-alef-maksura-farsi-yeh" ref="100" comment="do not mix Arabic letters ALEF MAKSURA and FARSI YEH in the same label" />
+    <action disp="invalid" match="no-mix-peh-noon-with-three-dots-above" ref="100" comment="do not mix Arabic letters PEH and NOON WITH THREE DOTS ABOVE in the same label" />
+    <action disp="invalid" match="no-mix-kaf-with-ring-gaf" ref="100" comment="do not mix Arabic letters KAF WITH RING and GAF in the same label" />
+    <action disp="invalid" match="no-mix-kaf-with-ring-keheh-with-three-dots-above" ref="100" comment="do not mix Arabic letters KAF WITH RING and KEHEH WITH THREE DOTS ABOVE" />
+    <action disp="invalid" match="no-mix-gaf-keheh-with-three-dots-above" ref="100" comment="do not mix Arabic letters GAF and KEHEH WITH THREE DOTS ABOVE in the same label" />
+    <action disp="invalid" match="no-mix-noon-with-three-dots-above-yeh-with-three-dots-below" ref="100" comment="do not mix Arabic letters NOON WITH THREE DOTS ABOVE and YEH WITH THREE DOTS BELOW in the same label" />
+    <action disp="invalid" match="no-mix-heh-goal-ae" ref="100" comment="do not mix Arabic letters HEH GOAL and AE in the same label" />
+    <action disp="blocked" any-variant="blocked" comment="variant labels containing blocked variants are blocked ⍟" />
+    <action disp="allocatable" all-variants="allocatable" comment="variant labels with all variants allocatable are allocatable ⍟" />
+    <action disp="valid" comment="catch all (default action) ⍟" />
+  </rules>
+</lgr>
