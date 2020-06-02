@@ -92,21 +92,22 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
     return res
 
 
-def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
-    res = {}
+def _get_collisions(lgr, label_cplist, labels, idna_encoder, lgr_actions, is_set):
+    res = {'collisions_checked': True}
     label_u = cp_to_ulabel(label_cplist)
-    set_labels = [l.strip() for l in set_labels]
+    labels = [l.strip() for l in labels]
+    debug_name = _("LGR set labels") if is_set else _("TLD list")
 
     # if label is in the LGR set labels skip
-    if label_u in set_labels:
-        res['collisions_error'] = _('The label is in the LGR set labels.')
+    if label_u in labels:
+        res['collisions_error'] = _('The label is in the {}.'.format(debug_name))
         return res
 
     # check for collisions
-    indexes = get_collisions(lgr, set_labels + [label_u], quiet=False)
+    indexes = get_collisions(lgr, labels + [label_u], quiet=False)
     if len(indexes) > 1:
         # there should be one collision as set labels are checked, this error should not happen
-        res['collisions_error'] = _('ERROR more than one collision, please check your LGR set labels')
+        res['collisions_error'] = _('ERROR more than one collision, please check your {}'.format(debug_name))
         return res
 
     if len(indexes) == 0:
@@ -119,17 +120,17 @@ def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
     for col in collisions:
         if col['label'] == label_u:
             collision = col
-        if col['label'] in set_labels:
+        if col['label'] in labels:
             collide_with.append(col)
 
     if not collision:
         # this should not happen
-        res['collisions_error'] = _('ERROR cannot retrieve label in collisions, please check your LGR set labels')
+        res['collisions_error'] = _('ERROR cannot retrieve label in collisions, please check your {}'.format(debug_name))
         return res
 
     if len(collide_with) != 1:
-        res['collisions_error'] = _('ERROR collision with more than one label in the LGR set labels,'
-                                    'please check your LGR set labels')
+        res['collisions_error'] = _('ERROR collision with more than one label in the {0},'
+                                    'please check your {0}'.format(debug_name))
         return res
 
     collide_with = collide_with[0]
@@ -160,7 +161,8 @@ def _get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions):
     return res
 
 
-def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=lambda x: x.encode('idna')):
+def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=lambda x: x.encode('idna'),
+                   check_collisions=None):
     """
     Evaluate the given `label_cplist` against the given `lgr`, which includes:
     * checking eligibility of the input label
@@ -173,12 +175,15 @@ def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=la
     :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.
                                    Set to negative to always return variants.
     :param idna_encoder: a function used to encode a string using IDNA
+    :param check_collisions: Check for collision against the provided list of labels
     :return: a dict containing results of the evaluation.
     """
     res, lgr_actions = _get_validity(lgr, label_cplist, idna_encoder)
 
     if res['eligible']:
         res.update(_get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions))
+        if check_collisions is not None:
+            res.update(_get_collisions(lgr, label_cplist, check_collisions, idna_encoder, lgr_actions, False))
 
     return res
 
@@ -212,7 +217,7 @@ def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
     # delegated labels (and any of their variants, whether blocked or allocatable).
     if res['eligible']:
         # TODO may need lgr_script and script_lgr_actions for variants and rules
-        res.update(_get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions))
+        res.update(_get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions, True))
 
     # Third, now that the label is known to be valid, and not in collision, use the appropriate element LGR to
     # generate all allocatable variants.

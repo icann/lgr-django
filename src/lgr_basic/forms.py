@@ -28,7 +28,8 @@ class ValidateLabelSimpleForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(ValidateLabelSimpleForm, self).clean()
-        if self.cleaned_data.get('collisions') or self.cleaned_data.get('labels_file'):
+        if (self.cleaned_data.get('collisions') and len(cleaned_data.get('labels', [])) > 1) or self.cleaned_data.get(
+                'labels_file'):
             if not self.cleaned_data.get('email'):
                 self.add_error('email', _('E-mail is mandatory to get the tasks results'))
 

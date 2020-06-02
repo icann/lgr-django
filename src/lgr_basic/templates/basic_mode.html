@@ -133,7 +133,7 @@
                                 <label>
                                     {% include "lgr_editor/_form_field.html" with field=form.collisions %}
                                     <span>
-                                        {% trans 'Check for collisions' %}
+                                        {% trans 'Check for collision with existing TLDs' %}
                                     </span>
                                 </label>
                             </div>
@@ -288,7 +288,7 @@
 
             function isEmailPartVisible () {
                 let isVisible = false;
-                if (isFormUploadActivated === true || $('#check-for-collision').is(':checked')) {
+                if (isFormUploadActivated === true || ($('#check-for-collision').is(':checked') && $('.label-text').length > 1)) {
                     isVisible = true;
                 }
 
@@ -300,7 +300,7 @@
             }
 
             function buttonValidateEnabled () {
-                const isCheckForCollision = isFormUploadActivated === true ||  $('#check-for-collision').is(':checked');
+                const isCheckForCollision = isFormUploadActivated === true || ($('#check-for-collision').is(':checked') && $('.label-text').length > 1);
                 let emptyLabel = false;
 
                 if (isCheckForCollision === true) {
@@ -341,6 +341,7 @@
                 $(el).parent().parent().remove();
                 $('.add-label').last().css('display', 'inline-block');
                 buttonValidateEnabled();
+                isEmailPartVisible();
             }
 
             function parseLabelsStart (labelsList) {
@@ -380,6 +381,7 @@
 
                 $('.add-label').last().css('display', 'inline-block');
                 buttonValidateEnabled();
+                isEmailPartVisible();
             }
 
             buttonValidateEnabled();

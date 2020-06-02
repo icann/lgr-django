@@ -32,7 +32,8 @@ class NeedAsyncProcess(Exception):
 def evaluate_label_from_info(request,
                              lgr_info, label_cplist, script_lgr_name,
                              email,
-                             threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE):
+                             threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE,
+                             check_collisions=None):
     """
     Evaluate a label in an LGR.
 
@@ -45,6 +46,7 @@ def evaluate_label_from_info(request,
     :param email: Required to launch processing in task queue.
     :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.
                                    Set to negative to always return variants.
+    :param check_collisions: Check for collisions with the provided list of labels
     :return: a dict containing results of the evaluation, empty if process is asynchronous.
     """
     ctx = {}
@@ -78,7 +80,8 @@ def evaluate_label_from_info(request,
         if not need_async:
             ctx = evaluate_label(lgr_info.lgr, label_cplist,
                                  threshold_include_vars=threshold_include_vars,
-                                 idna_encoder=udata.idna_encode_label)
+                                 idna_encoder=udata.idna_encode_label,
+                                 check_collisions=check_collisions)
         else:
             storage_path = session_get_storage(request)
             validate_label_task.delay(lgr_info.to_dict(), label_cplist, email, storage_path)
