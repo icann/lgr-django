@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.conf.urls import url
 from . import views
+from .views import LanguageAutocomplete
 
 LGR_SLUG_FORMAT_WITH_OPT_SET = r'(?:(?P<lgr_set_id>[\w\_\-\.]+)/)?(?P<lgr_id>[\w\_\-\.]+)'
 LGR_SLUG_FORMAT = r'(?P<lgr_id>[\w\_\-\.]+)'
@@ -145,6 +146,11 @@ urlpatterns = [
     url(r'^label_forms/$',
         views.label_forms,
         name='lgr_label_forms'),
+
+    # autocompletion
+    url(r'^language-autocomplete/$',
+        LanguageAutocomplete.as_view(),
+        name='language-autocomplete'),
 
     url(r'^about/$',
         views.about,

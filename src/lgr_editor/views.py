@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 import json
 
+from dal import autocomplete
 from lxml.etree import XMLSyntaxError
 
 import os
@@ -58,7 +59,7 @@ from .forms import (AddCodepointForm,
                     AddMultiCodepointsForm,
                     LanguageFormSet,
                     LabelFormsForm,
-                    EditCodepointsForm)
+                    EditCodepointsForm, IANA_LANG_REGISTRY)
 
 from .lgr_exceptions import lgr_exception_to_text
 from .api import (session_open_lgr,
@@ -1966,3 +1967,9 @@ def about(request):
     return render(request,
                   'lgr_editor/about.html',
                   context={'output': output})
+
+
+class LanguageAutocomplete(autocomplete.Select2ListView):
+
+    def get_list(self):
+        return sorted(IANA_LANG_REGISTRY)
