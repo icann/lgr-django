@@ -22,7 +22,9 @@ from lgr_tools.api import (lgr_diff_labels,
                            lgr_set_annotate_labels,
                            lgr_cross_script_variants,
                            lgr_validate_label,
-                           lgr_set_validate_label, lgr_validate_labels, lgr_basic_collision_labels)
+                           lgr_set_validate_label,
+                           lgr_validate_labels,
+                           lgr_basic_collision_labels)
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +36,7 @@ def _lgr_tool_task(storage_path, base_filename, email_subject,
 
 
     :param storage_path: The place where results will be stored
-    :param base_filename: The beginning of the filename that will be generated
+    :param base_filename: The filename that will be generated (.txt is added if it has no extension)
     :param email_subject: The subject for the e-mail to be sent
     :param email_body: The body of the e-mail to be sent
     :param email_address: The e-mail address where the results will be sent
@@ -44,15 +46,17 @@ def _lgr_tool_task(storage_path, base_filename, email_subject,
     sio = BytesIO()
     email = EmailMessage(subject='{}'.format(email_subject),
                          to=[email_address])
+    if '.' not in base_filename:
+        base_filename += '.txt'
 
     try:
-        with GzipFile(filename='{}.txt'.format(base_filename),
+        with GzipFile(filename=base_filename,
                       fileobj=sio, mode='w') as gzf:
             for line in cb(**cb_kwargs):
                 gzf.write(line.encode('utf-8'))
 
-        filename = '{0}_{1}.txt.gz'.format(time.strftime('%Y%m%d_%H%M%S'),
-                                           base_filename)
+        filename = '{0}_{1}.gz'.format(time.strftime('%Y%m%d_%H%M%S'),
+                                       base_filename)
 
         storage = FileSystemStorage(location=storage_path,
                                     file_permissions_mode=0o440)
@@ -366,7 +370,7 @@ def lgr_set_validate_label_task(lgr_json, script_lgr_json, label, email_address,
 
 
 @shared_task
-def lgr_set_validate_labels_task(lgr_json, labels_json, email_address, storage_path):
+def validate_labels_task(lgr_json, labels_json, email_address, storage_path):
     """
     Compute multiple labels validation variants of labels in a LGR.
 
@@ -382,12 +386,12 @@ def lgr_set_validate_labels_task(lgr_json, labels_json, email_address, storage_p
     logger.info("Starting task 'validate label' for %s, for file '%s'",
                 lgr_info.name, labels_info.name)
 
-    body = "Hi,\nThe processing of labels validation for file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
-                                                                                               lgr=lgr_info.name)
+    body = "Hi,\nThe processing of variant computation for file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
+                                                                                                 lgr=lgr_info.name)
 
     _lgr_tool_task(storage_path,
-                   base_filename='labels_validation_{0}'.format(lgr_info.name),
-                   email_subject='LGR Toolset labels validation result',
+                   base_filename='labels_variants_{0}.csv'.format(lgr_info.name),
+                   email_subject='LGR Toolset variants computation result',
                    email_body=body,
                    email_address=email_address,
                    cb=lgr_validate_labels,

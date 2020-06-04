@@ -1,0 +1,25 @@
+{% extends base_template|default:"_base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.lgr %}
+        {% include "lgr_editor/_form_field.html" with field=form.labels %}
+        <p>{% blocktrans %}As the computing may be very long, we will warn by e-mail once the result can be downloaded. Please provide a valid e-mail address:{% endblocktrans %}</p>
+        {% include "lgr_editor/_form_field.html" with field=form.email %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">{% trans "Compute variants" %}</button>
+        </div>
+    </form>
+    <p>
+        {% blocktrans trimmed %}
+            <strong class="text-danger"><i class="glyphicon glyphicon-alert"></i> Note that variants tool is not available for LGR sets.</strong>
+        {% endblocktrans %}
+    </p>
+{% endblock content %}

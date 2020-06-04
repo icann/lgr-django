@@ -265,3 +265,25 @@ class LGRHarmonizeSelector(forms.Form):
         self.fields['rz_lgr'].choices = [('', ''), ] + self.fields['rz_lgr'].choices
         self.fields['lgr_1'].initial = lgr_id
         self.fields['rz_lgr'].initial = ''
+
+
+class LGRComputeVariantsSelector(forms.Form):
+    lgr = forms.ChoiceField(label=_("LGR"),
+                            help_text=_('LGR to use in tool'),
+                            required=True)
+
+    labels = forms.FileField(label=_("Labels"),
+                             help_text=_('List of labels to use in tool. '
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'))
+
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=True)
+
+    def __init__(self, *args, **kwargs):
+        session_lgrs = kwargs.pop('session_lgrs', [])
+        lgr_id = kwargs.pop('lgr_id', '')
+        super(LGRComputeVariantsSelector, self).__init__(*args, **kwargs)
+        # dynamically append the session LGRs (by copy, not by reference)
+        self.fields['lgr'].choices = ((name, name) for name in session_lgrs)
+        self.fields['lgr'].initial = lgr_id

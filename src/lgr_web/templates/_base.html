@@ -67,12 +67,14 @@
                                     {% url 'lgr_tools_diff' lgr_set_id as lgr_tools_diff_url %}
                                     {% url 'lgr_tools_collisions' lgr_set_id as lgr_tools_collisions_url %}
                                     {% url 'lgr_tools_annotate' lgr_set_id as lgr_tools_annotate_url %}
+                                    {% url 'lgr_tools_variants' lgr_set_id as lgr_tools_variants_url %}
                                     {% url 'lgr_tools_cross_script' lgr_set_id as lgr_tools_cross_script_url %}
                                 {% else %}
                                     {% url 'lgr_tools_compare' lgr_id as lgr_tools_compare_url %}
                                     {% url 'lgr_tools_diff' lgr_id as lgr_tools_diff_url %}
                                     {% url 'lgr_tools_collisions' lgr_id as lgr_tools_collisions_url %}
                                     {% url 'lgr_tools_annotate' lgr_id as lgr_tools_annotate_url %}
+                                    {% url 'lgr_tools_variants' lgr_id as lgr_tools_variants_url %}
                                     {% url 'lgr_tools_cross_script' lgr_id as lgr_tools_cross_script_url %}
                                     {% url 'lgr_tools_harmonize' lgr_id as lgr_tools_harmonize_url %}
                                 {% endif %}
@@ -119,6 +121,14 @@
                                         </a>
                                     </li>
                                     {% if not lgr_id or not is_set %}
+                                       <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_tools_variants_url }}"
+                                               title="{% trans 'Compute variants of of labels' %}"
+                                               data-placement="bottom">
+                                                <i class="glyphicon glyphicon-pencil"></i>
+                                                {% trans "Compute variants" %}
+                                            </a>
+                                        </li>
                                         <li class="btn btn-block show-tooltip">
                                             <a href="{{ lgr_tools_harmonize_url }}"
                                                title="{% trans 'Perform harmonization on LGRs' %}"
