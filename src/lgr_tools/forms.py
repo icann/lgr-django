@@ -167,13 +167,6 @@ class LGRCollisionSelector(forms.Form):
         self.fields['lgr'].choices = ((name, name) for name in session_lgrs)
         self.fields['lgr'].initial = lgr_id
 
-    def clean(self):
-        cleaned_data = super(LGRCollisionSelector, self).clean()
-        if not cleaned_data.get('download_tlds') and not cleaned_data.get('labels'):
-            self.add_error('labels', _('Please provide a file containing labels to test or click the download TLDs box'))
-
-        return cleaned_data
-
 
 class LGRSetCompatibleForm(forms.Form):
     lgr = forms.ChoiceField(label=_("LGR"),

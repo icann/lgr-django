@@ -319,7 +319,7 @@ def validate_label_task(lgr_json, label, email_address, storage_path):
                                                                                                    lgr=lgr_info.name)
 
     _lgr_tool_task(storage_path,
-                   base_filename='label_validation_{0}'.format(lgr_info.name),
+                   base_filename='label_validation_{0}.csv'.format(lgr_info.name),
                    email_subject='LGR Toolset label validation result',
                    email_body=body,
                    email_address=email_address,
@@ -357,7 +357,7 @@ def lgr_set_validate_label_task(lgr_json, script_lgr_json, label, email_address,
                                                                    script=script_lgr.name)
 
     _lgr_tool_task(storage_path,
-                   base_filename='label_validation_{0}'.format(lgr_info.name),
+                   base_filename='label_validation_{0}.csv'.format(lgr_info.name),
                    email_subject='LGR Toolset label validation result',
                    email_body=body,
                    email_address=email_address,

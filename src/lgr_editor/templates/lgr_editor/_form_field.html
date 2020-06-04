@@ -2,8 +2,6 @@
 <div class="form-group{% if field.errors %} has-error{% endif %} clearfix">
     <label class="col-sm-{{ label_width|default:2 }} control-label" for="id_{{ field.name }}">{{ field.label }}</label>
     <div class="col col-sm-{{ control_width|default:10 }}">
-        {% if field.field.widget.input_type == 'text' %}
-        {% endif %}
             {{ field|add_class:"form-control" }}
         {% if field.field.widget.input_type == 'text' %}
             <span onClick="cleanInput($(this))" class="search-clear glyphicon glyphicon-remove-circle"></span>

@@ -173,6 +173,7 @@ def lgr_collisions(request, lgr_id):
         email_address = form.cleaned_data['email']
         full_dump = form.cleaned_data['full_dump']
         with_rules = form.cleaned_data['with_rules']
+        with_tlds = False
 
         lgr_info = session_select_lgr(request, lgr_id)
 
@@ -183,6 +184,7 @@ def lgr_collisions(request, lgr_id):
         tlds_json = None
         if form.cleaned_data['download_tlds']:
             tlds_json = LabelInfo.from_form('TLDs', download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
+            with_tlds = True
         lgr_json = lgr_info.to_dict()
         collision_task.delay(lgr_json, labels_json, tlds_json, email_address, full_dump, with_rules,
                              storage_path)
@@ -191,6 +193,7 @@ def lgr_collisions(request, lgr_id):
             'lgr_info': lgr_info,
             'labels_file': labels_file.name,
             'icann_tlds': settings.ICANN_TLDS,
+            'with_tlds': with_tlds,
             'email': email_address,
             'lgr_id': lgr_id if lgr_id is not None else '',
             'lgr': lgr_info.lgr if lgr_info is not None else '',
