@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-02 20:49+0000\n"
-"PO-Revision-Date: 2019-10-02 16:52-0400\n"
+"POT-Creation-Date: 2020-06-04 17:33+0000\n"
+"PO-Revision-Date: 2020-06-04 13:41-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.3\n"
 
 #: forms.py:18
 msgid "Label"
@@ -41,16 +41,16 @@ msgstr ""
 "le résultat pourra être téléchargé. Fournissez une adresse e-mail valide "
 "s'il vous plaît."
 
-#: forms.py:33
+#: forms.py:34
 msgid "E-mail is mandatory to get the tasks results"
 msgstr ""
 "L'adresse e-mail est obligatoire pour recevoir les résultats des tâches"
 
-#: forms.py:36 forms.py:37
+#: forms.py:37 forms.py:38
 msgid "Required"
 msgstr "Requis"
 
-#: forms.py:41 forms.py:42
+#: forms.py:42 forms.py:43
 msgid "Unknown error, please report"
 msgstr "Erreur inconnue, reportez l'erreur s'il vous plait"
 
@@ -66,15 +66,23 @@ msgstr "Retourner à l'écran d'accueil"
 msgid "Advanced mode"
 msgstr "Mode avancé"
 
-#: templates/basic_mode.html:47
+#: templates/basic_mode.html:47 templates/basic_mode.html:253
+msgid "Display all label forms"
+msgstr "Afficher toutes les formes d'un label"
+
+#: templates/basic_mode.html:48
+msgid "Label forms"
+msgstr "Formes"
+
+#: templates/basic_mode.html:53
 msgid "About LGR Toolset"
 msgstr "À propos de l'application LGR"
 
-#: templates/basic_mode.html:48 templates/basic_mode.html:229
+#: templates/basic_mode.html:54 templates/basic_mode.html:235
 msgid "About"
 msgstr "À propos"
 
-#: templates/basic_mode.html:68
+#: templates/basic_mode.html:74
 msgid ""
 "The server was unable to complete the request, most likely because too many "
 "resources were required to compute the query. If you check for collision, "
@@ -86,50 +94,53 @@ msgstr ""
 "collision, le résultat peut être toujours en cours de traitement et vous "
 "sera envoyé par mail. Merci de patienter avant de soumettre à nouveau."
 
-#: templates/basic_mode.html:76
+#: templates/basic_mode.html:82
 msgid "A server error occurred."
 msgstr "Une erreur de serveur s'est produite."
 
-#: templates/basic_mode.html:76
+#: templates/basic_mode.html:82
 msgid "code:"
 msgstr "code :"
 
-#: templates/basic_mode.html:76
+#: templates/basic_mode.html:82
 msgid "Please contact the administrator before submitting again."
 msgstr ""
 "Veuillez contacter l'administrateur avant de soumettre votre requête à "
 "nouveau."
 
-#: templates/basic_mode.html:82
+#: templates/basic_mode.html:88
 msgid "Validate label(s) against"
 msgstr "Valider le(s) label(s) avec"
 
-#: templates/basic_mode.html:95
+#: templates/basic_mode.html:93
+msgid "View LGR as"
+msgstr "Voir la LGR en"
+
+#: templates/basic_mode.html:106
 msgid "Manually input label(s)"
 msgstr "Entrer le(s) label(s) manuellement"
 
-#: templates/basic_mode.html:106
+#: templates/basic_mode.html:117
 msgid "Upload a list of labels"
 msgstr "Télécharger une liste de labels"
 
-#: templates/basic_mode.html:125
-msgid "Check for collisions"
-msgstr "Vérifier les collisions"
+#: templates/basic_mode.html:136
+msgid "Check for collision with existing TLDs"
+msgstr "Vérifier les collisions avec la liste de TLDs"
 
-#: templates/basic_mode.html:139
+#: templates/basic_mode.html:150
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision and validation tasks "
-"processing can take minutes, even hours.<br> Both results will be sent to "
-"%(email)s in two separate emails. Do not resubmit until you receive both "
-"reports."
+"processing can take minutes, even hours.<br> The result will be sent to "
+"%(email)s. Do not resubmit until you receive the report."
 msgstr ""
-"Votre requête a bien été envoyée, les tâches de collision et de validation "
-"peuvent prendre plusieurs minutes, voire plusieurs heures.<br> Les deux "
-"résultats seront envoyés à %(email)s en deux e-mails distincts. Ne renvoyez "
-"pas de requête tant que vous n'avez pas reçu les deux rapports."
+"Votre requête a bien été envoyée, le calcul des collision et la tâche de "
+"validation peuvent prendre plusieurs minutes, voire plusieurs heures.<br> Le "
+"résultat sera envoyé à %(email)s. Ne renvoyez pas de requête tant que vous "
+"n'avez pas reçu le rapport."
 
-#: templates/basic_mode.html:151
+#: templates/basic_mode.html:162
 #, python-format
 msgid ""
 "Your request was sent successfully, the validation task processing can take "
@@ -141,7 +152,7 @@ msgstr ""
 "%(email)s. Ne renvoyez pas de requête tant que vous n'avez pas reçu le "
 "rapport."
 
-#: templates/basic_mode.html:163
+#: templates/basic_mode.html:174
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision task processing can take "
@@ -153,38 +164,34 @@ msgstr ""
 "%(email)s. Ne renvoyez pas de requête tant que vous n'avez pas reçu le "
 "rapport."
 
-#: templates/basic_mode.html:173
+#: templates/basic_mode.html:184
 msgid "Validate"
 msgstr "Valider"
 
-#: templates/basic_mode.html:177
-msgid "View LGR as"
-msgstr "Voir la LGR en"
-
-#: templates/basic_mode.html:191
+#: templates/basic_mode.html:197
 msgid "Your saved results"
 msgstr "Vos résultats sauvegardés"
 
-#: templates/basic_mode.html:192
+#: templates/basic_mode.html:198
 msgid "The following files contains your tools computation results."
 msgstr ""
 "Ces fichiers contiennent les résultats des calculs fournis par les outils."
 
-#: templates/basic_mode.html:195
+#: templates/basic_mode.html:201
 msgid "Note that these files could be cleaned up regularly."
 msgstr ""
 "Veuillez noter que ces fichiers pourraient être régulièrement supprimés."
 
-#: templates/basic_mode.html:200
+#: templates/basic_mode.html:206
 #, python-format
 msgid "Download %(file)s"
 msgstr "Télécharger %(file)s"
 
-#: templates/basic_mode.html:235
+#: templates/basic_mode.html:241
 msgid "Close"
 msgstr "Fermer"
 
-#: views.py:60
+#: views.py:83
 msgid ""
 "Input label generates too many variants to compute them all quickly. You "
 "need to enter your email address and will receive a notification once "
@@ -193,6 +200,19 @@ msgstr ""
 "Le label entré peut générer trop de variantes pour rapidement toutes les "
 "calculer. Vous devez rentrer votre adresse e-mail et recevrez une "
 "notification une fois que le processus est terminé"
+
+#, python-format
+#~ msgid ""
+#~ "Your request was sent successfully, the collision and validation tasks "
+#~ "processing can take minutes, even hours.<br> Both results will be sent to "
+#~ "%(email)s in two separate emails. Do not resubmit until you receive both "
+#~ "reports."
+#~ msgstr ""
+#~ "Votre requête a bien été envoyée, les tâches de collision et de "
+#~ "validation peuvent prendre plusieurs minutes, voire plusieurs heures.<br> "
+#~ "Les deux résultats seront envoyés à %(email)s en deux e-mails distincts. "
+#~ "Ne renvoyez pas de requête tant que vous n'avez pas reçu les deux "
+#~ "rapports."
 
 #~ msgid "Collision task result will be sent to "
 #~ msgstr "Le résultat du calcul de collisions sera envoyé à "
@@ -677,9 +697,6 @@ msgstr ""
 
 #~ msgid "Cannot import LGR file(s):"
 #~ msgstr "Impossible d'importer le(s) fichier(s) LGR :"
-
-#~ msgid "Display forms"
-#~ msgstr "Afficher les formes"
 
 #~ msgid "Code point sequence"
 #~ msgstr "Séquence de code points"

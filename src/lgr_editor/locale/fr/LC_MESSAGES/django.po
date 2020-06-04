@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-02 20:49+0000\n"
+"POT-Creation-Date: 2020-06-04 17:33+0000\n"
 "PO-Revision-Date: 2019-08-14 11:15-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -74,7 +74,7 @@ msgstr ""
 "code point (%(first_cp)s)"
 
 #: forms/codepoints.py:78 forms/importer.py:14 forms/importer.py:27
-#: forms/metadata.py:50
+#: forms/metadata.py:55
 msgid "Validating repertoire"
 msgstr "Répertoire de validation"
 
@@ -134,7 +134,7 @@ msgstr "Nom du set"
 msgid "Label"
 msgstr "Label"
 
-#: forms/labels.py:15 forms/metadata.py:46
+#: forms/labels.py:15 forms/metadata.py:50
 msgid "Unicode version"
 msgstr "Version d'Unicode"
 
@@ -142,53 +142,53 @@ msgstr "Version d'Unicode"
 msgid "The unicode version used"
 msgstr "Version d'Unicode"
 
-#: forms/metadata.py:39
+#: forms/metadata.py:41
 msgid "Version"
 msgstr "Version"
 
-#: forms/metadata.py:40
+#: forms/metadata.py:42
 msgid "Version comment"
 msgstr "Commentaire de version"
 
-#: forms/metadata.py:41
+#: forms/metadata.py:43
 msgid "Date"
 msgstr "Date"
 
-#: forms/metadata.py:42
+#: forms/metadata.py:44
 msgid "Scope"
 msgstr "Portée"
 
-#: forms/metadata.py:43
+#: forms/metadata.py:46
 msgid "Scope type"
 msgstr "Type de la portée"
 
-#: forms/metadata.py:44
+#: forms/metadata.py:48
 msgid "Validity start"
 msgstr "Début de la validité"
 
-#: forms/metadata.py:45
+#: forms/metadata.py:49
 msgid "Validity end"
 msgstr "Fin de la validité"
 
-#: forms/metadata.py:47 templates/lgr_editor/codepoint_view.html:227
+#: forms/metadata.py:52 templates/lgr_editor/codepoint_view.html:227
 #: templates/lgr_editor/references.html:14
 #: templates/lgr_editor/references.html:51
 msgid "Description"
 msgstr "Description"
 
-#: forms/metadata.py:48
+#: forms/metadata.py:53
 msgid "Description type"
 msgstr "Type de la description"
 
-#: forms/metadata.py:53
+#: forms/metadata.py:58
 msgid "Built-in"
 msgstr "Fournis"
 
-#: forms/metadata.py:65
+#: forms/metadata.py:70
 msgid "My LGRs"
 msgstr "Mes LGRs"
 
-#: forms/metadata.py:75
+#: forms/metadata.py:80
 msgid "Language"
 msgstr "Langage"
 
@@ -377,7 +377,7 @@ msgstr "%(lgr_name)s"
 
 #: templates/lgr_editor/_rule_editor_widgets.html:5
 #: templates/lgr_editor/codepoint_view.html:244
-#: templates/lgr_editor/metadata.html:32
+#: templates/lgr_editor/metadata.html:45
 #: templates/lgr_editor/rules_edit.html:40
 #: templates/lgr_editor/rules_edit.html:71
 #: templates/lgr_editor/rules_edit.html:103
@@ -385,7 +385,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 #: templates/lgr_editor/_rule_editor_widgets.html:8
-#: templates/lgr_editor/metadata.html:33
+#: templates/lgr_editor/metadata.html:46
 #: templates/lgr_editor/references.html:39
 #: templates/lgr_editor/rules_edit.html:43
 #: templates/lgr_editor/rules_edit.html:74
@@ -724,7 +724,7 @@ msgstr "U-Label"
 msgid "A-label"
 msgstr "A-Label"
 
-#: templates/lgr_editor/metadata.html:11
+#: templates/lgr_editor/metadata.html:23
 msgid "There was an error saving; please see error(s) below"
 msgstr ""
 "Il y a eu une erreur lors de la sauvegarde, merci de regarder ci-dessous"
@@ -1020,7 +1020,7 @@ msgstr "Variante: %(variant|render_char)s"
 msgid "LGR rebuild OK"
 msgstr "Reconstruction de la LGR OK"
 
-#: views.py:114
+#: views.py:115
 msgid ""
 "The LGR you have tried to create already exists in your working session. "
 "Please use a new name."
@@ -1028,7 +1028,7 @@ msgstr ""
 "La LGR que vous essayez de créer existe déjà dans votre session de travail. "
 "Merci d'utiliser un nouveau nom."
 
-#: views.py:148
+#: views.py:149
 msgid ""
 "The LGR you have tried to import already exists in your working session. "
 "Please rename it before importing it."
@@ -1036,7 +1036,7 @@ msgstr ""
 "La LGR que vous essayez d'importer existe déjà dans votre session de "
 "travail. Merci de renommer le fichier avant de l'importer."
 
-#: views.py:154
+#: views.py:155
 msgid ""
 "The LGR you have tried to import already exists in your set. Please rename "
 "it before importing it."
@@ -1044,91 +1044,91 @@ msgstr ""
 "La LGR que vous essayez d'importer existe déjà dans votre ensemble. Merci de "
 "renommer le fichier avant de l'importer."
 
-#: views.py:177
+#: views.py:178
 msgid "The LGR set name already exists. Please use another name."
 msgstr "Ce nom de set LGR existe déjà. Merci d'utiliser un autre nom."
 
-#: views.py:248
+#: views.py:249
 msgid "Testing XML validity using RNG"
 msgstr "Validation du XML par le RNG"
 
-#: views.py:249
+#: views.py:250
 msgid "Testing symmetry"
 msgstr "Test de la symmétrie"
 
-#: views.py:250
+#: views.py:251
 msgid "Testing transitivity"
 msgstr "Test de la transitivité"
 
-#: views.py:251
+#: views.py:252
 msgid "Testing conditional variants"
 msgstr "Test des variantes conditionnelles"
 
-#: views.py:252
+#: views.py:253
 msgid "Generate stats"
 msgstr "Génération des statistiques"
 
-#: views.py:253
+#: views.py:254
 msgid "Rebuilding LGR"
 msgstr "Reconstruction de la LGR"
 
-#: views.py:301
+#: views.py:302
 #, python-format
 msgid "New code point %s added"
 msgstr "Nouveau code point ajouté %s"
 
-#: views.py:374
+#: views.py:375
 msgid "Rule"
 msgstr "Règle"
 
-#: views.py:374
+#: views.py:375
 msgid "Tag(s)"
 msgstr "Tag(s)"
 
-#: views.py:375
+#: views.py:376
 msgid "rule"
 msgstr "règle"
 
-#: views.py:375
+#: views.py:376
 msgid "tag(s)"
 msgstr "tag(s)"
 
-#: views.py:379
+#: views.py:380
 #, python-format
 msgid "%(operation)s successfully added to %(nb_cp)s code point(s)"
 msgstr "%(operation)s ajouté(s) avec succès à %(nb_cp)s code point(s)"
 
-#: views.py:384
+#: views.py:385
 #, python-format
 msgid "%(nb_cp)s code points were not updated to avoid invalid %(operation)s"
 msgstr ""
 "%(nb_cp)s code points n'ont pas été mis à jour pour éviter des %(operation)s "
 "invalides"
 
-#: views.py:516
+#: views.py:517
 #, python-format
 msgid "Automatically added codepoint %s from out-of-repertoire variant"
 msgstr ""
 "Code point %s automatiquement ajouté depuis une variante hors-répertoire"
 
-#: views.py:519
+#: views.py:520
 #, python-format
 msgid "New variant %s added"
 msgstr "Nouvelle variante %s ajoutée"
 
-#: views.py:592
+#: views.py:593
 msgid "Code point edited"
 msgstr "Code point modifié"
 
-#: views.py:744
+#: views.py:745
 msgid "Variants populated"
 msgstr "Les variantes ont été peuplées"
 
-#: views.py:795 views.py:831
+#: views.py:798 views.py:834
 msgid "References updated successfully"
 msgstr "Les références ont été correctement mises à jour"
 
-#: views.py:834
+#: views.py:837
 #, python-format
 msgid ""
 "Variant %(var_codepoint)s for code point %(codepoint)s with when=%(when)s "
@@ -1137,33 +1137,33 @@ msgstr ""
 "La variante %(var_codepoint)s du code point  %(codepoint)s avec when="
 "%(when)s et not-when=%(not_when)s n'a pas été trouvée"
 
-#: views.py:870
+#: views.py:873
 #, python-format
 msgid "Code point %s has been deleted"
 msgstr "Le code point  %s a été supprimé"
 
-#: views.py:892
+#: views.py:895
 #, python-format
 msgid "Variant %(var_cp)s with when='%(when)s' and not-when='%(not_when)s'"
 msgstr ""
 "La variante %(var_cp)s avec when='%(when)s' and not-when='%(not_when)s'"
 
-#: views.py:898
+#: views.py:901
 #, python-format
 msgid "%(var_msg_prefix)s has been deleted"
 msgstr "%(var_msg_prefix)s a été supprimée"
 
-#: views.py:901
+#: views.py:904
 #, python-format
 msgid "%(var_msg_prefix)s could not be deleted because it was not found"
 msgstr ""
 "%(var_msg_prefix)s n'a pas pu être supprimée car elle n'a pas été trouvée"
 
-#: views.py:931
+#: views.py:934
 msgid "New reference created"
 msgstr "Nouvelle référence créée"
 
-#: views.py:1139
+#: views.py:1142
 #, python-format
 msgid ""
 "References to tag %(tag)s have been removed from the repertoire. Do not "
@@ -1172,30 +1172,30 @@ msgstr ""
 "Les références au %(tag)s ont été supprimées du répertoire. N'oubliez pas de "
 "mettre à jour les WLE qui pourraient les utiliser."
 
-#: views.py:1207 views.py:1370 views.py:1452
+#: views.py:1210 views.py:1373 views.py:1455
 msgid "No body specified"
 msgstr "Aucun contenu spécifié"
 
-#: views.py:1216
+#: views.py:1219
 #, python-format
 msgid "Class \"%s\" does not exist"
 msgstr "La classe \"%s\" n'existe pas"
 
-#: views.py:1220
+#: views.py:1223
 #, python-format
 msgid "Class \"%s\" deleted."
 msgstr "Classe \"%s\" supprimée."
 
-#: views.py:1225
+#: views.py:1228
 msgid "No class element found"
 msgstr "Aucune classe trouvée"
 
-#: views.py:1227
+#: views.py:1230
 msgid "Name attribute must be present"
 msgstr "L'attribut name est obligatoire"
 
-#: views.py:1231 views.py:1248 views.py:1392 views.py:1409 views.py:1476
-#: views.py:1489
+#: views.py:1234 views.py:1251 views.py:1395 views.py:1412 views.py:1479
+#: views.py:1492
 #, python-format
 msgid ""
 "Encountered XML syntax error: %s (line number may be wrong, try subtracting "
@@ -1204,73 +1204,73 @@ msgstr ""
 "Erreur de syntaxe XML : %s (le numéro de ligne peut-être incorrect, essayer "
 "de soustraire un au numéro reporté)"
 
-#: views.py:1234 views.py:1251 views.py:1395 views.py:1412 views.py:1479
-#: views.py:1492
+#: views.py:1237 views.py:1254 views.py:1398 views.py:1415 views.py:1482
+#: views.py:1495
 msgid "Your XML is not valid"
 msgstr "Votre XML n'est pas valide"
 
-#: views.py:1239
+#: views.py:1242
 #, python-format
 msgid "Class \"%s\" already exists"
 msgstr "La classe \"%s\" existe déjà"
 
-#: views.py:1241
+#: views.py:1244
 #, python-format
 msgid "Class \"%s\" saved."
 msgstr "Classe \"%s\" sauvegardée."
 
-#: views.py:1379
+#: views.py:1382
 #, python-format
 msgid "Rule \"%s\" does not exist"
 msgstr "La règle \"%s\" n'existe pas"
 
-#: views.py:1383
+#: views.py:1386
 #, python-format
 msgid "Rule \"%s\" deleted."
 msgstr "Règle \"%s\" supprimée."
 
-#: views.py:1388
+#: views.py:1391
 msgid "No rule element found"
 msgstr "Aucune règle trouvée"
 
-#: views.py:1400
+#: views.py:1403
 #, python-format
 msgid "Rule \"%s\" already exists"
 msgstr "La règle \"%s\" existe déjà"
 
-#: views.py:1402
+#: views.py:1405
 #, python-format
 msgid "Rule \"%s\" saved."
 msgstr "Règle \"%s\" sauvegardée."
 
-#: views.py:1463
+#: views.py:1466
 #, python-format
 msgid "Action \"%s\" does not exist"
 msgstr "Action \"%s\" n'existe pas"
 
-#: views.py:1467
+#: views.py:1470
 #, python-format
 msgid "Action \"%s\" deleted."
 msgstr "Action \"%s\" supprimée."
 
-#: views.py:1472
+#: views.py:1475
 msgid "No action element found"
 msgstr "Aucune action trouvée"
 
-#: views.py:1482
+#: views.py:1485
 msgid "Action saved."
 msgstr "Action sauvée."
 
-#: views.py:1551 views.py:1639
+#: views.py:1554 views.py:1642
 #, python-format
 msgid "%d code points added"
 msgstr "%d code points ont été ajoutés"
 
-#: views.py:1608
+#: views.py:1611
 msgid "No code point in input file"
 msgstr "Le fichier d'entrée ne contient aucun code point"
 
-#: views.py:1914
+#: views.py:1917
 msgid "Meta data saved"
 msgstr "Metadonnées sauvegardées"
 

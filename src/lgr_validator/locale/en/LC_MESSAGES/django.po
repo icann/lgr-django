@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-02 20:49+0000\n"
+"POT-Creation-Date: 2020-06-04 17:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,23 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: api.py:102
-msgid "The label is in the LGR set labels."
+#: api.py:99
+msgid "the LGR set labels"
 msgstr ""
 
-#: api.py:109
-msgid "ERROR more than one collision, please check your LGR set labels"
+#: api.py:99
+msgid "the TLDs list"
 msgstr ""
 
-#: api.py:127
+#: api.py:103
+#, python-format
+msgid "The label is in %(labels_list)s"
+msgstr ""
+
+#: api.py:110
+#, python-format
+msgid "ERROR more than one collision, please check %(labels_list)s"
+msgstr ""
+
+#: api.py:128
+#, python-format
+msgid "ERROR cannot retrieve label in collisions, please check %(labels_list)s"
+msgstr ""
+
+#: api.py:132
+#, python-format
 msgid ""
-"ERROR cannot retrieve label in collisions, please check your LGR set labels"
-msgstr ""
-
-#: api.py:131
-msgid ""
-"ERROR collision with more than one label in the LGR set labels,please check "
-"your LGR set labels"
+"ERROR collision with more than one label in %(labels_list)s, please check it"
 msgstr ""
 
 #: forms.py:13
@@ -152,7 +162,7 @@ msgid ""
 "the provided address"
 msgstr ""
 
-#: views.py:127
+#: views.py:130
 msgid ""
 "Input label generates too many variants to compute them all quickly. You "
 "need to enter your email address and will receive a notification once "

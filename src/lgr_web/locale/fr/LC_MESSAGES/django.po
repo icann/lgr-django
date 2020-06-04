@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-02 20:49+0000\n"
-"PO-Revision-Date: 2019-08-13 16:08-0400\n"
+"POT-Creation-Date: 2020-06-04 17:33+0000\n"
+"PO-Revision-Date: 2020-06-04 13:34-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,17 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.3\n"
 
-#: settings/default.py:161
+#: settings/default.py:163
 msgid "Arabic"
 msgstr "Arabe"
 
-#: settings/default.py:162
+#: settings/default.py:164
 msgid "English"
 msgstr "Anglais"
 
-#: settings/default.py:163
+#: settings/default.py:165
 msgid "French"
 msgstr "Français"
 
@@ -58,116 +58,124 @@ msgstr "Nouvelle"
 msgid "Tools"
 msgstr "Outils"
 
-#: templates/_base.html:82
+#: templates/_base.html:84
 msgid "Compare two LGR"
 msgstr "Comparer deux LGR"
 
-#: templates/_base.html:84
+#: templates/_base.html:86
 msgid "Compare two LGRs"
 msgstr "Comparer deux LGR"
 
-#: templates/_base.html:91
+#: templates/_base.html:93
 msgid "Get differences for a list of labels for two LGRs versions"
 msgstr ""
 "Calculer les différences sur une liste de labels entre deux versions de LGR"
 
-#: templates/_base.html:94
+#: templates/_base.html:96
 msgid "Diff labels of two LGRs"
 msgstr "Diff labels entre deux LGR"
 
-#: templates/_base.html:99 templates/_base.html:102
+#: templates/_base.html:101 templates/_base.html:104
 msgid "Get collisions in a list of labels"
 msgstr "Calculer les collisions sur une liste de labels"
 
-#: templates/_base.html:107
+#: templates/_base.html:109
 msgid "Compute cross-script variants"
 msgstr "Calculer les variantes cross-script"
 
-#: templates/_base.html:110
+#: templates/_base.html:112
 msgid "Cross-script variants"
 msgstr "Variantes cross-script"
 
-#: templates/_base.html:115
+#: templates/_base.html:117
 msgid "Annotate list of labels with their disposition"
 msgstr "Annote une liste de labels avec leur disposition"
 
-#: templates/_base.html:118
+#: templates/_base.html:120
 msgid "Generate disp. annotations"
 msgstr "Génére les annotations de disposition"
 
-#: templates/_base.html:124
+#: templates/_base.html:126
+msgid "Compute variants of labels"
+msgstr "Calculer les variantes de labels"
+
+#: templates/_base.html:129
+msgid "Compute variants"
+msgstr "Calculer les variantes"
+
+#: templates/_base.html:134
 msgid "Perform harmonization on LGRs"
 msgstr "Harmoniser les LGR"
 
-#: templates/_base.html:127
+#: templates/_base.html:137
 msgid "Harmonization"
 msgstr "Harmonisation"
 
-#: templates/_base.html:147
-msgid "Validate label against LGR"
-msgstr "Valider un label avec une LGR"
-
-#: templates/_base.html:149 templates/_base.html:299
-msgid "Validate label"
-msgstr "Valider un label"
-
-#: templates/_base.html:153
-msgid "Analyze current file for errors and statistics"
-msgstr "Analyser le fichier courant pour les erreurs et les statistiques"
-
-#: templates/_base.html:156 templates/_base.html:270
-msgid "Validate LGR"
-msgstr "Valider la LGR"
-
-#: templates/_base.html:160 templates/_base.html:162
-msgid "Output"
-msgstr "Sorties"
-
-#: templates/_base.html:167
-msgid "Preview LGR file"
-msgstr "Prévisualiser le fichier LGR"
-
-#: templates/_base.html:170
-msgid "View XML"
-msgstr "Voir le XML"
-
-#: templates/_base.html:174
-msgid "Download LGR file"
-msgstr "Télécharger le fichier LGR"
-
-#: templates/_base.html:176
-msgid "Download"
-msgstr "Télécharger"
-
-#: templates/_base.html:180 templates/_base.html:183
-msgid "HTML Output"
-msgstr "Sortie HTML"
-
-#: templates/_base.html:192
+#: templates/_base.html:145
 msgid "Basic mode"
 msgstr "Mode simple"
 
-#: templates/_base.html:200 templates/_base.html:333
+#: templates/_base.html:158
+msgid "Validate label against LGR"
+msgstr "Valider un label avec une LGR"
+
+#: templates/_base.html:160 templates/_base.html:301
+msgid "Validate label"
+msgstr "Valider un label"
+
+#: templates/_base.html:164
+msgid "Analyze current file for errors and statistics"
+msgstr "Analyser le fichier courant pour les erreurs et les statistiques"
+
+#: templates/_base.html:167 templates/_base.html:272
+msgid "Validate LGR"
+msgstr "Valider la LGR"
+
+#: templates/_base.html:171 templates/_base.html:173
+msgid "Output"
+msgstr "Sorties"
+
+#: templates/_base.html:178
+msgid "Preview LGR file"
+msgstr "Prévisualiser le fichier LGR"
+
+#: templates/_base.html:181
+msgid "View XML"
+msgstr "Voir le XML"
+
+#: templates/_base.html:185
+msgid "Download LGR file"
+msgstr "Télécharger le fichier LGR"
+
+#: templates/_base.html:187
+msgid "Download"
+msgstr "Télécharger"
+
+#: templates/_base.html:191 templates/_base.html:194
+msgid "HTML Output"
+msgstr "Sortie HTML"
+
+#: templates/_base.html:202 templates/_base.html:335
 msgid "Display all label forms"
 msgstr "Afficher toutes les formes d'un label"
 
-#: templates/_base.html:201
+#: templates/_base.html:203
 msgid "Label forms"
 msgstr "Formes"
 
-#: templates/_base.html:206
+#: templates/_base.html:208
 msgid "About LGR Toolset"
 msgstr "À propos de l'application LGR"
 
-#: templates/_base.html:207 templates/_base.html:315
+#: templates/_base.html:209 templates/_base.html:317
 msgid "About"
 msgstr "À propos"
 
-#: templates/_base.html:278
+#: templates/_base.html:280
 msgid "Save results"
 msgstr "Sauvegarde le résultat"
 
-#: templates/_base.html:280 templates/_base.html:321
+#: templates/_base.html:282 templates/_base.html:323
 msgid "Close"
 msgstr "Fermer"
 

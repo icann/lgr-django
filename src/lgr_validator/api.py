@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import csv
+# Define some py2/3 compat stuff
+import sys
 
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
@@ -7,12 +9,11 @@ from django.utils.translation import ugettext_lazy as _
 from lgr.tools.diff_collisions import get_collisions
 from lgr.utils import cp_to_ulabel
 
-# Define some py2/3 compat stuff
-import sys
 if sys.version_info.major > 2:
     to_row_format = str
 else:
     from django.utils.encoding import force_bytes
+
     to_row_format = force_bytes
 
 
@@ -32,22 +33,23 @@ def _get_validity(lgr, label_cplist, idna_encoder):
             return u'<span class="text-danger not-in-rep">U+{:04X} (&#{};)</span>'.format(c, c)
         else:
             return u"U+{:04X} (&#{};)".format(c, c)
+
     label_display_html = mark_safe(u' '.join(map(format_cphex, label_cplist)))
     label_display_text = u' '.join(u"U+{:04X}".format(cp) for cp in label_cplist)
 
     lgr_actions = lgr.effective_actions_xml  # save it once (since `lgr.effective_actions` is dynamically computed)
     return {
-        'u_label': label_u,
-        'a_label': label_a,
-        'cp_display_html': label_display_html,
-        'cp_display': label_display_text,
-        'eligible': eligible,
-        'disposition': disp,
-        'label_invalid_parts': label_invalid_parts,
-        'action_idx': action_idx,
-        'action': lgr_actions[action_idx] if action_idx >= 0 else None,
-        'logs': logs
-    }, lgr_actions
+               'u_label': label_u,
+               'a_label': label_a,
+               'cp_display_html': label_display_html,
+               'cp_display': label_display_text,
+               'eligible': eligible,
+               'disposition': disp,
+               'label_invalid_parts': label_invalid_parts,
+               'action_idx': action_idx,
+               'action': lgr_actions[action_idx] if action_idx >= 0 else None,
+               'logs': logs
+           }, lgr_actions
 
 
 def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions):
@@ -96,18 +98,19 @@ def _get_collisions(lgr, label_cplist, labels, idna_encoder, lgr_actions, is_set
     res = {'collisions_checked': True}
     label_u = cp_to_ulabel(label_cplist)
     labels = [l.strip() for l in labels]
-    debug_name = _("LGR set labels") if is_set else _("TLD list")
+    debug_name = _("the LGR set labels") if is_set else _("the TLDs list")
 
     # if label is in the LGR set labels skip
     if label_u in labels:
-        res['collisions_error'] = _('The label is in the {}.'.format(debug_name))
+        res['collisions_error'] = _('The label is in %(labels_list)s') % {'labels_list': debug_name}
         return res
 
     # check for collisions
     indexes = get_collisions(lgr, labels + [label_u], quiet=False)
     if len(indexes) > 1:
         # there should be one collision as set labels are checked, this error should not happen
-        res['collisions_error'] = _('ERROR more than one collision, please check your {}'.format(debug_name))
+        res['collisions_error'] = _('ERROR more than one collision, please check %(labels_list)s') % {
+            'labels_list': debug_name}
         return res
 
     if len(indexes) == 0:
@@ -125,17 +128,19 @@ def _get_collisions(lgr, label_cplist, labels, idna_encoder, lgr_actions, is_set
 
     if not collision:
         # this should not happen
-        res['collisions_error'] = _('ERROR cannot retrieve label in collisions, please check your {}'.format(debug_name))
+        res['collisions_error'] = _('ERROR cannot retrieve label in collisions, please check %(labels_list)s') % {
+            'labels_list': debug_name}
         return res
 
     if len(collide_with) != 1:
-        res['collisions_error'] = _('ERROR collision with more than one label in the {0},'
-                                    'please check your {0}'.format(debug_name))
+        res['collisions_error'] = _('ERROR collision with more than one label in %(labels_list)s, '
+                                    'please check it') % {'labels_list': debug_name}
         return res
 
     collide_with = collide_with[0]
     variant_u = idna_encoder(collide_with['label'])
-    variant_display_html = mark_safe(u' '.join(u"U+{:04X} ({})".format(cp, cp_to_ulabel(cp)) for cp in collide_with['cp']))
+    variant_display_html = mark_safe(
+        u' '.join(u"U+{:04X} ({})".format(cp, cp_to_ulabel(cp)) for cp in collide_with['cp']))
     variant_display = u' '.join(u"U+{:04X}".format(cp) for cp in collide_with['cp'])
     try:
         variant_a = idna_encoder(variant_u)
