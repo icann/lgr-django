@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import logging
 import time
 
 from django.utils.text import slugify
@@ -15,6 +16,9 @@ from lgr.tools.harmonize import harmonize
 
 from lgr_editor.api import LGRInfo, session_open_lgr, session_save_lgr
 from lgr_validator.api import lgr_set_evaluate_label, evaluate_label, validation_results_to_csv
+
+
+logger = logging.getLogger(__name__)
 
 
 class LGRCompInvalidException(LGRValidationException):
@@ -259,6 +263,7 @@ def lgr_validate_labels(lgr, labels_file, udata):
             yield _validate_label_task_helper(evaluate_label(lgr, label_cp, -1, udata.idna_encode_label),
                                               with_header=not it)
             it += 1
-        except Exception:
+        except Exception as ex:
+            logger.error("Failed to process label %s: %s", label, ex)
             yield "\nError processing label {}\n".format(label)
 

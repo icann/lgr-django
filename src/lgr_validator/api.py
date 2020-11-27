@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.diff_collisions import get_collisions
 from lgr.utils import cp_to_ulabel
+from lgr_editor.lgr_exceptions import lgr_exception_to_text
 
 if sys.version_info.major > 2:
     to_row_format = str
@@ -22,7 +23,7 @@ def _get_validity(lgr, label_cplist, idna_encoder):
     try:
         label_a = idna_encoder(label_u)
     except UnicodeError as e:
-        label_a = '!ERROR - {}!'.format(e)
+        label_a = lgr_exception_to_text(e)
 
     (eligible, label_valid_parts, label_invalid_parts, disp, action_idx, logs) = lgr.test_label_eligible(label_cplist)
 
@@ -74,7 +75,11 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
             variant_display_html = mark_safe(u' '.join(map(format_cphex, variant_cp)))
             variant_display = u' '.join(u"U+{:04X}".format(cp, cp_to_ulabel(cp)) for cp in variant_cp)
             variant_input = u' '.join(u"U+{:04X}".format(cp) for cp in variant_cp)
-            variant_a = idna_encoder(variant_u)
+            try:
+                variant_a = idna_encoder(variant_u)
+            except UnicodeError as e:
+                variant_a = lgr_exception_to_text(e)
+                var_disp = 'invalid'
 
             var_results.append({
                 'u_label': variant_u,
