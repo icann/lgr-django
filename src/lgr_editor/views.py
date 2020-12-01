@@ -512,9 +512,9 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
                                              variant_type=settings.DEFAULT_VARIANT_TYPE,
                                              comment="Automatically added to map back to out-of-repertoire variant")
                     # Add identity mapping for newly added code point
-                    lgr_info.lgr.add_variant(var_cp_sequence, var_cp_sequence, variant_type='out-of-repertoire',
-                                             comment='Out-of-repertoire')
-                    messages.success(request, _('Automatically added codepoint %s from out-of-repertoire variant') %
+                    lgr_info.lgr.add_variant(var_cp_sequence, var_cp_sequence, variant_type='out-of-repertoire-var',
+                                             comment='Out-of-repertoire-var')
+                    messages.success(request, _('Automatically added codepoint %s from out-of-repertoire-var variant') %
                                      format_cp(var_cp_sequence))
                 session_save_lgr(request, lgr_info)
                 messages.success(request, _('New variant %s added') % format_cp(var_cp_sequence))
