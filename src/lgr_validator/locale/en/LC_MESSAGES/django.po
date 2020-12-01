@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 17:33+0000\n"
+"POT-Creation-Date: 2020-12-01 15:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,30 +17,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: api.py:99
+#: api.py:106
 msgid "the LGR set labels"
 msgstr ""
 
-#: api.py:99
+#: api.py:106
 msgid "the TLDs list"
-msgstr ""
-
-#: api.py:103
-#, python-format
-msgid "The label is in %(labels_list)s"
 msgstr ""
 
 #: api.py:110
 #, python-format
+msgid "The label is in %(labels_list)s"
+msgstr ""
+
+#: api.py:117
+#, python-format
 msgid "ERROR more than one collision, please check %(labels_list)s"
 msgstr ""
 
-#: api.py:128
+#: api.py:136
 #, python-format
 msgid "ERROR cannot retrieve label in collisions, please check %(labels_list)s"
 msgstr ""
 
-#: api.py:132
+#: api.py:141
 #, python-format
 msgid ""
 "ERROR collision with more than one label in %(labels_list)s, please check it"
@@ -162,7 +162,7 @@ msgid ""
 "the provided address"
 msgstr ""
 
-#: views.py:130
+#: views.py:133
 msgid ""
 "Input label generates too many variants to compute them all quickly. You "
 "need to enter your email address and will receive a notification once "

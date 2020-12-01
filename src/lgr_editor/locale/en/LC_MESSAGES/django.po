@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 17:33+0000\n"
+"POT-Creation-Date: 2020-12-01 15:59+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,149 +185,233 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: lgr_exceptions.py:25
+#: lgr_exceptions.py:28
 #, python-format
 msgid "Input code point %(codepoint)s is not in the LGR"
 msgstr ""
 
-#: lgr_exceptions.py:29
+#: lgr_exceptions.py:32
 #, python-format
 msgid "Input code point %(codepoint)s is not in the reference repertoire"
 msgstr ""
 
-#: lgr_exceptions.py:34
+#: lgr_exceptions.py:37
 #, python-format
 msgid ""
 "Variant %(variant_codepoint)s already exists for code point %(codepoint)s"
 msgstr ""
 
-#: lgr_exceptions.py:40
+#: lgr_exceptions.py:43
 #, python-format
 msgid "Range %(first_cp)s - %(last_cp)s already exists in the LGR"
 msgstr ""
 
-#: lgr_exceptions.py:45
+#: lgr_exceptions.py:48
 #, python-format
 msgid "Input code point %(codepoint)s already exists in the LGR"
 msgstr ""
 
-#: lgr_exceptions.py:50
+#: lgr_exceptions.py:53
 #, python-format
 msgid "Input code point %(codepoint)s is not in LGR script"
 msgstr ""
 
-#: lgr_exceptions.py:54
+#: lgr_exceptions.py:57
 #, python-format
 msgid ""
 "Input code point %(codepoint)s is not a PVALID/CONTEXTO/CONTEXTJ code point "
 "per IDNA2008"
 msgstr ""
 
-#: lgr_exceptions.py:59
+#: lgr_exceptions.py:62
 #, python-format
 msgid "Code point %(codepoint)s has invalid context rule %(rule)s"
 msgstr ""
 
-#: lgr_exceptions.py:64
+#: lgr_exceptions.py:67
 #, python-format
 msgid "Range %(first_cp)s - %(last_cp)s has invalid context rule"
 msgstr ""
 
-#: lgr_exceptions.py:69
+#: lgr_exceptions.py:72
 #, python-format
 msgid ""
 "Variant %(variant_codepoint)s of code point %(codepoint)shas invalid context "
 "rule"
 msgstr ""
 
-#: lgr_exceptions.py:75
+#: lgr_exceptions.py:78
 #, python-format
 msgid "Duplicate reference for code point %(codepoint)s"
 msgstr ""
 
-#: lgr_exceptions.py:79
+#: lgr_exceptions.py:82
 #, python-format
 msgid "Unspecified exception for input code point %(codepoint)s"
 msgstr ""
 
-#: lgr_exceptions.py:86
+#: lgr_exceptions.py:89
 msgid "Sequence cannot have a tag"
 msgstr ""
 
-#: lgr_exceptions.py:88
+#: lgr_exceptions.py:91
 msgid "Invalid language"
 msgstr ""
 
-#: lgr_exceptions.py:90
+#: lgr_exceptions.py:93
 msgid "Invalid date value"
 msgstr ""
 
-#: lgr_exceptions.py:92
+#: lgr_exceptions.py:95
 msgid "Invalid Unicode version"
 msgstr ""
 
-#: lgr_exceptions.py:94
+#: lgr_exceptions.py:97
 msgid "Invalid LGR XML file"
 msgstr ""
 
-#: lgr_exceptions.py:96
+#: lgr_exceptions.py:99
 #, python-format
 msgid "Reference %(ref_id)s is not defined"
 msgstr ""
 
-#: lgr_exceptions.py:100
+#: lgr_exceptions.py:103
 #, python-format
 msgid "Reference %(ref_id)s already exists"
 msgstr ""
 
-#: lgr_exceptions.py:104
+#: lgr_exceptions.py:107
 #, python-format
 msgid "Invalid reference id %(ref_id)s "
 msgstr ""
 
-#: lgr_exceptions.py:108
+#: lgr_exceptions.py:111
 #, python-format
 msgid "Rule \"%(rule_name)s\" cannot be processed (%(message)s)"
 msgstr ""
 
-#: lgr_exceptions.py:113
+#: lgr_exceptions.py:116
 msgid "Input parameter has invalid format"
 msgstr ""
 
-#: lgr_exceptions.py:115
+#: lgr_exceptions.py:118
 msgid "A general exception occurred in the LGR API"
 msgstr ""
 
-#: lgr_exceptions.py:117
+#: lgr_exceptions.py:120
 #, python-format
 msgid "LGR is not valid (%(args)s)"
 msgstr ""
 
-#: lgr_exceptions.py:119
+#: lgr_exceptions.py:122
 #, python-format
 msgid "Label %(label)s is not valid in the LGR (%(message)s)"
 msgstr ""
 
-#: lgr_exceptions.py:124
+#: lgr_exceptions.py:127
 msgid "Input label file contains collision(s)"
 msgstr ""
 
-#: lgr_exceptions.py:126
+#: lgr_exceptions.py:129
 msgid "The LGR contains a variant that do not have symmetric relations"
 msgstr ""
 
-#: lgr_exceptions.py:129
+#: lgr_exceptions.py:132
 #, python-format
 msgid "The LGR does not contain a valid language (%(message)s)"
 msgstr ""
 
-#: lgr_exceptions.py:131
+#: lgr_exceptions.py:134
 #, python-format
 msgid "Cannot generate cross-script variant for LGR without (%(message)s)"
 msgstr ""
 
-#: lgr_exceptions.py:135
+#: lgr_exceptions.py:138
 msgid "An unknown exception occurred in the LGR API"
+msgstr ""
+
+#: lgr_exceptions.py:143
+msgid "Label is empty"
+msgstr ""
+
+#: lgr_exceptions.py:145
+#, python-format
+msgid "%(label)s is invalid due to its length being longer than 63 bytes."
+msgstr ""
+
+#: lgr_exceptions.py:150
+#, python-format
+msgid ""
+"%(label)s is invalid due to hypen restrictions in the RFC5891 as it starts "
+"with a hyphen-minus."
+msgstr ""
+
+#: lgr_exceptions.py:155
+#, python-format
+msgid ""
+"%(label)s is invalid due to hyphen restrictions in the RFC5891 as it ends "
+"with a hyphen-minus."
+msgstr ""
+
+#: lgr_exceptions.py:160
+#, python-format
+msgid ""
+"%(label)s is invalid due to hyphen restrictions in the RFC5891 as it "
+"contains hyphen-minus in the third and fourth positions."
+msgstr ""
+
+#: lgr_exceptions.py:165
+#, python-format
+msgid ""
+"%(label)s is invalid due to leading combining marks restriction in the "
+"RFC5891."
+msgstr ""
+
+#: lgr_exceptions.py:170
+#, python-format
+msgid "%(label)s is invalid as it contains disallowed characters."
+msgstr ""
+
+#: lgr_exceptions.py:174
+#, python-format
+msgid ""
+"%(label)s is invalid as it starts with ‘xn--’ but does not contain valid "
+"Punycode."
+msgstr ""
+
+#: lgr_exceptions.py:179
+#, python-format
+msgid "%(label)s is invalid as it contains full stop (dot)."
+msgstr ""
+
+#: lgr_exceptions.py:183
+#, python-format
+msgid "%(label)s is invalid due to invalid Punycode."
+msgstr ""
+
+#: lgr_exceptions.py:185
+#, python-format
+msgid "%(label)s is invalid due to  the Bidi rule in the RFC5893."
+msgstr ""
+
+#: lgr_exceptions.py:189
+#, python-format
+msgid ""
+"%(label)s is invalid due to the IDNA contextual rule for Zero Width Joiner."
+msgstr ""
+
+#: lgr_exceptions.py:194
+#, python-format
+msgid ""
+"%(label)s is invalid due to the IDNA contextual rule for punctuation in the "
+"RFC5892."
+msgstr ""
+
+#: lgr_exceptions.py:199
+#, python-format
+msgid ""
+"%(label)s is invalid due to the IDNA contextual rule for digits in the "
+"RFC5892."
 msgstr ""
 
 #: templates/lgr_editor/_editor_base.html:25
@@ -1044,7 +1128,7 @@ msgstr ""
 
 #: views.py:517
 #, python-format
-msgid "Automatically added codepoint %s from out-of-repertoire variant"
+msgid "Automatically added codepoint %s from out-of-repertoire-var variant"
 msgstr ""
 
 #: views.py:520

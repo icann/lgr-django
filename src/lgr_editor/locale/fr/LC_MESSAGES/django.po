@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 17:33+0000\n"
-"PO-Revision-Date: 2019-08-14 11:15-0400\n"
+"POT-Creation-Date: 2020-12-01 15:59+0000\n"
+"PO-Revision-Date: 2020-12-01 11:01-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: forms/codepoint.py:14 templates/lgr_editor/codepoint_view.html:52
 msgid "When"
@@ -192,17 +192,17 @@ msgstr "Mes LGRs"
 msgid "Language"
 msgstr "Langage"
 
-#: lgr_exceptions.py:25
+#: lgr_exceptions.py:28
 #, python-format
 msgid "Input code point %(codepoint)s is not in the LGR"
 msgstr "Le code point %(codepoint)s n'est pas dans la LGR"
 
-#: lgr_exceptions.py:29
+#: lgr_exceptions.py:32
 #, python-format
 msgid "Input code point %(codepoint)s is not in the reference repertoire"
 msgstr "Le code point %(codepoint)s n'est pas dans le répertoire de référence"
 
-#: lgr_exceptions.py:34
+#: lgr_exceptions.py:37
 #, python-format
 msgid ""
 "Variant %(variant_codepoint)s already exists for code point %(codepoint)s"
@@ -210,22 +210,22 @@ msgstr ""
 "La variante %(variant_codepoint)s existe déjà pour le code point "
 "%(codepoint)s"
 
-#: lgr_exceptions.py:40
+#: lgr_exceptions.py:43
 #, python-format
 msgid "Range %(first_cp)s - %(last_cp)s already exists in the LGR"
 msgstr "L'ensemble %(first_cp)s - %(last_cp)s existe déjà dans la LGR"
 
-#: lgr_exceptions.py:45
+#: lgr_exceptions.py:48
 #, python-format
 msgid "Input code point %(codepoint)s already exists in the LGR"
 msgstr "Le code point %(codepoint)s existe déjà dans la LGR"
 
-#: lgr_exceptions.py:50
+#: lgr_exceptions.py:53
 #, python-format
 msgid "Input code point %(codepoint)s is not in LGR script"
 msgstr "Le code point %(codepoint)s n'est pas dans le script de la LGR"
 
-#: lgr_exceptions.py:54
+#: lgr_exceptions.py:57
 #, python-format
 msgid ""
 "Input code point %(codepoint)s is not a PVALID/CONTEXTO/CONTEXTJ code point "
@@ -234,18 +234,18 @@ msgstr ""
 "Le code point %(codepoint)s n'est pas un code point PVALID/CONTEXTO/CONTEXTJ "
 "d'après IDNA2008"
 
-#: lgr_exceptions.py:59
+#: lgr_exceptions.py:62
 #, python-format
 msgid "Code point %(codepoint)s has invalid context rule %(rule)s"
 msgstr "Le code point %(codepoint)s a une règle contextuelle invalide %(rule)s"
 
-#: lgr_exceptions.py:64
+#: lgr_exceptions.py:67
 #, python-format
 msgid "Range %(first_cp)s - %(last_cp)s has invalid context rule"
 msgstr ""
 "L'ensemble %(first_cp)s - %(last_cp)s a une règle contextuelle invalide"
 
-#: lgr_exceptions.py:69
+#: lgr_exceptions.py:72
 #, python-format
 msgid ""
 "Variant %(variant_codepoint)s of code point %(codepoint)shas invalid context "
@@ -254,97 +254,201 @@ msgstr ""
 "La variante %(variant_codepoint)s du code point %(codepoint)s a une règle "
 "contextuelle invalide"
 
-#: lgr_exceptions.py:75
+#: lgr_exceptions.py:78
 #, python-format
 msgid "Duplicate reference for code point %(codepoint)s"
 msgstr "Référence dupliquée pour le code point %(codepoint)s"
 
-#: lgr_exceptions.py:79
+#: lgr_exceptions.py:82
 #, python-format
 msgid "Unspecified exception for input code point %(codepoint)s"
 msgstr "Exception non-spécifiée pour le code point d'entrée %(codepoint)s"
 
-#: lgr_exceptions.py:86
+#: lgr_exceptions.py:89
 msgid "Sequence cannot have a tag"
 msgstr "Les séquences ne peuvent pas avoir de tag"
 
-#: lgr_exceptions.py:88
+#: lgr_exceptions.py:91
 msgid "Invalid language"
 msgstr "Langage invalide"
 
-#: lgr_exceptions.py:90
+#: lgr_exceptions.py:93
 msgid "Invalid date value"
 msgstr "Date invalide"
 
-#: lgr_exceptions.py:92
+#: lgr_exceptions.py:95
 msgid "Invalid Unicode version"
 msgstr "Version d'unicode invalide"
 
-#: lgr_exceptions.py:94
+#: lgr_exceptions.py:97
 msgid "Invalid LGR XML file"
 msgstr "Fichier XML de LGR invalide"
 
-#: lgr_exceptions.py:96
+#: lgr_exceptions.py:99
 #, python-format
 msgid "Reference %(ref_id)s is not defined"
 msgstr "La référence %(ref_id)s n'est pas définie"
 
-#: lgr_exceptions.py:100
+#: lgr_exceptions.py:103
 #, python-format
 msgid "Reference %(ref_id)s already exists"
 msgstr "La référence %(ref_id)s existe déjà"
 
-#: lgr_exceptions.py:104
+#: lgr_exceptions.py:107
 #, python-format
 msgid "Invalid reference id %(ref_id)s "
 msgstr "Identifiant de référence invalide %(ref_id)s "
 
-#: lgr_exceptions.py:108
+#: lgr_exceptions.py:111
 #, python-format
 msgid "Rule \"%(rule_name)s\" cannot be processed (%(message)s)"
 msgstr "La règle \"%(rule_name)s\" ne peut pas être traitée (%(message)s)"
 
-#: lgr_exceptions.py:113
+#: lgr_exceptions.py:116
 msgid "Input parameter has invalid format"
 msgstr "Le paramètre d'entrée a un format invalide"
 
-#: lgr_exceptions.py:115
+#: lgr_exceptions.py:118
 msgid "A general exception occurred in the LGR API"
 msgstr "Une exception s'est produite dans l'API LGR"
 
-#: lgr_exceptions.py:117
+#: lgr_exceptions.py:120
 #, python-format
 msgid "LGR is not valid (%(args)s)"
 msgstr "La LGR n'est pas valide (%(args)s)"
 
-#: lgr_exceptions.py:119
+#: lgr_exceptions.py:122
 #, python-format
 msgid "Label %(label)s is not valid in the LGR (%(message)s)"
 msgstr "Label %(label)s n'est pas valide dans la LGR (%(message)s)"
 
-#: lgr_exceptions.py:124
+#: lgr_exceptions.py:127
 msgid "Input label file contains collision(s)"
 msgstr "Le fichier d'entrée des labels contient une/des collision(s)"
 
-#: lgr_exceptions.py:126
+#: lgr_exceptions.py:129
 msgid "The LGR contains a variant that do not have symmetric relations"
 msgstr "La LGR contient des variantes ne respectant pas la symmétrie"
 
-#: lgr_exceptions.py:129
+#: lgr_exceptions.py:132
 #, python-format
 msgid "The LGR does not contain a valid language (%(message)s)"
 msgstr "La LGR ne contient pas de langues valides (%(message)s)"
 
-#: lgr_exceptions.py:131
+#: lgr_exceptions.py:134
 #, python-format
 msgid "Cannot generate cross-script variant for LGR without (%(message)s)"
 msgstr ""
 "Impossible de générer les variantes cross-script pour la LGR sans "
 "(%(message)s)"
 
-#: lgr_exceptions.py:135
+#: lgr_exceptions.py:138
 msgid "An unknown exception occurred in the LGR API"
 msgstr "Une exception inconnue s'est produite dans l'API LGR"
+
+#: lgr_exceptions.py:143
+msgid "Label is empty"
+msgstr "Le label est vide"
+
+#: lgr_exceptions.py:145
+#, python-format
+msgid "%(label)s is invalid due to its length being longer than 63 bytes."
+msgstr ""
+"le label %(label)s est invalide car sa longueur est supérieure à 63 octets."
+
+#: lgr_exceptions.py:150
+#, python-format
+msgid ""
+"%(label)s is invalid due to hypen restrictions in the RFC5891 as it starts "
+"with a hyphen-minus."
+msgstr ""
+"le label %(label)s est invalide en raison des restrictions sur les traits "
+"d'union dans la RFC5891 car il débute par le signe moins."
+
+#: lgr_exceptions.py:155
+#, python-format
+msgid ""
+"%(label)s is invalid due to hyphen restrictions in the RFC5891 as it ends "
+"with a hyphen-minus."
+msgstr ""
+"le label %(label)s est invalide en raison des restrictions sur les traits "
+"d'union dans la RFC5891 car il termine par le signe moins."
+
+#: lgr_exceptions.py:160
+#, python-format
+msgid ""
+"%(label)s is invalid due to hyphen restrictions in the RFC5891 as it "
+"contains hyphen-minus in the third and fourth positions."
+msgstr ""
+"le label %(label)s est invalide en raison des restrictions sur les traits "
+"d'union dans la RFC5891 car contient le signe moins à la troisième et "
+"quatrième position."
+
+#: lgr_exceptions.py:165
+#, python-format
+msgid ""
+"%(label)s is invalid due to leading combining marks restriction in the "
+"RFC5891."
+msgstr ""
+"le label %(label)s est invalide en raison des restrictions sur signes "
+"combinatoires de tête dans la RFC5891."
+
+#: lgr_exceptions.py:170
+#, python-format
+msgid "%(label)s is invalid as it contains disallowed characters."
+msgstr ""
+"le label %(label)s est invalide car il contient des caractères interdits."
+
+#: lgr_exceptions.py:174
+#, python-format
+msgid ""
+"%(label)s is invalid as it starts with ‘xn--’ but does not contain valid "
+"Punycode."
+msgstr ""
+"le label %(label)s est invalide car ils débute par 'xn--' et ne contient pas "
+"de Punycode valide."
+
+#: lgr_exceptions.py:179
+#, python-format
+msgid "%(label)s is invalid as it contains full stop (dot)."
+msgstr "le label %(label)s est invalide car il contient un point final."
+
+#: lgr_exceptions.py:183
+#, python-format
+msgid "%(label)s is invalid due to invalid Punycode."
+msgstr "le label %(label)s est invalide en raison de Punycode invalide."
+
+#: lgr_exceptions.py:185
+#, python-format
+msgid "%(label)s is invalid due to  the Bidi rule in the RFC5893."
+msgstr ""
+"le label %(label)s est invalide en raison de la règle Bidi dans la RFC5893."
+
+#: lgr_exceptions.py:189
+#, python-format
+msgid ""
+"%(label)s is invalid due to the IDNA contextual rule for Zero Width Joiner."
+msgstr ""
+"le label %(label)s est invalide en raison de la règle IDNA contextuelle pour "
+"les liant sans chasse (Zero Width Joiner)."
+
+#: lgr_exceptions.py:194
+#, python-format
+msgid ""
+"%(label)s is invalid due to the IDNA contextual rule for punctuation in the "
+"RFC5892."
+msgstr ""
+"le label %(label)s est invalide en raison de la règle IDNA contextuelle pour "
+"la ponctuation ans la RFC5892."
+
+#: lgr_exceptions.py:199
+#, python-format
+msgid ""
+"%(label)s is invalid due to the IDNA contextual rule for digits in the "
+"RFC5892."
+msgstr ""
+"le label %(label)s est invalide en raison de la règle IDNA contextuelle pour "
+"les chiffres ans la RFC5892."
 
 #: templates/lgr_editor/_editor_base.html:25
 #: templates/lgr_editor/codepoint_view.html:54
@@ -1107,7 +1211,7 @@ msgstr ""
 
 #: views.py:517
 #, python-format
-msgid "Automatically added codepoint %s from out-of-repertoire variant"
+msgid "Automatically added codepoint %s from out-of-repertoire-var variant"
 msgstr ""
 "Code point %s automatiquement ajouté depuis une variante hors-répertoire"
 

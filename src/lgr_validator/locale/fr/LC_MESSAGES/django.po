@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-04 17:33+0000\n"
+"POT-Creation-Date: 2020-12-01 15:59+0000\n"
 "PO-Revision-Date: 2020-06-04 13:34-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,32 +18,32 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.3\n"
 
-#: api.py:99
+#: api.py:106
 msgid "the LGR set labels"
 msgstr "la liste de labels du set LGR"
 
-#: api.py:99
+#: api.py:106
 msgid "the TLDs list"
 msgstr "la liste de TLDs"
 
-#: api.py:103
+#: api.py:110
 #, python-format
 msgid "The label is in %(labels_list)s"
 msgstr "Le label est dans %(labels_list)s"
 
-#: api.py:110
+#: api.py:117
 #, python-format
 msgid "ERROR more than one collision, please check %(labels_list)s"
 msgstr "ERREUR plus d'une collision, vérifier %(labels_list)s svp"
 
-#: api.py:128
+#: api.py:136
 #, python-format
 msgid "ERROR cannot retrieve label in collisions, please check %(labels_list)s"
 msgstr ""
 "ERREUR impossible de retrouver le label dans les collisions, vérifier "
 "%(labels_list)s"
 
-#: api.py:132
+#: api.py:141
 #, python-format
 msgid ""
 "ERROR collision with more than one label in %(labels_list)s, please check it"
@@ -173,7 +173,7 @@ msgstr ""
 "Comme le traitement peut être long, une fois complété, un e-mail vous sera "
 "envoyé à l'adresse fournie"
 
-#: views.py:130
+#: views.py:133
 msgid ""
 "Input label generates too many variants to compute them all quickly. You "
 "need to enter your email address and will receive a notification once "

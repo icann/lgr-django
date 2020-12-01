@@ -142,13 +142,13 @@ def lgr_exception_to_text(exception):
             if error == 'UIDNA_ERROR_EMPTY_LABEL':
                 messages.append(ugettext('Label is empty'))
             elif error == 'UIDNA_ERROR_LABEL_TOO_LONG':
-                messages.append(ugettext('%(label)s is invalid due to its length being longer than 63 bytes') % {
+                messages.append(ugettext('%(label)s is invalid due to its length being longer than 63 bytes.') % {
                     'label': exception.obj
                 })
             # elif error == 'UIDNA_ERROR_DOMAIN_NAME_TOO_LONG':
             elif error == 'UIDNA_ERROR_LEADING_HYPHEN':
                 messages.append(ugettext('%(label)s is invalid due to hypen restrictions in the RFC5891 as it starts '
-                                         'with a hyphen-minus' % {
+                                         'with a hyphen-minus.' % {
                                              'label': exception.obj
                                          }))
             elif error == 'UIDNA_ERROR_TRAILING_HYPHEN':
