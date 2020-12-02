@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.six import text_type
 from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.utils import parse_label_input
+from lgr_editor.api import LGRInfo
 from lgr_editor.forms.fields import ROOT_ZONES
+from lgr_editor.lgr_exceptions import lgr_exception_to_text
+from lgr_editor.repertoires import get_by_name
+from lgr_editor.unidb import get_db_by_version
 from lgr_tools.forms import UAEmailField
 
 
@@ -33,7 +36,7 @@ class ValidateLabelSimpleForm(forms.Form):
             if not self.cleaned_data.get('email'):
                 self.add_error('email', _('E-mail is mandatory to get the tasks results'))
 
-        if not cleaned_data.get('labels') and not cleaned_data.get('labels_file'):
+        if 'labels' not in self.errors and not cleaned_data.get('labels') and not cleaned_data.get('labels_file'):
             self.add_error('labels', _('Required'))
             self.add_error('labels_file', _('Required'))
 
@@ -45,13 +48,17 @@ class ValidateLabelSimpleForm(forms.Form):
         return cleaned_data
 
     def clean_labels(self):
+        rz_lgr = self.cleaned_data['rz_lgr']
+        lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr, with_unidb=True))
+        udata = get_db_by_version(lgr_info.lgr.metadata.unicode_version)
+
         value = self.cleaned_data['labels']
         labels = list()
         for label in set(value.split(';')):
             if not label:
                 continue
             try:
-                labels.append(parse_label_input(label))
+                labels.append(parse_label_input(label, idna_decoder=udata.idna_decode_label))
             except ValueError as e:
-                raise ValidationError(text_type(e))
+                raise ValidationError(lgr_exception_to_text(e))
         return labels

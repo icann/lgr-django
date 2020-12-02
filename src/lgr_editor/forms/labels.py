@@ -3,11 +3,10 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.utils.six import text_type
-
-from lgr_editor import unidb
 
 from lgr.tools.utils import parse_label_input
+from lgr_editor import unidb
+from lgr_editor.lgr_exceptions import lgr_exception_to_text
 
 
 class LabelFormsForm(forms.Form):
@@ -29,7 +28,7 @@ class LabelFormsForm(forms.Form):
         try:
             value = parse_label_input(label, idna_decoder=udata.idna_decode_label)
         except ValueError as e:
-            self.add_error('label', text_type(e))
+            self.add_error('label', lgr_exception_to_text(e))
         else:
             self.cleaned_data['label'] = value
         return self.cleaned_data
