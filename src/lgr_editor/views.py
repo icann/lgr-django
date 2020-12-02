@@ -1390,6 +1390,15 @@ def rule_edit_rule_ajax(request, lgr_id, rulename):
                 return _json_response(False, _('No rule element found'))
             if rule.name is None:
                 return _json_response(False, _('Name attribute must be present'))
+
+            if rulename != rule.name:
+                # user has renamed the rule, check that there is no dupe
+                if rule.name in lgr.rules_lookup:
+                    return _json_response(False, _('Rule "%s" already exists') % rule.name)
+
+            _update_rule(lgr, rulename, rule, body)
+
+            lgr_info.update_xml(validate=True)
         except LGRException as e:
             return _json_response(False, lgr_exception_to_text(e))
         except XMLSyntaxError as e:
@@ -1398,11 +1407,6 @@ def rule_edit_rule_ajax(request, lgr_id, rulename):
         except Exception:
             return _json_response(False, _('Your XML is not valid'))
 
-        if rulename != rule.name:
-            # user has renamed the rule, check that there is no dupe
-            if rule.name in lgr.rules_lookup:
-                return _json_response(False, _('Rule "%s" already exists') % rule.name)
-        _update_rule(lgr, rulename, rule, body)
         msg = _('Rule "%s" saved.') % rule.name
 
     try:

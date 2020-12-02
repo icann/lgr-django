@@ -45,9 +45,17 @@ class LGRInfo(object):
         self.lgr_set = lgr_set
         self.set_labels_info = set_labels_info  # List of labels defined for the LGR set, optional
 
-    def update_xml(self, pretty_print=False):
+    def update_xml(self, pretty_print=False, validate=False):
         # if something was changed in `lgr`, calling this will re-generate the xml
-        self.xml = serialize_lgr_xml(self.lgr, pretty_print=pretty_print)
+        new_xml = serialize_lgr_xml(self.lgr, pretty_print=pretty_print)
+        if validate:
+            parser = XMLParser(six.BytesIO(new_xml), self.name)
+
+            validation_result = parser.validate_document(settings.LGR_RNG_FILE)
+            if validation_result is not None:
+                raise LGRValidationException(validation_result)
+
+        self.xml = new_xml
 
     @classmethod
     def create(cls, name, unicode_version, validating_repertoire_name):
