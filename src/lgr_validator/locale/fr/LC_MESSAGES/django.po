@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-01 15:59+0000\n"
+"POT-Creation-Date: 2020-12-02 03:08+0000\n"
 "PO-Revision-Date: 2020-06-04 13:34-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -50,27 +50,27 @@ msgid ""
 msgstr ""
 "ERREUR collision avec plus d'un label dans %(labels_list)s, vérifiez la svp"
 
-#: forms.py:13
+#: forms.py:12
 msgid "Label"
 msgstr "Label"
 
-#: forms.py:14
+#: forms.py:13
 msgid "Maximum length: 63 code points"
 msgstr "Longueur maximale : 63 code points"
 
-#: forms.py:15
+#: forms.py:14
 msgid "E-mail"
 msgstr "E-mail"
 
-#: forms.py:16
+#: forms.py:15
 msgid "Provide your e-mail address"
 msgstr "Fournir votre adresse e-mail"
 
-#: forms.py:18
+#: forms.py:17
 msgid "Allocated Set labels"
 msgstr "Labels du set alloués"
 
-#: forms.py:20
+#: forms.py:19
 msgid ""
 "Optional list of labels already allocated in the LGR set, that will be used "
 "to check for collisions when evaluating labels using the merged LGR set"
@@ -79,11 +79,11 @@ msgstr ""
 "pour vérifier les collisions lors de l'évaluation des labels utilisant le "
 "set LGR mergé"
 
-#: forms.py:24
+#: forms.py:23
 msgid "Script"
 msgstr "Script"
 
-#: forms.py:26
+#: forms.py:25
 msgid "The script used to validate the label"
 msgstr "Le script utilisé pour valider le label"
 

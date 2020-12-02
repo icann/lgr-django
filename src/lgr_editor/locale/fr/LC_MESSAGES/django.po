@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-01 15:59+0000\n"
-"PO-Revision-Date: 2020-12-01 11:01-0500\n"
+"POT-Creation-Date: 2020-12-02 03:08+0000\n"
+"PO-Revision-Date: 2020-12-01 22:10-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -102,6 +102,14 @@ msgstr ""
 msgid "File type"
 msgstr "Type de fichier"
 
+#: forms/codepoints.py:135 forms/codepoints.py:136
+msgid "Cannot add when and not-when rules simultaneously"
+msgstr "Impossible d'ajouter when et not-when simultanément"
+
+#: forms/codepoints.py:138 forms/codepoints.py:139 forms/codepoints.py:142
+msgid "Please provide at least one value"
+msgstr "Fournissez au moins une valeur s'il vous plait"
+
 #: forms/importer.py:13
 msgid "Name"
 msgstr "Nom"
@@ -130,15 +138,15 @@ msgstr ""
 msgid "The name of the set"
 msgstr "Nom du set"
 
-#: forms/labels.py:14
+#: forms/labels.py:13
 msgid "Label"
 msgstr "Label"
 
-#: forms/labels.py:15 forms/metadata.py:50
+#: forms/labels.py:14 forms/metadata.py:50
 msgid "Unicode version"
 msgstr "Version d'Unicode"
 
-#: forms/labels.py:17
+#: forms/labels.py:16
 msgid "The unicode version used"
 msgstr "Version d'Unicode"
 
@@ -191,6 +199,10 @@ msgstr "Mes LGRs"
 #: forms/metadata.py:80
 msgid "Language"
 msgstr "Langage"
+
+#: forms/references.py:33
+msgid "Invalid format"
+msgstr "Format invalide"
 
 #: lgr_exceptions.py:28
 #, python-format
@@ -812,19 +824,19 @@ msgstr ""
 msgid "Cannot import LGR file(s):"
 msgstr "Impossible d'importer le(s) fichier(s) LGR :"
 
-#: templates/lgr_editor/label_forms.html:11
+#: templates/lgr_editor/label_forms.html:10
 msgid "Display forms"
 msgstr "Afficher les formes"
 
-#: templates/lgr_editor/label_forms.html:18
+#: templates/lgr_editor/label_forms.html:16
 msgid "Code point sequence"
 msgstr "Séquence de code points"
 
-#: templates/lgr_editor/label_forms.html:19
+#: templates/lgr_editor/label_forms.html:17
 msgid "U-label"
 msgstr "U-Label"
 
-#: templates/lgr_editor/label_forms.html:20
+#: templates/lgr_editor/label_forms.html:18
 msgid "A-label"
 msgstr "A-Label"
 
@@ -1276,7 +1288,7 @@ msgstr ""
 "Les références au %(tag)s ont été supprimées du répertoire. N'oubliez pas de "
 "mettre à jour les WLE qui pourraient les utiliser."
 
-#: views.py:1210 views.py:1373 views.py:1455
+#: views.py:1210 views.py:1372 views.py:1460
 msgid "No body specified"
 msgstr "Aucun contenu spécifié"
 
@@ -1294,12 +1306,12 @@ msgstr "Classe \"%s\" supprimée."
 msgid "No class element found"
 msgstr "Aucune classe trouvée"
 
-#: views.py:1230
+#: views.py:1230 views.py:1392
 msgid "Name attribute must be present"
 msgstr "L'attribut name est obligatoire"
 
-#: views.py:1234 views.py:1251 views.py:1395 views.py:1412 views.py:1479
-#: views.py:1492
+#: views.py:1234 views.py:1251 views.py:1405 views.py:1417 views.py:1484
+#: views.py:1497
 #, python-format
 msgid ""
 "Encountered XML syntax error: %s (line number may be wrong, try subtracting "
@@ -1308,8 +1320,8 @@ msgstr ""
 "Erreur de syntaxe XML : %s (le numéro de ligne peut-être incorrect, essayer "
 "de soustraire un au numéro reporté)"
 
-#: views.py:1237 views.py:1254 views.py:1398 views.py:1415 views.py:1482
-#: views.py:1495
+#: views.py:1237 views.py:1254 views.py:1408 views.py:1420 views.py:1487
+#: views.py:1500
 msgid "Your XML is not valid"
 msgstr "Votre XML n'est pas valide"
 
@@ -1323,63 +1335,60 @@ msgstr "La classe \"%s\" existe déjà"
 msgid "Class \"%s\" saved."
 msgstr "Classe \"%s\" sauvegardée."
 
-#: views.py:1382
+#: views.py:1381
 #, python-format
 msgid "Rule \"%s\" does not exist"
 msgstr "La règle \"%s\" n'existe pas"
 
-#: views.py:1386
+#: views.py:1385
 #, python-format
 msgid "Rule \"%s\" deleted."
 msgstr "Règle \"%s\" supprimée."
 
-#: views.py:1391
+#: views.py:1390
 msgid "No rule element found"
 msgstr "Aucune règle trouvée"
 
-#: views.py:1403
+#: views.py:1397
 #, python-format
 msgid "Rule \"%s\" already exists"
 msgstr "La règle \"%s\" existe déjà"
 
-#: views.py:1405
+#: views.py:1410
 #, python-format
 msgid "Rule \"%s\" saved."
 msgstr "Règle \"%s\" sauvegardée."
 
-#: views.py:1466
+#: views.py:1471
 #, python-format
 msgid "Action \"%s\" does not exist"
 msgstr "Action \"%s\" n'existe pas"
 
-#: views.py:1470
+#: views.py:1475
 #, python-format
 msgid "Action \"%s\" deleted."
 msgstr "Action \"%s\" supprimée."
 
-#: views.py:1475
+#: views.py:1480
 msgid "No action element found"
 msgstr "Aucune action trouvée"
 
-#: views.py:1485
+#: views.py:1490
 msgid "Action saved."
 msgstr "Action sauvée."
 
-#: views.py:1554 views.py:1642
+#: views.py:1559 views.py:1647
 #, python-format
 msgid "%d code points added"
 msgstr "%d code points ont été ajoutés"
 
-#: views.py:1611
+#: views.py:1616
 msgid "No code point in input file"
 msgstr "Le fichier d'entrée ne contient aucun code point"
 
-#: views.py:1917
+#: views.py:1922
 msgid "Meta data saved"
 msgstr "Metadonnées sauvegardées"
-
-#~ msgid "Invalid characters"
-#~ msgstr "Caractères invalides"
 
 #, fuzzy
 #~| msgid "Description"

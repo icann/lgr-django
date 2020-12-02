@@ -132,13 +132,13 @@ class EditCodepointsForm(forms.Form):
         cleaned_data = super(EditCodepointsForm, self).clean()
         if self.post and 'add-rules' in self.post:
             if cleaned_data['when'] and cleaned_data['not_when']:
-                self.add_error('when', 'Cannot add when and not-when rules simultaneously')
-                self.add_error('not_when', 'Cannot add when and not-when rules simultaneously')
+                self.add_error('when', _('Cannot add when and not-when rules simultaneously'))
+                self.add_error('not_when', _('Cannot add when and not-when rules simultaneously'))
             elif not cleaned_data.get('when') and not cleaned_data.get('not_when'):
-                self.add_error('when', 'Please provide at least one value')
-                self.add_error('not_when', 'Please provide at least one value')
+                self.add_error('when', _('Please provide at least one value'))
+                self.add_error('not_when', _('Please provide at least one value'))
 
         if self.post and 'add-tags' in self.post and not cleaned_data.get('tags'):
-            self.add_error('tags', 'Please provide at least one value')
+            self.add_error('tags', _('Please provide at least one value'))
 
         return cleaned_data

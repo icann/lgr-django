@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-01 15:59+0000\n"
+"POT-Creation-Date: 2020-12-02 03:08+0000\n"
 "PO-Revision-Date: 2020-06-04 13:41-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,21 +18,21 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.3\n"
 
-#: forms.py:18
+#: forms.py:21
 msgid "Label"
 msgstr "Label"
 
-#: forms.py:19
+#: forms.py:22
 msgid "File must be encoded in UTF-8 and using UNIX line ending."
 msgstr ""
 "Le fichier doit être encodé en UTF-8, et utiliser des retours à la ligne "
 "UNIX."
 
-#: forms.py:23
+#: forms.py:26
 msgid "Email address for tasks results"
 msgstr "Adresse e-mail utilisée pour recevoir le résultats des tâches"
 
-#: forms.py:24
+#: forms.py:27
 msgid ""
 "As the computing may be very long, we will warn by e-mail once the result "
 "can be downloaded."
@@ -41,16 +41,16 @@ msgstr ""
 "le résultat pourra être téléchargé. Fournissez une adresse e-mail valide "
 "s'il vous plaît."
 
-#: forms.py:34
+#: forms.py:37
 msgid "E-mail is mandatory to get the tasks results"
 msgstr ""
 "L'adresse e-mail est obligatoire pour recevoir les résultats des tâches"
 
-#: forms.py:37 forms.py:38
+#: forms.py:40 forms.py:41
 msgid "Required"
 msgstr "Requis"
 
-#: forms.py:42 forms.py:43
+#: forms.py:45 forms.py:46
 msgid "Unknown error, please report"
 msgstr "Erreur inconnue, reportez l'erreur s'il vous plait"
 

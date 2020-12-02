@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-01 15:59+0000\n"
+"POT-Creation-Date: 2020-12-02 03:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,33 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms.py:18
+#: forms.py:21
 msgid "Label"
 msgstr ""
 
-#: forms.py:19
+#: forms.py:22
 msgid "File must be encoded in UTF-8 and using UNIX line ending."
 msgstr ""
 
-#: forms.py:23
+#: forms.py:26
 msgid "Email address for tasks results"
 msgstr ""
 
-#: forms.py:24
+#: forms.py:27
 msgid ""
 "As the computing may be very long, we will warn by e-mail once the result "
 "can be downloaded."
 msgstr ""
 
-#: forms.py:34
+#: forms.py:37
 msgid "E-mail is mandatory to get the tasks results"
 msgstr ""
 
-#: forms.py:37 forms.py:38
+#: forms.py:40 forms.py:41
 msgid "Required"
 msgstr ""
 
-#: forms.py:42 forms.py:43
+#: forms.py:45 forms.py:46
 msgid "Unknown error, please report"
 msgstr ""
 

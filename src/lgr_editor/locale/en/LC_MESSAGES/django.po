@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-01 15:59+0000\n"
+"POT-Creation-Date: 2020-12-02 03:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,6 +97,14 @@ msgstr ""
 msgid "File type"
 msgstr ""
 
+#: forms/codepoints.py:135 forms/codepoints.py:136
+msgid "Cannot add when and not-when rules simultaneously"
+msgstr ""
+
+#: forms/codepoints.py:138 forms/codepoints.py:139 forms/codepoints.py:142
+msgid "Please provide at least one value"
+msgstr ""
+
 #: forms/importer.py:13
 msgid "Name"
 msgstr ""
@@ -123,15 +131,15 @@ msgstr ""
 msgid "The name of the set"
 msgstr ""
 
-#: forms/labels.py:14
+#: forms/labels.py:13
 msgid "Label"
 msgstr ""
 
-#: forms/labels.py:15 forms/metadata.py:50
+#: forms/labels.py:14 forms/metadata.py:50
 msgid "Unicode version"
 msgstr ""
 
-#: forms/labels.py:17
+#: forms/labels.py:16
 msgid "The unicode version used"
 msgstr ""
 
@@ -183,6 +191,10 @@ msgstr ""
 
 #: forms/metadata.py:80
 msgid "Language"
+msgstr ""
+
+#: forms/references.py:33
+msgid "Invalid format"
 msgstr ""
 
 #: lgr_exceptions.py:28
@@ -747,19 +759,19 @@ msgstr ""
 msgid "Cannot import LGR file(s):"
 msgstr ""
 
-#: templates/lgr_editor/label_forms.html:11
+#: templates/lgr_editor/label_forms.html:10
 msgid "Display forms"
 msgstr ""
 
-#: templates/lgr_editor/label_forms.html:18
+#: templates/lgr_editor/label_forms.html:16
 msgid "Code point sequence"
 msgstr ""
 
-#: templates/lgr_editor/label_forms.html:19
+#: templates/lgr_editor/label_forms.html:17
 msgid "U-label"
 msgstr ""
 
-#: templates/lgr_editor/label_forms.html:20
+#: templates/lgr_editor/label_forms.html:18
 msgid "A-label"
 msgstr ""
 
@@ -1186,7 +1198,7 @@ msgid ""
 "forget to update any WLE that might reference it."
 msgstr ""
 
-#: views.py:1210 views.py:1373 views.py:1455
+#: views.py:1210 views.py:1372 views.py:1460
 msgid "No body specified"
 msgstr ""
 
@@ -1204,20 +1216,20 @@ msgstr ""
 msgid "No class element found"
 msgstr ""
 
-#: views.py:1230
+#: views.py:1230 views.py:1392
 msgid "Name attribute must be present"
 msgstr ""
 
-#: views.py:1234 views.py:1251 views.py:1395 views.py:1412 views.py:1479
-#: views.py:1492
+#: views.py:1234 views.py:1251 views.py:1405 views.py:1417 views.py:1484
+#: views.py:1497
 #, python-format
 msgid ""
 "Encountered XML syntax error: %s (line number may be wrong, try subtracting "
 "one from the reported line number)"
 msgstr ""
 
-#: views.py:1237 views.py:1254 views.py:1398 views.py:1415 views.py:1482
-#: views.py:1495
+#: views.py:1237 views.py:1254 views.py:1408 views.py:1420 views.py:1487
+#: views.py:1500
 msgid "Your XML is not valid"
 msgstr ""
 
@@ -1231,57 +1243,57 @@ msgstr ""
 msgid "Class \"%s\" saved."
 msgstr ""
 
-#: views.py:1382
+#: views.py:1381
 #, python-format
 msgid "Rule \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1386
+#: views.py:1385
 #, python-format
 msgid "Rule \"%s\" deleted."
 msgstr ""
 
-#: views.py:1391
+#: views.py:1390
 msgid "No rule element found"
 msgstr ""
 
-#: views.py:1403
+#: views.py:1397
 #, python-format
 msgid "Rule \"%s\" already exists"
 msgstr ""
 
-#: views.py:1405
+#: views.py:1410
 #, python-format
 msgid "Rule \"%s\" saved."
 msgstr ""
 
-#: views.py:1466
+#: views.py:1471
 #, python-format
 msgid "Action \"%s\" does not exist"
 msgstr ""
 
-#: views.py:1470
+#: views.py:1475
 #, python-format
 msgid "Action \"%s\" deleted."
 msgstr ""
 
-#: views.py:1475
+#: views.py:1480
 msgid "No action element found"
 msgstr ""
 
-#: views.py:1485
+#: views.py:1490
 msgid "Action saved."
 msgstr ""
 
-#: views.py:1554 views.py:1642
+#: views.py:1559 views.py:1647
 #, python-format
 msgid "%d code points added"
 msgstr ""
 
-#: views.py:1611
+#: views.py:1616
 msgid "No code point in input file"
 msgstr ""
 
-#: views.py:1917
+#: views.py:1922
 msgid "Meta data saved"
 msgstr ""
