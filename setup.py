@@ -5,7 +5,7 @@ from io import open
 
 setup(
     name='lgr-django',
-    version='2.0.1',
+    version='3.0.0',
     author='Viagenie and Wil Tan',
     author_email='support@viagenie.ca',
     packages=find_packages('src'),
@@ -19,15 +19,18 @@ setup(
         'Framework :: Django :: 1.8',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     install_requires=[
         # Core stuff
         'Django',
         'django-widget-tweaks',
+        'django-multiupload',
+        'django-redis-cache',
+        'django-autocomplete-light',
         'celery',
         # LGR/Unicode modules
         'lgr-core',

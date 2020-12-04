@@ -1,5 +1,31 @@
 # Changelog for lgr-django
 
+## 3.0.0 (2020-12-04)
+### New features
+- Add MSR-4 validating repertoire
+- Add RZ-LGR validating repertoires
+- Add RZ-LGR in built in LGRs list
+- Allow collision tool to check collisions with existing set of TLDs downloaded from IANA
+- Add a new basic mode:
+  - new simplified interface
+  - validate labels against RZ-LGR
+  - allow checking for collisions as well
+- Add language autocompletion from IANA language registry
+- Stop support for python 2.7
+### Improvements
+- Update symetry report to consider contextual rules
+- Update Django to version 2.2.1
+- Update dependencies versions
+- Handle internationalized email addresses
+- Add translation to validation report
+- Cache scripts and repertoires
+- Improve memory consumption
+- Display IDNA error as user friendly strings
+- Correctly validate rule in LGR edition tool
+### Fixes
+- Fix memory leak
+- Fix error handling in label validation
+
 ## 2.0.1 (2019-08-01)
 ### Improvements
 - Mark out-of-script codepoints as warnings instead of errors (Fixes icann/lgr-core#15).
