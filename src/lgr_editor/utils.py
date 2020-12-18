@@ -13,6 +13,7 @@ from django.core.cache import cache
 from django.utils.encoding import force_bytes
 from django.utils.html import mark_safe, format_html, format_html_join
 from django.utils.six.moves.urllib_parse import quote_plus
+from language_tags import data
 from natsort import natsorted
 
 from lgr.char import RangeChar
@@ -258,37 +259,19 @@ def parse_language_registry():
     """
     languages = set()
 
-    subtag = None
-    script = None
-    _type = None
-    preferred = None
-    deprecated = False
-
-    with open(settings.IANA_LANGUAGE_SUBTAG_REGISTRY_LOCATION) as language_file:
-        for line in language_file:
-            if line.startswith("Subtag"):
-                subtag = line.split(':')[1].strip()
-            elif line.startswith("Type"):
-                _type = line.split(':')[1].strip()
-            elif line.startswith("Suppress-Script"):
-                script = line.split(':')[1].strip()
-            elif line.startswith("Preferred-Value"):
-                preferred = line.split(':')[1].strip()
-            elif line.startswith("Deprecated"):
-                deprecated = True
-            elif line.startswith('%'):
-                # end of entry
-                if not deprecated and _type == 'script':
-                    languages.add('und-' + subtag)
-                elif not deprecated and subtag:
-                    languages.add(subtag)
-                    if script:
-                        languages.add('{}-{}'.format(subtag, script))
-                    if preferred:
-                        languages.add(preferred)
-                subtag = None
-                script = None
-                _type = None
-                preferred = None
-                deprecated = False
+    for ref in data.get('registry'):
+        subtag = ref.get('Subtag')
+        _type = ref.get("Type")
+        script = ref.get("Suppress-Script")
+        preferred = ref.get("Preferred-Value")
+        deprecated = ref.get("Deprecated", False)
+        # end of entry
+        if not deprecated and _type == 'script':
+            languages.add('und-' + subtag)
+        elif not deprecated and subtag:
+            languages.add(subtag)
+            if script:
+                languages.add('{}-{}'.format(subtag, script))
+            if preferred:
+                languages.add(preferred)
     return languages

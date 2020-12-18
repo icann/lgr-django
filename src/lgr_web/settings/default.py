@@ -215,9 +215,6 @@ LGR_RNG_FILE = os.path.join(BASE_DIR, 'resources', 'lgr.rng')
 # For the tools output
 TOOLS_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'output')
 
-# Filepath of the IANA language subtag registry
-IANA_LANGUAGE_SUBTAG_REGISTRY_LOCATION = os.path.join(BASE_DIR, 'resources', 'language-subtag-registry')
-
 # Duration in second for which the tools output files are stored
 STORAGE_DURATION = 60*60*24*7  # 1 week
 
