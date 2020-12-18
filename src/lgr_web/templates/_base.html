@@ -77,6 +77,7 @@
                                     {% url 'lgr_tools_variants' lgr_id as lgr_tools_variants_url %}
                                     {% url 'lgr_tools_cross_script' lgr_id as lgr_tools_cross_script_url %}
                                     {% url 'lgr_tools_harmonize' lgr_id as lgr_tools_harmonize_url %}
+                                    {% url 'lgr_idn_table_review' lgr_id as lgr_idn_table_review_url %}
                                 {% endif %}
                                 <ul class="dropdown-menu">
                                     <li class="btn btn-block show-tooltip">
@@ -135,6 +136,14 @@
                                                data-placement="bottom">
                                                 <i class="glyphicon glyphicon-stats"></i>
                                                 {% trans "Harmonization" %}
+                                            </a>
+                                        </li>
+                                        <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_idn_table_review_url }}"
+                                               title="{% trans 'IDN table review' %}"
+                                               data-placement="bottom">
+                                                <i class="glyphicon glyphicon-check"></i>
+                                                {% trans "IDN table review" %}
                                             </a>
                                         </li>
                                     {% endif %}

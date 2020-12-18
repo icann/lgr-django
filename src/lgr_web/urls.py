@@ -13,6 +13,7 @@ import lgr_editor.urls
 import lgr_validator.urls
 import lgr_tools.urls
 import lgr_renderer.urls
+import lgr_idn_table_review.urls
 from . import views
 
 urlpatterns = [
@@ -21,6 +22,7 @@ urlpatterns = [
     url(r'^tools/', include(lgr_tools.urls.urlpatterns)),
     url(r'^render/', include(lgr_renderer.urls.urlpatterns)),
     url(r'^basic/', include(lgr_basic.urls.urlpatterns)),
+    url(r'^review/', include(lgr_idn_table_review.urls.urlpatterns)),
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^$', views.index, name='homepage'),
 ]
