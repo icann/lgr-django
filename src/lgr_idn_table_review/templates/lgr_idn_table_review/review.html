@@ -1,0 +1,464 @@
+{% load lgr_idn_table_review %}
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xHTML1/DTD/xHTML1-strict.dtd">
+<HTML xmlns="http://www.w3.org/1999/xHTML">
+<head>
+    <meta http-equiv="Content-Type" content="text/HTML; charset=utf-8"/>
+    <title>{{ name|title }}</title>
+    <style type="text/css">
+        #lgr {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: .3em 1em;
+        }
+
+        div#lgr h1 {
+            font-size: 185%;;
+        }
+
+        body {
+            padding: 0 0 1em 0;
+            margin: 0;
+            background-color: #EEE;
+            font-family: sans-serif;
+        }
+
+        .varset_description {
+            border-width: 1px;
+            border-style: solid;
+            border-color: #A0A0A0;
+            padding: .4em;
+            margin: 2em 0em 0.4em 0em;
+            width: 40%;
+
+        }
+
+        table.simple, table.simple td, table.simple th {
+            border-width: 1px;
+            border-style: solid;
+            border-color: #A0A0A0;
+            border-collapse: collapse;
+            border-spacing: 1px;
+        }
+
+        table.simple td, table.simple th {
+            font-family: sans-serif;
+            padding: .2em;
+        }
+
+        table.simple th {
+            font-weight: bold;
+            background-color: #D0D0D0;
+            color: #808080;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:link, a:visited {
+            color: blue;
+        }
+
+        a:hover, a:active {
+            color: red;
+        }
+
+        #header {
+            float: right;
+            border: solid 1px #999;
+            width: 40%;
+            margin-right: 20%;
+            margin-top: 0;
+            padding: .4em;
+        }
+
+        h1 {
+            font-size: 175%;;
+        }
+
+        h1 {
+            font-weight: bold;
+            font-family: sans-serif;
+            color: #8888FF;
+        }
+
+        body h1:first-child {
+            font-size: 120%;
+        }
+
+        ol {
+            counter-reset: item;
+        }
+
+        ol li {
+            line-height: 30px;
+        }
+
+        li {
+            display: block;
+        }
+
+        div#table_of_contents li:before {
+            content: counters(item, ".") " ";
+            counter-increment: item;
+        }
+
+        td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="lgr">
+    <h1>IDN Table Review Report</h1>
+    <div id="header">
+        <p>Date: {{ header.date }}</p>
+        <p>{{ header.disclaimer }}</p>
+        <p>This document presents the review report for IDN Table:<br>
+            {{ header.idn_table.filename }} Version: {{ header.idn_table.version }}<br>
+            with the Reference LGR:<br>
+            {{ header.reference_lgr.name }} Version: {{ header.reference_lgr.version }}<br>
+        </p>
+    </div>
+
+    <div id="table_of_contents">
+        <h1><a name="toc">Table of Contents</a></h1>
+        <ol>
+            <li><a href="#summary">Summary</a></li>
+            <li><a href="#language_tag">Language Tag</a></li>
+            <li><a href="#repertoire">Repertoire</a></li>
+            <li><a href="#variant_sets">Variant Sets</a></li>
+            <li><a href="#classes">Classes</a></li>
+            <li><a href="#whole_label_evaluation_rules">Whole label evaluation rules</a>
+            <li><a href="#actions">Actions</a></li>
+        </ol>
+    </div>
+
+    <h1><a name="summary">Overall Summary</a></h1>
+    <table class="simple">
+        <tr>
+            <th>#</th>
+            <th>Comparing Item</th>
+            <th>Overall Result</th>
+            <th>Summarized Remarks</th>
+        </tr>
+        <tr style="background-color:white;">
+            <td>1</td>
+            <td style="text-align:left"><a href="#language_tag">Language Tag</a></td>
+            <td>{{ summary.language_tag.result }}</td>
+            <td style="text-align:left">{{ summary.language_tag.remark|linebreaks }}</td>
+        </tr>
+        <tr style="background-color:#F8F4EC;">
+            <td>2</td>
+            <td style="text-align:left"><a href="#repertoire">Repertoire</a></td>
+            <td>{{ summary.repertoire.result }}</td>
+            <td style="text-align:left">{{ summary.repertoire.remark|linebreaks }}</td>
+        </tr>
+        <tr style="background-color:white;">
+            <td>3</td>
+            <td style="text-align:left"><a href="#variant_sets">Variant Sets</a></td>
+            <td>{{ summary.variant_sets.result }}</td>
+            <td style="text-align:left">{{ summary.variant_sets.remark|linebreaks }}</td>
+        </tr>
+        <tr style="background-color:#F8F4EC;">
+            <td>4</td>
+            <td style="text-align:left"><a href="#classes">Classes</a></td>
+            <td>{{ summary.classes.result }}</td>
+            <td style="text-align:left">{{ summary.classes.remark|linebreaks }}</td>
+        </tr>
+        <tr style="background-color:white;">
+            <td>5</td>
+            <td style="text-align:left"><a href="#whole_label_evaluation_rules">Whole label evaluation rules</a></td>
+            <td>{{ summary.wle.result }}</td>
+            <td style="text-align:left">{{ summary.wle.remark|linebreaks }}</td>
+        </tr>
+        <tr style="background-color:#F8F4EC;">
+            <td>6</td>
+            <td style="text-align:left"><a href="#actions">Actions</a></td>
+            <td>{{ summary.actions.result }}</td>
+            <td style="text-align:left">{{ summary.actions.remark|linebreaks }}</td>
+        </tr>
+    </table>
+
+
+    <h1><a name="language_tag"></a>Language Tag</h1>
+    <table class="simple">
+        <tr>
+            <th>#</th>
+            <th>IDN Table language tag</th>
+            <th>Ref. LGR language tag</th>
+            <th>Result</th>
+            <th>Remark</th>
+        </tr>
+        {% for language_tag in language_tags %}
+            <tr style="background-color:white;">
+                <td rowspan="{{ language_tag.comparison|length }}">{{ forloop.counter }}</td>
+                <td style="text-align:left"
+                    rowspan="{{ language_tag.comparison|length }}">{{ language_tag.idn_table_language_tag }}</td>
+                {% for comp in language_tag.comparison %}
+                    {% if not forloop.first %}
+                        <tr>
+                    {% endif %}
+                <td style="text-align:left">{{ comp.reference_lgr_language_tag }}</td>
+                <td>{{ comp.result }}</td>
+                <td style="text-align:left">{{ comp.remark|linebreaks }}</td>
+                {% if not forloop.first %}
+                    </tr>
+                {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1><a name="repertoire">Repertoire</a></h1>
+    <table class="simple">
+        <tr>
+            <th>#</th>
+            <th>Code<br>Point</th>
+            <th>Glyph</th>
+            <th>Name</th>
+            <th>IDN<br>Table</th>
+            <th>Ref.<br>LGR</th>
+            <th>Result</th>
+            <th>Remark</th>
+        </tr>
+        {% for cp in repertoire %}
+            <tr style="background-color:white;">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ cp.cp|format_cp }}</td>
+                <td>{{ cp.glyph }}</td>
+                <td style="text-align:left">{{ cp.name }}</td>
+                <td>{{ cp.idn_table|render_bool }}</td>
+                <td>{{ cp.reference_lgr|render_bool }}</td>
+                <td>{{ cp.result }}</td>
+                <td style="text-align:left">{{ cp.remark|linebreaks }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h1><a name="variant_sets">Variant Sets</a></h1>
+    {% for variant_set in variant_sets %}
+        <div class="varset_description">
+            <p><b>Set {{ forloop.counter }}</b></p>
+            <p>IDN Table: {{ variant_set.idn_table|format_cp_list }}<br>
+                Ref. LGR: {{ variant_set.ref_lgr|format_cp_list }}<br>
+                Relevant IDN Table Repertoire: {{ variant_set.relevant_idn_table_repertoire|format_cp_list }}<br>
+                Symmetry check: {{ variant_set.symmetry_check }}<br>
+                Transitivity check: {{ variant_set.transitivity_check }}</p>
+        </div>
+        <table class="simple">
+            <tr>
+                <th>Code<br>Point</th>
+                <th>Glyph</th>
+                <th>Code<br>Point</th>
+                <th>Glyph</th>
+                <th>&nbsp;</th>
+                <th>IDN<br>Table</th>
+                <th>Ref.<br>LGR</th>
+                <th>Type in<br>IDN Table</th>
+                <th>Type in<br>Ref. LGR</th>
+                <th>Result</th>
+                <th>Remark</th>
+            </tr>
+            {% for var in variant_set.report %}
+                {% if var.symmetric %}
+                    <tr style="background-color:white">
+                        <td>{{ var.source_cp|format_cp }}</td>
+                        <td>{{ var.source_glyph }}</td>
+                        <td>{{ var.dest_cp|format_cp }}</td>
+                        <td>{{ var.dest_glyph }}</td>
+                        <td>{% if var.source_cp != var.dest_cp %}↔{% else %}≡{% endif %}</td>
+                        <td>{{ var.dest_in_idn|render_bool }}</td>
+                        <td>{{ var.dest_in_ref|render_bool }}</td>
+                        <td>{{ var.fwd_type_idn }}</td>
+                        <td>{{ var.fwd_type_ref }}</td>
+                        <td>{{ var.result_fwd }}</td>
+                        <td style="text-align:left">{{ var.remark_fwd|linebreaks }}</td>
+                    </tr>
+                {% else %}
+                    <tr style="background-color:white">
+                        <td {% if var.reverse %} rowspan="2" {% endif %}>{{ var.source_cp|format_cp }}</td>
+                        <td {% if var.reverse %} rowspan="2" {% endif %}>{{ var.source_glyph }}</td>
+                        <td {% if var.reverse %} rowspan="2" {% endif %}>{{ var.dest_cp|format_cp }}</td>
+                        <td {% if var.reverse %} rowspan="2" {% endif %}>{{ var.dest_glyph }}</td>
+                        <td>→</td>
+                        <td>{{ var.dest_in_idn|render_bool }}</td>
+                        <td>{{ var.dest_in_ref|render_bool }}</td>
+                        <td>{{ var.fwd_type_idn }}</td>
+                        <td>{{ var.fwd_type_ref }}</td>
+                        <td>{{ var.result_fwd }}</td>
+                        <td style="text-align:left">{{ var.remark_fwd|linebreaks }}</td>
+                    </tr>
+                    {% if var.reverse %}
+                        <tr style="background-color:#F8F4EC">
+                            <td>←</td>
+                            <td>✓</td>
+                            <td>{{ var.dest_in_ref|render_bool }}</td>
+                            <td>{{ var.rev_type_idn }}</td>
+                            <td>{{ var.rev_type_ref }}</td>
+                            <td>{{ var.result_rev }}</td>
+                            <td style="text-align:left">{{ var.remark_rev|linebreaks }}</td>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endfor %}
+    <div>
+        <p><b>Additional code points which require additional variant review.</b></p>
+        <table class="simple">
+            <tr>
+                <th>Code<br>Point</th>
+                <th>Glyph</th>
+                <th>Name</th>
+            </tr>
+            {#            {% for cp in variant_sets.additional %}#}
+            {#                <tr>#}
+            {#                    <td>{{ cp.cp }}</td>#}
+            {#                    <td>{{ cp.glyph }}</td>#}
+            {#                    <td>{{ cp.name }}</td>#}
+            {#                </tr>#}
+            {#            {% endfor %}#}
+        </table>
+    </div>
+
+    <h1><a name="classes">Classes</a></h1>
+    <div class="classheader">
+        <p>The classes include classes formed by union, intersection and other operations on class.</p>
+    </div>
+    <table class="simple">
+        <tr>
+            <th>Class Name</th>
+            <th>Class Members in<br>IDN Table</th>
+            <th>Class Members in<br>Ref. LGR</th>
+            <th>Result</th>
+            <th>Remark</th>
+        </tr>
+        {% for clz in classes %}
+            <tr>
+                <td>{{ clz.name }}</td>
+                <td>{{ clz.idn_members|format_glyph_list }}</td>
+                <td>{{ clz.ref_members|format_glyph_list }}</td>
+                <td>{{ clz.result }}</td>
+                <td style="text-align:left">{{ clz.remark|linebreaks }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+    <h1><a name="whole_label_evaluation_rules">Whole Label Evaluation Rules</a></h1>
+    <table class="simple">
+        <tr>
+            <th>#</th>
+            <th>Rule Name</th>
+            <th>Exist in IDN Table</th>
+            <th>Exist in Ref. LGR</th>
+            <th>Result</th>
+            <th>Remark</th>
+        </tr>
+        {% for rule in wle.comparison %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td style="text-align:left">{{ rule.name }}</td>
+                <td>{{ rule.idn_table|render_bool }}</td>
+                <td>{{ rule.reference_lgr|render_bool }}</td>
+                <td>{{ rule.result }}</td>
+                <td style="text-align:left">{{ rule.remark|linebreaks }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <div>
+        <p><b>Additional code points which require additional WLE rules review.</b></p>
+        <table class="simple">
+            <tr>
+                <th>Code<br>Point</th>
+                <th>Glyph</th>
+                <th>Name</th>
+            </tr>
+            {% for cp in wle.additional_cp %}
+                <tr>
+                    <td>{{ cp.cp|format_cp }}</td>
+                    <td>{{ cp.glyph }}</td>
+                    <td style="text-align:left">{{ cp.name }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div>
+        <p><b>Additional General Rules.</b></p>
+        <table class="simple">
+            <tr>
+                <th>#</th>
+                <th>Rule Name</th>
+                <th>Is applicable for<br>the IDN Table?</th>
+                <th>Exists in<br>the IDN Table?</th>
+            </tr>
+            <tr style="background-color:white;">
+                <td>1</td>
+                <td style="text-align:left">The label cannot start with a combining mark based on the IDNA2008.</td>
+                <td>{{ wle.additional_general_rules.combining_mark.applicable|render_bool }}</td>
+                <td>{{ wle.additional_general_rules.combining_mark.exists|render_bool }}</td>
+            </tr>
+            <tr style="background-color:#F8F4EC;">
+                <td>2</td>
+                <td style="text-align:left">The label MUST NOT contain "--" (two consecutive hyphens) in the third and
+                    fourth character positions and MUST NOT start or end with a "-" (hyphen) based on the restriction in
+                    RFC5891
+                </td>
+                <td>{{ wle.additional_general_rules.consecutive_hyphens.applicable|render_bool }}</td>
+                <td>{{ wle.additional_general_rules.consecutive_hyphens.exists|render_bool }}</td>
+            </tr>
+            <tr style="background-color:white;">
+                <td>3</td>
+                <td style="text-align:left">For RTL scripts, digit cannot be at the beginning of the label based on the
+                    restriction RFC5893
+                </td>
+                <td>{{ wle.additional_general_rules.rtl.applicable|render_bool }}</td>
+                <td>{{ wle.additional_general_rules.rtl.exists|render_bool }}</td>
+            </tr>
+            <tr style="background-color:#F8F4EC;">
+                <td>4</td>
+                <td style="text-align:left">The label may contain only digits from a single set based on the restriction
+                    in RFC5893 and recommended for all script.
+                </td>
+                <td>{{ wle.additional_general_rules.digits_set.applicable|render_bool }}</td>
+                <td>{{ wle.additional_general_rules.digits_set.exists|render_bool }}</td>
+            </tr>
+            <tr style="background-color:white;">
+                <td>5</td>
+                <td style="text-align:left">???</td>
+                <td>{{ wle.additional_general_rules.ascii_cp.applicable|render_bool }}</td>
+                <td>{{ wle.additional_general_rules.ascii_cp.exists|render_bool }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <h1><a name="actions">Actions</a></h1>
+
+    <table class="simple">
+        <tr>
+            <th>#</th>
+            <th>Action</th>
+            <th>IDN<br>Table</th>
+            <th>Ref. LGR</th>
+            <th>Result</th>
+            <th>Remark</th>
+        </tr>
+        {% for action in actions.comparison %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td style="text-align:left">{{ action.name }}</td>
+                <td>{{ action.idn_table|render_bool }}</td>
+                <td>{{ action.reference_lgr|render_bool }}</td>
+                <td>{{ action.result }}</td>
+                <td style="text-align:left">{{ action.remark|linebreaks }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <p><b>Actions Sequence Check:</b> {{ actions.sequence }}</p>
+</div>
+</body>
+</HTML>
