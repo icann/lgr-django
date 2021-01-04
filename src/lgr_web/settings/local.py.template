@@ -18,10 +18,12 @@ if DEBUG:
         }
     }
 
+    LOGGING['loggers']['lgr_basic']['level'] = 'DEBUG'
     LOGGING['loggers']['lgr_web']['level'] = 'DEBUG'
     LOGGING['loggers']['lgr_editor']['level'] = 'DEBUG'
     LOGGING['loggers']['lgr']['level'] = 'DEBUG'
     LOGGING['loggers']['lgr-rule-logger']['level'] = 'DEBUG'
+    LOGGING['loggers']['celery']['level'] = 'DEBUG'
 
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'

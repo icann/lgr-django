@@ -1,0 +1,1100 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-02 03:08+0000\n"
+"PO-Revision-Date: 2020-06-04 13:41-0400\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.3\n"
+
+#: forms.py:21
+msgid "Label"
+msgstr "Label"
+
+#: forms.py:22
+msgid "File must be encoded in UTF-8 and using UNIX line ending."
+msgstr ""
+"Le fichier doit être encodé en UTF-8, et utiliser des retours à la ligne "
+"UNIX."
+
+#: forms.py:26
+msgid "Email address for tasks results"
+msgstr "Adresse e-mail utilisée pour recevoir le résultats des tâches"
+
+#: forms.py:27
+msgid ""
+"As the computing may be very long, we will warn by e-mail once the result "
+"can be downloaded."
+msgstr ""
+"Le temps de calcul peut être très long, vous serez averti par e-mail lorsque "
+"le résultat pourra être téléchargé. Fournissez une adresse e-mail valide "
+"s'il vous plaît."
+
+#: forms.py:37
+msgid "E-mail is mandatory to get the tasks results"
+msgstr ""
+"L'adresse e-mail est obligatoire pour recevoir les résultats des tâches"
+
+#: forms.py:40 forms.py:41
+msgid "Required"
+msgstr "Requis"
+
+#: forms.py:45 forms.py:46
+msgid "Unknown error, please report"
+msgstr "Erreur inconnue, reportez l'erreur s'il vous plait"
+
+#: templates/basic_mode.html:8 templates/basic_mode.html:39
+msgid "LGR Tool"
+msgstr "Outil de gestion de LGR"
+
+#: templates/basic_mode.html:38 templates/basic_mode.html:39
+msgid "Go to home screen"
+msgstr "Retourner à l'écran d'accueil"
+
+#: templates/basic_mode.html:43
+msgid "Advanced mode"
+msgstr "Mode avancé"
+
+#: templates/basic_mode.html:47 templates/basic_mode.html:253
+msgid "Display all label forms"
+msgstr "Afficher toutes les formes d'un label"
+
+#: templates/basic_mode.html:48
+msgid "Label forms"
+msgstr "Formes"
+
+#: templates/basic_mode.html:53
+msgid "About LGR Toolset"
+msgstr "À propos de l'application LGR"
+
+#: templates/basic_mode.html:54 templates/basic_mode.html:235
+msgid "About"
+msgstr "À propos"
+
+#: templates/basic_mode.html:74
+msgid ""
+"The server was unable to complete the request, most likely because too many "
+"resources were required to compute the query. If you check for collision, "
+"the result may be still processing and will be sent to your email. Please "
+"wait before submitting again."
+msgstr ""
+"Le serveur n'a pas pu compléter la requête, probablement parce que trop de "
+"ressources sont nécessaires pour calculer la requête. Si vous vérifiez une "
+"collision, le résultat peut être toujours en cours de traitement et vous "
+"sera envoyé par mail. Merci de patienter avant de soumettre à nouveau."
+
+#: templates/basic_mode.html:82
+msgid "A server error occurred."
+msgstr "Une erreur de serveur s'est produite."
+
+#: templates/basic_mode.html:82
+msgid "code:"
+msgstr "code :"
+
+#: templates/basic_mode.html:82
+msgid "Please contact the administrator before submitting again."
+msgstr ""
+"Veuillez contacter l'administrateur avant de soumettre votre requête à "
+"nouveau."
+
+#: templates/basic_mode.html:88
+msgid "Validate label(s) against"
+msgstr "Valider le(s) label(s) avec"
+
+#: templates/basic_mode.html:93
+msgid "View LGR as"
+msgstr "Voir la LGR en"
+
+#: templates/basic_mode.html:106
+msgid "Manually input label(s)"
+msgstr "Entrer le(s) label(s) manuellement"
+
+#: templates/basic_mode.html:117
+msgid "Upload a list of labels"
+msgstr "Télécharger une liste de labels"
+
+#: templates/basic_mode.html:136
+msgid "Check for collision with existing TLDs"
+msgstr "Vérifier les collisions avec la liste de TLDs"
+
+#: templates/basic_mode.html:150
+#, python-format
+msgid ""
+"Your request was sent successfully, the collision and validation tasks "
+"processing can take minutes, even hours.<br> The result will be sent to "
+"%(email)s. Do not resubmit until you receive the report."
+msgstr ""
+"Votre requête a bien été envoyée, le calcul des collision et la tâche de "
+"validation peuvent prendre plusieurs minutes, voire plusieurs heures.<br> Le "
+"résultat sera envoyé à %(email)s. Ne renvoyez pas de requête tant que vous "
+"n'avez pas reçu le rapport."
+
+#: templates/basic_mode.html:162
+#, python-format
+msgid ""
+"Your request was sent successfully, the validation task processing can take "
+"minutes, even hours.<br> The result will be sent to %(email)s. Do not "
+"resubmit until you receive the report."
+msgstr ""
+"Votre requête a bien été envoyée, la tâche de validation peut prendre "
+"plusieurs minutes, voire plusieurs heures.<br> Le résultat sera envoyé à "
+"%(email)s. Ne renvoyez pas de requête tant que vous n'avez pas reçu le "
+"rapport."
+
+#: templates/basic_mode.html:174
+#, python-format
+msgid ""
+"Your request was sent successfully, the collision task processing can take "
+"minutes, even hours.<br> The result will be sent to %(email)s. Do not "
+"resubmit until you receive the report."
+msgstr ""
+"Votre requête a bien été envoyée, le calcul des collisions peut prendre "
+"plusieurs minutes, voire plusieurs heures.<br> Le résultat sera envoyé à "
+"%(email)s. Ne renvoyez pas de requête tant que vous n'avez pas reçu le "
+"rapport."
+
+#: templates/basic_mode.html:184
+msgid "Validate"
+msgstr "Valider"
+
+#: templates/basic_mode.html:197
+msgid "Your saved results"
+msgstr "Vos résultats sauvegardés"
+
+#: templates/basic_mode.html:198
+msgid "The following files contains your tools computation results."
+msgstr ""
+"Ces fichiers contiennent les résultats des calculs fournis par les outils."
+
+#: templates/basic_mode.html:201
+msgid "Note that these files could be cleaned up regularly."
+msgstr ""
+"Veuillez noter que ces fichiers pourraient être régulièrement supprimés."
+
+#: templates/basic_mode.html:206
+#, python-format
+msgid "Download %(file)s"
+msgstr "Télécharger %(file)s"
+
+#: templates/basic_mode.html:241
+msgid "Close"
+msgstr "Fermer"
+
+#: views.py:83
+msgid ""
+"Input label generates too many variants to compute them all quickly. You "
+"need to enter your email address and will receive a notification once "
+"process is done"
+msgstr ""
+"Le label entré peut générer trop de variantes pour rapidement toutes les "
+"calculer. Vous devez rentrer votre adresse e-mail et recevrez une "
+"notification une fois que le processus est terminé"
+
+#, python-format
+#~ msgid ""
+#~ "Your request was sent successfully, the collision and validation tasks "
+#~ "processing can take minutes, even hours.<br> Both results will be sent to "
+#~ "%(email)s in two separate emails. Do not resubmit until you receive both "
+#~ "reports."
+#~ msgstr ""
+#~ "Votre requête a bien été envoyée, les tâches de collision et de "
+#~ "validation peuvent prendre plusieurs minutes, voire plusieurs heures.<br> "
+#~ "Les deux résultats seront envoyés à %(email)s en deux e-mails distincts. "
+#~ "Ne renvoyez pas de requête tant que vous n'avez pas reçu les deux "
+#~ "rapports."
+
+#~ msgid "Collision task result will be sent to "
+#~ msgstr "Le résultat du calcul de collisions sera envoyé à "
+
+#~ msgid "When"
+#~ msgstr "When"
+
+#~ msgid "Not-When"
+#~ msgstr "Not When"
+
+#~ msgid "Tags"
+#~ msgstr "Tags"
+
+#~ msgid "space-separated tags"
+#~ msgstr "liste de tags séparés par des espaces"
+
+#~ msgid "Code point"
+#~ msgstr "Code point"
+
+#~ msgid "Override repertoire"
+#~ msgstr "Ignorer le répertoire"
+
+#~ msgid "Code points"
+#~ msgstr "Code points"
+
+#~ msgid "Disabled code points"
+#~ msgstr "Code points indisponibles"
+
+#~ msgid "First code point"
+#~ msgstr "Premier code point"
+
+#~ msgid "Last code point"
+#~ msgstr "Dernier code point"
+
+#~ msgid ""
+#~ "Last code point (%(last_cp)s) must not be smaller than the first code "
+#~ "point (%(first_cp)s)"
+#~ msgstr ""
+#~ "Le dernier code point (%(last_cp)s) ne peut être plus petit que le "
+#~ "premier code point (%(first_cp)s)"
+
+#~ msgid "Validating repertoire"
+#~ msgstr "Répertoire de validation"
+
+#~ msgid "Script"
+#~ msgstr "Script"
+
+#~ msgid "Manual import"
+#~ msgstr "Importation manuelle"
+
+#~ msgid "Select a file"
+#~ msgstr "Sélectionner un fichier"
+
+#~ msgid "File type"
+#~ msgstr "Type de fichier"
+
+#~ msgid "Name"
+#~ msgstr "Nom"
+
+#~ msgid "Code points will be limited to the selected repertoire"
+#~ msgstr "Les code points seront limités au répertoire sélectionné"
+
+#~ msgid "Select file(s)"
+#~ msgstr "Sélectionner un/des fichier(s)"
+
+#~ msgid "LGR set name"
+#~ msgstr "Nom du set LGR"
+
+#~ msgid ""
+#~ "Enter a valid LGR set name. This value may contain only letters, numbers "
+#~ "and ./-/_ characters."
+#~ msgstr ""
+#~ "Entrer un nom de LGR valide. Cette valeur ne peut que contenir des "
+#~ "lettres, nombres et les caractères ./-/_."
+
+#~ msgid "The name of the set"
+#~ msgstr "Nom du set"
+
+#~ msgid "Unicode version"
+#~ msgstr "Version d'Unicode"
+
+#~ msgid "The unicode version used"
+#~ msgstr "Version d'Unicode"
+
+#~ msgid "Version"
+#~ msgstr "Version"
+
+#~ msgid "Version comment"
+#~ msgstr "Commentaire de version"
+
+#~ msgid "Date"
+#~ msgstr "Date"
+
+#~ msgid "Scope"
+#~ msgstr "Portée"
+
+#~ msgid "Scope type"
+#~ msgstr "Type de la portée"
+
+#~ msgid "Validity start"
+#~ msgstr "Début de la validité"
+
+#~ msgid "Description"
+#~ msgstr "Description"
+
+#~ msgid "Description type"
+#~ msgstr "Type de la description"
+
+#~ msgid "Built-in"
+#~ msgstr "Fournis"
+
+#~ msgid "My LGRs"
+#~ msgstr "Mes LGRs"
+
+#~ msgid "Language"
+#~ msgstr "Langage"
+
+#~ msgid "Input code point %(codepoint)s is not in the LGR"
+#~ msgstr "Le code point %(codepoint)s n'est pas dans la LGR"
+
+#~ msgid "Input code point %(codepoint)s is not in the reference repertoire"
+#~ msgstr ""
+#~ "Le code point %(codepoint)s n'est pas dans le répertoire de référence"
+
+#~ msgid ""
+#~ "Variant %(variant_codepoint)s already exists for code point %(codepoint)s"
+#~ msgstr ""
+#~ "La variante %(variant_codepoint)s existe déjà pour le code point "
+#~ "%(codepoint)s"
+
+#~ msgid "Range %(first_cp)s - %(last_cp)s already exists in the LGR"
+#~ msgstr "L'ensemble %(first_cp)s - %(last_cp)s existe déjà dans la LGR"
+
+#~ msgid "Input code point %(codepoint)s already exists in the LGR"
+#~ msgstr "Le code point %(codepoint)s existe déjà dans la LGR"
+
+#~ msgid "Input code point %(codepoint)s is not in LGR script"
+#~ msgstr "Le code point %(codepoint)s n'est pas dans le script de la LGR"
+
+#~ msgid ""
+#~ "Input code point %(codepoint)s is not a PVALID/CONTEXTO/CONTEXTJ code "
+#~ "point per IDNA2008"
+#~ msgstr ""
+#~ "Le code point %(codepoint)s n'est pas un code point PVALID/CONTEXTO/"
+#~ "CONTEXTJ d'après IDNA2008"
+
+#~ msgid "Code point %(codepoint)s has invalid context rule %(rule)s"
+#~ msgstr ""
+#~ "Le code point %(codepoint)s a une règle contextuelle invalide %(rule)s"
+
+#~ msgid "Range %(first_cp)s - %(last_cp)s has invalid context rule"
+#~ msgstr ""
+#~ "L'ensemble %(first_cp)s - %(last_cp)s a une règle contextuelle invalide"
+
+#~ msgid ""
+#~ "Variant %(variant_codepoint)s of code point %(codepoint)shas invalid "
+#~ "context rule"
+#~ msgstr ""
+#~ "La variante %(variant_codepoint)s du code point %(codepoint)s a une règle "
+#~ "contextuelle invalide"
+
+#~ msgid "Duplicate reference for code point %(codepoint)s"
+#~ msgstr "Référence dupliquée pour le code point %(codepoint)s"
+
+#~ msgid "Unspecified exception for input code point %(codepoint)s"
+#~ msgstr "Exception non-spécifiée pour le code point d'entrée %(codepoint)s"
+
+#~ msgid "Sequence cannot have a tag"
+#~ msgstr "Les séquences ne peuvent pas avoir de tag"
+
+#~ msgid "Invalid language"
+#~ msgstr "Langage invalide"
+
+#~ msgid "Invalid date value"
+#~ msgstr "Date invalide"
+
+#~ msgid "Invalid Unicode version"
+#~ msgstr "Version d'unicode invalide"
+
+#~ msgid "Invalid LGR XML file"
+#~ msgstr "Fichier XML de LGR invalide"
+
+#~ msgid "Reference %(ref_id)s is not defined"
+#~ msgstr "La référence %(ref_id)s n'est pas définie"
+
+#~ msgid "Reference %(ref_id)s already exists"
+#~ msgstr "La référence %(ref_id)s existe déjà"
+
+#~ msgid "Invalid reference id %(ref_id)s "
+#~ msgstr "Identifiant de référence invalide %(ref_id)s "
+
+#~ msgid "Rule \"%(rule_name)s\" cannot be processed (%(message)s)"
+#~ msgstr "La règle \"%(rule_name)s\" ne peut pas être traitée (%(message)s)"
+
+#~ msgid "Input parameter has invalid format"
+#~ msgstr "Le paramètre d'entrée a un format invalide"
+
+#~ msgid "A general exception occurred in the LGR API"
+#~ msgstr "Une exception s'est produite dans l'API LGR"
+
+#~ msgid "LGR is not valid (%(args)s)"
+#~ msgstr "La LGR n'est pas valide (%(args)s)"
+
+#~ msgid "Label %(label)s is not valid in the LGR (%(message)s)"
+#~ msgstr "Label %(label)s n'est pas valide dans la LGR (%(message)s)"
+
+#~ msgid "Input label file contains collision(s)"
+#~ msgstr "Le fichier d'entrée des labels contient une/des collision(s)"
+
+#~ msgid "The LGR contains a variant that do not have symmetric relations"
+#~ msgstr "La LGR contient des variantes ne respectant pas la symmétrie"
+
+#~ msgid "The LGR does not contain a valid language (%(message)s)"
+#~ msgstr "La LGR ne contient pas de langues valides (%(message)s)"
+
+#~ msgid "Cannot generate cross-script variant for LGR without (%(message)s)"
+#~ msgstr ""
+#~ "Impossible de générer les variantes cross-script pour la LGR sans "
+#~ "(%(message)s)"
+
+#~ msgid "An unknown exception occurred in the LGR API"
+#~ msgstr "Une exception inconnue s'est produite dans l'API LGR"
+
+#~ msgid "References"
+#~ msgstr "Références"
+
+#~ msgid "Meta data"
+#~ msgstr "Métadonnées"
+
+#~ msgid "Rules"
+#~ msgstr "Règles"
+
+#~ msgid "Embedded LGRs"
+#~ msgstr "LGR embarquées"
+
+#~ msgid "Sets:"
+#~ msgstr "Sets:"
+
+#~ msgid "%(lgr_name)s"
+#~ msgstr "%(lgr_name)s"
+
+#~ msgid "Cancel"
+#~ msgstr "Annuler"
+
+#~ msgid "Save"
+#~ msgstr "Sauvegarder"
+
+#~ msgid "Edit"
+#~ msgstr "Modifier"
+
+#~ msgid ""
+#~ "\n"
+#~ "        This application provides a convenient interface for browsing\n"
+#~ "        and editing <abbr title=\"Label Generation Ruleset\">LGR</abbr>’s "
+#~ "conforming to the\n"
+#~ "        <a href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" target="
+#~ "\"_blank\">Representing Label Generation Rulesets using XML</a>\n"
+#~ "        specification.\n"
+#~ "    "
+#~ msgstr ""
+#~ "\n"
+#~ "Cette application fournit une interface adaptée à la navigation et la "
+#~ "modification de  <abbr title=\"Label Generation Ruleset\">LGR</abbr> "
+#~ "conformes à la spécification <a href=\"https://www.rfc-editor.org/rfc/"
+#~ "rfc7940.txt\" target=\"_blank\">Representing Label Generation Rulesets "
+#~ "using XML</a>.\n"
+#~ "    "
+
+#~ msgid "Supported Unicode versions:"
+#~ msgstr "Versions d'Unicode supportées:"
+
+#~ msgid ""
+#~ "This toolset was implemented by <a href=\"http://www.viagenie.ca/\" "
+#~ "target=\"_blank\">Viagénie</a> and Wil Tan on an ICANN contract."
+#~ msgstr ""
+#~ "Cette application a été implémentée par <a href=\"http://www.viagenie.ca/"
+#~ "\" target=\"_blank\">Viagénie</a> et Wil Tan sous contrat ICANN."
+
+#~ msgid "Next"
+#~ msgstr "Suivant"
+
+#~ msgid ""
+#~ "Code points added. <a href=\"%(url)s\" href=\"_top\">Click here</a> if "
+#~ "you are not redirected automatically."
+#~ msgstr ""
+#~ "Code point ajouté. <a href=\"%(url)s\" href=\"_top\">Cliquez ici</a> si "
+#~ "vous n'êtes pas redirigé automatiquement."
+
+#~ msgid "Populate variants"
+#~ msgstr "Peupler les variantes"
+
+#~ msgid "Expand range(s)"
+#~ msgstr "Convertir tous les ensembles"
+
+#~ msgid "Add code point(s)"
+#~ msgstr "Ajouter un/des code point(s)"
+
+#~ msgid "Character Name"
+#~ msgstr "Nom du caractère"
+
+#~ msgid "Comments"
+#~ msgstr "Commentaires"
+
+#~ msgid "Action"
+#~ msgstr "Action"
+
+#~ msgid "Add Rule"
+#~ msgstr "Ajouter une règle"
+
+#~ msgid "There is no rule in the current LGR"
+#~ msgstr "Il n'y a pas de règles dans la LGR courante"
+
+#~ msgid ""
+#~ "\n"
+#~ "                                    <p>This rule will be added to "
+#~ "<b><span class=\"nbr-selected\"></span> codepoint(s)</b></p>\n"
+#~ "                                "
+#~ msgstr ""
+#~ "\n"
+#~ "                                    <p>Cette règle va être ajoutée à "
+#~ "<b><span class=\"nbr-selected\"></span> code point(s)</b></p>\n"
+#~ "                                "
+
+#~ msgid "Add Tags"
+#~ msgstr "Ajouter des Tags"
+
+#~ msgid ""
+#~ "\n"
+#~ "                                <p>These tags will be added to <b><span "
+#~ "class=\"nbr-selected\"></span> codepoint(s)</b></p>\n"
+#~ "                            "
+#~ msgstr ""
+#~ "\n"
+#~ "                                <p>Ces tags vont être ajoutées à <b><span "
+#~ "class=\"nbr-selected\"></span> code point(s)</b></p>\n"
+#~ "                            "
+
+#~ msgid "Code point range"
+#~ msgstr "Ensemble de Code points"
+
+#~ msgid "Code point from script"
+#~ msgstr "Code point depuis un script"
+
+#~ msgid "Import from file"
+#~ msgstr "Importer depuis un fichier"
+
+#~ msgid "Add Code Point"
+#~ msgstr "Ajouter un Code Point"
+
+#~ msgid "Variant(s)"
+#~ msgstr "Variante(s)"
+
+#~ msgid "See code point"
+#~ msgstr "Voir le code point"
+
+#~ msgid "Expand range"
+#~ msgstr "Convertir l'ensemble"
+
+#~ msgid "➡ Select code point(s) to apply batch action..."
+#~ msgstr ""
+#~ "➡ Sélectionner les code points sur lesquels appliquer une action par "
+#~ "lots..."
+
+#~ msgid "Add WLE"
+#~ msgstr "Ajouter une WLE"
+
+#~ msgid "➡ Apply batch action..."
+#~ msgstr "➡ Appliquer action par lots..."
+
+#~ msgid "Code point appeared in Unicode version: %(age)s"
+#~ msgstr "Le code point est apparu dans Unicode version : %(age)s"
+
+#~ msgid "Add variant"
+#~ msgstr "Ajouter une variante"
+
+#~ msgid "Type"
+#~ msgstr "Type"
+
+#~ msgid "Not When"
+#~ msgstr "Not When"
+
+#~ msgid "Code point is not in LGR"
+#~ msgstr "Le code point n'est pas dans la LGR"
+
+#~ msgid "Are you sure you want delete this variant?"
+#~ msgstr "Êtes-vous sûr(e) de vouloir supprimer cette variante ?"
+
+#~ msgid "Delete variant"
+#~ msgstr "Supprimer la variante"
+
+#~ msgid "Edit references"
+#~ msgstr "Modifier les références"
+
+#~ msgid "Range characters do not have variants."
+#~ msgstr "Les ensembles de caractères n'ont pas de variantes."
+
+#~ msgid "Code point has not variant"
+#~ msgstr "Le code point n'a pas de variante"
+
+#~ msgid "Save variants, tags, context rules and comment"
+#~ msgstr ""
+#~ "Sauvegarder les variantes, tags, règles contextuelles et commentaires"
+
+#~ msgid "No references associated with code point."
+#~ msgstr "Aucune référence associée au code point."
+
+#~ msgid "Are you sure you want delete this code point?"
+#~ msgstr "Êtes-vous sûr(e) de vouloir supprimer ce code point ?"
+
+#~ msgid "Delete code point"
+#~ msgstr "Supprimer le code point"
+
+#~ msgid "Edit References for <span></span>"
+#~ msgstr "Modifier les références pour <span></span>"
+
+#~ msgctxt "button title"
+#~ msgid "Delete reference"
+#~ msgstr "Supprimer la référence"
+
+#~ msgid "Add an existing reference"
+#~ msgstr "Ajouter un référence existante"
+
+#~ msgid "Add"
+#~ msgstr "Ajouter"
+
+#~ msgid "Create a new reference"
+#~ msgstr "Créer une nouvelle référence"
+
+#~ msgid "Error when adding reference"
+#~ msgstr "Erreur lors de l'ajout d'une référence"
+
+#~ msgid "Reference ID (optional)"
+#~ msgstr "Id de référence (optionnel)"
+
+#~ msgid "URL (optional)"
+#~ msgstr "URL (optionnelle)"
+
+#~ msgid "New reference"
+#~ msgstr "Nouvelle référence"
+
+#~ msgid "Save changes"
+#~ msgstr "Sauvegarder les changements"
+
+#~ msgid "List of LGRs in the set"
+#~ msgstr "Liste des LGR dans le set"
+
+#~ msgid "Import existing LGR"
+#~ msgstr "Importer une LGR existante"
+
+#~ msgid ""
+#~ "To import LGR set, select the XML files composing the LGR set. The set "
+#~ "will automatically be created."
+#~ msgstr ""
+#~ "Pour importer un set LGR, sélectionner les fichiers XML  le set LGR. Le "
+#~ "set sera créé automatiquement."
+
+#~ msgid ""
+#~ "<strong> <i class=\"glyphicon glyphicon-info-sign\"></i> Import function "
+#~ "will only perfom some basic checking (example: XML validity). Once the "
+#~ "LGR has been imported, you need to use the <emph>Validate LGR</emph> "
+#~ "button to do a complete check. </strong>"
+#~ msgstr ""
+#~ "<strong> <i class=\"glyphicon glyphicon-info-sign\"></i> La fonction "
+#~ "d'importation effectue uniquement quelques tests de base (par exemple, la "
+#~ "validité du XML). Une fois la LGR importée, vous devez utiliser le bouton "
+#~ "<emph>Valider la LGR</emph> pour effectuer un test complet. </strong>"
+
+#~ msgid "These LGRs are already imported. Click on one to access it."
+#~ msgstr "Les LGRs suivantes sont déjà importées. Cliquer pour y accéder."
+
+#~ msgid "Import"
+#~ msgstr "Importer"
+
+#~ msgid ""
+#~ "<strong class=\"text-danger\"><i class=\"glyphicon glyphicon-alert\"></i> "
+#~ "Note that importing large LGR files may take significant time to load on "
+#~ "your browser.</strong>"
+#~ msgstr ""
+#~ "<strong class=\"text-danger\"><i class=\"glyphicon glyphicon-alert\"></i> "
+#~ "L’importation de gros fichiers LGR peut être lente à charger dans le "
+#~ "navigateur.</strong>"
+
+#~ msgid "Cannot import LGR file(s):"
+#~ msgstr "Impossible d'importer le(s) fichier(s) LGR :"
+
+#~ msgid "Code point sequence"
+#~ msgstr "Séquence de code points"
+
+#~ msgid "U-label"
+#~ msgstr "U-Label"
+
+#~ msgid "A-label"
+#~ msgstr "A-Label"
+
+#~ msgid "There was an error saving; please see error(s) below"
+#~ msgstr ""
+#~ "Il y a eu une erreur lors de la sauvegarde, merci de regarder ci-dessous"
+
+#~ msgid "Create a new LGR"
+#~ msgstr "Créer une nouvelle LGR"
+
+#~ msgid "These LGRs are already created. Click on one to access it."
+#~ msgstr "Les LGRs suivantes sont déjà créées. Cliquez pour y accéder."
+
+#~ msgid "Create"
+#~ msgstr "Créer"
+
+#~ msgid "Existing references"
+#~ msgstr "Références existantes"
+
+#~ msgid "Reference id"
+#~ msgstr "Identifiant de référence"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "Delete reference"
+#~ msgstr "Supprimer la référence"
+
+#~ msgid "Are you sure you want delete this reference?"
+#~ msgstr "Êtes-vous sûr(e) de vouloir supprimer cette référence ?"
+
+#~ msgid "Classes"
+#~ msgstr "Classes"
+
+#~ msgid "The LGR has no class"
+#~ msgstr "La LGR n'a pas de classes"
+
+#~ msgid "The LGR has no rule"
+#~ msgstr "La LGR n'a pas de règles"
+
+#~ msgid "Actions"
+#~ msgstr "Actions"
+
+#~ msgid "The LGR has no action"
+#~ msgstr "La LGR n'a pas d'actions"
+
+#~ msgid "New class"
+#~ msgstr "Nouvelle classe"
+
+#~ msgid "New rule"
+#~ msgstr "Nouvelle règle"
+
+#~ msgid "New action"
+#~ msgstr "Nouvelle action"
+
+#~ msgid "Existing tags"
+#~ msgstr "Tags existants"
+
+#~ msgid "Tag name"
+#~ msgstr "Nom du tag"
+
+#~ msgid "Associated code points"
+#~ msgstr "Code points associés"
+
+#~ msgid "View all (%(nb_cp)s)"
+#~ msgstr "Voir tout (%(nb_cp)s)"
+
+#~ msgid "Delete Tag"
+#~ msgstr "Supprimer le tag"
+
+#~ msgid "Are you sure you want delete tag %(tag)s?"
+#~ msgstr "Êtes-vous sûr(e) de vouloir supprimer ce tag %(tag)s ?"
+
+#~ msgid ""
+#~ "<span style=\"font-weight: bold\">To create a new tag:</span>\n"
+#~ "                Add it to a code point first to find it back in this list"
+#~ msgstr ""
+#~ "<span style=\"font-weight: bold\">Pour créer un nouveau tag:</span>\n"
+#~ "                Ajouter le tag à un code point afin de le retrouver dans "
+#~ "cette list"
+
+#~ msgid "Erroneous conditional code points"
+#~ msgstr "Erreur dans les code points conditionels"
+
+#~ msgid ""
+#~ "Code point %(cp)s has invalid %(rule_type)s rule %(rule)s for variant "
+#~ "%(variant)s"
+#~ msgstr ""
+#~ "Le code point %(cp)s a la règle %(rule_type)s %(rule)s invalide pour les "
+#~ "variantes %(variant)s"
+
+#~ msgid "Conditional variants OK"
+#~ msgstr "Variantes conditionnelles OK"
+
+#~ msgid "Missing code points or rules"
+#~ msgstr "Code points ou règles manquants"
+
+#~ msgid "Code point %(cp)s:"
+#~ msgstr "Code point %(cp)s:"
+
+#~ msgid "Variant %(variant)s is not in repertoire"
+#~ msgstr "La variante %(variant)s n'est pas dans le répertoire"
+
+#~ msgid "%(variant)s has not original code point in its variants"
+#~ msgstr "%(variant)s n'a pas le code point original dans ses variantes"
+
+#~ msgid ""
+#~ "%(variant)s has not symmetric %(rule_type)s rule %(rule)s on its "
+#~ "symmetric variants"
+#~ msgstr ""
+#~ "%(variant)s n'a pas la règle %(rule_type)s %(rule)s dans ses variantes "
+#~ "symmétriques"
+
+#~ msgid "Symmetry OK"
+#~ msgstr "Symétrie OK"
+
+#~ msgid "Missing variants"
+#~ msgstr "Variantes manquantes"
+
+#~ msgid "Code point %(cp)s is missing variant %(variant)s"
+#~ msgstr "Le code point %(cp)s n'a pas la variante %(variant)s"
+
+#~ msgid "Transitivity OK"
+#~ msgstr "Transitivité OK"
+
+#~ msgid "XML is valid and complies with RNG."
+#~ msgstr "XML valide et conforme au RNG."
+
+#~ msgid "Invalid XML for lgr: %(res)s"
+#~ msgstr "Fichier XML invalide pour la LGR: %(res)s"
+
+#~ msgid "General stats"
+#~ msgstr "Statistiques générales"
+
+#~ msgid "Number of code points: %(nbr)s"
+#~ msgstr "Nombre de code points: %(nbr)s"
+
+#~ msgid "Number of ranges: %(nbr)s"
+#~ msgstr "Nombre d'intervalles: %(nbr)s"
+
+#~ msgid "Largest range: %(largest)s (length: %(largest_len)s)"
+#~ msgstr "Plus grand intervalle: %(largest)s (longueur: %(largest_len)s)"
+
+#~ msgid "Number of sequences: %(nbr)s"
+#~ msgstr "Nombre de séquences: %(nbr)s"
+
+#~ msgid "Largest sequence: %(largest)s (length: %(largest_len)s)"
+#~ msgstr "Plus grande séquence: %(largest)s (longueur: %(largest_len)s)"
+
+#~ msgid "Variants"
+#~ msgstr "Variante(s)"
+
+#~ msgid "Total number of variant mappings: %(nbr)s"
+#~ msgstr "Nombre total de variantes mappées: %(nbr)s"
+
+#~ msgid "Average number of variants per code point: %(nbr)s"
+#~ msgstr "Nombre moyen de variantes par code point: %(nbr)s"
+
+#~ msgid "Largest variant set: %(largest_set)s"
+#~ msgstr "Plus grand ensemble de variantes: %(largest_set)s"
+
+#~ msgid "Variants per type:"
+#~ msgstr "Variantes par type:"
+
+#~ msgid "Number of variants for type %(variant_type)s: %(number)s"
+#~ msgstr "Nombre de variantes pour le type %(variant_type)s: %(number)s"
+
+#~ msgid "Number of code points for tag %(tag_name)s: %(number)s"
+#~ msgstr "Nombre de code points pour le tag %(tag_name)s: %(number)s"
+
+#~ msgid "Number of defined rules: %(nbr)s"
+#~ msgstr "Nombre de règles définies: %(nbr)s"
+
+#~ msgid "Unicode version %(version)s"
+#~ msgstr "Version d'Unicode %(version)s"
+
+#~ msgid "Validating repertoire '%(repertoire)s'"
+#~ msgstr "Répertoire de validation '%(repertoire)s'"
+
+#~ msgid ""
+#~ "Target Unicode version %(version)s differs from UnicodeDatabase "
+#~ "%(database)s"
+#~ msgstr ""
+#~ "La version Unicode cible %(version)s diffère de UnicodeDatabase "
+#~ "%(database)s"
+
+#~ msgid "Invalid characters"
+#~ msgstr "Caractères invalides"
+
+#~ msgid "Invalid character %(cp)s:"
+#~ msgstr "Caractère invalide %(cp)s:"
+
+#~ msgid "Error: %(err)s"
+#~ msgstr "Erreur: %(err)s"
+
+#~ msgid "Variant: %(variant|render_char)s"
+#~ msgstr "Variante: %(variant|render_char)s"
+
+#~ msgid "LGR rebuild OK"
+#~ msgstr "Reconstruction de la LGR OK"
+
+#~ msgid ""
+#~ "The LGR you have tried to create already exists in your working session. "
+#~ "Please use a new name."
+#~ msgstr ""
+#~ "La LGR que vous essayez de créer existe déjà dans votre session de "
+#~ "travail. Merci d'utiliser un nouveau nom."
+
+#~ msgid ""
+#~ "The LGR you have tried to import already exists in your working session. "
+#~ "Please rename it before importing it."
+#~ msgstr ""
+#~ "La LGR que vous essayez d'importer existe déjà dans votre session de "
+#~ "travail. Merci de renommer le fichier avant de l'importer."
+
+#~ msgid ""
+#~ "The LGR you have tried to import already exists in your set. Please "
+#~ "rename it before importing it."
+#~ msgstr ""
+#~ "La LGR que vous essayez d'importer existe déjà dans votre ensemble. Merci "
+#~ "de renommer le fichier avant de l'importer."
+
+#~ msgid "The LGR set name already exists. Please use another name."
+#~ msgstr "Ce nom de set LGR existe déjà. Merci d'utiliser un autre nom."
+
+#~ msgid "Testing XML validity using RNG"
+#~ msgstr "Validation du XML par le RNG"
+
+#~ msgid "Testing symmetry"
+#~ msgstr "Test de la symmétrie"
+
+#~ msgid "Testing transitivity"
+#~ msgstr "Test de la transitivité"
+
+#~ msgid "Testing conditional variants"
+#~ msgstr "Test des variantes conditionnelles"
+
+#~ msgid "Generate stats"
+#~ msgstr "Génération des statistiques"
+
+#~ msgid "Rebuilding LGR"
+#~ msgstr "Reconstruction de la LGR"
+
+#~ msgid "New code point %s added"
+#~ msgstr "Nouveau code point ajouté %s"
+
+#~ msgid "Rule"
+#~ msgstr "Règle"
+
+#~ msgid "Tag(s)"
+#~ msgstr "Tag(s)"
+
+#~ msgid "rule"
+#~ msgstr "règle"
+
+#~ msgid "tag(s)"
+#~ msgstr "tag(s)"
+
+#~ msgid "%(operation)s successfully added to %(nb_cp)s code point(s)"
+#~ msgstr "%(operation)s ajouté(s) avec succès à %(nb_cp)s code point(s)"
+
+#~ msgid ""
+#~ "%(nb_cp)s code points were not updated to avoid invalid %(operation)s"
+#~ msgstr ""
+#~ "%(nb_cp)s code points n'ont pas été mis à jour pour éviter des "
+#~ "%(operation)s invalides"
+
+#~ msgid "Automatically added codepoint %s from out-of-repertoire variant"
+#~ msgstr ""
+#~ "Code point %s automatiquement ajouté depuis une variante hors-répertoire"
+
+#~ msgid "New variant %s added"
+#~ msgstr "Nouvelle variante %s ajoutée"
+
+#~ msgid "Code point edited"
+#~ msgstr "Code point modifié"
+
+#~ msgid "Variants populated"
+#~ msgstr "Les variantes ont été peuplées"
+
+#~ msgid "References updated successfully"
+#~ msgstr "Les références ont été correctement mises à jour"
+
+#~ msgid ""
+#~ "Variant %(var_codepoint)s for code point %(codepoint)s with when=%(when)s "
+#~ "and not-when=%(not_when)s could not be found"
+#~ msgstr ""
+#~ "La variante %(var_codepoint)s du code point  %(codepoint)s avec when="
+#~ "%(when)s et not-when=%(not_when)s n'a pas été trouvée"
+
+#~ msgid "Code point %s has been deleted"
+#~ msgstr "Le code point  %s a été supprimé"
+
+#~ msgid "Variant %(var_cp)s with when='%(when)s' and not-when='%(not_when)s'"
+#~ msgstr ""
+#~ "La variante %(var_cp)s avec when='%(when)s' and not-when='%(not_when)s'"
+
+#~ msgid "%(var_msg_prefix)s has been deleted"
+#~ msgstr "%(var_msg_prefix)s a été supprimée"
+
+#~ msgid "%(var_msg_prefix)s could not be deleted because it was not found"
+#~ msgstr ""
+#~ "%(var_msg_prefix)s n'a pas pu être supprimée car elle n'a pas été trouvée"
+
+#~ msgid "New reference created"
+#~ msgstr "Nouvelle référence créée"
+
+#~ msgid ""
+#~ "References to tag %(tag)s have been removed from the repertoire. Do not "
+#~ "forget to update any WLE that might reference it."
+#~ msgstr ""
+#~ "Les références au %(tag)s ont été supprimées du répertoire. N'oubliez pas "
+#~ "de mettre à jour les WLE qui pourraient les utiliser."
+
+#~ msgid "No body specified"
+#~ msgstr "Aucun contenu spécifié"
+
+#~ msgid "Class \"%s\" does not exist"
+#~ msgstr "La classe \"%s\" n'existe pas"
+
+#~ msgid "Class \"%s\" deleted."
+#~ msgstr "Classe \"%s\" supprimée."
+
+#~ msgid "No class element found"
+#~ msgstr "Aucune classe trouvée"
+
+#~ msgid "Name attribute must be present"
+#~ msgstr "L'attribut name est obligatoire"
+
+#~ msgid ""
+#~ "Encountered XML syntax error: %s (line number may be wrong, try "
+#~ "subtracting one from the reported line number)"
+#~ msgstr ""
+#~ "Erreur de syntaxe XML : %s (le numéro de ligne peut-être incorrect, "
+#~ "essayer de soustraire un au numéro reporté)"
+
+#~ msgid "Your XML is not valid"
+#~ msgstr "Votre XML n'est pas valide"
+
+#~ msgid "Class \"%s\" already exists"
+#~ msgstr "La classe \"%s\" existe déjà"
+
+#~ msgid "Class \"%s\" saved."
+#~ msgstr "Classe \"%s\" sauvegardée."
+
+#~ msgid "Rule \"%s\" does not exist"
+#~ msgstr "La règle \"%s\" n'existe pas"
+
+#~ msgid "Rule \"%s\" deleted."
+#~ msgstr "Règle \"%s\" supprimée."
+
+#~ msgid "No rule element found"
+#~ msgstr "Aucune règle trouvée"
+
+#~ msgid "Rule \"%s\" already exists"
+#~ msgstr "La règle \"%s\" existe déjà"
+
+#~ msgid "Rule \"%s\" saved."
+#~ msgstr "Règle \"%s\" sauvegardée."
+
+#~ msgid "Action \"%s\" does not exist"
+#~ msgstr "Action \"%s\" n'existe pas"
+
+#~ msgid "Action \"%s\" deleted."
+#~ msgstr "Action \"%s\" supprimée."
+
+#~ msgid "No action element found"
+#~ msgstr "Aucune action trouvée"
+
+#~ msgid "Action saved."
+#~ msgstr "Action sauvée."
+
+#~ msgid "%d code points added"
+#~ msgstr "%d code points ont été ajoutés"
+
+#~ msgid "No code point in input file"
+#~ msgstr "Le fichier d'entrée ne contient aucun code point"
+
+#~ msgid "Meta data saved"
+#~ msgstr "Metadonnées sauvegardées"
+
+#, fuzzy
+#~| msgid "Description"
+#~ msgid "%(description)s"
+#~ msgstr "Description"
+
+#~ msgid " with Unicode version {}"
+#~ msgstr " avec la version d'Unicode {}"
+
+#~ msgid " and validating repertoire '{}'"
+#~ msgstr " et le repertoire de validation '{}'"
+
+#~ msgid " "
+#~ msgstr " "

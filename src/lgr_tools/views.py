@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render, redirect
 from django.conf import settings
+from django.shortcuts import render, redirect
 
+from lgr.tools.utils import download_file
 from lgr_editor.api import session_list_lgr, session_select_lgr, session_get_storage, LabelInfo
 from lgr_editor.utils import cp_to_slug
 from lgr_tools.api import lgr_intersect_union, lgr_comp_diff, lgr_harmonization, LGRCompInvalidException
@@ -12,13 +13,14 @@ from lgr_tools.forms import (LGRCompareSelector,
                              LGRCollisionSelector,
                              LGRAnnotateSelector,
                              LGRCrossScriptVariantsSelector,
-                             LGRHarmonizeSelector)
-
+                             LGRHarmonizeSelector,
+                             LGRComputeVariantsSelector)
 from .tasks import (diff_task,
                     collision_task,
                     annotate_task,
                     lgr_set_annotate_task,
-                    cross_script_variants_task)
+                    cross_script_variants_task,
+                    validate_labels_task)
 
 select_lgr = getattr(__import__(settings.LGR_SELECTOR_FUNC.rpartition('.')[0],
                                 fromlist=[settings.LGR_SELECTOR_FUNC.rpartition('.')[0]]),
@@ -171,21 +173,27 @@ def lgr_collisions(request, lgr_id):
         email_address = form.cleaned_data['email']
         full_dump = form.cleaned_data['full_dump']
         with_rules = form.cleaned_data['with_rules']
+        with_tlds = False
 
         lgr_info = session_select_lgr(request, lgr_id)
 
         storage_path = session_get_storage(request)
 
         # need to transmit json serializable data
-        labels_json = LabelInfo.from_form(labels_file.name,
-                                          labels_file.read()).to_dict()
+        labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
+        tlds_json = None
+        if form.cleaned_data['download_tlds']:
+            tlds_json = LabelInfo.from_form('TLDs', download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
+            with_tlds = True
         lgr_json = lgr_info.to_dict()
-        collision_task.delay(lgr_json, labels_json, email_address,
-                             full_dump, with_rules, storage_path)
+        collision_task.delay(lgr_json, labels_json, tlds_json, email_address, full_dump, with_rules,
+                             storage_path)
 
         ctx = {
             'lgr_info': lgr_info,
             'labels_file': labels_file.name,
+            'icann_tlds': settings.ICANN_TLDS,
+            'with_tlds': with_tlds,
             'email': email_address,
             'lgr_id': lgr_id if lgr_id is not None else '',
             'lgr': lgr_info.lgr if lgr_info is not None else '',
@@ -337,7 +345,7 @@ def lgr_cross_script_variants(request, lgr_id):
 
 def lgr_harmonize(request, lgr_id):
     form = LGRHarmonizeSelector(request.POST or None,
-                                session_lgrs=session_list_lgr(request),
+                                session_lgrs=[lgr['name'] for lgr in session_list_lgr(request) if not lgr['is_set']],
                                 lgr_id=lgr_id)
 
     if form.is_valid():
@@ -367,3 +375,47 @@ def lgr_harmonize(request, lgr_id):
     }
 
     return render(request, 'lgr_tools/harmonize.html', context=ctx)
+
+
+def lgr_compute_variants(request, lgr_id):
+    form = LGRComputeVariantsSelector(request.POST or None, request.FILES or None,
+                                      session_lgrs=[lgr['name'] for lgr in session_list_lgr(request) if
+                                                    not lgr['is_set']],
+                                      lgr_id=lgr_id)
+
+    lgr_info = None
+    if lgr_id is not None:
+        lgr_info = session_select_lgr(request, lgr_id)
+
+    if form.is_valid():
+        lgr_id = form.cleaned_data['lgr']
+        labels_file = form.cleaned_data['labels']
+        email_address = form.cleaned_data['email']
+
+        lgr_info = session_select_lgr(request, lgr_id)
+
+        storage_path = session_get_storage(request)
+
+        # need to transmit json serializable data
+        labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
+        lgr_json = lgr_info.to_dict()
+        validate_labels_task.delay(lgr_json, labels_json, email_address, storage_path)
+
+        ctx = {
+            'lgr_info': lgr_info,
+            'labels_file': labels_file.name,
+            'email': email_address,
+            'lgr_id': lgr_id if lgr_id is not None else '',
+            'lgr': lgr_info.lgr if lgr_info is not None else '',
+            'is_set': lgr_info.is_set if lgr_info is not None else '',
+        }
+        return render(request, 'lgr_tools/wait_variants.html', context=ctx)
+
+    ctx = {
+        'form': form,
+        'lgr_id': lgr_id if lgr_id is not None else '',
+        'lgr': lgr_info.lgr if lgr_info is not None else '',
+        'is_set': lgr_info.is_set if lgr_info is not None else '',
+    }
+
+    return render(request, 'lgr_tools/variants.html', context=ctx)

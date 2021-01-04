@@ -1,8 +1,11 @@
 {% load widget_tweaks %}
 <div class="form-group{% if field.errors %} has-error{% endif %} clearfix">
     <label class="col-sm-{{ label_width|default:2 }} control-label" for="id_{{ field.name }}">{{ field.label }}</label>
-    <div class="col-sm-{{ control_width|default:10 }}">
-        {{ field|add_class:"form-control" }}
+    <div class="col col-sm-{{ control_width|default:10 }}">
+            {{ field|add_class:"form-control" }}
+        {% if field.field.widget.input_type == 'text' %}
+            <span onClick="cleanInput($(this))" class="search-clear glyphicon glyphicon-remove-circle"></span>
+        {% endif %}
         {% if field.errors %}
             <span class="help-block">
                 {% for error in  field.errors %}{{ error }}{% endfor %}
@@ -14,3 +17,8 @@
         {% endif %}
     </div>
 </div>
+<script type="text/javascript">
+    function cleanInput (input) {
+        input.closest('.col').find('input').val('');
+    }
+</script>

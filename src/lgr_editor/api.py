@@ -24,7 +24,7 @@ from lgr.tools.merge_set import merge_lgr_set
 from .utils import (LGR_CACHE_TIMEOUT,
                     LGR_OBJECT_CACHE_KEY,
                     clean_repertoire_cache,
-                    make_lgr_session_key)
+                    make_lgr_session_key, list_root_zones)
 from .exceptions import LGRValidationException
 from .repertoires import get_by_name
 from . import unidb
@@ -45,9 +45,17 @@ class LGRInfo(object):
         self.lgr_set = lgr_set
         self.set_labels_info = set_labels_info  # List of labels defined for the LGR set, optional
 
-    def update_xml(self, pretty_print=False):
+    def update_xml(self, pretty_print=False, validate=False):
         # if something was changed in `lgr`, calling this will re-generate the xml
-        self.xml = serialize_lgr_xml(self.lgr, pretty_print=pretty_print)
+        new_xml = serialize_lgr_xml(self.lgr, pretty_print=pretty_print)
+        if validate:
+            parser = XMLParser(six.BytesIO(new_xml), self.name)
+
+            validation_result = parser.validate_document(settings.LGR_RNG_FILE)
+            if validation_result is not None:
+                raise LGRValidationException(validation_result)
+
+        self.xml = new_xml
 
     @classmethod
     def create(cls, name, unicode_version, validating_repertoire_name):
@@ -205,6 +213,14 @@ class LabelInfo(object):
 
         return cls(name, labels, b64data)
 
+    @classmethod
+    def from_list(cls, name, labels):
+        data = '\n'.join(labels)
+        labels = six.StringIO(data)
+        b64data = base64.b64encode(data.encode('utf-8')).decode('utf-8')
+
+        return cls(name, labels, b64data)
+
     def to_dict(self):
         return {
             'name': self.name,
@@ -298,6 +314,7 @@ def session_open_lgr(request, lgr_id, lgr_xml,
 def session_select_lgr(request, lgr_id, lgr_set_id=None):
     """
     Find the LGR identified by `lgr_id` in the session.
+    Can also retrieve a root zone LGR.
 
     :param request: Django request object
     :param lgr_id: a slug identifying the LGR
@@ -305,6 +322,10 @@ def session_select_lgr(request, lgr_id, lgr_set_id=None):
     :return: `LGRInfo`
     """
     known_lgrs = request.session.get(LGRS_SESSION_KEY, {})
+
+    # handle RZ LGR selection
+    if lgr_id not in known_lgrs and lgr_id in list_root_zones():
+        return LGRInfo(lgr_id, lgr=get_by_name(lgr_id, with_unidb=True))
 
     if lgr_set_id:
         if lgr_set_id not in known_lgrs:

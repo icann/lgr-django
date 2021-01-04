@@ -11,11 +11,12 @@ The following modules are reusable Django apps that can be included in other Dja
 * `lgr_validator` contains the code related the label validation module.
 * `lgr_tools` contains the code related to all utilities: testing LGR and label sets, LGR comparisons, etc.
 * `lgr_renderer` contains the code and templates used to generate the static exports of the LGR (HTML only for now).
+* `lgr_basic` contains the code related to the simple LGR interface.
 
 ## Acknowledgment
 
 This toolset was implemented by Viagenie (Audric Schiltknecht, Julien Bernard,
-David Drouin and Marc Blanchet) and Wil Tan on an ICANN contract.
+David Drouin, Vincent Gonzalez and Marc Blanchet) and Wil Tan on an ICANN contract.
 
 ## License
 
@@ -53,7 +54,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
 ### Pre-requisites
 
 * Operating system: Tested on Linux and Mac OS X 
-* Python 2.7, >= 3.4
+* Python >=3.6
 * [LibXML2](http://www.xmlsoft.org/) [MIT License] used by the lxml Python bindings
 * [ICU4C](http://site.icu-project.org/) [ICU License]
 * Python modules (listed in `etc/requirements.txt`, or dependencies thereof)
@@ -183,6 +184,7 @@ Some notes for developers
 * `src/lgr_validator/templates` contains validator-specific templates
 * `src/lgr_tools/templates` contains tool-specific templates
 * `src/lgr_renderer/templates` contains renderers (HTML output) templates
+* `src/lgr_basic/templates` contains simple interface (HTML output) templates
 
 
 #### Static Assets (CSS, Javascript, Images)

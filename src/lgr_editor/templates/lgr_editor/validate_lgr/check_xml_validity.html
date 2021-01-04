@@ -1,10 +1,13 @@
 {% extends "lgr_editor/validate_lgr/_base.html" %}
+{% load i18n static %}
 {% load lgr_editor %}
 
 {% block result_contents %}
   {% if result.rng_result %}
-    XML is valid and complies with RNG.
+    {% trans "XML is valid and complies with RNG." %}
   {% else %}
-    Invalid XML for lgr: {{ result.validation_result|linebreaks }}
+  {% blocktrans trimmed with res=result.validation_result|linebreaks %}
+    Invalid XML for lgr: {{ res }}
+  {% endblocktrans %}
   {% endif %}
 {% endblock %}

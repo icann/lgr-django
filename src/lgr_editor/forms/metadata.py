@@ -3,14 +3,15 @@ from __future__ import unicode_literals
 
 from datetime import date
 
-from django.utils import six
+from dal import autocomplete
 from django import forms
 from django.forms.formsets import formset_factory
+from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 
+from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, VALIDATING_REPERTOIRES, DEFAULT_VALIDATING_REPERTOIRE, \
+    IANA_LANG_REGISTRY
 from .utils import BaseDisableableFormSet
-
-from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, VALIDATING_REPERTOIRES, DEFAULT_VALIDATING_REPERTOIRE
 
 
 def DateInputPlaceHolder(placeholder=''):
@@ -28,6 +29,7 @@ def TextInputPlaceHolder(placeholder):
     """
     return forms.TextInput(attrs={'placeholder': placeholder})
 
+
 DESCRIPTION_CONTENT_TYPES = (
     ('', ''),
     ('text/plain', 'text/plain'),
@@ -39,11 +41,14 @@ class MetadataForm(forms.Form):
     version = forms.CharField(label=_("Version"), max_length=255, required=False)
     version_comment = forms.CharField(label=_("Version comment"), required=False)
     date = forms.DateField(label=_("Date"), widget=DateInputPlaceHolder(date.today().isoformat()), required=False)
-    scope = forms.CharField(label=_("Scope"), max_length=255, required=False, widget=TextInputPlaceHolder('example'))  # XXX: we may need to support multiple scope elements
-    scope_type = forms.CharField(label=_("Scope type"), max_length=255, required=False, widget=TextInputPlaceHolder('domain'))
+    scope = forms.CharField(label=_("Scope"), max_length=255, required=False, widget=TextInputPlaceHolder(
+        'example'))  # XXX: we may need to support multiple scope elements
+    scope_type = forms.CharField(label=_("Scope type"), max_length=255, required=False,
+                                 widget=TextInputPlaceHolder('domain'))
     validity_start = forms.DateField(label=_("Validity start"), widget=DateInputPlaceHolder(), required=False)
     validity_end = forms.DateField(label=_("Validity end"), widget=DateInputPlaceHolder(), required=False)
-    unicode_version = forms.ChoiceField(label=_("Unicode version"), choices=UNICODE_VERSIONS, initial=DEFAULT_UNICODE_VERSION, required=False)
+    unicode_version = forms.ChoiceField(label=_("Unicode version"), choices=UNICODE_VERSIONS,
+                                        initial=DEFAULT_UNICODE_VERSION, required=False)
     description = forms.CharField(label=_("Description"), widget=forms.Textarea, required=False)
     description_type = forms.ChoiceField(label=_("Description type"), choices=DESCRIPTION_CONTENT_TYPES, required=False)
 
@@ -72,7 +77,9 @@ class MetadataForm(forms.Form):
 
 class LanguageForm(forms.Form):
     # validate using language_tags function
-    language = forms.CharField(label=_("Language"), max_length=50, required=False)  # https://tools.ietf.org/html/rfc5646#section-4.4
+    language = autocomplete.Select2ListChoiceField(label=_("Language"), choice_list=[''] + sorted(IANA_LANG_REGISTRY),
+                                                   widget=autocomplete.ListSelect2(url='language-autocomplete'),
+                                                   initial='', required=False)
 
 
 LanguageFormSet = formset_factory(LanguageForm,

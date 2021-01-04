@@ -1,21 +1,37 @@
 {% extends "lgr_editor/validate_lgr/_base.html" %}
+{% load i18n static %}
 {% load lgr_editor %}
 
 {% block result_contents %}
   {% if result.repertoire %}
-    <h4>Missing code points</h4>
+    <h4>{% trans "Missing code points or rules" %}</h4>
     <ul>
       {% for entry in result.repertoire %}
-        <li>Code point {{ entry.char|render_char }}:
+        <li>
+        {% blocktrans trimmed with cp=entry.char|render_char %}
+          Code point {{ cp }}:
+        {% endblocktrans %}
           {% if entry.type == 'not-in-repertoire' %}
-            Variant {{ entry.variant|render_char }} is not in repertoire
-          {% else %}
-            {{ entry.variant|render_char }} has not original code point in its variants
+        {% blocktrans trimmed with variant=entry.variant|render_char %}
+            Variant {{ variant }} is not in repertoire
+        {% endblocktrans %}
+          {% elif entry.type == 'missing-symmetric-variant' %}
+        {% blocktrans trimmed with variant=entry.variant|render_char %}
+            {{ variant }} has not original code point in its variants
+        {% endblocktrans %}
+          {% elif entry.type == 'variant-contextual-rule-missing' %}
+        {% blocktrans trimmed with rule_type=entry.rule_type rule=entry.rule variant=entry.variant|render_char %}
+            {{ variant }} has not symmetric {{ rule_type }} rule {{ rule }} on its symmetric variants
+        {% endblocktrans %}
+            {% else %}
+        {% blocktrans trimmed with variant=entry.variant|render_char %}
+            {{ variant }} unknown symmetry problem, please report
+        {% endblocktrans %}
           {% endif %}
         </li>
       {% endfor %}
     </ul>
   {% else %}
-    Symmetry OK
+    {% trans "Symmetry OK" %}
   {% endif %}
 {% endblock %}

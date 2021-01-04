@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import json
 
-from django.http import HttpResponse
-from django.contrib import messages
+import json
 from django.conf import settings
+from django.contrib import messages
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.translation import ugettext as _
 
+from lgr.exceptions import LGRException
 from lgr_editor.api import LabelInfo, session_get_storage
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
 from lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
-
-from lgr.exceptions import LGRException
-
-from .forms import ValidateLabelForm
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
+from .forms import ValidateLabelForm
 
 select_lgr = getattr(__import__(settings.LGR_SELECTOR_FUNC.rpartition('.')[0],
                                 fromlist=[settings.LGR_SELECTOR_FUNC.rpartition('.')[0]]),
@@ -34,7 +32,8 @@ class NeedAsyncProcess(Exception):
 def evaluate_label_from_info(request,
                              lgr_info, label_cplist, script_lgr_name,
                              email,
-                             threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE):
+                             threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE,
+                             check_collisions=None):
     """
     Evaluate a label in an LGR.
 
@@ -47,6 +46,7 @@ def evaluate_label_from_info(request,
     :param email: Required to launch processing in task queue.
     :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.
                                    Set to negative to always return variants.
+    :param check_collisions: Check for collisions with the provided list of labels
     :return: a dict containing results of the evaluation, empty if process is asynchronous.
     """
     ctx = {}
@@ -80,7 +80,8 @@ def evaluate_label_from_info(request,
         if not need_async:
             ctx = evaluate_label(lgr_info.lgr, label_cplist,
                                  threshold_include_vars=threshold_include_vars,
-                                 idna_encoder=udata.idna_encode_label)
+                                 idna_encoder=udata.idna_encode_label,
+                                 check_collisions=check_collisions)
         else:
             storage_path = session_get_storage(request)
             validate_label_task.delay(lgr_info.to_dict(), label_cplist, email, storage_path)
@@ -119,9 +120,12 @@ def validate_label(request, lgr_id, lgr_set_id=None,
                     lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
                                                                    set_labels_file.read())
         try:
-            ctx = evaluate_label_from_info(request, lgr_info, label_cplist, script_lgr_name, email,
-                                           threshold_include_vars=threshold_include_vars)
+            ctx['result'] = evaluate_label_from_info(request, lgr_info, label_cplist, script_lgr_name, email,
+                                                     threshold_include_vars=threshold_include_vars)
         except UnicodeError as ex:
+            if output_func:
+                return _redirect_on_error(request, lgr_id, lgr_set_id, ex, noframe)
+
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
         except NeedAsyncProcess:
@@ -130,16 +134,7 @@ def validate_label(request, lgr_id, lgr_set_id=None,
                                    'You need to enter your email address and will receive a notification once process is done'))
             ctx['email_required'] = True
         except LGRException as ex:
-            messages.add_message(request, messages.ERROR,
-                                 lgr_exception_to_text(ex))
-            kwargs = {'lgr_id': lgr_id}
-            if lgr_set_id is not None:
-                kwargs['lgr_set_id'] = lgr_set_id
-            # redirect to myself to refresh display
-            if noframe:
-                return redirect('lgr_validate_label_noframe', **kwargs)
-            else:
-                return redirect('lgr_validate_label', **kwargs)
+            return _redirect_on_error(request, lgr_id, lgr_set_id, ex, noframe)
 
     ctx['form'] = form
     ctx['lgr_id'] = lgr_id
@@ -159,6 +154,19 @@ def validate_label(request, lgr_id, lgr_set_id=None,
         return render(request, 'lgr_validator/validator.html', context=ctx)
 
 
+def _redirect_on_error(request, lgr_id, lgr_set_id, exception, noframe):
+    messages.add_message(request, messages.ERROR,
+                         lgr_exception_to_text(exception))
+    kwargs = {'lgr_id': lgr_id}
+    if lgr_set_id is not None:
+        kwargs['lgr_set_id'] = lgr_set_id
+    # redirect to myself to refresh display
+    if noframe:
+        return redirect('lgr_validate_label_noframe', **kwargs)
+    else:
+        return redirect('lgr_validate_label', **kwargs)
+
+
 def validate_label_noframe(request, lgr_id, lgr_set_id=None):
     return validate_label(request, lgr_id, lgr_set_id, noframe=True)
 
@@ -166,20 +174,22 @@ def validate_label_noframe(request, lgr_id, lgr_set_id=None):
 def validate_label_json(request, lgr_id, lgr_set_id=None):
     return validate_label(request, lgr_id,  lgr_set_id=lgr_set_id,
                           threshold_include_vars=-1,
-                          output_func=lambda ctx: HttpResponse(json.dumps(ctx), content_type='application/json'))
+                          output_func=lambda ctx: HttpResponse(json.dumps(ctx.get('result', 'Error')),
+                                                               content_type='application/json'),
+                          noframe=True)
 
 
 def validate_label_csv(request, lgr_id, lgr_set_id=None,):
     return validate_label(request, lgr_id, lgr_set_id=lgr_set_id,
                           threshold_include_vars=-1,
-                          output_func=_prepare_csv_response)
+                          output_func=_prepare_csv_response, noframe=True)
 
 
 def _prepare_csv_response(ctx):
     response = HttpResponse(content_type='text/csv', charset='utf-8')
-    cd = 'attachment; filename="lgr-val-{0}.csv"'.format(ctx['a_label'])
+    cd = 'attachment; filename="lgr-val-{0}.csv"'.format(ctx.get('result', {}).get('a_label', 'Error'))
     response['Content-Disposition'] = cd
 
-    validation_results_to_csv(ctx, response)
+    validation_results_to_csv(ctx['result'], response)
 
     return response

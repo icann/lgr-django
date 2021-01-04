@@ -13,17 +13,18 @@ from django.core.mail import EmailMessage
 
 from lgr.exceptions import LGRException
 from lgr.utils import cp_to_ulabel
-
 from lgr_editor.api import LabelInfo, LGRInfo
-from lgr_editor.unidb import get_db_by_version
 from lgr_editor.lgr_exceptions import lgr_exception_to_text
+from lgr_editor.unidb import get_db_by_version
 from lgr_tools.api import (lgr_diff_labels,
                            lgr_collision_labels,
                            lgr_annotate_labels,
                            lgr_set_annotate_labels,
                            lgr_cross_script_variants,
                            lgr_validate_label,
-                           lgr_set_validate_label)
+                           lgr_set_validate_label,
+                           lgr_validate_labels,
+                           lgr_basic_collision_labels)
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +36,7 @@ def _lgr_tool_task(storage_path, base_filename, email_subject,
 
 
     :param storage_path: The place where results will be stored
-    :param base_filename: The beginning of the filename that will be generated
+    :param base_filename: The filename that will be generated (.txt is added if it has no extension)
     :param email_subject: The subject for the e-mail to be sent
     :param email_body: The body of the e-mail to be sent
     :param email_address: The e-mail address where the results will be sent
@@ -45,15 +46,17 @@ def _lgr_tool_task(storage_path, base_filename, email_subject,
     sio = BytesIO()
     email = EmailMessage(subject='{}'.format(email_subject),
                          to=[email_address])
+    if '.' not in base_filename:
+        base_filename += '.txt'
 
     try:
-        with GzipFile(filename='{}.txt'.format(base_filename),
+        with GzipFile(filename=base_filename,
                       fileobj=sio, mode='w') as gzf:
             for line in cb(**cb_kwargs):
                 gzf.write(line.encode('utf-8'))
 
-        filename = '{0}_{1}.txt.gz'.format(time.strftime('%Y%m%d_%H%M%S'),
-                                           base_filename)
+        filename = '{0}_{1}.gz'.format(time.strftime('%Y%m%d_%H%M%S'),
+                                       base_filename)
 
         storage = FileSystemStorage(location=storage_path,
                                     file_permissions_mode=0o440)
@@ -123,28 +126,29 @@ def diff_task(lgr_json_1, lgr_json_2, labels_json, email_address, collision, ful
 
 
 @shared_task
-def collision_task(lgr_json, labels_json, email_address, full_dump,
+def collision_task(lgr_json, labels_json, tld_json, email_address, full_dump,
                    with_rules, storage_path):
     """
     Compute collision between labels in an LGR
 
     :param lgr_json: The LGRInfo as a JSON object.
-    :param labels_json: The LabelInfo as a JSON object.
+    :param labels_json: The LabelInfo as a JSON object containing labels to check for coliision.
+    :param tld_json: The LabelInfo as a JSON object containing TLDs.
     :param email_address: The e-mail address where the results will be sent
     :param full_dump: Whether we also output a full dump
     :param with_rules: Whether we also output rules
     :param storage_path: The place where results will be stored
-    :return:
     """
     lgr = LGRInfo.from_dict(lgr_json).lgr
     labels_info = LabelInfo.from_dict(labels_json)
+    tlds_info = LabelInfo.from_dict(tld_json) if tld_json else None
 
     logger.info("Starting task 'collision' for %s, for file %s",
                 lgr.name, labels_info.name)
 
-    body = "Hi,\nThe processing of collisions from labels provided in the " \
-           "file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
-                                                  lgr=lgr.name)
+    body = "Hi,\nThe processing of collisions from labels provided in {input} in LGR '{lgr}' has".format(
+        input="the file '{}'".format(labels_info.name) if labels_info.name else 'ICANN tlds',
+        lgr=lgr.name)
     _lgr_tool_task(storage_path,
                    base_filename='collisions_{0}'.format(lgr.name),
                    email_subject='LGR Toolset collisions result',
@@ -153,8 +157,47 @@ def collision_task(lgr_json, labels_json, email_address, full_dump,
                    cb=lgr_collision_labels,
                    lgr=lgr,
                    labels_file=labels_info.labels,
+                   tlds_file=tlds_info.labels if tld_json else None,
                    full_dump=full_dump,
                    with_rules=with_rules)
+
+
+@shared_task
+def basic_collision_task(lgr_json, labels_json, tld_json, email_address, storage_path, annotate=False):
+    """
+    Compute collision between labels in an LGR
+
+    :param lgr_json: The LGRInfo as a JSON object.
+    :param labels_json: The LabelInfo as a JSON object containing labels to check for coliision.
+    :param tld_json: The LabelInfo as a JSON object containing TLDs.
+    :param email_address: The e-mail address where the results will be sent
+    :param storage_path: The place where results will be stored
+    :param annotate: Whether the labels should also be annotated
+    """
+    lgr = LGRInfo.from_dict(lgr_json).lgr
+    labels_info = LabelInfo.from_dict(labels_json)
+    tlds_info = LabelInfo.from_dict(tld_json) if tld_json else None
+    task_name = "collisions"
+    if annotate:
+        task_name += " and annotations"
+
+    logger.info("Starting task 'basic %s' for %s, for file %s",
+                task_name, lgr.name, labels_info.name)
+
+    body = "Hi,\nThe processing of {name} from labels provided in {input} in LGR '{lgr}' has".format(
+        name=task_name,
+        input="the file '{}'".format(labels_info.name) if labels_info.name else 'ICANN tlds',
+        lgr=lgr.name)
+    _lgr_tool_task(storage_path,
+                   base_filename='{}_{}'.format(task_name.replace(" ", "_"), lgr.name),
+                   email_subject='LGR Toolset {} result'.format(task_name),
+                   email_body=body,
+                   email_address=email_address,
+                   cb=lgr_basic_collision_labels,
+                   lgr=lgr,
+                   labels_file=labels_info.labels,
+                   tlds_file=tlds_info.labels if tld_json else None,
+                   with_annotate=annotate)
 
 
 @shared_task
@@ -276,7 +319,7 @@ def validate_label_task(lgr_json, label, email_address, storage_path):
                                                                                                    lgr=lgr_info.name)
 
     _lgr_tool_task(storage_path,
-                   base_filename='label_validation_{0}'.format(lgr_info.name),
+                   base_filename='label_validation_{0}.csv'.format(lgr_info.name),
                    email_subject='LGR Toolset label validation result',
                    email_body=body,
                    email_address=email_address,
@@ -314,7 +357,7 @@ def lgr_set_validate_label_task(lgr_json, script_lgr_json, label, email_address,
                                                                    script=script_lgr.name)
 
     _lgr_tool_task(storage_path,
-                   base_filename='label_validation_{0}'.format(lgr_info.name),
+                   base_filename='label_validation_{0}.csv'.format(lgr_info.name),
                    email_subject='LGR Toolset label validation result',
                    email_body=body,
                    email_address=email_address,
@@ -323,4 +366,35 @@ def lgr_set_validate_label_task(lgr_json, script_lgr_json, label, email_address,
                    script_lgr=script_lgr,
                    set_labels=set_labels_info.labels,
                    label=label,
+                   udata=udata)
+
+
+@shared_task
+def validate_labels_task(lgr_json, labels_json, email_address, storage_path):
+    """
+    Compute multiple labels validation variants of labels in a LGR.
+
+    :param lgr_json: The LGRInfo as a JSON object.
+    :param labels_json: The LabelInfo as a JSON object.
+    :param email_address: The e-mail address where the results will be sent
+    :param storage_path: The place where results will be stored
+    """
+    lgr_info = LGRInfo.from_dict(lgr_json)
+    labels_info = LabelInfo.from_dict(labels_json)
+    udata = get_db_by_version(lgr_info.lgr.metadata.unicode_version)
+
+    logger.info("Starting task 'validate label' for %s, for file '%s'",
+                lgr_info.name, labels_info.name)
+
+    body = "Hi,\nThe processing of variant computation for file '{f}' in LGR '{lgr}' has".format(f=labels_info.name,
+                                                                                                 lgr=lgr_info.name)
+
+    _lgr_tool_task(storage_path,
+                   base_filename='labels_variants_{0}.csv'.format(lgr_info.name),
+                   email_subject='LGR Toolset variants computation result',
+                   email_body=body,
+                   email_address=email_address,
+                   cb=lgr_validate_labels,
+                   lgr=lgr_info.lgr,
+                   labels_file=labels_info.labels,
                    udata=udata)

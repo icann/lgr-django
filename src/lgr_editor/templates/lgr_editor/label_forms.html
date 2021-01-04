@@ -5,11 +5,9 @@
 {% block content %}
     <form method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-group{% if form.label.errors %} has-error{% endif %} clearfix">
-            {% include "lgr_editor/_form_field.html" with field=form.label %}
-            {% include "lgr_editor/_form_field.html" with field=form.unicode_version %}
-            <button class="col-sm-2 btn btn-primary" type="submit">{% trans "Display forms" %}</button>
-        </div>
+        {% include "lgr_editor/_form_field.html" with field=form.label %}
+        {% include "lgr_editor/_form_field.html" with field=form.unicode_version %}
+        <button class="col-sm-2 btn btn-primary" type="submit">{% trans "Display forms" %}</button>
     </form>
 
     {% if u_label %}

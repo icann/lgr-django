@@ -12,9 +12,9 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from kombu import Queue
-from django.utils.translation import ugettext_lazy as _
 
+from django.utils.translation import ugettext_lazy as _
+from kombu import Queue
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,19 +31,21 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'dal',
+    'dal_select2',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'kombu.transport.django',
     'lgr_editor',
     'lgr_validator',
     'lgr_tools',
     'lgr_renderer',
+    'lgr_basic',
     'widget_tweaks',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -119,6 +121,10 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
+        'lgr_basic': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
         'lgr_editor': {
             'handlers': ['console'],
             'level': 'INFO',
@@ -134,6 +140,10 @@ LOGGING = {
         'lgr-rule-logger': {
             'handlers': ['console_rule_logger'],
             'level': 'INFO' # Need to be set to INFO!
+        },
+        'celery': {
+            'handlers': ['console'],
+            'level': 'INFO',
         }
     }
 }
@@ -205,6 +215,9 @@ LGR_RNG_FILE = os.path.join(BASE_DIR, 'resources', 'lgr.rng')
 # For the tools output
 TOOLS_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'output')
 
+# Filepath of the IANA language subtag registry
+IANA_LANGUAGE_SUBTAG_REGISTRY_LOCATION = os.path.join(BASE_DIR, 'resources', 'language-subtag-registry')
+
 # Duration in second for which the tools output files are stored
 STORAGE_DURATION = 60*60*24*7  # 1 week
 
@@ -214,6 +227,9 @@ DEFAULT_VARIANT_TYPE = "blocked"
 SUPPORTED_UNICODE_VERSIONS = (
     '6.3.0',
 )
+
+# ICANN TLDs URL
+ICANN_TLDS = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
 
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'
@@ -244,9 +260,6 @@ LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE = 100
 
 # If estimated number of variants is greater, then switch to asynchronous mode
 LGR_VALIDATION_MAX_VARS_SYNCHRONOUS = 10000
-
-
-##### /LGR Toolset Project-specific settings #####
 
 
 ##### Celery configuration parameters #####

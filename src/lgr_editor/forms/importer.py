@@ -38,5 +38,4 @@ class ImportLGRForm(forms.Form):
                                                                'This value may contain only letters, numbers '
                                                                'and ./-/_ characters.'), 'invalid'),
                                ],
-                               help_text=_('The name of the set'),
-                               )
+                               help_text=_('The name of the set'))

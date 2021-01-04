@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 import json
 
+from dal import autocomplete
 from lxml.etree import XMLSyntaxError
 
 import os
@@ -25,7 +26,7 @@ from django.http import (HttpResponse,
                          JsonResponse)
 from django.core.cache import cache
 from django.views.generic import FormView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.template.response import TemplateResponse
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
@@ -58,7 +59,7 @@ from .forms import (AddCodepointForm,
                     AddMultiCodepointsForm,
                     LanguageFormSet,
                     LabelFormsForm,
-                    EditCodepointsForm)
+                    EditCodepointsForm, IANA_LANG_REGISTRY)
 
 from .lgr_exceptions import lgr_exception_to_text
 from .api import (session_open_lgr,
@@ -243,6 +244,18 @@ def validate_lgr(request, lgr_id, output_func=None, lgr_set_id=None):
 
     results = lgr_info.lgr.validate(options)
     tpl_name = 'lgr_editor/validate_lgr.html'
+
+    # XXX hack to get translation in validation descriptions and process them automatically by makemessages
+    _("Testing XML validity using RNG"),
+    _("Testing symmetry"),
+    _("Testing transitivity"),
+    _("Testing conditional variants"),
+    _("Generate stats"),
+    _("Rebuilding LGR")
+    for r in results:
+        r[1]['description'] = _(r[1]['description'])
+    # end hack
+
     context = {
         'results': results,
         'name': lgr_id
@@ -499,9 +512,9 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
                                              variant_type=settings.DEFAULT_VARIANT_TYPE,
                                              comment="Automatically added to map back to out-of-repertoire variant")
                     # Add identity mapping for newly added code point
-                    lgr_info.lgr.add_variant(var_cp_sequence, var_cp_sequence, variant_type='out-of-repertoire',
-                                             comment='Out-of-repertoire')
-                    messages.success(request, _('Automatically added codepoint %s from out-of-repertoire variant') %
+                    lgr_info.lgr.add_variant(var_cp_sequence, var_cp_sequence, variant_type='out-of-repertoire-var',
+                                             comment='Out-of-repertoire-var')
+                    messages.success(request, _('Automatically added codepoint %s from out-of-repertoire-var variant') %
                                      format_cp(var_cp_sequence))
                 session_save_lgr(request, lgr_info)
                 messages.success(request, _('New variant %s added') % format_cp(var_cp_sequence))
@@ -730,6 +743,8 @@ def populate_variants(request, lgr_id):
     lgr.populate_variants()
     messages.add_message(request, messages.INFO, log_output.getvalue())
     messages.add_message(request, messages.SUCCESS, _("Variants populated"))
+    populate_logger.removeHandler(ch)
+    log_output.close()
     session_save_lgr(request, lgr_info)
     return redirect('codepoint_list', lgr_id)
 
@@ -1375,6 +1390,15 @@ def rule_edit_rule_ajax(request, lgr_id, rulename):
                 return _json_response(False, _('No rule element found'))
             if rule.name is None:
                 return _json_response(False, _('Name attribute must be present'))
+
+            if rulename != rule.name:
+                # user has renamed the rule, check that there is no dupe
+                if rule.name in lgr.rules_lookup:
+                    return _json_response(False, _('Rule "%s" already exists') % rule.name)
+
+            _update_rule(lgr, rulename, rule, body)
+
+            lgr_info.update_xml(validate=True)
         except LGRException as e:
             return _json_response(False, lgr_exception_to_text(e))
         except XMLSyntaxError as e:
@@ -1383,11 +1407,6 @@ def rule_edit_rule_ajax(request, lgr_id, rulename):
         except Exception:
             return _json_response(False, _('Your XML is not valid'))
 
-        if rulename != rule.name:
-            # user has renamed the rule, check that there is no dupe
-            if rule.name in lgr.rules_lookup:
-                return _json_response(False, _('Rule "%s" already exists') % rule.name)
-        _update_rule(lgr, rulename, rule, body)
         msg = _('Rule "%s" saved.') % rule.name
 
     try:
@@ -1953,3 +1972,9 @@ def about(request):
     return render(request,
                   'lgr_editor/about.html',
                   context={'output': output})
+
+
+class LanguageAutocomplete(autocomplete.Select2ListView):
+
+    def get_list(self):
+        return sorted(IANA_LANG_REGISTRY)

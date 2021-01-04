@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+{% load i18n static %}
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>{% block html_title %}{% trans 'LGR Tool' %}{% endblock %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="{% static 'chrome/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.css"/>
+
+        <link rel="stylesheet" href="{% static 'chrome/css/lgr.css' %}">
+        {% block html_head_more %}{% endblock %}
+    </head>
+    <body style="padding-top: 20px;">
+        <div class="fade-blocking">
+            <div class="lds-spinner">
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+        </div>
+        {% block navbar %}
+            <nav class="navbar navbar-inverse navbar-fixed-top navbar-simple">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div id="navbar" class="collapse navbar-collapse">
+                      <p>
+                        <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom"><i class="glyphicon glyphicon-home"></i></a>
+                        <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom">{% trans "LGR Tool" %}</a>
+                    </p>
+
+                        <div class="navbar-form navbar-right">
+                            <a class="header-link" href="{% url 'homepage' %}?advanced">{% trans "Advanced mode" %}</a>
+
+                            <a class="btn btn-default show-tooltip"
+                               data-toggle="modal" data-target="#label-forms-modal"
+                               title="{% trans 'Display all label forms' %}" data-placement="bottom">
+                                <i class="glyphicon glyphicon-text-size"></i> {% trans "Label forms" %}
+                            </a>
+
+                            <a class="btn btn-default show-tooltip"
+                                   data-toggle="modal" data-target="#about-modal"
+                                   title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
+                                    <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
+                            </a>
+                        </div>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </nav>
+        {% endblock navbar %}
+
+        {% block messages %}
+            {% include "_msgs.html" %}
+        {% endblock messages %}
+
+        {% block container %}
+        <div class="container" id="content-basic">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 validate-label-simple-form">
+                    <form class="form-horizontal validate-label" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div id="timeout-error" class="alert alert-danger" style="display: none;">
+                            {% blocktrans trimmed %}
+                                The server was unable to complete the request, most likely because too many resources were required to compute the query.
+                                If you check for collision, the result may be still processing and will be sent to your email.
+                                Please wait before submitting again.
+                            {% endblocktrans %}
+                        </div>
+
+                        <div id="general-error" class="alert alert-danger" style="display: none;">
+                            {% trans 'A server error occurred.' %} ({% trans 'code:' %} <span></span>). {% trans 'Please contact the administrator before submitting again.' %}
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-4 col-lg-4 control-label">
+                                {% trans 'Validate label(s) against' %}
+                            </label>
+                            <div class="col-sm-8 col-lg-8">
+                                {% include "lgr_editor/_form_field.html" with field=form.rz_lgr %}
+                                <span class="text-secondary">
+                                    {% trans 'View LGR as' %}
+                                    <a href="" id="xmlLink" target="_blank">XML</a> |
+                                    <a href="" id="renderLink" target="_blank">HTML</a>
+                                </span>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-group" id="form-upload-label">
+                            <div class="col-sm-12">
+                                <a class="upload-labels-list action" href="javascript:;">
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                    {% trans 'Manually input label(s)' %}
+                                </a>
+
+                                {% include "lgr_editor/_form_field.html" with field=form.labels_file %}
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" id="form-text-label">
+                            <div class="col-lg-12">
+                                <a href="javascript:;" class="upload-labels-list action">
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>{% trans 'Upload a list of labels' %}
+                                </a>
+                            </div>
+                            <div class="labels-text-list">
+                                <div class="label-text">
+                                    <div class="col-lg-11 col-xs-10 labels-col">
+                                        {% include "lgr_editor/_form_field.html" with field=form.labels %}
+                                    </div>
+                                    <div class="col-lg-1 col-xs-2 labels-text-action labels-col">
+                                        <span onClick="addLabel()" class="add-label action glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 checkbox">
+                                <label>
+                                    {% include "lgr_editor/_form_field.html" with field=form.collisions %}
+                                    <span>
+                                        {% trans 'Check for collision with existing TLDs' %}
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="form-email-task">
+                            <div class="col-sm-12">
+                                {% include "lgr_editor/_form_field.html" with field=form.email %}
+                            </div>
+                        </div>
+                        {% if validation_to and collision_to %}
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="alert alert-success">
+                                        {% blocktrans trimmed with email=collision_to %}
+                                        Your request was sent successfully, the collision and validation tasks processing can take minutes, even hours.<br>
+                                        The result will be sent to {{ email }}. Do not resubmit until you receive the report.
+                                        {% endblocktrans %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            {% if validation_to %}
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="alert alert-success">
+                                            {% blocktrans trimmed with email=validation_to %}
+                                            Your request was sent successfully, the validation task processing can take minutes, even hours.<br>
+                                            The result will be sent to {{ email }}. Do not resubmit until you receive the report.
+                                            {% endblocktrans %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if collision_to %}
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="alert alert-success">
+                                            {% blocktrans trimmed with email=collision_to %}
+                                            Your request was sent successfully, the collision task processing can take minutes, even hours.<br>
+                                            The result will be sent to {{ email }}. Do not resubmit until you receive the report.
+                                            {% endblocktrans %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        <button class="btn btn-primary btn-block" id="validate-label-form">
+                            {% trans 'Validate' %}
+                        </button>
+
+                    </form>
+
+                    <div id ="results">
+                        {% for result in results %}
+                            {% include "lgr_validator/_validated_results.html" with result=result lgr_id=lgr_id index=forloop.counter only %}
+                        {% endfor %}
+                    </div>
+
+                    {% if storage %}
+                        <hr>
+                        <b>{% trans 'Your saved results' %}</b>
+                        <p>{% trans 'The following files contains your tools computation results.' %}</p>
+                        <b>
+                            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                            {% trans 'Note that these files could be cleaned up regularly.' %}
+                        </b>
+                    <ul>
+                        {% for file in storage %}
+                            <li>
+                                <a href="{% url 'download_file' file %}">{% blocktrans %}Download {{ file }}{% endblocktrans %}</a>
+                                <a href="{% url 'delete_file' file %}" class="delete_file"><i class="glyphicon glyphicon-trash"></i></a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <br>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% block footer %}
+            <hr>
+            <footer>
+                <p class="pull-right"><small>&copy;</small></p>
+                {% include "_languages.html" %}
+                <ul class="inline">
+                </ul>
+            </footer>
+            {% endblock %}
+
+        </div> <!-- /container -->
+        {% endblock container %}
+
+        <!-- About Modal -->
+        <div class="modal fade" id="about-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{% trans "About" %}</h4>
+                    </div>
+                    <div id="modal-body" class="modal-body">
+                        <iframe id="about-iframe" data-url="{% url 'about' %}" src="{% url 'about' %}" frameborder="0" width="100%" height="100%"></iframe>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Label forms Modal -->
+        <div class="modal fade" id="label-forms-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">{% trans "Display all label forms" %}</h4>
+                    </div>
+                    <div id="label-forms-modal-body" class="modal-body" style="height: 85vh;">
+                        <iframe id="label-forms-modal-iframe" data-url="{% url 'lgr_label_forms' %}" src="{% url 'lgr_label_forms' %}" frameborder="0" width="100%" height="98%"></iframe>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+        <script>window.jQuery || document.write('<script src="{% static 'chrome/js/vendor/jquery.min.js' %}"><\/script>')</script>
+        <script src="{% static 'chrome/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script>
+            var isFormUploadActivated = false;
+
+            $("#id_rz_lgr").change(() => {
+                changeRzValue();
+            });
+
+            function changeRzValue () {
+                const val = $('#id_rz_lgr').val();
+
+                let renderLink = `{% url 'lgr_render' 'NEWVALUESTUB' %}`;
+                renderLink = renderLink.replace('NEWVALUESTUB', val);
+                $('#renderLink').attr('href', renderLink);
+
+                let xmlLink = `{% url 'view_lgr_xml' 'NEWVALUESTUB' %}`;
+                xmlLink = xmlLink.replace('NEWVALUESTUB', val);
+                $('#xmlLink').attr('href', xmlLink);
+            }
+
+            function cleanInput (input) {
+                input.closest('.col').find('input').val('');
+            }
+
+            function isEmailPartVisible () {
+                let isVisible = false;
+                if (isFormUploadActivated === true || ($('#check-for-collision').is(':checked') && $('.label-text').length > 1)) {
+                    isVisible = true;
+                }
+
+                if (isVisible === true) {
+                    $('#form-email-task').css('display', 'block');
+                } else {
+                    $('#form-email-task').css('display', 'none');
+                }
+            }
+
+            function buttonValidateEnabled () {
+                const isCheckForCollision = isFormUploadActivated === true || ($('#check-for-collision').is(':checked') && $('.label-text').length > 1);
+                let emptyLabel = false;
+
+                if (isCheckForCollision === true) {
+                    if ($('#email-task').val() === '') {
+                        return setButtonStatusEnabled(false);
+                    }
+                }
+
+                if (isFormUploadActivated === false) {
+                    $('.form-label').each((index, el) => {
+                        if ($(el).val() === '') {
+                            emptyLabel = true;
+                            return;
+                        }
+                    })
+                } else if (isFormUploadActivated === true) {
+                    if ($('#file-upload').val() === '') {
+                        return setButtonStatusEnabled(false);
+                    }
+                }
+
+                if (emptyLabel === true) {
+                    return setButtonStatusEnabled(false);
+                }
+
+                return setButtonStatusEnabled(true);
+            }
+
+            function setButtonStatusEnabled (isEnabled) {
+                if (isEnabled === false) {
+                    $('#validate-label-form').attr('disabled', 'disabled');
+                } else {
+                    $('#validate-label-form').removeAttr('disabled');
+                }
+            }
+
+            function removeLabel (el) {
+                $(el).parent().parent().remove();
+                $('.add-label').last().css('display', 'inline-block');
+                buttonValidateEnabled();
+                isEmailPartVisible();
+            }
+
+            function parseLabelsStart (labelsList) {
+                const labels = labelsList.split(';');
+                if (labels.length > 1) {
+                    for (var i = 0; i < labels.length; i++) {
+                        if (i > 0) {
+                            addLabel();
+                        }
+                        $('.form-label').eq(i).val(labels[i]);
+                    }
+                }
+
+                buttonValidateEnabled();
+            }
+
+            function addLabel () {
+                const removeLabelStruct = '<span onClick="removeLabel(this)" class="remove-label action glyphicon glyphicon glyphicon-remove-circle" aria-hidden="true"></span>';
+                const newLabel = $('.label-text').first().clone();
+
+                $('.add-label').each((index, el) => {
+                    $(el).css('display', 'none');
+                });
+
+                $('.labels-text-list').append(
+                    newLabel
+                        .find('input')
+                        .val('')
+                        .parent()
+                        .parent()
+                        .parent()
+                        .parent()
+                        .find('.labels-text-action')
+                        .prepend(removeLabelStruct)
+                        .parent()
+                );
+
+                $('.add-label').last().css('display', 'inline-block');
+                buttonValidateEnabled();
+                isEmailPartVisible();
+            }
+
+            buttonValidateEnabled();
+
+            $(window).resize(function() {
+                $(document.body).css("margin-top", $(".navbar").height());
+            }).resize();
+
+            function OnloadFunction(coll_enabled) {
+                $('#check-for-collision').prop('checked', coll_enabled)
+                $('.add-label').last().css('display', 'inline-block');
+                isEmailPartVisible();
+                parseLabelsStart($('#id_labels').val());
+                changeRzValue();
+                $('.search-clear').click(() => {
+                    buttonValidateEnabled();
+                });
+
+                $('form.validate-label').submit((e) => {
+                    e.preventDefault();
+
+                    // Set post data
+                    const sendData = [];
+                    let data = $('form.validate-label').serializeArray();
+                    let labelString = '';
+                    data.forEach((el) => {
+                        if (el.name === 'labels' && !isFormUploadActivated) {
+                            labelString += el.value + ';';
+                        } else if ((isFormUploadActivated === true || $('#check-for-collision').is(':checked')) && el.name === 'email') {
+                            sendData.push({name: 'email', value: el.value})
+                        } else if (el.name === 'rz_lgr') {
+                            sendData.push({name: 'rz_lgr', value: el.value})
+                        }
+                    });
+
+                    if (data.find((el) => el.name === 'collisions')) {
+                        sendData.push({name: 'collisions', value: true});
+                        coll_enabled = true;
+                    } else {
+                        sendData.push({name: 'collisions', value: false});
+                        coll_enabled = false;
+                    }
+
+                    sendData.push({name: 'csrfmiddlewaretoken', value: data.find((el) => el.name === 'csrfmiddlewaretoken').value});
+                    if (labelString !== '') {
+                        sendData.push({name: 'labels', value: labelString.slice(0, -1)});
+                    }
+
+                    const formData = new FormData();
+                    if (isFormUploadActivated) {
+                        var file = $('#id_labels_file').get(0).files[0];
+                        formData.append('labels_file', file);
+                    }
+
+                    sendData.forEach((el) => {
+                        formData.append(el.name, el.value);
+                    });
+
+                    $('#validate-label-form').attr('disabled', 'disabled');
+                    $('.fade-blocking').css('display', 'block');
+                    $('#results').css('display', 'none');
+                    $('#timeout-error').css('display', 'none');
+                    $('#general-error').css('display', 'none');
+
+                    $.ajax({
+                        type: 'POST',
+                        enctype: 'multipart/form-data',
+                        url: window.location.pathname,
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        dataType: "HTML",
+                        success: (response) => {
+                            $("#content-basic").html($(response).filter('#content-basic').html());
+                            $('.fade-blocking').css('display', 'none');
+                            OnloadFunction(coll_enabled);
+                        },
+                        error: (error) => {
+                            console.error(error);
+                            if (error && (error.status === 502 || error.status === 504)) {
+                                $('#timeout-error').css('display', 'block');
+                            } else {
+                                $('#timeout-error').css('display', 'none');
+                                $('#general-error').css('display', 'block');
+                                $('#general-error').find("span").html(error ? error.status : null);
+                            }
+                            $('.fade-blocking').css('display', 'none');
+                            $("#content-basic").html($("#content-basic").filter('#content-basic').html());
+                            sessionStorage.setItem('isFormUploadActivated', false);
+                            OnloadFunction(coll_enabled);
+                        }
+                    })
+                });
+
+                if (sessionStorage.getItem('isFormUploadActivated') === 'true') {
+                    isFormUploadActivated = true;
+                    $('#form-upload-label').css('display', 'block');
+                    $('#form-text-label').css('display', 'none');
+                    isEmailPartVisible();
+                }
+
+                $('.upload-labels-list').click(() => {
+                    isFormUploadActivated = !isFormUploadActivated;
+
+                    if (isFormUploadActivated === true) {
+                        $('#form-upload-label').css('display', 'block');
+                        $('#form-text-label').css('display', 'none');
+                    } else {
+                        $('#form-upload-label').css('display', 'none');
+                        $('#form-text-label').css('display', 'block');
+                    }
+
+                    isEmailPartVisible();
+
+                    sessionStorage.setItem('isFormUploadActivated', isFormUploadActivated);
+
+                    buttonValidateEnabled();
+                });
+
+                $('#check-for-collision').change(function () {
+                    isEmailPartVisible();
+                    buttonValidateEnabled();
+                });
+
+                $('.validate-label input').keyup(() => {
+                    buttonValidateEnabled();
+                });
+
+                $('.validate-label input').change(() => {
+                    buttonValidateEnabled();
+                });
+
+                $('#label-forms-modal').on('hidden.bs.modal', function (e) {
+                    $("#label-forms-modal iframe").attr("src", $("#label-forms-modal iframe").attr("src"));
+                });
+
+                $("#lgr-validate-modal").on('show.bs.modal', function() {
+                    var spinner = $(this).find('.spinner');
+                    spinner.show();
+                    var url = $("#lgr-validate-modal").data('lgr-validate-modal-url');
+                    var success = function(html) {
+                        $("#lgr-validate-modal .modal-body").html(html);
+                        spinner.hide();
+                    };
+                    $.get(url, null, success, 'html');
+                });
+                $('.datepicker').datepicker({
+                    dateFormat: "yy-mm-dd"
+                });
+                $('.show-tooltip').tooltip();
+            }
+
+
+            jQuery(document).ready(function($) {
+                OnloadFunction(false);
+            });
+        </script>
+        {% block html_body_more %}{% endblock %}
+    </body>
+</html>
+
+
+
+
+

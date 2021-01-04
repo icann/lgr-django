@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 from . import views
+from .views import LanguageAutocomplete
 
 LGR_SLUG_FORMAT_WITH_OPT_SET = r'(?:(?P<lgr_set_id>[\w\_\-\.]+)/)?(?P<lgr_id>[\w\_\-\.]+)'
 LGR_SLUG_FORMAT = r'(?P<lgr_id>[\w\_\-\.]+)'
@@ -9,9 +10,7 @@ CP_SLUG_FORMAT = r'(?P<codepoint_id>[0-9a-z-A-Z]{1,6}(-[0-9a-z-A-Z]{1,6})*)'
 VAR_SLUG_FORMAT = r'(?P<var_slug>[0-9a-z-A-Z]{1,6}(-[0-9a-z-A-Z]{1,6})*,.*,.*)'
 TAG_SLUG_FORMAT = r'(?P<tag_id>[0-9a-zA-Z._:\-]+)'
 
-urlpatterns = patterns(
-    '',
-
+urlpatterns = [
     # Import/Creation functions
     url(r'^import/ref/(?P<filename>[\w\_\-\.]+)/$',
         views.import_reference_lgr,
@@ -148,7 +147,12 @@ urlpatterns = patterns(
         views.label_forms,
         name='lgr_label_forms'),
 
+    # autocompletion
+    url(r'^language-autocomplete/$',
+        LanguageAutocomplete.as_view(),
+        name='language-autocomplete'),
+
     url(r'^about/$',
         views.about,
         name='about'),
-)
+]

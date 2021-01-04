@@ -7,6 +7,7 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.lgr %}
+        {% include "lgr_editor/_form_field_checkbox.html" with field=form.download_tlds %}
         {% include "lgr_editor/_form_field.html" with field=form.labels %}
         <p>{% blocktrans %}As the computing may be very long, we will warn by e-mail once the result can be downloaded. Please provide a valid e-mail address:{% endblocktrans %}</p>
         {% include "lgr_editor/_form_field.html" with field=form.email %}

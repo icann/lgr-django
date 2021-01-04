@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 16:04+0000\n"
-"PO-Revision-Date: 2018-06-19 10:31-0400\n"
+"POT-Creation-Date: 2020-12-02 03:08+0000\n"
+"PO-Revision-Date: 2020-06-04 13:34-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,67 +16,150 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.0.8\n"
+"X-Generator: Poedit 2.3\n"
 
-#: api.py:102
-msgid "The label is in the LGR set labels."
-msgstr "Le label est dans la liste des labels du set LGR."
+#: api.py:106
+msgid "the LGR set labels"
+msgstr "la liste de labels du set LGR"
 
-#: api.py:109
-msgid "ERROR more than one collision, please check your LGR set labels"
-msgstr "ERREUR plus d'une collision, vérifier les labels du set LGR"
+#: api.py:106
+msgid "the TLDs list"
+msgstr "la liste de TLDs"
 
-#: api.py:127
-msgid ""
-"ERROR cannot retrieve label in collisions, please check your LGR set labels"
+#: api.py:110
+#, python-format
+msgid "The label is in %(labels_list)s"
+msgstr "Le label est dans %(labels_list)s"
+
+#: api.py:117
+#, python-format
+msgid "ERROR more than one collision, please check %(labels_list)s"
+msgstr "ERREUR plus d'une collision, vérifier %(labels_list)s svp"
+
+#: api.py:136
+#, python-format
+msgid "ERROR cannot retrieve label in collisions, please check %(labels_list)s"
 msgstr ""
-"ERREUR impossible de retrouver le label dans les collisions, vérifier les "
-"labels du set LGR"
+"ERREUR impossible de retrouver le label dans les collisions, vérifier "
+"%(labels_list)s"
 
-#: api.py:131
+#: api.py:141
+#, python-format
 msgid ""
-"ERROR collision with more than one label in the LGR set labels,please check "
-"your LGR set labels"
+"ERROR collision with more than one label in %(labels_list)s, please check it"
 msgstr ""
-"ERREUR collision avec plus d'un label dans les labels du set LGR, vérifier "
-"les labels du set LGR"
+"ERREUR collision avec plus d'un label dans %(labels_list)s, vérifiez la svp"
 
-#: forms.py:11
+#: forms.py:12
 msgid "Label"
 msgstr "Label"
 
-#: forms.py:12
+#: forms.py:13
 msgid "Maximum length: 63 code points"
 msgstr "Longueur maximale : 63 code points"
 
-#: forms.py:13
+#: forms.py:14
 msgid "E-mail"
 msgstr "E-mail"
 
-#: forms.py:14
+#: forms.py:15
 msgid "Provide your e-mail address"
 msgstr "Fournir votre adresse e-mail"
 
-#: forms.py:16
+#: forms.py:17
 msgid "Allocated Set labels"
 msgstr "Labels du set alloués"
 
-#: forms.py:18
+#: forms.py:19
 msgid ""
 "Optional list of labels already allocated in the LGR set, that will be used "
 "to check for collisions when evaluating labels using the merged LGR set"
 msgstr ""
 "Liste optionnelle des labels déjà alloués dans le set LGR, qui sera utilisée "
 "pour vérifier les collisions lors de l'évaluation des labels utilisant le "
-"set LGR mergé."
+"set LGR mergé"
 
-#: forms.py:22
+#: forms.py:23
 msgid "Script"
 msgstr "Script"
 
-#: forms.py:24
+#: forms.py:25
 msgid "The script used to validate the label"
 msgstr "Le script utilisé pour valider le label"
+
+#: templates/lgr_validator/_validated_results.html:15
+msgid "U-label"
+msgstr "U-Label"
+
+#: templates/lgr_validator/_validated_results.html:16
+msgid "Disposition"
+msgstr "Disposition"
+
+#: templates/lgr_validator/_validated_results.html:17
+msgid "Code point sequence"
+msgstr "Séquence de code points"
+
+#: templates/lgr_validator/_validated_results.html:31
+#: templates/lgr_validator/_validated_results.html:91
+#: templates/lgr_validator/_validated_results.html:154
+msgid "Show / hide log"
+msgstr "Montrer / Cacher les logs"
+
+#: templates/lgr_validator/_validated_results.html:46
+#: templates/lgr_validator/_validated_results.html:102
+#: templates/lgr_validator/_validated_results.html:165
+#, python-format
+msgid "<b>[Action index: %(action_idx)s]</b> %(action)s"
+msgstr "<b>[Index de l'action : %(action_idx)s]</b> %(action)s"
+
+#: templates/lgr_validator/_validated_results.html:60
+msgid "Collision(s) found"
+msgstr "Collision(s) trouvée(s)"
+
+#: templates/lgr_validator/_validated_results.html:62
+msgid "No collision"
+msgstr "Pas de collisions"
+
+#: templates/lgr_validator/_validated_results.html:67
+msgid "Collision"
+msgstr "Collision"
+
+#: templates/lgr_validator/_validated_results.html:112
+msgid "No collision."
+msgstr "Pas de collisions."
+
+#: templates/lgr_validator/_validated_results.html:122
+msgid "Variant labels"
+msgstr "Labels variants"
+
+#: templates/lgr_validator/_validated_results.html:122
+msgid " (including original as last)"
+msgstr " (incluant l'original en dernier)"
+
+#: templates/lgr_validator/_validated_results.html:127
+#, python-format
+msgid "%(num_variants)s variant label(s) generated."
+msgstr "%(num_variants)s label(s) variant(s) généré(s)."
+
+#: templates/lgr_validator/_validated_results.html:129
+msgid "By disposition: "
+msgstr "Par disposition : "
+
+#: templates/lgr_validator/_validated_results.html:131
+msgid "No variant labels generated."
+msgstr "Aucun label variant généré."
+
+#: templates/lgr_validator/_validated_results.html:178
+msgid ""
+"Too many variant labels to be displayed in the browser. Please download the "
+"results in .csv instead."
+msgstr ""
+"Trop de labels variants pour être affichés dans le navigateur. Prière de "
+"télécharger le resultat au format CSV."
+
+#: templates/lgr_validator/_validated_results.html:198
+msgid "Download results in CSV"
+msgstr "Télécharger les résultats en CSV"
 
 #: templates/lgr_validator/validator.html:24
 msgid "Validate"
@@ -90,81 +173,7 @@ msgstr ""
 "Comme le traitement peut être long, une fois complété, un e-mail vous sera "
 "envoyé à l'adresse fournie"
 
-#: templates/lgr_validator/validator.html:42
-msgid "U-label"
-msgstr "U-Label"
-
-#: templates/lgr_validator/validator.html:43
-msgid "Disposition"
-msgstr "Disposition"
-
-#: templates/lgr_validator/validator.html:44
-msgid "Code point sequence"
-msgstr "Séquence de code points"
-
-#: templates/lgr_validator/validator.html:57
-#: templates/lgr_validator/validator.html:115
-#: templates/lgr_validator/validator.html:178
-msgid "Show / hide log"
-msgstr "Montrer / Cacher les logs"
-
-#: templates/lgr_validator/validator.html:71
-#: templates/lgr_validator/validator.html:125
-#: templates/lgr_validator/validator.html:188
-#, python-format
-msgid "<b>[Action index: %(action_idx)s]</b> %(action)s"
-msgstr "[Index de l'action : %(action_idx)s] %(action)s"
-
-#: templates/lgr_validator/validator.html:85
-msgid "Collision(s) found"
-msgstr "Collision(s) trouvée(s)"
-
-#: templates/lgr_validator/validator.html:87
-msgid "No collision"
-msgstr "Pas de collisions"
-
-#: templates/lgr_validator/validator.html:92
-msgid "Collision"
-msgstr "Collision"
-
-#: templates/lgr_validator/validator.html:137
-msgid "No collision."
-msgstr "Pas de collisions."
-
-#: templates/lgr_validator/validator.html:147
-msgid "Variant labels"
-msgstr "Labels variants"
-
-#: templates/lgr_validator/validator.html:147
-msgid " (including original as last)"
-msgstr " (incluant l'original en dernier)"
-
-#: templates/lgr_validator/validator.html:152
-#, python-format
-msgid "%(num_variants)s variant label(s) generated."
-msgstr "%(num_variants)s label(s) variant(s) généré(s)."
-
-#: templates/lgr_validator/validator.html:154
-msgid "By disposition: "
-msgstr "Par disposition : "
-
-#: templates/lgr_validator/validator.html:156
-msgid "No variant labels generated."
-msgstr "Aucun label variant généré."
-
-#: templates/lgr_validator/validator.html:204
-msgid ""
-"Too many variant labels to be displayed in the browser. Please download the "
-"results in .csv instead."
-msgstr ""
-"Trop de labels variants pour être affichés dans le navigateur. Prière de "
-"télécharger le resultat au format CSV."
-
-#: templates/lgr_validator/validator.html:224
-msgid "Download results in CSV"
-msgstr "Télécharger les résultats en CSV"
-
-#: views.py:129
+#: views.py:133
 msgid ""
 "Input label generates too many variants to compute them all quickly. You "
 "need to enter your email address and will receive a notification once "
@@ -173,3 +182,12 @@ msgstr ""
 "Le label entré peut générer trop de variantes pour rapidement toutes les "
 "calculer. Vous devez rentrer votre adresse e-mail et recevrez une "
 "notification une fois que le processus est terminé"
+
+#, fuzzy
+#~| msgid "<b>[Action index: %(action_idx)s]</b> %(action)s"
+#~ msgid ""
+#~ "\n"
+#~ "                                <b>[Action index: %(action_idx)s]</b> "
+#~ "%(action)s\n"
+#~ "                            "
+#~ msgstr "[Index de l'action : %(action_idx)s] %(action)s"

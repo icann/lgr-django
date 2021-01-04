@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import re
+
 from django import forms
-from django.forms.widgets import Select
+from django.core import validators
+from django.forms.widgets import Select, TextInput
 from django.utils.six import iteritems
 from django.utils.translation import ugettext_lazy as _
 
@@ -10,6 +13,17 @@ LGR_COMPARE_ACTIONS = (
     ("UNION", _("Union")),
     ("INTERSECTION", _("Intersection")),
     ("DIFF", _("Diff")))
+
+
+class UAEmailValidator(validators.EmailValidator):
+    # same Email Validator class with unicode characters instead of a-z0-9
+    user_regex = validators._lazy_re_compile(r".+", re.IGNORECASE)
+    domain_regex = validators._lazy_re_compile(r".+", re.IGNORECASE)
+
+
+class UAEmailField(forms.EmailField):
+    widget = TextInput
+    default_validators = [UAEmailValidator()]
 
 
 class DataSelectWidget(Select):
@@ -23,12 +37,17 @@ class DataSelectWidget(Select):
         super(DataSelectWidget, self).__init__(attrs)
         self.data = data
 
-    def render_option(self, selected_choices, option_value, option_label):
-        option = super(DataSelectWidget, self).render_option(selected_choices, option_value, option_label)
-        str_data = ''
-        for key, val in iteritems(self.data.get(option_value, {})):
-            str_data += 'data-%s="%s" ' % (key, val)
-        return option.replace("value=", str_data + "value=")  # XXX is there a better way without rewriting all method from scratch
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        """
+        Yield all "subwidgets" of this widget. Used to enable iterating
+        options from a BoundField for choice widgets.
+        """
+        option = super(DataSelectWidget, self).create_option(name, value, label, selected, index, subindex, attrs)
+        for key, val in iteritems(self.data.get(value, {})):
+            # attrs won't be displayed if val is False and will be displayed without argument if val is True
+            option['attrs']['data-{}'.format(key)] = val
+
+        return option
 
 
 class LGRCompareSelector(forms.Form):
@@ -65,7 +84,8 @@ class LGRCompareSelector(forms.Form):
         self.fields['lgr_1'].choices = ((_('LGR'), [(lgr['name'], lgr['name']) for lgr in lgrs]),
                                         (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
         self.fields['lgr_2'].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs)
-        self.fields['lgr_1'].widget.data = {lgr['name']: {'is-set': lgr['is_set']} for lgr in session_lgrs}
+        self.fields['lgr_1'].widget.data = {lgr['name']: {'is-set': 'yes' if lgr['is_set'] else 'no'} for lgr in
+                                            session_lgrs}
         self.fields['lgr_2'].widget.data = self.fields['lgr_1'].widget.data
         if need_empty:
             self.fields['lgr_2'].empty = True
@@ -86,9 +106,9 @@ class LGRDiffSelector(forms.Form):
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=True)
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=True)
 
     collision = forms.BooleanField(label=_("Check collisions"),
                                    help_text=_('Also check for collision of '
@@ -119,14 +139,16 @@ class LGRCollisionSelector(forms.Form):
                             help_text=_('LGR to use in tool'),
                             required=True)
 
+    download_tlds = forms.BooleanField(label=_("Also check for collision with existing TLDs"),
+                                       required=False)
+
     labels = forms.FileField(label=_("Labels"),
                              help_text=_('List of labels to use in tool. '
-                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
-                             required=True)
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'))
 
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=True)
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=True)
 
     full_dump = forms.BooleanField(label=_("Full dump"),
                                    help_text=_('Print a full dump'),
@@ -191,9 +213,9 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=True)
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=True)
 
     def __init__(self, *args, **kwargs):
         lgr_info = kwargs.get('lgr_info', None)
@@ -208,9 +230,9 @@ class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
                                          'File must be encoded in UTF-8 and using UNIX line ending.'),
                              required=True)
 
-    email = forms.EmailField(label=_("E-mail"),
-                             help_text=_('Provide your e-mail address'),
-                             required=True)
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=True)
 
 
 class LGRHarmonizeSelector(forms.Form):
@@ -230,14 +252,31 @@ class LGRHarmonizeSelector(forms.Form):
         session_lgrs = kwargs.pop('session_lgrs', {})
         lgr_id = kwargs.pop('lgr_id', '')
         super(LGRHarmonizeSelector, self).__init__(*args, **kwargs)
-        lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
-        lgrs = [lgr for lgr in session_lgrs if not lgr['is_set']]
         # dynamically append the session LGRs
         for field_name in ('lgr_1', 'lgr_2', 'rz_lgr'):
-            self.fields[field_name].choices = ((_('LGR'), [(lgr['name'], lgr['name']) for lgr in lgrs]),
-                                               (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
-            self.fields[field_name].widget.data = {lgr['name']: {'lgr-set': ','.join([l['name'] for l in lgr['lgr_set_dct']])}
-                                                   for lgr in lgr_sets}
+            self.fields[field_name].choices = ((name, name) for name in session_lgrs)
         self.fields['rz_lgr'].choices = [('', ''), ] + self.fields['rz_lgr'].choices
         self.fields['lgr_1'].initial = lgr_id
         self.fields['rz_lgr'].initial = ''
+
+
+class LGRComputeVariantsSelector(forms.Form):
+    lgr = forms.ChoiceField(label=_("LGR"),
+                            help_text=_('LGR to use in tool'),
+                            required=True)
+
+    labels = forms.FileField(label=_("Labels"),
+                             help_text=_('List of labels to use in tool. '
+                                         'File must be encoded in UTF-8 and using UNIX line ending.'))
+
+    email = UAEmailField(label=_("E-mail"),
+                         help_text=_('Provide your e-mail address'),
+                         required=True)
+
+    def __init__(self, *args, **kwargs):
+        session_lgrs = kwargs.pop('session_lgrs', [])
+        lgr_id = kwargs.pop('lgr_id', '')
+        super(LGRComputeVariantsSelector, self).__init__(*args, **kwargs)
+        # dynamically append the session LGRs (by copy, not by reference)
+        self.fields['lgr'].choices = ((name, name) for name in session_lgrs)
+        self.fields['lgr'].initial = lgr_id

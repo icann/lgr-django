@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="{% static 'chrome/css/lgr.css' %}">
         {% block html_head_more %}{% endblock %}
     </head>
-    <body style="padding-top: 110px;">
+    <body style="padding-top: 20px;">
         {% block navbar %}
             <nav class="navbar navbar-inverse navbar-fixed-top">
                 <div class="container">
@@ -67,12 +67,14 @@
                                     {% url 'lgr_tools_diff' lgr_set_id as lgr_tools_diff_url %}
                                     {% url 'lgr_tools_collisions' lgr_set_id as lgr_tools_collisions_url %}
                                     {% url 'lgr_tools_annotate' lgr_set_id as lgr_tools_annotate_url %}
+                                    {% url 'lgr_tools_variants' lgr_set_id as lgr_tools_variants_url %}
                                     {% url 'lgr_tools_cross_script' lgr_set_id as lgr_tools_cross_script_url %}
                                 {% else %}
                                     {% url 'lgr_tools_compare' lgr_id as lgr_tools_compare_url %}
                                     {% url 'lgr_tools_diff' lgr_id as lgr_tools_diff_url %}
                                     {% url 'lgr_tools_collisions' lgr_id as lgr_tools_collisions_url %}
                                     {% url 'lgr_tools_annotate' lgr_id as lgr_tools_annotate_url %}
+                                    {% url 'lgr_tools_variants' lgr_id as lgr_tools_variants_url %}
                                     {% url 'lgr_tools_cross_script' lgr_id as lgr_tools_cross_script_url %}
                                     {% url 'lgr_tools_harmonize' lgr_id as lgr_tools_harmonize_url %}
                                 {% endif %}
@@ -119,6 +121,14 @@
                                         </a>
                                     </li>
                                     {% if not lgr_id or not is_set %}
+                                       <li class="btn btn-block show-tooltip">
+                                            <a href="{{ lgr_tools_variants_url }}"
+                                               title="{% trans 'Compute variants of labels' %}"
+                                               data-placement="bottom">
+                                                <i class="glyphicon glyphicon-pencil"></i>
+                                                {% trans "Compute variants" %}
+                                            </a>
+                                        </li>
                                         <li class="btn btn-block show-tooltip">
                                             <a href="{{ lgr_tools_harmonize_url }}"
                                                title="{% trans 'Perform harmonization on LGRs' %}"
@@ -132,6 +142,7 @@
                             </div>
                         </form>
                         <div class="navbar-form navbar-right">
+                            <a class="header-link" href="{% url 'lgr_basic_mode' %}">{% trans "Basic mode" %}</a>
                             {% if lgr_id %}
                                 {% if lgr_set_id %}
                                     {% url 'view_lgr_xml' lgr_set_id lgr_id as view_lgr_xml_url %}
@@ -336,7 +347,18 @@
         <script>window.jQuery || document.write('<script src="{% static 'chrome/js/vendor/jquery.min.js' %}"><\/script>')</script>
         <script src="{% static 'chrome/bootstrap/js/bootstrap.min.js' %}"></script>
         <script>
+            function cleanInput (input) {
+                input.closest('.col').find('input').val('');
+            }
+
+            $(window).resize(function() {
+                $(document.body).css("margin-top", $(".navbar").height());
+            }).resize();
+
             jQuery(document).ready(function($) {
+                $('#label-forms-modal').on('hidden.bs.modal', function (e) {
+                    $("#label-forms-modal iframe").attr("src", $("#label-forms-modal iframe").attr("src"));
+                });
                 $("#lgr-validate-modal").on('show.bs.modal', function() {
                     var spinner = $(this).find('.spinner');
                     spinner.show();

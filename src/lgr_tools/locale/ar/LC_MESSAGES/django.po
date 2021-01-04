@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 16:04+0000\n"
+"POT-Creation-Date: 2020-12-02 03:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,134 +19,138 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: forms.py:10
+#: forms.py:13
 msgid "Union"
 msgstr ""
 
-#: forms.py:11
+#: forms.py:14
 msgid "Intersection"
 msgstr ""
 
-#: forms.py:12
+#: forms.py:15
 msgid "Diff"
 msgstr ""
 
-#: forms.py:35 forms.py:76 forms.py:217
+#: forms.py:54 forms.py:96 forms.py:239
 msgid "First LGR"
 msgstr ""
 
-#: forms.py:36 forms.py:77 forms.py:218
+#: forms.py:55 forms.py:97 forms.py:240
 msgid "First LGR to use in tool"
 msgstr ""
 
-#: forms.py:40 forms.py:80 forms.py:221
+#: forms.py:59 forms.py:100 forms.py:243
 msgid "Second LGR"
 msgstr ""
 
-#: forms.py:41 forms.py:81 forms.py:222
+#: forms.py:60 forms.py:101 forms.py:244
 msgid "Second LGR to use in tool"
 msgstr ""
 
-#: forms.py:45
+#: forms.py:64
 msgid "Action to perform on LGRs"
 msgstr ""
 
-#: forms.py:46
+#: forms.py:65
 msgid "Choose the action to perform on selected LGRs"
 msgstr ""
 
-#: forms.py:50 forms.py:98 forms.py:131
+#: forms.py:69 forms.py:118 forms.py:153
 msgid "Full dump"
 msgstr ""
 
-#: forms.py:51
+#: forms.py:70
 msgid "Print a full dump (i.e. with identical code points as well)"
 msgstr ""
 
-#: forms.py:65 forms.py:118 forms.py:150 forms.py:168 forms.py:237
+#: forms.py:84 forms.py:138 forms.py:172 forms.py:190 forms.py:264
 msgid "LGR"
 msgstr ""
 
-#: forms.py:66 forms.py:169 forms.py:238
+#: forms.py:85 forms.py:191
 msgid "LGR set"
 msgstr ""
 
-#: forms.py:84 forms.py:122 forms.py:189 forms.py:206
+#: forms.py:104 forms.py:145 forms.py:211 forms.py:228 forms.py:268
 msgid "Labels"
 msgstr ""
 
-#: forms.py:85 forms.py:123 forms.py:190 forms.py:207
+#: forms.py:105 forms.py:146 forms.py:212 forms.py:229 forms.py:269
 msgid ""
 "List of labels to use in tool. File must be encoded in UTF-8 and using UNIX "
 "line ending."
 msgstr ""
 
-#: forms.py:89 forms.py:127 forms.py:194 forms.py:211
+#: forms.py:109 forms.py:149 forms.py:216 forms.py:233 forms.py:272
 msgid "E-mail"
 msgstr ""
 
-#: forms.py:90 forms.py:128 forms.py:195 forms.py:212
+#: forms.py:110 forms.py:150 forms.py:217 forms.py:234 forms.py:273
 msgid "Provide your e-mail address"
 msgstr ""
 
-#: forms.py:93
+#: forms.py:113
 msgid "Check collisions"
 msgstr ""
 
-#: forms.py:94
+#: forms.py:114
 msgid "Also check for collision of labels in both LGR"
 msgstr ""
 
-#: forms.py:99 forms.py:132
+#: forms.py:119 forms.py:154
 msgid "Print a full dump"
 msgstr ""
 
-#: forms.py:102 forms.py:135
+#: forms.py:122 forms.py:157
 msgid "Output rules"
 msgstr ""
 
-#: forms.py:103 forms.py:136
+#: forms.py:123 forms.py:158
 msgid "Show rules in output (this can be very verbose)"
 msgstr ""
 
-#: forms.py:119 forms.py:151
+#: forms.py:139 forms.py:173 forms.py:265
 msgid "LGR to use in tool"
 msgstr ""
 
-#: forms.py:155
+#: forms.py:142
+msgid "Also check for collision with existing TLDs"
+msgstr ""
+
+#: forms.py:177
 msgid "Script"
 msgstr ""
 
-#: forms.py:156
+#: forms.py:178
 msgid "The script used to validate the label"
 msgstr ""
 
-#: forms.py:181
+#: forms.py:203
 msgid "Allocated Set labels"
 msgstr ""
 
-#: forms.py:183
+#: forms.py:205
 msgid ""
 "Optional list of labels already allocated in the LGR set, that will be used "
 "to check for collisions when evaluating labels using the merged LGR set. "
 "File must be encoded in UTF-8 and using UNIX line ending."
 msgstr ""
 
-#: forms.py:225
+#: forms.py:247
 msgid "Root Zone LGR"
 msgstr ""
 
-#: forms.py:226
+#: forms.py:248
 msgid "The (optional) RootZone LGR to infer new variant sets from"
 msgstr ""
 
-#: middleware.py:25
+#: middleware.py:30
 msgid "Cannot decode input file. Make sure it is encoded in UTF-8"
 msgstr ""
 
-#: templates/lgr_tools/annotate.html:15 templates/lgr_tools/collision.html:11
+#: templates/lgr_tools/annotate.html:15 templates/lgr_tools/collision.html:12
 #: templates/lgr_tools/cross_script_variants.html:14
-#: templates/lgr_tools/diff.html:12
+#: templates/lgr_tools/diff.html:12 templates/lgr_tools/variants.html:11
 msgid ""
 "As the computing may be very long, we will warn by e-mail once the result "
 "can be downloaded. Please provide a valid e-mail address:"
@@ -156,11 +160,11 @@ msgstr ""
 msgid "Annotate"
 msgstr ""
 
-#: templates/lgr_tools/collision.html:19
+#: templates/lgr_tools/collision.html:20
 msgid "Get collisions"
 msgstr ""
 
-#: templates/lgr_tools/collision.html:23
+#: templates/lgr_tools/collision.html:24
 msgid ""
 "<strong class=\"text-danger\"><i class=\"glyphicon glyphicon-alert\"></i> "
 "Note that collision tool is not available for LGR sets.</strong>"
@@ -242,6 +246,16 @@ msgstr ""
 msgid "Harmonize"
 msgstr ""
 
+#: templates/lgr_tools/variants.html:17
+msgid "Compute variants"
+msgstr ""
+
+#: templates/lgr_tools/variants.html:21
+msgid ""
+"<strong class=\"text-danger\"><i class=\"glyphicon glyphicon-alert\"></i> "
+"Note that variants tool is not available for LGR sets.</strong>"
+msgstr ""
+
 #: templates/lgr_tools/wait_annotate.html:10
 #, python-format
 msgid ""
@@ -255,20 +269,26 @@ msgid " with script from <a href=\"%(lgr_script_url)s\">%(script)s</a>"
 msgstr ""
 
 #: templates/lgr_tools/wait_annotate.html:14
-#: templates/lgr_tools/wait_coll.html:8
+#: templates/lgr_tools/wait_coll.html:13
 #: templates/lgr_tools/wait_cross_scripts.html:10
 #: templates/lgr_tools/wait_diff.html:9
+#: templates/lgr_tools/wait_variants.html:10
 #, python-format
 msgid ""
 "As the computing may be very long, once completed, an e-mail will be sent at "
 "the provided address: %(email)s"
 msgstr ""
 
-#: templates/lgr_tools/wait_coll.html:6
+#: templates/lgr_tools/wait_coll.html:7
 #, python-format
 msgid ""
 "Computing collisions on labels provided in file %(labels_file)s in LGR <a "
 "href=\"%(lgr_url)s\">%(lgr_name)s</a>"
+msgstr ""
+
+#: templates/lgr_tools/wait_coll.html:9
+#, python-format
+msgid " and also check with <a href=\"%(icann_tlds)s\">ICANN TLDs</a>"
 msgstr ""
 
 #: templates/lgr_tools/wait_cross_scripts.html:7
@@ -284,4 +304,11 @@ msgid ""
 "Computing diff on labels provided in file %(labels_file)s between <a href="
 "\"%(lgr_1_url)s\">%(lgr_1_name)s</a> and <a href=\"%(lgr_2_url)s\">"
 "%(lgr_2_name)s</a> "
+msgstr ""
+
+#: templates/lgr_tools/wait_variants.html:7
+#, python-format
+msgid ""
+"Computing variants of labels provided in file %(labels_file)s in LGR <a href="
+"\"%(lgr_url)s\">%(lgr_name)s</a>"
 msgstr ""

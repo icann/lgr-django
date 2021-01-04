@@ -5,16 +5,15 @@ utils.py - utility functions for LGR Editor.
 from __future__ import unicode_literals
 
 import hashlib
-import os
 import logging
-
-from natsort import natsorted
+import os
 
 from django.conf import settings
-from django.utils.six.moves.urllib_parse import quote_plus
 from django.core.cache import cache
 from django.utils.encoding import force_bytes
 from django.utils.html import mark_safe, format_html, format_html_join
+from django.utils.six.moves.urllib_parse import quote_plus
+from natsort import natsorted
 
 from lgr.char import RangeChar
 from lgr.utils import cp_to_str
@@ -67,7 +66,7 @@ def render_cp(char):
         ))
     else:
         return format_html_join(" ", "U+{}",
-                                ((cp_to_str(c), )
+                                ((cp_to_str(c),)
                                  for c in char.cp))
 
 
@@ -81,7 +80,8 @@ def render_cp_or_sequence(cp_or_sequence):
     if isinstance(cp_or_sequence, int):
         cp_or_sequence = [cp_or_sequence]
 
-    out = format_html_join(" ", "U+{} ({})", ((cp_to_str(c), mark_safe(HTML_UNICODE_FORMAT % c)) for c in cp_or_sequence))
+    out = format_html_join(" ", "U+{} ({})",
+                           ((cp_to_str(c), mark_safe(HTML_UNICODE_FORMAT % c)) for c in cp_or_sequence))
     if len(cp_or_sequence) > 1:
         out += mark_safe(" [<bdi>{}</bdi>]".format("".join("&#x{:06X};".format(c) for c in cp_or_sequence)))
     return out
@@ -101,8 +101,8 @@ def render_glyph(char):
         ))
     else:
         out = format_html_join(" ", "{}",
-                                ((mark_safe(HTML_UNICODE_FORMAT % c), )
-                                 for c in char.cp))
+                               ((mark_safe(HTML_UNICODE_FORMAT % c),)
+                                for c in char.cp))
         if len(char.cp) > 1:
             out += mark_safe(" [<bdi>{}</bdi>]".format("".join("&#x{:06X};".format(c) for c in char.cp)))
         return out
@@ -189,7 +189,7 @@ def slug_to_var(var_slug):
     return slug_to_cp(cp_slug), var_when, var_not_when
 
 
-def _list_files(location):
+def _list_files(location, startswith='', reverse=True):
     """
     List XML file in a given directory.
 
@@ -199,12 +199,21 @@ def _list_files(location):
     xml_files = []
     try:
         for file in os.listdir(location):
-            if file.endswith(".xml"):
+            if file.endswith(".xml") and file.startswith(startswith):
                 xml_files.append(file.rsplit('.', 1)[0])
     except (OSError, IOError) as exc:
         logger.warning("Cannot access directory '%s': %s",
                        location, exc)
-    return natsorted(xml_files, reverse=True)
+    return natsorted(xml_files, reverse=reverse)
+
+
+def list_root_zones():
+    """
+    List XML LGR root zone files
+
+    :return: List of root zone LGRs.
+    """
+    return _list_files(settings.REPERTOIRE_STORAGE_LOCATION, startswith='lgr')
 
 
 def list_validating_repertoires():
@@ -222,7 +231,7 @@ def list_built_in_lgr():
 
     :return: List of built-in LGRs.
     """
-    return _list_files(settings.LGR_STORAGE_LOCATION)
+    return _list_files(settings.LGR_STORAGE_LOCATION, reverse=False)
 
 
 def make_lgr_session_key(key, request, lgr_id):
@@ -241,3 +250,45 @@ def clean_repertoire_cache(request, lgr_id):
     cache.delete(make_lgr_session_key(LGR_REPERTOIRE_CACHE_KEY,
                                       request,
                                       lgr_id))
+
+
+def parse_language_registry():
+    """
+    Retrieve the list of languages and subtags from the IANA registry content.
+    """
+    languages = set()
+
+    subtag = None
+    script = None
+    _type = None
+    preferred = None
+    deprecated = False
+
+    with open(settings.IANA_LANGUAGE_SUBTAG_REGISTRY_LOCATION) as language_file:
+        for line in language_file:
+            if line.startswith("Subtag"):
+                subtag = line.split(':')[1].strip()
+            elif line.startswith("Type"):
+                _type = line.split(':')[1].strip()
+            elif line.startswith("Suppress-Script"):
+                script = line.split(':')[1].strip()
+            elif line.startswith("Preferred-Value"):
+                preferred = line.split(':')[1].strip()
+            elif line.startswith("Deprecated"):
+                deprecated = True
+            elif line.startswith('%'):
+                # end of entry
+                if not deprecated and _type == 'script':
+                    languages.add('und-' + subtag)
+                elif not deprecated and subtag:
+                    languages.add(subtag)
+                    if script:
+                        languages.add('{}-{}'.format(subtag, script))
+                    if preferred:
+                        languages.add(preferred)
+                subtag = None
+                script = None
+                _type = None
+                preferred = None
+                deprecated = False
+    return languages

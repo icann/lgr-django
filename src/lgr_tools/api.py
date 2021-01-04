@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import logging
 import time
 
 from django.utils.text import slugify
 
+from lgr.tools.utils import read_labels
 from lgr_editor.exceptions import LGRValidationException
 from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_sets
 from lgr.tools.annotate import annotate, lgr_set_annotate
-from lgr.tools.diff_collisions import diff, collision
+from lgr.tools.diff_collisions import diff, collision, basic_collision
 from lgr.tools.cross_script_variants import cross_script_variants
 from lgr.tools.harmonize import harmonize
 
@@ -16,11 +18,15 @@ from lgr_editor.api import LGRInfo, session_open_lgr, session_save_lgr
 from lgr_validator.api import lgr_set_evaluate_label, evaluate_label, validation_results_to_csv
 
 
+logger = logging.getLogger(__name__)
+
+
 class LGRCompInvalidException(LGRValidationException):
     """
     Raised when the XML validation against schema fails and contains the
     invalid XML.
     """
+
     def __init__(self, content, error):
         self.content = content
         self.error = error
@@ -101,17 +107,31 @@ def lgr_diff_labels(lgr_1, lgr_2, labels_file,
                 show_collision, full_dump, not with_rules)
 
 
-def lgr_collision_labels(lgr, labels_file, full_dump, with_rules):
+def lgr_collision_labels(lgr, labels_file, tlds_file, full_dump, with_rules):
     """
     Show difference between two LGR for a list of labels
 
     :param lgr: The LGR object.
     :param labels_file: The file containing the list of labels
+    :param tlds_file: The file containing the TLDs
     :param full_dump: Whether we output a full dump
     :param with_rules: Whether we also output rules
     :return: Text log to be displayed
     """
-    return collision(lgr, labels_file, full_dump, not with_rules)
+    return collision(lgr, labels_file, tlds_file, full_dump, not with_rules)
+
+
+def lgr_basic_collision_labels(lgr, labels_file, tlds_file, with_annotate):
+    """
+    Show difference between two LGR for a list of labels
+
+    :param lgr: The LGR object.
+    :param labels_file: The file containing the list of labels
+    :param tlds_file: The file containing the TLDs
+    :param with_annotate: Whether we annotate labels
+    :return: Text log to be displayed
+    """
+    return basic_collision(lgr, labels_file, tlds_file, with_annotate)
 
 
 def lgr_annotate_labels(lgr, labels_file):
@@ -174,13 +194,14 @@ def lgr_harmonization(request, lgr_1, lgr_2, rz_lgr):
     return h_lgr_1_id, h_lgr_2_id, cp_review
 
 
-def _validate_label_task_helper(value):
+def _validate_label_task_helper(value, with_header=True):
     """
     Helper method for validate label tasks.
 
     Convert results to CSV format.
 
-    :param value: Result of label validation.
+    :param value:       Result of label validation.
+    :param with_header: Whether CSV the output is returned with header or not
     :return: A CSV as a string.
     """
     # Define some py2/3 compat stuff
@@ -195,7 +216,7 @@ def _validate_label_task_helper(value):
         out_fn = lambda x: x.decode('utf-8')
 
     out = outIO()
-    validation_results_to_csv(value, out)
+    validation_results_to_csv(value, out, with_header=with_header)
     return out_fn(out.getvalue())
 
 
@@ -208,8 +229,7 @@ def lgr_validate_label(lgr, label, udata):
     :param udata: The associated Unicode database.
     :return: CSV containing the label validation output.
     """
-    return _validate_label_task_helper(evaluate_label(lgr, label,
-                                                      -1, udata.idna_encode_label))
+    return _validate_label_task_helper(evaluate_label(lgr, label, -1, udata.idna_encode_label))
 
 
 def lgr_set_validate_label(lgr, script_lgr, set_labels, label, udata):
@@ -225,3 +245,25 @@ def lgr_set_validate_label(lgr, script_lgr, set_labels, label, udata):
         """
     return _validate_label_task_helper(lgr_set_evaluate_label(lgr, script_lgr, label, set_labels,
                                                               -1, udata.idna_encode_label))
+
+
+def lgr_validate_labels(lgr, labels_file, udata):
+    """
+    Validate labels for an LGR.
+
+    :param lgr: The LGR to use for variant generation.
+    :param labels_file: The file containing the list of labels
+    :param udata: The associated Unicode database.
+    :return: CSV containing the labels validation output.
+    """
+    it = 0
+    for label, _, _ in read_labels(labels_file, lgr.unicode_database):
+        label_cp = tuple([ord(c) for c in label])
+        try:
+            yield _validate_label_task_helper(evaluate_label(lgr, label_cp, -1, udata.idna_encode_label),
+                                              with_header=not it)
+            it += 1
+        except Exception as ex:
+            logger.error("Failed to process label %s: %s", label, ex)
+            yield "\nError processing label {}\n".format(label)
+

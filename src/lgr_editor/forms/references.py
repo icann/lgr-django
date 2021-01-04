@@ -5,6 +5,7 @@ import re
 
 from django import forms
 from django.forms.formsets import formset_factory
+from django.utils.translation import ugettext_lazy as _
 
 from lgr.metadata import ReferenceManager
 from .utils import BaseDisableableFormSet, ReadOnlyTextInput
@@ -29,7 +30,7 @@ class ReferenceForm(forms.Form):
     def clean(self):
         cleaned_data = super(ReferenceForm, self).clean()
         if cleaned_data['ref_id'] and not re.match(ReferenceManager.REFERENCE_REGEX, str(cleaned_data['ref_id'])):
-            self.add_error('ref_id', 'Invalid format')
+            self.add_error('ref_id', _('Invalid format'))
 
         return cleaned_data
 

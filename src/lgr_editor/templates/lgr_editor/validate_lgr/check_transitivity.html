@@ -1,15 +1,20 @@
 {% extends "lgr_editor/validate_lgr/_base.html" %}
+{% load i18n static %}
 {% load lgr_editor %}
 
 {% block result_contents %}
   {% if result.repertoire %}
-    <h4>Missing variants</h4>
+    <h4>{% trans "Missing variants" %}</h4>
     <ul>
       {% for entry in result.repertoire %}
-        <li>Code point {{ entry.char|render_char }} is missing variant {{ entry.variant|render_char }}</li>
+        <li>
+        {% blocktrans trimmed with cp=entry.char|render_char variant=entry.variant|render_char %}
+          Code point {{ cp }} is missing variant {{ variant }}
+        {% endblocktrans %}
+        </li>
       {% endfor %}
     </ul>
   {% else %}
-    Transitivity OK
+    {% trans "Transitivity OK" %}
   {% endif %}
 {% endblock %}

@@ -22,6 +22,10 @@ MO_FILES= \
 	  src/lgr_tools/locale/ar/LC_MESSAGES/django.mo \
 	  src/lgr_tools/locale/en/LC_MESSAGES/django.mo \
 	  src/lgr_tools/locale/fr/LC_MESSAGES/django.mo \
+	  src/lgr_basic/locale/ar/LC_MESSAGES/django.mo \
+	  src/lgr_basic/locale/en/LC_MESSAGES/django.mo \
+	  src/lgr_basic/locale/fr/LC_MESSAGES/django.mo \
+
 
 PO_FILES= \
 	  src/lgr_web/locale/ar/LC_MESSAGES/django.po \
@@ -36,12 +40,16 @@ PO_FILES= \
 	  src/lgr_tools/locale/ar/LC_MESSAGES/django.po \
 	  src/lgr_tools/locale/en/LC_MESSAGES/django.po \
 	  src/lgr_tools/locale/fr/LC_MESSAGES/django.po \
+	  src/lgr_basic/locale/ar/LC_MESSAGES/django.po \
+	  src/lgr_basic/locale/en/LC_MESSAGES/django.po \
+	  src/lgr_basic/locale/fr/LC_MESSAGES/django.po \
+
 
 all: messages
 
 messages: $(MO_FILES)
 
-update: update-lgrweb update-lgreditor update-lgrvalidator update-lgrtools
+update: update-lgrweb update-lgreditor update-lgrvalidator update-lgrtools update-lgrbasic
 
 update-lgrweb:
 	cd src/lgr_web && $(MAKEMESSAGES) $(LANGUAGES) $(MKMSG_OPTIONS)
@@ -55,6 +63,10 @@ update-lgrvalidator:
 update-lgrtools:
 	cd src/lgr_tools && $(MAKEMESSAGES) $(LANGUAGES) $(MKMSG_OPTIONS)
 
+update-lgrbasic:
+	cd src/lgr_basic && $(MAKEMESSAGES) $(LANGUAGES) $(MKMSG_OPTIONS)
+
+
 src/lgr_web/locale/%/LC_MESSAGES/django.po:
 	cd `echo "$@" | sed -e 's#\/locale/.*##'` && django-admin.py makemessages $(LANGUAGES) $(MKMSG_OPTIONS)
 
@@ -65,6 +77,9 @@ src/lgr_validator/locale/%/LC_MESSAGES/django.po:
 	cd `echo "$@" | sed -e 's#\/locale/.*##'` && django-admin.py makemessages $(LANGUAGES) $(MKMSG_OPTIONS)
 
 src/lgr_tools/locale/%/LC_MESSAGES/django.po:
+	cd `echo "$@" | sed -e 's#\/locale/.*##'` && django-admin.py makemessages $(LANGUAGES) $(MKMSG_OPTIONS)
+
+src/lgr_basic/locale/%/LC_MESSAGES/django.po:
 	cd `echo "$@" | sed -e 's#\/locale/.*##'` && django-admin.py makemessages $(LANGUAGES) $(MKMSG_OPTIONS)
 
 $(MO_FILES): $(PO_FILES)
