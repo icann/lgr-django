@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.conf.urls import url
+
+from django.urls import register_converter, path
+
+from lgr_web.converters import LgrSlugConverter
 from . import views
 
-
-LGR_SLUG_FORMAT_WITH_OPT_SET = r'(?:(?P<lgr_set_id>[\w\_\-\.]+)/)?(?P<lgr_id>[\w\_\-\.]+)'
+register_converter(LgrSlugConverter, 'lgr')
 
 urlpatterns = [
-    url(r'^eval/{}/json/'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.validate_label_json,
-        name='lgr_validate_json'),
-    url(r'^eval/{}/csv/'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.validate_label_csv,
-        name='lgr_validate_csv'),
-    url(r'^eval/{}/validate/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.validate_label,
-        name='lgr_validate_label'),
-    url(r'^eval/{}/validate-nf/$'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.validate_label_noframe,
-        name='lgr_validate_label_noframe'),
+    path('eval/<lgr:lgr_id>/json/', views.validate_label_json, name='lgr_validate_json'),
+    path('eval/<lgr:lgr_set_id>/<lgr:lgr_id>/json/', views.validate_label_json, name='lgr_validate_json'),
+    path('eval/<lgr:lgr_id>/csv/', views.validate_label_csv, name='lgr_validate_csv'),
+    path('eval/<lgr:lgr_set_id>/<lgr:lgr_id>/csv/', views.validate_label_csv, name='lgr_validate_csv'),
+    path('eval/<lgr:lgr_id>/validate/', views.validate_label, name='lgr_validate_label'),
+    path('eval/<lgr:lgr_set_id>/<lgr:lgr_id>/validate/', views.validate_label, name='lgr_validate_label'),
+    path('eval/<lgr:lgr_id>/validate-nf/', views.validate_label_noframe,
+         name='lgr_validate_label_noframe'),
+    path('eval/<lgr:lgr_set_id>/<lgr:lgr_id>/validate-nf/', views.validate_label_noframe,
+         name='lgr_validate_label_noframe'),
 ]
