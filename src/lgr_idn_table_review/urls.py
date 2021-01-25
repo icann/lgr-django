@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf.urls import url
+from django.urls import path, register_converter
 
 from lgr_idn_table_review import views
+from lgr_web.converters import LgrSlugConverter
+
+register_converter(LgrSlugConverter, 'lgr')
 
 urlpatterns = [
-    url(r'^tool/(?P<lgr_id>[\w\_\-\.]+)?$',
-        views.lgr_idn_table_review,
-        name='lgr_idn_table_review'),
+    path('tool/<lgr:lgr_id>', views.lgr_idn_table_review, name='lgr_idn_table_review'),
 ]

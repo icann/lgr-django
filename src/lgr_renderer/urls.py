@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.conf.urls import url
+
+from django.urls import path, register_converter
+
+from lgr_web.converters import LgrSlugConverter
 from . import views
 
-
-LGR_SLUG_FORMAT_WITH_OPT_SET = r'(?:(?P<lgr_set_id>[\w\_\-\.]+)/)?(?P<lgr_id>[\w\_\-\.]+)'
+register_converter(LgrSlugConverter, 'lgr')
 
 urlpatterns = [
-    url(r'^{}'.format(LGR_SLUG_FORMAT_WITH_OPT_SET),
-        views.LGRRendererView.as_view(),
-        name='lgr_render'),
+    path('<lgr:lgr_id>', views.LGRRendererView.as_view(), name='lgr_render'),
+    path('<lgr:lgr_set_id>/<lgr:lgr_id>', views.LGRRendererView.as_view(), name='lgr_render'),
 ]

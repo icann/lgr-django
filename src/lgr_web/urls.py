@@ -6,23 +6,25 @@ The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.8/topics/http/urls/
 """
 from __future__ import unicode_literals
-from django.conf.urls import include, url
+
+from django.conf.urls import include
+from django.urls import path
 
 import lgr_basic.urls
 import lgr_editor.urls
-import lgr_validator.urls
-import lgr_tools.urls
-import lgr_renderer.urls
 import lgr_idn_table_review.urls
+import lgr_renderer.urls
+import lgr_tools.urls
+import lgr_validator.urls
 from . import views
 
 urlpatterns = [
-    url(r'^editor/', include(lgr_editor.urls.urlpatterns)),
-    url(r'^validator/', include(lgr_validator.urls.urlpatterns)),
-    url(r'^tools/', include(lgr_tools.urls.urlpatterns)),
-    url(r'^render/', include(lgr_renderer.urls.urlpatterns)),
-    url(r'^basic/', include(lgr_basic.urls.urlpatterns)),
-    url(r'^review/', include(lgr_idn_table_review.urls.urlpatterns)),
-    url(r'^i18n/', include('django.conf.urls.i18n')),
-    url(r'^$', views.index, name='homepage'),
+    path('editor/', include(lgr_editor.urls.urlpatterns)),
+    path('validator/', include(lgr_validator.urls.urlpatterns)),
+    path('tools/', include(lgr_tools.urls.urlpatterns)),
+    path('render/', include(lgr_renderer.urls.urlpatterns)),
+    path('basic/', include(lgr_basic.urls.urlpatterns)),
+    path('review/', include(lgr_idn_table_review.urls.urlpatterns)),
+    path('i18n/', include('django.conf.urls.i18n')),
+    path('', views.index, name='homepage'),
 ]
