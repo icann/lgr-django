@@ -96,10 +96,6 @@ urlpatterns = [
     path('lgr/<lgr:lgr_id>/json', views.codepoint_list_json, name='codepoint_list_json'),
     path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/json', views.codepoint_list_json, name='codepoint_list_json'),
 
-    path('label_forms/', views.label_forms, name='lgr_label_forms'),
-
     # autocompletion
     path('language-autocomplete/', LanguageAutocomplete.as_view(), name='language-autocomplete'),
-
-    path('about/', views.about, name='about'),
 ]

@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.diff_collisions import get_collisions
 from lgr.utils import cp_to_ulabel
-from lgr_advanced.lgr_editor.lgr_exceptions import lgr_exception_to_text
+from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 
 if sys.version_info.major > 2:
     to_row_format = str

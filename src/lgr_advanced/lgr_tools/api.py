@@ -7,14 +7,14 @@ import time
 from django.utils.text import slugify
 
 from lgr.tools.utils import read_labels
-from lgr_advanced.lgr_editor.exceptions import LGRValidationException
+from lgr_advanced.exceptions import LGRValidationException
 from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_sets
 from lgr.tools.annotate import annotate, lgr_set_annotate
 from lgr.tools.diff_collisions import diff, collision, basic_collision
 from lgr.tools.cross_script_variants import cross_script_variants
 from lgr.tools.harmonize import harmonize
 
-from lgr_advanced.lgr_editor.api import LGRInfo, session_open_lgr, session_save_lgr
+from lgr_advanced.api import LGRInfo, session_open_lgr, session_save_lgr
 from lgr_advanced.lgr_validator.api import lgr_set_evaluate_label, evaluate_label, validation_results_to_csv
 
 

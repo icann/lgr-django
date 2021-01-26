@@ -4,11 +4,12 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.utils import parse_label_input
-from lgr_advanced.lgr_editor.api import LGRInfo
+
+from lgr_advanced.unidb import get_db_by_version
+from lgr_advanced.api import LGRInfo
 from lgr_advanced.lgr_editor.forms.fields import ROOT_ZONES
-from lgr_advanced.lgr_editor.lgr_exceptions import lgr_exception_to_text
+from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_editor.repertoires import get_by_name
-from lgr_advanced.lgr_editor.unidb import get_db_by_version
 from lgr_advanced.lgr_tools.forms import UAEmailField
 
 

@@ -11,8 +11,8 @@ import os
 from django.conf import settings
 
 from lgr.parser.xml_parser import XMLParser
+from lgr_advanced import unidb
 from .utils import list_validating_repertoires
-from . import unidb
 
 from django.core.cache import cache
 

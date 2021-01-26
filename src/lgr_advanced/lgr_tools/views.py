@@ -5,8 +5,8 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 
 from lgr.tools.utils import download_file
-from lgr_advanced.lgr_editor.api import session_list_lgr, session_select_lgr, session_get_storage, LabelInfo
-from lgr_advanced.lgr_editor.utils import cp_to_slug
+from ..api import LabelInfo, session_list_lgr, session_select_lgr, session_get_storage
+from ..utils import cp_to_slug
 from lgr_advanced.lgr_tools.api import lgr_intersect_union, lgr_comp_diff, lgr_harmonization, LGRCompInvalidException
 from lgr_advanced.lgr_tools.forms import (LGRCompareSelector,
                                           LGRDiffSelector,

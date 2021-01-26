@@ -5,8 +5,8 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.utils import parse_label_input
-from lgr_advanced.lgr_editor import unidb
-from lgr_advanced.lgr_editor.lgr_exceptions import lgr_exception_to_text
+from lgr_advanced import unidb
+from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 
 
 class LabelFormsForm(forms.Form):

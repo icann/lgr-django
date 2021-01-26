@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 
 from django import template
 
-from ..lgr_exceptions import lgr_exception_to_text
+from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from ..utils import render_char as render_char_lgr
 from lgr.utils import format_cp as format_cp_utils
 
