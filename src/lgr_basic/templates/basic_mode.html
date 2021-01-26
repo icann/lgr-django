@@ -1,67 +1,17 @@
-<!DOCTYPE html>
+{% extends "_skel.html" %}
 {% load i18n static %}
-{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
-<html lang="{{ LANGUAGE_CODE }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{% block html_title %}{% trans 'LGR Tool' %}{% endblock %}</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-        <link rel="stylesheet" href="{% static 'chrome/bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
-        <link rel="stylesheet" href="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.css"/>
-
-        <link rel="stylesheet" href="{% static 'chrome/css/lgr.css' %}">
-        {% block html_head_more %}{% endblock %}
-    </head>
-    <body style="padding-top: 20px;">
-        <div class="fade-blocking">
-            <div class="lds-spinner">
-                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-            </div>
-        </div>
-        {% block navbar %}
-            <nav class="navbar navbar-inverse navbar-fixed-top navbar-simple">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                    </div>
-                    <div id="navbar" class="collapse navbar-collapse">
-                      <p>
-                        <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom"><i class="glyphicon glyphicon-home"></i></a>
-                        <a href="{% url 'homepage' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip" data-placement="bottom">{% trans "LGR Tool" %}</a>
-                    </p>
-
-                        <div class="navbar-form navbar-right">
-                            <a class="header-link" href="{% url 'homepage' %}?advanced">{% trans "Advanced mode" %}</a>
+{% block html_title %}{% trans 'LGR Label Validation Tool' %}{% endblock %}
+{% block navbar-right %}
+                            <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
 
                             <a class="btn btn-default show-tooltip"
                                data-toggle="modal" data-target="#label-forms-modal"
                                title="{% trans 'Display all label forms' %}" data-placement="bottom">
                                 <i class="glyphicon glyphicon-text-size"></i> {% trans "Label forms" %}
                             </a>
+                            {{ block.super }}
+{% endblock %}
 
-                            <a class="btn btn-default show-tooltip"
-                                   data-toggle="modal" data-target="#about-modal"
-                                   title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
-                                    <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
-                            </a>
-                        </div>
-                    </div><!--/.nav-collapse -->
-                </div>
-            </nav>
-        {% endblock navbar %}
-
-        {% block messages %}
-            {% include "_msgs.html" %}
-        {% endblock messages %}
 
         {% block container %}
         <div class="container" id="content-basic">
@@ -183,7 +133,6 @@
                         <button class="btn btn-primary btn-block" id="validate-label-form">
                             {% trans 'Validate' %}
                         </button>
-
                     </form>
 
                     <div id ="results">
@@ -214,36 +163,13 @@
             </div>
 
             {% block footer %}
-            <hr>
-            <footer>
-                <p class="pull-right"><small>&copy;</small></p>
-                {% include "_languages.html" %}
-                <ul class="inline">
-                </ul>
-            </footer>
+            {{ block.super }}
             {% endblock %}
 
         </div> <!-- /container -->
         {% endblock container %}
 
-        <!-- About Modal -->
-        <div class="modal fade" id="about-modal">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">{% trans "About" %}</h4>
-                    </div>
-                    <div id="modal-body" class="modal-body">
-                        <iframe id="about-iframe" data-url="{% url 'about' %}" src="{% url 'about' %}" frameborder="0" width="100%" height="100%"></iframe>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+{% block html_body_more %}
         <!-- Label forms Modal -->
         <div class="modal fade" id="label-forms-modal">
             <div class="modal-dialog modal-lg">
@@ -258,11 +184,11 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
-        <script>window.jQuery || document.write('<script src="{% static 'chrome/js/vendor/jquery.min.js' %}"><\/script>')</script>
-        <script src="{% static 'chrome/bootstrap/js/bootstrap.min.js' %}"></script>
+        <div class="fade-blocking">
+            <div class="lds-spinner">
+                <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+        </div>
         <script>
             var isFormUploadActivated = false;
 
@@ -385,10 +311,6 @@
             }
 
             buttonValidateEnabled();
-
-            $(window).resize(function() {
-                $(document.body).css("margin-top", $(".navbar").height());
-            }).resize();
 
             function OnloadFunction(coll_enabled) {
                 $('#check-for-collision').prop('checked', coll_enabled)
@@ -539,9 +461,7 @@
                 OnloadFunction(false);
             });
         </script>
-        {% block html_body_more %}{% endblock %}
-    </body>
-</html>
+        {% endblock %}
 
 
 

@@ -37,10 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'lgr_editor',
-    'lgr_validator',
-    'lgr_tools',
-    'lgr_renderer',
+    'lgr_advanced',
+    'lgr_advanced.lgr_editor',
+    'lgr_advanced.lgr_validator',
+    'lgr_advanced.lgr_tools',
+    'lgr_advanced.lgr_renderer',
     'lgr_basic',
     'lgr_idn_table_review',
     'widget_tweaks',
@@ -53,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'lgr_tools.middleware.UnicodeDecodeErrorMiddleWare'
+    'lgr_advanced.lgr_tools.middleware.UnicodeDecodeErrorMiddleWare'
 ]
 
 ROOT_URLCONF = 'lgr_web.urls'
@@ -246,11 +247,6 @@ UNICODE_DATABASES = {
     },
 }
 
-
-# The following LGR_*_FUNC parameters decouple the lgr_validator module from the lgr_editor module
-LGR_SELECTOR_FUNC = 'lgr_editor.api.session_select_lgr'
-LGR_LIST_FUNC = 'lgr_editor.api.session_list_lgr'
-UNIDB_LOADER_FUNC = 'lgr_editor.unidb.get_db_by_version'
 
 # Validator will display variants inline if there are no more than the specified number of variants
 # Otherwise, only a .csv download link is offered.

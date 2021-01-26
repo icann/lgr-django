@@ -11,12 +11,12 @@ from django.views.generic import FormView
 from lgr.exceptions import LGRException
 from lgr.tools.utils import download_file, read_labels
 from lgr.utils import cp_to_ulabel
-from lgr_editor.api import LabelInfo, session_get_storage, LGRInfo, session_list_storage
-from lgr_editor.lgr_exceptions import lgr_exception_to_text
-from lgr_editor.repertoires import get_by_name
-from lgr_tools.tasks import annotate_task, basic_collision_task
-from lgr_validator.views import evaluate_label_from_info, NeedAsyncProcess
-from lgr_web.views import ADVANCED_INTERFACE_SESSION_KEY
+from lgr_advanced.lgr_editor.api import LabelInfo, session_get_storage, LGRInfo, session_list_storage
+from lgr_advanced.lgr_editor.lgr_exceptions import lgr_exception_to_text
+from lgr_advanced.lgr_editor.repertoires import get_by_name
+from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
+from lgr_advanced.lgr_validator.views import evaluate_label_from_info, NeedAsyncProcess
+from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 from .forms import ValidateLabelSimpleForm
 
 
@@ -25,8 +25,7 @@ class BasicModeView(FormView):
     template_name = 'basic_mode.html'
 
     def get(self, request, *args, **kwargs):
-        # we want to stay in basic mode
-        request.session[ADVANCED_INTERFACE_SESSION_KEY] = False
+        request.session[INTERFACE_SESSION_KEY] = Interfaces.BASIC.name
         return super(BasicModeView, self).get(request, *args, **kwargs)
 
     def form_valid(self, form):

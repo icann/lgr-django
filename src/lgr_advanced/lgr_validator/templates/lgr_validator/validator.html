@@ -1,0 +1,77 @@
+{% extends base_template|default:"lgr_advanced/_base.html" %}
+{% load i18n widget_tweaks %}
+
+{% block content %}
+    {% comment %}
+    This template may be used in two ways. Either by passing a Django form object in the context variable named `form`,
+    or a simple string in a context variable named `input`
+    {% endcomment %}
+
+    <form method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="col-sm-10">
+            {% include "lgr_editor/_form_field.html" with field=form.label %}
+            {%  if email_required or launched_as_task %}
+                {% include "lgr_editor/_form_field.html" with field=form.email %}
+            {% endif %}
+            {% if is_set and not lgr_set_id %}
+                {% include "lgr_editor/_form_field.html" with field=form.set_labels %}
+                {% include "lgr_editor/_form_field.html" with field=form.script %}
+            {% endif %}
+        </div>
+        <button class="col-sm-2 btn btn-primary" type="submit">{% trans "Validate" %}</button>
+    </form>
+
+    <div class="clearfix"></div>
+
+    {% if launched_as_task %}
+      {% blocktrans %}As the computing may be very long, once completed, an e-mail will be sent at the provided address{% endblocktrans %}
+    {% endif %}
+    {% include "lgr_validator/_validated_results.html" %}
+
+
+{% endblock content %}
+
+
+{% block html_head_more %}
+    {{ block.super }}
+    <style>
+    td.rule-detail-cell {
+        /* make it blend into the row above */
+        padding: 0 !important;
+        border-top: none !important;
+    }
+    div.rule-detail {
+        /* add the padding to offset the padding that we removed from the containing <td> */
+        padding: 8px;
+    }
+    </style>
+{% endblock %}
+
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            // turn off bootstrap transition because it is horrible when using collapse with table cell
+            $.support.transition = false;
+            $("#add-codepoint-modal")
+                    .on('show.bs.modal', function(event) {
+                        // reset iframe URLs whenever modal is shown (so we won't get stale content)
+                        $(this).find('iframe').each(function() {
+                            this.src = $(this).data('url');
+                        });
+                    })
+                    .on('shown.bs.modal', function(event) {
+                        // resize iframes
+                        var modal_body = $(this).find(".modal-body");
+                        $("#range-iframe").outerHeight(modal_body.height() - modal_body.find(".nav-tabs").outerHeight() - 5);
+                        $("#import-file-iframe").outerHeight(modal_body.height() - modal_body.find(".nav-tabs").outerHeight() - 5);
+                    });
+
+            $("#codepoints tr[data-url]").click(function() {
+                window.location.href = $(this).data('url');
+            });
+        });
+    </script>
+{% endblock html_body_more %}
