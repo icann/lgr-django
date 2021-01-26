@@ -5,7 +5,7 @@ views.py - Views for the LGR renderer.
 from __future__ import unicode_literals
 from django.views.generic import TemplateView
 
-from lgr_advanced.lgr_editor.api import session_select_lgr
+from lgr_advanced.api import session_select_lgr
 from lgr_advanced.lgr_renderer.api import generate_context
 
 

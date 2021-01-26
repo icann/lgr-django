@@ -88,8 +88,8 @@
                             <label>
                                 {% include "lgr_editor/_form_field.html" with field=form.collisions %}
                                 <span>
-                                        {% trans 'Check for collision with existing TLDs' %}
-                                    </span>
+                                    {% trans 'Check for collision with existing TLDs' %}
+                                </span>
                             </label>
                         </div>
                     </div>
@@ -163,10 +163,12 @@
                     <ul>
                         {% for file in storage %}
                             <li>
-                                <a href="{% url 'download_file' file %}">{% blocktrans %}Download
-                                    {{ file }}{% endblocktrans %}</a>
-                                <a href="{% url 'delete_file' file %}" class="delete_file"><i
-                                        class="glyphicon glyphicon-trash"></i></a>
+                                <a href="{% url 'download_file' file %}">
+                                    {% blocktrans %}Download {{ file }}{% endblocktrans %}
+                                </a>
+                                <a href="{% url 'delete_file' file %}" class="delete_file">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -184,21 +186,8 @@
 
 {% block html_body_more %}
     <!-- Label forms Modal -->
-    <div class="modal fade" id="label-forms-modal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">{% trans "Display all label forms" %}</h4>
-                </div>
-                <div id="label-forms-modal-body" class="modal-body" style="height: 85vh;">
-                    <iframe id="label-forms-modal-iframe" data-url="{% url 'lgr_label_forms' %}"
-                            src="{% url 'lgr_label_forms' %}" frameborder="0" width="100%" height="98%"></iframe>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    {% include 'lgr_advanced/_label_forms_modal.html' %}
+
     <div class="fade-blocking">
         <div class="lds-spinner">
             <div></div>
@@ -465,20 +454,6 @@
                 buttonValidateEnabled();
             });
 
-            $('#label-forms-modal').on('hidden.bs.modal', function (e) {
-                $("#label-forms-modal iframe").attr("src", $("#label-forms-modal iframe").attr("src"));
-            });
-
-            $("#lgr-validate-modal").on('show.bs.modal', function () {
-                var spinner = $(this).find('.spinner');
-                spinner.show();
-                var url = $("#lgr-validate-modal").data('lgr-validate-modal-url');
-                var success = function (html) {
-                    $("#lgr-validate-modal .modal-body").html(html);
-                    spinner.hide();
-                };
-                $.get(url, null, success, 'html');
-            });
             $('.datepicker').datepicker({
                 dateFormat: "yy-mm-dd"
             });

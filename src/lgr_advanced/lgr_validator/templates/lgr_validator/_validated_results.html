@@ -99,11 +99,13 @@
                         <td colspan="4" class="rule-detail-cell">
                             {% if result.collision.action_idx >= 0 %}
                             <div class="alert alert-warning" role="alert">
-                                {% blocktrans with action_idx=result.collision.action_idx action=result.collision.action trimmed %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
+                                {% blocktrans trimmed with action_idx=result.collision.action_idx action=result.collision.action %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
                             </div>
                             {% endif %}
                             <div class="collapse rule-detail" id="rule-detail-collision">
-                                <textarea style="width: 100%" rows="10" disabled="disabled">{{ result.collision.rules }}</textarea>
+                                <label>
+                                    <textarea style="width: 100%" rows="10" disabled="disabled">{{ result.collision.rules }}</textarea>
+                                </label>
                             </div>
                         </td>
                     </tr>
@@ -162,11 +164,13 @@
                             <td colspan="4" class="rule-detail-cell">
                                 {% if v.action_idx >= 0 %}
                                 <div class="alert alert-info" role="alert">
-                                    {% blocktrans with action_idx=v.action_idx action=v.action trimmed %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
+                                    {% blocktrans trimmed with action_idx=v.action_idx action=v.action %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
                                 </div>
                                 {% endif %}
                                 <div class="collapse rule-detail" id="rule-detail-v-{{ forloop.counter }}">
-                                    <textarea style="width: 100%" rows="10" disabled="disabled">{{ v.logs }}</textarea>
+                                    <label>
+                                        <textarea style="width: 100%" rows="10" disabled="disabled">{{ v.logs }}</textarea>
+                                    </label>
                                 </div>
                             </td>
                         </tr>

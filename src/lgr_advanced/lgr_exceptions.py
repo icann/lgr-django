@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 import lgr.exceptions
 from lgr.utils import format_cp
 from picu.exceptions import IDNAException
-from .exceptions import LGRValidationException
+from lgr_advanced.exceptions import LGRValidationException
 
 
 def lgr_exception_to_text(exception):

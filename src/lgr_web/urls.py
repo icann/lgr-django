@@ -13,13 +13,17 @@ from django.urls import path
 import lgr_advanced.urls
 import lgr_basic.urls
 import lgr_idn_table_review.urls
-from .views import LgrModesView, LgrSwitchModeView
+from .views import LgrModesView, LgrSwitchModeView, LgrAboutView
 
 urlpatterns = [
     path('a/', include(lgr_advanced.urls.urlpatterns)),
     path('b/', include(lgr_basic.urls.urlpatterns)),
     path('r/', include(lgr_idn_table_review.urls.urlpatterns)),
+
     path('i18n/', include('django.conf.urls.i18n')),
+
+    path('about/', LgrAboutView.as_view(), name='about'),
+
     path('switch', LgrSwitchModeView.as_view(), name='lgr_modes'),
     path('', LgrModesView.as_view(), name='lgr_home'),
 ]

@@ -4,27 +4,18 @@ utils.py - utility functions for LGR Editor.
 """
 from __future__ import unicode_literals
 
-import hashlib
 import logging
-import os
 
 from django.conf import settings
-from django.core.cache import cache
-from django.utils.encoding import force_bytes
 from django.utils.html import mark_safe, format_html, format_html_join
 from django.utils.six.moves.urllib_parse import quote_plus
 from language_tags import data
-from natsort import natsorted
 
 from lgr.char import RangeChar
 from lgr.utils import cp_to_str
+from lgr_advanced.utils import cp_to_slug, list_files
 
 HTML_UNICODE_FORMAT = '<bdi>&#x%06X;</bdi>'
-
-LGR_CACHE_TIMEOUT = 3600  # Cache timeout for serialized LGRs
-LGR_CACHE_KEY_PREFIX = 'lgr-cache'
-LGR_OBJECT_CACHE_KEY = 'lgr-obj'
-LGR_REPERTOIRE_CACHE_KEY = 'repertoire'
 
 logger = logging.getLogger(__name__)
 
@@ -53,24 +44,6 @@ def render_char(char):
         return out
 
 
-def render_cp(char):
-    """
-    Render the code point(s) of a character.
-
-    :param char: The char object to render.
-    :returns: HTML string of the code points.
-    """
-    if isinstance(char, RangeChar):
-        return mark_safe('U+{first_c} &hellip; U+{last_c}'.format(
-            first_c=cp_to_str(char.first_cp),
-            last_c=cp_to_str(char.last_cp),
-        ))
-    else:
-        return format_html_join(" ", "U+{}",
-                                ((cp_to_str(c),)
-                                 for c in char.cp))
-
-
 def render_cp_or_sequence(cp_or_sequence):
     """
     Render the code point(s) of a list unique or list of code points..
@@ -86,45 +59,6 @@ def render_cp_or_sequence(cp_or_sequence):
     if len(cp_or_sequence) > 1:
         out += mark_safe(" [<bdi>{}</bdi>]".format("".join("&#x{:06X};".format(c) for c in cp_or_sequence)))
     return out
-
-
-def render_glyph(char):
-    """
-    Render the glyph corresponding to a char in HTML.
-
-    :param char: The char object to render.
-    :returns: HTML string of the glyph.
-    """
-    if isinstance(char, RangeChar):
-        return mark_safe('{first_u} &hellip; {last_u}'.format(
-            first_u=HTML_UNICODE_FORMAT % char.first_cp,
-            last_u=HTML_UNICODE_FORMAT % char.last_cp,
-        ))
-    else:
-        out = format_html_join(" ", "{}",
-                               ((mark_safe(HTML_UNICODE_FORMAT % c),)
-                                for c in char.cp))
-        if len(char.cp) > 1:
-            out += mark_safe(" [<bdi>{}</bdi>]".format("".join("&#x{:06X};".format(c) for c in char.cp)))
-        return out
-
-
-def render_name(char, udata):
-    """
-    Render the name of a char in HTML.
-
-    :param char: The char object to render.
-    :param udata: The Unicode data manager.
-    :return: HTML string to display.
-    """
-    if isinstance(char, RangeChar):
-        name = format_html("{} &hellip; {}",
-                           udata.get_char_name(char.first_cp),
-                           udata.get_char_name(char.last_cp))
-    else:
-        name = format_html_join(" ", "{}",
-                                ((udata.get_char_name(cp),) for cp in char.cp))
-    return name
 
 
 def render_age(char, udata):
@@ -143,16 +77,6 @@ def render_age(char, udata):
         name = format_html_join(" ", "{}",
                                 ((udata.get_char_age(cp),) for cp in char.cp))
     return name
-
-
-def cp_to_slug(codepoint):
-    """
-    Convert a codepoint to a slug that can be used in URL.
-
-    :param codepoint: Codepoint to convert.
-    :return: Slug to be used in URL.
-    """
-    return '-'.join(str(c) for c in codepoint)
 
 
 def var_to_slug(variant):
@@ -190,67 +114,13 @@ def slug_to_var(var_slug):
     return slug_to_cp(cp_slug), var_when, var_not_when
 
 
-def _list_files(location, startswith='', reverse=True):
-    """
-    List XML file in a given directory.
-
-    :param location: Directory to list files from.
-    :return: List of XML (.xml) files in this directory.
-    """
-    xml_files = []
-    try:
-        for file in os.listdir(location):
-            if file.endswith(".xml") and file.startswith(startswith):
-                xml_files.append(file.rsplit('.', 1)[0])
-    except (OSError, IOError) as exc:
-        logger.warning("Cannot access directory '%s': %s",
-                       location, exc)
-    return natsorted(xml_files, reverse=reverse)
-
-
-def list_root_zones():
-    """
-    List XML LGR root zone files
-
-    :return: List of root zone LGRs.
-    """
-    return _list_files(settings.REPERTOIRE_STORAGE_LOCATION, startswith='lgr')
-
-
 def list_validating_repertoires():
     """
     List XML LGR repertoire files stored at a specific location.
 
     :return: List of validating repertoires.
     """
-    return _list_files(settings.REPERTOIRE_STORAGE_LOCATION)
-
-
-def list_built_in_lgr():
-    """
-    List XML LGR files stored at a specific location.
-
-    :return: List of built-in LGRs.
-    """
-    return _list_files(settings.LGR_STORAGE_LOCATION, reverse=False)
-
-
-def make_lgr_session_key(key, request, lgr_id):
-    key = "{}:{}:{}".format(key, request.session.session_key, lgr_id)
-    args = hashlib.md5(force_bytes(key))
-    return "{}.{}".format(LGR_CACHE_KEY_PREFIX, args.hexdigest())
-
-
-def clean_repertoire_cache(request, lgr_id):
-    """
-    Clean all repertoire-related caches.
-
-    :param request: Django request object
-    :param lgr_id: a slug identifying the LGR
-    """
-    cache.delete(make_lgr_session_key(LGR_REPERTOIRE_CACHE_KEY,
-                                      request,
-                                      lgr_id))
+    return list_files(settings.REPERTOIRE_STORAGE_LOCATION)
 
 
 def parse_language_registry():

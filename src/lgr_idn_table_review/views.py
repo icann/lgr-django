@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 
 from lgr.tools.idn_review.review import review_lgr
-from lgr_advanced.lgr_editor.api import session_select_lgr, session_list_lgr
+from lgr_advanced.api import session_list_lgr, session_select_lgr
 from lgr_idn_table_review.forms import LGRIdnTableReviewSelector
 
 

@@ -9,12 +9,12 @@ from django.shortcuts import render, redirect
 from django.utils.translation import ugettext as _
 
 from lgr.exceptions import LGRException
-from lgr_advanced.lgr_editor.api import LabelInfo, session_get_storage, session_select_lgr
-from lgr_advanced.lgr_editor.lgr_exceptions import lgr_exception_to_text
+from lgr_advanced.unidb import get_db_by_version
+from ..api import LabelInfo, session_select_lgr, session_get_storage
+from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
 from .forms import ValidateLabelForm
-from ..lgr_editor.unidb import get_db_by_version
 
 
 class NeedAsyncProcess(Exception):

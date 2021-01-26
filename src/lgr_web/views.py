@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from enum import Enum, auto
 
+from django.conf import settings
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
@@ -33,3 +34,15 @@ class LgrSwitchModeView(LgrModesView):
         # reset interface session key
         request.session.pop(INTERFACE_SESSION_KEY, None)
         return super(LgrModesView, self).get(request, *args, **kwargs)
+
+
+class LgrAboutView(TemplateView):
+    """
+    About dialog
+    """
+    template_name = 'about.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['output'] = {"versions": settings.SUPPORTED_UNICODE_VERSIONS}
+        return ctx

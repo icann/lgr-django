@@ -35,7 +35,7 @@ from lgr.exceptions import LGRException, NotInLGR, CharInvalidContextRule, LGRFo
 from lgr.metadata import Scope, Description, Metadata, Version
 from lgr.char import RangeChar
 from lgr.parser.xml_parser import LGR_NS
-from lgr.utils import format_cp, cp_to_ulabel
+from lgr.utils import format_cp
 from lgr.validate.transitivity import check_transitivity
 from lgr.validate.symmetry import check_symmetry
 from lgr.parser.rfc3743_parser import RFC3743Parser
@@ -43,6 +43,7 @@ from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.parser.line_parser import LineParser
 from lgr.core import LGR
 
+from lgr_advanced import unidb
 from .repertoires import get_by_name, get_all_scripts_from_repertoire
 from .forms import (AddCodepointForm,
                     AddRangeForm,
@@ -58,34 +59,23 @@ from .forms import (AddCodepointForm,
                     CreateLGRForm,
                     AddMultiCodepointsForm,
                     LanguageFormSet,
-                    LabelFormsForm,
                     EditCodepointsForm, IANA_LANG_REGISTRY)
 
-from .lgr_exceptions import lgr_exception_to_text
-from .api import (session_open_lgr,
-                  session_select_lgr,
-                  session_save_lgr,
-                  session_delete_lgr,
+from lgr_advanced.lgr_exceptions import lgr_exception_to_text
+from .api import (session_delete_lgr,
                   session_new_lgr,
-                  session_list_lgr,
                   session_get_file,
                   session_delete_file,
-                  session_merge_set,
-                  get_builtin_or_session_repertoire,
-                  LGRInfo)
+                  session_merge_set)
+from ..api import LGRInfo, session_list_lgr, session_open_lgr, session_select_lgr, session_save_lgr, \
+    get_builtin_or_session_repertoire
 from .utils import (render_char,
-                    render_name,
                     render_age,
                     render_cp_or_sequence,
-                    cp_to_slug,
                     slug_to_cp,
                     slug_to_var,
-                    var_to_slug,
-                    make_lgr_session_key,
-                    LGR_REPERTOIRE_CACHE_KEY,
-                    LGR_CACHE_TIMEOUT)
-from . import unidb
-
+                    var_to_slug)
+from ..utils import render_name, cp_to_slug, LGR_REPERTOIRE_CACHE_KEY, make_lgr_session_key, LGR_CACHE_TIMEOUT
 
 TRUNCATE_AFTER_N_CP_TAGS = 10
 RE_SAFE_FILENAME = re.compile(r'[a-zA-Z0-9. _\-()]+')
@@ -1929,27 +1919,6 @@ class MetadataView(FormView):
         return self.render_to_response(context)
 
 
-def label_forms(request):
-    unicode_versions = ((v, v) for v in settings.SUPPORTED_UNICODE_VERSIONS)
-    form = LabelFormsForm(request.POST or None,
-                          unicode_versions=unicode_versions)
-    ctx = {}
-    if form.is_bound and form.is_valid():
-        label = form.cleaned_data['label']
-        unicode_version = form.cleaned_data['unicode_version']
-        udata = unidb.manager.get_db_by_version(unicode_version)
-        try:
-            ctx['cp_list'] = format_cp(label)
-            ctx['u_label'] = cp_to_ulabel(label)
-            ctx['a_label'] = udata.idna_encode_label(ctx['u_label'])
-        except UnicodeError as ex:
-            messages.add_message(request, messages.ERROR,
-                                 lgr_exception_to_text(ex))
-
-    ctx['form'] = form
-    return render(request, 'lgr_editor/label_forms.html', context=ctx)
-
-
 def embedded_lgrs(request, lgr_id):
     lgr_info = session_select_lgr(request, lgr_id)
     if not lgr_info.is_set:
@@ -1962,16 +1931,6 @@ def embedded_lgrs(request, lgr_id):
         'is_set': True
     }
     return render(request, 'lgr_editor/embedded_lgrs.html', context=ctx)
-
-
-def about(request):
-    """
-    Show about dialog
-    """
-    output = {"versions": settings.SUPPORTED_UNICODE_VERSIONS}
-    return render(request,
-                  'lgr_editor/about.html',
-                  context={'output': output})
 
 
 class LanguageAutocomplete(autocomplete.Select2ListView):
