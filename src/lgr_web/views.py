@@ -1,26 +1,35 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-from django.shortcuts import render, redirect
-from lgr_editor.api import session_list_lgr, session_list_storage
-from lgr_editor.utils import list_built_in_lgr
+from enum import Enum, auto
+
+from django.shortcuts import redirect
+from django.views.generic import TemplateView
+
+INTERFACE_SESSION_KEY = None
 
 
-ADVANCED_INTERFACE_SESSION_KEY = 'advanced'
+class Interfaces(Enum):
+    ADVANCED = auto()
+    BASIC = auto()
+    ICANN = auto()
+    ADMIN = auto()
 
 
-def index(request):
-    if 'advanced' in request.GET:
-        # we explicitly clicked the advanced mode button
-        request.session[ADVANCED_INTERFACE_SESSION_KEY] = True
+class LgrModesView(TemplateView):
+    template_name = 'lgr_modes.html'
 
-    if not request.session.get(ADVANCED_INTERFACE_SESSION_KEY, False):
-        return redirect('lgr_basic_mode')
+    def get(self, request, *args, **kwargs):
+        # stay in the current mode
+        interface = request.session.get(INTERFACE_SESSION_KEY)
+        if interface == Interfaces.ADVANCED.name:
+            return redirect('lgr_advanced_mode')
+        if interface == Interfaces.BASIC.name:
+            return redirect('lgr_basic_mode')
 
-    xml_files = list_built_in_lgr()
-    ctx = {
-        'lgr_xml': xml_files,
-        'lgrs': session_list_lgr(request),
-        'lgr_id': '',
-        'storage': session_list_storage(request),
-    }
-    return render(request, 'index.html', context=ctx)
+        return super(LgrModesView, self).get(request, *args, **kwargs)
+
+
+class LgrSwitchModeView(LgrModesView):
+    def get(self, request, *args, **kwargs):
+        # reset interface session key
+        request.session.pop(INTERFACE_SESSION_KEY, None)
+        return super(LgrModesView, self).get(request, *args, **kwargs)

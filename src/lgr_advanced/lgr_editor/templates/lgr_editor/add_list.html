@@ -1,0 +1,10 @@
+{% extends "lgr_advanced/_base_noframe.html" %}
+{% load i18n %}
+
+{% block content %}
+    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button id="btn-add-range" type="submit" class="btn btn-primary">{% trans "Next" %}</button>
+    </form>
+{% endblock content %}

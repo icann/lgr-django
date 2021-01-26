@@ -357,3 +357,18 @@ input[type="text"].form-control {
 	  opacity: 0;
 	}
   }
+
+/* Tool selection page */
+.panel.btn {
+    display: block;
+    text-align: left;
+    padding: 0px 10px;
+}
+.col-md-6 .panel.btn {
+    padding: 50px 10px;
+    text-align: center;
+}
+
+a.panel {
+	color: #333;
+}

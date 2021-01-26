@@ -1,0 +1,47 @@
+{% extends "_skel.html" %}
+{% load i18n %}
+
+{% block content %}
+    <h1>{% trans "Welcome to the LGR (Label Generation Ruleset) Tools" %}</h1>
+
+    <hr class="header-sep"/>
+
+    <div class="col-md-12">
+        <p>{% trans "Select your mode:" %}</p>
+    </div>
+    <div class="col-md-6">
+        <a class="panel panel-default btn" href="{% url "lgr_basic_mode" %}" title="{% trans "Basic mode" %}">
+            <div class="panel-body">
+                <b><span class="glyphicon glyphicon-ok">&nbsp;</span>{% trans "Validate label(s) against an LGR" %}
+                </b>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-6">
+        <a class="panel panel-default btn" href="" title="{% trans "Review mode" %}">
+            <div class="panel-body">
+                <b><span class="glyphicon glyphicon-copy">&nbsp;</span>{% trans "Review IDN table(s)" %}</b>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-12">
+        <a class="panel panel-default btn" href="{% url "lgr_advanced_mode" %}" title="{% trans "Advanced mode" %}">
+            <div class="panel-body">
+                <span class="glyphicon glyphicon-wrench">&nbsp;</span>{% trans "Advanced LGR Tools" %}
+            </div>
+        </a>
+        <a class="panel panel-default btn" href="" title="{% trans "ICANN mode" %}">
+            <div class="panel-body">
+                <span class="glyphicon glyphicon-lock">&nbsp;</span>{% trans "Generate ICANN IDN report" %}
+            </div>
+        </a>
+
+        <a class="panel panel-default btn" href="" title="{% trans "Admin mode" %}">
+            <div class="panel-body">
+                <span class="glyphicon glyphicon-lock">&nbsp;</span>{% trans "Administrate IDN review tool" %}
+            </div>
+        </a>
+    </div>
+    <div class="clearfix"></div>
+
+{% endblock %}

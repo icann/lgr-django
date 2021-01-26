@@ -1,0 +1,26 @@
+{% extends base_template|default:"lgr_advanced/_base.html" %}
+{% load i18n widget_tweaks %}
+
+{% block content %}
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.lgr %}
+        {% include "lgr_editor/_form_field_checkbox.html" with field=form.download_tlds %}
+        {% include "lgr_editor/_form_field.html" with field=form.labels %}
+        <p>{% blocktrans %}As the computing may be very long, we will warn by e-mail once the result can be downloaded. Please provide a valid e-mail address:{% endblocktrans %}</p>
+        {% include "lgr_editor/_form_field.html" with field=form.email %}
+        {% include "lgr_editor/_form_field_checkbox.html" with field=form.full_dump label_width=7 field_width=8 %}
+        {% include "lgr_editor/_form_field_checkbox.html" with field=form.with_rules label_width=7 field_width=8 %}
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">{% trans "Get collisions" %}</button>
+        </div>
+    </form>
+    <p>
+        {% blocktrans trimmed %}
+            <strong class="text-danger"><i class="glyphicon glyphicon-alert"></i> Note that collision tool is not available for LGR sets.</strong>
+        {% endblocktrans %}
+    </p>
+{% endblock content %}
