@@ -1,11 +1,11 @@
 {% extends "lgr_advanced/_base.html" %}
 {% load i18n %}
 
+{% block content-title %}
+    {% trans "Advanced LGR (Label Generation Ruleset) Tools" %}
+{% endblock %}
 {% block content %}
     {% regroup lgrs|dictsort:"is_set" by is_set as lgrs_sorted %}
-
-    <h1>{% trans "Welcome to the LGR (Label Generation Ruleset) Tools" %}</h1>
-
     <p>
     {% blocktrans trimmed %}
         This application provides a convenient interface for browsing
@@ -51,7 +51,7 @@
 
                             <div class="panel-group">
                                 <div class="panel">
-                                    <div id={{lgr.name}} class="panel-collapse collapse">
+                                    <div id="{{lgr.name}}" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <ul>
                                                 {% for lgr_info in lgr.lgr_set_dct %}
