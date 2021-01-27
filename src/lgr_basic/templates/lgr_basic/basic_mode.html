@@ -17,6 +17,8 @@
     <div class="container" id="content-basic">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 validate-label-simple-form">
+                <h1>{% trans "Label Validation Tool" %}</h1>
+                <hr class="header-sep"/>
                 <form class="form-horizontal validate-label" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
@@ -409,6 +411,7 @@
                             $('#general-error').find("span").html(error ? error.status : null);
                         }
                         $('.fade-blocking').css('display', 'none');
+                        {# FIXME: replace the logic of the view to only return content for the result part here #}
                         $("#content-basic").html($("#content-basic").filter('#content-basic').html());
                         sessionStorage.setItem('isFormUploadActivated', false);
                         OnloadFunction(coll_enabled);

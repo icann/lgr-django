@@ -22,7 +22,8 @@ class CreateLGRForm(forms.Form):
 
 class ImportLGRForm(forms.Form):
     file = MultiFileField(label=_("Select file(s)"), min_num=1,
-                          help_text='If you select more than one file, this will create a LGR set')
+                          help_text='If you select more than one file, this will create a LGR set. '
+                                    'File(s) must be encoded in UTF-8 and using UNIX line ending.')
     # TODO if more than one file: add forms.CharField LGR set name
     validating_repertoire = forms.ChoiceField(label=_("Validating repertoire"),
                                               help_text=_('Code points will be limited to the selected repertoire'),

@@ -22,7 +22,7 @@ from .forms import ValidateLabelSimpleForm
 
 class BasicModeView(FormView):
     form_class = ValidateLabelSimpleForm
-    template_name = 'basic_mode.html'
+    template_name = 'lgr_basic/basic_mode.html'
 
     def get(self, request, *args, **kwargs):
         request.session[INTERFACE_SESSION_KEY] = Interfaces.BASIC.name
