@@ -11,6 +11,7 @@ INTERFACE_SESSION_KEY = None
 class Interfaces(Enum):
     ADVANCED = auto()
     BASIC = auto()
+    REVIEW = auto()
     ICANN = auto()
     ADMIN = auto()
 
@@ -25,6 +26,8 @@ class LgrModesView(TemplateView):
             return redirect('lgr_advanced_mode')
         if interface == Interfaces.BASIC.name:
             return redirect('lgr_basic_mode')
+        if interface == Interfaces.REVIEW.name:
+            return redirect('lgr_review_mode')
 
         return super(LgrModesView, self).get(request, *args, **kwargs)
 

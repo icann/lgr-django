@@ -1,0 +1,42 @@
+{% extends "_skel.html" %}
+{% load i18n widget_tweaks %}
+
+{% block html_title %}{% trans 'IDN Table Review' %}{% endblock %}
+
+{% block navbar-right %}
+    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
+    {{ block.super }}
+{% endblock %}
+
+{% block content-title %}
+    {% trans "IDN Table Review" %}
+{% endblock %}
+
+{% block content %}
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.idn_tables %}
+            <button id="submit" type="submit" class="btn btn-primary btn-block">{% trans "Next..." %}</button>
+    </form>
+{% endblock content %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            function enable_submit_button() {
+                let files = $('#id_idn_tables').prop('files');
+                if (files.length > 0) {
+                    $('#submit').removeAttr('disabled')
+                } else {
+                    $('#submit').attr('disabled', 'disabled')
+                }
+            }
+
+            $('#id_idn_tables').change(function () {
+                enable_submit_button()
+            });
+            enable_submit_button();
+        });
+    </script>
+{% endblock html_body_more %}
