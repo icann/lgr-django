@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.urls import path, register_converter
+from django.urls import path, include
 
-from lgr_idn_table_review.views import IdnTableReviewModeView, IdnTableReviewSelectReferenceView
-from lgr_web.converters import LgrSlugConverter
-
-register_converter(LgrSlugConverter, 'lgr')
+import lgr_idn_table_review.tool.urls
+# import lgr_idn_table_review.icann.urls
+# import lgr_idn_table_review.admin.urls
 
 urlpatterns = [
-    path('', IdnTableReviewModeView.as_view(), name='lgr_review_mode'),
-    path('ref', IdnTableReviewSelectReferenceView.as_view(), name='lgr_review_select_reference'),
+    # path('admin/', include(lgr_idn_table_review.admin.urls.urlpatterns)),
+    # path('icann/', include(lgr_idn_table_review.icann.urls.urlpatterns)),
+    path('tool/', include(lgr_idn_table_review.tool.urls.urlpatterns)),
 ]
