@@ -7,14 +7,14 @@ from django.utils.text import slugify
 from django.views.generic import FormView
 
 from lgr_advanced.lgr_editor.views import RE_SAFE_FILENAME
-from lgr_idn_table_review.api import session_open_idn_table, session_list_idn_tables, session_delete_idn_tables
-from lgr_idn_table_review.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
+from lgr_idn_table_review.tool.api import session_open_idn_table, session_list_idn_tables, session_delete_idn_tables
+from lgr_idn_table_review.tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 
 
 class IdnTableReviewModeView(FormView):
     form_class = LGRIdnTableReviewForm
-    template_name = 'lgr_idn_table_review/review_mode.html'
+    template_name = 'lgr_idn_table_review_tool/review_mode.html'
     success_url = reverse_lazy('lgr_review_select_reference')
 
     def get(self, request, *args, **kwargs):
@@ -39,7 +39,7 @@ class IdnTableReviewModeView(FormView):
 
 class IdnTableReviewSelectReferenceView(FormView):
     form_class = IdnTableReviewSelectReferenceForm
-    template_name = 'lgr_idn_table_review/select_reference.html'
+    template_name = 'lgr_idn_table_review_tool/select_reference.html'
 
     def form_valid(self, form):
         return super(IdnTableReviewSelectReferenceView, self).form_valid(form)
