@@ -3,7 +3,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from multiupload.fields import MultiFileField
 
-from lgr_idn_table_review.admin.models import RzLgr, RzLgrMember
+from lgr_idn_table_review.admin.models import RzLgr, RzLgrMember, RefLgr
 
 
 class RzLgrCreateForm(forms.ModelForm):
@@ -23,3 +23,14 @@ class RzLgrCreateForm(forms.ModelForm):
         for lgr in self.cleaned_data['repository']:
             RzLgrMember.objects.create(file=lgr, name=lgr.name, rz_lgr=rz_lgr)
         return rz_lgr
+
+
+class RefLgrCreateForm(forms.ModelForm):
+    class Meta:
+        model = RefLgr
+        fields = '__all__'
+        labels = {
+            'file': _('Reference LGR file'),
+            'name': _('Name'),
+            'language_script': _('Language/script tag')
+        }
