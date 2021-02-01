@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'lgr_basic',
     'lgr_idn_table_review',
     'lgr_idn_table_review.admin',
+    'lgr_idn_table_review.icann',
     'lgr_idn_table_review.tool',
     'widget_tweaks',
     'django_cleanup.apps.CleanupConfig',  # should be placed last
