@@ -1,0 +1,33 @@
+{% extends "_skel.html" %}
+{% load i18n %}
+
+{% block html_title %}{% trans 'IDN review tool admin' %}{% endblock %}
+
+{% block navbar-right %}
+    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
+    {{ block.super }}
+{% endblock %}
+
+{% block content-title %}
+    {% trans 'IDN review tool admin' %}
+{% endblock %}
+
+{% block content %}
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="{% block rz-lgr-active %}{% endblock %}">
+            <a href="{% url 'lgr_idn_admin_rz_lgr' %}">{% trans "Root Zone LGRs" %}</a>
+        </li>
+        <li role="presentation" class="{% block ref-lgr-active %}{% endblock %}">
+            <a href="{% url 'lgr_idn_admin_ref_lgr' %}">{% trans "Reference LGRs" %}</a>
+        </li>
+        <li role="presentation" class="{% block user-management-active %}{% endblock %}">
+            <a href="{% url 'lgr_idn_admin_user_management' %}">{% trans "User management" %}</a>
+        </li>
+    </ul>
+
+    <div>
+    {% block content-pane %}
+    {% endblock content-pane %}
+    </div>
+{% endblock content %}
+

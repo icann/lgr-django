@@ -1,0 +1,107 @@
+{% extends "lgr_idn_table_review_admin/_idn_table_review_admin_base.html" %}
+{% load i18n %}
+
+{% block rz-lgr-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h2>{% trans 'Existing Root Zone LGRs' %}</h2>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">{% trans 'Name' %}</th>
+            <th scope="col">{% trans 'Files' %}</th>
+            <th scope="col">{% trans 'Action' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for rz_lgr in object_list %}
+            <tr>
+                <td>{{ rz_lgr.name }}</td>
+                <td>
+                    <a href="{% url 'lgr_idn_admin_display_rz_lgr' lgr_id=rz_lgr.pk %}">{{ rz_lgr.filename }}</a><br>
+                    {% for lgr in rz_lgr.repository.all %}
+                        {% if forloop.counter == 5 %}
+                            <div id="remain-{{ rz_lgr.pk }}" class="collapse lgr-collapsed" data-pk="{{ rz_lgr.pk }}">
+                        {% endif %}
+                        <a href="{% url 'lgr_idn_admin_display_rz_lgr_member' lgr_id=lgr.pk %}">{{ lgr.filename }}</a>
+                        <br>
+                    {% endfor %}
+                    {% if rz_lgr.repository.all|length > 4 %}
+                        </div>
+                        <a href="#remain-{{ rz_lgr.pk }}" data-toggle="collapse">
+                            <div id="collapsed-text-{{ rz_lgr.pk }}"><b><u>
+                                {% blocktrans with remain=rz_lgr.repository.all|length|add:"-5" %}
+                                    Display {{ remain }} more files
+                                {% endblocktrans %}</u></b>
+                            </div>
+                            <span id="collapsed-icon-{{ rz_lgr.pk }}" class="glyphicon"></span>
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url "lgr_idn_admin_delete_rz_lgr" lgr_id=rz_lgr.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        {% empty %}
+            <tr>
+                <td colspan="3">{% trans 'No Root Zone LGR.' %}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2>{% trans 'New Root Zone LGR' %}</h2>
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.name control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.file control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.repository control_width=8 %}
+        <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>
+    </form>
+{% endblock content-pane %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            function enable_submit_button() {
+                if ($('#id_repository').prop('files').length > 0 &&
+                    $('#id_name').val() !== "" &&
+                    $('#id_file').prop('files').length > 0) {
+                    $('#submit').removeAttr('disabled')
+                } else {
+                    $('#submit').attr('disabled', 'disabled')
+                }
+            }
+
+            $('#id_repository').change(function () {
+                enable_submit_button()
+            });
+            $('#id_name').change(function () {
+                enable_submit_button()
+            });
+            $('#id_file').change(function () {
+                enable_submit_button()
+            });
+            enable_submit_button();
+
+            function display_more_collapsed() {
+                $(".lgr-collapsed").on('shown.bs.collapse', function () {
+                    $("#collapsed-icon-" + $(this).data('pk')).addClass('glyphicon-chevron-up');
+                    $("#collapsed-text-" + $(this).data('pk')).hide()
+                });
+
+                $(".lgr-collapsed").on('hidden.bs.collapse', function () {
+                    $("#collapsed-icon-" + $(this).data('pk')).removeClass('glyphicon-chevron-up');
+                    $("#collapsed-text-" + $(this).data('pk')).show();
+                });
+            }
+
+            display_more_collapsed();
+        });
+    </script>
+{% endblock html_body_more %}

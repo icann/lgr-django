@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.core.exceptions import SuspiciousOperation
 from django.urls import reverse_lazy
 from django.utils.text import slugify
@@ -18,7 +16,7 @@ class IdnTableReviewModeView(FormView):
     success_url = reverse_lazy('lgr_review_select_reference')
 
     def get(self, request, *args, **kwargs):
-        request.session[INTERFACE_SESSION_KEY] = Interfaces.REVIEW.name
+        request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_REVIEW.name
         session_delete_idn_tables(request)
         return super(IdnTableReviewModeView, self).get(request, *args, **kwargs)
 
