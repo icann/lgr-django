@@ -7,6 +7,7 @@ celery[redis]==4.3.0
 django-redis-cache==2.0.0
 django-autocomplete-light==3.5.1
 vine==1.3.0
+django-cleanup==5.1.0
 
 # LGR/Unicode modules
 picu==1.1
