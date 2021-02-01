@@ -1,0 +1,50 @@
+{% extends "_skel.html" %}
+{% load i18n %}
+
+{% block html_title %}{% trans 'LGR Tools login' %}{% endblock %}
+
+{% block content-title %}
+    {% trans "Login" %}
+{% endblock %}
+
+{% block messages %}
+    {{ block.super }}
+    <div class="container">
+        {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {% trans "Your username and password didn't match. Please try again." %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock messages %}
+
+{% block content %}
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>
+                {% blocktrans %}
+                    Your account doesn't have access to this page.
+                    To proceed, please login with an account that has access.
+                {% endblocktrans %}
+            </p>
+        {% else %}
+            <p>{% trans "Please login to see this page." %}</p>
+        {% endif %}
+    {% endif %}
+
+    <form class="form-horizontal" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.username control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.password control_width=8 %}
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary">{% trans "Login" %}</button>
+        </div>
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
+
+    {#    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>#}
+
+{% endblock %}

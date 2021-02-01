@@ -33,10 +33,12 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'dal',
     'dal_select2',
+    'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'lgr_auth',
     'lgr_advanced',
     'lgr_advanced.lgr_editor',
     'lgr_advanced.lgr_validator',
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -57,6 +60,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'lgr_advanced.lgr_tools.middleware.UnicodeDecodeErrorMiddleWare'
 ]
+
+
+# Custom auth user model
+AUTH_USER_MODEL = 'lgr_auth.LgrUser'
+
+# Redirect URL after auth
+LOGIN_REDIRECT_URL = '/'
+# Default LOGIN URL (use named URLs)
+LOGIN_URL = '/auth/login'
+# Redirect URL after logout
+LOGOUT_REDIRECT_URL = 'switch'
 
 ROOT_URLCONF = 'lgr_web.urls'
 
@@ -71,6 +85,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
