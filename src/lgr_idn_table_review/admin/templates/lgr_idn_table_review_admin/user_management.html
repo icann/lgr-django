@@ -1,0 +1,77 @@
+{% extends "lgr_idn_table_review_admin/_idn_table_review_admin_base.html" %}
+{% load i18n %}
+
+{% block user-management-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h2>{% trans 'Admin user' %}</h2>
+    <form class="form-horizontal" method="post" action="{% url "password_reset" %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary">
+            <input type="hidden" name="email" value="{{ request.user.email }}">
+            {% trans 'Send password reset link' %}
+        </button>
+    </form>
+    <h2>{% trans 'ICANN users' %}</h2>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">{% trans 'Email' %}</th>
+            <th scope="col">{% trans 'Actions' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in object_list %}
+            <tr>
+                <td>{{ user.email }}</td>
+                <td style="display: flex">
+                    <form method="post" action="{% url "password_reset" %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="email" value="{{ user.email }}">
+                        <button type="submit" class="btn btn-default">
+                            {% trans 'Send password reset link' %}
+                        </button>
+                    </form>
+                    &nbsp;
+                    <form method="post" action="{% url "lgr_idn_admin_delete_user" user_id=user.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-default">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        {% empty %}
+            <tr>
+                <td colspan="3">{% trans 'No ICANN user.' %}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2>{% trans 'Create new ICANN user' %}</h2>
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.email control_width=8 %}
+        <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>
+    </form>
+{% endblock content-pane %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            function enable_submit_button() {
+                if ($('#id_email').val() !== "") {
+                    $('#submit').removeAttr('disabled')
+                } else {
+                    $('#submit').attr('disabled', 'disabled')
+                }
+            }
+
+            $('#id_email').change(function () {
+                enable_submit_button()
+            });
+            enable_submit_button();
+        });
+    </script>
+{% endblock html_body_more %}
