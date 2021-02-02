@@ -5,6 +5,8 @@ from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from lgr_advanced.lgr_tools.forms import UAEmailValidator
+
 
 class LgrUserManager(BaseUserManager):
     """
@@ -39,15 +41,19 @@ class LgrRole(IntEnum):
     ICANN = auto()
 
 
+class UAEmailField(models.EmailField):
+    default_validators = [UAEmailValidator()]
+
+
 class LgrUser(AbstractBaseUser):
     """
     Model of an User.
     """
-    email = models.EmailField(unique=True,
-                              help_text=_('Required. Valid email address'),
-                              error_messages={
-                                  'unique': _("An user with that email already exists."),
-                              })
+    email = UAEmailField(unique=True,
+                         help_text=_('Required. Valid email address'),
+                         error_messages={
+                             'unique': _("An user with that email already exists."),
+                         })
     role = models.PositiveSmallIntegerField(default=LgrRole.ICANN.value)
 
     # The username field will be the email address
