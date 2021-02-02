@@ -41,3 +41,9 @@ class RefLgrCreateForm(forms.ModelForm):
             'file': _('Reference LGR file'),
             'name': _('Name'),
         }
+
+
+class UserCreateForm(forms.ModelForm):
+    class Meta:
+        model = LgrUser
+        fields = ['email']
