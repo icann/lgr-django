@@ -48,7 +48,7 @@ class LgrUser(AbstractBaseUser):
                               error_messages={
                                   'unique': _("An user with that email already exists."),
                               })
-    role = models.PositiveSmallIntegerField()
+    role = models.PositiveSmallIntegerField(default=LgrRole.ICANN.value)
 
     # The username field will be the email address
     USERNAME_FIELD = 'email'
