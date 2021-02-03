@@ -9,8 +9,8 @@ import io
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
-from lgr_editor.api import LGRInfo
-from lgr_renderer.api import generate_context
+from lgr_advanced.api import LGRInfo
+from lgr_advanced.lgr_renderer.api import generate_context
 
 
 class Command(BaseCommand):
