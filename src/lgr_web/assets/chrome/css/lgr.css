@@ -403,3 +403,8 @@ input[type="text"].form-control {
 a.panel {
     color: #333;
 }
+
+.select2-selection {
+    padding-top: 0px;
+    padding-left: 4px;
+}
