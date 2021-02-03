@@ -16,8 +16,10 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.idn_tables %}
-            <button id="submit" type="submit" class="btn btn-primary btn-block">{% trans "Next..." %}</button>
+        <button id="submit" type="submit" class="btn btn-primary btn-block">{% trans "Next..." %}</button>
     </form>
+    <br>
+    <a href="{% url 'lgr_review_reports' %}">{% trans 'See previous reports' %}</a>
 {% endblock content %}
 
 {% block html_body_more %}
