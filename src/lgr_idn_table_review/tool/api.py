@@ -5,7 +5,11 @@
 api - 
 """
 import logging
+import os
+from uuid import uuid4
 
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 from django.http import Http404
 
 logger = logging.getLogger(__name__)
@@ -60,7 +64,6 @@ def session_open_idn_table(request, idn_table_id, data):
     :return: `IdnTableInfo`
     """
     idn_table_info = IdnTableInfo(idn_table_id, data)
-    # do not save lgr in session, it will be kept in set
     session_save_idn_table(request, idn_table_info)
     return idn_table_info
 
@@ -92,3 +95,58 @@ def session_save_idn_table(request, idn_table_info):
     request.session.setdefault(IDN_TABLES_SESSION_KEY, {})[idn_table_id] = idn_table_info.to_dict()
     # mark session as modified because we are possibly only changing the content of a dict
     request.session.modified = True
+
+
+def session_get_user_idn_review_storage(request):
+    """
+    Get the storage path for the session
+
+    :param request: Django request object
+    :return: the storage location
+    """
+    # get or create a key for storage in the session,
+    try:
+        storage_key = request.session['storage']
+    except KeyError:
+        # generate a random key
+        storage_key = uuid4().hex
+        request.session['storage'] = storage_key
+    # the storage may still not be created here but now it has a path for
+    #  this session
+    return os.path.join(settings.IDN_REVIEW_USER_OUTPUT_STORAGE_LOCATION,
+                        storage_key)
+
+
+def session_list_user_id_review_storage(request):
+    """
+    List files in the storage
+
+    :param request: Django request object
+    :return: the list of files in storage
+    """
+    storage = FileSystemStorage(location=session_get_user_idn_review_storage(request))
+    try:
+        files = storage.listdir('.')
+    except OSError:
+        return []
+
+    return sorted(files[1], reverse=True)
+
+
+def session_get_user_idn_review_file(request, filename):
+    """
+    Get a file in the storage
+
+    :param request: Django request object
+    :param filename: The name of the file to be returned
+    :return: A 2-tuple containing the File object and the file size
+    """
+    storage = FileSystemStorage(location=session_get_user_idn_review_storage(request))
+    return storage.open(filename, 'rb'), storage.size(filename)
+
+
+def session_save_user_idn_review_file(request, filename, data):
+    storage = FileSystemStorage(location=session_get_user_idn_review_storage(request))
+    storage.save(filename, data)
+
+

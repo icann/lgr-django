@@ -29,13 +29,16 @@
                 </tr>
             {% endfor %}
             {% for field in form %}
-                <tr>
-                    <td>{{ field.html_name }}</td>
-                    <td>{% include "lgr_editor/_form_field_no_label.html" with field=field %}</td>
-                </tr>
+                {% if field.html_name != 'email' %}
+                    <tr>
+                        <td>{{ field.html_name }}</td>
+                        <td>{% include "lgr_editor/_form_field_no_label.html" with field=field %}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
         </table>
+        {% include "lgr_editor/_form_field_no_label.html" with field=form.email %}
         <button id="submit" type="submit" class="btn btn-primary btn-block">{% trans "Review" %}</button>
     </form>
 {% endblock content %}

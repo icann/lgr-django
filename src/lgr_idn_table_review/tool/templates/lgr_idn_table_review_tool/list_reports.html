@@ -1,0 +1,34 @@
+{% extends "_skel.html" %}
+{% load i18n widget_tweaks %}
+
+{% block html_title %}{% trans 'IDN Table Review reports' %}{% endblock %}
+
+{% block navbar-right %}
+    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
+    {{ block.super }}
+{% endblock %}
+
+{% block content-title %}
+    {% trans "IDN Table Review Reports" %}
+{% endblock %}
+
+{% block content %}
+    <p>
+        {% blocktrans trimmed %}
+            The following files contains your IDN review reports.<br/>
+            <strong><i class="glyphicon glyphicon-alert"></i> Note that these files could be cleaned up
+                regularly.</strong>
+        {% endblocktrans %}
+    </p>
+    <ul>
+        {% for file in storage %}
+            <li>
+                {{ file }}
+                {# <a href="{% url 'download_file' file %}">{% blocktrans %}Download {{ file }}{% endblocktrans %}</a>#}
+                {# <a href="{% url 'delete_file' file %}" class="delete_file"><i class="glyphicon glyphicon-trash"></i></a>#}
+            </li>
+        {% empty %}
+            {% trans 'No report' %}
+        {% endfor %}
+    </ul>
+{% endblock content %}

@@ -33,3 +33,7 @@ doc/_build/
 
 # Local configuration
 src/lgr_web/settings/local.py
+
+# dev storage
+src/lgr_web/output
+src/lgr_web/media
