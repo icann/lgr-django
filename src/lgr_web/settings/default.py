@@ -222,6 +222,10 @@ STATICFILES_DIRS = (
     os.path.abspath(os.path.join(BASE_DIR, 'assets')),
 )
 
+# User uploaded files
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+
 ##### LGR Toolset Project-specific settings #####
 # Where the XML files are stored on the filesystem
 # For the repertoires
