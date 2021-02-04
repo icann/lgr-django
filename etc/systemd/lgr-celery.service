@@ -4,7 +4,12 @@ After=network.target
 
 [Service]
 WorkingDirectory=/var/www/lgr/lgr-django
-ExecStart=/var/www/lgr/venv/bin/celery --app=lgr_tools --workdir=/var/www/lgr/lgr-django/src --concurrency=2 --logfile=/var/log/lgr/celery-lgr.log worker
+Environment="LD_LIBRARY_PATH=/usr/local/lib"
+ExecStart=/var/www/lgr/venv/bin/celery \
+--app=lgr_tools \
+--workdir=/var/www/lgr/lgr-django/src/lgr_advanced \
+--concurrency=2 \
+worker
 User=lgr
 Group=lgr
 
