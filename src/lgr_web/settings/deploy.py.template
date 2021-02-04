@@ -25,8 +25,9 @@ LOGGING['handlers']['celery-file'] = {'level': 'DEBUG', 'class': 'logging.FileHa
 
 # Set handler for modules
 LOGGING['loggers']['celery']['handlers'] += ['celery-file']
-for mod in ['django.request', 'lgr_basic', 'lgr_web', 'lgr_editor', 'lgr']:
-    LOGGING['loggers'][mod]['handlers'] += ['file']
+for mod in ['django.request', 'lgr_web', 'lgr_auth', 'lgr_advanced', 'lgr_advanced.lgr_editor',
+            'lgr_advanced.lgr_tools', 'lgr_basic', 'lgr_idn_table_review', 'lgr_session', 'lgr']:
+	    LOGGING['loggers'][mod]['handlers'] += ['file']
 
 
 ##### e-mail settings #####

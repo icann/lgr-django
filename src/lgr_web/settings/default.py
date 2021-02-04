@@ -143,15 +143,31 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
+        'lgr_auth': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'lgr_advanced': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'lgr_advanced.lgr_editor': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'lgr_advanced.lgr_tools': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
         'lgr_basic': {
             'handlers': ['console'],
             'level': 'INFO',
         },
-        'lgr_editor': {
+        'lgr_idn_table_review': {
             'handlers': ['console'],
             'level': 'INFO',
         },
-        'lgr_tools': {
+        'lgr_session': {
             'handlers': ['console'],
             'level': 'INFO',
         },
