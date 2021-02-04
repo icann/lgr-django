@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import json
 
 from dal import autocomplete
+from dal.views import ViewMixin
 from lxml.etree import XMLSyntaxError
 
 import os
@@ -62,13 +63,7 @@ from .forms import (AddCodepointForm,
                     EditCodepointsForm, IANA_LANG_REGISTRY)
 
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from .api import (session_delete_lgr,
-                  session_new_lgr,
-                  session_get_file,
-                  session_delete_file,
-                  session_merge_set)
-from ..api import LGRInfo, session_list_lgr, session_open_lgr, session_select_lgr, session_save_lgr, \
-    get_builtin_or_session_repertoire
+from ..api import LGRInfo, get_builtin_or_session_repertoire, LgrToolSession
 from .utils import (render_char,
                     render_age,
                     render_cp_or_sequence,
@@ -76,6 +71,7 @@ from .utils import (render_char,
                     slug_to_var,
                     var_to_slug)
 from ..utils import render_name, cp_to_slug, LGR_REPERTOIRE_CACHE_KEY, make_lgr_session_key, LGR_CACHE_TIMEOUT
+from ..views import LgrViewMixin
 
 TRUNCATE_AFTER_N_CP_TAGS = 10
 RE_SAFE_FILENAME = re.compile(r'[a-zA-Z0-9. _\-()]+')
@@ -92,6 +88,8 @@ def new_lgr(request):
     """
     Create a new empty LGR.
     """
+    session = LgrToolSession(request)
+
     form = CreateLGRForm(request.POST or None)
     if form.is_valid():
         lgr_id = form.cleaned_data['name']
@@ -99,18 +97,18 @@ def new_lgr(request):
             lgr_id = lgr_id.rsplit('.', 1)[0]
         lgr_id = slugify(lgr_id)
 
-        if lgr_id in [lgr['name'] for lgr in session_list_lgr(request)]:
+        if lgr_id in [lgr['name'] for lgr in session.list_lgr()]:
             logger.error("Import existing LGR")
             return render(request, 'lgr_editor/import_invalid.html',
                           context={'error': _("The LGR you have tried to create already exists in your working session. Please use a new name.")})
 
-        session_new_lgr(request, lgr_id,
+        session.new_lgr(lgr_id,
                         form.cleaned_data['unicode_version'],
                         form.cleaned_data['validating_repertoire'])
         return redirect('codepoint_list', lgr_id=lgr_id)
     ctx = {
         'form': form,
-        'lgrs': session_list_lgr(request),
+        'lgrs': session.list_lgr(),
     }
     return render(request, 'lgr_editor/new_form.html', context=ctx)
 
@@ -119,9 +117,11 @@ def import_lgr(request):
     """
     Import an LGR from XML file supplied by user.
     """
+    session = LgrToolSession(request)
+
     form = ImportLGRForm(request.POST or None, request.FILES or None)
     if form.is_valid():
-        lgr_names = [lgr['name'] for lgr in session_list_lgr(request)]
+        lgr_names = [lgr['name'] for lgr in session.list_lgr()]
         is_set = len(form.cleaned_data['file']) > 1
         merged_id = None
         lgr_info_set = []
@@ -146,10 +146,9 @@ def import_lgr(request):
                                                   "Please rename it before importing it.")})
 
             try:
-                lgr_info = session_open_lgr(request,
-                                            lgr_id,
+                lgr_info = session.open_lgr(lgr_id,
                                             lgr_file.read(),
-                                            form.cleaned_data['validating_repertoire'],
+                                            validating_repertoire=form.cleaned_data['validating_repertoire'],
                                             validate=True,
                                             from_set=is_set)
             except Exception as import_error:
@@ -168,7 +167,7 @@ def import_lgr(request):
                               context={'error': _("The LGR set name already exists. Please use another name.")})
 
             try:
-                merged_id = session_merge_set(request, lgr_info_set,
+                merged_id = session.merge_set(lgr_info_set,
                                               form.cleaned_data['set_name'])
             except Exception as import_error:
                 # remove imported LGRs, those that were already existing won't be erased
@@ -181,7 +180,7 @@ def import_lgr(request):
 
     ctx = {
         'form': form,
-        'lgrs': session_list_lgr(request),
+        'lgrs': session.list_lgr(),
     }
     return render(request, 'lgr_editor/import_form.html', context=ctx)
 
@@ -190,6 +189,8 @@ def import_reference_lgr(request, filename):
     """
     Import a built-in LGR to user's session.
     """
+    session = LgrToolSession(request)
+
     if not RE_SAFE_FILENAME.match(filename):
         raise SuspiciousOperation()
 
@@ -198,7 +199,7 @@ def import_reference_lgr(request, filename):
         lgr_id = lgr_id.rsplit('.', 1)[0]
     lgr_id = slugify(lgr_id)
     with open(os.path.join(settings.LGR_STORAGE_LOCATION, filename + '.xml'), 'rb') as f:
-        session_open_lgr(request, lgr_id, f.read())
+        session.open_lgr(lgr_id, f.read())
     return redirect('codepoint_list', lgr_id=lgr_id)
 
 
@@ -209,7 +210,9 @@ def view_lgr_xml(request, lgr_id, force_download=False, lgr_set_id=None):
     Display the content of the LGR as XML. Optionally,
     set content-disposition to open download box on browser.
     """
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
     lgr_info.update_xml(pretty_print=True)
     resp = HttpResponse(lgr_info.xml, content_type='text/xml', charset='UTF-8')
     if force_download:
@@ -221,7 +224,9 @@ def validate_lgr(request, lgr_id, output_func=None, lgr_set_id=None):
     """
     Validate an LGR and display result.
     """
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
     # Construct options dictionary for checks/validations
     options = {}
     try:
@@ -275,7 +280,9 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
     """
     List the codepoints defined in an LGR.
     """
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
 
     # instantiate form
     cp_form = AddCodepointForm(request.POST if 'add_cp' in request.POST else None, prefix='add_cp')
@@ -288,7 +295,7 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
             lgr_info.lgr.add_cp(cp_or_sequence,
                                 validating_repertoire=lgr_info.validating_repertoire,
                                 override_repertoire=override_repertoire)
-            session_save_lgr(request, lgr_info)
+            session.save_lgr(lgr_info)
             messages.success(request, _('New code point %s added') % format_cp(cp_or_sequence))
         except LGRException as ex:
             messages.add_message(request, messages.ERROR,
@@ -361,7 +368,7 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
                                                  when=variant.when, not_when=variant.not_when,
                                                  comment=variant.comment, ref=variant.references)
 
-        session_save_lgr(request, lgr_info)
+        session.save_lgr(lgr_info)
         operation = _('Rule') if 'add-rules' in request.POST else _('Tag(s)')
         operation_lowercase = _('rule') if 'add-rules' in request.POST else _('tag(s)')
         if len(edited) - len(invalid):
@@ -391,7 +398,7 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
         'all_tags_json': json.dumps(lgr_info.lgr.all_tags()),
     }
     if lgr_set_id:
-        lgr_set_info = session_select_lgr(request, lgr_set_id)
+        lgr_set_info = session.select_lgr(lgr_set_id)
         ctx['lgr_set'] = lgr_set_info.lgr
         ctx['lgr_set_id'] = lgr_set_id
 
@@ -399,7 +406,9 @@ def codepoint_list(request, lgr_id='default', lgr_set_id=None):
 
 
 def codepoint_list_json(request, lgr_id, lgr_set_id=None):
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
     udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
 
     repertoire_cache_key = make_lgr_session_key(LGR_REPERTOIRE_CACHE_KEY,
@@ -443,7 +452,9 @@ def delete_lgr(request, lgr_id):
     """
     Delete the selected LGR from session.
     """
-    session_delete_lgr(request, lgr_id)
+    session = LgrToolSession(request)
+
+    session.delete_lgr(lgr_id)
 
     return redirect('/')
 
@@ -452,7 +463,9 @@ def download_file(request, filename):
     """
     Download the selected file from session.
     """
-    res_file = session_get_file(request, filename)
+    session = LgrToolSession(request)
+
+    res_file = session.storage_get_file(filename)
     if res_file is None:
         # TODO show an error...
         return delete_file(request, filename)
@@ -465,7 +478,9 @@ def delete_file(request, filename):
     """
     Delete the selected file from session.
     """
-    session_delete_file(request, filename)
+    session = LgrToolSession(request)
+
+    session.storage_delete_file(filename)
 
     return redirect('/')
 
@@ -474,7 +489,9 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
     """
     View a specific codepoints of an LGR.
     """
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
     udata = unidb.manager.get_db_by_version(lgr_info.lgr.metadata.unicode_version)
     codepoint = slug_to_cp(codepoint_id)
     rule_names = (('', ''),) + tuple((v, v) for v in lgr_info.lgr.rules)
@@ -506,7 +523,7 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
                                              comment='Out-of-repertoire-var')
                     messages.success(request, _('Automatically added codepoint %s from out-of-repertoire-var variant') %
                                      format_cp(var_cp_sequence))
-                session_save_lgr(request, lgr_info)
+                session.save_lgr(lgr_info)
                 messages.success(request, _('New variant %s added') % format_cp(var_cp_sequence))
             except LGRException as ex:
                 messages.add_message(request, messages.ERROR,
@@ -579,7 +596,7 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
                         logger.error(variants_form.errors)
 
                 # Save edition
-                session_save_lgr(request, lgr_info)
+                session.save_lgr(lgr_info)
                 messages.success(request, _('Code point edited'))
                 # redirect to myself to refresh display
                 return redirect('codepoint_view',
@@ -660,7 +677,7 @@ def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
         'is_set': lgr_info.is_set or lgr_set_id is not None
     }
     if lgr_set_id:
-        lgr_set_info = session_select_lgr(request, lgr_set_id)
+        lgr_set_info = session.select_lgr(lgr_set_id)
         ctx['lgr_set'] = lgr_set_info.lgr
         ctx['lgr_set_id'] = lgr_set_id
 
@@ -671,7 +688,9 @@ def expand_ranges(request, lgr_id):
     """
     Expand all ranges into code points.
     """
-    lgr_info = session_select_lgr(request, lgr_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
     try:
@@ -680,7 +699,7 @@ def expand_ranges(request, lgr_id):
         messages.add_message(request, messages.ERROR,
                              lgr_exception_to_text(ex))
 
-    session_save_lgr(request, lgr_info)
+    session.save_lgr(lgr_info)
     # Redirect to code point list
     return redirect('codepoint_list',
                     lgr_id=lgr_id)
@@ -690,7 +709,9 @@ def expand_range(request, lgr_id, codepoint_id):
     """
     Expand a range into code points.
     """
-    lgr_info = session_select_lgr(request, lgr_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -708,14 +729,16 @@ def expand_range(request, lgr_id, codepoint_id):
         messages.add_message(request, messages.ERROR,
                              lgr_exception_to_text(ex))
 
-    session_save_lgr(request, lgr_info)
+    session.save_lgr(lgr_info)
     # Redirect to code point list
     return redirect('codepoint_list',
                     lgr_id=lgr_id)
 
 
 def populate_variants(request, lgr_id):
-    lgr_info = session_select_lgr(request, lgr_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id)
     lgr = lgr_info.lgr
 
     if 'test' in request.GET:
@@ -735,7 +758,7 @@ def populate_variants(request, lgr_id):
     messages.add_message(request, messages.SUCCESS, _("Variants populated"))
     populate_logger.removeHandler(ch)
     log_output.close()
-    session_save_lgr(request, lgr_info)
+    session.save_lgr(lgr_info)
     return redirect('codepoint_list', lgr_id)
 
 
@@ -743,7 +766,9 @@ def codepoint_update_refs(request, lgr_id, codepoint_id):
     """
     Update a codepoint's references.
     """
-    lgr_info = session_select_lgr(request, lgr_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -784,7 +809,7 @@ def codepoint_update_refs(request, lgr_id, codepoint_id):
                                          not_when=var.not_when,
                                          comment=var.comment,
                                          ref=var.references)
-        session_save_lgr(request, lgr_info)
+        session.save_lgr(lgr_info)
         messages.success(request, _('References updated successfully'))
     except LGRException as ex:
         messages.add_message(request, messages.ERROR,
@@ -797,7 +822,9 @@ def var_update_refs(request, lgr_id, codepoint_id, var_slug):
     """
     Update a variant's references.
     """
-    lgr_info = session_select_lgr(request, lgr_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -819,7 +846,7 @@ def var_update_refs(request, lgr_id, codepoint_id, var_slug):
                                          not_when=variant.not_when,
                                          comment=variant.comment,
                                          ref=ref_ids)
-                session_save_lgr(request, lgr_info)
+                session.save_lgr(lgr_info)
                 messages.success(request,
                                  _('References updated successfully'))
                 break
@@ -845,8 +872,10 @@ def codepoint_delete(request, lgr_id, codepoint_id):
     """
     Delete a codepoint from an LGR.
     """
+    session = LgrToolSession(request)
+
     # TODO - only accept POST request
-    lgr_info = session_select_lgr(request, lgr_id)
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -859,7 +888,7 @@ def codepoint_delete(request, lgr_id, codepoint_id):
             lgr_info.lgr.del_range(char.first_cp, char.last_cp)
         else:
             lgr_info.lgr.del_cp(codepoint)
-        session_save_lgr(request, lgr_info)
+        session.save_lgr(lgr_info)
         messages.info(request, _("Code point %s has been deleted") % format_cp(codepoint))
     except LGRException as ex:
         messages.add_message(request, messages.ERROR,
@@ -872,8 +901,10 @@ def variant_delete(request, lgr_id, codepoint_id, var_slug):
     """
     Delete a variant of a codepoint from an LGR.
     """
+    session = LgrToolSession(request)
+
     # TODO - only accept POST request
-    lgr_info = session_select_lgr(request, lgr_id)
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -887,7 +918,7 @@ def variant_delete(request, lgr_id, codepoint_id, var_slug):
                             'when': var_when,
                             'not_when': var_not_when}
         if r:
-            session_save_lgr(request, lgr_info)
+            session.save_lgr(lgr_info)
             messages.info(request, _("%(var_msg_prefix)s has been deleted") % {'var_msg_prefix': var_msg_prefix})
         else:
             messages.error(request,
@@ -904,7 +935,9 @@ def reference_list(request, lgr_id, lgr_set_id=None):
     """
     List/edit references of an LGR.
     """
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
 
     add_reference_form = ReferenceForm(request.POST if 'add_reference' in request.POST else None,
                                        prefix='add_reference', ro_id=False)
@@ -920,7 +953,7 @@ def reference_list(request, lgr_id, lgr_set_id=None):
             url = add_reference_form.cleaned_data['comment']
             try:
                 lgr_info.lgr.reference_manager.add_reference(description, url, ref_id=ref_id or None)
-                session_save_lgr(request, lgr_info)
+                session.save_lgr(lgr_info)
                 messages.success(request, _('New reference created'))
             except LGRException as ex:
                 messages.add_message(request, messages.ERROR,
@@ -948,7 +981,7 @@ def reference_list(request, lgr_id, lgr_set_id=None):
                     reference_manager.update_reference(ref_id,
                                                        value=description,
                                                        comment=comment)
-                    session_save_lgr(request, lgr_info)
+                    session.save_lgr(lgr_info)
                 except LGRException as ex:
                     messages.add_message(request, messages.ERROR,
                                          lgr_exception_to_text(ex))
@@ -974,7 +1007,7 @@ def reference_list(request, lgr_id, lgr_set_id=None):
         'is_set': lgr_info.is_set or lgr_set_id is not None
     }
     if lgr_set_id:
-        lgr_set_info = session_select_lgr(request, lgr_set_id)
+        lgr_set_info = session.select_lgr(lgr_set_id)
         ctx['lgr_set'] = lgr_set_info.lgr
         ctx['lgr_set_id'] = lgr_set_id
 
@@ -985,7 +1018,9 @@ def reference_list_json(request, lgr_id, lgr_set_id=None):
     """
     Return the list of defined references as JSON.
     """
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
 
     references = [{
         'ref_id': ref_id,
@@ -1001,7 +1036,9 @@ def add_reference_ajax(request, lgr_id):
     """
     AJAX interface to create a new reference.
     """
-    lgr_info = session_select_lgr(request, lgr_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -1012,7 +1049,7 @@ def add_reference_ajax(request, lgr_id):
         url = add_reference_form.cleaned_data['comment']
         try:
             lgr_info.lgr.reference_manager.add_reference(description, url, ref_id=ref_id)
-            session_save_lgr(request, lgr_info)
+            session.save_lgr(lgr_info)
             references = [{
                               'ref_id': ref_id,
                               'description': ref.get('value', ''),
@@ -1031,14 +1068,16 @@ def delete_reference(request, lgr_id, ref_id):
     """
     Delete a reference from an LGR.
     """
+    session = LgrToolSession(request)
+
     logger.debug("Delete reference %s'", ref_id)
-    lgr_info = session_select_lgr(request, lgr_id)
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
     try:
         lgr_info.lgr.del_reference(ref_id)
-        session_save_lgr(request, lgr_info)
+        session.save_lgr(lgr_info)
     except LGRException as ex:
         messages.add_message(request, messages.ERROR,
                              lgr_exception_to_text(ex))
@@ -1048,9 +1087,11 @@ def delete_reference(request, lgr_id, ref_id):
 
 def tag_list(request, lgr_id, lgr_set_id=None):
     """
-        List/edit tags of an LGR.
+    List/edit tags of an LGR.
     """
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
 
     tag_classes = lgr_info.lgr.get_tag_classes()
 
@@ -1071,7 +1112,7 @@ def tag_list(request, lgr_id, lgr_set_id=None):
         'is_set': lgr_info.is_set or lgr_set_id is not None
     }
     if lgr_set_id:
-        lgr_set_info = session_select_lgr(request, lgr_set_id)
+        lgr_set_info = session.select_lgr(lgr_set_id)
         ctx['lgr_set'] = lgr_set_info.lgr
         ctx['lgr_set_id'] = lgr_set_id
 
@@ -1082,7 +1123,9 @@ def tag_list_json(request, tag_id, lgr_id, lgr_set_id=None):
     """
     Return the full list of code points associated with a tag in JSON.
     """
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
 
     tag_classes = lgr_info.lgr.get_tag_classes()
     if tag_id not in tag_classes:
@@ -1116,14 +1159,16 @@ def delete_tag(request, lgr_id, tag_id):
     """
     Delete a tag from an LGR.
     """
+    session = LgrToolSession(request)
+
     logger.debug("Delete tag %s'", tag_id)
-    lgr_info = session_select_lgr(request, lgr_id)
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
     try:
         lgr_info.lgr.del_tag(tag_id)
-        session_save_lgr(request, lgr_info)
+        session.save_lgr(lgr_info)
     except LGRException as ex:
         messages.add_message(request, messages.ERROR,
                              lgr_exception_to_text(ex))
@@ -1139,7 +1184,9 @@ def rule_list_simple(request, lgr_id, lgr_set_id=None):
     """
     Display a verbatim view of the <rules> section.
     """
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
 
     rules = {
         'classes': '\n\n'.join(lgr_info.lgr.classes_xml),
@@ -1153,7 +1200,7 @@ def rule_list_simple(request, lgr_id, lgr_set_id=None):
         'is_set': lgr_info.is_set or lgr_set_id is not None
     }
     if lgr_set_id:
-        lgr_set_info = session_select_lgr(request, lgr_set_id)
+        lgr_set_info = session.select_lgr(lgr_set_id)
         ctx['lgr_set'] = lgr_set_info.lgr
         ctx['lgr_set_id'] = lgr_set_id
 
@@ -1193,13 +1240,15 @@ def _json_response(success, error_msg=None):
 
 @require_POST
 def rule_edit_class_ajax(request, lgr_id, clsname):
+    session = LgrToolSession(request)
+
     delete_action = request.POST.get('delete')
     body = request.POST.get('body')
 
     if not delete_action and not body:
         return _json_response(False, _('No body specified'))
 
-    lgr_info = session_select_lgr(request, lgr_id)
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -1234,7 +1283,7 @@ def rule_edit_class_ajax(request, lgr_id, clsname):
         msg = _('Class "%s" saved.') % cls.name
 
     try:
-        session_save_lgr(request, lgr_info)
+        session.save_lgr(lgr_info)
     except LGRException as e:
         return _json_response(False, lgr_exception_to_text(e))
     except XMLSyntaxError as e:
@@ -1281,7 +1330,9 @@ def rule_list(request, lgr_id, lgr_set_id=None):
     """
     Edit rules
     """
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id)
 
     # set
     if lgr_info.is_set or lgr_set_id is not None:
@@ -1355,13 +1406,15 @@ def _parse_rule(xml):
 
 @require_POST
 def rule_edit_rule_ajax(request, lgr_id, rulename):
+    session = LgrToolSession(request)
+
     delete_action = request.POST.get('delete')
     body = request.POST.get('body')
 
     if not delete_action and not body:
         return _json_response(False, _('No body specified'))
 
-    lgr_info = session_select_lgr(request, lgr_id)
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -1400,7 +1453,7 @@ def rule_edit_rule_ajax(request, lgr_id, rulename):
         msg = _('Rule "%s" saved.') % rule.name
 
     try:
-        session_save_lgr(request, lgr_info)
+        session.save_lgr(lgr_info)
     except LGRException as e:
         return _json_response(False, lgr_exception_to_text(e))
     except XMLSyntaxError as e:
@@ -1443,13 +1496,15 @@ def _parse_action(xml):
 
 @require_POST
 def rule_edit_action_ajax(request, lgr_id, action_idx):
+    session = LgrToolSession(request)
+
     delete_action = request.POST.get('delete')
     body = request.POST.get('body')
 
     if not delete_action and not body:
         return _json_response(False, _('No body specified'))
 
-    lgr_info = session_select_lgr(request, lgr_id)
+    lgr_info = session.select_lgr(lgr_id)
     if lgr_info.is_set:
         return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -1480,7 +1535,7 @@ def rule_edit_action_ajax(request, lgr_id, action_idx):
         msg = _('Action saved.')
 
     try:
-        session_save_lgr(request, lgr_info)
+        session.save_lgr(lgr_info)
     except LGRException as e:
         return _json_response(False, lgr_exception_to_text(e))
     except XMLSyntaxError as e:
@@ -1491,7 +1546,7 @@ def rule_edit_action_ajax(request, lgr_id, action_idx):
     return _json_response(True, msg)
 
 
-class MultiCodepointsView(FormView):
+class MultiCodepointsView(LgrViewMixin, FormView):
     """
     Basic view to handle some kind of input which generates a list of
     codepoints.
@@ -1509,7 +1564,7 @@ class MultiCodepointsView(FormView):
         self.discrete_cp = discrete_cp
 
     def post(self, request, *args, **kwargs):
-        self.lgr_info = session_select_lgr(self.request, self.kwargs['lgr_id'])
+        self.lgr_info = self.session.select_lgr(self.kwargs['lgr_id'])
         if self.lgr_info.is_set:
             return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -1519,13 +1574,13 @@ class MultiCodepointsView(FormView):
         if 'tmp_lgr' in request.POST:
             tmp_lgr_name = self.request.POST.get('tmp_lgr')
             if tmp_lgr_name:
-                for saved_lgr in session_list_lgr(self.request):
+                for saved_lgr in self.session.list_lgr():
                     if tmp_lgr_name == saved_lgr['name']:
-                        tmp_lgr_info = session_select_lgr(self.request, tmp_lgr_name)
+                        tmp_lgr_info = self.session.select_lgr(tmp_lgr_name)
                 if not tmp_lgr_info:
                     logger.warning("Unable to find temporary LGR, won't be able to "
                                    "get variants")
-                    session_delete_lgr(request, tmp_lgr_name)
+                    self.session.delete_lgr(tmp_lgr_name)
         if 'codepoint' in request.POST:
             # assume that we are submitting the `AddMultiCodepointsForm`
             codepoints = [slug_to_cp(cp) for cp in self.request.POST.getlist('codepoint')]
@@ -1543,13 +1598,13 @@ class MultiCodepointsView(FormView):
                 codepoints = [x[0] for x in codepoints]
                 self.lgr_info.lgr.add_codepoints(codepoints)
                 # no variants in range
-            session_save_lgr(request, self.lgr_info)
+            self.session.save_lgr(self.lgr_info)
             messages.add_message(self.request,
                                  messages.SUCCESS,
                                  _("%d code points added") % len(codepoints))
             # remove temporary LGR
             if tmp_lgr_info:
-                session_delete_lgr(request, tmp_lgr_info.name)
+                self.session.delete_lgr(tmp_lgr_info.name)
             return self.render_success_page()
 
         return super(MultiCodepointsView, self).post(request, *args, **kwargs)
@@ -1613,15 +1668,15 @@ class MultiCodepointsView(FormView):
                 tmp_lgr_id = tmp_lgr_id.rsplit('.', 1)[0]
             tmp_lgr_id += '_tmp'
             tmp_lgr_id = slugify(tmp_lgr_id)
-            if tmp_lgr_id in [saved_lgr['name'] for saved_lgr in session_list_lgr(self.request)]:
+            if tmp_lgr_id in [saved_lgr['name'] for saved_lgr in self.session.list_lgr()]:
                 # The temporary LGR already exists... This should not happen
                 logger.warning("Temporary LGR already exists...")
             else:
-                tmp_lgr_info = session_new_lgr(self.request, tmp_lgr_id,
-                                               lgr.metadata.unicode_version,
-                                               self.lgr_info.validating_repertoire.name if self.lgr_info.validating_repertoire else None)
+                tmp_lgr_info = self.session.new_lgr(tmp_lgr_id,
+                                                    lgr.metadata.unicode_version,
+                                                    self.lgr_info.validating_repertoire.name if self.lgr_info.validating_repertoire else None)
                 self._copy_characters(tmp_lgr_info.lgr, input_lgr, force=True)
-                session_save_lgr(self.request, tmp_lgr_info)
+                self.session.save_lgr(tmp_lgr_info)
 
             range_form.fields['codepoint'].choices = codepoint
             range_form.fields['disabled_codepoint'].choices = disabled_codepoint
@@ -1631,7 +1686,7 @@ class MultiCodepointsView(FormView):
         # Automatic import
         logger.debug("Import: Copy characters")
         nb_codepoints = self._copy_characters(lgr, input_lgr)
-        session_save_lgr(self.request, self.lgr_info)
+        self.session.save_lgr(self.lgr_info)
         messages.add_message(self.request,
                              messages.SUCCESS,
                              _("%d code points added") % nb_codepoints)
@@ -1753,7 +1808,7 @@ class AddCodepointFromScriptView(MultiCodepointsView):
     template_name = 'lgr_editor/add_list_from_script.html'
 
     def get(self, request, *args, **kwargs):
-        self.lgr_info = session_select_lgr(request, kwargs['lgr_id'])
+        self.lgr_info = self.session.select_lgr(kwargs['lgr_id'])
         if self.lgr_info.is_set:
             return HttpResponseBadRequest('Cannot edit LGR set')
 
@@ -1786,7 +1841,7 @@ class AddCodepointFromScriptView(MultiCodepointsView):
         return self._handle_discrete(lgr, fake_lgr, cd['manual_import'])
 
 
-class MetadataView(FormView):
+class MetadataView(LgrViewMixin, FormView):
     """
     This view is used to display the metadata screen.
     """
@@ -1801,7 +1856,7 @@ class MetadataView(FormView):
         kwargs = super(MetadataView, self).get_form_kwargs()
 
         # Set LGR info reference
-        self.lgr_info = session_select_lgr(self.request, self.kwargs['lgr_id'], self.kwargs.get('lgr_set_id'))
+        self.lgr_info = self.session.select_lgr(self.kwargs['lgr_id'], lgr_set_id=self.kwargs.get('lgr_set_id'))
 
         metadata = self.lgr_info.lgr.metadata
         language = metadata.languages[0] if len(metadata.languages) > 0 else ""
@@ -1833,7 +1888,7 @@ class MetadataView(FormView):
         }
 
         # add other repertoires available in the user's session
-        kwargs['additional_repertoires'] = [lgr['name'] for lgr in session_list_lgr(self.request)
+        kwargs['additional_repertoires'] = [lgr['name'] for lgr in self.session.list_lgr()
                                             if lgr['name'] != self.lgr_info.name]
 
         kwargs['disabled'] = self.kwargs.get('lgr_set_id') is not None
@@ -1859,7 +1914,7 @@ class MetadataView(FormView):
 
         if self.kwargs.get('lgr_set_id'):
             ctx['lgr_set_id'] = self.kwargs['lgr_set_id']
-            ctx['lgr_set'] = session_select_lgr(self.request, self.kwargs.get('lgr_set_id')).lgr
+            ctx['lgr_set'] = self.session.select_lgr(self.kwargs.get('lgr_set_id')).lgr
         return ctx
 
     def form_valid(self, form):
@@ -1906,7 +1961,7 @@ class MetadataView(FormView):
                     self.lgr_info.validating_repertoire = None
 
                 self.lgr_info.lgr.metadata = metadata
-                session_save_lgr(self.request, self.lgr_info)
+                self.session.save_lgr(self.lgr_info)
                 messages.add_message(self.request,
                                      messages.SUCCESS,
                                      _("Meta data saved"))
@@ -1920,7 +1975,9 @@ class MetadataView(FormView):
 
 
 def embedded_lgrs(request, lgr_id):
-    lgr_info = session_select_lgr(request, lgr_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id)
     if not lgr_info.is_set:
         return HttpResponseBadRequest('LGR is not a set')
 

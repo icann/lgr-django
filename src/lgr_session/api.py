@@ -60,14 +60,14 @@ class LgrSession:
         """
         self.request.session.pop(self.lgr_session_key, None)
 
-    def open_lgr(self, lgr_id, lgr_xml, **kwargs):
+    def open_lgr(self, lgr_id, data, **kwargs):
         """
-        Parse the given LGR in XML format, and save it in session.
+        Parse the given LGR, and save it in session.
 
         :param lgr_id: a slug identifying the LGR
-        :param lgr_xml: a string with the xml
+        :param data: a string with the data
         :param kwargs: The following kwargs are available for `LGRInfo` as `lgr_serializer`:
-                         - validating_repertoire_name: optional name of a validating repertoire
+                         - validating_repertoire: optional name of a validating repertoire
                          - validate: if True, ensure the XML is valid LGR XML
                          - from_set: Whether the LGR belongs to a set or not
                          - lgr_set: The list of LGRInfo in the set if this is a merged LGR from a set
@@ -76,14 +76,14 @@ class LgrSession:
         """
         kwargs.update({
             'name': lgr_id,
-            'data': lgr_xml,
+            'data': data,
         })
         if 'lgr_set' in kwargs:
             kwargs['lgr_set_dct'] = [lgr.to_dict() for lgr in kwargs['lgr_set']]
         lgr_serializer_kwargs = {}
         if self.loader_function:
             lgr_serializer_kwargs = {'lgr_loader_func': partial(self.loader_function, session=self)}
-        lgr_info = self.lgr_serializer.from_dict(**kwargs, **lgr_serializer_kwargs)
+        lgr_info = self.lgr_serializer.from_dict(kwargs, **lgr_serializer_kwargs)
         if not kwargs.get('from_set', False):
             # do not save lgr in session, it will be kept in set
             self.save_lgr(lgr_info)

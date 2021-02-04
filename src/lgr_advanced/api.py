@@ -7,28 +7,25 @@ api -
 import base64
 import errno
 import logging
-import os
-from functools import partial
-from uuid import uuid4
+from typing import Type
 
 from django.conf import settings
 from django.core.cache import cache
-from django.core.files.storage import FileSystemStorage
-from django.http import Http404
 from django.utils import six
+from django.utils.text import slugify
 
 from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.parser.xml_serializer import serialize_lgr_xml
+from lgr.tools.merge_set import merge_lgr_set
 from lgr_advanced import unidb
 from lgr_advanced.exceptions import LGRValidationException
 from lgr_advanced.lgr_editor.repertoires import get_by_name
-from lgr_advanced.utils import (list_root_zones,
-                                make_lgr_session_key,
-                                clean_repertoire_cache,
+from lgr_advanced.utils import (make_lgr_session_key,
                                 LGR_CACHE_TIMEOUT,
                                 LGR_OBJECT_CACHE_KEY)
+from lgr_session.api import LgrSession, LgrSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -36,9 +33,9 @@ OLD_LGR_NS = 'http://www.iana.org/lgr/0.1'
 LGRS_SESSION_KEY = 'lgr'
 
 
-class LGRInfo(object):
+class LGRInfo(LgrSerializer):
     def __init__(self, name, lgr=None, xml=None, validating_repertoire=None, lgr_set=None, set_labels_info=None):
-        self.name = name
+        super(LGRInfo, self).__init__(name)
         self.lgr = lgr
         self.xml = xml
         self.validating_repertoire = validating_repertoire
@@ -127,6 +124,8 @@ class LGRInfo(object):
                                              lgr_loader_func=lgr_loader_func,
                                              request=request))
 
+        if 'xml' not in dct:
+            dct['xml'] = dct['data']
         xml = dct['xml']
         if not isinstance(xml, six.text_type):
             xml = six.text_type(xml, 'utf-8')
@@ -155,7 +154,8 @@ class LGRInfo(object):
                 lgr.unicode_database = unidb.manager.get_db_by_version(unicode_version)
 
         validating_repertoire = dct.get('validating_repertoire')
-        val_lgr = lgr_loader_func(validating_repertoire) if (validating_repertoire and lgr_loader_func is not None) else None
+        val_lgr = lgr_loader_func(validating_repertoire) if (
+                validating_repertoire and lgr_loader_func is not None) else None
         lgr_info = cls(name=name,
                        xml=xml,
                        lgr=lgr,
@@ -170,7 +170,7 @@ class LGRInfo(object):
 
         dct = {
             'name': self.name,
-            'xml': self.xml,
+            'data': self.xml,
             'validating_repertoire': self.validating_repertoire.name if self.validating_repertoire else None,
             'lgr_set_dct': [l.to_dict(request) for l in self.lgr_set] if self.is_set else None,
             'is_set': self.is_set  # for index.html
@@ -228,150 +228,12 @@ class LabelInfo(object):
         }
 
 
-def session_list_lgr(request):
-    """
-    List the LGRs stored in session.
-
-    :param request: Django request object
-    :return: list of `LGRInfo` instances
-    """
-    known_lgrs = request.session.get(LGRS_SESSION_KEY, {})
-    return sorted(known_lgrs.values(), key=lambda x: x['name'])
-
-
-def session_open_lgr(request, lgr_id, lgr_xml,
-                     validating_repertoire_name=None,
-                     validate=False, from_set=False,
-                     lgr_set=None, set_labels=None):
-    """
-    Parse the given LGR in XML format, and save it in session.
-
-    :param request: Django request object
-    :param lgr_id: a slug identifying the LGR
-    :param lgr_xml: a string with the xml
-    :param validating_repertoire_name: optional name of a validating repertoire
-    :param validate: if True, ensure the XML is valid LGR XML
-    :param from_set: Whether the LGR belongs to a set or not
-    :param lgr_set: The list of LGRInfo in the set if this is a merged LGR from a set
-    :return: `LGRInfo`
-    """
-    lgr_info = LGRInfo.from_dict(
-        {
-            'name': lgr_id,
-            'xml': lgr_xml,
-            'validating_repertoire': validating_repertoire_name,
-            'validate': validate,
-            'lgr_set_dct': [lgr.to_dict() for lgr in lgr_set] if lgr_set else None,
-            'set_labels': set_labels
-        },
-        lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request)
-    )
-    if not from_set:
-        # do not save lgr in session, it will be kept in set
-        session_save_lgr(request, lgr_info)
-    else:
-        lgr_info.update_xml()
-
-    return lgr_info
-
-
-def session_select_lgr(request, lgr_id, lgr_set_id=None):
-    """
-    Find the LGR identified by `lgr_id` in the session.
-    Can also retrieve a root zone LGR.
-
-    :param request: Django request object
-    :param lgr_id: a slug identifying the LGR
-    :param lgr_set_id: a slug identifying a LGR set if LGR is in a set
-    :return: `LGRInfo`
-    """
-    known_lgrs = request.session.get(LGRS_SESSION_KEY, {})
-
-    # handle RZ LGR selection
-    if lgr_id not in known_lgrs and lgr_id in list_root_zones():
-        return LGRInfo(lgr_id, lgr=get_by_name(lgr_id, with_unidb=True))
-
-    if lgr_set_id:
-        if lgr_set_id not in known_lgrs:
-            raise Http404
-        lgr_dct = known_lgrs[lgr_set_id]
-    else:
-        if lgr_id not in known_lgrs:
-            raise Http404
-        lgr_dct = known_lgrs[lgr_id]
-        return LGRInfo.from_dict(lgr_dct,
-                                 lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request),
-                                 request=request)
-
-    if not lgr_dct.get('lgr_set_dct', None):
-        raise Http404
-
-    for lgr in lgr_dct.get('lgr_set_dct'):
-        if lgr['name'] == lgr_id:
-            return LGRInfo.from_dict(lgr,
-                                     lgr_loader_func=partial(get_builtin_or_session_repertoire, request=request),
-                                     request=request)
-    raise Http404
-
-
-def session_save_lgr(request, lgr_info, lgr_id=None):
-    """
-    Save the LGR object in session
-    :param request: Django request object
-    :param lgr_info: `LGRInfo` instance
-    :param lgr_id: a slug identifying the LGR
-    """
-    lgr_id = lgr_id if lgr_id is not None else lgr_info.name
-    lgr_info.update_xml()  # make sure we have updated XML before saving
-    request.session.setdefault(LGRS_SESSION_KEY, {})[lgr_id] = lgr_info.to_dict(request)
-    # mark session as modified because we are possibly only changing the content of a dict
-    request.session.modified = True
-    # As LGR has been modified, need to invalidate the template repertoire cache
-    clean_repertoire_cache(request, lgr_id)
-
-
-def session_get_storage(request):
-    """
-    Get the storage path for the session
-
-    :param request: Django request object
-    :return: the storage location
-    """
-    # get or create a key for storage in the session,
-    try:
-        storage_key = request.session['storage']
-    except KeyError:
-        # generate a random key
-        storage_key = uuid4().hex
-        request.session['storage'] = storage_key
-    # the storage may still not be created here but now it has a path for
-    #  this session
-    return os.path.join(settings.TOOLS_OUTPUT_STORAGE_LOCATION,
-                        storage_key)
-
-
-def session_list_storage(request):
-    """
-    List files in the storage
-
-    :param request: Django request object
-    :return: the list of files in storage
-    """
-    storage = FileSystemStorage(location=session_get_storage(request))
-    try:
-        files = storage.listdir('.')
-    except OSError:
-        return []
-
-    return sorted(files[1], reverse=True)
-
-
-def get_builtin_or_session_repertoire(repertoire_id, request):
+def get_builtin_or_session_repertoire(session: LgrSession, repertoire_id):
     """
     Load the given LGR from the set of built-in repertoires, or if not found, load it from the user's session
 
+    :param session: LgrSession object
     :param repertoire_id: a slug identifying the LGR
-    :param request: Django request object
     :return: `LGR` instance
     """
     try:
@@ -379,7 +241,48 @@ def get_builtin_or_session_repertoire(repertoire_id, request):
     except IOError as e:
         if e.errno == errno.ENOENT:  # not found
             # try session
-            session_lgr_info = session_select_lgr(request, repertoire_id)
+            session_lgr_info = session.select_lgr(repertoire_id)
             return session_lgr_info.lgr
         else:
             raise  # don't deal with any other errors
+
+
+class LgrToolSession(LgrSession):
+    lgr_session_key = LGRS_SESSION_KEY
+    lgr_serializer = LGRInfo
+    storage_location = settings.TOOLS_OUTPUT_STORAGE_LOCATION
+    get_from_repertoire = True
+    loader_function = get_builtin_or_session_repertoire
+
+    def merge_set(self, lgr_info_set, lgr_set_name):
+        """
+        Merge some LGR to build a set.
+
+        :param lgr_info_set: The list of LGRInfo objects in the set
+        :param lgr_set_name: The name of the LGR set
+        :return: The LGR set merge id
+        """
+        merged_lgr = merge_lgr_set([l.lgr for l in lgr_info_set], lgr_set_name)
+        merged_id = slugify(merged_lgr.name)
+
+        merged_lgr_xml = serialize_lgr_xml(merged_lgr)
+
+        self.open_lgr(merged_id, merged_lgr_xml,
+                      validating_repertoire=None,
+                      validate=True, lgr_set=lgr_info_set)
+        return merged_id
+
+    def new_lgr(self, lgr_id, unicode_version, validating_repertoire_name):
+        """
+        Create a new, blank LGR, and save it in session.
+
+        :param lgr_id: a slug identifying the LGR
+        :param unicode_version: version of Unicode applicable to this LGR
+        :param validating_repertoire_name: name of a validating repertoire
+        :return: `lgr_serializer`
+        """
+        lgr_info = self.lgr_serializer.create(name=lgr_id,
+                                              unicode_version=unicode_version,
+                                              validating_repertoire_name=validating_repertoire_name)
+        self.save_lgr(lgr_info)
+        return lgr_info

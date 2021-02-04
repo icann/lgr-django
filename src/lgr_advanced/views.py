@@ -5,14 +5,21 @@ from django.views.generic import TemplateView
 
 from lgr.utils import cp_to_ulabel, format_cp
 from lgr_advanced import unidb
+from lgr_advanced.api import LgrToolSession
 from lgr_advanced.forms import LabelFormsForm
-from lgr_advanced.api import session_list_lgr, session_list_storage
 from lgr_advanced.utils import list_built_in_lgr
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_web.views import Interfaces, INTERFACE_SESSION_KEY
 
 
-class AdvancedModeView(TemplateView):
+class LgrViewMixin:
+
+    def dispatch(self, request, *args, **kwargs):
+        self.session = LgrToolSession(request)
+        return super().dispatch(request, *args, **kwargs)
+
+
+class AdvancedModeView(LgrViewMixin, TemplateView):
     template_name = 'lgr_advanced/index.html'
 
     def get(self, request, *args, **kwargs):
@@ -24,9 +31,9 @@ class AdvancedModeView(TemplateView):
         xml_files = list_built_in_lgr()
         ctx.update({
             'lgr_xml': xml_files,
-            'lgrs': session_list_lgr(self.request),
+            'lgrs': self.session.list_lgr(),
             'lgr_id': '',
-            'storage': session_list_storage(self.request),
+            'storage': self.session.list_storage(),
         })
         return ctx
 

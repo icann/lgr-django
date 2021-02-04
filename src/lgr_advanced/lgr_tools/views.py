@@ -5,7 +5,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 
 from lgr.tools.utils import download_file
-from ..api import LabelInfo, session_list_lgr, session_select_lgr, session_get_storage
+from ..api import LabelInfo, LgrToolSession
 from ..utils import cp_to_slug
 from lgr_advanced.lgr_tools.api import lgr_intersect_union, lgr_comp_diff, lgr_harmonization, LGRCompInvalidException
 from lgr_advanced.lgr_tools.forms import (LGRCompareSelector,
@@ -24,25 +24,28 @@ from .tasks import (diff_task,
 
 
 def lgr_compare(request, lgr_id):
+    session = LgrToolSession(request)
+
     form = LGRCompareSelector(request.POST or None,
-                              session_lgrs=session_list_lgr(request),
+                              session_lgrs=session.list_lgr(),
                               lgr_id=lgr_id)
 
     lgr_info = None
     if lgr_id is not None:
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
     if form.is_valid():
         lgr_id_1 = form.cleaned_data['lgr_1']
         lgr_id_2 = form.cleaned_data['lgr_2']
         action = form.cleaned_data['action']
 
-        lgr_info_1 = session_select_lgr(request, lgr_id_1)
-        lgr_info_2 = session_select_lgr(request, lgr_id_2)
+        lgr_info_1 = session.select_lgr(lgr_id_1)
+        lgr_info_2 = session.select_lgr(lgr_id_2)
+
 
         if action in ['INTERSECTION', 'UNION']:
             try:
-                lgr_id = lgr_intersect_union(request,
+                lgr_id = lgr_intersect_union(session,
                                              lgr_info_1, lgr_info_2,
                                              action)
             except LGRCompInvalidException as lgr_xml:
@@ -61,9 +64,7 @@ def lgr_compare(request, lgr_id):
                               fileobj=sio, mode='w') as gzf:
                     gzf.write(lgr_xml.content)
 
-                storage = FileSystemStorage(location=session_get_storage(request),
-                                            file_permissions_mode=0o440)
-                filename = storage.save('{}.gz'.format(base_filename), sio)
+                filename = session.storage_save_file('{}.gz'.format(base_filename), sio, mode=0o440)
                 return render(request, 'lgr_tools/comp_invalid.html',
                               context={
                                   'lgr_1': lgr_info_1,
@@ -77,7 +78,7 @@ def lgr_compare(request, lgr_id):
             else:
                 return redirect('codepoint_list', lgr_id)
         else:
-            content = lgr_comp_diff(request, lgr_info_1, lgr_info_2, form.cleaned_data['full_dump'])
+            content = lgr_comp_diff(lgr_info_1, lgr_info_2, form.cleaned_data['full_dump'])
             ctx = {
                 'content': content,
                 'lgr_1': lgr_info_1,
@@ -99,13 +100,15 @@ def lgr_compare(request, lgr_id):
 
 
 def lgr_diff(request, lgr_id):
+    session = LgrToolSession(request)
+
     form = LGRDiffSelector(request.POST or None, request.FILES or None,
-                           session_lgrs=[lgr['name'] for lgr in session_list_lgr(request) if not lgr['is_set']],
+                           session_lgrs=[lgr['name'] for lgr in session.list_lgr() if not lgr['is_set']],
                            lgr_id=lgr_id)
 
     lgr_info = None
     if lgr_id is not None:
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
     if form.is_valid():
         lgr_id_1 = form.cleaned_data['lgr_1']
@@ -116,10 +119,10 @@ def lgr_diff(request, lgr_id):
         full_dump = form.cleaned_data['full_dump']
         with_rules = form.cleaned_data['with_rules']
 
-        lgr_info_1 = session_select_lgr(request, lgr_id_1)
-        lgr_info_2 = session_select_lgr(request, lgr_id_2)
+        lgr_info_1 = session.select_lgr(lgr_id_1)
+        lgr_info_2 = session.select_lgr(lgr_id_2)
 
-        storage_path = session_get_storage(request)
+        storage_path = session.get_storage_path()
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
@@ -151,13 +154,15 @@ def lgr_diff(request, lgr_id):
 
 
 def lgr_collisions(request, lgr_id):
+    session = LgrToolSession(request)
+
     form = LGRCollisionSelector(request.POST or None, request.FILES or None,
-                                session_lgrs=[lgr['name'] for lgr in session_list_lgr(request) if not lgr['is_set']],
+                                session_lgrs=[lgr['name'] for lgr in session.list_lgr() if not lgr['is_set']],
                                 lgr_id=lgr_id)
 
     lgr_info = None
     if lgr_id is not None:
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
     if form.is_valid():
         lgr_id = form.cleaned_data['lgr']
@@ -167,9 +172,9 @@ def lgr_collisions(request, lgr_id):
         with_rules = form.cleaned_data['with_rules']
         with_tlds = False
 
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
-        storage_path = session_get_storage(request)
+        storage_path = session.get_storage_path()
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
@@ -204,14 +209,16 @@ def lgr_collisions(request, lgr_id):
 
 
 def _create_set_compatible_form_instance(form_class, request, lgr_id):
+    session = LgrToolSession(request)
+
     # Retrieve complete list of all scripts defined in all sets
     lgr_scripts = set()
-    for lgr_dct in session_list_lgr(request):
+    for lgr_dct in session.list_lgr():
         if lgr_dct['is_set']:
             lgr_set = [l['name'] for l in lgr_dct['lgr_set_dct']]
             scripts = []
             for lgr_name in lgr_set:
-                lgr_info = session_select_lgr(request, lgr_name, lgr_dct['name'])
+                lgr_info = session.select_lgr(lgr_name, lgr_dct['name'])
                 try:
                     scripts.append((lgr_info.name, lgr_info.lgr.metadata.languages[0]))
                 except (AttributeError, IndexError):
@@ -220,19 +227,21 @@ def _create_set_compatible_form_instance(form_class, request, lgr_id):
 
     lgr_info = None
     if lgr_id is not None:
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
     form = form_class(request.POST or None, request.FILES or None,
-                      session_lgrs=session_list_lgr(request),
+                      session_lgrs=session.list_lgr(),
                       lgr_info=lgr_info,
                       scripts=list(lgr_scripts))
     return form
 
 
 def lgr_annotate(request, lgr_id):
+    session = LgrToolSession(request)
+
     lgr_info = None
     if lgr_id is not None:
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
     form = _create_set_compatible_form_instance(LGRAnnotateSelector,
                                                 request, lgr_id)
@@ -242,9 +251,9 @@ def lgr_annotate(request, lgr_id):
         labels_file = form.cleaned_data['labels']
         email_address = form.cleaned_data['email']
 
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
-        storage_path = session_get_storage(request)
+        storage_path = session.get_storage_path()
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
@@ -261,7 +270,7 @@ def lgr_annotate(request, lgr_id):
             annotate_task.delay(lgr_json, labels_json, email_address, storage_path)
         else:
             script_lgr_id = form.cleaned_data['script']
-            script_lgr_info = session_select_lgr(request, script_lgr_id, lgr_set_id=lgr_id)
+            script_lgr_info = session.select_lgr(script_lgr_id, lgr_set_id=lgr_id)
 
             script_lgr_json = script_lgr_info.to_dict()
             lgr_set_annotate_task.delay(lgr_json, script_lgr_json, labels_json, email_address, storage_path)
@@ -288,9 +297,11 @@ def lgr_annotate(request, lgr_id):
 
 
 def lgr_cross_script_variants(request, lgr_id):
+    session = LgrToolSession(request)
+
     lgr_info = None
     if lgr_id is not None:
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
     form = _create_set_compatible_form_instance(LGRCrossScriptVariantsSelector,
                                                 request, lgr_id)
@@ -301,9 +312,9 @@ def lgr_cross_script_variants(request, lgr_id):
         labels_file = form.cleaned_data['labels']
         email_address = form.cleaned_data['email']
 
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
-        storage_path = session_get_storage(request)
+        storage_path = session.get_storage_path()
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
@@ -311,8 +322,7 @@ def lgr_cross_script_variants(request, lgr_id):
 
         if lgr_info.is_set:
             script_lgr_id = form.cleaned_data['script']
-            script_lgr = session_select_lgr(request, script_lgr_id,
-                                            lgr_set_id=lgr_id)
+            script_lgr = session.select_lgr(script_lgr_id, lgr_set_id=lgr_id)
             lgr_info = script_lgr
 
         cross_script_variants_task.delay(lgr_info.to_dict(), labels_json,
@@ -336,8 +346,10 @@ def lgr_cross_script_variants(request, lgr_id):
 
 
 def lgr_harmonize(request, lgr_id):
+    session = LgrToolSession(request)
+
     form = LGRHarmonizeSelector(request.POST or None,
-                                session_lgrs=[lgr['name'] for lgr in session_list_lgr(request) if not lgr['is_set']],
+                                session_lgrs=[lgr['name'] for lgr in session.list_lgr() if not lgr['is_set']],
                                 lgr_id=lgr_id)
 
     if form.is_valid():
@@ -345,10 +357,11 @@ def lgr_harmonize(request, lgr_id):
         lgr_1_id, lgr_2_id = form.cleaned_data['lgr_1'], form.cleaned_data['lgr_2']
         rz_lgr_id = form.cleaned_data['rz_lgr'] or None
 
-        lgr_1_info, lgr_2_info = (session_select_lgr(request, l) for l in (lgr_1_id, lgr_2_id))
-        rz_lgr = session_select_lgr(request, rz_lgr_id).lgr if rz_lgr_id is not None else None
+        lgr_1_info, lgr_2_info = (session.select_lgr(l) for l in (lgr_1_id, lgr_2_id))
+        rz_lgr = session.select_lgr(rz_lgr_id).lgr if rz_lgr_id is not None else None
 
-        h_lgr_1_id, h_lgr_2_id, cp_review = lgr_harmonization(request, lgr_1_info.lgr, lgr_2_info.lgr, rz_lgr)
+        session = LgrToolSession(request)
+        h_lgr_1_id, h_lgr_2_id, cp_review = lgr_harmonization(session ,lgr_1_info.lgr, lgr_2_info.lgr, rz_lgr)
 
         ctx.update({
             'lgr_1': lgr_1_info,
@@ -370,23 +383,25 @@ def lgr_harmonize(request, lgr_id):
 
 
 def lgr_compute_variants(request, lgr_id):
+    session = LgrToolSession(request)
+
     form = LGRComputeVariantsSelector(request.POST or None, request.FILES or None,
-                                      session_lgrs=[lgr['name'] for lgr in session_list_lgr(request) if
+                                      session_lgrs=[lgr['name'] for lgr in session.list_lgr() if
                                                     not lgr['is_set']],
                                       lgr_id=lgr_id)
 
     lgr_info = None
     if lgr_id is not None:
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
     if form.is_valid():
         lgr_id = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
         email_address = form.cleaned_data['email']
 
-        lgr_info = session_select_lgr(request, lgr_id)
+        lgr_info = session.select_lgr(lgr_id)
 
-        storage_path = session_get_storage(request)
+        storage_path = session.get_storage_path()
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()

@@ -11,16 +11,17 @@ from django.views.generic import FormView
 from lgr.exceptions import LGRException
 from lgr.tools.utils import download_file, read_labels
 from lgr.utils import cp_to_ulabel
-from lgr_advanced.api import LGRInfo, LabelInfo, session_get_storage, session_list_storage
+from lgr_advanced.api import LGRInfo, LabelInfo
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import evaluate_label_from_info, NeedAsyncProcess
+from lgr_advanced.views import LgrViewMixin
 from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 from .forms import ValidateLabelSimpleForm
 
 
-class BasicModeView(FormView):
+class BasicModeView(LgrViewMixin, FormView):
     form_class = ValidateLabelSimpleForm
     template_name = 'lgr_basic/basic_mode.html'
 
@@ -46,7 +47,7 @@ class BasicModeView(FormView):
         lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr, with_unidb=True))
         lgr_info.update_xml()
         lgr_json = lgr_info.to_dict()
-        storage_path = session_get_storage(self.request)
+        storage_path = self.session.get_storage()
 
         if labels_file:
             labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
@@ -94,6 +95,6 @@ class BasicModeView(FormView):
         ctx = super(BasicModeView, self).get_context_data(**kwargs)
         if 'results' in kwargs:
             ctx['results'] = kwargs.pop('results')
-        ctx['storage'] = session_list_storage(self.request)
+        ctx['storage'] = self.session.list_storage()
         ctx.update(kwargs)
         return ctx
