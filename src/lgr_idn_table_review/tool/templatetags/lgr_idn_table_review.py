@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-lgr_editor.py - Template tags for LGR editor
+lgr_idn_table_review.py - Template tags for IDN table review
 """
-from __future__ import unicode_literals
-
 from django import template
 
 from lgr.utils import format_cp as format_cp_utils
