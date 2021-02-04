@@ -7,7 +7,6 @@ api -
 import logging
 
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
 
 from lgr_session.api import LgrSession, LgrSerializer
 
@@ -37,18 +36,3 @@ class LgrIdnReviewSession(LgrSession):
     lgr_session_key = IDN_TABLES_SESSION_KEY
     lgr_serializer = IdnTableInfo
     storage_location = settings.IDN_REVIEW_USER_OUTPUT_STORAGE_LOCATION
-
-
-def session_list_icann_idn_review_storage():
-    """
-    List files in the storage
-
-    :return: the list of files in storage
-    """
-    storage = FileSystemStorage(location=settings.IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION)
-    try:
-        files = storage.listdir('.')
-    except OSError:
-        return []
-
-    return sorted(files[1], reverse=True)
