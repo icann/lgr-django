@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 
 from lgr.exceptions import LGRException
 from lgr_advanced.unidb import get_db_by_version
-from ..api import LabelInfo, session_select_lgr, session_get_storage
+from ..api import LabelInfo, LgrToolSession
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
@@ -42,6 +42,8 @@ def evaluate_label_from_info(request,
     :param check_collisions: Check for collisions with the provided list of labels
     :return: a dict containing results of the evaluation, empty if process is asynchronous.
     """
+    session = LgrToolSession(request)
+
     ctx = {}
     need_async = lgr_info.lgr.estimate_variant_number(label_cplist) > settings.LGR_VALIDATION_MAX_VARS_SYNCHRONOUS
     if need_async and not email:
@@ -65,7 +67,7 @@ def evaluate_label_from_info(request,
                                          threshold_include_vars=threshold_include_vars,
                                          idna_encoder=udata.idna_encode_label)
         else:
-            storage_path = session_get_storage(request)
+            storage_path = session.get_storage_path()
             lgr_set_validate_label_task.delay(lgr_info.to_dict(), script_lgr_info.to_dict(), label_cplist, email,
                                               storage_path)
             ctx['launched_as_task'] = True
@@ -76,7 +78,7 @@ def evaluate_label_from_info(request,
                                  idna_encoder=udata.idna_encode_label,
                                  check_collisions=check_collisions)
         else:
-            storage_path = session_get_storage(request)
+            storage_path = session.get_storage_path()
             validate_label_task.delay(lgr_info.to_dict(), label_cplist, email, storage_path)
             ctx['launched_as_task'] = True
 
@@ -86,7 +88,9 @@ def evaluate_label_from_info(request,
 def validate_label(request, lgr_id, lgr_set_id=None,
                    threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE,
                    output_func=None, noframe=False):
-    lgr_info = session_select_lgr(request, lgr_id, lgr_set_id)
+    session = LgrToolSession(request)
+
+    lgr_info = session.select_lgr(lgr_id, lgr_set_id=lgr_set_id)
     udata = get_db_by_version(lgr_info.lgr.metadata.unicode_version)
     scripts = None
     if lgr_info.is_set:
@@ -134,7 +138,7 @@ def validate_label(request, lgr_id, lgr_set_id=None,
     ctx['is_set'] = lgr_info.is_set or lgr_set_id is not None
 
     if lgr_set_id:
-        lgr_set_info = session_select_lgr(request, lgr_set_id)
+        lgr_set_info = session.select_lgr(lgr_set_id)
         ctx['lgr_set'] = lgr_set_info.lgr
         ctx['lgr_set_id'] = lgr_set_id
 

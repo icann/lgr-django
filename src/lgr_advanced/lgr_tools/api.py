@@ -6,17 +6,15 @@ import time
 
 from django.utils.text import slugify
 
-from lgr.tools.utils import read_labels
-from lgr_advanced.exceptions import LGRValidationException
-from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_sets
 from lgr.tools.annotate import annotate, lgr_set_annotate
-from lgr.tools.diff_collisions import diff, collision, basic_collision
+from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_sets
 from lgr.tools.cross_script_variants import cross_script_variants
+from lgr.tools.diff_collisions import diff, collision, basic_collision
 from lgr.tools.harmonize import harmonize
-
-from lgr_advanced.api import LGRInfo, session_open_lgr, session_save_lgr
+from lgr.tools.utils import read_labels
+from lgr_advanced.api import LGRInfo
+from lgr_advanced.exceptions import LGRValidationException
 from lgr_advanced.lgr_validator.api import lgr_set_evaluate_label, evaluate_label, validation_results_to_csv
-
 
 logger = logging.getLogger(__name__)
 
@@ -32,11 +30,11 @@ class LGRCompInvalidException(LGRValidationException):
         self.error = error
 
 
-def lgr_intersect_union(request, lgr_info_1, lgr_info_2, action):
+def lgr_intersect_union(session, lgr_info_1, lgr_info_2, action):
     """
     Compare 2 LGRs for union/intersection.
 
-    :param request: The request object.
+    :param session: The LgrSession object.
     :param lgr_info_1: The first LGR info object.
     :param lgr_info_2: The second LGR info object.
     :param action: One of "UNION", "INTERSECTION".
@@ -56,8 +54,8 @@ def lgr_intersect_union(request, lgr_info_1, lgr_info_2, action):
                        lgr=result_lgr)
     lgr_info.update_xml(pretty_print=True)
     try:
-        session_open_lgr(request, lgr_id, lgr_info.xml,
-                         validating_repertoire_name=None,
+        session.open_lgr(lgr_id, lgr_info.xml,
+                         validating_repertoire=None,
                          validate=True)
     except LGRValidationException as e:
         raise LGRCompInvalidException(lgr_info.xml, e.args[0])
@@ -65,11 +63,10 @@ def lgr_intersect_union(request, lgr_info_1, lgr_info_2, action):
     return lgr_id
 
 
-def lgr_comp_diff(request, lgr_info_1, lgr_info_2, full_dump=True):
+def lgr_comp_diff(lgr_info_1, lgr_info_2, full_dump=True):
     """
     Compare 2 LGRs with textual output.
 
-    :param request: The request object.
     :param lgr_info_1: The first LGR info object.
     :param lgr_info_2: The second LGR info object.
     :param full_dump: Whether identical char should return something or not.
@@ -169,11 +166,11 @@ def lgr_cross_script_variants(lgr, labels_file):
     return cross_script_variants(lgr, labels_file)
 
 
-def lgr_harmonization(request, lgr_1, lgr_2, rz_lgr):
+def lgr_harmonization(session, lgr_1, lgr_2, rz_lgr):
     """
     Perform variant harmonization between 2 LGRs
 
-    :param request: The request object.
+    :param session: The LgrSession object.
     :param lgr_1: First LGR.
     :param lgr_2: Second LGR.
     :param rz_lgr: Optional related Rootzone LGR.
@@ -187,7 +184,7 @@ def lgr_harmonization(request, lgr_1, lgr_2, rz_lgr):
         lgr_info = LGRInfo(name=lgr_id,
                            lgr=l)
         lgr_info.update_xml(pretty_print=True)
-        session_save_lgr(request, lgr_info)
+        session.save_lgr(lgr_info)
         return lgr_id
 
     (h_lgr_1_id, h_lgr_2_id) = (_save_resulting_lgr(l) for l in (h_lgr_1, h_lgr_2))
@@ -266,4 +263,3 @@ def lgr_validate_labels(lgr, labels_file, udata):
         except Exception as ex:
             logger.error("Failed to process label %s: %s", label, ex)
             yield "\nError processing label {}\n".format(label)
-
