@@ -30,6 +30,8 @@ class LgrModesView(TemplateView):
             return redirect('lgr_review_mode')
         if interface == Interfaces.IDN_ADMIN.name:
             return redirect('lgr_idn_admin_mode')
+        if interface == Interfaces.IDN_ICANN.name:
+            return redirect('lgr_idn_icann_mode')
 
         return super(LgrModesView, self).get(request, *args, **kwargs)
 
