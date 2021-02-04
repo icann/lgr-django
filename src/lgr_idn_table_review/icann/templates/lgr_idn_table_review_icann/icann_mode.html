@@ -1,0 +1,39 @@
+{% extends "_skel.html" %}
+{% load i18n %}
+
+{% block html_title %}{% trans 'ICANN IDN review tool' %}{% endblock %}
+
+{% block navbar-right %}
+    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
+    {{ block.super }}
+{% endblock %}
+
+{% block content-title %}
+    {% trans 'ICANN IDN review tool' %}
+{% endblock %}
+
+{% block content %}
+    <form id="report-form" class="form-horizontal" method="post">
+        {% csrf_token %}
+        <button id="submit" type="submit" class="btn btn-primary btn-block" {% if messages %}disabled{% endif %}>
+            {% trans "Generate report" %}
+        </button>
+    </form>
+    <hr>
+    <h2>{% trans 'Previously generated reports' %}</h2>
+    <ul>
+        {% for file in storage %}
+            <li>
+                <a href="{% url 'download_file' storage='rev_icann' filename=file %}?next={{ request.path }}">
+                    {{ file }}
+                </a>
+                <a href="{% url 'delete_file' storage='rev_icann' filename=file %}?next={{ request.path }}"
+                   class="delete_file">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </a>
+            </li>
+        {% empty %}
+            {% trans 'No report' %}
+        {% endfor %}
+    </ul>
+{% endblock content %}

@@ -259,6 +259,7 @@ TOOLS_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'output', 'tools')
 
 # For IDN review output
 IDN_REVIEW_USER_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'output', 'idn_review', 'user')
+IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'output', 'idn_review', 'icann')
 
 # Duration in second for which the tools output files are stored
 STORAGE_DURATION = 60*60*24*7  # 1 week

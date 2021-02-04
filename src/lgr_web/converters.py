@@ -43,4 +43,4 @@ class ActionIndexConverter(BaseConverter):
 
 
 class StorageTypeConverter(BaseConverter):
-    regex = r'(tool|rev_usr)'
+    regex = r'(tool|rev_usr|rev_icann)'

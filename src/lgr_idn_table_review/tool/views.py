@@ -34,6 +34,7 @@ class IdnTableReviewModeView(FormView, IdnTableReviewViewMixin):
 
     def get(self, request, *args, **kwargs):
         request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_REVIEW.name
+        # remove IDN files from session, we restart an new IDN review process
         self.session.delete_all()
         return super(IdnTableReviewModeView, self).get(request, *args, **kwargs)
 
