@@ -127,8 +127,8 @@
         <ul>
             {% for file in storage %}
                 <li>
-                    <a href="{% url 'download_file' file %}">{% blocktrans %}Download {{ file }}{% endblocktrans %}</a>
-                    <a href="{% url 'delete_file' file %}" class="delete_file"><i class="glyphicon glyphicon-trash"></i></a>
+                    <a href="{% url 'download_file' storage='tool' filename=file %}">{% blocktrans %}Download {{ file }}{% endblocktrans %}</a>
+                    <a href="{% url 'delete_file' storage='tool' filename=file %}" class="delete_file"><i class="glyphicon glyphicon-trash"></i></a>
                 </li>
             {% endfor %}
         </ul>

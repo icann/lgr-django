@@ -28,10 +28,6 @@ urlpatterns = [
     path('new/', views.new_lgr, name='new_lgr'),
     path('import/', views.import_lgr, name='import_lgr'),
 
-    # Storage related functions
-    path('storage/<filename:filename>/dl/', views.download_file, name='download_file'),
-    path('storage/<filename:filename>/rm/', views.delete_file, name='delete_file'),
-
     # View/Export functions
     path('lgr/view/<lgr:lgr_id>.xml', views.view_lgr_xml, name='view_lgr_xml'),
     path('lgr/view/<lgr:lgr_set_id>/<lgr:lgr_id>.xml', views.view_lgr_xml, name='view_lgr_xml'),
