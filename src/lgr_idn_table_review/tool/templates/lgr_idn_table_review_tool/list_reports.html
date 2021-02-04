@@ -23,9 +23,13 @@
     <ul>
         {% for file in storage %}
             <li>
-                {{ file }}
-                {# <a href="{% url 'download_file' file %}">{% blocktrans %}Download {{ file }}{% endblocktrans %}</a>#}
-                {# <a href="{% url 'delete_file' file %}" class="delete_file"><i class="glyphicon glyphicon-trash"></i></a>#}
+                <a href="{% url 'download_filetmp' storage='rev_usr' filename=file %}?next={{ request.path }}">
+                    {% blocktrans %}Download {{ file }}{% endblocktrans %}
+                </a>
+                <a href="{% url 'delete_filetmp' storage='rev_usr' filename=file %}?next={{ request.path }}"
+                   class="delete_file">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </a>
             </li>
         {% empty %}
             {% trans 'No report' %}

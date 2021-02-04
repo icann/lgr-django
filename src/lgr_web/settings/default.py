@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'lgr_session',
     'lgr_auth',
     'lgr_advanced',
     'lgr_advanced.lgr_editor',

@@ -40,3 +40,7 @@ class ReferenceIdConverter(BaseConverter):
 
 class ActionIndexConverter(BaseConverter):
     regex = r'-?\d+'
+
+
+class StorageTypeConverter(BaseConverter):
+    regex = r'(tool|rev_usr)'
