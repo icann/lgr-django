@@ -3,6 +3,7 @@ from django.http import Http404, FileResponse
 from django.shortcuts import redirect
 from django.views.generic.base import View
 
+from lgr_advanced.api import LgrToolSession
 from lgr_idn_table_review.tool.api import LgrIdnReviewSession
 
 
@@ -10,11 +11,10 @@ class LgrSessionView(View):
 
     def dispatch(self, request, *args, **kwargs):
         self.filename = self.kwargs.get('filename')
-        self.next = request.GET.get('next')
+        self.next = request.GET.get('next', '/')
         storage_type = self.kwargs.get('storage')
-        if storage_type == 'lgr':
-            pass
-            # self.session = LgrToolSession(self.request)
+        if storage_type == 'tool':
+            self.session = LgrToolSession(self.request)
         elif storage_type == 'rev_usr':
             self.session = LgrIdnReviewSession(request)
         else:

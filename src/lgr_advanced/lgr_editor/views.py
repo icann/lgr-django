@@ -459,32 +459,6 @@ def delete_lgr(request, lgr_id):
     return redirect('/')
 
 
-def download_file(request, filename):
-    """
-    Download the selected file from session.
-    """
-    session = LgrToolSession(request)
-
-    res_file = session.storage_get_file(filename)
-    if res_file is None:
-        # TODO show an error...
-        return delete_file(request, filename)
-    response = FileResponse(res_file[0], content_type='application/x-gzip')
-    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
-    return response
-
-
-def delete_file(request, filename):
-    """
-    Delete the selected file from session.
-    """
-    session = LgrToolSession(request)
-
-    session.storage_delete_file(filename)
-
-    return redirect('/')
-
-
 def codepoint_view(request, lgr_id, codepoint_id, lgr_set_id=None):
     """
     View a specific codepoints of an LGR.

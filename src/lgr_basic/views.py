@@ -47,7 +47,7 @@ class BasicModeView(LgrViewMixin, FormView):
         lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr, with_unidb=True))
         lgr_info.update_xml()
         lgr_json = lgr_info.to_dict()
-        storage_path = self.session.get_storage()
+        storage_path = self.session.get_storage_path()
 
         if labels_file:
             labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
