@@ -2,7 +2,7 @@
 import time
 from ast import literal_eval
 from io import BytesIO
-from zipfile import ZipFile
+from zipfile import ZipFile, ZIP_BZIP2
 
 from django.core.exceptions import SuspiciousOperation, ValidationError
 from django.template.loader import render_to_string
@@ -12,10 +12,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView
 
 from lgr.tools.idn_review.review import review_lgr
-from lgr_advanced.api import LGRInfo
 from lgr_advanced.lgr_editor.views import RE_SAFE_FILENAME
 from lgr_idn_table_review.admin.models import RzLgr, RefLgr, LgrModel
-from lgr_idn_table_review.tool.api import LgrIdnReviewSession
+from lgr_idn_table_review.tool.api import LgrIdnReviewSession, IdnTableInfo
 from lgr_idn_table_review.tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 
@@ -27,7 +26,7 @@ class IdnTableReviewViewMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
-class IdnTableReviewModeView(FormView, IdnTableReviewViewMixin):
+class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
     form_class = LGRIdnTableReviewForm
     template_name = 'lgr_idn_table_review_tool/review_mode.html'
     success_url = reverse_lazy('lgr_review_select_reference')
@@ -53,46 +52,20 @@ class IdnTableReviewModeView(FormView, IdnTableReviewViewMixin):
         return super(IdnTableReviewModeView, self).form_valid(form)
 
 
-class IdnTableReviewSelectReferenceView(FormView, IdnTableReviewViewMixin):
+class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
     form_class = IdnTableReviewSelectReferenceForm
     template_name = 'lgr_idn_table_review_tool/select_reference.html'
     success_url = reverse_lazy('lgr_review_reports')
 
     def form_valid(self, form):
-        idn_review_contexts = {}
         email_address = form.cleaned_data.pop('email', None)
-        for idn_table, lgr_info in form.cleaned_data.items():
-            idn_table_info = self.session.select_lgr(idn_table)
-            idn_table_as_lgr = LGRInfo.from_dict(
-                {
-                    'name': idn_table_info.name,
-                    'xml': idn_table_info.data,
-                    'validate': False,
-                }, None)
-            lgr_type, lgr_name = literal_eval(lgr_info)
-            try:
-                if lgr_type == 'ref':
-                    ref_lgr = RefLgr.objects.get(name=lgr_name)
-                elif lgr_type == 'rz':
-                    ref_lgr = RzLgr.objects.get(name=lgr_name)
-                else:
-                    raise ValidationError(_('Unable to retrieve reference LGR'))
-            except LgrModel.DoesNotExist:
-                raise ValidationError(_('Unable to retrieve reference LGR'))
-            ref_lgr_info = LGRInfo.from_dict(
-                {
-                    'name': ref_lgr.name,
-                    'xml': ref_lgr.file.read(),
-                    'validate': False,
-                }, None)
-
-            idn_review_contexts[idn_table_as_lgr.name] = review_lgr(idn_table_as_lgr.lgr, ref_lgr_info.lgr)
 
         zip_content = BytesIO()
-        with ZipFile(zip_content, mode='w') as zf:
-            for name, context in idn_review_contexts.items():
+        with ZipFile(zip_content, mode='w', compression=ZIP_BZIP2) as zf:
+            for idn_table, lgr_info in form.cleaned_data.items():
+                context = self._review(idn_table, lgr_info)
                 html_report = render_to_string('lgr_idn_table_review_tool/review.html', context)
-                zf.writestr(f'{name}.html', html_report)
+                zf.writestr(f'{idn_table}.html', html_report)
 
         self.session.storage_save_file(f"{time.strftime('%Y%m%d_%H%M%S')}_idn_table_review.zip", zip_content)
 
@@ -101,6 +74,24 @@ class IdnTableReviewSelectReferenceView(FormView, IdnTableReviewViewMixin):
             pass
 
         return super(IdnTableReviewSelectReferenceView, self).form_valid(form)
+
+    def _review(self, idn_table, lgr_info):
+        idn_table_info = self.session.select_lgr(idn_table)
+        lgr_type, lgr_name = literal_eval(lgr_info)
+        try:
+            if lgr_type == 'ref':
+                ref_lgr = RefLgr.objects.get(name=lgr_name)
+            elif lgr_type == 'rz':
+                ref_lgr = RzLgr.objects.get(name=lgr_name)
+            else:
+                raise ValidationError(_('Unable to retrieve reference LGR'))
+        except LgrModel.DoesNotExist:
+            raise ValidationError(_('Unable to retrieve reference LGR'))
+        ref_lgr_info = IdnTableInfo.from_dict({
+            'name': ref_lgr.name,
+            'data': ref_lgr.file.read().decode('utf-8'),
+        })
+        return review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
 
     def get_form_kwargs(self):
         kwargs = super(IdnTableReviewSelectReferenceView, self).get_form_kwargs()

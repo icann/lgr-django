@@ -11,7 +11,7 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
 from lgr.tools.idn_review.review import review_lgr
-from lgr_advanced.api import LGRInfo
+from lgr_idn_table_review.tool.api import IdnTableInfo
 
 
 class Command(BaseCommand):
@@ -19,17 +19,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         with open(options['idn_table'], 'rb') as idn_table:
-            idn_table_info = LGRInfo.from_dict(
-                {
-                    'xml': idn_table.read(),
-                    'validate': False,
-                }, None)
+            idn_table_info = IdnTableInfo.from_dict({
+                'name': options['idn_table'],
+                'data': idn_table.read().decode('utf-8'),
+            })
         with open(options['reference_lgr'], 'rb') as ref_lgr:
-            ref_lgr_info = LGRInfo.from_dict(
-                {
-                    'xml': ref_lgr.read(),
-                    'validate': False,
-                }, None)
+            ref_lgr_info = IdnTableInfo.from_dict({
+                'name': options['reference_lgr'],
+                'data': ref_lgr.read().decode('utf-8'),
+            })
 
             context = review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
             html = render_to_string('lgr_idn_table_review_tool/review.html', context)

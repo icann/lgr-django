@@ -6,6 +6,7 @@ api -
 """
 import logging
 import os
+from abc import abstractmethod, ABC
 from functools import partial
 from typing import Type
 from uuid import uuid4
@@ -19,20 +20,24 @@ from lgr_advanced.utils import list_root_zones, clean_repertoire_cache
 logger = logging.getLogger(__name__)
 
 
-class LgrSerializer:
+class LgrSerializer(ABC):
 
-    def __init__(self, name, **kwargs):
+    def __init__(self, name, lgr=None, **kwargs):
         self.name = name
+        self.lgr = lgr
 
     @classmethod
+    @abstractmethod
     def from_dict(cls, dct, **kwargs):
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def to_dict(self, *args, **kwargs):
-        raise NotImplementedError
+        pass
 
+    @abstractmethod
     def update_xml(self, pretty_print=False, validate=False):
-        raise NotImplementedError
+        pass
 
 
 class LgrSession:

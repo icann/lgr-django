@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import json
 
 from dal import autocomplete
-from dal.views import ViewMixin
 from lxml.etree import XMLSyntaxError
 
 import os
@@ -23,7 +22,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join
 from django.http import (HttpResponse,
                          HttpResponseBadRequest,
-                         FileResponse,
                          JsonResponse)
 from django.core.cache import cache
 from django.views.generic import FormView
