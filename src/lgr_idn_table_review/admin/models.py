@@ -32,8 +32,7 @@ class RzLgr(LgrModel):
 
 
 class RefLgr(LgrModel):
-    language_script = models.CharField(max_length=32)
-    pass
+    language_script = models.CharField(max_length=32, unique=True)
 
 
 class RzLgrMember(LgrModel):

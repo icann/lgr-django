@@ -7,7 +7,6 @@ api -
 import base64
 import errno
 import logging
-from typing import Type
 
 from django.conf import settings
 from django.core.cache import cache
@@ -35,8 +34,7 @@ LGRS_SESSION_KEY = 'lgr'
 
 class LGRInfo(LgrSerializer):
     def __init__(self, name, lgr=None, xml=None, validating_repertoire=None, lgr_set=None, set_labels_info=None):
-        super(LGRInfo, self).__init__(name)
-        self.lgr = lgr
+        super(LGRInfo, self).__init__(name, lgr=lgr)
         self.xml = xml
         self.validating_repertoire = validating_repertoire
         self.lgr_set = lgr_set
@@ -144,7 +142,7 @@ class LGRInfo(LgrSerializer):
                 lgr = cls._parse_lgr(name, xml, dct.get('validate', False))
                 cache.set(make_lgr_session_key(LGR_OBJECT_CACHE_KEY,
                                                request,
-                                               name),
+                                               lgr.name),
                           lgr,
                           LGR_CACHE_TIMEOUT)
             else:
@@ -156,7 +154,7 @@ class LGRInfo(LgrSerializer):
         validating_repertoire = dct.get('validating_repertoire')
         val_lgr = lgr_loader_func(validating_repertoire) if (
                 validating_repertoire and lgr_loader_func is not None) else None
-        lgr_info = cls(name=name,
+        lgr_info = cls(name=lgr.name,
                        xml=xml,
                        lgr=lgr,
                        validating_repertoire=val_lgr,
