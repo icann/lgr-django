@@ -43,7 +43,7 @@ def get_icann_idn_repository_tables():
     for col in idn_table_columns:
         a_tag = col.findall('td/a')[0]
         url = a_tag.attrib['href'].strip()
-        tld, lang_script, version = url.split('_', 3)
+        tld, lang_script, version = os.path.basename(url).split('_', 3)
         date = col.findall('td')[3].text.strip()
         try:
             name, data = download_file(ICANN_URL + url)

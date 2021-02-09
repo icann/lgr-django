@@ -9,28 +9,29 @@
 {% endblock %}
 
 {% block content-title %}
-    {% blocktrans %}IDN Table Review Reports: {{ folder }}{% endblocktrans %}
+    {{ title }}
 {% endblock %}
 
 {% block content %}
     <p>
         {% blocktrans trimmed %}
-            The following files contains your IDN review reports.<br/>
-            <strong><i class="glyphicon glyphicon-alert"></i> Note that these files could be cleaned up
-                regularly.</strong>
+            The following files contains IDN review reports.<br/>
+            <strong>
+                <i class="glyphicon glyphicon-alert"></i> Note that these files could be cleaned up regularly.
+            </strong>
         {% endblocktrans %}
     </p>
     <ul>
         {% for file in storage %}
             <li>
-                <a href="{% url 'download_file' storage='rev_usr' filename=file folder=folder %}?display=true"
+                <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?display=true"
                    target="_blank" rel="noopener noreferrer">
                     {{ file }}
                 </a>
-                <a href="{% url 'download_file' storage='rev_usr' filename=file folder=folder %}?next={{ request.path }}">
+                <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}">
                     <i class="glyphicon glyphicon-floppy-disk"></i>
                 </a>
-                <a href="{% url 'delete_file' storage='rev_usr' filename=file folder=folder %}?next={{ request.path }}"
+                <a href="{% url 'delete_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}"
                    class="delete_file">
                     <i class="glyphicon glyphicon-trash"></i>
                 </a>
@@ -40,5 +41,5 @@
         {% endfor %}
     </ul>
     <br>
-    <a class="btn btn-primary" href="{% url 'lgr_review_report_folders' %}">{% trans "Back" %}</a>
+    <a class="btn btn-primary" href="{% url back_url %}">{% trans "Back" %}</a>
 {% endblock content %}
