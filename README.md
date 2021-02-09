@@ -168,7 +168,7 @@ The default broker used is the [redis broker](http://docs.celeryproject.org/en/3
 
 To launch celery, in a venv-enabled console:
 
-    $ (venv) ./venv/bin/celery --app=lgr_tools --workdir=./src --concurrency=2 worker
+    $ (venv) ./venv/bin/celery --app=lgr_web --workdir=./src --concurrency=2 worker
 
 ### Hacking
 
