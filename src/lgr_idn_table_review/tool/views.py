@@ -1,21 +1,15 @@
 # -*- coding: utf-8 -*-
-import time
-from ast import literal_eval
-from io import BytesIO
-from zipfile import ZipFile, ZIP_BZIP2
 
-from django.core.exceptions import SuspiciousOperation, ValidationError
-from django.template.loader import render_to_string
+from django.core.exceptions import SuspiciousOperation
 from django.urls import reverse_lazy
 from django.utils.text import slugify
-from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView
 
-from lgr.tools.idn_review.review import review_lgr
 from lgr_advanced.lgr_editor.views import RE_SAFE_FILENAME
-from lgr_idn_table_review.admin.models import RzLgr, RefLgr, LgrModel
-from lgr_idn_table_review.tool.api import LgrIdnReviewSession, IdnTableInfo
+from lgr_idn_table_review.admin.models import RzLgr, RefLgr
+from lgr_idn_table_review.tool.api import LgrIdnReviewSession
 from lgr_idn_table_review.tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
+from lgr_idn_table_review.tool.tasks import idn_table_review_task
 from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 
 
@@ -60,38 +54,19 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
     def form_valid(self, form):
         email_address = form.cleaned_data.pop('email', None)
 
-        zip_content = BytesIO()
-        with ZipFile(zip_content, mode='w', compression=ZIP_BZIP2) as zf:
-            for idn_table, lgr_info in form.cleaned_data.items():
-                context = self._review(idn_table, lgr_info)
-                html_report = render_to_string('lgr_idn_table_review_tool/review.html', context)
-                zf.writestr(f'{idn_table}.html', html_report)
-
-        self.session.storage_save_file(f"{time.strftime('%Y%m%d_%H%M%S')}_idn_table_review.zip", zip_content)
+        idn_tables = []
+        for idn_table, lgr_info in form.cleaned_data.items():
+            idn_table_info = self.session.select_lgr(idn_table)
+            idn_tables.append((idn_table_info.to_dict(), lgr_info))
 
         if email_address:
-            # TODO put process in queue and send email once finished
-            pass
+            idn_table_review_task.delay(idn_tables, self.request.user.email, self.session.get_storage_path(),
+                                        self.success_url)
+        else:
+            idn_table_review_task(idn_tables, self.request.user.email, self.session.get_storage_path(),
+                                  self.success_url)
 
         return super(IdnTableReviewSelectReferenceView, self).form_valid(form)
-
-    def _review(self, idn_table, lgr_info):
-        idn_table_info = self.session.select_lgr(idn_table)
-        lgr_type, lgr_name = literal_eval(lgr_info)
-        try:
-            if lgr_type == 'ref':
-                ref_lgr = RefLgr.objects.get(name=lgr_name)
-            elif lgr_type == 'rz':
-                ref_lgr = RzLgr.objects.get(name=lgr_name)
-            else:
-                raise ValidationError(_('Unable to retrieve reference LGR'))
-        except LgrModel.DoesNotExist:
-            raise ValidationError(_('Unable to retrieve reference LGR'))
-        ref_lgr_info = IdnTableInfo.from_dict({
-            'name': ref_lgr.name,
-            'data': ref_lgr.file.read().decode('utf-8'),
-        })
-        return review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
 
     def get_form_kwargs(self):
         kwargs = super(IdnTableReviewSelectReferenceView, self).get_form_kwargs()
