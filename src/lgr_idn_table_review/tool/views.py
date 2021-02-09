@@ -49,7 +49,7 @@ class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
 class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
     form_class = IdnTableReviewSelectReferenceForm
     template_name = 'lgr_idn_table_review_tool/select_reference.html'
-    success_url = reverse_lazy('lgr_review_reports')
+    success_url = reverse_lazy('lgr_review_report_folders')
 
     def form_valid(self, form):
         email_address = form.cleaned_data.pop('email', None)
@@ -80,10 +80,19 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
         return kwargs
 
 
+class IdnTableReviewListReportFolders(IdnTableReviewViewMixin, TemplateView):
+    template_name = 'lgr_idn_table_review_tool/list_report_folders.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['folders'] = self.session.list_storage_folders()
+        return context
+
+
 class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
     template_name = 'lgr_idn_table_review_tool/list_reports.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['storage'] = self.session.list_storage()
+        context['storage'] = self.session.list_storage(subfolder=self.kwargs.get('folder'))
         return context

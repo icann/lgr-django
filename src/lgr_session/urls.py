@@ -9,5 +9,7 @@ register_converter(StorageTypeConverter, 'storage')
 
 urlpatterns = [
     path('<storage:storage>/<filename:filename>/dl/', DownloadFileView.as_view(), name='download_file'),
+    path('<storage:storage>/<filename:folder>/<filename:filename>/dl/', DownloadFileView.as_view(), name='download_file'),
     path('<storage:storage><filename:filename>/rm/', DeleteFileView.as_view(), name='delete_file'),
+    path('<storage:storage>/<filename:folder>/<filename:filename>/rm/', DeleteFileView.as_view(), name='delete_file'),
 ]

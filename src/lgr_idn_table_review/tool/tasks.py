@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
+import os
 import time
 from ast import literal_eval
-from io import BytesIO
+from io import BytesIO, StringIO
 from zipfile import ZipFile, ZIP_BZIP2
 
 from celery import shared_task
@@ -46,35 +47,30 @@ def idn_table_review_task(idn_tables, email_address, storage_path, download_link
     :param download_link: The link where the file will be available
     :return:
     """
-    zip_content = BytesIO()
-    with ZipFile(zip_content, mode='w', compression=ZIP_BZIP2) as zf:
-        for idn_table_json, lgr_info in idn_tables:
-            try:
-                idn_table_info = IdnTableInfo.from_dict(idn_table_json)
-                context = _review_idn_table(idn_table_info, lgr_info)
-                if not context:
-                    raise BaseException
-            except BaseException:
-                logger.exception('Failed to review IDN table')
-                context = {'name': idn_table_json['name']}
-                html_report = render_to_string('lgr_idn_table_review_tool/error.html', context)
-            else:
-                html_report = render_to_string('lgr_idn_table_review_tool/review.html', context)
-            finally:
-                zf.writestr(f"{idn_table_json['name']}.html", html_report)
-
-    storage = FileSystemStorage(location=storage_path,
+    path = time.strftime('%Y-%m-%d-%H%M%S')
+    storage = FileSystemStorage(location=os.path.join(storage_path, path),
                                 file_permissions_mode=0o440)
-    filename = f"{time.strftime('%Y%m%d_%H%M%S')}_idn_table_review.zip"
-    storage.save(filename, zip_content)
 
-    zip_content.close()
+    for idn_table_json, lgr_info in idn_tables:
+        try:
+            idn_table_info = IdnTableInfo.from_dict(idn_table_json)
+            context = _review_idn_table(idn_table_info, lgr_info)
+            if not context:
+                raise BaseException
+        except BaseException:
+            logger.exception('Failed to review IDN table')
+            context = {'name': idn_table_json['name']}
+            html_report = render_to_string('lgr_idn_table_review_tool/error.html', context)
+        else:
+            html_report = render_to_string('lgr_idn_table_review_tool/review.html', context)
+        finally:
+            storage.save(f"{idn_table_json['name']}.html", StringIO(html_report))
 
     if email_address:
         email = EmailMessage(subject='IDN table review',
                              to=[email_address])
         email.body = f"IDN table review has been successfully completed.\n" \
-                     f"You should now be able to download it from {download_link} under the name: '{filename}'.\n" \
+                     f"You should now be able to download it from {download_link} under the path: '{path}'.\n" \
                      f"Please refresh the home page if you don't see the link.\n" \
                      f"Best regards"
         email.send()
