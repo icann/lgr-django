@@ -3,6 +3,7 @@
 from django.core.exceptions import SuspiciousOperation
 from django.urls import reverse_lazy
 from django.utils.text import slugify
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, TemplateView
 
 from lgr_advanced.lgr_editor.views import RE_SAFE_FILENAME
@@ -90,9 +91,12 @@ class IdnTableReviewListReportFolders(IdnTableReviewViewMixin, TemplateView):
 
 
 class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
-    template_name = 'lgr_idn_table_review_tool/list_reports.html'
+    template_name = 'lgr_idn_table_review/list_reports.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['storage'] = self.session.list_storage(subfolder=self.kwargs.get('folder'))
+        context['title'] = _("IDN Table Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
+        context['storage_type'] = 'rev_usr'
+        context['back_url'] = 'lgr_review_report_folders'
         return context

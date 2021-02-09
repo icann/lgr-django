@@ -30,7 +30,7 @@ class Command(BaseCommand):
             })
 
             context = review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
-            html = render_to_string('lgr_idn_table_review_tool/review.html', context)
+            html = render_to_string('lgr_idn_table_review/review.html', context)
             if not options['output']:
                 sys.stdout.write(html)
             else:

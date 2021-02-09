@@ -52,6 +52,7 @@ def idn_table_review_task(idn_tables, email_address, storage_path, download_link
                                 file_permissions_mode=0o440)
 
     for idn_table_json, lgr_info in idn_tables:
+        html_report = ''
         try:
             idn_table_info = IdnTableInfo.from_dict(idn_table_json)
             context = _review_idn_table(idn_table_info, lgr_info)
@@ -60,9 +61,9 @@ def idn_table_review_task(idn_tables, email_address, storage_path, download_link
         except BaseException:
             logger.exception('Failed to review IDN table')
             context = {'name': idn_table_json['name']}
-            html_report = render_to_string('lgr_idn_table_review_tool/error.html', context)
+            html_report = render_to_string('lgr_idn_table_review/error.html', context)
         else:
-            html_report = render_to_string('lgr_idn_table_review_tool/review.html', context)
+            html_report = render_to_string('lgr_idn_table_review/review.html', context)
         finally:
             storage.save(f"{idn_table_json['name']}.html", StringIO(html_report))
 

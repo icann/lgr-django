@@ -122,7 +122,13 @@ class LgrStorage:
         :param filename: The name of the file to delete
         """
         storage = FileSystemStorage(location=self.get_storage_path(subfolder=subfolder))
+
         try:
+            for f in self.list_storage(subfolder=os.path.join(subfolder or '', filename)):
+                sub_storage = FileSystemStorage(
+                    location=self.get_storage_path(subfolder=os.path.join(subfolder or '', filename)))
+                # delete all files if filename is a directory
+                sub_storage.delete(f)
             storage.delete(filename)
         except NotImplementedError:
             # should not happen

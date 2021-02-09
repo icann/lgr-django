@@ -12,8 +12,7 @@ from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 from .tasks import idn_table_review_task
 
 
-class IdnTableIcannModeView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
-    template_name = 'lgr_idn_table_review_icann/icann_mode.html'
+class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):
 
     def dispatch(self, request, *args, **kwargs):
         self.session = LgrIcannSession(request)
@@ -21,6 +20,10 @@ class IdnTableIcannModeView(LoginRequiredMixin, UserPassesTestMixin, TemplateVie
 
     def test_func(self):
         return self.request.user.role in [LgrRole.ICANN.value, LgrRole.ADMIN.value]
+
+
+class IdnTableIcannModeView(BaseIcannView, TemplateView):
+    template_name = 'lgr_idn_table_review_icann/icann_mode.html'
 
     def get(self, request, *args, **kwargs):
         request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_ICANN.name
@@ -34,5 +37,17 @@ class IdnTableIcannModeView(LoginRequiredMixin, UserPassesTestMixin, TemplateVie
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['storage'] = self.session.list_storage()
+        context['folders'] = self.session.list_storage_folders()
+        return context
+
+
+class IdnTableIcannListReports(BaseIcannView, TemplateView):
+    template_name = 'lgr_idn_table_review/list_reports.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['storage'] = self.session.list_storage(subfolder=self.kwargs.get('folder'))
+        context['title'] = _("ICANN Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
+        context['storage_type'] = 'rev_icann'
+        context['back_url'] = 'lgr_idn_icann_mode'
         return context
