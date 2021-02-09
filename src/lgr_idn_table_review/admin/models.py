@@ -6,11 +6,12 @@ from django.db import models
 
 def get_upload_path(instance, filename):
     base_path = 'idn_table_review'
-    if isinstance(instance, RzLgr):
+    # need to test on object_name because instance may not be a real object instance if called in a migration
+    if instance._meta.object_name == 'RzLgr':
         return os.path.join(base_path, 'rz_lgr', filename)
-    if isinstance(instance, RefLgr):
+    if instance._meta.object_name == 'RefLgr':
         return os.path.join(base_path, 'reference_lgr', filename)
-    if isinstance(instance, RzLgrMember):
+    if instance._meta.object_name == 'RzLgrMember':
         return os.path.join(base_path, 'rz_lgr', instance.rz_lgr.name, filename)
 
 
