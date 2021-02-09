@@ -6,8 +6,8 @@ After=network.target
 WorkingDirectory=/var/www/lgr/lgr-django
 Environment="LD_LIBRARY_PATH=/usr/local/lib"
 ExecStart=/var/www/lgr/venv/bin/celery \
---app=lgr_tools \
---workdir=/var/www/lgr/lgr-django/src/lgr_advanced \
+--app=lgr_web \
+--workdir=/var/www/lgr/lgr-django/src \
 --concurrency=2 \
 worker
 User=lgr
