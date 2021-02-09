@@ -60,10 +60,10 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
             idn_tables.append((idn_table_info.to_dict(), lgr_info))
 
         if email_address:
-            idn_table_review_task.delay(idn_tables, self.request.user.email, self.session.get_storage_path(),
+            idn_table_review_task.delay(idn_tables, email_address, self.session.get_storage_path(),
                                         self.success_url)
         else:
-            idn_table_review_task(idn_tables, self.request.user.email, self.session.get_storage_path(),
+            idn_table_review_task(idn_tables, None, self.session.get_storage_path(),
                                   self.success_url)
 
         return super(IdnTableReviewSelectReferenceView, self).form_valid(form)

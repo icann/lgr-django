@@ -41,7 +41,8 @@ def idn_table_review_task(email_address):
         for tld, idn_table_info in get_icann_idn_repository_tables():
             try:
                 context = _review_idn_table(idn_table_info)
-            except LGRException:
+            except BaseException:
+                logger.exception('Failed to review IDN table')
                 context = {
                     'name': idn_table_info.name,
                     'reason': 'Invalid IDN table'
@@ -60,12 +61,13 @@ def idn_table_review_task(email_address):
                 zf.writestr(f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}."
                             f"{idn_table_info.lgr.metadata.version.value}.{time.strftime('%Y-%m-%d')}.html",
                             html_report)
-    zip_content.close()
 
     storage = FileSystemStorage(location=settings.IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION,
                                 file_permissions_mode=0o440)
     filename = f"{time.strftime('%Y%m%d_%H%M%S')}_idn_report.zip"
     storage.save(filename, zip_content)
+
+    zip_content.close()
 
     email = EmailMessage(subject='ICANN IDN table review completed',
                          to=[email_address])
