@@ -14,6 +14,7 @@ class LgrSessionView(View):
 
     def dispatch(self, request, *args, **kwargs):
         self.filename = self.kwargs.get('filename')
+        self.folder = self.kwargs.get('folder', None)
         self.next = request.GET.get('next', '/')
         storage_type = self.kwargs.get('storage')
         if storage_type == 'tool':
@@ -30,18 +31,18 @@ class LgrSessionView(View):
 class DownloadFileView(LgrSessionView):
 
     def get(self, request, *args, **kwargs):
-        res_file = self.session.storage_get_file(self.filename)
+        res_file = self.session.storage_get_file(self.filename, subfolder=self.folder)
         if res_file is None:
-            messages.error(request, _('Unabled to download file %s') % self.filename)
-            # TODO show an error...
+            messages.error(request, _('Unable to download file %s') % self.filename)
             return DeleteFileView.as_view()(self.request)
-        response = FileResponse(res_file[0], content_type='application/x-gzip')
-        response['Content-Disposition'] = 'attachment; filename={}'.format(self.filename)
+        response = FileResponse(res_file[0])
+        if 'display' not in self.request.GET:
+            response['Content-Disposition'] = 'attachment; filename={}'.format(self.filename)
         return response
 
 
 class DeleteFileView(LgrSessionView):
 
     def get(self, request, *args, **kwargs):
-        self.session.storage_delete_file(self.filename)
+        self.session.storage_delete_file(self.filename, subfolder=self.folder)
         return redirect(self.next)

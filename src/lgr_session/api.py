@@ -40,11 +40,99 @@ class LgrSerializer(ABC):
         pass
 
 
-class LgrSession:
+class LgrStorage:
+    storage_location: str = None
+
+    def get_storage_path(self, subfolder=None):
+        """
+        Get the storage path for the session
+
+        :param subfolder: a subfolder for the path
+        :return: the storage location
+        """
+        # get or create a key for storage in the session,
+        try:
+            storage_key = self.request.session['storage']
+        except KeyError:
+            # generate a random key
+            storage_key = uuid4().hex
+            self.request.session['storage'] = storage_key
+        # the storage may still not be created here but now it has a path for
+        #  this session
+        return os.path.join(self.storage_location, storage_key, subfolder or '')
+
+    def list_storage(self, subfolder=None):
+        """
+        List files in the storage
+
+        :param subfolder: a subfolder where to look for files
+        :return: the list of files in storage
+        """
+        subfolder = subfolder or '.'
+        storage = FileSystemStorage(location=self.get_storage_path())
+        try:
+            files = storage.listdir(subfolder)
+        except OSError:
+            return []
+
+        return sorted(files[1], reverse=True)
+
+    def list_storage_folders(self):
+        """
+        List files in the storage
+
+        :param subfolder: a subfolder where to look for files
+        :return: the list of files in storage
+        """
+        storage = FileSystemStorage(location=self.get_storage_path())
+        try:
+            files = storage.listdir('.')
+        except OSError:
+            return []
+
+        return sorted(files[0], reverse=True)
+
+    def storage_get_file(self, filename, subfolder=None):
+        """
+        Get a file in the storage
+
+        :param filename: The name of the file to be returned
+        :param subfolder: a subfolder where to get the file
+        :return: A 2-tuple containing the File object and the file size
+        """
+        storage = FileSystemStorage(location=self.get_storage_path(subfolder=subfolder))
+        return storage.open(filename, 'rb'), storage.size(filename)
+
+    def storage_save_file(self, filename, data, mode=0o440):
+        """
+        Save a file in the storage
+
+        :param filename: The name of the file to save
+        :param data: The content of the file to save
+        :param mode: File permissions mode
+        """
+        storage = FileSystemStorage(location=self.get_storage_path(), file_permissions_mode=mode)
+        return storage.save(filename, data)
+
+    def storage_delete_file(self, filename, subfolder=None):
+        """
+        Delete a file from the storage
+
+        :param subfolder: a subfolder where to delete the file
+        :param filename: The name of the file to delete
+        """
+        storage = FileSystemStorage(location=self.get_storage_path(subfolder=subfolder))
+        try:
+            storage.delete(filename)
+        except NotImplementedError:
+            # should not happen
+            pass
+
+
+class LgrSession(LgrStorage):
     lgr_session_key: str = None
     lgr_serializer: Type[LgrSerializer] = None
     get_from_repertoire: bool = False
-    storage_location: str = None
     loader_function = None
 
     def __init__(self, request):
@@ -163,68 +251,3 @@ class LgrSession:
         # Remove cached repertoire
         if self.get_from_repertoire:
             clean_repertoire_cache(self.request, lgr_id)
-
-    def get_storage_path(self):
-        """
-        Get the storage path for the session
-
-        :return: the storage location
-        """
-        # get or create a key for storage in the session,
-        try:
-            storage_key = self.request.session['storage']
-        except KeyError:
-            # generate a random key
-            storage_key = uuid4().hex
-            self.request.session['storage'] = storage_key
-        # the storage may still not be created here but now it has a path for
-        #  this session
-        return os.path.join(self.storage_location, storage_key)
-
-    def list_storage(self):
-        """
-        List files in the storage
-
-        :return: the list of files in storage
-        """
-        storage = FileSystemStorage(location=self.get_storage_path())
-        try:
-            files = storage.listdir('.')
-        except OSError:
-            return []
-
-        return sorted(files[1], reverse=True)
-
-    def storage_get_file(self, filename):
-        """
-        Get a file in the storage
-
-        :param filename: The name of the file to be returned
-        :return: A 2-tuple containing the File object and the file size
-        """
-        storage = FileSystemStorage(location=self.get_storage_path())
-        return storage.open(filename, 'rb'), storage.size(filename)
-
-    def storage_save_file(self, filename, data, mode=0o440):
-        """
-        Save a file in the storage
-
-        :param filename: The name of the file to save
-        :param data: The content of the file to save
-        :param mode: File permissions mode
-        """
-        storage = FileSystemStorage(location=self.get_storage_path(), file_permissions_mode=mode)
-        return storage.save(filename, data)
-
-    def storage_delete_file(self, filename):
-        """
-        Delete a file from the storage
-
-        :param filename: The name of the file to delete
-        """
-        storage = FileSystemStorage(location=self.get_storage_path())
-        try:
-            storage.delete(filename)
-        except NotImplementedError:
-            # should not happen
-            pass

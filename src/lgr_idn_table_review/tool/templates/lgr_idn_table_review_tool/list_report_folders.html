@@ -9,28 +9,22 @@
 {% endblock %}
 
 {% block content-title %}
-    {% blocktrans %}IDN Table Review Reports: {{ folder }}{% endblocktrans %}
+    {% trans "IDN Table Review Reports" %}
 {% endblock %}
 
 {% block content %}
     <p>
         {% blocktrans trimmed %}
-            The following files contains your IDN review reports.<br/>
+            The following files contains your IDN review report folders.<br/>
             <strong><i class="glyphicon glyphicon-alert"></i> Note that these files could be cleaned up
                 regularly.</strong>
         {% endblocktrans %}
     </p>
     <ul>
-        {% for file in storage %}
+        {% for folder in folders %}
             <li>
-                <a href="{% url 'download_file' storage='rev_usr' filename=file folder=folder %}?display=true"
-                   target="_blank" rel="noopener noreferrer">
-                    {{ file }}
-                </a>
-                <a href="{% url 'download_file' storage='rev_usr' filename=file folder=folder %}?next={{ request.path }}">
-                    <i class="glyphicon glyphicon-floppy-disk"></i>
-                </a>
-                <a href="{% url 'delete_file' storage='rev_usr' filename=file folder=folder %}?next={{ request.path }}"
+                <a href="{% url 'lgr_review_reports' folder=folder %}">{{ folder }}</a>
+                <a href="{% url 'delete_file' storage='rev_usr' filename=folder %}?next={{ request.path }}"
                    class="delete_file">
                     <i class="glyphicon glyphicon-trash"></i>
                 </a>
@@ -40,5 +34,5 @@
         {% endfor %}
     </ul>
     <br>
-    <a class="btn btn-primary" href="{% url 'lgr_review_report_folders' %}">{% trans "Back" %}</a>
+    <a class="btn btn-primary" href="{% url 'lgr_review_mode' %}">{% trans "New report" %}</a>
 {% endblock content %}

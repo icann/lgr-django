@@ -5,6 +5,7 @@
 api - 
 """
 import logging
+import os
 from urllib.error import URLError
 from urllib.request import urlopen
 
@@ -17,6 +18,7 @@ from lgr.metadata import Metadata, Version
 from lgr.tools.utils import download_file
 from lgr_idn_table_review.admin.models import RefLgr
 from lgr_idn_table_review.tool.api import IdnTableInfo
+from lgr_session.api import LgrStorage
 
 logger = logging.getLogger(__name__)
 
@@ -25,59 +27,14 @@ ICANN_URL = 'https://www.iana.org'
 ICANN_IDN_TABLES = ICANN_URL + '/domains/idn-tables'
 
 
-class LgrIcannSession:
+class LgrIcannSession(LgrStorage):
     storage_location = settings.IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION
 
     def __init__(self, request):
         self.request = request
 
-    def list_storage(self):
-        """
-        List files in the storage
-
-        :return: the list of files in storage
-        """
-        storage = FileSystemStorage(location=self.storage_location)
-        try:
-            files = storage.listdir('.')
-        except OSError:
-            return []
-
-        return sorted(files[1], reverse=True)
-
-    def storage_get_file(self, filename):
-        """
-        Get a file in the storage
-
-        :param filename: The name of the file to be returned
-        :return: A 2-tuple containing the File object and the file size
-        """
-        storage = FileSystemStorage(location=self.storage_location)
-        return storage.open(filename, 'rb'), storage.size(filename)
-
-    def storage_save_file(self, filename, data, mode=0o440):
-        """
-        Save a file in the storage
-
-        :param filename: The name of the file to save
-        :param data: The content of the file to save
-        :param mode: File permissions mode
-        """
-        storage = FileSystemStorage(location=self.storage_location, file_permissions_mode=mode)
-        return storage.save(filename, data)
-
-    def storage_delete_file(self, filename):
-        """
-        Delete a file from the storage
-
-        :param filename: The name of the file to delete
-        """
-        storage = FileSystemStorage(location=self.storage_location)
-        try:
-            storage.delete(filename)
-        except NotImplementedError:
-            # should not happen
-            pass
+    def get_storage_path(self, subfolder=None):
+        return os.path.join(self.storage_location, subfolder or '')
 
 
 def get_icann_idn_repository_tables():
