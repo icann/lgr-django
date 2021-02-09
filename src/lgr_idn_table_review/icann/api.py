@@ -5,6 +5,7 @@
 api - 
 """
 import logging
+from urllib.error import URLError
 from urllib.request import urlopen
 
 import lxml.html
@@ -12,6 +13,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
 from lgr.core import LGR
+from lgr.metadata import Metadata, Version
 from lgr.tools.utils import download_file
 from lgr_idn_table_review.admin.models import RefLgr
 from lgr_idn_table_review.tool.api import IdnTableInfo
@@ -80,13 +82,32 @@ class LgrIcannSession:
 
 def get_icann_idn_repository_tables():
     tree = lxml.html.parse(urlopen(ICANN_IDN_TABLES))
-    idn_table_urls = tree.xpath("//table[@id='idn-table']/tbody/tr/td/a/@href")
-    for url in idn_table_urls:
-        name, data = download_file(ICANN_URL + url)
-        yield IdnTableInfo.from_dict({
-            'name': name,
-            'data': data.read().decode('utf-8'),
-        })
+    idn_table_columns = tree.xpath("//table[@id='idn-table']/tbody/tr")
+    for col in idn_table_columns:
+        a_tag = col.findall('td/a')[0]
+        url = a_tag.attrib['href'].strip()
+        tld, lang_script, version = url.split('_', 3)
+        date = col.findall('td')[3].text.strip()
+        try:
+            name, data = download_file(ICANN_URL + url)
+            info = IdnTableInfo.from_dict({
+                'name': name,
+                'data': data.read().decode('utf-8'),
+            })
+        except URLError:
+            logger.error('Cannot download %s', ICANN_URL + url)
+            continue
+        except Exception:
+            logger.error("Unable to parse IDN table at %s", ICANN_URL + url)
+            continue
+        meta: Metadata = info.lgr.metadata
+        if not meta.date:
+            meta.set_date(date, force=True)
+        if not meta.languages:
+            meta.add_language(lang_script, force=True)
+        if not meta.version:
+            meta.version = Version(version)
+        yield tld, info
 
 
 def get_reference_lgr(idn_table_info: IdnTableInfo):
@@ -104,11 +125,11 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
         logger.info("No language tag in IDN table %s", idn_table)
         return None
 
-    logger.info('Retrieve reference LGR for IDN table %s with script %s', idn_table, language_tag)
+    logger.info('Retrieve reference LGR for IDN table %s with language %s', idn_table, language_tag)
 
     try:
         script = idn_table.metadata.get_scripts()[0]
-        logger.info('Retrieve reference LGR for IDN table % with script %s', idn_table, script)
+        logger.info('Retrieve reference LGR for IDN table %s with script %s', idn_table, script)
         try:
             ref_lgr = RefLgr.objects.get(language_script=script)
             logger.info('Found script-based reference LGR %s', ref_lgr.name)
