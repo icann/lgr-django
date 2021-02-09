@@ -48,31 +48,33 @@ def idn_table_review_task(idn_tables, email_address, storage_path, download_link
     """
     zip_content = BytesIO()
     with ZipFile(zip_content, mode='w', compression=ZIP_BZIP2) as zf:
-        for idn_tables_json, lgr_info in idn_tables.items():
+        for idn_table_json, lgr_info in idn_tables:
             try:
-                idn_table_info = IdnTableInfo.from_dict(idn_tables)
+                idn_table_info = IdnTableInfo.from_dict(idn_table_json)
                 context = _review_idn_table(idn_table_info, lgr_info)
                 if not context:
                     raise BaseException
-            except Exception:
-                context = {'name': idn_table_info.name}
+            except BaseException:
+                logger.exception('Failed to review IDN table')
+                context = {'name': idn_table_json['name']}
                 html_report = render_to_string('lgr_idn_table_review_tool/error.html', context)
             else:
                 html_report = render_to_string('lgr_idn_table_review_tool/review.html', context)
             finally:
-                zf.writestr(f'{idn_table_info.name}.html', html_report)
-
-    zip_content.close()
+                zf.writestr(f"{idn_table_json['name']}.html", html_report)
 
     storage = FileSystemStorage(location=storage_path,
                                 file_permissions_mode=0o440)
     filename = f"{time.strftime('%Y%m%d_%H%M%S')}_idn_table_review.zip"
     storage.save(filename, zip_content)
 
-    email = EmailMessage(subject='IDN table review',
-                         to=[email_address])
-    email.body = f"IDN table review has been successfully completed.\n" \
-                 f"You should now be able to download it from {download_link} under the name: '{filename}'.\n" \
-                 f"Please refresh the home page if you don't see the link.\n" \
-                 f"Best regards"
-    email.send()
+    zip_content.close()
+
+    if email_address:
+        email = EmailMessage(subject='IDN table review',
+                             to=[email_address])
+        email.body = f"IDN table review has been successfully completed.\n" \
+                     f"You should now be able to download it from {download_link} under the name: '{filename}'.\n" \
+                     f"Please refresh the home page if you don't see the link.\n" \
+                     f"Best regards"
+        email.send()
