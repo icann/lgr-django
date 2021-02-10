@@ -42,7 +42,7 @@
                     </a>
                 </td>
                 <td>
-                    <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}"
+                    <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}"
                        class="btn btn-default">
                         <i class="glyphicon glyphicon-floppy-disk"></i>
                     </a>
@@ -58,6 +58,12 @@
     </table>
     <br>
     <a class="btn btn-primary" href="{% url back_url %}">{% trans "Back" %}</a>
+    &nbsp;
+    {% if zip %}
+        <a href="{% url 'download_file' storage=storage_type filename=zip folder=folder %}" class="btn btn-default">
+            <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;{% trans 'Download all' %}
+        </a>
+    {% endif %}
 {% endblock content %}
 
 

@@ -3,6 +3,7 @@ import logging
 import os
 import time
 from io import StringIO
+from zipfile import ZipFile, ZIP_BZIP2
 
 from celery import shared_task
 from django.conf import settings
@@ -28,6 +29,37 @@ def _review_idn_table(idn_table_info):
     return review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
 
 
+def _create_review_report(tld, idn_table_info, processed_list):
+    html_report = ''
+    try:
+        context = _review_idn_table(idn_table_info)
+    except BaseException:
+        logger.exception('Failed to review IDN table')
+        context = {
+            'name': idn_table_info.name,
+            'reason': 'Invalid IDN table'
+        }
+        html_report = render_to_string('lgr_idn_table_review/error.html', context)
+    else:
+        if context:
+            html_report = render_to_string('lgr_idn_table_review/review.html', context)
+            flag = 1
+            for result in context['summary'].values():
+                if result not in ['MATCH', 'NOTE']:
+                    flag = 0
+                    break
+            processed_list.append(f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}."
+                                  f"{flag}.{context['header']['reference_lgr']['name']}")
+        else:
+            context = {
+                'name': idn_table_info.name,
+                'reason': 'No Reference LGR was found to compare with IDN table'
+            }
+            html_report = render_to_string('lgr_idn_table_review/error.html', context)
+    finally:
+        return html_report
+
+
 @shared_task
 def idn_table_review_task(email_address):
     """
@@ -37,42 +69,20 @@ def idn_table_review_task(email_address):
     """
     path = time.strftime('%Y-%m-%d-%H%M%S')
     storage = FileSystemStorage(location=os.path.join(settings.IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION, path),
-                                file_permissions_mode=0o440)
+                                file_permissions_mode=0o640)
 
     count = 0
     processed = []
-    for tld, idn_table_info in get_icann_idn_repository_tables():
-        count += 1
-        html_report = ''
-        try:
-            context = _review_idn_table(idn_table_info)
-        except BaseException:
-            logger.exception('Failed to review IDN table')
-            context = {
-                'name': idn_table_info.name,
-                'reason': 'Invalid IDN table'
-            }
-            html_report = render_to_string('lgr_idn_table_review/error.html', context)
-        else:
-            if context:
-                html_report = render_to_string('lgr_idn_table_review/review.html', context)
-                flag = 1
-                for result in context['summary'].values():
-                    if result not in ['MATCH', 'NOTE']:
-                        flag = 0
-                        break
-                processed.append(f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}."
-                              f"{flag}.{context['header']['reference_lgr']['name']}")
-            else:
-                context = {
-                    'name': idn_table_info.name,
-                    'reason': 'No Reference LGR was found to compare with IDN table'
-                }
-                html_report = render_to_string('lgr_idn_table_review/error.html', context)
-        finally:
-            storage.save(f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}."
-                         f"{idn_table_info.lgr.metadata.version.value}.{time.strftime('%Y-%m-%d')}.html",
-                         StringIO(html_report))
+    storage.save(f'{path}.zip', StringIO(''))
+    with storage.open(f'{path}.zip', 'wb') as f:
+        with ZipFile(f, mode='w', compression=ZIP_BZIP2) as zf:
+            for tld, idn_table_info in get_icann_idn_repository_tables():
+                count += 1
+                html_report = _create_review_report(tld, idn_table_info, processed)
+                filename = f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}." \
+                           f"{idn_table_info.lgr.metadata.version.value}.{time.strftime('%Y-%m-%d')}.html"
+                zf.writestr(filename, html_report)
+                storage.save(filename, StringIO(html_report))
 
     summary_report = render_to_string('lgr_idn_table_review_icann/report.html', {
         'count': count,
