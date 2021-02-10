@@ -60,7 +60,9 @@
     <a class="btn btn-primary" href="{% url back_url %}">{% trans "Back" %}</a>
     &nbsp;
     {% if zip %}
-        <a href="{% url 'download_file' storage=storage_type filename=zip folder=folder %}" class="btn btn-default">
+        <a href="{% url 'download_file' storage=storage_type filename=zip folder=folder %}" class="btn btn-default"
+           data-toggle="tooltip" data-placement="top"
+           title="{% trans 'Wait until full report is completed for the file to be valid' %}">
             <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;{% trans 'Download all' %}
         </a>
     {% endif %}
@@ -71,22 +73,27 @@
     {{ block.super }}
     <script src="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.js"></script>
     <script type="text/javascript">
-        $('#files').DataTable({
-            "responsive": true,
-            "info": false,
-            "scrollX": false,
-            "searching": true,
-            "lengthMenu": [[20, 50, 100, 1000, -1], [20, 50, 100, 1000, "All"]],
-            "columns": [
-                {
-                    "orderable": true,
-                    "searchable": true
-                },
-                {
-                    "orderable": false,
-                    "searchable": false
-                }
-            ]
-        });
+        jQuery(document).ready(function ($) {
+            $('#files').DataTable({
+                "responsive": true,
+                "info": false,
+                "scrollX": false,
+                "searching": true,
+                "lengthMenu": [[20, 50, 100, 1000, -1], [20, 50, 100, 1000, "All"]],
+                "columns": [
+                    {
+                        "orderable": true,
+                        "searchable": true
+                    },
+                    {
+                        "orderable": false,
+                        "searchable": false
+                    }
+                ]
+            });
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+        })
     </script>
 {% endblock %}
