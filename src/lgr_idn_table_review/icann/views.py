@@ -47,6 +47,10 @@ class IdnTableIcannListReports(BaseIcannView, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['storage'] = self.session.list_storage(subfolder=self.kwargs.get('folder'), reverse=False)
+        zipname = f"{self.kwargs.get('folder')}.zip"
+        if zipname in context['storage']:
+            context['storage'].remove(zipname)
+            context['zip'] = zipname
         context['title'] = _("ICANN Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
         context['storage_type'] = 'rev_icann'
         context['back_url'] = 'lgr_idn_icann_mode'
