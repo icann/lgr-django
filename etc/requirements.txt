@@ -16,3 +16,5 @@ lgr-core==3.0.0
 
 # Natural sorting implementation
 natsort==6.0.0
+
+pycountry==20.7.3
