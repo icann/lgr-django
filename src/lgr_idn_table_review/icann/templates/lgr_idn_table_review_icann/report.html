@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xHTML1/DTD/xHTML1-strict.dtd">
+<HTML xmlns="http://www.w3.org/1999/xHTML">
+<head>
+    <meta http-equiv="Content-Type" content="text/HTML; charset=utf-8"/>
+    <title>{{ name|title }}</title>
+    <style type="text/css">
+        #lgr {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: .3em 1em;
+        }
+
+        div#lgr h1 {
+            font-size: 185%;;
+        }
+
+        body {
+            padding: 0 0 1em 0;
+            margin: 0;
+            background-color: #EEE;
+            font-family: sans-serif;
+        }
+
+        #header {
+            float: left;
+            border: solid 1px #999;
+            width: 40%;
+            margin-right: 20%;
+            margin-top: 0;
+            padding: .4em;
+        }
+
+        h1 {
+            font-size: 175%;;
+        }
+
+        h1 {
+            font-weight: bold;
+            font-family: sans-serif;
+            color: #8888FF;
+        }
+
+        body h1:first-child {
+            font-size: 120%;
+        }
+    </style>
+</head>
+<body>
+<div id="lgr">
+    <h1>ICANN IDN Table Review Report</h1>
+    <div id="header">
+        <p>Total IDN table in IANA repository: {{ count }}</p>
+        <p>Date of review: {{ date }}</p>
+        <p>IDN table processed:</p>
+        <ul>
+            {% for report in processed %}
+                <li>report</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+</body>
+</HTML>
