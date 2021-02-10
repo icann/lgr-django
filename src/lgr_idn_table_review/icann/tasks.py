@@ -39,7 +39,10 @@ def idn_table_review_task(email_address):
     storage = FileSystemStorage(location=os.path.join(settings.IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION, path),
                                 file_permissions_mode=0o440)
 
+    count = 0
+    processed = []
     for tld, idn_table_info in get_icann_idn_repository_tables():
+        count += 1
         html_report = ''
         try:
             context = _review_idn_table(idn_table_info)
@@ -52,8 +55,14 @@ def idn_table_review_task(email_address):
             html_report = render_to_string('lgr_idn_table_review/error.html', context)
         else:
             if context:
-                html_report = render_to_string(
-                    'lgr_idn_table_review/review.html', context)
+                html_report = render_to_string('lgr_idn_table_review/review.html', context)
+                flag = 1
+                for result in context['summary'].values():
+                    if result not in ['MATCH', 'NOTE']:
+                        flag = 0
+                        break
+                processed.append(f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}."
+                              f"{flag}.{context['header']['reference_lgr']['name']}")
             else:
                 context = {
                     'name': idn_table_info.name,
@@ -64,6 +73,13 @@ def idn_table_review_task(email_address):
             storage.save(f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}."
                          f"{idn_table_info.lgr.metadata.version.value}.{time.strftime('%Y-%m-%d')}.html",
                          StringIO(html_report))
+
+    summary_report = render_to_string('lgr_idn_table_review_icann/report.html', {
+        'count': count,
+        'date': time.strftime(('%Y-%m-%d')),
+        'processed': processed
+    })
+    storage.save(f'{path}-summary.html', StringIO(summary_report))
 
     email = EmailMessage(subject='ICANN IDN table review completed',
                          to=[email_address])

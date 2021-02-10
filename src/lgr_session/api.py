@@ -61,7 +61,7 @@ class LgrStorage:
         #  this session
         return os.path.join(self.storage_location, storage_key, subfolder or '')
 
-    def list_storage(self, subfolder=None):
+    def list_storage(self, subfolder=None, reverse=True):
         """
         List files in the storage
 
@@ -75,7 +75,7 @@ class LgrStorage:
         except OSError:
             return []
 
-        return sorted(files[1], reverse=True)
+        return sorted(files[1], reverse=reverse)
 
     def list_storage_folders(self):
         """
