@@ -11,12 +11,13 @@ from urllib.request import urlopen
 
 import lxml.html
 from django.conf import settings
-from django.core.files.storage import FileSystemStorage
+from django.db.models import Q
+from language_tags import tags
 
 from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.tools.utils import download_file
-from lgr_idn_table_review.admin.models import RefLgr
+from lgr_idn_table_review.admin.models import RefLgr, RzLgrMember, RzLgr
 from lgr_idn_table_review.tool.api import IdnTableInfo
 from lgr_session.api import LgrStorage
 
@@ -69,32 +70,37 @@ def get_icann_idn_repository_tables():
 
 def get_reference_lgr(idn_table_info: IdnTableInfo):
     idn_table: LGR = idn_table_info.lgr
+    query = Q(pk=None)
     try:
         language_tag = idn_table.metadata.languages[0]
-        logger.info('Retrieve reference LGR for IDN table %s with language tag %s', idn_table, language_tag)
-        try:
-            ref_lgr = RefLgr.objects.get(language_script=language_tag)
-            logger.info('Found reference LGR %s from language tag', ref_lgr.name)
-            return ref_lgr
-        except RefLgr.DoesNotExist:
-            logger.info("No reference LGR with language tag %s", language_tag)
+        logger.info('Look for reference LGR with language %s', language_tag)
+        query |= Q(language__iexact=language_tag) | Q(script__iexact=language_tag, language='')
     except IndexError:
         logger.info("No language tag in IDN table %s", idn_table)
         return None
 
-    logger.info('Retrieve reference LGR for IDN table %s with language %s', idn_table, language_tag)
-
     try:
         script = idn_table.metadata.get_scripts()[0]
-        logger.info('Retrieve reference LGR for IDN table %s with script %s', idn_table, script)
-        try:
-            ref_lgr = RefLgr.objects.get(language_script=script)
-            logger.info('Found script-based reference LGR %s', ref_lgr.name)
-            return ref_lgr
-        except RefLgr.DoesNotExist:
-            logger.info('No reference LGR with script %s', script)
+        logger.info('Look for reference LGR with script %s', script)
+        query |= Q(script__iexact=script, language='')
     except IndexError:
-        logger.info("No script in IDN table %s", idn_table)
-        return None
+        pass
+
+    try:
+        ref_lgr = RefLgr.objects.get(query)
+        logger.info('Found reference LGR %s', ref_lgr.name)
+        return ref_lgr
+    except RefLgr.DoesNotExist:
+        logger.info("No reference LGR found")
+
+    logger.info('Look for RZ LGR')
+    # get the latest RZ LGR (XXX: we assume they are all named the same with an incresing ID)
+    last_rz_lgr = RzLgr.objects.order_by('name').first()
+    try:
+        ref_lgr = RzLgrMember.objects.get(query & Q(rz_lgr=last_rz_lgr))
+        logger.info('Found RZ LGR script %s', ref_lgr.name)
+        return ref_lgr
+    except RzLgrMember.DoesNotExist:
+        logger.info("No RZ LGR script found")
 
     return None
