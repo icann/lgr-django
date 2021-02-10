@@ -3,6 +3,10 @@
 
 {% block html_title %}{% trans 'IDN Table Review reports' %}{% endblock %}
 
+{% block html_head_more %}
+    <link rel="stylesheet" href="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.css"/>
+{% endblock %}
+
 {% block navbar-right %}
     <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
     {{ block.super }}
@@ -21,25 +25,62 @@
             </strong>
         {% endblocktrans %}
     </p>
-    <ul>
+    <table id="files" class="display table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>{% trans 'File' %}</th>
+            <th>{% trans 'Action' %}</th>
+        </tr>
+        </thead>
+        <tbody>
         {% for file in storage %}
-            <li>
-                <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?display=true"
-                   target="_blank" rel="noopener noreferrer">
-                    {{ file }}
-                </a>
-                <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}">
-                    <i class="glyphicon glyphicon-floppy-disk"></i>
-                </a>
-                <a href="{% url 'delete_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}"
-                   class="delete_file">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </a>
-            </li>
-        {% empty %}
-            {% trans 'No report' %}
+            <tr>
+                <td>
+                    <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?display=true"
+                       target="_blank" rel="noopener noreferrer">
+                        {{ file }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}"
+                       class="btn btn-default">
+                        <i class="glyphicon glyphicon-floppy-disk"></i>
+                    </a>
+                    &nbsp;
+                    <a href="{% url 'delete_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}"
+                       class="delete_file btn btn-default">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
+        </tbody>
+    </table>
     <br>
     <a class="btn btn-primary" href="{% url back_url %}">{% trans "Back" %}</a>
 {% endblock content %}
+
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script src="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.js"></script>
+    <script type="text/javascript">
+        $('#files').DataTable({
+            "responsive": true,
+            "info": false,
+            "scrollX": false,
+            "searching": true,
+            "lengthMenu": [[20, 50, 100, 1000, -1], [20, 50, 100, 1000, "All"]],
+            "columns": [
+                {
+                    "orderable": true,
+                    "searchable": true
+                },
+                {
+                    "orderable": false,
+                    "searchable": false
+                }
+            ]
+        });
+    </script>
+{% endblock %}
