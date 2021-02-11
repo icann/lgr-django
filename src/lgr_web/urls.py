@@ -28,6 +28,6 @@ urlpatterns = [
 
     path('about/', LgrAboutView.as_view(), name='about'),
 
-    path('switch', LgrSwitchModeView.as_view(), name='lgr_modes'),
+    path('switch/', LgrSwitchModeView.as_view(), name='lgr_modes'),
     path('', LgrModesView.as_view(), name='lgr_home'),
 ]
