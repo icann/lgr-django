@@ -74,7 +74,7 @@ LOGIN_REDIRECT_URL = '/'
 # Default LOGIN URL (use named URLs)
 LOGIN_URL = '/auth/login'
 # Redirect URL after logout
-LOGOUT_REDIRECT_URL = 'switch'
+LOGOUT_REDIRECT_URL = '/switch/'
 
 ROOT_URLCONF = 'lgr_web.urls'
 
