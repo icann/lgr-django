@@ -29,7 +29,7 @@ def _review_idn_table(idn_table_info):
     return review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
 
 
-def _create_review_report(tld, idn_table_info, processed_list):
+def _create_review_report(tlds, idn_table_info, processed_list):
     html_report = ''
     try:
         context = _review_idn_table(idn_table_info)
@@ -48,8 +48,9 @@ def _create_review_report(tld, idn_table_info, processed_list):
                 if result not in ['MATCH', 'NOTE']:
                     flag = 0
                     break
-            processed_list.append(f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}."
-                                  f"{flag}.{context['header']['reference_lgr']['name']}")
+            for tld in tlds:
+                processed_list.append(f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}."
+                                      f"{flag}.{context['header']['reference_lgr']['name']}")
         else:
             context = {
                 'name': idn_table_info.name,
@@ -76,13 +77,15 @@ def idn_table_review_task(email_address):
     storage.save(f'{path}.zip', StringIO(''))
     with storage.open(f'{path}.zip', 'wb') as f:
         with ZipFile(f, mode='w', compression=ZIP_BZIP2) as zf:
-            for tld, idn_table_info in get_icann_idn_repository_tables():
-                count += 1
-                html_report = _create_review_report(tld, idn_table_info, processed)
-                filename = f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}." \
-                           f"{idn_table_info.lgr.metadata.version.value}.{time.strftime('%Y-%m-%d')}.html"
-                zf.writestr(filename, html_report)
-                storage.save(filename, StringIO(html_report))
+            for tlds, idn_table_info in get_icann_idn_repository_tables():
+                count += len(tlds)
+                html_report = _create_review_report(tlds, idn_table_info, processed)
+                for tld in tlds:
+                    # need to save a version per tld, processed and count will reflect that as well
+                    filename = f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}." \
+                               f"{idn_table_info.lgr.metadata.version.value}.{time.strftime('%Y-%m-%d')}.html"
+                    zf.writestr(filename, html_report)
+                    storage.save(filename, StringIO(html_report))
 
     summary_report = render_to_string('lgr_idn_table_review_icann/report.html', {
         'count': count,

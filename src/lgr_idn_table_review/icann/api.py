@@ -6,13 +6,13 @@ api -
 """
 import logging
 import os
+from collections import defaultdict
 from urllib.error import URLError
 from urllib.request import urlopen
 
 import lxml.html
 from django.conf import settings
 from django.db.models import Q
-from language_tags import tags
 
 from lgr.core import LGR
 from lgr.metadata import Metadata, Version
@@ -41,11 +41,22 @@ class LgrIcannSession(LgrStorage):
 def get_icann_idn_repository_tables():
     tree = lxml.html.parse(urlopen(ICANN_IDN_TABLES))
     idn_table_columns = tree.xpath("//table[@id='idn-table']/tbody/tr")
+
+    # some urls are the same for many TLDs therefore need to loop twice to regroup them instead of parsing multiple
+    # times the same LGR
+    urls = defaultdict(set)
+    dates = {}
     for col in idn_table_columns:
         a_tag = col.findall('td/a')[0]
+        tld = a_tag.find('span').text.strip('.')
         url = a_tag.attrib['href'].strip()
-        tld, lang_script, version = os.path.basename(url).split('_', 3)
         date = col.findall('td')[3].text.strip()
+        urls[url].add(tld)
+        dates.setdefault(url, date)
+
+    for url, tlds in urls.items():
+        __, lang_script, version = os.path.basename(url).split('_', 3)
+        date = dates.get(url)
         try:
             name, data = download_file(ICANN_URL + url)
             info = IdnTableInfo.from_dict({
@@ -59,13 +70,13 @@ def get_icann_idn_repository_tables():
             logger.error("Unable to parse IDN table at %s", ICANN_URL + url)
             continue
         meta: Metadata = info.lgr.metadata
-        if not meta.date:
+        if date and not meta.date:
             meta.set_date(date, force=True)
         if not meta.languages:
             meta.add_language(lang_script, force=True)
         if not meta.version:
             meta.version = Version(version)
-        yield tld, info
+        yield tlds, info
 
 
 def get_reference_lgr(idn_table_info: IdnTableInfo):
