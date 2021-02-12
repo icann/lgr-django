@@ -106,22 +106,25 @@ def list_built_in_lgr():
 LGR_REPERTOIRE_CACHE_KEY = 'repertoire'
 
 
-def make_lgr_session_key(key, request, lgr_id):
+def make_lgr_session_key(key, request, lgr_id, uid=None):
     key = "{}:{}:{}".format(key, request.session.session_key, lgr_id)
+    if uid:
+        key += ':{}'.format(uid)
     args = hashlib.md5(force_bytes(key))
     return "{}.{}".format(LGR_CACHE_KEY_PREFIX, args.hexdigest())
 
 
-def clean_repertoire_cache(request, lgr_id):
+def clean_repertoire_cache(request, lgr_id, uid=None):
     """
     Clean all repertoire-related caches.
 
     :param request: Django request object
     :param lgr_id: a slug identifying the LGR
+    :param uid: an unique ID under which the LGR is saved in session
     """
     cache.delete(make_lgr_session_key(LGR_REPERTOIRE_CACHE_KEY,
                                       request,
-                                      lgr_id))
+                                      lgr_id, uid=uid))
 
 
 LGR_CACHE_TIMEOUT = 3600  # Cache timeout for serialized LGRs

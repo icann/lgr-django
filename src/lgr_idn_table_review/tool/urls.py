@@ -13,7 +13,7 @@ register_converter(LgrSlugConverter, 'lgr')
 
 urlpatterns = [
     path('', IdnTableReviewModeView.as_view(), name='lgr_review_mode'),
-    path('ref', IdnTableReviewSelectReferenceView.as_view(), name='lgr_review_select_reference'),
+    path('ref/<str:report_id>', IdnTableReviewSelectReferenceView.as_view(), name='lgr_review_select_reference'),
     path('reports', IdnTableReviewListReportFolders.as_view(), name='lgr_review_report_folders'),
     path('report/<str:folder>', IdnTableReviewListReports.as_view(), name='lgr_review_reports'),
 ]
