@@ -144,20 +144,17 @@ class LgrSession(LgrStorage):
     def __init__(self, request):
         self.request = request
 
-    def list_lgr(self):
+    def list_lgr(self, uid=None):
         """
         List the LGRs stored in session.
 
+        :param uid: an unique ID under which the LGR is saved in the session
         :return: list of `lgr_serializer` instances
         """
         known_lgrs = self.request.session.get(self.lgr_session_key, {})
+        if uid:
+            known_lgrs = known_lgrs.get(uid, {})
         return sorted(known_lgrs.values(), key=lambda x: x['name'])
-
-    def delete_all(self):
-        """
-        Delete the LGRs stored in session.
-        """
-        self.request.session.pop(self.lgr_session_key, None)
 
     def open_lgr(self, lgr_id, data, **kwargs):
         """
@@ -171,6 +168,8 @@ class LgrSession(LgrStorage):
                          - from_set: Whether the LGR belongs to a set or not
                          - lgr_set: The list of LGRInfo in the set if this is a merged LGR from a set
                          - set_label: The labels for the LGR set
+                       The following kwargs are available for all:
+                         - uid: An unique ID under which the LGR will be stored in the session
         :return: `lgr_serializer`
         """
         kwargs.update({
@@ -185,36 +184,51 @@ class LgrSession(LgrStorage):
         lgr_info = self.lgr_serializer.from_dict(kwargs, **lgr_serializer_kwargs)
         if not kwargs.get('from_set', False):
             # do not save lgr in session, it will be kept in set
-            self.save_lgr(lgr_info)
+            self.save_lgr(lgr_info, uid=kwargs.get('uid'))
         else:
             lgr_info.update_xml()
 
         return lgr_info
 
-    def select_lgr(self, lgr_id, lgr_set_id=None):
+    def select_lgr(self, lgr_id, lgr_set_id=None, uid=None):
         """
         Find the LGR identified by `lgr_id` in the session.
         Can also retrieve a root zone LGR from repertoire if enabled.
 
         :param lgr_id: a slug identifying the LGR
         :param lgr_set_id: a slug identifying a LGR set if LGR is in a set
+        :param uid: an unique ID under which the LGR is saved in the session
         :return: `lgr_serializer`
         """
+        if lgr_set_id and uid:
+            logger.error("Set either lgr_set_id or uid, not both")
+            return Http404
+
+        def get_lgr(known, _id):
+            if _id not in known:
+                raise Http404
+            dct = known[_id]
+            return self.lgr_serializer.from_dict(dct)
+
         known_lgrs = self.request.session.get(self.lgr_session_key, {})
 
         # handle RZ LGR selection
         if self.get_from_repertoire and lgr_id not in known_lgrs and lgr_id in list_root_zones():
             return self.lgr_serializer(lgr_id, lgr=get_by_name(lgr_id, with_unidb=True))
 
+        if uid:
+            if uid not in known_lgrs:
+                raise Http404
+            known_lgrs = known_lgrs[uid]
+
+            return get_lgr(known_lgrs, lgr_id)
+
         if lgr_set_id:
             if lgr_set_id not in known_lgrs:
                 raise Http404
             lgr_dct = known_lgrs[lgr_set_id]
         else:
-            if lgr_id not in known_lgrs:
-                raise Http404
-            lgr_dct = known_lgrs[lgr_id]
-            return self.lgr_serializer.from_dict(lgr_dct)
+            return get_lgr(known_lgrs, lgr_id)
 
         if not lgr_dct.get('lgr_set_dct', None):
             raise Http404
@@ -227,33 +241,41 @@ class LgrSession(LgrStorage):
                 return self.lgr_serializer.from_dict(lgr, **lgr_serializer_kwargs)
         raise Http404
 
-    def save_lgr(self, lgr_info, lgr_id=None):
+    def save_lgr(self, lgr_info, lgr_id=None, uid=None):
         """
         Save the LGR object in session
 
         :param lgr_info: `lgr_serializer` instance
         :param lgr_id: a slug identifying the LGR
+        :param uid: an unique ID under which the LGR is saved in the session
         """
         lgr_id = lgr_id if lgr_id is not None else lgr_info.name
         lgr_info.update_xml()  # make sure we have updated XML before saving
-        self.request.session.setdefault(self.lgr_session_key, {})[lgr_id] = lgr_info.to_dict()
+        if not uid:
+            self.request.session.setdefault(self.lgr_session_key, {})[lgr_id] = lgr_info.to_dict()
+        else:
+            self.request.session.setdefault(self.lgr_session_key, {}).setdefault(uid, {})[lgr_id] = lgr_info.to_dict()
         # mark session as modified because we are possibly only changing the content of a dict
         self.request.session.modified = True
         # As LGR has been modified, need to invalidate the template repertoire cache
-        clean_repertoire_cache(self.request, lgr_id)
+        clean_repertoire_cache(self.request, lgr_id, uid=uid)
 
-    def delete_lgr(self, lgr_id):
+    def delete_lgr(self, lgr_id, uid=None):
         """
         Delete the LGR object from session
 
         :param lgr_id: a slug identifying the LGR
+        :param uid: an unique ID under which the LGR is saved in the session
         """
         try:
-            del self.request.session[self.lgr_session_key][lgr_id]
+            if not uid:
+                del self.request.session[self.lgr_session_key][lgr_id]
+            else:
+                del self.request.session[self.lgr_session_key][uid][lgr_id]
         except KeyError:
             raise Http404
         # mark session as modified because we are possibly only changing the content of a dict
         self.request.session.modified = True
         # Remove cached repertoire
         if self.get_from_repertoire:
-            clean_repertoire_cache(self.request, lgr_id)
+            clean_repertoire_cache(self.request, lgr_id, uid=uid)
