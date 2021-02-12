@@ -18,6 +18,7 @@ from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.tools.utils import download_file
 from lgr_idn_table_review.admin.models import RefLgr, RzLgrMember, RzLgr
+from lgr_idn_table_review.api import tag_to_language_script
 from lgr_idn_table_review.tool.api import IdnTableInfo
 from lgr_session.api import LgrStorage
 
@@ -83,19 +84,17 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
     idn_table: LGR = idn_table_info.lgr
     query = Q(pk=None)
     try:
-        language_tag = idn_table.metadata.languages[0]
-        logger.info('Look for reference LGR with language %s', language_tag)
-        query |= Q(language__iexact=language_tag) | Q(script__iexact=language_tag, language='')
+        tag = idn_table.metadata.languages[0]
     except IndexError:
         logger.info("No language tag in IDN table %s", idn_table)
         return None
 
-    try:
-        script = idn_table.metadata.get_scripts()[0]
-        logger.info('Look for reference LGR with script %s', script)
+    language, script = tag_to_language_script(tag)
+    logger.info("Look for reference LGR with language '%s' and script '%s'", language, script)
+    if language:
+        query |= Q(language__iexact=language)
+    if script:
         query |= Q(script__iexact=script, language='')
-    except IndexError:
-        pass
 
     try:
         ref_lgr = RefLgr.objects.get(query)
@@ -103,6 +102,9 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
         return ref_lgr
     except RefLgr.DoesNotExist:
         logger.info("No reference LGR found")
+
+    if script and RefLgr.objects.filter(script__iexact=script).count() == 1:
+        return RefLgr.objects.get(script__iexact=script)
 
     logger.info('Look for RZ LGR')
     # get the latest RZ LGR (XXX: we assume they are all named the same with an incresing ID)
@@ -113,5 +115,8 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
         return ref_lgr
     except RzLgrMember.DoesNotExist:
         logger.info("No RZ LGR script found")
+
+    if script and RzLgr.objects.filter(script__iexact=script, rz_lgr=last_rz_lgr).count() == 1:
+        return RefLgr.objects.get(script__iexact=script, rz_lgr=last_rz_lgr)
 
     return None
