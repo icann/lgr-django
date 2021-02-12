@@ -43,17 +43,38 @@
                         {% endblock %}
                     </div>
                     <div class="navbar-form navbar-right">
-                        {% block navbar-right %}
-                            <a class="btn btn-default show-tooltip"
-                               data-toggle="modal" data-target="#about-modal"
-                               title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
-                                <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
+                    {% block navbar-right %}
+                        <a class="btn btn-default show-tooltip"
+                           data-toggle="modal" data-target="#about-modal"
+                           title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
+                            <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
+                        </a>
+                        {% if user.is_authenticated %}
+                            <div class="btn-group">
+                            <a class="btn btn-default dropdown-toggle pull-right" href="#" data-toggle="dropdown"
+                               role="button" aria-expanded="false">
+                                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                                <span class="caret"></span>
                             </a>
-                        {% endblock %}
-                    </div>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item">
+                                    <span class="btn btn-block">{{ user.email }}</span>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="btn" href="{% url 'logout' %}">
+                                        <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="btn-group">
+
+                        {% endif %}
+                    {% endblock %}
+                </div>
                 {% endblock %}
-            </div><!--/.nav-collapse -->
-        </div>
+                </div><!--/.nav-collapse -->
+                </div>
     </nav>
 {% endblock navbar %}
 
