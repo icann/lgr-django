@@ -2,10 +2,9 @@
 import os
 
 from django.db import models
-from language_tags import tags
-from pycountry import languages
 
 from lgr.parser.xml_parser import XMLParser
+from lgr_idn_table_review.api import tag_to_language_script
 
 
 def get_upload_path(instance, filename):
@@ -59,19 +58,3 @@ class RzLgrMember(LgrModel):
         super().save(force_insert, force_update, using, update_fields)
 
 
-def tag_to_language_script(tag):
-    # replace 3 char language isocode by 2 char isocode
-    # XXX Assume lang-script format
-    splitted = tag.split('-', 1)
-    lang = splitted[0]
-    try:
-        lang_lookup = languages.lookup(lang)
-        lang_2 = lang_lookup.alpha_2
-    except (LookupError, AttributeError):
-        lang_2 = lang
-
-    splitted[0] = lang_2
-    tag = '-'.join(splitted)
-
-    tag = tags.tag(tag)
-    return tag.language or '', tag.script or ''
