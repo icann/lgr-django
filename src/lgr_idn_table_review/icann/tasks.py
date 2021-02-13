@@ -10,9 +10,11 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.urls import reverse
 
 from lgr.tools.idn_review.review import review_lgr
-from lgr_idn_table_review.icann.api import get_icann_idn_repository_tables, get_reference_lgr
+from lgr_idn_table_review.admin.models import RefLgr, RzLgrMember
+from lgr_idn_table_review.icann.api import get_icann_idn_repository_tables, get_reference_lgr, IANA_IDN_TABLES
 from lgr_idn_table_review.tool.api import IdnTableInfo
 
 logger = logging.getLogger(__name__)
@@ -26,7 +28,14 @@ def _review_idn_table(idn_table_info):
         'name': ref_lgr.name,
         'data': ref_lgr.file.read().decode('utf-8'),
     })
-    return review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
+    context = review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
+    if isinstance(ref_lgr, RefLgr):
+        context['ref_lgr_url'] = reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
+    elif isinstance(ref_lgr, RzLgrMember):
+        context['ref_lgr_url'] = reverse('lgr_idn_admin_display_rz_lgr_member',
+                                         kwargs={'rz_lgr_id': ref_lgr.rz_lgr.pk, 'lgr_id': ref_lgr.pk})
+    context['idn_table_url'] = f'{IANA_IDN_TABLES}/tables/{idn_table_info.name}'
+    return context
 
 
 def _create_review_report(tlds, idn_table_info, processed_list):
@@ -75,6 +84,7 @@ def idn_table_review_task(email_address):
     count = 0
     processed = []
     storage.save(f'{path}.zip', StringIO(''))
+    today = time.strftime('%Y-%m-%d')
     with storage.open(f'{path}.zip', 'wb') as f:
         with ZipFile(f, mode='w', compression=ZIP_BZIP2) as zf:
             for tlds, idn_table_info in get_icann_idn_repository_tables():
@@ -83,13 +93,13 @@ def idn_table_review_task(email_address):
                 for tld in tlds:
                     # need to save a version per tld, processed and count will reflect that as well
                     filename = f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}." \
-                               f"{idn_table_info.lgr.metadata.version.value}.{time.strftime('%Y-%m-%d')}.html"
+                               f"{idn_table_info.lgr.metadata.version.value}.{today}.html"
                     zf.writestr(filename, html_report)
                     storage.save(filename, StringIO(html_report))
 
     summary_report = render_to_string('lgr_idn_table_review_icann/report.html', {
         'count': count,
-        'date': time.strftime(('%Y-%m-%d')),
+        'date': today,
         'processed': processed
     })
     storage.save(f'{path}-summary.html', StringIO(summary_report))
