@@ -165,7 +165,7 @@
                     <ul>
                         {% for file in storage %}
                             <li>
-                                <a href="{% url 'download_file' storage='tool' filename=file %}">
+                                <a href="{% url 'download_file' storage='tool' filename=file %}?next={{ request.path }}">
                                     {% blocktrans %}Download {{ file }}{% endblocktrans %}
                                 </a>
                                 <a href="{% url 'delete_file' storage='tool' filename=file %}" class="delete_file">
