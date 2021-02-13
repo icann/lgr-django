@@ -21,7 +21,7 @@ class LgrSessionView(UserPassesTestMixin, View):
         if not RE_SAFE_FILENAME.match(self.filename):
             raise SuspiciousOperation()
         self.folder = self.kwargs.get('folder', None)
-        if not RE_SAFE_FILENAME.match(self.folder):
+        if self.folder and not RE_SAFE_FILENAME.match(self.folder):
             raise SuspiciousOperation()
         self.next = request.GET.get('next', '/')
         storage_type = self.kwargs.get('storage')
@@ -46,10 +46,13 @@ class LgrSessionView(UserPassesTestMixin, View):
 class DownloadFileView(LgrSessionView):
 
     def get(self, request, *args, **kwargs):
-        res_file = self.session.storage_get_file(self.filename, subfolder=self.folder)
-        if res_file is None:
+        try:
+            res_file = self.session.storage_get_file(self.filename, subfolder=self.folder)
+            if res_file is None:
+                raise FileNotFoundError
+        except FileNotFoundError:
             messages.error(request, _('Unable to download file %s') % self.filename)
-            return DeleteFileView.as_view()(self.request)
+            return redirect(self.next)
         response = FileResponse(res_file[0])
         if 'display' not in self.request.GET:
             response['Content-Disposition'] = 'attachment; filename={}'.format(self.filename)

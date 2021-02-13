@@ -36,13 +36,13 @@
         {% for file in storage %}
             <tr>
                 <td>
-                    <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?display=true"
+                    <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?display=true&next={{ request.path }}"
                        target="_blank" rel="noopener noreferrer">
                         {{ file }}
                     </a>
                 </td>
                 <td>
-                    <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}"
+                    <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}"
                        class="btn btn-default">
                         <i class="glyphicon glyphicon-floppy-disk"></i>
                     </a>
@@ -60,8 +60,8 @@
     <a class="btn btn-primary" href="{% url back_url %}">{% trans "Back" %}</a>
     &nbsp;
     {% if zip %}
-        <a href="{% url 'download_file' storage=storage_type filename=zip folder=folder %}" class="btn btn-default"
-           data-toggle="tooltip" data-placement="top"
+        <a href="{% url 'download_file' storage=storage_type filename=zip folder=folder %}?next={{ request.path }}"
+           class="btn btn-default" data-toggle="tooltip" data-placement="top"
            title="{% trans 'Wait until full report is completed for the file to be valid' %}">
             <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;{% trans 'Download all' %}
         </a>
