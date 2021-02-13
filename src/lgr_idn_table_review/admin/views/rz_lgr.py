@@ -59,3 +59,6 @@ class DisplayRzLgrMemberView(SingleObjectMixin, views.View):
     def get(self, request, *args, **kwargs):
         lgr = self.get_object()
         return HttpResponse(lgr.file.read(), content_type='text/xml', charset='UTF-8')
+
+    def get_queryset(self):
+        return self.model.objects.filter(rz_lgr__pk=self.kwargs.get('rz_lgr_id'))
