@@ -116,9 +116,19 @@
         <p>Date: {{ header.date }}</p>
         <p>{{ header.disclaimer }}</p>
         <p>This document presents the review report for IDN Table:<br>
-            {{ header.idn_table.filename }} Version: {{ header.idn_table.version }}<br>
+            {% if idn_table_url %}
+                <a href="{{ idn_table_url }}">{{ header.idn_table.filename }}</a>
+            {% else %}
+                {{ header.idn_table.filename }}
+            {% endif %}
+            Version: {{ header.idn_table.version }}<br>
             with the Reference LGR:<br>
-            {{ header.reference_lgr.name }} Version: {{ header.reference_lgr.version }}<br>
+            {% if ref_lgr_url %}
+                <a href="{{ ref_lgr_url }}">{{ header.reference_lgr.name }}</a>
+            {% else %}
+                {{ header.reference_lgr.name }}
+            {% endif %}
+            Version: {{ header.reference_lgr.version }}<br>
         </p>
     </div>
 

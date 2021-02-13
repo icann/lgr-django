@@ -6,7 +6,8 @@ from django.urls import path, register_converter
 from lgr_idn_table_review.tool.views import (IdnTableReviewModeView,
                                              IdnTableReviewSelectReferenceView,
                                              IdnTableReviewListReportFolders,
-                                             IdnTableReviewListReports)
+                                             IdnTableReviewListReports,
+                                             IdnTableReviewDisplayIdnTable)
 from lgr_web.converters import LgrSlugConverter
 
 register_converter(LgrSlugConverter, 'lgr')
@@ -16,4 +17,6 @@ urlpatterns = [
     path('ref/<str:report_id>', IdnTableReviewSelectReferenceView.as_view(), name='lgr_review_select_reference'),
     path('reports', IdnTableReviewListReportFolders.as_view(), name='lgr_review_report_folders'),
     path('report/<str:folder>', IdnTableReviewListReports.as_view(), name='lgr_review_reports'),
+    path('view/<str:report_id>/<lgr:lgr_id>', IdnTableReviewDisplayIdnTable.as_view(),
+         name='lgr_review_display_idn_table')
 ]

@@ -2,9 +2,11 @@
 import uuid
 
 from django.core.exceptions import SuspiciousOperation
+from django.http import HttpResponse
 from django.urls import reverse_lazy, reverse
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
+from django.views import View
 from django.views.generic import FormView, TemplateView
 
 from lgr_advanced.lgr_editor.views import RE_SAFE_FILENAME
@@ -56,17 +58,18 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
 
     def form_valid(self, form):
         email_address = form.cleaned_data.pop('email', None)
+        report_id = self.kwargs.get('report_id')
 
         idn_tables = []
         for idn_table, lgr_info in form.cleaned_data.items():
-            idn_table_info = self.session.select_lgr(idn_table, uid=self.kwargs.get('report_id'))
+            idn_table_info = self.session.select_lgr(idn_table, uid=report_id)
             idn_tables.append((idn_table_info.to_dict(), lgr_info))
 
         if email_address:
-            idn_table_review_task.delay(idn_tables, email_address, self.session.get_storage_path(),
+            idn_table_review_task.delay(idn_tables, report_id, email_address, self.session.get_storage_path(),
                                         self.get_success_url())
         else:
-            idn_table_review_task(idn_tables, None, self.session.get_storage_path(), self.get_success_url())
+            idn_table_review_task(idn_tables, report_id, None, self.session.get_storage_path(), self.get_success_url())
 
         return super(IdnTableReviewSelectReferenceView, self).form_valid(form)
 
@@ -110,3 +113,12 @@ class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
         context['storage_type'] = 'rev_usr'
         context['back_url'] = 'lgr_review_report_folders'
         return context
+
+
+class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        idn_table_info = self.session.select_lgr(self.kwargs.get('lgr_id'), uid=self.kwargs.get('report_id'))
+        resp = HttpResponse(idn_table_info.data, content_type='text/plain', charset='UTF-8')
+        resp['Content-disposition'] = 'attachment'
+        return resp

@@ -25,8 +25,8 @@ from lgr_session.api import LgrStorage
 logger = logging.getLogger(__name__)
 
 IDN_TABLES_SESSION_KEY = 'idn-table'
-ICANN_URL = 'https://www.iana.org'
-ICANN_IDN_TABLES = ICANN_URL + '/domains/idn-tables'
+IANA_URL = 'https://www.iana.org'
+IANA_IDN_TABLES = IANA_URL + '/domains/idn-tables'
 
 
 class LgrIcannSession(LgrStorage):
@@ -40,7 +40,7 @@ class LgrIcannSession(LgrStorage):
 
 
 def get_icann_idn_repository_tables():
-    tree = lxml.html.parse(urlopen(ICANN_IDN_TABLES))
+    tree = lxml.html.parse(urlopen(IANA_IDN_TABLES))
     idn_table_columns = tree.xpath("//table[@id='idn-table']/tbody/tr")
 
     # some urls are the same for many TLDs therefore need to loop twice to regroup them instead of parsing multiple
@@ -56,19 +56,19 @@ def get_icann_idn_repository_tables():
         dates.setdefault(url, date)
 
     for url, tlds in urls.items():
-        __, lang_script, version = os.path.basename(url).split('_', 3)
+        __, lang_script, version = os.path.basename(url).rsplit('.', 1)[0].split('_', 3)
         date = dates.get(url)
         try:
-            name, data = download_file(ICANN_URL + url)
+            name, data = download_file(IANA_URL + url)
             info = IdnTableInfo.from_dict({
                 'name': name,
                 'data': data.read().decode('utf-8'),
             })
         except URLError:
-            logger.error('Cannot download %s', ICANN_URL + url)
+            logger.error('Cannot download %s', IANA_URL + url)
             continue
         except Exception:
-            logger.error("Unable to parse IDN table at %s", ICANN_URL + url)
+            logger.error("Unable to parse IDN table at %s", IANA_URL + url)
             continue
         meta: Metadata = info.lgr.metadata
         if date and not meta.date:
