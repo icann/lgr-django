@@ -68,7 +68,7 @@ def get_icann_idn_repository_tables():
             logger.error('Cannot download %s', IANA_URL + url)
             continue
         except Exception:
-            logger.error("Unable to parse IDN table at %s", IANA_URL + url)
+            logger.exception("Unable to parse IDN table at %s", IANA_URL + url)
             continue
         meta: Metadata = info.lgr.metadata
         if date and not meta.date:
@@ -107,8 +107,11 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
         return RefLgr.objects.get(script__iexact=script)
 
     logger.info('Look for RZ LGR')
-    # get the latest RZ LGR (XXX: we assume they are all named the same with an incresing ID)
+    # get the latest RZ LGR (XXX: we assume they are all named the same with an increasing ID)
     last_rz_lgr = RzLgr.objects.order_by('name').first()
+    if not last_rz_lgr:
+        logger.info("No RZ LGR")
+        return None
     try:
         ref_lgr = RzLgrMember.objects.get(query & Q(rz_lgr=last_rz_lgr))
         logger.info('Found RZ LGR script %s', ref_lgr.name)
