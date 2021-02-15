@@ -152,43 +152,97 @@
             <th>Comparing Item</th>
             <th>Overall Result</th>
             <th>Summarized Remarks</th>
+            <th>Remark occurence</th>
         </tr>
         <tr style="background-color:white;">
-            <td>1</td>
-            <td style="text-align:left"><a href="#language_tag">Language Tag</a></td>
-            <td>{{ summary.language_tag.result }}</td>
-            <td style="text-align:left">{{ summary.language_tag.remark|linebreaks }}</td>
-        </tr>
+            {% with distinct_remarks=summary.language_tag.remark|length %}
+                <td rowspan="{{ distinct_remarks }}">1</td>
+                <td rowspan="{{ distinct_remarks }}" style="text-align:left"><a href="#language_tag">Language Tag</a>
+                </td>
+                <td rowspan="{{ distinct_remarks }}">{{ summary.language_tag.result }}</td>
+                {% for remark, count in summary.language_tag.remark.items %}
+                    {% if not forloop.first %}
+                        <tr>
+                    {% endif %}
+                <td style="text-align:left">{{ remark }}</td>
+                <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            {% endwith %}
         <tr style="background-color:#F8F4EC;">
-            <td>2</td>
-            <td style="text-align:left"><a href="#repertoire">Repertoire</a></td>
-            <td>{{ summary.repertoire.result }}</td>
-            <td style="text-align:left">{{ summary.repertoire.remark|linebreaks }}</td>
-        </tr>
+            {% with distinct_remarks=summary.repertoire.remark|length %}
+                <td rowspan="{{ distinct_remarks }}">2</td>
+                <td rowspan="{{ distinct_remarks }}" style="text-align:left"><a href="#repertoire">Repertoire</a></td>
+                <td rowspan="{{ distinct_remarks }}">{{ summary.repertoire.result }}</td>
+                {% for remark, count in summary.repertoire.remark.items %}
+                    {% if not forloop.first %}
+                        <tr>
+                    {% endif %}
+                <td style="text-align:left">{{ remark }}</td>
+                <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            {% endwith %}
         <tr style="background-color:white;">
-            <td>3</td>
-            <td style="text-align:left"><a href="#variant_sets">Variant Sets</a></td>
-            <td>{{ summary.variant_sets.result }}</td>
-            <td style="text-align:left">{{ summary.variant_sets.remark|linebreaks }}</td>
-        </tr>
+            {% with distinct_remarks=summary.variant_sets.remark|length %}
+                <td rowspan="{{ distinct_remarks }}">3</td>
+                <td rowspan="{{ distinct_remarks }}" style="text-align:left">
+                    <a href="#variant_sets">Variant Sets</a>
+                </td>
+                <td rowspan="{{ distinct_remarks }}">{{ summary.variant_sets.result }}</td>
+                {% for remark, count in summary.variant_sets.remark.items %}
+                    {% if not forloop.first %}
+                        <tr>
+                    {% endif %}
+                <td style="text-align:left">{{ remark }}</td>
+                <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            {% endwith %}
         <tr style="background-color:#F8F4EC;">
-            <td>4</td>
-            <td style="text-align:left"><a href="#classes">Classes</a></td>
-            <td>{{ summary.classes.result }}</td>
-            <td style="text-align:left">{{ summary.classes.remark|linebreaks }}</td>
-        </tr>
+            {% with distinct_remarks=summary.classes.remark|length %}
+                <td rowspan="{{ distinct_remarks }}">4</td>
+                <td rowspan="{{ distinct_remarks }}" style="text-align:left"><a href="#classes">Classes</a></td>
+                <td rowspan="{{ distinct_remarks }}">{{ summary.classes.result }}</td>
+                {% for remark, count in summary.classes.remark.items %}
+                    {% if not forloop.first %}
+                        <tr>
+                    {% endif %}
+                <td style="text-align:left">{{ remark }}</td>
+                <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            {% endwith %}
         <tr style="background-color:white;">
-            <td>5</td>
-            <td style="text-align:left"><a href="#whole_label_evaluation_rules">Whole label evaluation rules</a></td>
-            <td>{{ summary.wle.result }}</td>
-            <td style="text-align:left">{{ summary.wle.remark|linebreaks }}</td>
-        </tr>
+            {% with distinct_remarks=summary.wle.remark|length %}
+                <td rowspan="{{ distinct_remarks }}">5</td>
+                <td rowspan="{{ distinct_remarks }}" style="text-align:left">
+                    <a href="#whole_label_evaluation_rules">Whole label evaluation rules</a>
+                </td>
+                <td rowspan="{{ distinct_remarks }}">{{ summary.wle.result }}</td>
+                {% for remark, count in summary.wle.remark.items %}
+                    {% if not forloop.first %}
+                        <tr>
+                    {% endif %}
+                <td style="text-align:left">{{ remark }}</td>
+                <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            {% endwith %}
         <tr style="background-color:#F8F4EC;">
-            <td>6</td>
-            <td style="text-align:left"><a href="#actions">Actions</a></td>
-            <td>{{ summary.actions.result }}</td>
-            <td style="text-align:left">{{ summary.actions.remark|linebreaks }}</td>
-        </tr>
+            {% with distinct_remarks=summary.actions.remark|length %}
+                <td rowspan="{{ distinct_remarks }}">6</td>
+                <td rowspan="{{ distinct_remarks }}" style="text-align:left"><a href="#actions">Actions</a></td>
+                <td rowspan="{{ distinct_remarks }}">{{ summary.actions.result }}</td>
+                {% for remark, count in summary.actions.remark.items %}
+                    {% if not forloop.first %}
+                        <tr>
+                    {% endif %}
+                <td style="text-align:left">{{ remark }}</td>
+                <td>{{ count }}</td>
+                </tr>
+                {% endfor %}
+            {% endwith %}
     </table>
 
 
@@ -204,8 +258,9 @@
         {% for language_tag in language_tags %}
             <tr style="background-color:white;">
                 <td rowspan="{{ language_tag.comparison|length }}">{{ forloop.counter }}</td>
-                <td style="text-align:left"
-                    rowspan="{{ language_tag.comparison|length }}">{{ language_tag.idn_table_language_tag }}</td>
+                <td style="text-align:left" rowspan="{{ language_tag.comparison|length }}">
+                    {{ language_tag.idn_table_language_tag }}
+                </td>
                 {% for comp in language_tag.comparison %}
                     {% if not forloop.first %}
                         <tr>
@@ -213,11 +268,8 @@
                 <td style="text-align:left">{{ comp.reference_lgr_language_tag }}</td>
                 <td>{{ comp.result }}</td>
                 <td style="text-align:left">{{ comp.remark|linebreaks }}</td>
-                {% if not forloop.first %}
-                    </tr>
-                {% endif %}
+                </tr>
                 {% endfor %}
-            </tr>
         {% endfor %}
     </table>
 
