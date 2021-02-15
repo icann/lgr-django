@@ -105,11 +105,6 @@ class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
             context['storage'].remove(zipname)
             context['zip'] = zipname
         context['title'] = _("IDN Table Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
-        zipname = f"{self.kwargs.get('folder')}.zip"
-        if zipname in context['storage']:
-            context['storage'].remove(zipname)
-            context['zip'] = zipname
-        context['title'] = _("IDN Table Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
         context['storage_type'] = 'rev_usr'
         context['back_url'] = 'lgr_review_report_folders'
         return context
