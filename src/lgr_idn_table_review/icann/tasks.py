@@ -13,6 +13,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from lgr.tools.idn_review.review import review_lgr
+from lgr_advanced import unidb
+from lgr_advanced.lgr_editor.forms import DEFAULT_UNICODE_VERSION
 from lgr_idn_table_review.admin.models import RefLgr, RzLgrMember
 from lgr_idn_table_review.icann.api import get_icann_idn_repository_tables, get_reference_lgr, IANA_IDN_TABLES
 from lgr_idn_table_review.tool.api import IdnTableInfo
@@ -80,6 +82,7 @@ def idn_table_review_task(email_address):
     path = time.strftime('%Y-%m-%d-%H%M%S')
     storage = FileSystemStorage(location=os.path.join(settings.IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION, path),
                                 file_permissions_mode=0o640)
+    udata = unidb.manager.get_db_by_version(DEFAULT_UNICODE_VERSION)
 
     count = 0
     processed = []
@@ -91,8 +94,9 @@ def idn_table_review_task(email_address):
                 count += len(tlds)
                 html_report = _create_review_report(tlds, idn_table_info, processed)
                 for tld in tlds:
+                    tld_a_label = udata.idna_encode_label(tld)
                     # need to save a version per tld, processed and count will reflect that as well
-                    filename = f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}." \
+                    filename = f"{tld_a_label.upper()}.{idn_table_info.lgr.metadata.languages[0]}." \
                                f"{idn_table_info.lgr.metadata.version.value}.{today}.html"
                     zf.writestr(filename, html_report)
                     storage.save(filename, StringIO(html_report))
