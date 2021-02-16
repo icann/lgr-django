@@ -22,7 +22,7 @@ from lgr_idn_table_review.tool.api import IdnTableInfo
 logger = logging.getLogger(__name__)
 
 
-def _review_idn_table(idn_table_info):
+def _review_idn_table(idn_table_info, absolute_url):
     ref_lgr = get_reference_lgr(idn_table_info)
     if not ref_lgr:
         return None
@@ -32,18 +32,18 @@ def _review_idn_table(idn_table_info):
     })
     context = review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
     if isinstance(ref_lgr, RefLgr):
-        context['ref_lgr_url'] = reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
+        context['ref_lgr_url'] = absolute_url + reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
     elif isinstance(ref_lgr, RzLgrMember):
-        context['ref_lgr_url'] = reverse('lgr_idn_admin_display_rz_lgr_member',
-                                         kwargs={'rz_lgr_id': ref_lgr.rz_lgr.pk, 'lgr_id': ref_lgr.pk})
+        context['ref_lgr_url'] = absolute_url + reverse('lgr_idn_admin_display_rz_lgr_member',
+                                                        kwargs={'rz_lgr_id': ref_lgr.rz_lgr.pk, 'lgr_id': ref_lgr.pk})
     context['idn_table_url'] = f'{IANA_IDN_TABLES}/tables/{idn_table_info.name}'
     return context
 
 
-def _create_review_report(tlds, idn_table_info, processed_list):
+def _create_review_report(tlds, idn_table_info, processed_list, absolute_url):
     html_report = ''
     try:
-        context = _review_idn_table(idn_table_info)
+        context = _review_idn_table(idn_table_info, absolute_url)
     except BaseException:
         logger.exception('Failed to review IDN table')
         context = {
@@ -73,10 +73,11 @@ def _create_review_report(tlds, idn_table_info, processed_list):
 
 
 @shared_task
-def idn_table_review_task(email_address):
+def idn_table_review_task(absolute_url, email_address):
     """
     Review all IDN tables
 
+    :param absolute_url: The absolute website url
     :param email_address: The e-mail address where the results will be sent
     """
     path = time.strftime('%Y-%m-%d-%H%M%S')
@@ -92,7 +93,7 @@ def idn_table_review_task(email_address):
         with ZipFile(f, mode='w', compression=ZIP_BZIP2) as zf:
             for tlds, idn_table_info in get_icann_idn_repository_tables():
                 count += len(tlds)
-                html_report = _create_review_report(tlds, idn_table_info, processed)
+                html_report = _create_review_report(tlds, idn_table_info, processed, absolute_url)
                 for tld in tlds:
                     tld_a_label = udata.idna_encode_label(tld)
                     # need to save a version per tld, processed and count will reflect that as well

@@ -67,9 +67,10 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
 
         if email_address:
             idn_table_review_task.delay(idn_tables, report_id, email_address, self.session.get_storage_path(),
-                                        self.get_success_url())
+                                        self.get_success_url(), self.request.build_absolute_uri())
         else:
-            idn_table_review_task(idn_tables, report_id, None, self.session.get_storage_path(), self.get_success_url())
+            idn_table_review_task(idn_tables, report_id, None, self.session.get_storage_path(), self.get_success_url(),
+                                  self.request.build_absolute_uri('/').rstrip('/'))
 
         return super(IdnTableReviewSelectReferenceView, self).form_valid(form)
 
