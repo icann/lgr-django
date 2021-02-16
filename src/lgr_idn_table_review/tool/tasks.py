@@ -4,6 +4,7 @@ import os
 import time
 from ast import literal_eval
 from io import StringIO
+from typing import Dict
 from zipfile import ZipFile, ZIP_BZIP2
 
 from celery import shared_task
@@ -19,7 +20,7 @@ from lgr_idn_table_review.tool.api import IdnTableInfo
 logger = logging.getLogger(__name__)
 
 
-def _review_idn_table(report_id, idn_table_info, lgr_info, absolute_url):
+def _review_idn_table(context: Dict, idn_table_info, lgr_info, absolute_url):
     lgr_type, lgr_name = literal_eval(lgr_info)
     if lgr_type == 'ref':
         ref_lgr = RefLgr.objects.get(name=lgr_name)
@@ -28,26 +29,29 @@ def _review_idn_table(report_id, idn_table_info, lgr_info, absolute_url):
         ref_lgr = RzLgr.objects.get(name=lgr_name)
         ref_lgr_url = absolute_url + reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
     else:
-        raise BaseException
+        raise BaseException(f'Wrong LGR type: {lgr_type}')
+    context.update({
+        'ref_lgr': ref_lgr.name,
+        'ref_lgr_url': ref_lgr_url,
+    })
     ref_lgr_info = IdnTableInfo.from_dict({
         'name': ref_lgr.name,
         'data': ref_lgr.file.read().decode('utf-8'),
     })
-    context = review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
-    context['ref_lgr_url'] = ref_lgr_url
-    context['idn_table_url'] = absolute_url + reverse('lgr_review_display_idn_table',
-                                                      kwargs={'report_id': report_id, 'lgr_id': idn_table_info.name})
-    return context
+    context.update(review_lgr(idn_table_info.lgr, ref_lgr_info.lgr))
 
 
 def _create_review_report(report_id, idn_table_json, lgr_info, absolute_url):
     html_report = ''
+    context = {
+        'idn_table': idn_table_json['name'],
+        'idn_table_url': absolute_url + reverse('lgr_review_display_idn_table',
+                                                kwargs={'report_id': report_id, 'lgr_id': idn_table_json['name']})
+    }
     try:
-        idn_table_info = IdnTableInfo.from_dict(idn_table_json)
-        context = _review_idn_table(report_id, idn_table_info, lgr_info, absolute_url)
+        _review_idn_table(context, IdnTableInfo.from_dict(idn_table_json), lgr_info, absolute_url)
     except BaseException:
         logger.exception('Failed to review IDN table')
-        context = {'name': idn_table_json['name']}
         html_report = render_to_string('lgr_idn_table_review/error.html', context)
     else:
         html_report = render_to_string('lgr_idn_table_review/review.html', context)

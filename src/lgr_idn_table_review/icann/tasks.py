@@ -2,7 +2,9 @@
 import logging
 import os
 import time
+import traceback
 from io import StringIO
+from typing import Dict
 from zipfile import ZipFile, ZIP_BZIP2
 
 from celery import shared_task
@@ -22,37 +24,41 @@ from lgr_idn_table_review.tool.api import IdnTableInfo
 logger = logging.getLogger(__name__)
 
 
-def _review_idn_table(idn_table_info, absolute_url):
+def _review_idn_table(context: Dict, idn_table_info, absolute_url):
     ref_lgr = get_reference_lgr(idn_table_info)
     if not ref_lgr:
-        return None
+        context['reason'] = 'No Reference LGR was found to compare with IDN table.'
+        return False
     ref_lgr_info = IdnTableInfo.from_dict({
         'name': ref_lgr.name,
         'data': ref_lgr.file.read().decode('utf-8'),
     })
-    context = review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
+    context['ref_lgr'] = ref_lgr.name
     if isinstance(ref_lgr, RefLgr):
         context['ref_lgr_url'] = absolute_url + reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
     elif isinstance(ref_lgr, RzLgrMember):
         context['ref_lgr_url'] = absolute_url + reverse('lgr_idn_admin_display_rz_lgr_member',
                                                         kwargs={'rz_lgr_id': ref_lgr.rz_lgr.pk, 'lgr_id': ref_lgr.pk})
-    context['idn_table_url'] = f'{IANA_IDN_TABLES}/tables/{idn_table_info.name}'
-    return context
+    context.update(review_lgr(idn_table_info.lgr, ref_lgr_info.lgr))
+    return True
 
 
 def _create_review_report(tlds, idn_table_info, processed_list, absolute_url):
     html_report = ''
+    context = {
+        'idn_table': idn_table_info.name,
+        'idn_table_url': f'{IANA_IDN_TABLES}/tables/{idn_table_info.name}'
+    }
     try:
-        context = _review_idn_table(idn_table_info, absolute_url)
+        reference_found = _review_idn_table(context, idn_table_info, absolute_url)
     except BaseException:
         logger.exception('Failed to review IDN table')
-        context = {
-            'name': idn_table_info.name,
-            'reason': 'Invalid IDN table'
-        }
+        context['reason'] = 'Invalid IDN table.'
+        if settings.DEBUG:
+            context['reason'] += f'\n{traceback.format_exc()}'
         html_report = render_to_string('lgr_idn_table_review/error.html', context)
     else:
-        if context:
+        if reference_found:
             html_report = render_to_string('lgr_idn_table_review/review.html', context)
             flag = 1
             for result in context['summary'].values():
@@ -63,10 +69,6 @@ def _create_review_report(tlds, idn_table_info, processed_list, absolute_url):
                 processed_list.append(f"{tld.upper()}.{idn_table_info.lgr.metadata.languages[0]}."
                                       f"{flag}.{context['header']['reference_lgr']['name']}")
         else:
-            context = {
-                'name': idn_table_info.name,
-                'reason': 'No Reference LGR was found to compare with IDN table'
-            }
             html_report = render_to_string('lgr_idn_table_review/error.html', context)
     finally:
         return html_report
