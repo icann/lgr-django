@@ -154,7 +154,7 @@
             <th>Summarized Remarks</th>
             <th>Remark occurence</th>
         </tr>
-        <tr style="background-color:white;">
+        <tr>
             {% with distinct_remarks=summary.language_tag.remark|length %}
                 <td rowspan="{{ distinct_remarks }}">1</td>
                 <td rowspan="{{ distinct_remarks }}" style="text-align:left"><a href="#language_tag">Language Tag</a>
@@ -169,7 +169,7 @@
                 </tr>
                 {% endfor %}
             {% endwith %}
-        <tr style="background-color:#F8F4EC;">
+        <tr>
             {% with distinct_remarks=summary.repertoire.remark|length %}
                 <td rowspan="{{ distinct_remarks }}">2</td>
                 <td rowspan="{{ distinct_remarks }}" style="text-align:left"><a href="#repertoire">Repertoire</a></td>
@@ -183,7 +183,7 @@
                 </tr>
                 {% endfor %}
             {% endwith %}
-        <tr style="background-color:white;">
+        <tr>
             {% with distinct_remarks=summary.variant_sets.remark|length %}
                 <td rowspan="{{ distinct_remarks }}">3</td>
                 <td rowspan="{{ distinct_remarks }}" style="text-align:left">
@@ -199,7 +199,7 @@
                 </tr>
                 {% endfor %}
             {% endwith %}
-        <tr style="background-color:#F8F4EC;">
+        <tr>
             {% with distinct_remarks=summary.classes.remark|length %}
                 <td rowspan="{{ distinct_remarks }}">4</td>
                 <td rowspan="{{ distinct_remarks }}" style="text-align:left"><a href="#classes">Classes</a></td>
@@ -213,7 +213,7 @@
                 </tr>
                 {% endfor %}
             {% endwith %}
-        <tr style="background-color:white;">
+        <tr>
             {% with distinct_remarks=summary.wle.remark|length %}
                 <td rowspan="{{ distinct_remarks }}">5</td>
                 <td rowspan="{{ distinct_remarks }}" style="text-align:left">
@@ -229,7 +229,7 @@
                 </tr>
                 {% endfor %}
             {% endwith %}
-        <tr style="background-color:#F8F4EC;">
+        <tr>
             {% with distinct_remarks=summary.actions.remark|length %}
                 <td rowspan="{{ distinct_remarks }}">6</td>
                 <td rowspan="{{ distinct_remarks }}" style="text-align:left"><a href="#actions">Actions</a></td>
