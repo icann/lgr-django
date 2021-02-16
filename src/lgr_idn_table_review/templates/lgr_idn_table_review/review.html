@@ -300,7 +300,7 @@
     </table>
 
     <h1><a name="variant_sets">Variant Sets</a></h1>
-    {% for variant_set in variant_sets %}
+    {% for variant_set in variant_sets.reports %}
         <div class="varset_description">
             <p><b>Set {{ forloop.counter }}</b></p>
             <p>IDN Table: {{ variant_set.idn_table|format_cp_list }}<br>
@@ -375,13 +375,13 @@
                 <th>Glyph</th>
                 <th>Name</th>
             </tr>
-            {#            {% for cp in variant_sets.additional %}#}
-            {#                <tr>#}
-            {#                    <td>{{ cp.cp }}</td>#}
-            {#                    <td>{{ cp.glyph }}</td>#}
-            {#                    <td>{{ cp.name }}</td>#}
-            {#                </tr>#}
-            {#            {% endfor %}#}
+            {% for cp in variant_sets.additional %}
+                <tr>
+                    <td>{{ cp.cp|format_cp }}</td>
+                    <td>{{ cp.glyph }}</td>
+                    <td>{{ cp.name }}</td>
+                </tr>
+            {% endfor %}
         </table>
     </div>
 
