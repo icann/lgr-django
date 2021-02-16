@@ -119,7 +119,7 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
     except RzLgrMember.DoesNotExist:
         logger.info("No RZ LGR script found")
 
-    if script and RzLgr.objects.filter(script__iexact=script, rz_lgr=last_rz_lgr).count() == 1:
-        return RefLgr.objects.get(script__iexact=script, rz_lgr=last_rz_lgr)
+    if script and RzLgrMember.objects.filter(script__iexact=script, rz_lgr=last_rz_lgr).count() == 1:
+        return RzLgrMember.objects.get(script__iexact=script, rz_lgr=last_rz_lgr)
 
     return None
