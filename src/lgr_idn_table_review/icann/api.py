@@ -125,7 +125,7 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
 
     logger.info('Look for RZ LGR')
     # get the latest RZ LGR (XXX: we assume they are all named the same with an increasing ID)
-    last_rz_lgr = RzLgr.objects.order_by('name').first()
+    last_rz_lgr = RzLgr.objects.order_by('-name').first()
     if not last_rz_lgr:
         logger.info("No RZ LGR")
         return None
