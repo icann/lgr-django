@@ -26,4 +26,10 @@ def tag_to_language_script(tag):
     tag = '-'.join(splitted)
 
     tag = tags.tag(tag)
-    return tag.language or '', tag.script or ''
+    language = str(tag.language) if tag.language else ''
+    if language.lower() == 'und':
+        language = ''
+
+    script = str(tag.script) if tag.script else ''
+
+    return language, script
