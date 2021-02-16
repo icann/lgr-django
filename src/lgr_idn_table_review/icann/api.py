@@ -56,7 +56,10 @@ def get_icann_idn_repository_tables():
         dates.setdefault(url, date)
 
     for url, tlds in urls.items():
-        __, lang_script, version = os.path.basename(url).rsplit('.', 1)[0].split('_', 3)
+        basename = os.path.basename(url)
+        if settings.ICANN_IDN_REVIEW_TABLES and basename not in settings.ICANN_IDN_REVIEW_TABLES:
+            continue
+        __, lang_script, version = basename.rsplit('.', 1)[0].split('_', 3)
         date = dates.get(url)
         try:
             name, data = download_file(IANA_URL + url)
