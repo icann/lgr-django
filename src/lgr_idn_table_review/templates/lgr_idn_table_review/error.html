@@ -2,10 +2,22 @@
 <HTML xmlns="http://www.w3.org/1999/xHTML">
 <head>
     <meta http-equiv="Content-Type" content="text/HTML; charset=utf-8"/>
-    <title>{{ name|title }}</title>
+    <title>Review {{ idn_table|title }}</title>
 </head>
 <body>
-<p>Unable to review IDN table {{ name }}</p>
-<p>{{ reason }}</p>
+<p>Unable to review IDN table
+    {% if idn_table_url %}
+        <a href="{{ idn_table_url }}">{{ idn_table }}</a>
+    {% else %}
+        {{ idn_table }}
+    {% endif %}
+    {% if ref_lgr %} with
+        {% if ref_lgr_url %}
+            <a href="{{ ref_lgr_url }}">{{ ref_lgr }}</a>
+        {% else %}
+            {{ ref_lgr }}
+        {% endif %}
+    {% endif %}</p>
+<p>{{ reason|linebreaks }}</p>
 </body>
 </HTML>
