@@ -82,29 +82,43 @@ def get_icann_idn_repository_tables():
 
 def get_reference_lgr(idn_table_info: IdnTableInfo):
     idn_table: LGR = idn_table_info.lgr
-    query = Q(pk=None)
+    logger.info('Look for reference LGR for IDN table %s', idn_table_info.name)
     try:
         tag = idn_table.metadata.languages[0]
     except IndexError:
         logger.info("No language tag in IDN table %s", idn_table)
         return None
 
+    def make_query(obj, q):
+        logger.info("Look for %s LGR with query %s", obj.__name__, q)
+        try:
+            ref = obj.objects.get(q)
+            logger.info('Found reference LGR %s', ref.name)
+            return ref
+        except obj.DoesNotExist:
+            logger.info("No reference LGR found")
+            return None
+
     language, script = tag_to_language_script(tag)
+    language = str(language) if language else None
+    script = str(script) if script else None
     logger.info("Look for reference LGR with language '%s' and script '%s'", language, script)
     if language:
-        query |= Q(language__iexact=language)
+        ref_lgr = make_query(RefLgr, Q(language__iexact=language))
+        if ref_lgr:
+            return ref_lgr
+
     if script:
-        query |= Q(script__iexact=script, language='')
+        ref_lgr = make_query(RefLgr, Q(script__iexact=script, language=''))
+        if ref_lgr:
+            return ref_lgr
 
-    try:
-        ref_lgr = RefLgr.objects.get(query)
-        logger.info('Found reference LGR %s', ref_lgr.name)
+    filtered = RefLgr.objects.filter(script__iexact=script)
+    if script and filtered.count() == 1:
+        ref_lgr = filtered.get()
+        logger.info("Found one reference LGR with script %s but containing language %s, use it anyway",
+                    script, ref_lgr.language)
         return ref_lgr
-    except RefLgr.DoesNotExist:
-        logger.info("No reference LGR found")
-
-    if script and RefLgr.objects.filter(script__iexact=script).count() == 1:
-        return RefLgr.objects.get(script__iexact=script)
 
     logger.info('Look for RZ LGR')
     # get the latest RZ LGR (XXX: we assume they are all named the same with an increasing ID)
@@ -112,14 +126,22 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
     if not last_rz_lgr:
         logger.info("No RZ LGR")
         return None
-    try:
-        ref_lgr = RzLgrMember.objects.get(query & Q(rz_lgr=last_rz_lgr))
-        logger.info('Found RZ LGR script %s', ref_lgr.name)
-        return ref_lgr
-    except RzLgrMember.DoesNotExist:
-        logger.info("No RZ LGR script found")
 
-    if script and RzLgrMember.objects.filter(script__iexact=script, rz_lgr=last_rz_lgr).count() == 1:
-        return RzLgrMember.objects.get(script__iexact=script, rz_lgr=last_rz_lgr)
+    if language:
+        ref_lgr = make_query(RzLgrMember, Q(language__iexact=language, rz_lgr=last_rz_lgr))
+        if ref_lgr:
+            return ref_lgr
+
+    if script:
+        ref_lgr = make_query(RzLgrMember, Q(script__iexact=script, language='', rz_lgr=last_rz_lgr))
+        if ref_lgr:
+            return ref_lgr
+
+    filtered = RzLgrMember.objects.filter(script__iexact=script, rz_lgr=last_rz_lgr)
+    if script and filtered.count() == 1:
+        ref_lgr = filtered.get()
+        logger.info("Found one RZ LGR with script %s but containing language %s, use it anyway",
+                    script, ref_lgr.language)
+        return ref_lgr
 
     return None
