@@ -105,6 +105,7 @@ class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
         if zipname in context['storage']:
             context['storage'].remove(zipname)
             context['zip'] = zipname
+        context['completed'] = True  # FIXME: we don't know if this if finished or not
         context['title'] = _("IDN Table Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
         context['storage_type'] = 'rev_usr'
         context['back_url'] = 'lgr_review_report_folders'
@@ -115,6 +116,7 @@ class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, View):
 
     def get(self, request, *args, **kwargs):
         idn_table_info = self.session.select_lgr(self.kwargs.get('lgr_id'), uid=self.kwargs.get('report_id'))
+        # FIXME: should distinct txt and xml LGRs
         resp = HttpResponse(idn_table_info.data, content_type='text/plain', charset='UTF-8')
         resp['Content-disposition'] = 'attachment'
         return resp

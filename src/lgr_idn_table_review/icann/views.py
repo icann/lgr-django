@@ -52,6 +52,10 @@ class IdnTableIcannListReports(BaseIcannView, TemplateView):
         if zipname in context['storage']:
             context['storage'].remove(zipname)
             context['zip'] = zipname
+        summary_name = f"{self.kwargs.get('folder')}-summary.html"
+        context['completed'] = False
+        if summary_name in context['storage']:
+            context['completed'] = True
         context['title'] = _("ICANN Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
         context['storage_type'] = 'rev_icann'
         context['back_url'] = 'lgr_idn_icann_mode'
