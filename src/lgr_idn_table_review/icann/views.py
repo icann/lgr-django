@@ -30,7 +30,8 @@ class IdnTableIcannModeView(BaseIcannView, TemplateView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        idn_table_review_task.delay(email_address=self.request.user.email)
+        idn_table_review_task.delay(self.request.build_absolute_uri('/').rstrip('/'),
+                                    self.request.user.email)
 
         messages.info(request, _('Generating report. You will receive an email upon completion.'))
         return redirect('lgr_idn_icann_mode')

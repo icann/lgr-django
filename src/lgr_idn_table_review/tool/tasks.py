@@ -19,14 +19,14 @@ from lgr_idn_table_review.tool.api import IdnTableInfo
 logger = logging.getLogger(__name__)
 
 
-def _review_idn_table(report_id, idn_table_info, lgr_info):
+def _review_idn_table(report_id, idn_table_info, lgr_info, absolute_url):
     lgr_type, lgr_name = literal_eval(lgr_info)
     if lgr_type == 'ref':
         ref_lgr = RefLgr.objects.get(name=lgr_name)
-        ref_lgr_url = reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
+        ref_lgr_url = absolute_url + reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
     elif lgr_type == 'rz':
         ref_lgr = RzLgr.objects.get(name=lgr_name)
-        ref_lgr_url = reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
+        ref_lgr_url = absolute_url + reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
     else:
         raise BaseException
     ref_lgr_info = IdnTableInfo.from_dict({
@@ -35,16 +35,16 @@ def _review_idn_table(report_id, idn_table_info, lgr_info):
     })
     context = review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
     context['ref_lgr_url'] = ref_lgr_url
-    context['idn_table_url'] = reverse('lgr_review_display_idn_table',
-                                       kwargs={'report_id': report_id, 'lgr_id': idn_table_info.name})
+    context['idn_table_url'] = absolute_url + reverse('lgr_review_display_idn_table',
+                                                      kwargs={'report_id': report_id, 'lgr_id': idn_table_info.name})
     return context
 
 
-def _create_review_report(report_id, idn_table_json, lgr_info):
+def _create_review_report(report_id, idn_table_json, lgr_info, absolute_url):
     html_report = ''
     try:
         idn_table_info = IdnTableInfo.from_dict(idn_table_json)
-        context = _review_idn_table(report_id, idn_table_info, lgr_info)
+        context = _review_idn_table(report_id, idn_table_info, lgr_info, absolute_url)
     except BaseException:
         logger.exception('Failed to review IDN table')
         context = {'name': idn_table_json['name']}
@@ -56,7 +56,7 @@ def _create_review_report(report_id, idn_table_json, lgr_info):
 
 
 @shared_task
-def idn_table_review_task(idn_tables, report_id, email_address, storage_path, download_link):
+def idn_table_review_task(idn_tables, report_id, email_address, storage_path, download_link, absolute_url):
     """
     Review IDN tables
 
@@ -65,6 +65,7 @@ def idn_table_review_task(idn_tables, report_id, email_address, storage_path, do
     :param email_address: The e-mail address where the results will be sent
     :param storage_path: The place where results will be stored
     :param download_link: The link where the file will be available
+    :param absolute_url: The absolute website url
     :return:
     """
     path = time.strftime('%Y-%m-%d-%H%M%S')
@@ -75,7 +76,7 @@ def idn_table_review_task(idn_tables, report_id, email_address, storage_path, do
     with storage.open(f'{path}.zip', 'wb') as f:
         with ZipFile(f, mode='w', compression=ZIP_BZIP2) as zf:
             for idn_table_json, lgr_info in idn_tables:
-                html_report = _create_review_report(report_id, idn_table_json, lgr_info)
+                html_report = _create_review_report(report_id, idn_table_json, lgr_info, absolute_url)
                 filename = f"{idn_table_json['name']}.html"
                 zf.writestr(filename, html_report)
                 storage.save(filename, StringIO(html_report))
