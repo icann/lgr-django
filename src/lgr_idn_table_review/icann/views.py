@@ -8,6 +8,7 @@ from django.views.generic import TemplateView
 
 from lgr_auth.models import LgrRole
 from lgr_idn_table_review.icann.api import LgrIcannSession
+from lgr_session.views import StorageType
 from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 from .tasks import idn_table_review_task
 
@@ -57,6 +58,6 @@ class IdnTableIcannListReports(BaseIcannView, TemplateView):
         if summary_name in context['storage']:
             context['completed'] = True
         context['title'] = _("ICANN Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
-        context['storage_type'] = 'rev_icann'
+        context['storage_type'] = StorageType.IDN_REVIEW_ICANN_MODE.value
         context['back_url'] = 'lgr_idn_icann_mode'
         return context

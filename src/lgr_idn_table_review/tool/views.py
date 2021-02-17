@@ -14,6 +14,7 @@ from lgr_idn_table_review.admin.models import RzLgr, RefLgr
 from lgr_idn_table_review.tool.api import LgrIdnReviewSession
 from lgr_idn_table_review.tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_idn_table_review.tool.tasks import idn_table_review_task
+from lgr_session.views import StorageType
 from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 
 
@@ -107,7 +108,7 @@ class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
             context['zip'] = zipname
         context['completed'] = True  # FIXME: we don't know if this if finished or not
         context['title'] = _("IDN Table Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
-        context['storage_type'] = 'rev_usr'
+        context['storage_type'] = StorageType.IDN_REVIEW_USER_MODE
         context['back_url'] = 'lgr_review_report_folders'
         return context
 
