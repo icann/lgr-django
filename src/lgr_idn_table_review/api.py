@@ -11,7 +11,7 @@ from pycountry import languages
 logger = logging.getLogger('api')
 
 
-def tag_to_language_script(tag):
+def tag_to_language_script(tag, use_suppress_script=False):
     # replace 3 char language isocode by 2 char isocode
     # XXX Assume lang-script format
     splitted = tag.split('-', 1)
@@ -26,10 +26,13 @@ def tag_to_language_script(tag):
     tag = '-'.join(splitted)
 
     tag = tags.tag(tag)
+    script = str(tag.script) if tag.script else ''
+    language = tag.language
+    if use_suppress_script and language and not script:
+        suppress_script = language.data.get('record', {}).get('Suppress-Script')
+        script = suppress_script
     language = str(tag.language) if tag.language else ''
     if language.lower() == 'und':
         language = ''
-
-    script = str(tag.script) if tag.script else ''
 
     return language, script

@@ -102,9 +102,7 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
             logger.info("No reference LGR found")
             return None
 
-    language, script = tag_to_language_script(tag)
-    language = str(language) if language else None
-    script = str(script) if script else None
+    language, script = tag_to_language_script(tag, use_suppress_script=True)
     logger.info("Look for reference LGR with language '%s' and script '%s'", language, script)
     if language:
         ref_lgr = make_query(RefLgr, Q(language__iexact=language))
