@@ -355,7 +355,7 @@
                     {% if var.reverse %}
                         <tr style="background-color:#F8F4EC">
                             <td>←</td>
-                            <td>✓</td>
+                            <td>{{ var.dest_in_idn|render_bool }}</td>
                             <td>{{ var.dest_in_ref|render_bool }}</td>
                             <td>{{ var.rev_type_idn }}</td>
                             <td>{{ var.rev_type_ref }}</td>
