@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import json
 import logging
 import os
 import time
 import traceback
+from datetime import date
 from io import StringIO
 from typing import Dict
 from zipfile import ZipFile, ZIP_BZIP2
@@ -44,7 +46,12 @@ def _review_idn_table(context: Dict, idn_table_info, absolute_url):
     return ref_lgr.name
 
 
-def _create_review_report(idn_table_info, absolute_url):
+def _json_date_converter(k):
+    if isinstance(k, date):
+        return k.__str__()
+
+
+def _create_review_report(idn_table_info, absolute_url, storage):
     html_report = ''
     context = {
         'idn_table': idn_table_info.name,
@@ -71,6 +78,11 @@ def _create_review_report(idn_table_info, absolute_url):
         else:
             html_report = render_to_string('lgr_idn_table_review/error.html', context)
     finally:
+        if settings.DEBUG:
+            json_name = f'{os.path.splitext(idn_table_info.name)[0]}.json'
+            json_data = StringIO()
+            json.dump(context, json_data, default=_json_date_converter, indent=2)
+            storage.save(os.path.join('json', json_name), json_data)
         return html_report, ref_lgr_name, flag
 
 
@@ -95,7 +107,7 @@ def idn_table_review_task(absolute_url, email_address):
         with ZipFile(f, mode='w', compression=ZIP_BZIP2) as zf:
             for tlds, idn_table_info in get_icann_idn_repository_tables():
                 count += len(tlds)
-                html_report, ref_lgr_name, flag = _create_review_report(idn_table_info, absolute_url)
+                html_report, ref_lgr_name, flag = _create_review_report(idn_table_info, absolute_url, storage)
                 for tld in tlds:
                     tld_a_label = udata.idna_encode_label(tld)
                     # need to save a version per tld, processed and count will reflect that as well

@@ -77,14 +77,14 @@ class LgrStorage:
 
         return sorted(files[1], reverse=reverse)
 
-    def list_storage_folders(self):
+    def list_storage_folders(self, subfolder=None):
         """
         List files in the storage
 
         :param subfolder: a subfolder where to look for files
         :return: the list of files in storage
         """
-        storage = FileSystemStorage(location=self.get_storage_path())
+        storage = FileSystemStorage(location=self.get_storage_path(subfolder=subfolder))
         try:
             files = storage.listdir('.')
         except OSError:
@@ -124,11 +124,13 @@ class LgrStorage:
         storage = FileSystemStorage(location=self.get_storage_path(subfolder=subfolder))
 
         try:
+            # if filename is a directory:
+            #  - remove all directories in it
+            for f in self.list_storage_folders(subfolder=os.path.join(subfolder or '', filename)):
+                self.storage_delete_file(f, subfolder=os.path.join(subfolder or '', filename))
+            #  - remove all files in it
             for f in self.list_storage(subfolder=os.path.join(subfolder or '', filename)):
-                sub_storage = FileSystemStorage(
-                    location=self.get_storage_path(subfolder=os.path.join(subfolder or '', filename)))
-                # delete all files if filename is a directory
-                sub_storage.delete(f)
+                self.storage_delete_file(f, subfolder=os.path.join(subfolder or '', filename))
             storage.delete(filename)
         except NotImplementedError:
             # should not happen
