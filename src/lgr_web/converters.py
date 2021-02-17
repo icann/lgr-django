@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from lgr_session.views import StorageType
+
 
 class BaseConverter:
     regex = None
@@ -43,4 +45,4 @@ class ActionIndexConverter(BaseConverter):
 
 
 class StorageTypeConverter(BaseConverter):
-    regex = r'(tool|rev_usr|rev_icann)'
+    regex = rf"({'|'.join(s.value for s in StorageType)})"

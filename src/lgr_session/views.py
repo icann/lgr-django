@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from enum import Enum
+
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import SuspiciousOperation
@@ -14,6 +16,12 @@ from lgr_idn_table_review.icann.api import LgrIcannSession
 from lgr_idn_table_review.tool.api import LgrIdnReviewSession
 
 
+class StorageType(Enum):
+    TOOL = 'tool'
+    IDN_REVIEW_USER_MODE = 'rev_usr'
+    IDN_REVIEW_ICANN_MODE = 'rev_icann'
+
+
 class LgrSessionView(UserPassesTestMixin, View):
 
     def dispatch(self, request, *args, **kwargs):
@@ -25,11 +33,11 @@ class LgrSessionView(UserPassesTestMixin, View):
             raise SuspiciousOperation()
         self.next = request.GET.get('next', '/')
         storage_type = self.kwargs.get('storage')
-        if storage_type == 'tool':
+        if StorageType(storage_type) == StorageType.TOOL:
             self.session = LgrToolSession(self.request)
-        elif storage_type == 'rev_usr':
+        elif StorageType(storage_type) == StorageType.IDN_REVIEW_USER_MODE:
             self.session = LgrIdnReviewSession(request)
-        elif storage_type == 'rev_icann':
+        elif StorageType(storage_type) == StorageType.IDN_REVIEW_ICANN_MODE:
             self.session = LgrIcannSession(request)
         else:
             raise Http404
@@ -37,7 +45,7 @@ class LgrSessionView(UserPassesTestMixin, View):
 
     def test_func(self):
         storage_type = self.kwargs.get('storage')
-        if storage_type == 'rev_icann':
+        if StorageType(storage_type) == StorageType.IDN_REVIEW_ICANN_MODE:
             return self.request.user.is_authenticated and self.request.user.role in [LgrRole.ICANN.value,
                                                                                      LgrRole.ADMIN.value]
         return True
