@@ -108,7 +108,7 @@ class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
             context['zip'] = zipname
         context['completed'] = True  # FIXME: we don't know if this if finished or not
         context['title'] = _("IDN Table Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
-        context['storage_type'] = StorageType.IDN_REVIEW_USER_MODE
+        context['storage_type'] = StorageType.IDN_REVIEW_USER_MODE.value
         context['back_url'] = 'lgr_review_report_folders'
         return context
 
