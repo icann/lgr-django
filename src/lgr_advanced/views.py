@@ -14,17 +14,17 @@ from lgr_web.views import Interfaces, INTERFACE_SESSION_KEY
 
 class LgrViewMixin:
 
-    def dispatch(self, request, *args, **kwargs):
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
         self.session = LgrToolSession(request)
-        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        request.session[INTERFACE_SESSION_KEY] = Interfaces.ADVANCED.name
+        return super().get(request, *args, **kwargs)
 
 
 class AdvancedModeView(LgrViewMixin, TemplateView):
     template_name = 'lgr_advanced/index.html'
-
-    def get(self, request, *args, **kwargs):
-        request.session[INTERFACE_SESSION_KEY] = Interfaces.ADVANCED.name
-        return super(AdvancedModeView, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super(AdvancedModeView, self).get_context_data(**kwargs)

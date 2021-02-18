@@ -15,9 +15,9 @@ from .tasks import idn_table_review_task
 
 class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):
 
-    def dispatch(self, request, *args, **kwargs):
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
         self.session = LgrIcannSession(request)
-        return super().dispatch(request, *args, **kwargs)
 
     def test_func(self):
         return self.request.user.role in [LgrRole.ICANN.value, LgrRole.ADMIN.value]
