@@ -7,7 +7,6 @@ api -
 import logging
 import os
 from abc import abstractmethod, ABC
-from functools import partial
 from typing import Type
 from uuid import uuid4
 
@@ -141,7 +140,7 @@ class LgrSession(LgrStorage):
     lgr_session_key: str = None
     lgr_serializer: Type[LgrSerializer] = None
     get_from_repertoire: bool = False
-    loader_function = None
+    loader_function = None  # function with session as first argument and repertoire as second
 
     def __init__(self, request):
         self.request = request
@@ -182,7 +181,7 @@ class LgrSession(LgrStorage):
             kwargs['lgr_set_dct'] = [lgr.to_dict() for lgr in kwargs['lgr_set']]
         lgr_serializer_kwargs = {}
         if self.loader_function:
-            lgr_serializer_kwargs = {'lgr_loader_func': partial(self.loader_function, session=self)}
+            lgr_serializer_kwargs = {'lgr_loader_func': self.loader_function}
         lgr_info = self.lgr_serializer.from_dict(kwargs, **lgr_serializer_kwargs)
         if not kwargs.get('from_set', False):
             # do not save lgr in session, it will be kept in set
@@ -239,7 +238,7 @@ class LgrSession(LgrStorage):
             if lgr['name'] == lgr_id:
                 lgr_serializer_kwargs = {'request': self.request}
                 if self.loader_function:
-                    lgr_serializer_kwargs['lgr_loader_func'] = partial(self.loader_function, session=self),
+                    lgr_serializer_kwargs['lgr_loader_func'] = self.loader_function,
                 return self.lgr_serializer.from_dict(lgr, **lgr_serializer_kwargs)
         raise Http404
 

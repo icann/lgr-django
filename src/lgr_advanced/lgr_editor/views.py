@@ -1926,9 +1926,8 @@ class MetadataView(LgrViewMixin, FormView):
                                                        description_type=cd['description_type'] or None)
 
                 if cd['validating_repertoire']:
-                    self.lgr_info.validating_repertoire = \
-                        get_builtin_or_session_repertoire(cd['validating_repertoire'],
-                                                          self.request)
+                    self.lgr_info.validating_repertoire = get_builtin_or_session_repertoire(self.session,
+                                                                                            cd['validating_repertoire'])
                 else:
                     self.lgr_info.validating_repertoire = None
 
