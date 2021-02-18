@@ -24,7 +24,8 @@ class StorageType(Enum):
 
 class LgrSessionView(UserPassesTestMixin, View):
 
-    def dispatch(self, request, *args, **kwargs):
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
         self.filename = self.kwargs.get('filename')
         if not RE_SAFE_FILENAME.match(self.filename):
             raise SuspiciousOperation()
@@ -41,7 +42,6 @@ class LgrSessionView(UserPassesTestMixin, View):
             self.session = LgrIcannSession(request)
         else:
             raise Http404
-        return super().dispatch(request, *args, **kwargs)
 
     def test_func(self):
         storage_type = self.kwargs.get('storage')

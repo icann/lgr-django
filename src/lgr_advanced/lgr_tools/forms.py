@@ -72,7 +72,6 @@ class LGRCompareSelector(forms.Form):
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', [])
-        lgr_id = kwargs.pop('lgr_id', '')
         super(LGRCompareSelector, self).__init__(*args, **kwargs)
         need_empty = False
         lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
@@ -89,7 +88,6 @@ class LGRCompareSelector(forms.Form):
         self.fields['lgr_2'].widget.data = self.fields['lgr_1'].widget.data
         if need_empty:
             self.fields['lgr_2'].empty = True
-        self.fields['lgr_1'].initial = lgr_id
 
 
 class LGRDiffSelector(forms.Form):
@@ -126,12 +124,10 @@ class LGRDiffSelector(forms.Form):
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', [])
-        lgr_id = kwargs.pop('lgr_id', '')
         super(LGRDiffSelector, self).__init__(*args, **kwargs)
         # dynamically append the session LGRs (by copy, not by reference)
         for lgr_f in ['lgr_1', 'lgr_2']:
-            self.fields[lgr_f].choices = ((name, name) for name in session_lgrs)
-        self.fields['lgr_1'].initial = lgr_id
+            self.fields[lgr_f].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs if not lgr['is_set'])
 
 
 class LGRCollisionSelector(forms.Form):
@@ -161,11 +157,9 @@ class LGRCollisionSelector(forms.Form):
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', [])
-        lgr_id = kwargs.pop('lgr_id', '')
         super(LGRCollisionSelector, self).__init__(*args, **kwargs)
         # dynamically append the session LGRs (by copy, not by reference)
-        self.fields['lgr'].choices = ((name, name) for name in session_lgrs)
-        self.fields['lgr'].initial = lgr_id
+        self.fields['lgr'].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs if not lgr['is_set'])
 
 
 class LGRSetCompatibleForm(forms.Form):
@@ -180,8 +174,6 @@ class LGRSetCompatibleForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', {})
-        lgr_id = kwargs.pop('lgr_id', '')
-        lgr_info = kwargs.pop('lgr_info', None)
         scripts = kwargs.pop('scripts', [])
         super(LGRSetCompatibleForm, self).__init__(*args, **kwargs)
         lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
@@ -191,9 +183,6 @@ class LGRSetCompatibleForm(forms.Form):
                                       (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
         self.fields['lgr'].widget.data = {lgr['name']: {'lgr-set': ','.join([l['name'] for l in lgr['lgr_set_dct']])}
                                           for lgr in lgr_sets}
-        self.fields['lgr'].initial = lgr_id
-        if lgr_info is not None:
-            self.fields['lgr'].initial = lgr_info.name
 
         if scripts:
             self.fields['script'].choices = scripts
@@ -216,12 +205,6 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
     email = UAEmailField(label=_("E-mail"),
                          help_text=_('Provide your e-mail address'),
                          required=True)
-
-    def __init__(self, *args, **kwargs):
-        lgr_info = kwargs.get('lgr_info', None)
-        super(LGRAnnotateSelector, self).__init__(*args, **kwargs)
-        if lgr_info is not None and lgr_info.set_labels_info is not None:
-            self.fields['set_labels'].initial = lgr_info.set_labels_info.name
 
 
 class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
@@ -250,14 +233,11 @@ class LGRHarmonizeSelector(forms.Form):
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', {})
-        lgr_id = kwargs.pop('lgr_id', '')
         super(LGRHarmonizeSelector, self).__init__(*args, **kwargs)
         # dynamically append the session LGRs
         for field_name in ('lgr_1', 'lgr_2', 'rz_lgr'):
-            self.fields[field_name].choices = ((name, name) for name in session_lgrs)
+            self.fields[field_name].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs if not lgr['is_set'])
         self.fields['rz_lgr'].choices = [('', ''), ] + self.fields['rz_lgr'].choices
-        self.fields['lgr_1'].initial = lgr_id
-        self.fields['rz_lgr'].initial = ''
 
 
 class LGRComputeVariantsSelector(forms.Form):
@@ -275,8 +255,6 @@ class LGRComputeVariantsSelector(forms.Form):
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', [])
-        lgr_id = kwargs.pop('lgr_id', '')
         super(LGRComputeVariantsSelector, self).__init__(*args, **kwargs)
         # dynamically append the session LGRs (by copy, not by reference)
-        self.fields['lgr'].choices = ((name, name) for name in session_lgrs)
-        self.fields['lgr'].initial = lgr_id
+        self.fields['lgr'].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs if not lgr['is_set'])

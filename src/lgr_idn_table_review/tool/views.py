@@ -20,9 +20,9 @@ from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 
 class IdnTableReviewViewMixin:
 
-    def dispatch(self, request, *args, **kwargs):
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
         self.session = LgrIdnReviewSession(request)
-        return super().dispatch(request, *args, **kwargs)
 
 
 class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
