@@ -168,7 +168,8 @@
                                 <a href="{% url 'download_file' storage='tool' filename=file %}?next={{ request.path }}">
                                     {% blocktrans %}Download {{ file }}{% endblocktrans %}
                                 </a>
-                                <a href="{% url 'delete_file' storage='tool' filename=file %}" class="delete_file">
+                                <a href="{% url 'delete_file' storage='tool' filename=file %}?next={{ request.path }}"
+                                   class="delete_file">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
                             </li>
