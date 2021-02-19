@@ -18,7 +18,7 @@ from lgr_advanced.utils import list_root_zones, clean_repertoire_cache
 logger = logging.getLogger(__name__)
 
 
-class LgrSerializer(ABC):
+class LGRSerializer(ABC):
 
     def __init__(self, name, lgr=None, **kwargs):
         self.name = name
@@ -135,9 +135,9 @@ class LgrStorage:
             pass
 
 
-class LgrSession(LgrStorage):
+class LGRSession(LgrStorage):
     lgr_session_key: str = None
-    lgr_serializer: Type[LgrSerializer] = None
+    lgr_serializer: Type[LGRSerializer] = None
     get_from_repertoire: bool = False
     loader_function = None  # function with session as first argument and repertoire as second
 

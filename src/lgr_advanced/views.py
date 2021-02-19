@@ -5,25 +5,25 @@ from django.views.generic import TemplateView
 
 from lgr.utils import cp_to_ulabel, format_cp
 from lgr_advanced import unidb
-from lgr_advanced.api import LgrToolSession
+from lgr_advanced.api import LGRToolSession
 from lgr_advanced.forms import LabelFormsForm
 from lgr_advanced.utils import list_built_in_lgr
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_web.views import Interfaces, INTERFACE_SESSION_KEY
 
 
-class LgrViewMixin:
+class LGRViewMixin:
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.session = LgrToolSession(request)
+        self.session = LGRToolSession(request)
 
     def get(self, request, *args, **kwargs):
         request.session[INTERFACE_SESSION_KEY] = Interfaces.ADVANCED.name
         return super().get(request, *args, **kwargs)
 
 
-class AdvancedModeView(LgrViewMixin, TemplateView):
+class AdvancedModeView(LGRViewMixin, TemplateView):
     template_name = 'lgr_advanced/index.html'
 
     def get_context_data(self, **kwargs):

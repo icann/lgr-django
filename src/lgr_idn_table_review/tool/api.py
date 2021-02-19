@@ -12,14 +12,14 @@ from lgr.parser.heuristic_parser import HeuristicParser
 from lgr.parser.xml_parser import LGR_NS
 from lgr_advanced import unidb
 from lgr_advanced.api import OLD_LGR_NS
-from lgr_session.api import LgrSession, LgrSerializer
+from lgr_session.api import LGRSession, LGRSerializer
 
 logger = logging.getLogger(__name__)
 
 IDN_TABLES_SESSION_KEY = 'idn-table'
 
 
-class IdnTableInfo(LgrSerializer):
+class IdnTableInfo(LGRSerializer):
     def __init__(self, name, data, lgr):
         super(IdnTableInfo, self).__init__(name, lgr=lgr)
         self.data = data
@@ -55,7 +55,7 @@ class IdnTableInfo(LgrSerializer):
         return lgr
 
 
-class LgrIdnReviewSession(LgrSession):
+class LGRIdnReviewSession(LGRSession):
     lgr_session_key = IDN_TABLES_SESSION_KEY
     lgr_serializer = IdnTableInfo
     storage_location = settings.IDN_REVIEW_USER_OUTPUT_STORAGE_LOCATION

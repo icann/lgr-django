@@ -5,12 +5,12 @@ mixins -
 """
 import logging
 
-from lgr_advanced.views import LgrViewMixin
+from lgr_advanced.views import LGRViewMixin
 
 logger = logging.getLogger(__name__)
 
 
-class LGRHandlingBaseMixin(LgrViewMixin):
+class LGRHandlingBaseMixin(LGRViewMixin):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

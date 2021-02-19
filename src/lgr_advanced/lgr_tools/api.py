@@ -34,7 +34,7 @@ def lgr_intersect_union(session, lgr_info_1, lgr_info_2, action):
     """
     Compare 2 LGRs for union/intersection.
 
-    :param session: The LgrSession object.
+    :param session: The LGRSession object.
     :param lgr_info_1: The first LGR info object.
     :param lgr_info_2: The second LGR info object.
     :param action: One of "UNION", "INTERSECTION".
@@ -170,7 +170,7 @@ def lgr_harmonization(session, lgr_1, lgr_2, rz_lgr):
     """
     Perform variant harmonization between 2 LGRs
 
-    :param session: The LgrSession object.
+    :param session: The LGRSession object.
     :param lgr_1: First LGR.
     :param lgr_2: Second LGR.
     :param rz_lgr: Optional related Rootzone LGR.

@@ -28,7 +28,7 @@ IANA_URL = 'https://www.iana.org'
 IANA_IDN_TABLES = IANA_URL + '/domains/idn-tables'
 
 
-class LgrIcannSession(LgrStorage):
+class LGRIcannSession(LgrStorage):
     storage_location = settings.IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION
 
     def __init__(self, request):

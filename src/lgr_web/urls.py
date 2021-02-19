@@ -15,7 +15,7 @@ import lgr_auth.urls
 import lgr_basic.urls
 import lgr_idn_table_review.urls
 import lgr_session.urls
-from .views import LgrModesView, LgrSwitchModeView, LgrAboutView
+from .views import LGRModesView, LGRSwitchModeView, LGRAboutView
 
 urlpatterns = [
     path('a/', include(lgr_advanced.urls.urlpatterns)),
@@ -26,8 +26,8 @@ urlpatterns = [
 
     path('i18n/', include('django.conf.urls.i18n')),
 
-    path('about/', LgrAboutView.as_view(), name='about'),
+    path('about/', LGRAboutView.as_view(), name='about'),
 
-    path('switch/', LgrSwitchModeView.as_view(), name='lgr_modes'),
-    path('', LgrModesView.as_view(), name='lgr_home'),
+    path('switch/', LGRSwitchModeView.as_view(), name='lgr_modes'),
+    path('', LGRModesView.as_view(), name='lgr_home'),
 ]

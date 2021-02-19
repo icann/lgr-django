@@ -6,10 +6,10 @@ from __future__ import unicode_literals
 from django.views.generic import TemplateView
 
 from lgr_advanced.lgr_renderer.api import generate_context
-from lgr_advanced.views import LgrViewMixin
+from lgr_advanced.views import LGRViewMixin
 
 
-class LGRRendererView(LgrViewMixin, TemplateView):
+class LGRRendererView(LGRViewMixin, TemplateView):
     template_name = 'lgr_renderer.html'
 
     def get(self, request, *args, **kwargs):

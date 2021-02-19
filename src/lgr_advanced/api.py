@@ -23,7 +23,7 @@ from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.utils import (make_lgr_session_key,
                                 LGR_CACHE_TIMEOUT,
                                 LGR_OBJECT_CACHE_KEY)
-from lgr_session.api import LgrSession, LgrSerializer
+from lgr_session.api import LGRSession, LGRSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ OLD_LGR_NS = 'http://www.iana.org/lgr/0.1'
 LGRS_SESSION_KEY = 'lgr'
 
 
-class LGRInfo(LgrSerializer):
+class LGRInfo(LGRSerializer):
     def __init__(self, name, lgr=None, xml=None, validating_repertoire=None, lgr_set=None, set_labels_info=None):
         super(LGRInfo, self).__init__(name, lgr=lgr)
         self.xml = xml
@@ -225,11 +225,11 @@ class LabelInfo(object):
         }
 
 
-def get_builtin_or_session_repertoire(session: LgrSession, repertoire_id):
+def get_builtin_or_session_repertoire(session: LGRSession, repertoire_id):
     """
     Load the given LGR from the set of built-in repertoires, or if not found, load it from the user's session
 
-    :param session: LgrSession object
+    :param session: LGRSession object
     :param repertoire_id: a slug identifying the LGR
     :return: `LGR` instance
     """
@@ -244,7 +244,7 @@ def get_builtin_or_session_repertoire(session: LgrSession, repertoire_id):
             raise  # don't deal with any other errors
 
 
-class LgrToolSession(LgrSession):
+class LGRToolSession(LGRSession):
     lgr_session_key = LGRS_SESSION_KEY
     lgr_serializer = LGRInfo
     storage_location = settings.TOOLS_OUTPUT_STORAGE_LOCATION

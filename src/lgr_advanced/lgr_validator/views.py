@@ -13,7 +13,7 @@ from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_l
 from lgr_advanced.unidb import get_db_by_version
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
 from .forms import ValidateLabelForm
-from ..api import LabelInfo, LgrToolSession
+from ..api import LabelInfo, LGRToolSession
 
 
 class NeedAsyncProcess(Exception):
@@ -41,7 +41,7 @@ def evaluate_label_from_info(request,
     :param check_collisions: Check for collisions with the provided list of labels
     :return: a dict containing results of the evaluation, empty if process is asynchronous.
     """
-    session = LgrToolSession(request)
+    session = LGRToolSession(request)
 
     ctx = {}
     need_async = lgr_info.lgr.estimate_variant_number(label_cplist) > settings.LGR_VALIDATION_MAX_VARS_SYNCHRONOUS
@@ -87,7 +87,7 @@ def evaluate_label_from_info(request,
 def validate_label(request, lgr_id, lgr_set_id=None,
                    threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE,
                    output_func=None, noframe=False):
-    session = LgrToolSession(request)
+    session = LGRToolSession(request)
 
     lgr_info = session.select_lgr(lgr_id, lgr_set_id=lgr_set_id)
     udata = get_db_by_version(lgr_info.lgr.metadata.unicode_version)

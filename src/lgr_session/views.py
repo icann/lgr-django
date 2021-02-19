@@ -9,11 +9,11 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import View
 
-from lgr_advanced.api import LgrToolSession
+from lgr_advanced.api import LGRToolSession
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
 from lgr_auth.models import LgrRole
-from lgr_idn_table_review.icann.api import LgrIcannSession
-from lgr_idn_table_review.tool.api import LgrIdnReviewSession
+from lgr_idn_table_review.icann.api import LGRIcannSession
+from lgr_idn_table_review.tool.api import LGRIdnReviewSession
 
 
 class StorageType(Enum):
@@ -22,7 +22,7 @@ class StorageType(Enum):
     IDN_REVIEW_ICANN_MODE = 'rev_icann'
 
 
-class LgrSessionView(UserPassesTestMixin, View):
+class LGRSessionView(UserPassesTestMixin, View):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
@@ -35,11 +35,11 @@ class LgrSessionView(UserPassesTestMixin, View):
         self.next = request.GET.get('next', '/')
         storage_type = self.kwargs.get('storage')
         if StorageType(storage_type) == StorageType.TOOL:
-            self.session = LgrToolSession(self.request)
+            self.session = LGRToolSession(self.request)
         elif StorageType(storage_type) == StorageType.IDN_REVIEW_USER_MODE:
-            self.session = LgrIdnReviewSession(request)
+            self.session = LGRIdnReviewSession(request)
         elif StorageType(storage_type) == StorageType.IDN_REVIEW_ICANN_MODE:
-            self.session = LgrIcannSession(request)
+            self.session = LGRIcannSession(request)
         else:
             raise Http404
 
@@ -51,7 +51,7 @@ class LgrSessionView(UserPassesTestMixin, View):
         return True
 
 
-class DownloadFileView(LgrSessionView):
+class DownloadFileView(LGRSessionView):
 
     def get(self, request, *args, **kwargs):
         try:
@@ -67,7 +67,7 @@ class DownloadFileView(LgrSessionView):
         return response
 
 
-class DeleteFileView(LgrSessionView):
+class DeleteFileView(LGRSessionView):
 
     def get(self, request, *args, **kwargs):
         self.session.storage_delete_file(self.filename, subfolder=self.folder)

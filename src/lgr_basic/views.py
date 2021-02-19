@@ -16,12 +16,12 @@ from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import evaluate_label_from_info, NeedAsyncProcess
-from lgr_advanced.views import LgrViewMixin
+from lgr_advanced.views import LGRViewMixin
 from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 from .forms import ValidateLabelSimpleForm
 
 
-class BasicModeView(LgrViewMixin, FormView):
+class BasicModeView(LGRViewMixin, FormView):
     form_class = ValidateLabelSimpleForm
     template_name = 'lgr_basic/basic_mode.html'
 

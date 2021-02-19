@@ -23,10 +23,10 @@ from .tasks import (diff_task,
                     validate_labels_task)
 from ..api import LabelInfo
 from ..utils import cp_to_slug
-from ..views import LgrViewMixin
+from ..views import LGRViewMixin
 
 
-class LGRToolBaseView(LgrViewMixin, FormView):
+class LGRToolBaseView(LGRViewMixin, FormView):
     initial_field = 'lgr'
 
     def setup(self, request, *args, **kwargs):

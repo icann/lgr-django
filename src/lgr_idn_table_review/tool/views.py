@@ -11,7 +11,7 @@ from django.views.generic import FormView, TemplateView
 
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
 from lgr_idn_table_review.admin.models import RzLgr, RefLgr
-from lgr_idn_table_review.tool.api import LgrIdnReviewSession
+from lgr_idn_table_review.tool.api import LGRIdnReviewSession
 from lgr_idn_table_review.tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_idn_table_review.tool.tasks import idn_table_review_task
 from lgr_session.views import StorageType
@@ -22,7 +22,7 @@ class IdnTableReviewViewMixin:
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.session = LgrIdnReviewSession(request)
+        self.session = LGRIdnReviewSession(request)
 
 
 class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
