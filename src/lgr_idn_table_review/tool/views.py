@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import FormView, TemplateView
 
-from lgr_advanced.lgr_editor.views import RE_SAFE_FILENAME
+from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
 from lgr_idn_table_review.admin.models import RzLgr, RefLgr
 from lgr_idn_table_review.tool.api import LgrIdnReviewSession
 from lgr_idn_table_review.tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm

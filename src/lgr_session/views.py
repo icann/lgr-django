@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import View
 
 from lgr_advanced.api import LgrToolSession
-from lgr_advanced.lgr_editor.views import RE_SAFE_FILENAME
+from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
 from lgr_auth.models import LgrRole
 from lgr_idn_table_review.icann.api import LgrIcannSession
 from lgr_idn_table_review.tool.api import LgrIdnReviewSession

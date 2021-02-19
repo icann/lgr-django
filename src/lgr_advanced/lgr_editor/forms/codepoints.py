@@ -119,10 +119,9 @@ class EditCodepointsForm(forms.Form):
     tags = forms.CharField(label='Tags', required=False, help_text='space-separated tags')
     cp_id = MultipleChoiceFieldNoValidation()  # will contain a list of code points
 
-    def __init__(self, post, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         rule_names = kwargs.pop('rule_names', None)
-        self.post = post
-        super(EditCodepointsForm, self).__init__(post, *args, **kwargs)
+        super(EditCodepointsForm, self).__init__(*args, **kwargs)
 
         if rule_names:
             self.fields['when'].choices = rule_names
@@ -130,7 +129,7 @@ class EditCodepointsForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(EditCodepointsForm, self).clean()
-        if self.post and 'add-rules' in self.post:
+        if 'add-rules' in self.data:
             if cleaned_data['when'] and cleaned_data['not_when']:
                 self.add_error('when', _('Cannot add when and not-when rules simultaneously'))
                 self.add_error('not_when', _('Cannot add when and not-when rules simultaneously'))
@@ -138,7 +137,7 @@ class EditCodepointsForm(forms.Form):
                 self.add_error('when', _('Please provide at least one value'))
                 self.add_error('not_when', _('Please provide at least one value'))
 
-        if self.post and 'add-tags' in self.post and not cleaned_data.get('tags'):
+        if 'add-tags' in self.data and not cleaned_data.get('tags'):
             self.add_error('tags', _('Please provide at least one value'))
 
         return cleaned_data

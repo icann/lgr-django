@@ -1,20 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import json
 from django.conf import settings
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.translation import ugettext as _
 
 from lgr.exceptions import LGRException
-from lgr_advanced.unidb import get_db_by_version
-from ..api import LabelInfo, LgrToolSession
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
+from lgr_advanced.unidb import get_db_by_version
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
 from .forms import ValidateLabelForm
+from ..api import LabelInfo, LgrToolSession
 
 
 class NeedAsyncProcess(Exception):
@@ -169,14 +168,13 @@ def validate_label_noframe(request, lgr_id, lgr_set_id=None):
 
 
 def validate_label_json(request, lgr_id, lgr_set_id=None):
-    return validate_label(request, lgr_id,  lgr_set_id=lgr_set_id,
+    return validate_label(request, lgr_id, lgr_set_id=lgr_set_id,
                           threshold_include_vars=-1,
-                          output_func=lambda ctx: HttpResponse(json.dumps(ctx.get('result', 'Error')),
-                                                               content_type='application/json'),
+                          output_func=lambda ctx: JsonResponse(ctx.get('result', 'Error')),
                           noframe=True)
 
 
-def validate_label_csv(request, lgr_id, lgr_set_id=None,):
+def validate_label_csv(request, lgr_id, lgr_set_id=None, ):
     return validate_label(request, lgr_id, lgr_set_id=lgr_set_id,
                           threshold_include_vars=-1,
                           output_func=_prepare_csv_response, noframe=True)
