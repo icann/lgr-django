@@ -16,7 +16,7 @@ class Interfaces(Enum):
     IDN_ADMIN = auto()
 
 
-class LgrModesView(TemplateView):
+class LGRModesView(TemplateView):
     template_name = 'lgr_modes.html'
 
     def get(self, request, *args, **kwargs):
@@ -33,17 +33,17 @@ class LgrModesView(TemplateView):
         if interface == Interfaces.IDN_ICANN.name:
             return redirect('lgr_idn_icann_mode')
 
-        return super(LgrModesView, self).get(request, *args, **kwargs)
+        return super(LGRModesView, self).get(request, *args, **kwargs)
 
 
-class LgrSwitchModeView(LgrModesView):
+class LGRSwitchModeView(LGRModesView):
     def get(self, request, *args, **kwargs):
         # reset interface session key
         request.session.pop(INTERFACE_SESSION_KEY, None)
-        return super(LgrModesView, self).get(request, *args, **kwargs)
+        return super(LGRModesView, self).get(request, *args, **kwargs)
 
 
-class LgrAboutView(TemplateView):
+class LGRAboutView(TemplateView):
     """
     About dialog
     """

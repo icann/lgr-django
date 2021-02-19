@@ -18,14 +18,14 @@ from django.views.generic import FormView
 
 from lgr_advanced.lgr_editor.forms import CreateLGRForm, ImportLGRForm
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_advanced.views import LgrViewMixin
+from lgr_advanced.views import LGRViewMixin
 
 logger = logging.getLogger(__name__)
 
 RE_SAFE_FILENAME = re.compile(r'[a-zA-Z0-9. _\-()]+')
 
 
-class NewLGRView(LgrViewMixin, FormView):
+class NewLGRView(LGRViewMixin, FormView):
     form_class = CreateLGRForm
     template_name = 'lgr_editor/new_form.html'
 
@@ -61,7 +61,7 @@ class NewLGRView(LgrViewMixin, FormView):
         return super(NewLGRView, self).form_valid(form)
 
 
-class ImportLGRView(LgrViewMixin, FormView):
+class ImportLGRView(LGRViewMixin, FormView):
     """
     Import an LGR from XML file supplied by user.
     """
@@ -157,7 +157,7 @@ class ImportLGRView(LgrViewMixin, FormView):
         return merged_id
 
 
-class ImportReferenceLGRView(LgrViewMixin, View):
+class ImportReferenceLGRView(LGRViewMixin, View):
     """
     Import a built-in LGR to user's session.
     """
@@ -178,7 +178,7 @@ class ImportReferenceLGRView(LgrViewMixin, View):
         return reverse('codepoint_list', kwargs={'lgr_id': self.lgr_id})
 
 
-class DeleteLGRView(LgrViewMixin, View):
+class DeleteLGRView(LGRViewMixin, View):
     """
     Delete the selected LGR from session.
     """
