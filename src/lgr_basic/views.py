@@ -74,7 +74,7 @@ class BasicModeView(LGRViewMixin, FormView):
 
             for label_cplist in labels_cp:
                 try:
-                    results.append(evaluate_label_from_info(self.request, lgr_info, label_cplist, None, email_address,
+                    results.append(evaluate_label_from_info(self.session, lgr_info, label_cplist, None, email_address,
                                                             check_collisions=check_collisions))
                 except UnicodeError as ex:
                     messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
