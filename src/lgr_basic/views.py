@@ -11,19 +11,22 @@ from django.views.generic import FormView
 from lgr.exceptions import LGRException
 from lgr.tools.utils import download_file, read_labels
 from lgr.utils import cp_to_ulabel
-from lgr_advanced.api import LGRInfo, LabelInfo
-from lgr_advanced.lgr_exceptions import lgr_exception_to_text
+from lgr_advanced.api import LGRInfo, LabelInfo, LGRToolSession
 from lgr_advanced.lgr_editor.repertoires import get_by_name
+from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import evaluate_label_from_info, NeedAsyncProcess
-from lgr_advanced.views import LGRViewMixin
 from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
 from .forms import ValidateLabelSimpleForm
 
 
-class BasicModeView(LGRViewMixin, FormView):
+class BasicModeView(FormView):
     form_class = ValidateLabelSimpleForm
     template_name = 'lgr_basic/basic_mode.html'
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.session = LGRToolSession(request)
 
     def get(self, request, *args, **kwargs):
         request.session[INTERFACE_SESSION_KEY] = Interfaces.BASIC.name
