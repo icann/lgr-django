@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib import messages
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, FormView
 
 from lgr.utils import cp_to_ulabel, format_cp
 from lgr_advanced import unidb
 from lgr_advanced.api import LGRToolSession
 from lgr_advanced.forms import LabelFormsForm
-from lgr_advanced.utils import list_built_in_lgr
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
+from lgr_advanced.utils import list_built_in_lgr
 from lgr_web.views import Interfaces, INTERFACE_SESSION_KEY
 
 
@@ -38,25 +38,35 @@ class AdvancedModeView(LGRViewMixin, TemplateView):
         return ctx
 
 
-class LabelFormsView(TemplateView):
+class LabelFormsView(FormView):
+    form_class = LabelFormsForm
     template_name = 'lgr_advanced/label_forms.html'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.label = ''
+        self.udata = None
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['unicode_versions'] = ((v, v) for v in settings.SUPPORTED_UNICODE_VERSIONS)
+        return kwargs
+
     def get_context_data(self, **kwargs):
-        ctx = super(LabelFormsView, self).get_context_data(**kwargs)
-        unicode_versions = ((v, v) for v in settings.SUPPORTED_UNICODE_VERSIONS)
-        form = LabelFormsForm(self.request.POST or None,
-                              unicode_versions=unicode_versions)
-        if form.is_bound and form.is_valid():
-            label = form.cleaned_data['label']
-            unicode_version = form.cleaned_data['unicode_version']
-            udata = unidb.manager.get_db_by_version(unicode_version)
+        ctx = super().get_context_data(**kwargs)
+        if self.label:
             try:
-                ctx['cp_list'] = format_cp(label)
-                ctx['u_label'] = cp_to_ulabel(label)
-                ctx['a_label'] = udata.idna_encode_label(ctx['u_label'])
+                ctx['cp_list'] = format_cp(self.label)
+                ctx['u_label'] = cp_to_ulabel(self.label)
+                ctx['a_label'] = self.udata.idna_encode_label(ctx['u_label'])
             except UnicodeError as ex:
                 messages.add_message(self.request, messages.ERROR,
                                      lgr_exception_to_text(ex))
-
-        ctx['form'] = form
         return ctx
+
+    def form_valid(self, form):
+        self.label = form.cleaned_data['label']
+        unicode_version = form.cleaned_data['unicode_version']
+        self.udata = unidb.manager.get_db_by_version(unicode_version)
+
+        return self.render_to_response(self.get_context_data(form=form))
