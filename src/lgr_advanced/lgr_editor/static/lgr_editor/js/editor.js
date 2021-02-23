@@ -2,9 +2,6 @@
  * LGR Editor common javascript functions.
  */
 
-
-
-
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
