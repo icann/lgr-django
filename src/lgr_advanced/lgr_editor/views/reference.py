@@ -7,16 +7,16 @@ import logging
 
 from django.contrib import messages
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.six import iteritems
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
-from django.views.generic import TemplateView, FormView, RedirectView
+from django.views.generic import TemplateView, FormView
 
 from lgr.exceptions import LGRException
 from lgr_advanced.lgr_editor.forms import ReferenceForm, ReferenceFormSet
-from lgr_advanced.lgr_editor.views.codepoints.mixins import LGREditMixin
-from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
+from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 
 logger = logging.getLogger('reference')
@@ -74,7 +74,8 @@ class AddReferenceView(LGREditMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['rd_id'] = False
+        kwargs['ro_id'] = False
+        return kwargs
 
     def form_valid(self, form):
         logger.debug('Add reference')
@@ -143,7 +144,7 @@ class ListReferenceJsonView(LGRHandlingBaseMixin, View):
             'comment': ref.get('comment', '')
         } for (ref_id, ref) in iteritems(self.lgr_info.lgr.reference_manager)]
 
-        return JsonResponse(references, charset='UTF-8')
+        return JsonResponse(references, charset='UTF-8', safe=False)
 
 
 class AddReferenceAjaxView(LGREditMixin, FormView):
@@ -174,12 +175,10 @@ class AddReferenceAjaxView(LGREditMixin, FormView):
         return HttpResponseBadRequest(form.errors)
 
 
-class DeleteReferenceView(LGREditMixin, RedirectView):
+class DeleteReferenceView(LGREditMixin, View):
     """
     Delete a reference from an LGR.
     """
-    pattern_name = 'references'
-
     def get(self, request, *args, **kwargs):
         ref_id = self.kwargs['ref_id']
         logger.debug("Delete reference %s'", ref_id)
@@ -194,4 +193,4 @@ class DeleteReferenceView(LGREditMixin, RedirectView):
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        return super().get(request, *args, **kwargs)
+        return redirect('references', lgr_id=self.lgr_id)

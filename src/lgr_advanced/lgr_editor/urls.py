@@ -10,7 +10,6 @@ from lgr_web.converters import (LgrSlugConverter,
                                 FileNameConverter,
                                 ReferenceIdConverter,
                                 ActionIndexConverter)
-from . import views
 from .api import _prepare_validation_html_file_response
 from .views.codepoints.codepoint import (CodePointUpdateReferencesView,
                                          CodePointDeleteView,
@@ -27,12 +26,12 @@ from .views.create import (DeleteLGRView,
                            NewLGRView,
                            ImportLGRView)
 from .views.export import LGRRenderXMLView
+from .views.metadata import MetadataView, LanguageAutocomplete
 from .views.reference import ReferenceView, ListReferenceJsonView, AddReferenceAjaxView, DeleteReferenceView
+from .views.rule import ListRuleView, RuleEditClassAjaxView, RuleEditRuleAjaxView, RuleEditActionAjaxView
 from .views.set import EmbeddedLGRsView
 from .views.tag import ListTagView, ListTagJsonView, DeleteTagView
 from .views.validate import ValidateLGRView
-from .views.metadata import MetadataView, LanguageAutocomplete
-from .views.rule import ListRuleView, RuleEditClassAjaxView, RuleEditRuleAjaxView, RuleEditActionAjaxView
 
 register_converter(FileNameConverter, 'filename')
 register_converter(LgrSlugConverter, 'lgr')
@@ -72,7 +71,7 @@ urlpatterns = [
     # Tags management functions
     path('lgr/<lgr:lgr_id>/tags', ListTagView.as_view(), name='tags'),
     path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/tags', ListTagView.as_view(), name='tags'),
-    path('lgr/<lgr:lgr_id>/d/tags/<tag:tag_id>', DeleteTagView, name='tag_delete'),
+    path('lgr/<lgr:lgr_id>/d/tags/<tag:tag_id>', DeleteTagView.as_view(), name='tag_delete'),
     path('lgr/<lgr:lgr_id>/tags/<tag:tag_id>', ListTagJsonView.as_view(), name='tag_list_json'),
     path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/tags/<tag:tag_id>', ListTagJsonView.as_view(), name='tag_list_json'),
 

@@ -12,12 +12,11 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView
 
 from lgr.exceptions import LGRException
 from lgr_advanced.lgr_editor.utils import render_cp_or_sequence
-from lgr_advanced.lgr_editor.views.codepoints.mixins import LGREditMixin
-from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
+from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.utils import cp_to_slug
 
@@ -95,11 +94,10 @@ class ListTagJsonView(LGRHandlingBaseMixin, View):
         return JsonResponse(response)
 
 
-class DeleteTagView(LGREditMixin, RedirectView):
+class DeleteTagView(LGREditMixin, View):
     """
     Delete a tag from an LGR.
     """
-    pattern_name = 'tags'
 
     def get(self, request, *args, **kwargs):
         tag_id = self.kwargs['tag_id']

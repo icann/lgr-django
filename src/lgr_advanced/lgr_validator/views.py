@@ -91,10 +91,16 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
     output_func: str = None
     noframe = False
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self):
+        super().__init__()
         self.result = {}
         self.email_required = False
+
+    def get_initial(self):
+        initial = super().get_initial()
+        if self.lgr_info is not None and self.lgr_info.set_labels_info is not None:
+            initial['set_labels'].initial = self.lgr_info.set_labels_info.name
+        return initial
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -108,12 +114,11 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
                 except (AttributeError, IndexError):
                     pass
         kwargs.update({
-            'lgr_info': self.lgr_info,
             'idna_decoder': udata.idna_decode_label,
             'scripts': scripts
         })
 
-        if self.request.method == 'GET':
+        if self.request.GET:
             kwargs['data'] = self.request.GET
         return kwargs
 
@@ -122,6 +127,7 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
         ctx['result'] = self.result
         ctx['lgr_id'] = self.lgr_id
         ctx['is_set'] = self.lgr_info.is_set or self.lgr_set_id is not None
+        ctx['email_required'] = self.email_required
 
         if self.lgr_set_id:
             lgr_set_info = self.session.select_lgr(self.lgr_set_id)

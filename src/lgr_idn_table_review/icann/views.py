@@ -17,6 +17,7 @@ class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
+        request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_ICANN.name
         self.session = LGRIcannSession(request)
 
     def test_func(self):
@@ -25,10 +26,6 @@ class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):
 
 class IdnTableIcannModeView(BaseIcannView, TemplateView):
     template_name = 'lgr_idn_table_review_icann/icann_mode.html'
-
-    def get(self, request, *args, **kwargs):
-        request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_ICANN.name
-        return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         idn_table_review_task.delay(self.request.build_absolute_uri('/').rstrip('/'),

@@ -15,8 +15,7 @@ from lxml.etree import XMLSyntaxError
 from lgr.exceptions import LGRException
 from lgr.parser.xml_parser import LGR_NS
 from lgr_advanced.api import LGRInfo
-from lgr_advanced.lgr_editor.views.codepoints.mixins import LGREditMixin
-from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
+from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 
 logger = logging.getLogger(__name__)
@@ -74,7 +73,7 @@ class ListRuleView(LGRHandlingBaseMixin, TemplateView):
         if self.lgr_info.is_set or self.lgr_set_id is not None:
             return ListRuleSimpleView.as_view()(request, *args, **kwargs)
 
-        return super().get(*args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -128,6 +127,11 @@ def _json_response(success, error_msg=None):
 
 class RuleEditAjaxView(LGREditMixin, View):
 
+    class RuleEditException(BaseException):
+
+        def __init__(self, msg):
+            self.message = msg
+
     def process_request(self, delete_action, body):
         raise NotImplementedError
 
@@ -135,7 +139,10 @@ class RuleEditAjaxView(LGREditMixin, View):
         delete_action = request.POST.get('delete')
         body = request.POST.get('body')
 
-        msg = self.process_request(delete_action, body)
+        try:
+            msg = self.process_request(delete_action, body)
+        except RuleEditAjaxView.RuleEditException as e:
+            return _json_response(False, e.message)
 
         try:
             self.session.save_lgr(self.lgr_info)
@@ -186,13 +193,13 @@ def _parse_class(xml):
 class RuleEditClassAjaxView(RuleEditAjaxView):
     def process_request(self, delete_action, body):
         if not delete_action and not body:
-            return _json_response(False, _('No body specified'))
+            raise self.RuleEditException(_('No body specified'))
 
         lgr = self.lgr_info.lgr
 
         clsname = self.kwargs['clsname']
         if clsname not in lgr.classes_lookup and clsname != NEW_ELEMENT_NAME_PARAM:
-            return _json_response(False, _('Class "%s" does not exist') % clsname)
+            raise self.RuleEditException(_('Class "%s" does not exist') % clsname)
 
         if delete_action:
             _del_class(lgr, clsname)
@@ -201,21 +208,21 @@ class RuleEditClassAjaxView(RuleEditAjaxView):
             try:
                 cls = _parse_class(body)
                 if not cls:
-                    return _json_response(False, _('No class element found'))
+                    raise self.RuleEditException(_('No class element found'))
                 if cls.name is None:
-                    return _json_response(False, _('Name attribute must be present'))
+                    raise self.RuleEditException(_('Name attribute must be present'))
             except LGRException as e:
-                return _json_response(False, lgr_exception_to_text(e))
+                raise self.RuleEditException(lgr_exception_to_text(e))
             except XMLSyntaxError as e:
-                return _json_response(False, _('Encountered XML syntax error: %s (line number may be wrong, '
+                raise self.RuleEditException(_('Encountered XML syntax error: %s (line number may be wrong, '
                                                'try subtracting one from the reported line number)') % (e,))
             except Exception:
-                return _json_response(False, _('Your XML is not valid'))
+                raise self.RuleEditException(_('Your XML is not valid'))
 
             if clsname != cls.name:
                 # user has renamed the class, check that there is no dupe
                 if cls.name in lgr.classes_lookup:
-                    return _json_response(False, _('Class "%s" already exists') % cls.name)
+                    raise self.RuleEditException(_('Class "%s" already exists') % cls.name)
             _update_class(lgr, clsname, cls, body)
             msg = _('Class "%s" saved.') % cls.name
 
@@ -260,13 +267,13 @@ def _parse_rule(xml):
 class RuleEditRuleAjaxView(RuleEditAjaxView):
     def process_request(self, delete_action, body):
         if not delete_action and not body:
-            return _json_response(False, _('No body specified'))
+            raise self.RuleEditException(_('No body specified'))
 
         lgr = self.lgr_info.lgr
 
         rulename = self.kwargs['rulename']
         if rulename not in lgr.rules_lookup and rulename != NEW_ELEMENT_NAME_PARAM:
-            return _json_response(False, _('Rule "%s" does not exist') % rulename)
+            raise self.RuleEditException(_('Rule "%s" does not exist') % rulename)
 
         if delete_action:
             _del_rule(lgr, rulename)
@@ -275,26 +282,25 @@ class RuleEditRuleAjaxView(RuleEditAjaxView):
             try:
                 rule = _parse_rule(body)
                 if not rule:
-                    return _json_response(False, _('No rule element found'))
+                    raise self.RuleEditException(_('No rule element found'))
                 if rule.name is None:
-                    return _json_response(False, _('Name attribute must be present'))
+                    raise self.RuleEditException(_('Name attribute must be present'))
 
                 if rulename != rule.name:
                     # user has renamed the rule, check that there is no dupe
                     if rule.name in lgr.rules_lookup:
-                        return _json_response(False, _('Rule "%s" already exists') % rule.name)
+                        raise self.RuleEditException(_('Rule "%s" already exists') % rule.name)
 
                 _update_rule(lgr, rulename, rule, body)
 
                 self.lgr_info.update_xml(validate=True)
             except LGRException as e:
-                return _json_response(False, lgr_exception_to_text(e))
+                raise self.RuleEditException(lgr_exception_to_text(e))
             except XMLSyntaxError as e:
-                return _json_response(False, _('Encountered XML syntax error: %s (line number may be wrong, '
+                raise self.RuleEditException(_('Encountered XML syntax error: %s (line number may be wrong, '
                                                'try subtracting one from the reported line number)') % (e,))
             except Exception:
-                return _json_response(False, _('Your XML is not valid'))
-
+                raise self.RuleEditException(_('Your XML is not valid'))
             msg = _('Rule "%s" saved.') % rule.name
 
         return msg
@@ -333,7 +339,7 @@ def _parse_action(xml):
 class RuleEditActionAjaxView(RuleEditAjaxView):
     def process_request(self, delete_action, body):
         if not delete_action and not body:
-            return _json_response(False, _('No body specified'))
+            raise self.RuleEditException(_('No body specified'))
 
         lgr = self.lgr_info.lgr
 
@@ -341,7 +347,7 @@ class RuleEditActionAjaxView(RuleEditAjaxView):
         action_idx = int(action_idx)  # 0-based
         # negative action_idx means to add new
         if action_idx + 1 > len(lgr.actions):
-            return _json_response(False, _('Action "%s" does not exist') % action_idx)
+            raise self.RuleEditException(_('Action "%s" does not exist') % action_idx)
 
         if delete_action:
             _del_action(lgr, action_idx)
@@ -350,14 +356,14 @@ class RuleEditActionAjaxView(RuleEditAjaxView):
             try:
                 action = _parse_action(body)
                 if not action:
-                    return _json_response(False, _('No action element found'))
+                    raise self.RuleEditException(_('No action element found'))
             except LGRException as e:
-                return _json_response(False, lgr_exception_to_text(e))
+                raise self.RuleEditException(lgr_exception_to_text(e))
             except XMLSyntaxError as e:
-                return _json_response(False, _('Encountered XML syntax error: %s (line number may be wrong, '
+                raise self.RuleEditException(_('Encountered XML syntax error: %s (line number may be wrong, '
                                                'try subtracting one from the reported line number)') % (e,))
             except Exception:
-                return _json_response(False, _('Your XML is not valid'))
+                raise self.RuleEditException(_('Your XML is not valid'))
 
             _update_action(lgr, action_idx, action, body)
             msg = _('Action saved.')

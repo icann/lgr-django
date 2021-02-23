@@ -9,10 +9,11 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseBadRequest, Http404
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
-from django.views.generic.base import RedirectView, TemplateView
+from django.views.generic.base import RedirectView, TemplateView, View
 
 from lgr.char import RangeChar
 from lgr.exceptions import LGRException, NotInLGR
@@ -22,8 +23,8 @@ from lgr_advanced.lgr_editor.forms import (AddVariantForm,
                                            CodepointForm,
                                            CodepointVariantFormSet)
 from lgr_advanced.lgr_editor.utils import slug_to_cp, render_char, var_to_slug, render_age, slug_to_var
-from lgr_advanced.lgr_editor.views.codepoints.mixins import LGREditMixin, CodePointMixin
-from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
+from lgr_advanced.lgr_editor.views.codepoints.mixins import CodePointMixin
+from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.utils import (cp_to_slug,
                                 render_name)
@@ -80,17 +81,17 @@ class CodePointView(LGRHandlingBaseMixin, CodePointMixin, TemplateView):
         rule_names = (('', ''),) + tuple((v, v) for v in self.lgr_info.lgr.rules)
         ctx.update({
             'add_variant_form': AddVariantForm(prefix='add_variant'),
-            'codepoint_form': CodepointVariantFormSet(initial=variants,
-                                                      prefix='variants',
-                                                      rules=rule_names,
-                                                      disabled=self.lgr_info.is_set or self.lgr_set_id is not None),
-            'variants_form': CodepointForm(initial={'comment': char.comment,
-                                                    'tags': ' '.join(char.tags),
-                                                    'when': char.when,
-                                                    'not_when': char.not_when},
-                                           prefix='edit_cp',
-                                           rules=rule_names,
-                                           disabled=self.lgr_info.is_set or self.lgr_set_id is not None),
+            'variants_form': CodepointVariantFormSet(initial=variants,
+                                                     prefix='variants',
+                                                     rules=rule_names,
+                                                     disabled=self.lgr_info.is_set or self.lgr_set_id is not None),
+            'codepoint_form': CodepointForm(initial={'comment': char.comment,
+                                                     'tags': ' '.join(char.tags),
+                                                     'when': char.when,
+                                                     'not_when': char.not_when},
+                                            prefix='edit_cp',
+                                            rules=rule_names,
+                                            disabled=self.lgr_info.is_set or self.lgr_set_id is not None),
             'is_range': isinstance(char, RangeChar),
             'cp': self.codepoint_id,
             'lgr': self.lgr_info.lgr,
@@ -132,18 +133,17 @@ class AddVariantView(LGREditMixin, CodePointMixin, FormView):
         return reverse('codepoint_view', kwargs={'lgr_id': self.lgr_id, 'codepoint_id': self.codepoint_id})
 
     def form_valid(self, form):
-        add_variant_form = AddVariantForm(self.request.POST, prefix='add_variant')
         logger.debug('Add variant')
-        if add_variant_form.is_valid():
-            var_cp_sequence = add_variant_form.cleaned_data['codepoint']
-            override_repertoire = add_variant_form.cleaned_data['override_repertoire']
+        if form.is_valid():
+            var_cp_sequence = form.cleaned_data['codepoint']
+            override_repertoire = form.cleaned_data['override_repertoire']
             try:
                 self.lgr_info.lgr.add_variant(self.codepoint,
                                               var_cp_sequence,
                                               variant_type=settings.DEFAULT_VARIANT_TYPE,
                                               validating_repertoire=self.lgr_info.validating_repertoire,
                                               override_repertoire=override_repertoire)
-                if var_cp_sequence not in lgr_info.lgr.repertoire:
+                if var_cp_sequence not in self.lgr_info.lgr.repertoire:
                     # Added variant code point not in repertoire
                     # -> add it to the LGR
                     self.lgr_info.lgr.add_cp(var_cp_sequence,
@@ -166,13 +166,17 @@ class AddVariantView(LGREditMixin, CodePointMixin, FormView):
                 # do nothing to redirect to myself (success url) to refresh display
         else:
             logger.error('Add variant: form is not valid')
-            logger.error(add_variant_form.errors)
+            logger.error(form.errors)
         return super().form_valid(form)
 
 
 class EditCodePointView(LGREditMixin, CodePointMixin, FormView):
-    form_class = CodepointVariantFormSet
+    form_class = CodepointForm
     template_name = 'lgr_editor/codepoint_view.html'
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.rule_names = (('', ''),) + tuple((v, v) for v in self.lgr_info.lgr.rules)
 
     def get_prefix(self):
         return 'edit_cp'
@@ -182,8 +186,7 @@ class EditCodePointView(LGREditMixin, CodePointMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        rule_names = (('', ''),) + tuple((v, v) for v in self.lgr_info.lgr.rules)
-        kwargs['rule_names'] = rule_names
+        kwargs['rules'] = self.rule_names
         return kwargs
 
     def form_valid(self, form):
@@ -300,17 +303,15 @@ class CodePointUpdateReferencesView(LGREditMixin, CodePointMixin, RedirectView):
         return super().post(request, *args, **kwargs)
 
 
-class VariantUpdateReferencesView(LGREditMixin, CodePointMixin, RedirectView):
+class VariantUpdateReferencesView(LGREditMixin, CodePointMixin, View):
     """
     Update a variant's references.
     """
-    pattern_name = 'codepoint_view'
-
     def post(self, request, *args, **kwargs):
         var_cp, var_when, var_not_when = slug_to_var(self.kwargs['var_slug'])
         ref_ids = filter(None,
-                         self.request.POST.getlist(
-                             'ref_id'))  # filter away empty entries (an artifact of the editing form)
+                         # filter away empty entries (an artifact of the editing form)
+                         self.request.POST.getlist('ref_id'))
 
         try:
             char = self.lgr_info.lgr.get_char(self.codepoint)
@@ -346,7 +347,7 @@ class VariantUpdateReferencesView(LGREditMixin, CodePointMixin, RedirectView):
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        return super().post(request, *args, **kwargs)
+        return redirect('codepoint_view', lgr_id=self.lgr_id, codepoint_id=self.codepoint_id)
 
 
 class CodePointDeleteView(LGREditMixin, CodePointMixin, RedirectView):
@@ -373,11 +374,10 @@ class CodePointDeleteView(LGREditMixin, CodePointMixin, RedirectView):
         return super().get(request, *args, **kwargs)
 
 
-class VariantDeleteView(LGREditMixin, CodePointMixin, RedirectView):
+class VariantDeleteView(LGREditMixin, CodePointMixin, View):
     """
     Delete a variant of a codepoint from an LGR.
     """
-    pattern_name = 'codepoint_view'
 
     # TODO - only accept POST request
     def get(self, request, *args, **kwargs):
@@ -405,4 +405,4 @@ class VariantDeleteView(LGREditMixin, CodePointMixin, RedirectView):
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        return super().get(request, *args, **kwargs)
+        return redirect('codepoint_view', lgr_id=self.lgr_id, codepoint_id=self.codepoint_id)

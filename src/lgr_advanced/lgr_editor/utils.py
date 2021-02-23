@@ -86,11 +86,9 @@ def var_to_slug(variant):
     :param variant: Variant to convert.
     :return: Slug to be used in URL.
     """
-    return '{},{},{}'.format(
-        cp_to_slug(variant.cp),
-        quote_plus(variant.when or ''),
-        quote_plus(variant.not_when or '')
-    )
+    return '{},{},{}'.format(cp_to_slug(variant.cp),
+                             quote_plus(variant.when or ''),
+                             quote_plus(variant.not_when or ''))
 
 
 def slug_to_cp(cp_slug):

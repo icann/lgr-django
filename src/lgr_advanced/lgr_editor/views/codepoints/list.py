@@ -24,8 +24,8 @@ from lgr_advanced import unidb
 from lgr_advanced.lgr_editor.forms import (AddCodepointForm,
                                            EditCodepointsForm)
 from lgr_advanced.lgr_editor.utils import slug_to_cp, render_char
-from lgr_advanced.lgr_editor.views.codepoints.mixins import LGREditMixin, CodePointMixin
-from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
+from lgr_advanced.lgr_editor.views.codepoints.mixins import CodePointMixin
+from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.utils import (make_lgr_session_key,
                                 LGR_REPERTOIRE_CACHE_KEY,
@@ -261,11 +261,10 @@ class ExpandRangesView(LGREditMixin, RedirectView):
         return super().get(request, *args, **kwargs)
 
 
-class ExpandRangeView(LGREditMixin, CodePointMixin, RedirectView):
+class ExpandRangeView(LGREditMixin, CodePointMixin, View):
     """
     Expand a range into code points.
     """
-    pattern_name = 'codepoint_list'
 
     def get(self, request, *args, **kwargs):
         char = self.lgr_info.lgr.get_char(self.codepoint)
@@ -281,7 +280,7 @@ class ExpandRangeView(LGREditMixin, CodePointMixin, RedirectView):
                                  lgr_exception_to_text(ex))
 
         self.session.save_lgr(self.lgr_info)
-        return super().get(request, *args, **kwargs)
+        return redirect('codepoint_list', lgr_id=self.lgr_id)
 
 
 class PopulateVariantsView(LGRHandlingBaseMixin, RedirectView):

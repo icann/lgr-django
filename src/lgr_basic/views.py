@@ -26,11 +26,8 @@ class BasicModeView(FormView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.session = LGRToolSession(request)
-
-    def get(self, request, *args, **kwargs):
         request.session[INTERFACE_SESSION_KEY] = Interfaces.BASIC.name
-        return super(BasicModeView, self).get(request, *args, **kwargs)
+        self.session = LGRToolSession(request)
 
     def form_valid(self, form):
         ctx = {}

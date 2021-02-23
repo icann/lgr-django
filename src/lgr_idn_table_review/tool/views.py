@@ -23,15 +23,12 @@ class IdnTableReviewViewMixin:
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.session = LGRIdnReviewSession(request)
+        request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_REVIEW.name
 
 
 class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
     form_class = LGRIdnTableReviewForm
     template_name = 'lgr_idn_table_review_tool/review_mode.html'
-
-    def get(self, request, *args, **kwargs):
-        request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_REVIEW.name
-        return super(IdnTableReviewModeView, self).get(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse('lgr_review_select_reference', kwargs={'report_id': self.report_id})
@@ -68,9 +65,11 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
 
         if email_address:
             idn_table_review_task.delay(idn_tables, report_id, email_address, self.session.get_storage_path(),
-                                        self.get_success_url(), self.request.build_absolute_uri())
+                                        self.request.build_absolute_uri(self.get_success_url()),
+                                        self.request.build_absolute_uri('/').rstrip('/'))
         else:
-            idn_table_review_task(idn_tables, report_id, None, self.session.get_storage_path(), self.get_success_url(),
+            idn_table_review_task(idn_tables, report_id, None, self.session.get_storage_path(),
+                                  self.request.build_absolute_uri(self.get_success_url()),
                                   self.request.build_absolute_uri('/').rstrip('/'))
 
         return super(IdnTableReviewSelectReferenceView, self).form_valid(form)

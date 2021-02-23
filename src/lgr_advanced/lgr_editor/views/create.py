@@ -109,7 +109,7 @@ class ImportLGRView(LGRViewMixin, FormView):
                 return render(self.request, 'lgr_editor/import_invalid.html',
                               context={'error': exc.error})
 
-        return super(ImportLGRView, self).form_valid(form)
+        return super().form_valid(form)
 
     def _handle_lgr_file(self, lgr_file, validating_repertoire, is_set, lgr_info_set):
         lgr_id = lgr_file.name
@@ -162,20 +162,17 @@ class ImportReferenceLGRView(LGRViewMixin, View):
     Import a built-in LGR to user's session.
     """
 
-    def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
-        self.filename = self.kwargs['filename']
-        if not RE_SAFE_FILENAME.match(self.filename):
+    def get(self, request, *args, **kwargs):
+        filename = self.kwargs['filename']
+        if not RE_SAFE_FILENAME.match(filename):
             raise SuspiciousOperation()
-        self.lgr_id = self.filename
+        self.lgr_id = filename
         if self.lgr_id.endswith('.xml'):
             self.lgr_id = self.lgr_id.rsplit('.', 1)[0]
         self.lgr_id = slugify(self.lgr_id)
-
-    def get(self, request, *args, **kwargs):
-        with open(os.path.join(settings.LGR_STORAGE_LOCATION, self.filename + '.xml'), 'rb') as f:
+        with open(os.path.join(settings.LGR_STORAGE_LOCATION, filename + '.xml'), 'rb') as f:
             self.session.open_lgr(self.lgr_id, f.read())
-        return reverse('codepoint_list', kwargs={'lgr_id': self.lgr_id})
+        return redirect('codepoint_list', lgr_id=self.lgr_id)
 
 
 class DeleteLGRView(LGRViewMixin, View):
