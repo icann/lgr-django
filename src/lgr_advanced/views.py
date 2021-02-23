@@ -17,10 +17,7 @@ class LGRViewMixin:
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.session = LGRToolSession(request)
-
-    def get(self, request, *args, **kwargs):
         request.session[INTERFACE_SESSION_KEY] = Interfaces.ADVANCED.name
-        return super().get(request, *args, **kwargs)
 
 
 class AdvancedModeView(LGRViewMixin, TemplateView):

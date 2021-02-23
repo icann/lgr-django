@@ -204,11 +204,11 @@ class LGRSession(LgrStorage):
             logger.error("Set either lgr_set_id or uid, not both")
             return Http404
 
-        def get_lgr(known, _id):
+        def get_lgr(known, _id, **serializer_kwargs):
             if _id not in known:
                 raise Http404
             dct = known[_id]
-            return self.lgr_serializer.from_dict(dct)
+            return self.lgr_serializer.from_dict(dct, **serializer_kwargs)
 
         known_lgrs = self.request.session.get(self.lgr_session_key, {})
 
@@ -223,21 +223,22 @@ class LGRSession(LgrStorage):
 
             return get_lgr(known_lgrs, lgr_id)
 
+        lgr_serializer_kwargs = {'request': self.request}
+        if self.loader_function:
+            lgr_serializer_kwargs['lgr_loader_func'] = self.loader_function
+
         if lgr_set_id:
             if lgr_set_id not in known_lgrs:
                 raise Http404
             lgr_dct = known_lgrs[lgr_set_id]
         else:
-            return get_lgr(known_lgrs, lgr_id)
+            return get_lgr(known_lgrs, lgr_id, **lgr_serializer_kwargs)
 
         if not lgr_dct.get('lgr_set_dct', None):
             raise Http404
 
         for lgr in lgr_dct.get('lgr_set_dct'):
             if lgr['name'] == lgr_id:
-                lgr_serializer_kwargs = {'request': self.request}
-                if self.loader_function:
-                    lgr_serializer_kwargs['lgr_loader_func'] = self.loader_function,
                 return self.lgr_serializer.from_dict(lgr, **lgr_serializer_kwargs)
         raise Http404
 
@@ -252,9 +253,10 @@ class LGRSession(LgrStorage):
         lgr_id = lgr_id if lgr_id is not None else lgr_info.name
         lgr_info.update_xml()  # make sure we have updated XML before saving
         if not uid:
-            self.request.session.setdefault(self.lgr_session_key, {})[lgr_id] = lgr_info.to_dict()
+            self.request.session.setdefault(self.lgr_session_key, {})[lgr_id] = lgr_info.to_dict(self.request)
         else:
-            self.request.session.setdefault(self.lgr_session_key, {}).setdefault(uid, {})[lgr_id] = lgr_info.to_dict()
+            self.request.session.setdefault(self.lgr_session_key, {}).setdefault(uid, {})[lgr_id] = lgr_info.to_dict(
+                self.request)
         # mark session as modified because we are possibly only changing the content of a dict
         self.request.session.modified = True
         # As LGR has been modified, need to invalidate the template repertoire cache
@@ -277,5 +279,4 @@ class LGRSession(LgrStorage):
         # mark session as modified because we are possibly only changing the content of a dict
         self.request.session.modified = True
         # Remove cached repertoire
-        if self.get_from_repertoire:
-            clean_repertoire_cache(self.request, lgr_id, uid=uid)
+        clean_repertoire_cache(self.request, lgr_id, uid=uid)

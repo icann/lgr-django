@@ -33,7 +33,7 @@ class IdnTableInfo(LGRSerializer):
                    dct['data'],
                    lgr=cls._parse_idn_table_as_lgr(dct['name'], data))
 
-    def to_dict(self):
+    def to_dict(self, *args, **kwargs):
         return {
             'name': self.name,
             'data': self.data,

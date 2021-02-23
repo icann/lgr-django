@@ -14,6 +14,6 @@ class BaseAdminView(LoginRequiredMixin, UserPassesTestMixin):
 
 class BaseListAdminView(BaseAdminView, views.generic.ListView):
 
-    def get(self, request, *args, **kwargs):
+    def setup(self, request, *args, **kwargs):
         request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_ADMIN.name
-        return super(BaseListAdminView, self).get(request, *args, **kwargs)
+        return super().setup(request, *args, **kwargs)

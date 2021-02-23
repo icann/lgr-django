@@ -30,7 +30,7 @@ from lgr_advanced.lgr_editor.forms import (AddMultiCodepointsForm,
                                            AddCodepointFromScriptForm)
 from lgr_advanced.lgr_editor.repertoires import get_all_scripts_from_repertoire, get_by_name
 from lgr_advanced.lgr_editor.utils import slug_to_cp
-from lgr_advanced.lgr_editor.views.codepoints.mixins import LGREditMixin
+from lgr_advanced.lgr_editor.views.mixins import LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.utils import (cp_to_slug)
 

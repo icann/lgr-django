@@ -25,15 +25,12 @@ class ValidateLabelForm(forms.Form):
                                help_text=_('The script used to validate the label'))
 
     def __init__(self, *args, **kwargs):
-        lgr_info = kwargs.pop('lgr_info', None)
         self.idna_decoder = kwargs.pop('idna_decoder', None)
         scripts = kwargs.pop('scripts', None)
         super(ValidateLabelForm, self).__init__(*args, **kwargs)
         if scripts:
             self.fields['script'].choices = scripts
             self.fields['script'].required = True
-        if lgr_info is not None and lgr_info.set_labels_info is not None:
-            self.fields['set_labels'].initial = lgr_info.set_labels_info.name
 
     def clean_label(self):
         value = self.cleaned_data['label']

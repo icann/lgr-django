@@ -7,7 +7,7 @@ import logging
 
 from dal import autocomplete
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 
@@ -27,9 +27,6 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
     """
     form_class = MetadataForm
     template_name = 'lgr_editor/metadata.html'
-
-    def __init__(self):
-        super(MetadataView, self).__init__()
 
     def get_form_kwargs(self):
         kwargs = super(MetadataView, self).get_form_kwargs()
@@ -93,60 +90,59 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
             ctx['lgr_set'] = self.session.select_lgr(self.kwargs.get('lgr_set_id')).lgr
         return ctx
 
+    def get_success_url(self):
+        return reverse('metadata', kwargs={'lgr_id': self.lgr_id})
+
     def form_valid(self, form):
         # main `MetadataForm` is valid, now test for `LanguageFormSet`
         language_formset = LanguageFormSet(self.request.POST, prefix='lang')
-        if language_formset.is_valid():
-            cd = form.cleaned_data
-            metadata = Metadata()
+        cd = form.cleaned_data
+        metadata = Metadata()
 
-            try:
-                if cd['version']:
-                    metadata.version = Version(cd['version'], cd['version_comment'] or None)
+        try:
+            if cd['version']:
+                metadata.version = Version(cd['version'], cd['version_comment'] or None)
+            else:
+                metadata.version = None
+
+            if cd['date']:
+                metadata.set_date(cd['date'].isoformat())
+
+            if cd['scope']:
+                scope = Scope(value=cd['scope'],
+                              scope_type=cd['scope_type'] or None)
+                if len(metadata.scopes) > 0:
+                    metadata.scopes[0] = scope
                 else:
-                    metadata.version = None
+                    metadata.scopes.append(scope)
+            if cd['unicode_version']:
+                metadata.set_unicode_version(cd['unicode_version'])
+            if cd['validity_start']:
+                metadata.set_validity_start(cd['validity_start'].isoformat())
+            if cd['validity_end']:
+                metadata.set_validity_end(cd['validity_end'].isoformat())
+            if cd['description']:
+                metadata.description = Description(value=cd['description'],
+                                                   description_type=cd['description_type'] or None)
 
-                if cd['date']:
-                    metadata.set_date(cd['date'].isoformat())
+            if cd['validating_repertoire']:
+                self.lgr_info.validating_repertoire = get_builtin_or_session_repertoire(self.session,
+                                                                                        cd['validating_repertoire'])
+            else:
+                self.lgr_info.validating_repertoire = None
 
+            if language_formset.is_valid():
                 # save languages
                 metadata.set_languages(filter(None, (f.get('language') for f in language_formset.cleaned_data)))
 
-                if cd['scope']:
-                    scope = Scope(value=cd['scope'],
-                                  scope_type=cd['scope_type'] or None)
-                    if len(metadata.scopes) > 0:
-                        metadata.scopes[0] = scope
-                    else:
-                        metadata.scopes.append(scope)
-                if cd['unicode_version']:
-                    metadata.set_unicode_version(cd['unicode_version'])
-                if cd['validity_start']:
-                    metadata.set_validity_start(cd['validity_start'].isoformat())
-                if cd['validity_end']:
-                    metadata.set_validity_end(cd['validity_end'].isoformat())
-                if cd['description']:
-                    metadata.description = Description(value=cd['description'],
-                                                       description_type=cd['description_type'] or None)
+            self.lgr_info.lgr.metadata = metadata
+            self.session.save_lgr(self.lgr_info)
+            messages.add_message(self.request, messages.SUCCESS, _("Meta data saved"))
+        except LGRException as ex:
+            messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
+            return self.form_invalid(form)
 
-                if cd['validating_repertoire']:
-                    self.lgr_info.validating_repertoire = get_builtin_or_session_repertoire(self.session,
-                                                                                            cd['validating_repertoire'])
-                else:
-                    self.lgr_info.validating_repertoire = None
-
-                self.lgr_info.lgr.metadata = metadata
-                self.session.save_lgr(self.lgr_info)
-                messages.add_message(self.request,
-                                     messages.SUCCESS,
-                                     _("Meta data saved"))
-                return redirect('metadata', self.kwargs['lgr_id'])  # redirect to myself
-            except LGRException as ex:
-                messages.add_message(self.request, messages.ERROR,
-                                     lgr_exception_to_text(ex))
-
-        context = self.get_context_data(form=form)
-        return self.render_to_response(context)
+        return super().form_valid(form)
 
 
 class LanguageAutocomplete(autocomplete.Select2ListView):
