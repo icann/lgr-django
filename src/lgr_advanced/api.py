@@ -6,10 +6,10 @@ api -
 import base64
 import errno
 import logging
+from io import BytesIO, StringIO
 
 from django.conf import settings
 from django.core.cache import cache
-from django.utils import six
 from django.utils.text import slugify
 
 from lgr.core import LGR
@@ -43,7 +43,7 @@ class LGRInfo(LGRSerializer):
         # if something was changed in `lgr`, calling this will re-generate the xml
         new_xml = serialize_lgr_xml(self.lgr, pretty_print=pretty_print)
         if validate:
-            parser = XMLParser(six.BytesIO(new_xml), self.name)
+            parser = XMLParser(BytesIO(new_xml), self.name)
 
             validation_result = parser.validate_document(settings.LGR_RNG_FILE)
             if validation_result is not None:
@@ -65,7 +65,7 @@ class LGRInfo(LGRSerializer):
     @classmethod
     def _parse_lgr(cls, name, xml, validate):
         # Create parser - Assume xml is unicode data
-        parser = XMLParser(six.BytesIO(xml.encode('utf-8')), name)
+        parser = XMLParser(BytesIO(xml.encode('utf-8')), name)
 
         # Do we need to validate the schema?
         if validate:
@@ -124,8 +124,8 @@ class LGRInfo(LGRSerializer):
         if 'xml' not in dct:
             dct['xml'] = dct['data']
         xml = dct['xml']
-        if not isinstance(xml, six.text_type):
-            xml = six.text_type(xml, 'utf-8')
+        if not isinstance(xml, str):
+            xml = str(xml, 'utf-8')
 
         # Parse XML #
         # Replace old namespace by the new one for compatibility purpose with old LGR
@@ -158,8 +158,8 @@ class LGRInfo(LGRSerializer):
         return lgr_info
 
     def to_dict(self, request=None):
-        if not isinstance(self.xml, six.text_type):
-            self.xml = six.text_type(self.xml, 'utf-8')
+        if not isinstance(self.xml, str):
+            self.xml = str(self.xml, 'utf-8')
 
         dct = {
             'name': self.name,
@@ -192,13 +192,13 @@ class LabelInfo(object):
     @classmethod
     def from_dict(cls, dct):
         return cls(dct['name'],
-                   six.StringIO(base64.b64decode(dct['data']).decode('utf-8')),
+                   StringIO(base64.b64decode(dct['data']).decode('utf-8')),
                    dct['data'])
 
     @classmethod
     def from_form(cls, name, label_input):
         data = label_input.decode('utf-8')
-        labels = six.StringIO(data)
+        labels = StringIO(data)
         b64data = base64.b64encode(label_input).decode('utf-8')
 
         return cls(name, labels, b64data)
@@ -206,7 +206,7 @@ class LabelInfo(object):
     @classmethod
     def from_list(cls, name, labels):
         data = '\n'.join(labels)
-        labels = six.StringIO(data)
+        labels = StringIO(data)
         b64data = base64.b64encode(data.encode('utf-8')).decode('utf-8')
 
         return cls(name, labels, b64data)

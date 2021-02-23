@@ -9,7 +9,6 @@ from django.contrib import messages
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.six import iteritems
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView, FormView
@@ -34,7 +33,7 @@ class ReferenceView(LGRHandlingBaseMixin, TemplateView):
             'ref_id': ref_id,
             'description': ref.get('value', ''),
             'comment': ref.get('comment', '')
-        } for (ref_id, ref) in iteritems(self.lgr_info.lgr.reference_manager)]
+        } for (ref_id, ref) in self.lgr_info.lgr.reference_manager.items()]
 
         ctx.update({
             'add_reference_form': ReferenceForm(prefix='add_reference', ro_id=False),
@@ -142,7 +141,7 @@ class ListReferenceJsonView(LGRHandlingBaseMixin, View):
             'ref_id': ref_id,
             'description': ref.get('value', ''),
             'comment': ref.get('comment', '')
-        } for (ref_id, ref) in iteritems(self.lgr_info.lgr.reference_manager)]
+        } for (ref_id, ref) in self.lgr_info.lgr.reference_manager.items()]
 
         return JsonResponse(references, charset='UTF-8', safe=False)
 
@@ -164,7 +163,7 @@ class AddReferenceAjaxView(LGREditMixin, FormView):
                 'ref_id': ref_id,
                 'description': ref.get('value', ''),
                 'comment': ref.get('comment', '')
-            } for (ref_id, ref) in iteritems(self.lgr_info.lgr.reference_manager)]
+            } for (ref_id, ref) in self.lgr_info.lgr.reference_manager.items()]
             rv = {'ok': True, 'data': references}
         except LGRException as ex:
             rv = {'ok': False, 'error': lgr_exception_to_text(ex)}
@@ -179,6 +178,7 @@ class DeleteReferenceView(LGREditMixin, View):
     """
     Delete a reference from an LGR.
     """
+
     def get(self, request, *args, **kwargs):
         ref_id = self.kwargs['ref_id']
         logger.debug("Delete reference %s'", ref_id)

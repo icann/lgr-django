@@ -12,10 +12,8 @@ from itertools import islice
 
 from natsort import natsorted
 
-from django.utils.six.moves import zip
 from django.utils.translation import ugettext_lazy as _
 from django.utils.html import format_html_join, format_html, mark_safe
-from django.utils import six
 
 from lgr.matcher import AnchorMatcher
 from lgr.validate.lgr_stats import generate_stats
@@ -112,7 +110,7 @@ def _generate_context_repertoire(repertoire, variant_sets_sorted, udata):
         ctx_rules.add(char.when)
         ctx_rules.add(char.not_when)
         variant_id = ''
-        for var_id, variant_set in six.iteritems(variant_sets_sorted):
+        for var_id, variant_set in variant_sets_sorted.items():
             if char.cp in variant_set:
                 variant_id = var_id
                 break

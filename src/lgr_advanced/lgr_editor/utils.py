@@ -5,10 +5,10 @@ utils.py - utility functions for LGR Editor.
 from __future__ import unicode_literals
 
 import logging
+from urllib.parse import quote_plus
 
 from django.conf import settings
 from django.utils.html import mark_safe, format_html, format_html_join
-from django.utils.six.moves.urllib_parse import quote_plus
 from language_tags import data
 
 from lgr.char import RangeChar

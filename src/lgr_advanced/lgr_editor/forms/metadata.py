@@ -6,7 +6,6 @@ from datetime import date
 from dal import autocomplete
 from django import forms
 from django.forms.formsets import formset_factory
-from django.utils import six
 from django.utils.translation import ugettext_lazy as _
 
 from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, VALIDATING_REPERTOIRES, DEFAULT_VALIDATING_REPERTOIRE, \
@@ -70,7 +69,7 @@ class MetadataForm(forms.Form):
                 (_('My LGRs'), tuple((rname, rname) for rname in additional_repertoires))]
         if disabled:
             # do not enable to update references for LGRs in a set
-            for field in six.itervalues(self.fields):
+            for field in self.fields.values():
                 # field.disabled = True  XXX need django 1.9
                 field.widget.attrs['disabled'] = True
 

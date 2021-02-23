@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.utils.six.moves.urllib_parse import quote_plus
-from django.utils import six
+from urllib.parse import quote_plus
+
 from django import forms
 from django.forms import HiddenInput
 from django.forms.formsets import formset_factory
@@ -25,7 +25,7 @@ class CodepointForm(forms.Form):
         self.fields['when'].choices = rule_names
         self.fields['not_when'].choices = rule_names
         if disabled:
-            for field in six.itervalues(self.fields):
+            for field in self.fields.values():
                 # field.disabled = True  XXX need django 1.9
                 field.widget.attrs['disabled'] = True
 

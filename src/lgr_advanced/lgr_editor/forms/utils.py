@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 from functools import partial
 
-from django.utils import six
 from django import forms
 
 
@@ -28,7 +27,7 @@ class BaseDisableableFormSet(forms.formsets.BaseFormSet):
         form = super(BaseDisableableFormSet, self)._construct_form(i, **kwargs)
 
         if self.disabled:
-            for field in six.itervalues(form.fields):
+            for field in form.fields.values():
                 field.disabled = True
 
         return form
