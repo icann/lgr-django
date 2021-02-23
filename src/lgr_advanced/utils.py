@@ -20,6 +20,12 @@ from lgr.utils import cp_to_str
 logger = logging.getLogger('utils')
 
 
+LGR_CACHE_TIMEOUT = 3600  # Cache timeout for serialized LGRs
+LGR_OBJECT_CACHE_KEY = 'lgr-obj'
+LGR_CACHE_KEY_PREFIX = 'lgr-cache'
+LGR_REPERTOIRE_CACHE_KEY = 'repertoire'
+
+
 def render_cp(char):
     """
     Render the code point(s) of a character.
@@ -102,9 +108,6 @@ def list_built_in_lgr():
     return list_files(settings.LGR_STORAGE_LOCATION, reverse=False)
 
 
-LGR_REPERTOIRE_CACHE_KEY = 'repertoire'
-
-
 def make_lgr_session_key(key, request, lgr_id, uid=None):
     key = "{}:{}:{}".format(key, request.session.session_key, lgr_id)
     if uid:
@@ -125,7 +128,3 @@ def clean_repertoire_cache(request, lgr_id, uid=None):
                                       request,
                                       lgr_id, uid=uid))
 
-
-LGR_CACHE_TIMEOUT = 3600  # Cache timeout for serialized LGRs
-LGR_OBJECT_CACHE_KEY = 'lgr-obj'
-LGR_CACHE_KEY_PREFIX = 'lgr-cache'

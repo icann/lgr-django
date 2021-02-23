@@ -134,14 +134,10 @@ class LGRInfo(LGRSerializer):
         if request is None:
             lgr = cls._parse_lgr(name, xml, dct.get('validate', False))
         else:
-            lgr = cache.get(make_lgr_session_key(LGR_OBJECT_CACHE_KEY,
-                                                 request,
-                                                 name))
+            lgr = cache.get(make_lgr_session_key(LGR_OBJECT_CACHE_KEY, request, name))
             if lgr is None:
                 lgr = cls._parse_lgr(name, xml, dct.get('validate', False))
-                cache.set(make_lgr_session_key(LGR_OBJECT_CACHE_KEY,
-                                               request,
-                                               lgr.name),
+                cache.set(make_lgr_session_key(LGR_OBJECT_CACHE_KEY, request, lgr.name),
                           lgr,
                           LGR_CACHE_TIMEOUT)
             else:
@@ -174,11 +170,8 @@ class LGRInfo(LGRSerializer):
         }
         if self.set_labels_info is not None:
             dct['set_labels_info'] = self.set_labels_info.to_dict()
-
         if request is not None:
-            cache.set(make_lgr_session_key(LGR_OBJECT_CACHE_KEY,
-                                           request,
-                                           self.name),
+            cache.set(make_lgr_session_key(LGR_OBJECT_CACHE_KEY, request, self.name),
                       self.lgr,
                       LGR_CACHE_TIMEOUT)
 
