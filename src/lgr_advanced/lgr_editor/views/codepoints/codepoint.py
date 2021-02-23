@@ -5,6 +5,7 @@ codepoint -
 """
 import json
 import logging
+from ast import literal_eval
 
 from django.conf import settings
 from django.contrib import messages
@@ -230,13 +231,15 @@ class EditCodePointView(LGREditMixin, CodePointMixin, FormView):
                         variant_type = v_form.cleaned_data['type']
                         variant_when = v_form.cleaned_data['when'] or None
                         variant_not_when = v_form.cleaned_data['not_when'] or None
+                        variant_refs = literal_eval(v_form.cleaned_data['references'])
                         # No validating repertoire here neither
                         self.lgr_info.lgr.add_variant(self.codepoint,
                                                       variant_codepoint,
                                                       comment=variant_comment,
                                                       variant_type=variant_type,
                                                       when=variant_when,
-                                                      not_when=variant_not_when)
+                                                      not_when=variant_not_when,
+                                                      ref=variant_refs)
                 else:
                     logger.error('Edit CP: form is not valid')
                     logger.error(variants_form.errors)
