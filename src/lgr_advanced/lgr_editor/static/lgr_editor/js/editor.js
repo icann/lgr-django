@@ -143,13 +143,17 @@ function RuleEditor() {
                 xhr.setRequestHeader("X-CSRFToken", getCSRFToken());
             }
         }).done(function (data) {
-            self.display_alert(container, data.message, 'success');
-            delete_btn.hide();
-            delete_btn.siblings('.begin-editing').hide();
-            delete_btn.siblings('.save-rule').hide();
-            delete_btn.siblings('.cancel-editing').hide();
+            if (data.success) {
+                self.display_alert(container, data.message, 'success');
+                delete_btn.hide();
+                delete_btn.siblings('.begin-editing').hide();
+                delete_btn.siblings('.save-rule').hide();
+                delete_btn.siblings('.cancel-editing').hide();
 
-            setTimeout('window.location.reload()', 1000);
+                setTimeout('window.location.reload()', 1000);
+            } else {
+                self.display_alert(container, data.message, 'danger');
+            }
         }).fail(function(xhr, status, errmsg) {
             self.display_alert(container, status + ": " + errmsg, 'danger');
         });
