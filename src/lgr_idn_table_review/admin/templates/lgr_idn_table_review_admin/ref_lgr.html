@@ -26,7 +26,8 @@
                 <td>
                     <form method="post" action="{% url "lgr_idn_admin_delete_ref_lgr" lgr_id=ref_lgr.pk %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-default">
+                        <button type="submit" class="btn btn-default confirm-prompt"
+                                data-confirmation-prompt="{% blocktrans with lgr=ref_lgr.name %}Are you sure you want to delete LGR {{ lgr }}?{% endblocktrans %}">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </form>
@@ -53,7 +54,6 @@
 {% block html_body_more %}
     {{ block.super }}
     <script type="text/javascript" src="{% static 'chrome/select2/select2.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'lgr_editor/js/editor.js' %}"></script>
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
             function enable_submit_button() {

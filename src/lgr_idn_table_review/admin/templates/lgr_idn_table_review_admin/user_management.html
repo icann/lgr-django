@@ -35,7 +35,8 @@
                     &nbsp;
                     <form method="post" action="{% url "lgr_idn_admin_delete_user" user_id=user.pk %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-default">
+                        <button type="submit" class="btn btn-default confirm-prompt"
+                                data-confirmation-prompt="{% blocktrans with user=user.email %}Are you sure you want to delete user {{ user }}?{% endblocktrans %}">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </form>

@@ -169,7 +169,8 @@
                                     {% blocktrans %}Download {{ file }}{% endblocktrans %}
                                 </a>
                                 <a href="{% url 'delete_file' storage='tool' filename=file %}?next={{ request.path }}"
-                                   class="delete_file">
+                                   data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ file }}?{% endblocktrans %}"
+                                   class="delete_file confirm-prompt">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
                             </li>

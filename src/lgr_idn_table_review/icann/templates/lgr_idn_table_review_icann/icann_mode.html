@@ -28,7 +28,8 @@
                     {% blocktrans %}IDN table {{ folder }}{% endblocktrans %}
                 </a>
                 <a href="{% url 'delete_file' storage='rev_icann' filename=folder %}?next={{ request.path }}"
-                   class="delete_file">
+                   class="delete_file confirm-prompt"
+                   data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ folder }}?{% endblocktrans %}">
                     <i class="glyphicon glyphicon-trash"></i>
                 </a>
             </li>
