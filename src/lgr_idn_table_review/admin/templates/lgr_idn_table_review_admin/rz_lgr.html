@@ -46,7 +46,8 @@
                 <td>
                     <form method="post" action="{% url "lgr_idn_admin_delete_rz_lgr" lgr_id=rz_lgr.pk %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-default">
+                        <button type="submit" class="btn btn-default confirm-prompt"
+                                data-confirmation-prompt="{% blocktrans with lgr=rz_lgr.name %}Are you sure you want to delete LGR {{ lgr }}?{% endblocktrans %}">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
                     </form>

@@ -41,15 +41,6 @@ function setupJQueryAjax($) {
 }
 
 
-function confirmAction(el) {
-    var msg = $(this).data('confirmation-prompt');
-    if (!msg) {
-        msg = 'Are you sure?';
-    }
-    return confirm(msg);
-}
-
-
 function RuleEditor() {
     this.cancel_editing = function(cancel_btn) {
         var cm = cancel_btn.siblings('.CodeMirror').get(0).CodeMirror;
@@ -225,5 +216,4 @@ function RuleEditor() {
 ///// common init
 $(document).ready(function($) {
     setupJQueryAjax($);
-    $(".confirm-prompt").click(confirmAction);
 });

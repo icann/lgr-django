@@ -35,7 +35,10 @@
                         {% for lgr in local_lgrs.list %}
                             <li>
                                 <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
-                                <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-trash"></i></a>
+                                <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr confirm-prompt"
+                                   data-confirmation-prompt="{% blocktrans with lgr=lgr.name %}Are you sure you want to delete LGR {{ lgr }}?{% endblocktrans %}">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -46,7 +49,10 @@
                             <li>
                                 <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
                                 <a href="#{{lgr.name}}" data-toggle="collapse" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-th-list"></i>&nbsp;{% blocktrans %}View embedded LGRs{% endblocktrans %}</a>
-                                <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr"><i class="glyphicon glyphicon-trash"></i></a>
+                                <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr confirm-prompt"
+                                   data-confirmation-prompt="{% blocktrans with lgr=lgr.name %}Are you sure you want to delete LGR {{ lgr }}?{% endblocktrans %}">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
                             </li>
 
                             <div class="panel-group">
@@ -128,7 +134,10 @@
             {% for file in storage %}
                 <li>
                     <a href="{% url 'download_file' storage='tool' filename=file %}?next={{ request.path }}">{% blocktrans %}Download {{ file }}{% endblocktrans %}</a>
-                    <a href="{% url 'delete_file' storage='tool' filename=file %}" class="delete_file"><i class="glyphicon glyphicon-trash"></i></a>
+                    <a href="{% url 'delete_file' storage='tool' filename=file %}" class="delete_file confirm-prompt"
+                       data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ file }}?{% endblocktrans %}">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
                 </li>
             {% endfor %}
         </ul>

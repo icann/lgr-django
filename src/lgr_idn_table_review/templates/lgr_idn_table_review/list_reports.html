@@ -48,7 +48,8 @@
                     </a>
                     &nbsp;
                     <a href="{% url 'delete_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}"
-                       class="delete_file btn btn-default">
+                       class="delete_file btn btn-default confirm-prompt"
+                       data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ file }}?{% endblocktrans %}">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>
                 </td>

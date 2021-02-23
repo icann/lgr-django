@@ -54,7 +54,7 @@
                     <td class="text-right">
                         <a class="btn btn-default confirm-prompt"
                            title="{% trans 'Delete Tag' %}"
-                           data-confirmation-prompt="{% blocktrans with tag=tag.name %}Are you sure you want delete tag {{ tag }}?{% endblocktrans %}"
+                           data-confirmation-prompt="{% blocktrans with tag=tag.name %}Are you sure you want to delete tag {{ tag }}?{% endblocktrans %}"
                            href="{% url 'tag_delete' lgr_id=lgr_id tag_id=tag.name %}">
                             <i class="glyphicon glyphicon-trash"></i>
                         </a>
