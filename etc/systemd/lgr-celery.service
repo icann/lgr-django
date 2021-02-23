@@ -9,7 +9,9 @@ ExecStart=/var/www/lgr/venv/bin/celery \
 --app=lgr_web \
 --workdir=/var/www/lgr/lgr-django/src \
 --concurrency=2 \
-worker
+worker \
+--time-limit=300000 \
+--soft-time-limit=300000
 User=lgr
 Group=lgr
 
