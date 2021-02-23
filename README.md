@@ -190,7 +190,7 @@ Some notes for developers
 #### Static Assets (CSS, Javascript, Images)
 
 The static assets are stored in the following directories, using conventions supported by Django 
-[staticfiles](https://docs.djangoproject.com/en/1.8/howto/static-files/) mechanism.
+[static files](https://docs.djangoproject.com/fr/3.1/howto/static-files/) mechanism.
 
 * `src/lgr_web/assets`
 * `src/lgr_editor/static`

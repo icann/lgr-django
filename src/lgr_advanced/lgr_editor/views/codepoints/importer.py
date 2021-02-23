@@ -11,7 +11,6 @@ from django.http import HttpResponseBadRequest
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.html import format_html_join
-from django.utils.six import iteritems
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
@@ -120,7 +119,7 @@ class MultiCodepointsView(LGREditMixin, FormView):
     def _handle_discrete(self, lgr, input_lgr, manual):
         logger.debug("Import: Copy references")
         # No choice here, we have to import references
-        for (ref_id, ref) in iteritems(input_lgr.reference_manager):
+        for (ref_id, ref) in input_lgr.reference_manager.items():
             value = ref['value']
             comment = ref.get('comment', None)
             try:

@@ -6,7 +6,6 @@ import re
 from django import forms
 from django.core import validators
 from django.forms.widgets import Select, TextInput
-from django.utils.six import iteritems
 from django.utils.translation import ugettext_lazy as _
 
 LGR_COMPARE_ACTIONS = (
@@ -43,7 +42,7 @@ class DataSelectWidget(Select):
         options from a BoundField for choice widgets.
         """
         option = super(DataSelectWidget, self).create_option(name, value, label, selected, index, subindex, attrs)
-        for key, val in iteritems(self.data.get(value, {})):
+        for key, val in self.data.get(value, {}).items():
             # attrs won't be displayed if val is False and will be displayed without argument if val is True
             option['attrs']['data-{}'.format(key)] = val
 

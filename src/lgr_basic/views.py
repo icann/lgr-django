@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import six
+from io import StringIO
+
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -66,7 +67,7 @@ class BasicModeView(FormView):
                 if len(labels_cp) == 1:
                     # if only one label include collisions directly in result
                     data = tlds.decode('utf-8')
-                    check_collisions = [l[0] for l in read_labels(six.StringIO(data))]
+                    check_collisions = [l[0] for l in read_labels(StringIO(data))]
                 else:
                     basic_collision_task.delay(lgr_json, labels_json, tld_json, email_address, storage_path,
                                                False)
