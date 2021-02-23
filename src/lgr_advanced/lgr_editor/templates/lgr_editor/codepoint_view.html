@@ -92,6 +92,7 @@
                         <td class="codepoint-conditional">{{ char.when }}</td>
                         <td class="codepoint-conditional">{{ char.not_when }}</td>
                         <td>
+                            {{ char.references }}
                             <ul class="references" data-cp-disp="{{ char.cp_disp.value }}" data-references-json-url="{{ references_json_url }}">
                             {% for ref_id in char.reference_list %}
                                 <li data-refid="{{ ref_id }}"><a href="{{ references_url }}#ref_{{ref_id}}">{{ ref_id }}</a></li>

@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.utils.six.moves.urllib_parse import quote_plus
 from django.utils import six
 from django import forms
+from django.forms import HiddenInput
 from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext_lazy as _
 
@@ -41,7 +42,7 @@ class CodepointVariantForm(forms.Form):
     when = forms.ChoiceField(label='', required=False)
     not_when = forms.ChoiceField(label='', required=False)
     references = forms.CharField(required=False, label='',
-                                 widget=ReadOnlyTextInput())
+                                 widget=HiddenInput())
 
     # Editable fields
     type = forms.CharField(label='')
