@@ -1,12 +1,12 @@
 {% extends base_template|default:"lgr_advanced/_base.html" %}
 {% load i18n widget_tweaks %}
 
-{% block content %}
-    {% comment %}
-    This template may be used in two ways. Either by passing a Django form object in the context variable named `form`,
-    or a simple string in a context variable named `input`
-    {% endcomment %}
+{% block html_head_more %}
+    {{ block.super }}
+    {% include "lgr_validator/_validated_style.html" %}
+{% endblock %}
 
+{% block content %}
     <form method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="col-sm-10">
@@ -31,22 +31,6 @@
 
 
 {% endblock content %}
-
-
-{% block html_head_more %}
-    {{ block.super }}
-    <style>
-    td.rule-detail-cell {
-        /* make it blend into the row above */
-        padding: 0 !important;
-        border-top: none !important;
-    }
-    div.rule-detail {
-        /* add the padding to offset the padding that we removed from the containing <td> */
-        padding: 8px;
-    }
-    </style>
-{% endblock %}
 
 
 {% block html_body_more %}

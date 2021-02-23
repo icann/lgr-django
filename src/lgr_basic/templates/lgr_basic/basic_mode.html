@@ -12,6 +12,10 @@
     {{ block.super }}
 {% endblock %}
 
+{% block html_head_more %}
+    {{ block.super }}
+    {% include "lgr_validator/_validated_style.html" %}
+{% endblock %}
 
 {% block container %}
     <div class="container" id="content-basic">
