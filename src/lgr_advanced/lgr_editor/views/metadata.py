@@ -5,7 +5,6 @@ metadata -
 """
 import logging
 
-from dal import autocomplete
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -14,7 +13,7 @@ from django.views.generic import FormView
 from lgr.exceptions import LGRException
 from lgr.metadata import Scope, Metadata, Version, Description
 from lgr_advanced.api import get_builtin_or_session_repertoire
-from lgr_advanced.lgr_editor.forms import MetadataForm, LanguageFormSet, IANA_LANG_REGISTRY
+from lgr_advanced.lgr_editor.forms import MetadataForm, LanguageFormSet
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 
@@ -143,9 +142,3 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
             return self.form_invalid(form)
 
         return super().form_valid(form)
-
-
-class LanguageAutocomplete(autocomplete.Select2ListView):
-
-    def get_list(self):
-        return sorted(IANA_LANG_REGISTRY)

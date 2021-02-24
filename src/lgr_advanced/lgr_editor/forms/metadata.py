@@ -8,8 +8,8 @@ from django import forms
 from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext_lazy as _
 
-from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, VALIDATING_REPERTOIRES, DEFAULT_VALIDATING_REPERTOIRE, \
-    IANA_LANG_REGISTRY
+from lgr_web.utils import IANA_LANG_REGISTRY
+from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, VALIDATING_REPERTOIRES, DEFAULT_VALIDATING_REPERTOIRE
 from .utils import BaseDisableableFormSet
 
 

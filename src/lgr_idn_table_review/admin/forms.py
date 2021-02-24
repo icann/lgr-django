@@ -4,9 +4,9 @@ from django import forms
 from django.forms import FileField
 from django.utils.translation import ugettext_lazy as _
 
-from lgr_advanced.lgr_editor.forms import IANA_LANG_REGISTRY
 from lgr_auth.models import LgrUser
 from lgr_idn_table_review.admin.models import RzLgr, RzLgrMember, RefLgr
+from lgr_web.utils import IANA_LANG_REGISTRY
 
 
 class RzLgrCreateForm(forms.ModelForm):

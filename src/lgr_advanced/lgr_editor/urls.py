@@ -26,7 +26,7 @@ from .views.create import (DeleteLGRView,
                            NewLGRView,
                            ImportLGRView)
 from .views.export import LGRRenderXMLView
-from .views.metadata import MetadataView, LanguageAutocomplete
+from .views.metadata import MetadataView
 from .views.reference import ReferenceView, ListReferenceJsonView, AddReferenceAjaxView, DeleteReferenceView
 from .views.rule import ListRuleView, RuleEditClassAjaxView, RuleEditRuleAjaxView, RuleEditActionAjaxView
 from .views.set import EmbeddedLGRsView
@@ -114,7 +114,4 @@ urlpatterns = [
     path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/', ListCodePointsView.as_view(), name='codepoint_list'),
     path('lgr/<lgr:lgr_id>/json', ListCodePointsJsonView.as_view(), name='codepoint_list_json'),
     path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/json', ListCodePointsJsonView.as_view(), name='codepoint_list_json'),
-
-    # autocompletion
-    path('language-autocomplete/', LanguageAutocomplete.as_view(), name='language-autocomplete'),
 ]
