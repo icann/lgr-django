@@ -65,6 +65,7 @@ MIDDLEWARE = [
     'lgr_advanced.lgr_tools.middleware.UnicodeDecodeErrorMiddleWare'
 ]
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'  # for iframes containing popups
 
 # Custom auth user model
 AUTH_USER_MODEL = 'lgr_auth.LgrUser'
