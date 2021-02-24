@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.utils.translation import ugettext_lazy as _
+
 from django import forms
 from django.core import validators
-from multiupload.fields import MultiFileField
+from django.utils.translation import ugettext_lazy as _
+
 from .fields import (DEFAULT_UNICODE_VERSION,
                      VALIDATING_REPERTOIRES,
                      DEFAULT_VALIDATING_REPERTOIRE)
@@ -21,10 +22,10 @@ class CreateLGRForm(forms.Form):
 
 
 class ImportLGRForm(forms.Form):
-    file = MultiFileField(label=_("Select file(s)"), min_num=1,
-                          help_text='If you select more than one file, this will create a LGR set. '
-                                    'File(s) must be encoded in UTF-8 and using UNIX line ending.')
-    # TODO if more than one file: add forms.CharField LGR set name
+    file = forms.FileField(label=_("Select file(s)"), required=True,
+                           help_text=_('If you select more than one file, this will create a LGR set. '
+                                       'File(s) must be encoded in UTF-8 and using UNIX line ending.'),
+                           widget=forms.ClearableFileInput(attrs={'multiple': True}))
     validating_repertoire = forms.ChoiceField(label=_("Validating repertoire"),
                                               help_text=_('Code points will be limited to the selected repertoire'),
                                               required=False,

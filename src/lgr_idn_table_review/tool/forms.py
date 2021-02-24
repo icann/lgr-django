@@ -2,16 +2,27 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.forms import FileField
 from django.utils.translation import ugettext_lazy as _
-from multiupload.fields import MultiFileField
 
 from lgr_advanced.lgr_tools.forms import UAEmailField
 
 
 class LGRIdnTableReviewForm(forms.Form):
-    idn_tables = MultiFileField(label=_('Select IDN table(s) to review'), min_num=1, max_num=20,
-                                help_text=_('File(s) must be encoded in UTF-8 and using UNIX line ending.'
-                                            'You can select up to 20 IDN tables.'))
+    idn_tables = FileField(label=_('Select IDN table(s) to review'),
+                           help_text=_('File(s) must be encoded in UTF-8 and using UNIX line ending.'
+                                       'You can select up to 20 IDN tables.'),
+                           required=True,
+                           widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
+    def clean_idn_tables(self):
+        if len(self.files.getlist('idn_tables')) > settings.MAX_USER_IDN_REVIEW_INPUT:
+            raise ValidationError(
+                _('You can upload up to %(max_files)s files'),
+                params={'max_files': settings.MAX_USER_IDN_REVIEW_INPUT})
+        return self.cleaned_data['idn_tables']
 
 
 class IdnTableReviewSelectReferenceForm(forms.Form):

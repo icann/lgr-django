@@ -28,7 +28,6 @@ setup(
         # Core stuff
         'Django',
         'django-widget-tweaks',
-        'django-multiupload',
         'django-redis-cache',
         'django-autocomplete-light',
         'celery',

@@ -35,7 +35,7 @@ class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
 
     def form_valid(self, form):
         self.report_id = str(uuid.uuid4())
-        for idn_table in form.cleaned_data['idn_tables']:
+        for idn_table in self.request.FILES.getlist('idn_tables'):
             idn_table_id = idn_table.name
             if not RE_SAFE_FILENAME.match(idn_table_id):
                 raise SuspiciousOperation()
