@@ -92,7 +92,7 @@ class ImportLGRView(LGRViewMixin, FormView):
         is_set = len(form.cleaned_data['file']) > 1
         validating_repertoire = form.cleaned_data['validating_repertoire']
         lgr_info_set = []
-        for lgr_file in form.cleaned_data['file']:
+        for lgr_file in self.request.FILES.getlist('file'):
             try:
                 lgr_info = self._handle_lgr_file(lgr_file, validating_repertoire, is_set, lgr_info_set)
                 lgr_info_set.append(lgr_info)

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from dal import autocomplete
 from django import forms
+from django.forms import FileField
 from django.utils.translation import ugettext_lazy as _
-from multiupload.fields import MultiFileField
 
 from lgr_advanced.lgr_editor.forms import IANA_LANG_REGISTRY
 from lgr_auth.models import LgrUser
@@ -10,8 +10,9 @@ from lgr_idn_table_review.admin.models import RzLgr, RzLgrMember, RefLgr
 
 
 class RzLgrCreateForm(forms.ModelForm):
-    repository = MultiFileField(label=_("LGR file(s)"), min_num=1,
-                                help_text=_('File(s) must be encoded in UTF-8 and using UNIX line ending.'))
+    repository = FileField(label=_("LGR file(s)"), required=True,
+                           help_text=_('File(s) must be encoded in UTF-8 and using UNIX line ending.'),
+                           widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta:
         model = RzLgr
@@ -23,7 +24,7 @@ class RzLgrCreateForm(forms.ModelForm):
 
     def save(self, commit=True):
         rz_lgr = super(RzLgrCreateForm, self).save(commit=commit)
-        for lgr in self.cleaned_data['repository']:
+        for lgr in self.files.getlist('repository'):
             RzLgrMember.objects.create(file=lgr, name=lgr.name, rz_lgr=rz_lgr)
         return rz_lgr
 
