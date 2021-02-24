@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 from lgr_auth.models import LgrRole
 from lgr_idn_table_review.icann.api import LGRIcannSession
 from lgr_session.views import StorageType
-from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
+from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 from .tasks import idn_table_review_task
 
 
@@ -17,7 +17,7 @@ class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_ICANN.name
+        request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.IDN_ICANN.name
         self.session = LGRIcannSession(request)
 
     def test_func(self):

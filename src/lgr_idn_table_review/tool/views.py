@@ -15,7 +15,7 @@ from lgr_idn_table_review.tool.api import LGRIdnReviewSession
 from lgr_idn_table_review.tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_idn_table_review.tool.tasks import idn_table_review_task
 from lgr_session.views import StorageType
-from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
+from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 
 
 class IdnTableReviewViewMixin:
@@ -23,7 +23,7 @@ class IdnTableReviewViewMixin:
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.session = LGRIdnReviewSession(request)
-        request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_REVIEW.name
+        request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.IDN_REVIEW.name
 
 
 class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):

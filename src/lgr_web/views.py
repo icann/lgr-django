@@ -5,7 +5,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
-INTERFACE_SESSION_KEY = None
+INTERFACE_SESSION_MODE_KEY = 'mode'
 
 
 class Interfaces(Enum):
@@ -21,7 +21,7 @@ class LGRModesView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         # stay in the current mode
-        interface = request.session.get(INTERFACE_SESSION_KEY)
+        interface = request.session.get(INTERFACE_SESSION_MODE_KEY)
         if interface == Interfaces.ADVANCED.name:
             return redirect('lgr_advanced_mode')
         if interface == Interfaces.BASIC.name:
@@ -39,7 +39,7 @@ class LGRModesView(TemplateView):
 class LGRSwitchModeView(LGRModesView):
     def get(self, request, *args, **kwargs):
         # reset interface session key
-        request.session.pop(INTERFACE_SESSION_KEY, None)
+        request.session.pop(INTERFACE_SESSION_MODE_KEY, None)
         return super(LGRModesView, self).get(request, *args, **kwargs)
 
 

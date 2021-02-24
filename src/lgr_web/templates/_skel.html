@@ -33,10 +33,15 @@
                     <div class="navbar-form navbar-left">
                         {% block navbar-left %}
                             <p>
-                                <a href="{% url 'lgr_home' %}" title="{% trans 'Go to home screen' %}"
+                            {% if reset_mode %}
+                                {% url 'lgr_modes' as home %}
+                            {% else %}
+                                {% url 'lgr_home' as home %}
+                            {% endif %}
+                                <a href="{{ home }}" title="{% trans 'Go to home screen' %}"
                                    class="show-tooltip"
                                    data-placement="bottom"><i class="glyphicon glyphicon-home"></i></a>
-                                <a href="{% url 'lgr_home' %}" title="{% trans 'Go to home screen' %}"
+                                <a href="{{ home }}" title="{% trans 'Go to home screen' %}"
                                    class="show-tooltip"
                                    data-placement="bottom">{% trans "LGR Tools" %}</a>
                             </p>
