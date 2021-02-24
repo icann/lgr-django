@@ -15,7 +15,7 @@ import lgr_auth.urls
 import lgr_basic.urls
 import lgr_idn_table_review.urls
 import lgr_session.urls
-from .views import LGRModesView, LGRSwitchModeView, LGRAboutView
+from .views import LGRModesView, LGRSwitchModeView, LGRAboutView, LanguageAutocomplete
 
 urlpatterns = [
     path('a/', include(lgr_advanced.urls.urlpatterns)),
@@ -23,6 +23,9 @@ urlpatterns = [
     path('r/', include(lgr_idn_table_review.urls.urlpatterns)),
     path('auth/', include(lgr_auth.urls.urlpatterns)),
     path('storage/', include(lgr_session.urls.urlpatterns)),
+
+    # autocompletion
+    path('language-autocomplete/', LanguageAutocomplete.as_view(), name='language-autocomplete'),
 
     path('i18n/', include('django.conf.urls.i18n')),
 

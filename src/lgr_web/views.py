@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from enum import Enum, auto
 
+from dal import autocomplete
 from django.conf import settings
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
+
+from lgr_web.utils import IANA_LANG_REGISTRY
 
 INTERFACE_SESSION_MODE_KEY = 'mode'
 
@@ -53,3 +56,9 @@ class LGRAboutView(TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['output'] = {"versions": settings.SUPPORTED_UNICODE_VERSIONS}
         return ctx
+
+
+class LanguageAutocomplete(autocomplete.Select2ListView):
+
+    def get_list(self):
+        return sorted(IANA_LANG_REGISTRY)

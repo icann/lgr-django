@@ -9,7 +9,6 @@ from urllib.parse import quote_plus
 
 from django.conf import settings
 from django.utils.html import mark_safe, format_html, format_html_join
-from language_tags import data
 
 from lgr.char import RangeChar
 from lgr.utils import cp_to_str
@@ -119,27 +118,3 @@ def list_validating_repertoires():
     :return: List of validating repertoires.
     """
     return list_files(settings.REPERTOIRE_STORAGE_LOCATION)
-
-
-def parse_language_registry():
-    """
-    Retrieve the list of languages and subtags from the IANA registry content.
-    """
-    languages = set()
-
-    for ref in data.get('registry'):
-        subtag = ref.get('Subtag')
-        _type = ref.get("Type")
-        script = ref.get("Suppress-Script")
-        preferred = ref.get("Preferred-Value")
-        deprecated = ref.get("Deprecated", False)
-        # end of entry
-        if not deprecated and _type == 'script':
-            languages.add('und-' + subtag)
-        elif not deprecated and subtag:
-            languages.add(subtag)
-            if script:
-                languages.add('{}-{}'.format(subtag, script))
-            if preferred:
-                languages.add(preferred)
-    return languages
