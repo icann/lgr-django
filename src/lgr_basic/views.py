@@ -17,7 +17,7 @@ from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import evaluate_label_from_info, NeedAsyncProcess
-from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
+from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 from .forms import ValidateLabelSimpleForm
 
 
@@ -27,7 +27,7 @@ class BasicModeView(FormView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        request.session[INTERFACE_SESSION_KEY] = Interfaces.BASIC.name
+        request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.BASIC.name
         self.session = LGRToolSession(request)
 
     def form_valid(self, form):

@@ -3,7 +3,7 @@ from django import views
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from lgr_auth.models import LgrRole
-from lgr_web.views import INTERFACE_SESSION_KEY, Interfaces
+from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 
 
 class BaseAdminView(LoginRequiredMixin, UserPassesTestMixin):
@@ -15,5 +15,5 @@ class BaseAdminView(LoginRequiredMixin, UserPassesTestMixin):
 class BaseListAdminView(BaseAdminView, views.generic.ListView):
 
     def setup(self, request, *args, **kwargs):
-        request.session[INTERFACE_SESSION_KEY] = Interfaces.IDN_ADMIN.name
+        request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.IDN_ADMIN.name
         return super().setup(request, *args, **kwargs)

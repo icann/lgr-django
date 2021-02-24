@@ -9,7 +9,7 @@ from lgr_advanced.api import LGRToolSession
 from lgr_advanced.forms import LabelFormsForm
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.utils import list_built_in_lgr
-from lgr_web.views import Interfaces, INTERFACE_SESSION_KEY
+from lgr_web.views import Interfaces, INTERFACE_SESSION_MODE_KEY
 
 
 class LGRViewMixin:
@@ -17,7 +17,7 @@ class LGRViewMixin:
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.session = LGRToolSession(request)
-        request.session[INTERFACE_SESSION_KEY] = Interfaces.ADVANCED.name
+        request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.ADVANCED.name
 
 
 class AdvancedModeView(LGRViewMixin, TemplateView):
