@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.urls import path, register_converter
 
-from lgr_idn_table_review.tool.views import (IdnTableReviewModeView,
+from lgr_idn_table_review.idn_tool.views import (IdnTableReviewModeView,
                                              IdnTableReviewSelectReferenceView,
                                              IdnTableReviewListReportFolders,
                                              IdnTableReviewListReports,

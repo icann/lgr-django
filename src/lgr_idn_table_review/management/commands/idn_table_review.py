@@ -11,7 +11,7 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
 from lgr.tools.idn_review.review import review_lgr
-from lgr_idn_table_review.tool.api import IdnTableInfo
+from lgr_idn_table_review.idn_tool.api import IdnTableInfo
 
 
 class Command(BaseCommand):
