@@ -4,7 +4,7 @@
 <html lang="{{ LANGUAGE_CODE }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
     <head>
 		<link rel="stylesheet" href="{% static 'chrome/bootstrap/css/bootstrap.min.css' %}">
-        <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="{% static 'chrome/css/jquery-ui.css' %}">
         <link rel="stylesheet" href="{% static 'chrome/css/lgr.css' %}">
         <style>
             {# override the base style to remove the padding that is meant to account for the headers/footers #}
@@ -27,9 +27,8 @@
         </div> <!-- /container -->
         {% endblock container %}
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
-        <script>window.jQuery || document.write('<script src="{% static 'chrome/js/vendor/jquery.min.js' %}"><\/script>')</script>
+        <script src="{% static 'chrome/js/vendor/jquery.min.js' %}"></script>
+        <script src="{% static 'chrome/js/vendor/jquery-ui.min.js' %}"></script>
         <script src="{% static 'chrome/bootstrap/js/bootstrap.min.js' %}"></script>
         {% block html_body_more %}{% endblock %}
     </body>
