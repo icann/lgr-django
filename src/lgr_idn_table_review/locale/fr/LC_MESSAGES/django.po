@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-26 21:18+0000\n"
+"PO-Revision-Date: 2021-02-26 16:15-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 2.4.1\n"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:4
+msgid "IDN Table Review reports"
+msgstr "Rapports de vérification des Tables IDN"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:11
+msgid "Switch mode"
+msgstr "Changer de mode"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:21
+msgid ""
+"The following files contains IDN review reports.<br/> <strong> <i class="
+"\"glyphicon glyphicon-alert\"></i> Note that these files could be cleaned up "
+"regularly. </strong>"
+msgstr ""
+"Les fichiers suivants contiennent vos rapports de vérification IDN.<br/> "
+"<strong><i class=\"glyphicon glyphicon-alert\"></i> Veuillez noter que ces "
+"fichiers pourraient être nettoyés régulièrement.</strong>"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:31
+msgid "File"
+msgstr "Fichier"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:32
+msgid "Action"
+msgstr "Action"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:52
+#, python-format
+msgid "Are you sure you want to delete report %(file)s?"
+msgstr "Êtes-vous sûr(e) de vouloir supprimer le rapport %(file)s ?"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:61
+msgid "Back"
+msgstr "Précédent"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:67
+msgid "Wait until full report is completed for the file to be valid"
+msgstr ""
+"Veuillez attendre que le rapport soit complet pour que le fichier soit valide"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:69
+msgid "Get the zip file containing all generated reports"
+msgstr "Télécharger le fichier zip contenant tous les rapports générés"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:74
+msgid "Download all"
+msgstr "Télécharger tout"

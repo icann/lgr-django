@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-02-26 21:18+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: src/lgr_idn_table_review/idn_tool/forms.py:15
+msgid "Select IDN table(s) to review"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/forms.py:16
+#, python-format
+msgid ""
+"File(s) must be encoded in UTF-8 and using UNIX line ending. You can select "
+"up to %(max_files)s IDN tables."
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/forms.py:24
+#, python-format
+msgid "You can upload up to %(max_files)s files"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/forms.py:30
+msgid "E-mail"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/forms.py:31
+msgid ""
+"As the computing may be very long, we will warn by e-mail once the result "
+"can be downloaded"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_report_folders.html:4
+msgid "IDN Table Review reports"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_report_folders.html:7
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/review_mode.html:7
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/select_reference.html:7
+msgid "Switch mode"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_report_folders.html:12
+msgid "IDN Table Review Reports"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_report_folders.html:17
+msgid ""
+"The following folders contains your IDN review reports.<br/> <strong><i "
+"class=\"glyphicon glyphicon-alert\"></i> Note that these files could be "
+"cleaned up regularly.</strong>"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_report_folders.html:29
+#, python-format
+msgid "Are you sure you want to delete report %(folder)s?"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_report_folders.html:34
+msgid "No report"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_report_folders.html:38
+msgid "New report"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/review_mode.html:4
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/review_mode.html:12
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/select_reference.html:4
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/select_reference.html:12
+msgid "IDN Table Review"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/review_mode.html:19
+msgid "Next..."
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/review_mode.html:22
+msgid "See previous reports"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/select_reference.html:21
+msgid "IDN table"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/select_reference.html:22
+msgid "LGR to review against"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/select_reference.html:38
+msgid "Review"
+msgstr ""
+
+#: src/lgr_idn_table_review/idn_tool/views.py:115
+#, python-format
+msgid "IDN Table Review Reports: %(folder)s"
+msgstr ""

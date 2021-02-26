@@ -63,7 +63,7 @@
                             {% include "lgr_editor/_form_field.html" with field=edit_codepoints_form.when %}
                             {% include "lgr_editor/_form_field.html" with field=edit_codepoints_form.not_when %}
                             <div class="col-sm-12 text-right">
-                                {% blocktrans %}
+                                {% blocktrans trimmed %}
                                     <p>This rule will be added to <b><span class="nbr-selected"></span> codepoint(s)</b></p>
                                 {% endblocktrans %}
                                 <button name="add-rules" id="btn-add-rules" type="submit" class="btn btn-primary">{% trans "Next" %}</button>
@@ -84,7 +84,7 @@
                     <div class="modal-body" id="add-tags-model-body">
                         {% include "lgr_editor/_form_field.html" with field=edit_codepoints_form.tags %}
                         <div class="col-sm-12 text-right">
-                            {% blocktrans %}
+                            {% blocktrans trimmed %}
                                 <p>These tags will be added to <b><span class="nbr-selected"></span> codepoint(s)</b></p>
                             {% endblocktrans %}
                             <button name="add-tags" id="btn-add-tags" type="submit" class="btn btn-primary">{% trans "Next" %}</button>
