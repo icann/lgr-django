@@ -94,8 +94,6 @@ class BasicModeView(FormView):
 
     def get_context_data(self, **kwargs):
         ctx = super(BasicModeView, self).get_context_data(**kwargs)
-        if 'results' in kwargs:
-            ctx['results'] = kwargs.pop('results')
         ctx['storage'] = self.session.list_storage()
         ctx.update(kwargs)
         return ctx

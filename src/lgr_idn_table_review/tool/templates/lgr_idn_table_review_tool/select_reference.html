@@ -23,11 +23,6 @@
             </tr>
             </thead>
             <tbody>
-            {% for idn_table_info in idn_tables %}
-                <tr>
-                    <td>{{ idn_table_info }}</td>
-                </tr>
-            {% endfor %}
             {% for field in form %}
                 {% if field.html_name != 'email' %}
                     <tr>
@@ -42,24 +37,3 @@
         <button id="submit" type="submit" class="btn btn-primary btn-block">{% trans "Review" %}</button>
     </form>
 {% endblock content %}
-
-{% block html_body_more %}
-    {{ block.super }}
-    <script type="text/javascript">
-        jQuery(document).ready(function ($) {
-            function enable_submit_button() {
-                let files = $('#id_idn_tables').prop('files');
-                if (files.length > 0) {
-                    $('#submit').removeAttr('disabled')
-                } else {
-                    $('#submit').attr('disabled', 'disabled')
-                }
-            }
-
-            $('#id_idn_tables').change(function () {
-                enable_submit_button()
-            });
-            enable_submit_button();
-        });
-    </script>
-{% endblock html_body_more %}
