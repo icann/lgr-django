@@ -29,7 +29,7 @@ enable the EPEL repository before:
 
 Install virtualenv, used to create the Python environment:
 
-	# yum install python34-virtualenv
+	# yum install python3-virtualenv
 
 Create a new user/group that will be used to run the application, as well as the
 log directory where log files will be placed:
@@ -124,7 +124,7 @@ application. For example, if your application is available at
 `lgr-editor.example.com`, then the configuration should be `ALLOWED_HOSTS = ['lgr-editor.example.com']`.
 Also configure `SUPPORTED_UNICODE_VERSIONS` as well as `UNICODE_DATABASES` according to your ICU installation.
 
-The default database, used to store sessions, is `sqlite`.
+The default database, used to store sessions, users and admin LGRs, is `sqlite`.
 It is possible to configure the use of another server using the `DATABASES` dictionary.
 
 For some tools, computation is performed in background and results are sent by e-mail.
