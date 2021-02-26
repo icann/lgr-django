@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from lgr.tools.idn_review.review import review_lgr
-from lgr_idn_table_review.idn_admin.models import RefLgr, RzLgr
+from lgr_idn_table_review.idn_admin.models import RefLgr, RzLgr, RzLgrMember
 from lgr_idn_table_review.tool.api import IdnTableInfo
 
 logger = logging.getLogger(__name__)
@@ -25,9 +25,14 @@ def _review_idn_table(context: Dict, idn_table_info, lgr_info, absolute_url):
     if lgr_type == 'ref':
         ref_lgr = RefLgr.objects.get(name=lgr_name)
         ref_lgr_url = absolute_url + reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
+    elif lgr_type == 'rz_member':
+        ref_lgr = RzLgrMember.objects.get(name=lgr_name)
+        ref_lgr_url = absolute_url + reverse('lgr_idn_admin_display_rz_lgr_member',
+                                             kwargs={'lgr_id': ref_lgr.pk,
+                                                     'rz_lgr_id': ref_lgr.rz_lgr.pk})
     elif lgr_type == 'rz':
         ref_lgr = RzLgr.objects.get(name=lgr_name)
-        ref_lgr_url = absolute_url + reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
+        ref_lgr_url = absolute_url + reverse('lgr_idn_admin_display_rz_lgr', kwargs={'lgr_id': ref_lgr.pk})
     else:
         raise BaseException(f'Wrong LGR type: {lgr_type}')
     context.update({
