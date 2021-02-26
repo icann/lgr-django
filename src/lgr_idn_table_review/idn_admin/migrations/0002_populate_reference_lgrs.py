@@ -4,7 +4,7 @@ import os
 from django.conf import settings
 from django.core.files import File
 from django.db import migrations
-from lgr_idn_table_review.admin.models import RefLgr, RzLgrMember
+from lgr_idn_table_review.idn_admin.models import RefLgr, RzLgrMember
 
 
 SECOND_LEVEL_LANG = {
@@ -56,9 +56,9 @@ SECOND_LEVEL_LANG = {
 def initial_data(apps, schema_editor):
     # We get the model from the versioned app registry;
     # if we directly import it, it'll be the wrong version
-    OldRefLgr = apps.get_model("admin", "RefLgr")
-    OldRzLgr = apps.get_model("admin", "RzLgr")
-    OldRzLgrMember = apps.get_model("admin", "RzLgrMember")
+    OldRefLgr = apps.get_model("idn_admin", "RefLgr")
+    OldRzLgr = apps.get_model("idn_admin", "RzLgr")
+    OldRzLgrMember = apps.get_model("idn_admin", "RzLgrMember")
     db_alias = schema_editor.connection.alias
 
     resouces_path = os.path.join(settings.BASE_DIR, 'resources')
@@ -90,7 +90,7 @@ def initial_data(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('admin', '0001_initial'),
+        ('idn_admin', '0001_initial'),
     ]
 
     operations = [

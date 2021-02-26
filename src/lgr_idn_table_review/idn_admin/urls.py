@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.urls import path
 
-from lgr_idn_table_review.admin.views.reference_lgr import RefLgrView, RefLgrDeleteView, DisplayRefLgrView
-from lgr_idn_table_review.admin.views.rz_lgr import RzLgrView, RzLgrDeleteView, DisplayRzLgrView, DisplayRzLgrMemberView
-from lgr_idn_table_review.admin.views.users import LgrUserView, LgrUserDeleteView
+from lgr_idn_table_review.idn_admin.views.reference_lgr import RefLgrView, RefLgrDeleteView, DisplayRefLgrView
+from lgr_idn_table_review.idn_admin.views.rz_lgr import RzLgrView, RzLgrDeleteView, DisplayRzLgrView, DisplayRzLgrMemberView
+from lgr_idn_table_review.idn_admin.views.users import LgrUserView, LgrUserDeleteView
 
 urlpatterns = [
     path('', RzLgrView.as_view(), name='lgr_idn_admin_mode'),

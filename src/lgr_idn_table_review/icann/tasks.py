@@ -19,7 +19,7 @@ from django.urls import reverse
 from lgr.tools.idn_review.review import review_lgr
 from lgr_advanced import unidb
 from lgr_advanced.lgr_editor.forms import DEFAULT_UNICODE_VERSION
-from lgr_idn_table_review.admin.models import RefLgr, RzLgrMember
+from lgr_idn_table_review.idn_admin.models import RefLgr, RzLgrMember
 from lgr_idn_table_review.icann.api import get_icann_idn_repository_tables, get_reference_lgr, IANA_IDN_TABLES, \
     NoRefLgrFound
 from lgr_idn_table_review.tool.api import IdnTableInfo

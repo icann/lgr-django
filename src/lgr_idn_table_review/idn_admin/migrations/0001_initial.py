@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import lgr_idn_table_review.admin.models
+import lgr_idn_table_review.idn_admin.models
 
 
 class Migration(migrations.Migration):
@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name='RefLgr',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.FileField(upload_to=lgr_idn_table_review.admin.models.get_upload_path)),
+                ('file', models.FileField(upload_to=lgr_idn_table_review.idn_admin.models.get_upload_path)),
                 ('name', models.CharField(max_length=128, unique=True)),
                 ('language_script', models.CharField(max_length=32, unique=True)),
                 ('language', models.CharField(blank=True, max_length=8)),
@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
             name='RzLgr',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.FileField(upload_to=lgr_idn_table_review.admin.models.get_upload_path)),
+                ('file', models.FileField(upload_to=lgr_idn_table_review.idn_admin.models.get_upload_path)),
                 ('name', models.CharField(max_length=128, unique=True)),
             ],
             options={
@@ -44,11 +44,11 @@ class Migration(migrations.Migration):
             name='RzLgrMember',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('file', models.FileField(upload_to=lgr_idn_table_review.admin.models.get_upload_path)),
+                ('file', models.FileField(upload_to=lgr_idn_table_review.idn_admin.models.get_upload_path)),
                 ('name', models.CharField(max_length=128, unique=True)),
                 ('language', models.CharField(max_length=8)),
                 ('script', models.CharField(max_length=8)),
-                ('rz_lgr', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='repository', to='admin.rzlgr')),
+                ('rz_lgr', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='repository', to='idn_admin.rzlgr')),
             ],
             options={
                 'ordering': ['name'],

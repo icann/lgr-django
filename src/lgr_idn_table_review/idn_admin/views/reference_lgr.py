@@ -6,9 +6,9 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
 
-from lgr_idn_table_review.admin.forms import RefLgrCreateForm
-from lgr_idn_table_review.admin.models import RefLgr
-from lgr_idn_table_review.admin.views.common import BaseListAdminView, BaseAdminView
+from lgr_idn_table_review.idn_admin.forms import RefLgrCreateForm
+from lgr_idn_table_review.idn_admin.models import RefLgr
+from lgr_idn_table_review.idn_admin.views.common import BaseListAdminView, BaseAdminView
 
 
 class RefLgrListView(BaseListAdminView):

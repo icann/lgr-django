@@ -4,8 +4,8 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from lgr_auth.models import LgrUser, LgrRole
-from lgr_idn_table_review.admin.forms import UserCreateForm
-from lgr_idn_table_review.admin.views.common import BaseListAdminView, BaseAdminView
+from lgr_idn_table_review.idn_admin.forms import UserCreateForm
+from lgr_idn_table_review.idn_admin.views.common import BaseListAdminView, BaseAdminView
 
 
 class LgrUserListView(BaseListAdminView):

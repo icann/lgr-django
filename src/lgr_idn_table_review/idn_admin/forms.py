@@ -5,7 +5,7 @@ from django.forms import FileField
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_auth.models import LgrUser
-from lgr_idn_table_review.admin.models import RzLgr, RzLgrMember, RefLgr
+from lgr_idn_table_review.idn_admin.models import RzLgr, RzLgrMember, RefLgr
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 

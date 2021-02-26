@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'lgr_advanced.lgr_renderer',
     'lgr_basic',
     'lgr_idn_table_review',
-    'lgr_idn_table_review.admin',
+    'lgr_idn_table_review.idn_admin',
     'lgr_idn_table_review.icann',
     'lgr_idn_table_review.tool',
     'widget_tweaks',
