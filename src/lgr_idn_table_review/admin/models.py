@@ -20,7 +20,7 @@ def get_upload_path(instance, filename):
 
 class LgrModel(models.Model):
     file = models.FileField(upload_to=get_upload_path)
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
 
     class Meta:
         ordering = ['name']
