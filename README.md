@@ -5,13 +5,21 @@ This repository contains the Django project and applications for working with LG
 * `lgr_web` is the main Django project that ties everything together. It has the settings, main url routes,
   most of the templates as well as static resources like CSS, Javascript and images.
 
-The following modules are reusable Django apps that can be included in other Django projects.
+The following modules are Django apps for clarity but may depend on each other, therefore using them
+in another project would require some work:
 
-* `lgr_editor` contains the code related to the LGR web-editor.
-* `lgr_validator` contains the code related the label validation module.
-* `lgr_tools` contains the code related to all utilities: testing LGR and label sets, LGR comparisons, etc.
-* `lgr_renderer` contains the code and templates used to generate the static exports of the LGR (HTML only for now).
+* `lgr_advanced` contains the advanced tools to manipulate LGR. It is split into the following sub-modules:
+  * `lgr_editor` contains the code related to the LGR web-editor.
+  * `lgr_validator` contains the code related the label validation module.
+  * `lgr_tools` contains the code related to all utilities: testing LGR and label sets, LGR comparisons, etc.
+  * `lgr_renderer` contains the code and templates used to generate the static exports of the LGR (HTML only for now).
+* `lgr_auth` contains the authentication part that is used by some apps,
 * `lgr_basic` contains the code related to the simple LGR interface.
+* `lgr_idn_table_review` contains the IDN table review tools. It is split into the following sub-modules:
+  * `idn_admin` contains the IDN table and ICANN users management part,
+  * `idn_icann` contains the IDN table ICANN review that launches a review on all the tables stored in IANA registry,
+  * `idn_tool` contains a tool allowing reviewing IDN tables against the references LGRs managed by admin,
+* `lgr_session` defines a session object that allows manipulating some session objects and accessing and displaying storage,
 
 ## Acknowledgment
 
@@ -67,6 +75,9 @@ THE POSSIBILITY OF SUCH DAMAGE.
   * [munidata](https://github.com/icann/munidata) [BSD License]
   * [natsort](https://pypi.python.org/pypi/natsort) [MIT License]
   * [django-redis-cache](https://github.com/sebleier/django-redis-cache) [BSD License]
+  * [django-autocomplete-light](https://github.com/yourlabs/django-autocomplete-light/) [MIT License]
+  * [pycountry](https://github.com/flyingcircusio/pycountry) [L-GPL License]
+  * [django-cleanup](https://github.com/un1t/django-cleanup) [MIT License]
 * A [redis](https://redis.io/) server for cache and asynchronous computations
 
  For documentation generation:
@@ -146,8 +157,8 @@ To customize the settings, edit `src/lgr_web/settings/local.py` which overrides 
 
 #### Persistence
 
-LGR files are stored as session data. See Django documentation on 
-[configuring the session engine](https://docs.djangoproject.com/en/1.8/topics/http/sessions/).
+Most uploaded LGR files are stored as session data. See Django documentation on
+[configuring the session engine](https://docs.djangoproject.com/en/3.2/topics/http/sessions/).
 The default setting is to use the configured database, which defaults to `sqlite`.
 
 For example, to use files as a storage mechanism, the following can be added to `src/lgr_web/settings/local.py`:
@@ -160,6 +171,8 @@ Both the session engine and result files may need a periodical cleaning. Conside
 
     $ (venv) python manage.py cleanstorage
 
+User accounts and files uploaded in IDN admin mode are stored in a database.
+See the [official documentation](https://docs.djangoproject.com/en/3.2/ref/settings/#databases) to configure your database.
 
 #### Celery
 
@@ -168,7 +181,7 @@ The default broker used is the [redis broker](http://docs.celeryproject.org/en/3
 
 To launch celery, in a venv-enabled console:
 
-    $ (venv) ./venv/bin/celery --app=lgr_web --workdir=./src --concurrency=2 worker
+    $ (venv) ./venv/bin/celery --app=lgr_web --workdir=./src worker --concurrency=2
 
 ### Hacking
 
@@ -179,21 +192,27 @@ Some notes for developers
 
 #### Templates
 
+* `src/lgr_idn_table_review/templates` contains common templates for IDN review apps
+* `src/lgr_idn_table_review/idn_tool/templates` contains IDN tool specific templates
+* `src/lgr_idn_table_review/idn_icann/templates` contains IDN ICANN specific templates
+* `src/lgr_idn_table_review/idn_admin/templates` contains IDN admin specific templates
 * `src/lgr_web/templates` contains the base templates
-* `src/lgr_editor/templates` contains editor-specific templates
-* `src/lgr_validator/templates` contains validator-specific templates
-* `src/lgr_tools/templates` contains tool-specific templates
-* `src/lgr_renderer/templates` contains renderers (HTML output) templates
+* `src/lgr_auth/templates` contains authentication templates
 * `src/lgr_basic/templates` contains simple interface (HTML output) templates
+* `src/lgr_advanced/templates` contains common template for LGR advanced apps
+* `src/lgr_advanced/lgr_renderer/templates` contains LGR renderers (html output) templates
+* `src/lgr_advanced/lgr_validator/templates` contains LGR validator specific templates
+* `src/lgr_advanced/lgr_tools/templates` contains LGR tools specific templates
+* `src/lgr_advanced/lgr_editor/templates` contains LGR editor specific templates
 
 
 #### Static Assets (CSS, Javascript, Images)
 
 The static assets are stored in the following directories, using conventions supported by Django 
-[static files](https://docs.djangoproject.com/fr/3.1/howto/static-files/) mechanism.
+[static files](https://docs.djangoproject.com/en/3.1/howto/static-files/) mechanism.
 
 * `src/lgr_web/assets`
-* `src/lgr_editor/static`
+* `src/lgr_advanced/lgr_editor/static`
 
 
 #### How ICU4C is used
