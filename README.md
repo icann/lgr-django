@@ -236,3 +236,11 @@ To generate the documentation, go to the `doc` directory and run the following c
     (venv) $ make html
 
 The generated documentation is available in `doc/_build/html/index.html`.
+
+
+## Translations
+
+To generate and update translation for locales (1 and 2) run the following commands:
+
+    ./manage.py makemessages -l <locale1> -l <locale2> -i venv
+    ./manage.py compilemessages -l <locale1> -l <locale2> -i venv
