@@ -8,8 +8,8 @@ Environment="LD_LIBRARY_PATH=/usr/local/lib"
 ExecStart=/var/www/lgr/venv/bin/celery \
 --app=lgr_web \
 --workdir=/var/www/lgr/lgr-django/src \
---concurrency=2 \
 worker \
+--concurrency=2 \
 --time-limit=300000 \
 --soft-time-limit=300000
 User=lgr
