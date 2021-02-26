@@ -34,7 +34,7 @@ class IdnTableReviewSelectReferenceForm(forms.Form):
                          widget=forms.TextInput(attrs={'placeholder': 'Email address for tasks results'}))
 
     def __init__(self, *args, **kwargs):
-        # from lgr_idn_table_review.tool.views import RefLgrAutocomplete
+        # from lgr_idn_table_review.idn_tool.views import RefLgrAutocomplete
 
         idn_tables = kwargs.pop('idn_tables', [])
         self.lgrs = kwargs.pop('lgrs', {})
@@ -72,7 +72,7 @@ class IdnTableReviewSelectReferenceForm(forms.Form):
 #                          widget=forms.TextInput(attrs={'placeholder': 'Email address for tasks results'}))
 #
 #     def __init__(self, *args, **kwargs):
-#         from lgr_idn_table_review.tool.views import RefLgrAutocomplete
+#         from lgr_idn_table_review.idn_tool.views import RefLgrAutocomplete
 #
 #         idn_tables = kwargs.pop('idn_tables', [])
 #         super().__init__(*args, **kwargs)

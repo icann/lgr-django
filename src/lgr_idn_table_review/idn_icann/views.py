@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
 from lgr_auth.models import LgrRole
-from lgr_idn_table_review.icann.api import LGRIcannSession
+from lgr_idn_table_review.idn_icann.api import LGRIcannSession
 from lgr_session.views import StorageType
 from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 from .tasks import idn_table_review_task

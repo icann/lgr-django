@@ -17,7 +17,7 @@ from lgr.metadata import Metadata, Version
 from lgr.tools.utils import download_file
 from lgr_idn_table_review.idn_admin.models import RefLgr, RzLgrMember, RzLgr
 from lgr_idn_table_review.api import tag_to_language_script
-from lgr_idn_table_review.tool.api import IdnTableInfo
+from lgr_idn_table_review.idn_tool.api import IdnTableInfo
 from lgr_session.api import LgrStorage
 
 logger = logging.getLogger(__name__)

@@ -12,9 +12,9 @@ from django.views.generic import FormView, TemplateView
 
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
 from lgr_idn_table_review.idn_admin.models import RzLgr, RefLgr, RzLgrMember
-from lgr_idn_table_review.tool.api import LGRIdnReviewSession
-from lgr_idn_table_review.tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
-from lgr_idn_table_review.tool.tasks import idn_table_review_task
+from lgr_idn_table_review.idn_tool.api import LGRIdnReviewSession
+from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
+from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_session.views import StorageType
 from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 
