@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-02 03:08+0000\n"
+"POT-Creation-Date: 2021-02-26 21:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,65 +19,57 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: forms.py:21
+#: src/lgr_basic/forms.py:22
 msgid "Label"
 msgstr ""
 
-#: forms.py:22
+#: src/lgr_basic/forms.py:23
 msgid "File must be encoded in UTF-8 and using UNIX line ending."
 msgstr ""
 
-#: forms.py:26
+#: src/lgr_basic/forms.py:27
 msgid "Email address for tasks results"
 msgstr ""
 
-#: forms.py:27
+#: src/lgr_basic/forms.py:28
 msgid ""
 "As the computing may be very long, we will warn by e-mail once the result "
 "can be downloaded."
 msgstr ""
 
-#: forms.py:37
+#: src/lgr_basic/forms.py:38
 msgid "E-mail is mandatory to get the tasks results"
 msgstr ""
 
-#: forms.py:40 forms.py:41
+#: src/lgr_basic/forms.py:41 src/lgr_basic/forms.py:42
 msgid "Required"
 msgstr ""
 
-#: forms.py:45 forms.py:46
+#: src/lgr_basic/forms.py:46 src/lgr_basic/forms.py:47
 msgid "Unknown error, please report"
 msgstr ""
 
-#: templates/basic_mode.html:8 templates/basic_mode.html:39
-msgid "LGR Tool"
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:3
+msgid "LGR Label Validation Tool"
 msgstr ""
 
-#: templates/basic_mode.html:38 templates/basic_mode.html:39
-msgid "Go to home screen"
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:5
+msgid "Switch mode"
 msgstr ""
 
-#: templates/basic_mode.html:43
-msgid "Advanced mode"
-msgstr ""
-
-#: templates/basic_mode.html:47 templates/basic_mode.html:253
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:9
 msgid "Display all label forms"
 msgstr ""
 
-#: templates/basic_mode.html:48
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:10
 msgid "Label forms"
 msgstr ""
 
-#: templates/basic_mode.html:53
-msgid "About LGR Toolset"
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:24
+msgid "Label Validation Tool"
 msgstr ""
 
-#: templates/basic_mode.html:54 templates/basic_mode.html:235
-msgid "About"
-msgstr ""
-
-#: templates/basic_mode.html:74
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:30
 msgid ""
 "The server was unable to complete the request, most likely because too many "
 "resources were required to compute the query. If you check for collision, "
@@ -85,39 +77,39 @@ msgid ""
 "wait before submitting again."
 msgstr ""
 
-#: templates/basic_mode.html:82
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:40
 msgid "A server error occurred."
 msgstr ""
 
-#: templates/basic_mode.html:82
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:40
 msgid "code:"
 msgstr ""
 
-#: templates/basic_mode.html:82
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:41
 msgid "Please contact the administrator before submitting again."
 msgstr ""
 
-#: templates/basic_mode.html:88
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:47
 msgid "Validate label(s) against"
 msgstr ""
 
-#: templates/basic_mode.html:93
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:52
 msgid "View LGR as"
 msgstr ""
 
-#: templates/basic_mode.html:106
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:65
 msgid "Manually input label(s)"
 msgstr ""
 
-#: templates/basic_mode.html:117
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:77
 msgid "Upload a list of labels"
 msgstr ""
 
-#: templates/basic_mode.html:136
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:97
 msgid "Check for collision with existing TLDs"
 msgstr ""
 
-#: templates/basic_mode.html:150
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:111
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision and validation tasks "
@@ -125,7 +117,7 @@ msgid ""
 "%(email)s. Do not resubmit until you receive the report."
 msgstr ""
 
-#: templates/basic_mode.html:162
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:125
 #, python-format
 msgid ""
 "Your request was sent successfully, the validation task processing can take "
@@ -133,7 +125,7 @@ msgid ""
 "resubmit until you receive the report."
 msgstr ""
 
-#: templates/basic_mode.html:174
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:139
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision task processing can take "
@@ -141,32 +133,33 @@ msgid ""
 "resubmit until you receive the report."
 msgstr ""
 
-#: templates/basic_mode.html:184
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:151
 msgid "Validate"
 msgstr ""
 
-#: templates/basic_mode.html:197
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:163
 msgid "Your saved results"
 msgstr ""
 
-#: templates/basic_mode.html:198
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:164
 msgid "The following files contains your tools computation results."
 msgstr ""
 
-#: templates/basic_mode.html:201
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:167
 msgid "Note that these files could be cleaned up regularly."
 msgstr ""
 
-#: templates/basic_mode.html:206
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:173
 #, python-format
 msgid "Download %(file)s"
 msgstr ""
 
-#: templates/basic_mode.html:241
-msgid "Close"
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:176
+#, python-format
+msgid "Are you sure you want to delete report %(file)s?"
 msgstr ""
 
-#: views.py:83
+#: src/lgr_basic/views.py:84
 msgid ""
 "Input label generates too many variants to compute them all quickly. You "
 "need to enter your email address and will receive a notification once "

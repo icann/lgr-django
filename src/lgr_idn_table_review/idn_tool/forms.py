@@ -13,16 +13,16 @@ from lgr_advanced.lgr_tools.forms import UAEmailField
 
 class LGRIdnTableReviewForm(forms.Form):
     idn_tables = FileField(label=_('Select IDN table(s) to review'),
-                           help_text=_('File(s) must be encoded in UTF-8 and using UNIX line ending.'
-                                       'You can select up to 20 IDN tables.'),
+                           help_text=_('File(s) must be encoded in UTF-8 and using UNIX line ending. '
+                                       'You can select up to %(max_files)s IDN tables.') % {
+                                         'max_files': settings.MAX_USER_IDN_REVIEW_INPUT},
                            required=True,
                            widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     def clean_idn_tables(self):
         if len(self.files.getlist('idn_tables')) > settings.MAX_USER_IDN_REVIEW_INPUT:
-            raise ValidationError(
-                _('You can upload up to %(max_files)s files'),
-                params={'max_files': settings.MAX_USER_IDN_REVIEW_INPUT})
+            raise ValidationError(_('You can upload up to %(max_files)s files') % {
+                'max_files': settings.MAX_USER_IDN_REVIEW_INPUT})
         return self.cleaned_data['idn_tables']
 
 

@@ -59,7 +59,7 @@ class DownloadFileView(LGRSessionView):
             if res_file is None:
                 raise FileNotFoundError
         except FileNotFoundError:
-            messages.error(request, _('Unable to download file %s') % self.filename)
+            messages.error(request, _('Unable to download file %(filename)s') % {'filename': self.filename})
             return redirect(self.next)
         response = FileResponse(res_file[0])
         if 'display' not in self.request.GET:
