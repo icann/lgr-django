@@ -20,7 +20,8 @@ from lgr.tools.idn_review.review import review_lgr
 from lgr_advanced import unidb
 from lgr_advanced.lgr_editor.forms import DEFAULT_UNICODE_VERSION
 from lgr_idn_table_review.admin.models import RefLgr, RzLgrMember
-from lgr_idn_table_review.icann.api import get_icann_idn_repository_tables, get_reference_lgr, IANA_IDN_TABLES
+from lgr_idn_table_review.icann.api import get_icann_idn_repository_tables, get_reference_lgr, IANA_IDN_TABLES, \
+    NoRefLgrFound
 from lgr_idn_table_review.tool.api import IdnTableInfo
 from lgr_session.views import StorageType
 
@@ -29,9 +30,6 @@ logger = logging.getLogger(__name__)
 
 def _review_idn_table(context: Dict, idn_table_info, absolute_url):
     ref_lgr = get_reference_lgr(idn_table_info)
-    if not ref_lgr:
-        context['reason'] = 'No Reference LGR was found to compare with IDN table.'
-        return None
     ref_lgr_info = IdnTableInfo.from_dict({
         'name': ref_lgr.name,
         'data': ref_lgr.file.read().decode('utf-8'),
@@ -61,6 +59,10 @@ def _create_review_report(idn_table_info, absolute_url, storage):
     ref_lgr_name = None
     try:
         ref_lgr_name = _review_idn_table(context, idn_table_info, absolute_url)
+    except NoRefLgrFound as exc:
+        logger.exception('Failed to get a reference LGR')
+        context['reason'] = f'No Reference LGR was found to compare with IDN table:\n{exc.message}'
+        html_report = render_to_string('lgr_idn_table_review/error.html', context)
     except BaseException:
         logger.exception('Failed to review IDN table')
         context['reason'] = 'Invalid IDN table.'
@@ -68,15 +70,12 @@ def _create_review_report(idn_table_info, absolute_url, storage):
             context['reason'] += f'\n{traceback.format_exc()}'
         html_report = render_to_string('lgr_idn_table_review/error.html', context)
     else:
-        if ref_lgr_name:
-            html_report = render_to_string('lgr_idn_table_review/review.html', context)
-            flag = 1
-            for result in context['summary'].values():
-                if result not in ['MATCH', 'NOTE']:
-                    flag = 0
-                    break
-        else:
-            html_report = render_to_string('lgr_idn_table_review/error.html', context)
+        html_report = render_to_string('lgr_idn_table_review/review.html', context)
+        flag = 1
+        for result in context['summary'].values():
+            if result not in ['MATCH', 'NOTE']:
+                flag = 0
+                break
     finally:
         if settings.DEBUG:
             json_name = f'{os.path.splitext(idn_table_info.name)[0]}.json'
