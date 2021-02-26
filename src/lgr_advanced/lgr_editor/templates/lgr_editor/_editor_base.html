@@ -47,14 +47,7 @@
     </div>
 {% endblock content %}
 
-{% block html_head_more %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{% static 'chrome/select2/select2.css' %}">
-    <link rel="stylesheet" href="{% static 'chrome/select2/select2-bootstrap.css' %}">
-{% endblock %}
-
 {% block html_body_more %}
 {{ block.super }}
-<script type="text/javascript" src="{% static 'chrome/select2/select2.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'lgr_editor/js/editor.js' %}"></script>
 {% endblock html_body_more %}
