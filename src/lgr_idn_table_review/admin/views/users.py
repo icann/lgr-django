@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django import views
+from django.contrib import messages
 from django.urls import reverse_lazy
-
+from django.utils.translation import ugettext_lazy as _
 from lgr_auth.models import LgrUser, LgrRole
 from lgr_idn_table_review.admin.forms import UserCreateForm
 from lgr_idn_table_review.admin.views.common import BaseListAdminView, BaseAdminView
@@ -29,6 +30,13 @@ class LgrUserCreateView(BaseAdminView, views.generic.CreateView):
         context['object_list'] = LgrUserListView.queryset.all()
         return context
 
+    def form_valid(self, form):
+        messages.add_message(self.request, messages.SUCCESS, _('New user created'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.add_message(self.request, messages.ERROR, _('Failed to create user'))
+        return super().form_invalid(form)
 
 class LgrUserView(BaseAdminView, views.View):
 
