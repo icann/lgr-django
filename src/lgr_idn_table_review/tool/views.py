@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 
+from dal_select2.views import Select2GroupListView
 from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponse
 from django.urls import reverse_lazy, reverse
@@ -10,7 +11,7 @@ from django.views import View
 from django.views.generic import FormView, TemplateView
 
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
-from lgr_idn_table_review.idn_admin.models import RzLgr, RefLgr
+from lgr_idn_table_review.idn_admin.models import RzLgr, RefLgr, RzLgrMember
 from lgr_idn_table_review.tool.api import LGRIdnReviewSession
 from lgr_idn_table_review.tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_idn_table_review.tool.tasks import idn_table_review_task
@@ -78,10 +79,15 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
         kwargs = super(IdnTableReviewSelectReferenceView, self).get_form_kwargs()
         idn_tables = self.session.list_lgr(uid=self.kwargs.get('report_id'))
         kwargs['idn_tables'] = [t['name'] for t in idn_tables]
-        kwargs['lgrs'] = {
-            'rz': RzLgr.objects.order_by('name').values_list('name', flat=True),
-            'ref': RefLgr.objects.order_by('name').values_list('name', flat=True)
-        }
+        lgrs = {}
+        for name in list(RzLgr.objects.order_by('name').values_list('name', flat=True)):
+            lgrs[name] = 'rz'
+        for name in list(RzLgrMember.objects.order_by('name').values_list('name', flat=True)):
+            lgrs[name] = 'rz_member'
+        for name in list(RefLgr.objects.order_by('name').values_list('name', flat=True)):
+            lgrs[name] = 'ref'
+
+        kwargs['lgrs'] = lgrs
 
         return kwargs
 
@@ -120,3 +126,30 @@ class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, View):
         resp = HttpResponse(idn_table_info.data, content_type='text/plain', charset='UTF-8')
         resp['Content-disposition'] = 'attachment'
         return resp
+
+
+class RefLgrAutocomplete(Select2GroupListView):
+
+    # XXX Uncomment this and remove the other method when upgrading django-autocomplete-light to a version that
+    #     supports it (should be > 3.8.2) and that is working correctly
+    #     Check in forms as well to use the relevant IdnTableReviewSelectReferenceForm
+    # @staticmethod
+    # def get_list():
+    #     lgr_choices = []
+    #     for rz in RzLgr.objects.order_by('name').values_list('name', flat=True):
+    #         rz_member_choices = ((('rz', rz), rz),) + tuple((('rz_member', name), name) for name in
+    #                                                         RzLgrMember.objects.order_by('name').values_list('name',
+    #                                                                                                          flat=True))
+    #         lgr_choices += [((rz, rz), rz_member_choices)]
+    #     lgr_choices += [(('Ref. LGR', 'Ref. LGR'), tuple(
+    #         (('ref', name), name) for name in RefLgr.objects.order_by('name').values_list('name', flat=True)))]
+    #     return lgr_choices
+
+    @staticmethod
+    def get_list():
+        lgr_choices = []
+        for rz in RzLgr.objects.order_by('name').values_list('name', flat=True):
+            rz_member_choices = (rz,) + tuple(RzLgrMember.objects.order_by('name').values_list('name', flat=True))
+            lgr_choices += [(rz, rz_member_choices)]
+        lgr_choices += [('Ref. LGR', tuple(RefLgr.objects.order_by('name').values_list('name', flat=True)))]
+        return lgr_choices

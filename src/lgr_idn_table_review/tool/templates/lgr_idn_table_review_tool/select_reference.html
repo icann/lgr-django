@@ -23,6 +23,7 @@
             </tr>
             </thead>
             <tbody>
+            {{ form.media }}
             {% for field in form %}
                 {% if field.html_name != 'email' %}
                     <tr>

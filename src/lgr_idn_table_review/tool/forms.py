@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from dal import autocomplete
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -33,14 +34,51 @@ class IdnTableReviewSelectReferenceForm(forms.Form):
                          widget=forms.TextInput(attrs={'placeholder': 'Email address for tasks results'}))
 
     def __init__(self, *args, **kwargs):
-        idn_tables = kwargs.pop('idn_tables', [])
-        lgrs = kwargs.pop('lgrs', {})
-        super().__init__(*args, **kwargs)
+        # from lgr_idn_table_review.tool.views import RefLgrAutocomplete
 
-        lgr_choices = sorted([((lgr_type, name), name) for lgr_type, names in lgrs.items() for name in names],
-                             key=lambda x: x[1])
+        idn_tables = kwargs.pop('idn_tables', [])
+        self.lgrs = kwargs.pop('lgrs', {})
+        super().__init__(*args, **kwargs)
 
         for idn_table_name in idn_tables:
             self.fields[idn_table_name] = forms.ChoiceField(label=idn_table_name,
                                                             required=True,
-                                                            choices=lgr_choices)
+                                                            choices=((lgr, lgr) for lgr in self.lgrs.keys()),
+                                                            # choices=RefLgrAutocomplete.get_list(),
+                                                            widget=autocomplete.ListSelect2(url='ref-lgr-autocomplete',
+                                                                                            attrs={
+                                                                                                'data-language': None
+                                                                                            }))
+
+    def clean(self):
+        cleaned_data = super().clean()
+        for field in cleaned_data:
+            if field == 'email':
+                continue
+            lgr_name = cleaned_data[field]
+            # replace lgr value by a tuple (lgr_type, value), this is necessary as dal does not allow us to use values
+            # different than display in choices. The next version should allow that (see commented part below)
+            cleaned_data[field] = str((self.lgrs[lgr_name], lgr_name))
+        return cleaned_data
+
+# XXX Uncomment this and remove the old form when upgrading django-autocomplete-light to a version that
+#     supports it (should be > 3.8.2) and that is working correctly
+#     Check view as well to update RefLgrAutocomplete and remove lgrs from IdnTableReviewSelectReferenceView.get_form_kwargs
+# class IdnTableReviewSelectReferenceForm(forms.Form):
+#     email = UAEmailField(label=_("E-mail"),
+#                          help_text=_('As the computing may be very long, we will warn by e-mail once the result can be '
+#                                      'downloaded'),
+#                          required=False,
+#                          widget=forms.TextInput(attrs={'placeholder': 'Email address for tasks results'}))
+#
+#     def __init__(self, *args, **kwargs):
+#         from lgr_idn_table_review.tool.views import RefLgrAutocomplete
+#
+#         idn_tables = kwargs.pop('idn_tables', [])
+#         super().__init__(*args, **kwargs)
+#
+#         for idn_table_name in idn_tables:
+#             self.fields[idn_table_name] = forms.ChoiceField(label=idn_table_name,
+#                                                             required=True,
+#                                                             choices=RefLgrAutocomplete.get_list(),
+#                                                             widget=autocomplete.ListSelect2(url='ref-lgr-autocomplete'))
