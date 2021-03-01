@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-26 21:18+0000\n"
+"POT-Creation-Date: 2021-03-01 14:56+0000\n"
 "PO-Revision-Date: 2021-02-26 16:00-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,21 +18,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.4.1\n"
 
-#: src/lgr_basic/forms.py:22
+#: src/lgr_basic/forms.py:21
 msgid "Label"
 msgstr "Label"
 
-#: src/lgr_basic/forms.py:23
-msgid "File must be encoded in UTF-8 and using UNIX line ending."
-msgstr ""
-"Le fichier doit être encodé en UTF-8, et utiliser des retours à la ligne "
-"UNIX."
-
-#: src/lgr_basic/forms.py:27
+#: src/lgr_basic/forms.py:26
 msgid "Email address for tasks results"
 msgstr "Adresse e-mail utilisée pour recevoir le résultats des tâches"
 
-#: src/lgr_basic/forms.py:28
+#: src/lgr_basic/forms.py:27
 msgid ""
 "As the computing may be very long, we will warn by e-mail once the result "
 "can be downloaded."
@@ -41,16 +35,16 @@ msgstr ""
 "le résultat pourra être téléchargé. Fournissez une adresse e-mail valide "
 "s'il vous plaît."
 
-#: src/lgr_basic/forms.py:38
+#: src/lgr_basic/forms.py:37
 msgid "E-mail is mandatory to get the tasks results"
 msgstr ""
 "L'adresse e-mail est obligatoire pour recevoir les résultats des tâches"
 
-#: src/lgr_basic/forms.py:41 src/lgr_basic/forms.py:42
+#: src/lgr_basic/forms.py:40 src/lgr_basic/forms.py:41
 msgid "Required"
 msgstr "Requis"
 
-#: src/lgr_basic/forms.py:46 src/lgr_basic/forms.py:47
+#: src/lgr_basic/forms.py:45 src/lgr_basic/forms.py:46
 msgid "Unknown error, please report"
 msgstr "Erreur inconnue, reportez l'erreur s'il vous plait"
 
@@ -193,6 +187,11 @@ msgstr ""
 "Le label entré peut générer trop de variantes pour rapidement toutes les "
 "calculer. Vous devez rentrer votre adresse e-mail et recevrez une "
 "notification une fois que le processus est terminé"
+
+#~ msgid "File must be encoded in UTF-8 and using UNIX line ending."
+#~ msgstr ""
+#~ "Le fichier doit être encodé en UTF-8, et utiliser des retours à la ligne "
+#~ "UNIX."
 
 #~ msgid "LGR Tool"
 #~ msgstr "Outil de gestion de LGR"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-26 21:18+0000\n"
+"POT-Creation-Date: 2021-03-01 14:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,33 +19,29 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_basic/forms.py:22
+#: src/lgr_basic/forms.py:21
 msgid "Label"
 msgstr ""
 
-#: src/lgr_basic/forms.py:23
-msgid "File must be encoded in UTF-8 and using UNIX line ending."
-msgstr ""
-
-#: src/lgr_basic/forms.py:27
+#: src/lgr_basic/forms.py:26
 msgid "Email address for tasks results"
 msgstr ""
 
-#: src/lgr_basic/forms.py:28
+#: src/lgr_basic/forms.py:27
 msgid ""
 "As the computing may be very long, we will warn by e-mail once the result "
 "can be downloaded."
 msgstr ""
 
-#: src/lgr_basic/forms.py:38
+#: src/lgr_basic/forms.py:37
 msgid "E-mail is mandatory to get the tasks results"
 msgstr ""
 
-#: src/lgr_basic/forms.py:41 src/lgr_basic/forms.py:42
+#: src/lgr_basic/forms.py:40 src/lgr_basic/forms.py:41
 msgid "Required"
 msgstr ""
 
-#: src/lgr_basic/forms.py:46 src/lgr_basic/forms.py:47
+#: src/lgr_basic/forms.py:45 src/lgr_basic/forms.py:46
 msgid "Unknown error, please report"
 msgstr ""
 

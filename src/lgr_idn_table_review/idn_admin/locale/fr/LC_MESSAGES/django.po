@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-26 21:18+0000\n"
+"POT-Creation-Date: 2021-03-01 14:56+0000\n"
 "PO-Revision-Date: 2021-02-26 16:05-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,33 +18,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.4.1\n"
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:13
+#: src/lgr_idn_table_review/idn_admin/forms.py:14
 msgid "LGR file(s)"
 msgstr "Fichier(s) LGR"
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:14
-msgid "File(s) must be encoded in UTF-8 and using UNIX line ending."
-msgstr ""
-"Le(s) fichier(s) doivent être encodés en UTF-8 et utiliser le retour à la "
-"ligne UNIX."
-
-#: src/lgr_idn_table_review/idn_admin/forms.py:21
+#: src/lgr_idn_table_review/idn_admin/forms.py:22
 msgid "Common LGR file"
 msgstr "Fichier pour la LGR commune"
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:22
-#: src/lgr_idn_table_review/idn_admin/forms.py:43
+#: src/lgr_idn_table_review/idn_admin/forms.py:23
+#: src/lgr_idn_table_review/idn_admin/forms.py:44
 #: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/ref_lgr.html:11
 #: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/rz_lgr.html:11
 msgid "Name"
 msgstr "Nom"
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:33
+#: src/lgr_idn_table_review/idn_admin/forms.py:34
 #: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/ref_lgr.html:12
 msgid "Language/script tag"
 msgstr "Tag de langage/script"
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:42
+#: src/lgr_idn_table_review/idn_admin/forms.py:43
 msgid "Reference LGR file"
 msgstr "Fichier pour la LGR de référence"
 
@@ -176,6 +170,11 @@ msgstr "Nouvel utilisateur créé"
 #: src/lgr_idn_table_review/idn_admin/views/users.py:38
 msgid "Failed to create user"
 msgstr "Échec à la création de l'utilisateur"
+
+#~ msgid "File(s) must be encoded in UTF-8 and using UNIX line ending."
+#~ msgstr ""
+#~ "Le(s) fichier(s) doivent être encodés en UTF-8 et utiliser le retour à la "
+#~ "ligne UNIX."
 
 #, python-format
 #~ msgid ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-26 21:18+0000\n"
+"POT-Creation-Date: 2021-03-01 14:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,7 +39,7 @@ msgstr ""
 msgid "space-separated tags"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:47
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:48
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:102
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:38
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:112
@@ -47,60 +47,54 @@ msgstr ""
 msgid "Code point"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:48
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:49
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:103
 msgid "Override repertoire"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:53
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:54
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/_editor_base.html:22
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:22
 msgid "Code points"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:57
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:58
 msgid "Disabled code points"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:64
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:65
 msgid "First code point"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:65
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:66
 msgid "Last code point"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:71
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:72
 #, python-format
 msgid ""
 "Last code point (%(last_cp)s) must not be smaller than the first code point "
 "(%(first_cp)s)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:77
-#: src/lgr_advanced/lgr_editor/forms/importer.py:15
-#: src/lgr_advanced/lgr_editor/forms/importer.py:29
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:78
+#: src/lgr_advanced/lgr_editor/forms/importer.py:16
+#: src/lgr_advanced/lgr_editor/forms/importer.py:30
 #: src/lgr_advanced/lgr_editor/forms/metadata.py:54
 msgid "Validating repertoire"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:81
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:82
 msgid "Script"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:83
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:84
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:97
 msgid "Manual import"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:92
-msgid "Select a file"
-msgstr ""
-
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:93
-msgid ""
-"File containing data to be imported. File must be encoded in UTF-8 and using "
-"UNIX line ending."
+msgid "Select a file"
 msgstr ""
 
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:95
@@ -118,36 +112,34 @@ msgstr ""
 msgid "Please provide at least one value"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:14
+#: src/lgr_advanced/lgr_editor/forms/fields.py:20
+msgid "File must be encoded in UTF-8 and using 0x0A line ending."
+msgstr ""
+
+#: src/lgr_advanced/lgr_editor/forms/importer.py:15
 msgid "Name"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:16
-#: src/lgr_advanced/lgr_editor/forms/importer.py:30
+#: src/lgr_advanced/lgr_editor/forms/importer.py:17
+#: src/lgr_advanced/lgr_editor/forms/importer.py:31
 msgid "Code points will be limited to the selected repertoire"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:25
+#: src/lgr_advanced/lgr_editor/forms/importer.py:26
 msgid "Select file(s)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:26
-msgid ""
-"If you select more than one file, this will create a LGR set. File(s) must "
-"be encoded in UTF-8 and using UNIX line ending."
-msgstr ""
-
-#: src/lgr_advanced/lgr_editor/forms/importer.py:34
+#: src/lgr_advanced/lgr_editor/forms/importer.py:35
 msgid "LGR set name"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:39
+#: src/lgr_advanced/lgr_editor/forms/importer.py:40
 msgid ""
 "Enter a valid LGR set name. This value may contain only letters, numbers "
 "and ./-/_ characters."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:43
+#: src/lgr_advanced/lgr_editor/forms/importer.py:44
 msgid "The name of the set"
 msgstr ""
 

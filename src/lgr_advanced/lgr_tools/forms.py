@@ -8,6 +8,8 @@ from django.core import validators
 from django.forms.widgets import Select, TextInput
 from django.utils.translation import ugettext_lazy as _
 
+from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
+
 LGR_COMPARE_ACTIONS = (
     ("UNION", _("Union")),
     ("INTERSECTION", _("Intersection")),
@@ -99,8 +101,7 @@ class LGRDiffSelector(forms.Form):
                               required=True)
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in tool. '
-                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
+                             help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}",
                              required=True)
 
     email = UAEmailField(label=_("E-mail"),
@@ -138,8 +139,7 @@ class LGRCollisionSelector(forms.Form):
                                        required=False)
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in tool. '
-                                         'File must be encoded in UTF-8 and using UNIX line ending.'))
+                             help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}")
 
     email = UAEmailField(label=_("E-mail"),
                          help_text=_('Provide your e-mail address'),
@@ -190,15 +190,13 @@ class LGRSetCompatibleForm(forms.Form):
 class LGRAnnotateSelector(LGRSetCompatibleForm):
     set_labels = forms.FileField(label=_("Allocated Set labels"),
                                  required=False,
-                                 help_text=_('Optional list of labels already allocated '
-                                             'in the LGR set, that will be used to check '
-                                             'for collisions when evaluating labels using '
-                                             'the merged LGR set. '
-                                             'File must be encoded in UTF-8 and using UNIX line ending.'))
+                                 help_text="%s %s" % (
+                                     _('Optional list of labels already allocated in the LGR set, that will be used to '
+                                       'check for collisions when evaluating labels using the merged LGR set.'),
+                                     FILE_FIELD_ENCODING_HELP))
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in tool. '
-                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
+                             help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}",
                              required=True)
 
     email = UAEmailField(label=_("E-mail"),
@@ -208,8 +206,7 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
 
 class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in tool. '
-                                         'File must be encoded in UTF-8 and using UNIX line ending.'),
+                             help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}",
                              required=True)
 
     email = UAEmailField(label=_("E-mail"),
@@ -245,8 +242,7 @@ class LGRComputeVariantsSelector(forms.Form):
                             required=True)
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=_('List of labels to use in tool. '
-                                         'File must be encoded in UTF-8 and using UNIX line ending.'))
+                             help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}")
 
     email = UAEmailField(label=_("E-mail"),
                          help_text=_('Provide your e-mail address'),

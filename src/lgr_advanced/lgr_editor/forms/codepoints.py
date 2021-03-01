@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from django import forms
 
 from lgr.tools.utils import parse_single_cp_input, parse_codepoint_input
 from .fields import (VALIDATING_REPERTOIRES,
-                     DEFAULT_VALIDATING_REPERTOIRE)
+                     DEFAULT_VALIDATING_REPERTOIRE,
+                     FILE_FIELD_ENCODING_HELP)
 
 SUPPORTED_CODEPOINT_INPUT_FILES = [
     ('rfc3743', 'RFC3743'),
@@ -90,8 +91,7 @@ class AddCodepointFromScriptForm(forms.Form):
 
 class ImportCodepointsFromFileForm(forms.Form):
     file = forms.FileField(label=_("Select a file"),
-                           help_text=_('File containing data to be imported. '
-                                       'File must be encoded in UTF-8 and using UNIX line ending.'))
+                           help_text=f"{_('File containing data to be imported.')} {FILE_FIELD_ENCODING_HELP}")
     type = forms.ChoiceField(label=_("File type"),
                              choices=SUPPORTED_CODEPOINT_INPUT_FILES)
     manual_import = forms.BooleanField(label=_("Manual import"),

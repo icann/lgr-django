@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-26 21:18+0000\n"
+"POT-Creation-Date: 2021-03-01 14:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,31 +19,27 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:13
+#: src/lgr_idn_table_review/idn_admin/forms.py:14
 msgid "LGR file(s)"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:14
-msgid "File(s) must be encoded in UTF-8 and using UNIX line ending."
-msgstr ""
-
-#: src/lgr_idn_table_review/idn_admin/forms.py:21
+#: src/lgr_idn_table_review/idn_admin/forms.py:22
 msgid "Common LGR file"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:22
-#: src/lgr_idn_table_review/idn_admin/forms.py:43
+#: src/lgr_idn_table_review/idn_admin/forms.py:23
+#: src/lgr_idn_table_review/idn_admin/forms.py:44
 #: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/ref_lgr.html:11
 #: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/rz_lgr.html:11
 msgid "Name"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:33
+#: src/lgr_idn_table_review/idn_admin/forms.py:34
 #: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/ref_lgr.html:12
 msgid "Language/script tag"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:42
+#: src/lgr_idn_table_review/idn_admin/forms.py:43
 msgid "Reference LGR file"
 msgstr ""
 

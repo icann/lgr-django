@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-26 21:18+0000\n"
+"POT-Creation-Date: 2021-03-01 14:56+0000\n"
 "PO-Revision-Date: 2021-02-26 16:13-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,29 +18,26 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.4.1\n"
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:15
+#: src/lgr_idn_table_review/idn_tool/forms.py:16
 msgid "Select IDN table(s) to review"
 msgstr "Sélectionner la(les) table(s) IDN à vérifier"
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:16
-#, python-format
-msgid ""
-"File(s) must be encoded in UTF-8 and using UNIX line ending. You can select "
-"up to %(max_files)s IDN tables."
-msgstr ""
-"Le(s) fichiers doivent être encodés en UTF-8 et contenir des retours à la "
-"ligne UNIX. Vous pouvez sélectionner jusqu'à %(max_files)s tables IDN."
+#: src/lgr_idn_table_review/idn_tool/forms.py:19
+#, fuzzy, python-format
+#| msgid "You can upload up to %(max_files)s files"
+msgid " You can select up to %(max_files)s IDN tables."
+msgstr "Vous pouvez téléverser jusqu'à %(max_files)s fichiers."
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:24
+#: src/lgr_idn_table_review/idn_tool/forms.py:26
 #, python-format
 msgid "You can upload up to %(max_files)s files"
 msgstr "Vous pouvez téléverser jusqu'à %(max_files)s fichiers."
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:30
+#: src/lgr_idn_table_review/idn_tool/forms.py:32
 msgid "E-mail"
 msgstr "E-mail"
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:31
+#: src/lgr_idn_table_review/idn_tool/forms.py:33
 msgid ""
 "As the computing may be very long, we will warn by e-mail once the result "
 "can be downloaded"
@@ -116,3 +113,11 @@ msgstr "Vérifier"
 #, python-format
 msgid "IDN Table Review Reports: %(folder)s"
 msgstr "Rapport de Vérification de Table IDN: %(folder)s"
+
+#, python-format
+#~ msgid ""
+#~ "File(s) must be encoded in UTF-8 and using UNIX line ending. You can "
+#~ "select up to %(max_files)s IDN tables."
+#~ msgstr ""
+#~ "Le(s) fichiers doivent être encodés en UTF-8 et contenir des retours à la "
+#~ "ligne UNIX. Vous pouvez sélectionner jusqu'à %(max_files)s tables IDN."

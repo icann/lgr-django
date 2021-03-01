@@ -4,6 +4,7 @@ from django import forms
 from django.forms import FileField
 from django.utils.translation import ugettext_lazy as _
 
+from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
 from lgr_auth.models import LgrUser
 from lgr_idn_table_review.idn_admin.models import RzLgr, RzLgrMember, RefLgr
 from lgr_web.utils import IANA_LANG_REGISTRY
@@ -11,7 +12,7 @@ from lgr_web.utils import IANA_LANG_REGISTRY
 
 class RzLgrCreateForm(forms.ModelForm):
     repository = FileField(label=_("LGR file(s)"), required=True,
-                           help_text=_('File(s) must be encoded in UTF-8 and using UNIX line ending.'),
+                           help_text=FILE_FIELD_ENCODING_HELP,
                            widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta:
