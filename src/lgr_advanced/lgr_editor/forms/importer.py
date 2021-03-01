@@ -7,7 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from .fields import (DEFAULT_UNICODE_VERSION,
                      VALIDATING_REPERTOIRES,
-                     DEFAULT_VALIDATING_REPERTOIRE)
+                     DEFAULT_VALIDATING_REPERTOIRE,
+                     FILE_FIELD_ENCODING_HELP)
 
 
 class CreateLGRForm(forms.Form):
@@ -23,8 +24,8 @@ class CreateLGRForm(forms.Form):
 
 class ImportLGRForm(forms.Form):
     file = forms.FileField(label=_("Select file(s)"), required=True,
-                           help_text=_('If you select more than one file, this will create a LGR set. '
-                                       'File(s) must be encoded in UTF-8 and using UNIX line ending.'),
+                           help_text=f"{_('If you select more than one file, this will create a LGR set.')} "
+                                     f"{FILE_FIELD_ENCODING_HELP}",
                            widget=forms.ClearableFileInput(attrs={'multiple': True}))
     validating_repertoire = forms.ChoiceField(label=_("Validating repertoire"),
                                               help_text=_('Code points will be limited to the selected repertoire'),

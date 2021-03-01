@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-26 21:18+0000\n"
-"PO-Revision-Date: 2021-02-26 16:01-0500\n"
+"POT-Creation-Date: 2021-03-01 14:56+0000\n"
+"PO-Revision-Date: 2021-03-01 09:57-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -38,7 +38,7 @@ msgstr "Tags"
 msgid "space-separated tags"
 msgstr "liste de tags séparés par des espaces"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:47
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:48
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:102
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:38
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:112
@@ -46,30 +46,30 @@ msgstr "liste de tags séparés par des espaces"
 msgid "Code point"
 msgstr "Code point"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:48
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:49
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:103
 msgid "Override repertoire"
 msgstr "Ignorer le répertoire"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:53
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:54
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/_editor_base.html:22
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:22
 msgid "Code points"
 msgstr "Code points"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:57
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:58
 msgid "Disabled code points"
 msgstr "Code points indisponibles"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:64
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:65
 msgid "First code point"
 msgstr "Premier code point"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:65
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:66
 msgid "Last code point"
 msgstr "Dernier code point"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:71
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:72
 #, python-format
 msgid ""
 "Last code point (%(last_cp)s) must not be smaller than the first code point "
@@ -78,33 +78,25 @@ msgstr ""
 "Le dernier code point (%(last_cp)s) ne peut être plus petit que le premier "
 "code point (%(first_cp)s)"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:77
-#: src/lgr_advanced/lgr_editor/forms/importer.py:15
-#: src/lgr_advanced/lgr_editor/forms/importer.py:29
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:78
+#: src/lgr_advanced/lgr_editor/forms/importer.py:16
+#: src/lgr_advanced/lgr_editor/forms/importer.py:30
 #: src/lgr_advanced/lgr_editor/forms/metadata.py:54
 msgid "Validating repertoire"
 msgstr "Répertoire de validation"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:81
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:82
 msgid "Script"
 msgstr "Script"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:83
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:84
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:97
 msgid "Manual import"
 msgstr "Importation manuelle"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:92
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:93
 msgid "Select a file"
 msgstr "Sélectionner un fichier"
-
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:93
-msgid ""
-"File containing data to be imported. File must be encoded in UTF-8 and using "
-"UNIX line ending."
-msgstr ""
-"Fichier contenant les données à être importées. Le fichier doit être encodé "
-"en UTF-8 et utiliser les retours à la ligne au format UNIX."
 
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:95
 msgid "File type"
@@ -121,33 +113,29 @@ msgstr "Impossible d'ajouter when et not-when simultanément"
 msgid "Please provide at least one value"
 msgstr "Fournissez au moins une valeur s'il vous plait"
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:14
+#: src/lgr_advanced/lgr_editor/forms/fields.py:20
+msgid "File must be encoded in UTF-8 and using 0x0A line ending."
+msgstr ""
+"Le fichier doit être encodé en UTF-8 et utiliser les retours à la ligne 0x0A."
+
+#: src/lgr_advanced/lgr_editor/forms/importer.py:15
 msgid "Name"
 msgstr "Nom"
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:16
-#: src/lgr_advanced/lgr_editor/forms/importer.py:30
+#: src/lgr_advanced/lgr_editor/forms/importer.py:17
+#: src/lgr_advanced/lgr_editor/forms/importer.py:31
 msgid "Code points will be limited to the selected repertoire"
 msgstr "Les code points seront limités au répertoire sélectionné"
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:25
+#: src/lgr_advanced/lgr_editor/forms/importer.py:26
 msgid "Select file(s)"
 msgstr "Sélectionner un/des fichier(s)"
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:26
-msgid ""
-"If you select more than one file, this will create a LGR set. File(s) must "
-"be encoded in UTF-8 and using UNIX line ending."
-msgstr ""
-"SI vous sélectionnez plus d'un fichier, cela créera un set de LGRs. Les "
-"fichier(s) doivent être encodés en UTF-8 et utiliser les retours à la ligne "
-"au format UNIX."
-
-#: src/lgr_advanced/lgr_editor/forms/importer.py:34
+#: src/lgr_advanced/lgr_editor/forms/importer.py:35
 msgid "LGR set name"
 msgstr "Nom du set LGR"
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:39
+#: src/lgr_advanced/lgr_editor/forms/importer.py:40
 msgid ""
 "Enter a valid LGR set name. This value may contain only letters, numbers "
 "and ./-/_ characters."
@@ -155,7 +143,7 @@ msgstr ""
 "Entrer un nom de LGR valide. Cette valeur ne peut que contenir des lettres, "
 "nombres et les caractères ./-/_."
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:43
+#: src/lgr_advanced/lgr_editor/forms/importer.py:44
 msgid "The name of the set"
 msgstr "Nom du set"
 
@@ -1102,6 +1090,14 @@ msgstr "Génération des statistiques"
 #: src/lgr_advanced/lgr_editor/views/validate.py:49
 msgid "Rebuilding LGR"
 msgstr "Reconstruction de la LGR"
+
+#~ msgid ""
+#~ "If you select more than one file, this will create a LGR set. File(s) "
+#~ "must be encoded in UTF-8 and using UNIX line ending."
+#~ msgstr ""
+#~ "SI vous sélectionnez plus d'un fichier, cela créera un set de LGRs. Les "
+#~ "fichier(s) doivent être encodés en UTF-8 et utiliser les retours à la "
+#~ "ligne au format UNIX."
 
 #~ msgid "Label"
 #~ msgstr "Label"

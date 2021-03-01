@@ -8,14 +8,16 @@ from django.core.exceptions import ValidationError
 from django.forms import FileField
 from django.utils.translation import ugettext_lazy as _
 
+from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
 from lgr_advanced.lgr_tools.forms import UAEmailField
 
 
 class LGRIdnTableReviewForm(forms.Form):
     idn_tables = FileField(label=_('Select IDN table(s) to review'),
-                           help_text=_('File(s) must be encoded in UTF-8 and using UNIX line ending. '
-                                       'You can select up to %(max_files)s IDN tables.') % {
-                                         'max_files': settings.MAX_USER_IDN_REVIEW_INPUT},
+                           help_text="%s %s" % (
+                               FILE_FIELD_ENCODING_HELP,
+                               _(' You can select up to %(max_files)s IDN tables.') % {
+                                   'max_files': settings.MAX_USER_IDN_REVIEW_INPUT}),
                            required=True,
                            widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
