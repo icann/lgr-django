@@ -491,7 +491,11 @@
                 <td>1</td>
                 <td style="text-align:left">The label cannot start with a combining mark based on the IDNA2008.</td>
                 <td>{{ wle.additional_general_rules.combining_mark.applicable|render_bool }}</td>
-                <td>{{ wle.additional_general_rules.combining_mark.exists|render_bool }}</td>
+                <td>
+                    {% if wle.additional_general_rules.combining_mark.applicable %}
+                        {{ wle.additional_general_rules.combining_mark.exists|render_general_rule }}
+                    {% endif %}
+                </td>
             </tr>
             <tr style="background-color:#F8F4EC;">
                 <td>2</td>
@@ -500,7 +504,11 @@
                     RFC5891
                 </td>
                 <td>{{ wle.additional_general_rules.consecutive_hyphens.applicable|render_bool }}</td>
-                <td>{{ wle.additional_general_rules.consecutive_hyphens.exists|render_bool }}</td>
+                <td>
+                    {% if wle.additional_general_rules.consecutive_hyphens.applicable %}
+                        {{ wle.additional_general_rules.consecutive_hyphens.exists|render_general_rule }}
+                    {% endif %}
+                </td>
             </tr>
             <tr style="background-color:white;">
                 <td>3</td>
@@ -508,7 +516,11 @@
                     restriction RFC5893
                 </td>
                 <td>{{ wle.additional_general_rules.rtl.applicable|render_bool }}</td>
-                <td>{{ wle.additional_general_rules.rtl.exists|render_bool }}</td>
+                <td>
+                    {% if wle.additional_general_rules.rtl.applicable %}
+                        {{ wle.additional_general_rules.rtl.exists|render_general_rule }}
+                    {% endif %}
+                </td>
             </tr>
             <tr style="background-color:#F8F4EC;">
                 <td>4</td>
@@ -516,13 +528,11 @@
                     in RFC5893 and recommended for all script.
                 </td>
                 <td>{{ wle.additional_general_rules.digits_set.applicable|render_bool }}</td>
-                <td>{{ wle.additional_general_rules.digits_set.exists|render_bool }}</td>
-            </tr>
-            <tr style="background-color:white;">
-                <td>5</td>
-                <td style="text-align:left">???</td>
-                <td>{{ wle.additional_general_rules.ascii_cp.applicable|render_bool }}</td>
-                <td>{{ wle.additional_general_rules.ascii_cp.exists|render_bool }}</td>
+                <td>
+                    {% if wle.additional_general_rules.digits_set.applicable %}
+                        {{ wle.additional_general_rules.digits_set.exists|render_general_rule }}
+                    {% endif %}
+                </td>
             </tr>
         </table>
     </div>
