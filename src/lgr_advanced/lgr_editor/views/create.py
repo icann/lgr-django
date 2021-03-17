@@ -89,10 +89,11 @@ class ImportLGRView(LGRViewMixin, FormView):
         return reverse('codepoint_list', kwargs={'lgr_id': self.lgr_id})
 
     def form_valid(self, form):
-        is_set = len(form.cleaned_data['file']) > 1
+        lgr_files = self.request.FILES.getlist('file')
+        is_set = len(lgr_files) > 1
         validating_repertoire = form.cleaned_data['validating_repertoire']
         lgr_info_set = []
-        for lgr_file in self.request.FILES.getlist('file'):
+        for lgr_file in lgr_files:
             try:
                 lgr_info = self._handle_lgr_file(lgr_file, validating_repertoire, is_set, lgr_info_set)
                 lgr_info_set.append(lgr_info)
