@@ -314,8 +314,8 @@
             <p>Variant set in IDN Table: {{ variant_set.idn_table|format_cp_list }}<br>
                 Variant set in Ref. LGR: {{ variant_set.ref_lgr|format_cp_list }}<br>
                 Relevant IDN Table Repertoire: {{ variant_set.relevant_idn_table_repertoire|format_cp_list }}<br>
-                Symmetry check: {{ variant_set.symmetry_check }}<br>
-                Transitivity check: {{ variant_set.transitivity_check }}</p>
+                Symmetry check: {{ variant_set.symmetry_check|render_variant_check }}<br>
+                Transitivity check: {{ variant_set.transitivity_check|render_variant_check }}</p>
         </div>
         <table class="simple">
             <tr>

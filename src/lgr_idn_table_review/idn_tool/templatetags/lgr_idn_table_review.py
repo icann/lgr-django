@@ -13,11 +13,20 @@ register = template.Library()
 def render_bool(boolean):
     return '✓' if boolean else '✕'
 
+
 @register.filter
 def render_general_rule(exists):
     if exists is None:
         return 'MANUAL_CHECK'
     return '✓' if exists else '✕'
+
+
+@register.filter
+def render_variant_check(result):
+    if result is None:
+        return 'Not Applicable'
+    return 'Pass' if result else 'Fail'
+
 
 @register.filter
 def format_cp(cp):
