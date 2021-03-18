@@ -14,7 +14,7 @@ SECOND_LEVEL_LANG = {
     'lgr-second-level-bosnian-cyrillic-30aug16-en.xml': 'bos-Cyrl',
     'lgr-second-level-bosnian-latin-30aug16-en.xml': 'bos-Latn',
     'lgr-second-level-bulgarian-30aug16-en.xml': 'bul-Cyrl',
-    'lgr-second-level-chinese-30aug16-en.xml': 'zho',
+    'lgr-second-level-chinese-30aug16-en.xml': 'zho-Hani',
     'lgr-second-level-danish-30aug16-en.xml': 'dan-Latn',
     'lgr-second-level-devanagari-script-15dec20-en.xml': 'und-Deva',
     'lgr-second-level-english-30aug16-en.xml': 'eng-Latn',
