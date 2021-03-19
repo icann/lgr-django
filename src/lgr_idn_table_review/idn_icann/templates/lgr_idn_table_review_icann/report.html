@@ -43,7 +43,7 @@
     <h1>ICANN IDN Table Review Report</h1>
     <p>Total IDN table in IANA repository: {{ count }}</p>
     <p>Date of review: {{ date }}</p>
-    <p>IDN table processed:</p>
+    <h2>IDN table processed:</h2>
     <table id="processed" class="display">
         <thead>
         <tr>
@@ -52,6 +52,21 @@
         </thead>
         <tbody>
         {% for report in processed %}
+            <tr>
+                <td><a href="{{ report.url }}" target="_blank" rel="noopener noreferrer">{{ report.name }}</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <h2>IDN table that could not be processed:</h2>
+    <table id="unprocessed" class="display">
+        <thead>
+        <tr>
+            <th>Report</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for report in unprocessed %}
             <tr>
                 <td><a href="{{ report.url }}" target="_blank" rel="noopener noreferrer">{{ report.name }}</a></td>
             </tr>
@@ -69,6 +84,19 @@
             "scrollX": false,
             "searching": true,
             "lengthMenu": [[20, 50, 100, 1000, -1], [20, 50, 100, 1000, "All"]],
+            "columns": [
+                {
+                    "orderable": true,
+                    "searchable": true
+                },
+            ]
+        });
+        $('#unprocessed').DataTable({
+            "responsive": true,
+            "info": false,
+            "scrollX": false,
+            "searching": true,
+            "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "All"]],
             "columns": [
                 {
                     "orderable": true,
