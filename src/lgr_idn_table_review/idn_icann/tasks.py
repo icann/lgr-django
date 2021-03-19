@@ -102,6 +102,7 @@ def idn_table_review_task(absolute_url, email_address):
 
     count = 0
     processed = []
+    unprocessed = []
     storage.save(f'{path}.zip', StringIO(''))
     today = time.strftime('%Y-%m-%d')
     with storage.open(f'{path}.zip', 'wb') as f:
@@ -115,15 +116,20 @@ def idn_table_review_task(absolute_url, email_address):
                     lang = idn_table_info.lgr.metadata.languages[0]
                     filename = f"{tld_a_label.upper()}.{lang}." \
                                f"{idn_table_info.lgr.metadata.version.value}.{today}.html"
+                    url = absolute_url + reverse('download_file', kwargs={
+                        'storage': StorageType.IDN_REVIEW_ICANN_MODE.value,
+                        'filename': filename,
+                        'folder': path
+                    }) + '?display=true'
                     if flag is not None:
                         processed.append({
-                            'name': f"{tld.upper()}.{lang}.{flag}.{ref_lgr_name}",
-                            'url': absolute_url + reverse('download_file',
-                                                          kwargs={
-                                                              'storage': StorageType.IDN_REVIEW_ICANN_MODE.value,
-                                                              'filename': filename,
-                                                              'folder': path
-                                                          }) + '?display=true'
+                            'name': f"{tld.upper()}.{lang}.{flag}.{idn_table_info.name}.{ref_lgr_name}",
+                            'url': url
+                        })
+                    else:
+                        unprocessed.append({
+                            'name': f"{tld.upper()}.{lang}.0.0",
+                            'url': url
                         })
                     zf.writestr(filename, html_report)
                     storage.save(filename, StringIO(html_report))
@@ -131,7 +137,8 @@ def idn_table_review_task(absolute_url, email_address):
     summary_report = render_to_string('lgr_idn_table_review_icann/report.html', {
         'count': count,
         'date': today,
-        'processed': processed
+        'processed': processed,
+        'unprocessed': unprocessed
     })
     storage.save(f'{path}-summary.html', StringIO(summary_report))
 
