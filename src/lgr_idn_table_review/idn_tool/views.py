@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 import uuid
 
 from dal_select2.views import Select2GroupListView
@@ -17,6 +18,8 @@ from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableR
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_session.views import StorageType
 from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
+
+logger = logging.getLogger(__name__)
 
 
 class IdnTableReviewViewMixin:
@@ -45,7 +48,12 @@ class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
                     idn_table_id = idn_table_id.rsplit('.', 1)[0]
                     break
             idn_table_id = slugify(idn_table_id)
-            self.session.open_lgr(idn_table_id, idn_table.read().decode('utf-8'), uid=self.report_id)
+            try:
+                self.session.open_lgr(idn_table_id, idn_table.read().decode('utf-8'), uid=self.report_id)
+            except Exception:
+                logger.exception('Unable to parser IDN table %s', idn_table_id)
+                form.add_error('idn_tables', _('%(filename)s is an invalid IDN table') % {'filename': idn_table_id})
+                return super().form_invalid(form)
 
         return super(IdnTableReviewModeView, self).form_valid(form)
 
