@@ -9,6 +9,9 @@ from language_tags import data
 
 logger = logging.getLogger(__name__)
 
+# all types: {'redundant', 'extlang', 'script', 'grandfathered', 'language', 'region', 'variant'}
+IGNORE_LANGUAGE_REGISTRY_TYPES = ['region', 'variant']
+
 
 def parse_language_registry():
     """
@@ -23,9 +26,13 @@ def parse_language_registry():
         preferred = ref.get("Preferred-Value")
         deprecated = ref.get("Deprecated", False)
         # end of entry
-        if not deprecated and _type == 'script':
+        if _type in IGNORE_LANGUAGE_REGISTRY_TYPES:
+            continue
+        if deprecated:
+            continue
+        if _type == 'script':
             languages.add('und-' + subtag)
-        elif not deprecated and subtag:
+        elif subtag:
             languages.add(subtag)
             if script:
                 languages.add('{}-{}'.format(subtag, script))
