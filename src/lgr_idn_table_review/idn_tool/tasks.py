@@ -5,7 +5,7 @@ import time
 from ast import literal_eval
 from io import StringIO
 from typing import Dict
-from zipfile import ZipFile, ZIP_BZIP2
+from zipfile import ZipFile, ZIP_DEFLATED
 
 from celery import shared_task
 from django.core.files.storage import FileSystemStorage
@@ -83,7 +83,7 @@ def idn_table_review_task(idn_tables, report_id, email_address, storage_path, do
 
     storage.save(f'{path}.zip', StringIO(''))
     with storage.open(f'{path}.zip', 'wb') as f:
-        with ZipFile(f, mode='w', compression=ZIP_BZIP2) as zf:
+        with ZipFile(f, mode='w', compression=ZIP_DEFLATED) as zf:
             for idn_table_json, lgr_info in idn_tables:
                 html_report = _create_review_report(report_id, idn_table_json, lgr_info, absolute_url)
                 filename = f"{idn_table_json['name']}.html"

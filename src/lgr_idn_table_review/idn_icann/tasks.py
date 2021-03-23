@@ -7,7 +7,7 @@ import traceback
 from datetime import date
 from io import StringIO
 from typing import Dict
-from zipfile import ZipFile, ZIP_BZIP2
+from zipfile import ZipFile, ZIP_DEFLATED
 
 from celery import shared_task
 from django.conf import settings
@@ -106,7 +106,7 @@ def idn_table_review_task(absolute_url, email_address):
     storage.save(f'{path}.zip', StringIO(''))
     today = time.strftime('%Y-%m-%d')
     with storage.open(f'{path}.zip', 'wb') as f:
-        with ZipFile(f, mode='w', compression=ZIP_BZIP2) as zf:
+        with ZipFile(f, mode='w', compression=ZIP_DEFLATED) as zf:
             for tlds, idn_table_info in get_icann_idn_repository_tables():
                 count += len(tlds)
                 html_report, ref_lgr_name, flag = _create_review_report(idn_table_info, absolute_url, storage)
