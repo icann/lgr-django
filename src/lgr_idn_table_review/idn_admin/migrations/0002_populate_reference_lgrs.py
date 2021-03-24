@@ -31,7 +31,7 @@ SECOND_LEVEL_LANG = {
     'lgr-second-level-italian-30aug16-en.xml': 'ita-Latn',
     'lgr-second-level-kannada-script-15dec20-en.xml': 'und-Knda',
     'lgr-second-level-khmer-script-15dec20-en.xml': 'und-Khmr',
-    'lgr-second-level-korean-30aug16-en.xml': 'kor',
+    'lgr-second-level-korean-30aug16-en.xml': 'kor-Hang',
     'lgr-second-level-lao-script-15dec20-en.xml': 'und-Laoo',
     'lgr-second-level-latvian-30aug16-en.xml': 'lav-Latn',
     'lgr-second-level-lithuanian-30aug16-en.xml': 'lit-Latn',
