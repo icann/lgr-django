@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-01 14:56+0000\n"
-"PO-Revision-Date: 2021-02-26 16:13-0500\n"
+"POT-Creation-Date: 2021-03-25 00:06+0000\n"
+"PO-Revision-Date: 2021-03-24 20:08-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -23,15 +23,14 @@ msgid "Select IDN table(s) to review"
 msgstr "Sélectionner la(les) table(s) IDN à vérifier"
 
 #: src/lgr_idn_table_review/idn_tool/forms.py:19
-#, fuzzy, python-format
-#| msgid "You can upload up to %(max_files)s files"
+#, python-format
 msgid " You can select up to %(max_files)s IDN tables."
-msgstr "Vous pouvez téléverser jusqu'à %(max_files)s fichiers."
+msgstr "Vous pouvez téléverser jusqu'à %(max_files)s tables IDN."
 
 #: src/lgr_idn_table_review/idn_tool/forms.py:26
 #, python-format
 msgid "You can upload up to %(max_files)s files"
-msgstr "Vous pouvez téléverser jusqu'à %(max_files)s fichiers."
+msgstr "Vous pouvez téléverser jusqu'à %(max_files)s fichiers"
 
 #: src/lgr_idn_table_review/idn_tool/forms.py:32
 msgid "E-mail"
@@ -109,7 +108,12 @@ msgstr "LGR avec laquelle effectuer la vérification"
 msgid "Review"
 msgstr "Vérifier"
 
-#: src/lgr_idn_table_review/idn_tool/views.py:115
+#: src/lgr_idn_table_review/idn_tool/views.py:55
+#, python-format
+msgid "%(filename)s is an invalid IDN table"
+msgstr "%(filename)s est une table IDN invalide"
+
+#: src/lgr_idn_table_review/idn_tool/views.py:123
 #, python-format
 msgid "IDN Table Review Reports: %(folder)s"
 msgstr "Rapport de Vérification de Table IDN: %(folder)s"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-01 14:56+0000\n"
+"POT-Creation-Date: 2021-03-25 00:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -896,19 +896,19 @@ msgid ""
 "Please use a new name."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/create.py:124
+#: src/lgr_advanced/lgr_editor/views/create.py:125
 msgid ""
 "The LGR you have tried to import already exists in your working session. "
 "Please rename it before importing it."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/create.py:129
+#: src/lgr_advanced/lgr_editor/views/create.py:130
 msgid ""
 "The LGR you have tried to import already exists in your set. Please rename "
 "it before importing it."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/create.py:148
+#: src/lgr_advanced/lgr_editor/views/create.py:149
 msgid "The LGR set name already exists. Please use another name."
 msgstr ""
 

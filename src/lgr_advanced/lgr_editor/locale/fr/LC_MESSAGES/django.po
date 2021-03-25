@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-01 14:56+0000\n"
+"POT-Creation-Date: 2021-03-25 00:06+0000\n"
 "PO-Revision-Date: 2021-03-01 09:57-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -934,7 +934,7 @@ msgstr ""
 "La LGR que vous essayez de créer existe déjà dans votre session de travail. "
 "Merci d'utiliser un nouveau nom."
 
-#: src/lgr_advanced/lgr_editor/views/create.py:124
+#: src/lgr_advanced/lgr_editor/views/create.py:125
 msgid ""
 "The LGR you have tried to import already exists in your working session. "
 "Please rename it before importing it."
@@ -942,7 +942,7 @@ msgstr ""
 "La LGR que vous essayez d'importer existe déjà dans votre session de "
 "travail. Merci de renommer le fichier avant de l'importer."
 
-#: src/lgr_advanced/lgr_editor/views/create.py:129
+#: src/lgr_advanced/lgr_editor/views/create.py:130
 msgid ""
 "The LGR you have tried to import already exists in your set. Please rename "
 "it before importing it."
@@ -950,7 +950,7 @@ msgstr ""
 "La LGR que vous essayez d'importer existe déjà dans votre ensemble. Merci de "
 "renommer le fichier avant de l'importer."
 
-#: src/lgr_advanced/lgr_editor/views/create.py:148
+#: src/lgr_advanced/lgr_editor/views/create.py:149
 msgid "The LGR set name already exists. Please use another name."
 msgstr "Ce nom de set LGR existe déjà. Merci d'utiliser un autre nom."
 
