@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-01 14:56+0000\n"
-"PO-Revision-Date: 2021-02-26 16:21-0500\n"
+"POT-Creation-Date: 2021-03-25 00:06+0000\n"
+"PO-Revision-Date: 2021-03-24 20:08-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -128,7 +128,7 @@ msgid "Admin mode"
 msgstr "Mode admin"
 
 #: src/lgr_web/templates/lgr_modes.html:41
-msgid "Administrate IDN review tool"
+msgid "Manage IDN review tool"
 msgstr "Administrer l'outil de vérification IDN"
 
 #, fuzzy
