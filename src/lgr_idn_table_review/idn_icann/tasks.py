@@ -114,8 +114,8 @@ def idn_table_review_task(absolute_url, email_address):
                     tld_a_label = udata.idna_encode_label(tld)
                     # need to save a version per tld, processed and count will reflect that as well
                     lang = idn_table_info.lgr.metadata.languages[0]
-                    filename = f"{tld_a_label.upper()}.{lang}." \
-                               f"{idn_table_info.lgr.metadata.version.value}.{today}.html"
+                    version = idn_table_info.lgr.metadata.version.value
+                    filename = f"{tld_a_label.upper()}.{lang}.{version}.{today}.html"
                     url = absolute_url + reverse('download_file', kwargs={
                         'storage': StorageType.IDN_REVIEW_ICANN_MODE.value,
                         'filename': filename,
@@ -123,12 +123,12 @@ def idn_table_review_task(absolute_url, email_address):
                     }) + '?display=true'
                     if flag is not None:
                         processed.append({
-                            'name': f"{tld.upper()}.{lang}.{flag}.{idn_table_info.name}.{ref_lgr_name}",
+                            'name': f"{tld.upper()}.{lang}.{version}.{flag}.{idn_table_info.name}.{ref_lgr_name}",
                             'url': url
                         })
                     else:
                         unprocessed.append({
-                            'name': f"{tld.upper()}.{lang}.0.0",
+                            'name': f"{tld.upper()}.{lang}.{version}.0.0",
                             'url': url
                         })
                     zf.writestr(filename, html_report)
