@@ -374,7 +374,7 @@ class CodePointDeleteView(LGREditMixin, CodePointMixin, RedirectView):
             messages.add_message(self.request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        return super().get(request, *args, **kwargs)
+        return redirect('codepoint_list', lgr_id=self.lgr_id)
 
 
 class VariantDeleteView(LGREditMixin, CodePointMixin, View):
