@@ -80,7 +80,7 @@
     jQuery(document).ready(function ($) {
         $('#processed').DataTable({
             "responsive": true,
-            "info": false,
+            "info": true,
             "scrollX": false,
             "searching": true,
             "lengthMenu": [[20, 50, 100, 1000, -1], [20, 50, 100, 1000, "All"]],
@@ -93,7 +93,7 @@
         });
         $('#unprocessed').DataTable({
             "responsive": true,
-            "info": false,
+            "info": true,
             "scrollX": false,
             "searching": true,
             "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "All"]],
