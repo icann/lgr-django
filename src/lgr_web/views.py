@@ -62,3 +62,6 @@ class LanguageAutocomplete(autocomplete.Select2ListView):
 
     def get_list(self):
         return sorted(IANA_LANG_REGISTRY)
+
+    def create(self, value):
+        return value
