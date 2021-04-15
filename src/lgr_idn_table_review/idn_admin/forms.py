@@ -31,10 +31,11 @@ class RzLgrCreateForm(forms.ModelForm):
 
 
 class RefLgrCreateForm(forms.ModelForm):
-    language_script = autocomplete.Select2ListChoiceField(label=_("Language/script tag"),
-                                                          choice_list=[''] + sorted(IANA_LANG_REGISTRY),
-                                                          widget=autocomplete.ListSelect2(url='language-autocomplete'),
-                                                          initial='', required=True)
+    language_script = autocomplete.Select2ListCreateChoiceField(label=_("Language/script tag"),
+                                                                choice_list=[''] + sorted(IANA_LANG_REGISTRY),
+                                                                widget=autocomplete.ListSelect2(
+                                                                    url='language-autocomplete'),
+                                                                initial='', required=True)
 
     class Meta:
         model = RefLgr
