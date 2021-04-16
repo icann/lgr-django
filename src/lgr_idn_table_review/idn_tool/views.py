@@ -156,8 +156,9 @@ class RefLgrAutocomplete(Select2GroupListView):
     @staticmethod
     def get_list():
         lgr_choices = []
-        for rz in RzLgr.objects.order_by('name').values_list('name', flat=True):
-            rz_member_choices = (rz,) + tuple(RzLgrMember.objects.order_by('name').values_list('name', flat=True))
-            lgr_choices += [(rz, rz_member_choices)]
         lgr_choices += [('Ref. LGR', tuple(RefLgr.objects.order_by('name').values_list('name', flat=True)))]
+        for rz in RzLgr.objects.order_by('name').values_list('name', flat=True):
+            rz_member_choices = (rz,) + tuple(
+                RzLgrMember.objects.filter(rz_lgr__name=rz).order_by('name').values_list('name', flat=True))
+            lgr_choices += [(rz, rz_member_choices)]
         return lgr_choices
