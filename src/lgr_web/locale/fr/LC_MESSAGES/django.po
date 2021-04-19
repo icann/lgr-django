@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-25 00:06+0000\n"
-"PO-Revision-Date: 2021-03-24 20:08-0400\n"
+"POT-Creation-Date: 2021-04-19 15:09+0000\n"
+"PO-Revision-Date: 2021-04-19 11:11-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -42,11 +42,19 @@ msgstr "Retourner à l'écran d'accueil"
 msgid "About LGR Toolset"
 msgstr "À propos de l'application LGR"
 
-#: src/lgr_web/templates/_base.html:59 src/lgr_web/templates/_base.html:119
+#: src/lgr_web/templates/_base.html:59 src/lgr_web/templates/_base.html:120
 msgid "About"
 msgstr "À propos"
 
-#: src/lgr_web/templates/_base.html:126
+#: src/lgr_web/templates/_base.html:104
+msgid ""
+"If you have questions, please contact <a href=\"mailto:globalsupport@icann."
+"org\">globalsupport@icann.org</a>"
+msgstr ""
+"Si vous avez des questions, contactez <a href=\"mailto:globalsupport@icann."
+"org\">globalsupport@icann.org</a> svp"
+
+#: src/lgr_web/templates/_base.html:127
 msgid "Close"
 msgstr "Fermer"
 
