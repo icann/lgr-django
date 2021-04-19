@@ -37,11 +37,11 @@
                     <div class="navbar-form navbar-left">
                         {% block navbar-left %}
                             <p>
-                            {% if reset_mode %}
-                                {% url 'lgr_modes' as home %}
-                            {% else %}
-                                {% url 'lgr_home' as home %}
-                            {% endif %}
+                                {% if reset_mode %}
+                                    {% url 'lgr_modes' as home %}
+                                {% else %}
+                                    {% url 'lgr_home' as home %}
+                                {% endif %}
                                 <a href="{{ home }}" title="{% trans 'Go to home screen' %}"
                                    class="show-tooltip"
                                    data-placement="bottom"><i class="glyphicon glyphicon-home"></i></a>
@@ -101,9 +101,10 @@
             <hr>
             <footer>
                 <p class="pull-right"><small>&copy;</small></p>
+                <p>{% blocktrans trimmed %}
+                    If you have questions, please contact <a href="mailto:globalsupport@icann.org">globalsupport@icann.org</a>
+                {% endblocktrans %}</p>
                 {% include "_languages.html" %}
-                <ul class="inline">
-                </ul>
             </footer>
         {% endblock %}
     </div> <!-- /container -->
