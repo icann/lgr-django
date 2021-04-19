@@ -134,7 +134,7 @@ def idn_table_review_task(absolute_url, email_address):
                     zf.writestr(filename, html_report)
                     storage.save(filename, StringIO(html_report))
 
-    summary_report = render_to_string('lgr_idn_table_review_icann/report.html', {
+    summary_report = render_to_string('lgr_idn_table_review_icann/summary_report.html', {
         'count': count,
         'date': today,
         'processed': processed,
