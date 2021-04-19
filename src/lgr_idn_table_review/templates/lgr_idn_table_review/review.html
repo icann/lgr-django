@@ -544,7 +544,11 @@
             </tr>
             <tr style="background-color:white;">
                 <td>1</td>
-                <td style="text-align:left">The label cannot start with a combining mark based on the IDNA2008.</td>
+                <td style="text-align:left">The Unicode string MUST NOT begin with a combining mark or combining mark
+                    character.
+                    See <a href="https://www.rfc-editor.org/rfc/rfc5891.txt" target="_blank" rel="noopener noreferrer">RFC5891</a>,
+                    Section 4.2.3.2.
+                </td>
                 <td>{{ wle.additional_general_rules.combining_mark.applicable|render_bool }}</td>
                 <td>
                     {% if wle.additional_general_rules.combining_mark.applicable %}
@@ -554,9 +558,11 @@
             </tr>
             <tr style="background-color:#F8F4EC;">
                 <td>2</td>
-                <td style="text-align:left">The label MUST NOT contain "--" (two consecutive hyphens) in the third and
-                    fourth character positions and MUST NOT start or end with a "-" (hyphen) based on the restriction in
-                    RFC5891
+                <td style="text-align:left">The Unicode string MUST NOT contain "--" (two consecutive hyphens) in the
+                    third and
+                    fourth character positions and MUST NOT start or end with a "-" (hyphen).
+                    See <a href="https://www.rfc-editor.org/rfc/rfc5891.txt" target="_blank" rel="noopener noreferrer">RFC5891</a>,
+                    Section 4.2.3.1.
                 </td>
                 <td>{{ wle.additional_general_rules.consecutive_hyphens.applicable|render_bool }}</td>
                 <td>
@@ -567,8 +573,9 @@
             </tr>
             <tr style="background-color:white;">
                 <td>3</td>
-                <td style="text-align:left">For RTL scripts, digit cannot be at the beginning of the label based on the
-                    restriction RFC5893
+                <td style="text-align:left">The RTL label MUST NOT start with a number.
+                    See <a href="https://www.rfc-editor.org/rfc/rfc5893.txt" target="_blank" rel="noopener noreferrer">RFC5893</a>,
+                    Section 2 Bidi Rule 1 and Section 3.
                 </td>
                 <td>{{ wle.additional_general_rules.rtl.applicable|render_bool }}</td>
                 <td>
@@ -579,8 +586,13 @@
             </tr>
             <tr style="background-color:#F8F4EC;">
                 <td>4</td>
-                <td style="text-align:left">The label may contain only digits from a single set based on the restriction
-                    in RFC5893 and recommended for all script.
+                <td style="text-align:left">The RTL Label MUST NOT contain digits from different sets.
+                    See <a href="https://www.rfc-editor.org/rfc/rfc5893.txt" target="_blank" rel="noopener noreferrer">RFC5893</a>,
+                    Section 2 Bidi Rule 4.<br>
+                    In addition, the reference LGRs recommend that LTR labels also contain digits from a single set.
+                    See <a href="https://www.icann.org/en/system/files/files/lgr-guidelines-second-level-27may20-en.pdf"
+                           target="_blank" rel="noopener noreferrer">
+                        Guidelines for Developing Reference LGRs for the Second Level</a>, Section 4.4.
                 </td>
                 <td>{{ wle.additional_general_rules.digits_set.applicable|render_bool }}</td>
                 <td>
