@@ -40,3 +40,4 @@ src/lgr_web/media
 
 # static
 src/lgr_web/static/
+!src/lgr_web/assets/chrome/select2/dist
