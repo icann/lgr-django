@@ -15,8 +15,8 @@ from django.conf import settings
 from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.tools.utils import download_file
-from lgr_idn_table_review.idn_admin.models import RefLgr, RzLgrMember, RzLgr
 from lgr_idn_table_review.api import tag_to_language_script
+from lgr_idn_table_review.idn_admin.models import RefLgr, RzLgrMember, RzLgr
 from lgr_idn_table_review.idn_tool.api import IdnTableInfo
 from lgr_session.api import LgrStorage
 
@@ -87,7 +87,7 @@ def get_icann_idn_repository_tables():
         yield tlds, info
 
 
-def _make_ref_lgr_query(obj, q, logs, multiple_found_query=None):
+def _make_lgr_query(obj, q, logs, multiple_found_query=None):
     obj_name = 'Reference LGR'
     if obj == RzLgrMember:
         obj_name = 'RZ LGR'
@@ -107,7 +107,7 @@ def _make_ref_lgr_query(obj, q, logs, multiple_found_query=None):
         logger.info("Multiple reference LGR found")
         logs.append(f"More than one {obj_name} found for {query_str}")
         if multiple_found_query:
-            return _make_ref_lgr_query(obj, multiple_found_query, logs)
+            return _make_lgr_query(obj, multiple_found_query, logs)
         return None
 
 
@@ -124,41 +124,58 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
     language, script = tag_to_language_script(tag, use_suppress_script=True)
     logger.info("Look for reference LGR with language '%s' and script '%s'", language, script)
     if language:
-        ref_lgr = _make_ref_lgr_query(RefLgr, {'language__iexact': language}, logs,
-                                      multiple_found_query={'language__iexact': language, 'script__iexact': script})
+        if script:
+            ref_lgr = _make_lgr_query(RefLgr, {'language__iexact': language, 'script__iexact': script}, logs)
+        else:
+            ref_lgr = _make_lgr_query(RefLgr, {'language__iexact': language}, logs,
+                                      multiple_found_query={'language__iexact': language, 'script__iexact': ''})
         if ref_lgr:
             return ref_lgr
 
-    if script:
-        ref_lgr = _make_ref_lgr_query(RefLgr, {'script__iexact': script}, logs,
-                                      multiple_found_query={'script__iexact': script, 'language': ''})
-        if ref_lgr:
-            return ref_lgr
-
-    logger.info('Look for RZ LGR')
     # get the latest RZ LGR (XXX: we assume they are all named the same with an increasing ID)
     last_rz_lgr = RzLgr.objects.order_by('-name').first()
+
+    if script:
+        logger.info("Look for Ref. LGR then RZ LGR for script '%s'", script)
+        ref_lgr = _make_lgr_query(RefLgr, {'script__iexact': script, 'language': ''}, logs)
+        if ref_lgr:
+            return ref_lgr
+        rz_lgr = _make_lgr_query(RzLgrMember,
+                                 {'script__iexact': script,
+                                  'language': '',
+                                  'rz_lgr__name': last_rz_lgr.name},
+                                 logs)
+        if rz_lgr:
+            return rz_lgr
+        logger.info("Widen search to Ref. LGR then RZ LGR for script '%s' and any language", script)
+        ref_lgr = _make_lgr_query(RefLgr, {'script__iexact': script}, logs)
+        if ref_lgr:
+            return ref_lgr
+        rz_lgr = _make_lgr_query(RzLgrMember,
+                                 {'script__iexact': script,
+                                  'rz_lgr__name': last_rz_lgr.name},
+                                 logs)
+        if rz_lgr:
+            return rz_lgr
+
     if not last_rz_lgr:
         logger.info("No RZ LGR")
         raise NoRefLgrFound('\n'.join(logs))
 
     if language:
-        ref_lgr = _make_ref_lgr_query(RzLgrMember, {'language__iexact': language, 'rz_lgr__name': last_rz_lgr.name},
-                                      logs, multiple_found_query={'language__iexact': language,
-                                                                  'script__iexact': script,
-                                                                  'rz_lgr__name': last_rz_lgr.name})
-        if ref_lgr:
-            return ref_lgr
-
-    if script:
-        ref_lgr = _make_ref_lgr_query(RzLgrMember,
-                                      {'script__iexact': script,
-                                       'rz_lgr__name': last_rz_lgr.name},
-                                      logs,
-                                      multiple_found_query={'script__iexact': script,
-                                                            'language': '',
-                                                            'rz_lgr__name': last_rz_lgr.name})
-        if ref_lgr:
-            return ref_lgr
+        logger.info("Look for RZ LGR with language '%s'", language)
+        if script:
+            rz_lgr = _make_lgr_query(RzLgrMember,
+                                     {'language__iexact': language,
+                                      'script__iexact': script,
+                                      'rz_lgr__name': last_rz_lgr.name},
+                                     logs)
+        else:
+            rz_lgr = _make_lgr_query(RzLgrMember, {'language__iexact': language, 'rz_lgr__name': last_rz_lgr.name},
+                                     logs, multiple_found_query={'language__iexact': language,
+                                                                 'script__iexact': '',
+                                                                 'rz_lgr__name': last_rz_lgr.name})
+        if rz_lgr:
+            return rz_lgr
 
     raise NoRefLgrFound('\n'.join(logs))
