@@ -76,9 +76,10 @@ class MetadataForm(forms.Form):
 
 class LanguageForm(forms.Form):
     # validate using language_tags function
-    language = autocomplete.Select2ListChoiceField(label=_("Language"), choice_list=[''] + sorted(IANA_LANG_REGISTRY),
-                                                   widget=autocomplete.ListSelect2(url='language-autocomplete'),
-                                                   initial='', required=False)
+    language = autocomplete.Select2ListCreateChoiceField(label=_("Language"),
+                                                         choice_list=[''] + sorted(IANA_LANG_REGISTRY),
+                                                         widget=autocomplete.ListSelect2(url='language-autocomplete'),
+                                                         initial='', required=False)
 
 
 LanguageFormSet = formset_factory(LanguageForm,

@@ -3,7 +3,6 @@
 """
 list.py - 
 """
-import json
 import logging
 from io import StringIO
 
@@ -36,11 +35,7 @@ from lgr_advanced.utils import (make_lgr_session_key,
 logger = logging.getLogger(__name__)
 
 
-class ListCodePointsView(LGRHandlingBaseMixin, TemplateView):
-    """
-    List the codepoints defined in an LGR.
-    """
-    template_name = 'lgr_editor/codepoint_list.html'
+class CodePointsViewMixin:
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -52,20 +47,39 @@ class ListCodePointsView(LGRHandlingBaseMixin, TemplateView):
                 break
 
         rule_names = (('', ''),) + tuple((v, v) for v in self.lgr_info.lgr.rules)
+        cp_form = None
+        edit_codepoints_form = None
+        form = ctx.get('form')
+        if form:
+            if isinstance(form, AddCodepointForm):
+                cp_form = form
+            elif isinstance(form, EditCodepointsForm):
+                edit_codepoints_form = form
+        cp_form = cp_form or AddCodepointForm(prefix='add_cp')
+        edit_codepoints_form = edit_codepoints_form or EditCodepointsForm(prefix='edit_codepoints',
+                                                                          rule_names=rule_names,
+                                                                          tags=((v, v) for v in
+                                                                                self.lgr_info.lgr.all_tags()))
         ctx.update({
-            'cp_form': AddCodepointForm(prefix='add_cp'),
-            'edit_codepoints_form': EditCodepointsForm(prefix='edit_codepoints', rule_names=rule_names),
+            'cp_form': cp_form,
+            'edit_codepoints_form': edit_codepoints_form,
             'lgr': self.lgr_info.lgr,
             'lgr_id': self.lgr_id,
             'is_set': self.lgr_info.is_set or self.lgr_set_id is not None,
             'has_range': has_range,
-            'all_tags_json': json.dumps(self.lgr_info.lgr.all_tags()),
         })
         if self.lgr_set_id:
             lgr_set_info = self.session.select_lgr(self.lgr_set_id)
             ctx['lgr_set'] = lgr_set_info.lgr
             ctx['lgr_set_id'] = self.lgr_set_id
         return ctx
+
+
+class ListCodePointsView(LGRHandlingBaseMixin, CodePointsViewMixin, TemplateView):
+    """
+    List the codepoints defined in an LGR.
+    """
+    template_name = 'lgr_editor/codepoint_list.html'
 
     def post(self, request, *args, **kwargs):
         if 'add_cp' in request.POST:
@@ -78,7 +92,7 @@ class ListCodePointsView(LGRHandlingBaseMixin, TemplateView):
         return view(request, *args, **kwargs)
 
 
-class AddCodePointView(LGREditMixin, FormView):
+class AddCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
     form_class = AddCodepointForm
     template_name = 'lgr_editor/codepoint_list.html'
 
@@ -107,7 +121,7 @@ class AddCodePointView(LGREditMixin, FormView):
         return super().form_valid(form)
 
 
-class EditCodePointView(LGREditMixin, FormView):
+class EditCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
     form_class = EditCodepointsForm
     template_name = 'lgr_editor/codepoint_list.html'
 
@@ -121,6 +135,7 @@ class EditCodePointView(LGREditMixin, FormView):
         kwargs = super().get_form_kwargs()
         rule_names = (('', ''),) + tuple((v, v) for v in self.lgr_info.lgr.rules)
         kwargs['rule_names'] = rule_names
+        kwargs['tags'] = tuple((v, v) for v in self.lgr_info.lgr.all_tags())
         return kwargs
 
     def form_valid(self, form):
@@ -128,7 +143,7 @@ class EditCodePointView(LGREditMixin, FormView):
         cd = form.cleaned_data
         when = cd['when'] or None
         not_when = cd['not_when'] or None
-        tags = cd['tags'].split()
+        tags = cd['tags']
         edited = cd['cp_id']
         invalid = []
         for cp in [slug_to_cp(c) for c in edited]:

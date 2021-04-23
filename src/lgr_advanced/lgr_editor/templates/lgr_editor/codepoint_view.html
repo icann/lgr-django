@@ -3,6 +3,11 @@
 
 {% block html_head_more %}
     {{ block.super }}
+{#    <link rel="stylesheet" href="{% static 'vendor/select2/dist/css/select2.min.css' %}">#}
+{#    XXX Use above when django-autocomplete-light will be updated to a newer version briging a new version of #}
+{#    select2.js that does not have this bug: https://github.com/select2/select2/issues/5485 and remove our version #}
+{#    of select2 from assets #}
+    <link rel="stylesheet" href="{% static 'chrome/select2/dist/css/select2.min.css' %}">
     <style>
     .tag-field .control-label {
         width: 100%;
@@ -255,6 +260,11 @@
 
 {% block html_body_more %}
     {{ block.super }}
+{#    <script type="text/javascript" src="{% static 'vendor/select2/dist/js/select2.full.js' %}"></script>#}
+{#    XXX Use above when django-autocomplete-light will be updated to a newer version briging a new version of #}
+{#    select2.js that does not have this bug: https://github.com/select2/select2/issues/5485 and remove our version #}
+{#    of select2 from assets #}
+    <script type="text/javascript" src="{% static 'chrome/select2/dist/js/select2.full.js' %}"></script>
     <script type="text/javascript">
         var cp_references = $.parseJSON('{{ cp_references_json|escapejs }}');
 
@@ -320,10 +330,9 @@
 
         $(document).ready(function($) {
 
-            var tag_select = $('input[name="edit_cp-tags"]');
+            var tag_select = $('select[name="edit_cp-tags"]');
             tag_select.select2({
-                tags: $.parseJSON('{{ all_tags_json|escapejs }}'),
-                separator: " ",
+                tags: true,
                 tokenSeparators: [" "]
             });
 

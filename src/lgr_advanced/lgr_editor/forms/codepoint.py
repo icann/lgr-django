@@ -8,22 +8,24 @@ from django.forms import HiddenInput
 from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext_lazy as _
 
-from .utils import BaseDisableableFormSet, ReadOnlyTextInput
+from .utils import BaseDisableableFormSet, ReadOnlyTextInput, MultipleChoiceFieldNoValidation
 
 
 class CodepointForm(forms.Form):
     when = forms.ChoiceField(label=_('When'), required=False)
     not_when = forms.ChoiceField(label=_('Not-When'), required=False)
-    tags = forms.CharField(required=False, label=_('Tags'), help_text=_('space-separated tags'))
+    tags = MultipleChoiceFieldNoValidation(required=False, label=_('Tags'), help_text=_('space-separated tags'))
     comment = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': '2'}))
 
     def __init__(self, *args, **kwargs):
         rule_names = kwargs.pop('rules', tuple())
+        tags = kwargs.pop('tags', tuple())
         disabled = kwargs.pop('disabled', False)  # in set fields are note editable
         super(CodepointForm, self).__init__(*args, **kwargs)
 
         self.fields['when'].choices = rule_names
         self.fields['not_when'].choices = rule_names
+        self.fields['tags'].choices = tags
         if disabled:
             for field in self.fields.values():
                 # field.disabled = True  XXX need django 1.9
