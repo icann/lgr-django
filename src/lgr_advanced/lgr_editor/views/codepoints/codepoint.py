@@ -33,11 +33,7 @@ from lgr_advanced.utils import (cp_to_slug,
 logger = logging.getLogger(__name__)
 
 
-class CodePointView(LGRHandlingBaseMixin, CodePointMixin, TemplateView):
-    """
-    View a specific code point of an LGR.
-    """
-    template_name = 'lgr_editor/codepoint_view.html'
+class CodePointViewMixin(CodePointMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -80,19 +76,34 @@ class CodePointView(LGRHandlingBaseMixin, CodePointMixin, TemplateView):
             })
 
         rule_names = (('', ''),) + tuple((v, v) for v in self.lgr_info.lgr.rules)
+        add_variant_form = None
+        variants_form = None
+        codepoint_form = None
+        form = ctx.get('form')
+        if form:
+            if isinstance(form, AddVariantForm):
+                add_variant_form = form
+            elif isinstance(form, CodepointVariantFormSet):
+                variants_form = form
+            elif isinstance(form, CodepointForm):
+                codepoint_form = form
+        add_variant_form = add_variant_form or AddVariantForm(prefix='add_variant')
+        variants_form = variants_form or CodepointVariantFormSet(initial=variants,
+                                                                 prefix='variants',
+                                                                 rules=rule_names,
+                                                                 disabled=self.lgr_info.is_set or self.lgr_set_id is not None)
+        codepoint_form = codepoint_form or CodepointForm(initial={'comment': char.comment,
+                                                                  'tags': char.tags,
+                                                                  'when': char.when,
+                                                                  'not_when': char.not_when},
+                                                         prefix='edit_cp',
+                                                         rules=rule_names,
+                                                         tags=tuple((v, v) for v in self.lgr_info.lgr.all_tags()),
+                                                         disabled=self.lgr_info.is_set or self.lgr_set_id is not None)
         ctx.update({
-            'add_variant_form': AddVariantForm(prefix='add_variant'),
-            'variants_form': CodepointVariantFormSet(initial=variants,
-                                                     prefix='variants',
-                                                     rules=rule_names,
-                                                     disabled=self.lgr_info.is_set or self.lgr_set_id is not None),
-            'codepoint_form': CodepointForm(initial={'comment': char.comment,
-                                                     'tags': ' '.join(char.tags),
-                                                     'when': char.when,
-                                                     'not_when': char.not_when},
-                                            prefix='edit_cp',
-                                            rules=rule_names,
-                                            disabled=self.lgr_info.is_set or self.lgr_set_id is not None),
+            'add_variant_form': add_variant_form,
+            'variants_form': variants_form,
+            'codepoint_form': codepoint_form,
             'is_range': isinstance(char, RangeChar),
             'cp': self.codepoint_id,
             'lgr': self.lgr_info.lgr,
@@ -101,7 +112,6 @@ class CodePointView(LGRHandlingBaseMixin, CodePointMixin, TemplateView):
             'cp_references': cp_references,
             'cp_references_json': json.dumps(cp_references),
             'cp_disp': render_char(char),
-            'all_tags_json': json.dumps(self.lgr_info.lgr.all_tags()),
             'name': render_name(char, udata),
             'age': render_age(char, udata),
             'is_set': self.lgr_info.is_set or self.lgr_set_id is not None
@@ -111,6 +121,13 @@ class CodePointView(LGRHandlingBaseMixin, CodePointMixin, TemplateView):
             ctx['lgr_set'] = lgr_set_info.lgr
             ctx['lgr_set_id'] = self.lgr_set_id
         return ctx
+
+
+class CodePointView(LGRHandlingBaseMixin, CodePointViewMixin, TemplateView):
+    """
+    View a specific code point of an LGR.
+    """
+    template_name = 'lgr_editor/codepoint_view.html'
 
     def post(self, request, *args, **kwargs):
         if 'add_variant' in request.POST:
@@ -123,7 +140,7 @@ class CodePointView(LGRHandlingBaseMixin, CodePointMixin, TemplateView):
         return view(request, *args, **kwargs)
 
 
-class AddVariantView(LGREditMixin, CodePointMixin, FormView):
+class AddVariantView(LGREditMixin, CodePointViewMixin, FormView):
     form_class = AddVariantForm
     template_name = 'lgr_editor/codepoint_view.html'
 
@@ -171,7 +188,7 @@ class AddVariantView(LGREditMixin, CodePointMixin, FormView):
         return super().form_valid(form)
 
 
-class EditCodePointView(LGREditMixin, CodePointMixin, FormView):
+class EditCodePointView(LGREditMixin, CodePointViewMixin, FormView):
     form_class = CodepointForm
     template_name = 'lgr_editor/codepoint_view.html'
 
@@ -188,6 +205,7 @@ class EditCodePointView(LGREditMixin, CodePointMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['rules'] = self.rule_names
+        kwargs['tags'] = tuple((v, v) for v in self.lgr_info.lgr.all_tags())
         return kwargs
 
     def form_valid(self, form):
@@ -202,7 +220,7 @@ class EditCodePointView(LGREditMixin, CodePointMixin, FormView):
         when = form.cleaned_data['when'] or None
         not_when = form.cleaned_data['not_when'] or None
         ref = char.references
-        tag = form.cleaned_data['tags'].split()
+        tag = form.cleaned_data['tags']
 
         try:
             if isinstance(char, RangeChar):
@@ -310,6 +328,7 @@ class VariantUpdateReferencesView(LGREditMixin, CodePointMixin, View):
     """
     Update a variant's references.
     """
+
     def post(self, request, *args, **kwargs):
         var_cp, var_when, var_not_when = slug_to_var(self.kwargs['var_slug'])
         ref_ids = filter(None,

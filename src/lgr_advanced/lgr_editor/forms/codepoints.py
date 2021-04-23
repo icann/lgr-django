@@ -9,6 +9,7 @@ from lgr.tools.utils import parse_single_cp_input, parse_codepoint_input
 from .fields import (VALIDATING_REPERTOIRES,
                      DEFAULT_VALIDATING_REPERTOIRE,
                      FILE_FIELD_ENCODING_HELP)
+from .utils import MultipleChoiceFieldNoValidation
 
 SUPPORTED_CODEPOINT_INPUT_FILES = [
     ('rfc3743', 'RFC3743'),
@@ -104,27 +105,20 @@ class AddVariantForm(forms.Form):
                                              required=False)
 
 
-class MultipleChoiceFieldNoValidation(forms.MultipleChoiceField):
-
-    def validate(self, value):
-        # do not enable default validation as it will refuse our values as they are not in form choices
-        # XXX we could validate that cp are in lgr
-        pass
-
-
 class EditCodepointsForm(forms.Form):
     when = forms.ChoiceField(label='when', required=False)
     not_when = forms.ChoiceField(label='not-when', required=False)
-    tags = forms.CharField(label='Tags', required=False, help_text='space-separated tags')
+    tags = MultipleChoiceFieldNoValidation(label='Tags', required=False, help_text='space-separated tags')
     cp_id = MultipleChoiceFieldNoValidation()  # will contain a list of code points
 
     def __init__(self, *args, **kwargs):
         rule_names = kwargs.pop('rule_names', None)
+        tags = kwargs.pop('tags', tuple())
         super(EditCodepointsForm, self).__init__(*args, **kwargs)
-
         if rule_names:
             self.fields['when'].choices = rule_names
             self.fields['not_when'].choices = rule_names
+        self.fields['tags'].choices = tags
 
     def clean(self):
         cleaned_data = super(EditCodepointsForm, self).clean()

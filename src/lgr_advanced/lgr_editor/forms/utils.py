@@ -31,3 +31,13 @@ class BaseDisableableFormSet(forms.formsets.BaseFormSet):
                 field.disabled = True
 
         return form
+
+
+class MultipleChoiceFieldNoValidation(forms.MultipleChoiceField):
+
+    def validate(self, value):
+        # do not enable default validation as it will refuse our values as they are not in form choices
+        # XXX we could perform some validation though
+        #  - validate that cp are in lgr
+        #  - validate the tag format is correct
+        pass
