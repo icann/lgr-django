@@ -21,11 +21,7 @@ from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 logger = logging.getLogger('reference')
 
 
-class ReferenceView(LGRHandlingBaseMixin, TemplateView):
-    """
-    List/edit references of an LGR.
-    """
-    template_name = 'lgr_editor/references.html'
+class ReferenceViewMixin:
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -35,11 +31,21 @@ class ReferenceView(LGRHandlingBaseMixin, TemplateView):
             'comment': ref.get('comment', '')
         } for (ref_id, ref) in self.lgr_info.lgr.reference_manager.items()]
 
+        add_reference_form = None
+        references_form = None
+        form = ctx.get('form')
+        if form:
+            if isinstance(form, ReferenceForm):
+                add_reference_form = form
+            if isinstance(form, ReferenceFormSet):
+                references_form = form
+        add_reference_form = add_reference_form or ReferenceForm(prefix='add_reference', ro_id=False)
+        references_form = references_form or ReferenceFormSet(initial=references,
+                                                              prefix='references',
+                                                              disabled=self.lgr_info.is_set or self.lgr_set_id is not None)
         ctx.update({
-            'add_reference_form': ReferenceForm(prefix='add_reference', ro_id=False),
-            'references_form': ReferenceFormSet(initial=references,
-                                                prefix='references',
-                                                disabled=self.lgr_info.is_set or self.lgr_set_id is not None),
+            'add_reference_form': add_reference_form,
+            'references_form': references_form,
             'lgr': self.lgr_info.lgr,
             'lgr_id': self.lgr_id,
             'is_set': self.lgr_info.is_set or self.lgr_set_id is not None
@@ -49,6 +55,13 @@ class ReferenceView(LGRHandlingBaseMixin, TemplateView):
             ctx['lgr_set'] = lgr_set_info.lgr
             ctx['lgr_set_id'] = self.lgr_set_id
         return ctx
+
+
+class ReferenceView(LGRHandlingBaseMixin, ReferenceViewMixin, TemplateView):
+    """
+    List/edit references of an LGR.
+    """
+    template_name = 'lgr_editor/references.html'
 
     def post(self, request, *args, **kwargs):
         if 'add_reference' in request.POST:
@@ -61,7 +74,7 @@ class ReferenceView(LGRHandlingBaseMixin, TemplateView):
         return view(request, *args, **kwargs)
 
 
-class AddReferenceView(LGREditMixin, FormView):
+class AddReferenceView(LGREditMixin, ReferenceViewMixin, FormView):
     form_class = ReferenceForm
     template_name = 'lgr_editor/references.html'
 
@@ -98,7 +111,7 @@ class AddReferenceView(LGREditMixin, FormView):
         return super().form_invalid(form)
 
 
-class EditReferenceView(LGREditMixin, FormView):
+class EditReferenceView(LGREditMixin, ReferenceViewMixin, FormView):
     form_class = ReferenceFormSet
     template_name = 'lgr_editor/references.html'
 
