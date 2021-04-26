@@ -4,7 +4,7 @@ import os
 from django.db import models
 
 from lgr.parser.xml_parser import XMLParser
-from lgr_idn_table_review.api import tag_to_language_script
+from lgr.utils import tag_to_language_script
 
 
 def get_upload_path(instance, filename):
