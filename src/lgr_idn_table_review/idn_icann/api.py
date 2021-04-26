@@ -127,8 +127,7 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
         if script:
             ref_lgr = _make_lgr_query(RefLgr, {'language__iexact': language, 'script__iexact': script}, logs)
         else:
-            ref_lgr = _make_lgr_query(RefLgr, {'language__iexact': language}, logs,
-                                      multiple_found_query={'language__iexact': language, 'script__iexact': ''})
+            ref_lgr = _make_lgr_query(RefLgr, {'language__iexact': language, 'script__iexact': ''}, logs)
         if ref_lgr:
             return ref_lgr
 
@@ -143,16 +142,6 @@ def get_reference_lgr(idn_table_info: IdnTableInfo):
         rz_lgr = _make_lgr_query(RzLgrMember,
                                  {'script__iexact': script,
                                   'language': '',
-                                  'rz_lgr__name': last_rz_lgr.name},
-                                 logs)
-        if rz_lgr:
-            return rz_lgr
-        logger.info("Widen search to Ref. LGR then RZ LGR for script '%s' and any language", script)
-        ref_lgr = _make_lgr_query(RefLgr, {'script__iexact': script}, logs)
-        if ref_lgr:
-            return ref_lgr
-        rz_lgr = _make_lgr_query(RzLgrMember,
-                                 {'script__iexact': script,
                                   'rz_lgr__name': last_rz_lgr.name},
                                  logs)
         if rz_lgr:
