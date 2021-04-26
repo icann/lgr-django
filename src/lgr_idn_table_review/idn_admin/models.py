@@ -52,10 +52,9 @@ class RzLgrMember(LgrModel):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         super().save(force_insert, force_update, using, update_fields)
-        with self.file.open('r') as f:
-            lgr_parser = XMLParser(self.file.path)
-            lgr = lgr_parser.parse_document()
-            self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
+        lgr_parser = XMLParser(self.file.path)
+        lgr = lgr_parser.parse_document()
+        self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
         super().save(force_insert=False, force_update=True, using=using, update_fields=['language', 'script'])
 
 
