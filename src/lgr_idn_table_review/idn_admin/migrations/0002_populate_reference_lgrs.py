@@ -4,8 +4,8 @@ import os
 from django.conf import settings
 from django.core.files import File
 from django.db import migrations
-from lgr_idn_table_review.idn_admin.models import RefLgr, RzLgrMember
 
+from lgr_idn_table_review.idn_admin.models import RefLgr, RzLgrMember
 
 SECOND_LEVEL_LANG = {
     'lgr-second-level-arabic-language-15dec20-en.xml': 'ar-Arab',
@@ -69,17 +69,18 @@ def initial_data(apps, schema_editor):
     for lgr in os.listdir(second_level):
         with open(os.path.join(second_level, lgr), 'r') as f:
             OldRefLgr.objects.using(db_alias).create(name=os.path.splitext(lgr)[0],
-                                                  language_script=SECOND_LEVEL_LANG[lgr],
-                                                  file=File(f, name=lgr))
+                                                     language_script=SECOND_LEVEL_LANG[lgr],
+                                                     file=File(f, name=lgr))
 
     with open(os.path.join(root_zone, 'lgr-4-common-05nov20-en.xml'), 'r') as f:
-        rz_lgr = OldRzLgr.objects.using(db_alias).create(name="RZ-LGR 4", file=File(f, name='lgr-4-common-05nov20-en.xml'))
+        rz_lgr = OldRzLgr.objects.using(db_alias).create(name="RZ-LGR 4",
+                                                         file=File(f, name='lgr-4-common-05nov20-en.xml'))
 
     for lgr in os.listdir(root_zone_members):
         with open(os.path.join(root_zone_members, lgr), 'rb') as f:
             OldRzLgrMember.objects.using(db_alias).create(name=os.path.splitext(lgr)[0],
-                                                       rz_lgr=rz_lgr,
-                                                       file=File(f, name=lgr))
+                                                          rz_lgr=rz_lgr,
+                                                          file=File(f, name=lgr))
 
     # call save on objects with real model to populate script and language fields
     for lgr in RefLgr.objects.all():
