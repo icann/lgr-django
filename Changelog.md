@@ -1,5 +1,18 @@
 # Changelog for lgr-django
 
+## 4.0.0 (2021-04-27)
+### New features
+- Add IDN table review tools
+- Add new interface to select between modes
+### Improvements
+- Reorganize Django apps and add new apps for IDN table review
+- Rework all views to use class based views
+- Ask for confirmation before removing reports
+- Update Django to version 3.1.7
+- Update dependencies versions
+- Clean and update some assets
+- Remove django-multiupload dependency
+
 ## 3.0.0 (2020-12-04)
 ### New features
 - Add MSR-4 validating repertoire
