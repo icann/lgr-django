@@ -92,7 +92,7 @@ def _make_lgr_query(obj, q, logs, multiple_found_query=None):
     if obj == RzLgrMember:
         obj_name = 'RZ LGR'
 
-    query_str = ', '.join(f"{k.split('__')[0]}={v or None}" for k, v in q.items())
+    query_str = ', '.join(f"{k.split('__')[0]}={v or ''}" for k, v in q.items())
 
     logger.info("Look for %s LGR with query %s", obj.__name__, q)
     try:

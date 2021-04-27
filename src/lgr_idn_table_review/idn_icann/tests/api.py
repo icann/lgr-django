@@ -22,6 +22,17 @@ from lgr_web import settings
 logger = logging.getLogger('api')
 
 
+def custom_name_func(testcase_func, param_num, param):
+    expected = None
+    for lgr_data in param.args[2]:
+        if lgr_data.get('expected'):
+            expected = f"{lgr_data['lgr-type']}_{lgr_data['language-tag']}"
+    return "%s_%s" % (
+        testcase_func.__name__,
+        parameterized.to_safe_name(f"{param.args[0]}_got_{param.args[1]}_expect_{expected}"),
+    )
+
+
 class TestApi(TestCase):
     test_path = os.path.join(settings.MEDIA_ROOT, 'test_files')
 
@@ -30,16 +41,6 @@ class TestApi(TestCase):
         RefLgr.objects.all().delete()
         RzLgrMember.objects.all().delete()
         os.makedirs(self.test_path, exist_ok=True)
-
-    def custom_name_func(testcase_func, param_num, param):
-        expected = None
-        for lgr_data in param.args[2]:
-            if lgr_data.get('expected'):
-                expected = f"{lgr_data['lgr-type']}_{lgr_data['language-tag']}"
-        return "%s_%s" % (
-            testcase_func.__name__,
-            parameterized.to_safe_name(f"{param.args[0]}_got_{param.args[1]}_expect_{expected}"),
-        )
 
     @parameterized.expand([
         (0, 'th-Thai', [
@@ -81,7 +82,8 @@ class TestApi(TestCase):
         (3, 'zh', [
             {
                 'lgr-type': 'ref',
-                'language-tag': 'zh-Hani'
+                'language-tag': 'zh-Hani',
+                'expected': True
             }, {
                 'lgr-type': 'rz',
                 'language-tag': 'Hans',
@@ -240,6 +242,59 @@ class TestApi(TestCase):
             {
                 'lgr-type': 'ref',
                 'language-tag': 'th-Thai',
+            }
+        ]),
+        (22, 'ko', [
+            {
+                'lgr-type': 'ref',
+                'language-tag': 'ko-Hang'
+            }, {
+                'lgr-type': 'ref',
+                'language-tag': 'ko-Kore',
+                'expected': True
+            }
+        ]),
+        (23, 'ko-Hang', [
+            {
+                'lgr-type': 'ref',
+                'language-tag': 'ko-Hang',
+                'expected': True
+            }, {
+                'lgr-type': 'ref',
+                'language-tag': 'ko-Kore'
+            }
+        ]),
+        (24, 'ko-Hang', [
+            {
+                'lgr-type': 'ref',
+                'language-tag': 'ko-Kore'
+            }, {
+                'lgr-type': 'ref',
+                'language-tag': 'Hang',
+                'expected': True
+            }
+        ]),
+        (25, 'ko-Hang', [
+            {
+                'lgr-type': 'ref',
+                'language-tag': 'ko-Kore'
+            }, {
+                'lgr-type': 'ref',
+                'language-tag': 'Hang',
+                'expected': True
+            }, {
+                'lgr-type': 'rz',
+                'language-tag': 'Hang'
+            }
+        ]),
+        (26, 'ja', [
+            {
+                'lgr-type': 'ref',
+                'language-tag': 'Jpan',
+                'expected': True
+            }, {
+                'lgr-type': 'ref',
+                'language-tag': 'Hira'
             }
         ])
     ], name_func=custom_name_func)
