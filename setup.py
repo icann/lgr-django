@@ -5,7 +5,7 @@ from io import open
 
 setup(
     name='lgr-django',
-    version='3.0.0',
+    version='4.0.0',
     author='Viagenie and Wil Tan',
     author_email='support@viagenie.ca',
     packages=find_packages('src'),
@@ -16,7 +16,7 @@ setup(
     include_package_data=True,
     classifiers=[
         'Environment :: Web Environment',
-        'Framework :: Django :: 1.8',
+        'Framework :: Django :: 3.1',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.4',
@@ -30,6 +30,7 @@ setup(
         'django-widget-tweaks',
         'django-redis-cache',
         'django-autocomplete-light',
+        'django-cleanup',
         'celery',
         # LGR/Unicode modules
         'lgr-core',
