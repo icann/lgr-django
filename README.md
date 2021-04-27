@@ -76,7 +76,6 @@ THE POSSIBILITY OF SUCH DAMAGE.
   * [natsort](https://pypi.python.org/pypi/natsort) [MIT License]
   * [django-redis-cache](https://github.com/sebleier/django-redis-cache) [BSD License]
   * [django-autocomplete-light](https://github.com/yourlabs/django-autocomplete-light/) [MIT License]
-  * [pycountry](https://github.com/flyingcircusio/pycountry) [L-GPL License]
   * [django-cleanup](https://github.com/un1t/django-cleanup) [MIT License]
 * A [redis](https://redis.io/) server for cache and asynchronous computations
 
