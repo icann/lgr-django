@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Second Level Reference LGR">1</version>
-    <date>2020-12-15</date>
+    <date>2021-01-13</date>
     <language>ar-Arab</language>
     <unicode-version>6.3.0</unicode-version>
     <description type="text/html"><![CDATA[
@@ -34,16 +34,16 @@
         <li>First, they can significantly overproduce and would require additional rules to contain them effectively, 
         complicating the design.</li>
         <li>Second, even where they are required for some languages, they are optional for others.</li>
-         <li>Third, this also circumvents the issue regarding duplication between some precomposed code points and combining sequences raised by [IAB].</li>
+        <li>Third, this also circumvents the issue regarding duplication between some precomposed code points and combining sequences raised by [IAB].</li>
    </ul>
 
     <p>For further details, see Section 3.2, "Code point repertoire included" in [Proposal-Arabic]. 
     (The proposal cited has been adopted for the Arabic script portion of the Root Zone LGR.)</p>
 
     <p>Code points outside the Arabic language that are listed in this file are targets
-        for out-of-repertoire variants and are identified by a reflexive (identity)
-        variant of type "out-of-repertoire-var". They do not form part of the
-        repertoire.</p>
+     for out-of-repertoire variants and are identified by a reflexive (identity)
+     variant of type "out-of-repertoire-var". They do not form part of the
+     repertoire.</p>
 
     <p>Each code point or range is tagged with the script or scripts that the code point is used with, and one or more 
     references documenting sufficient justification for inclusion in the repertoire, see "References" below.
@@ -198,21 +198,6 @@
           Any variant must be generated using code point taken from a single supported language table.</li>
     </ul>
     
-      <p>In addition, this LGR includes WLE rules and actions specific to the Arabic language adapted from the rules for the Arabic script 
-      found in Section 5, "Whole Label Evaluation (WLE) rules" in [Proposal-Arabic]. 
-      As specified, the rules and actions serve to prevent the mixing of two variants
-        of the same code point within the same label. This reduces overproduction of variant labels. The rules are listed
-        here with the numbers given in Table 17 in [Proposal-Arabic]. 
-        See also the comments given for each rule or action.</p> 
-
-        <ul>
-            <li><b>no-mix-kaf-keheh</b> &mdash; WLE Rule 1: do not mix Arabic letters KAF and KEHEH in the same label</li>
-            <li><b>no-mix-alef-maksura-farsi-yeh</b> &mdash; WLE Rule 3: do not mix Arabic letters ALEF MAKSURA and FARSI YEH in the same label</li>
-            <li><b>no-mix-heh-goal</b> &mdash; WLE Rule 4: do not mix Arabic letters HEH and HEH GOAL in the same label</li>
-            <li><b>no-mix-heh-doachashmee</b> &mdash; WLE Rule 7: do not mix Arabic letters HEH and HEH DOACHASHMEE in the same label</li>
-            <li><b>no-mix-teh-marbuta-goal</b> &mdash; WLE Rule 8: do not mix Arabic letters TEH MARBUTA and FEH WITH DOT MOVED BELOW in the same label</li>
-        </ul>
-
     <h3>Arabic Language-specific Actions</h3>
     
     <p>The three non-default variant mapping types used in this reference LGR trigger actions that result in variant label dispositions as follows:</p>
@@ -245,7 +230,7 @@
      However, independent of which of the customizations for disposition is chosen above, an <b>original label</b> (as applied for) that contains any of the affected code points 
      would remain unavailable.</p>
 
-    <p>Most of the code points involved in labels resulting in "activated" or "allocatable" actions are subject to "no-mix" rules
+    <p>Most of the code points involved in labels resulting in "activated" or "allocatable" actions are subject to a "single-language-label" rule
      to decrease the number of activated or allocatable variants. This is especially a concern for the "activated" action which results
      in forced delegation.</p>
 
@@ -255,20 +240,20 @@
      which are usable and still block those which may be redundant, e.g. cannot be typed from a single keyboard supporting a given language.
      For this purpose, the no languages mixing rule is part of this LGR.</p>
          
-    <p>Furthermore, applying this customization for variant sets involving code points which do not have "no-mix" should be done with caution.
-     This is especially true for the variant set including the ALEF characters, for which an external policy should be established to ensure
-     that only a strictly limited number of variant labels are allocated. It may not be possible to create a general policy that determine
-     which of the variants from among a potential large variant pool are indeed suitable; therefore, the selection may have to be left as a choice to
-     the registrant, but within a strict cap.</p>
+    <p>Furthermore, applying this customization to variant sets involving code points which are not restricted by the "single-language-label" 
+     rule should be done with caution. This is especially true for the variant set including the ALEF characters, for which an external policy 
+     should be established to ensure that only a strictly limited number of variant labels are allocated. It may not be possible to create 
+     a general policy that determines which of the variants from among a potential large variant pool are indeed suitable; therefore, the 
+     selection may have to be left as a choice to the registrant, but within a strict cap on their number.</p>
 
     <h2>Methodology and Contributors</h2>
-      <p>This reference LGR for the Arabic language for the 2nd Level has been edited by Michel Suignard and Asmus Freytag, based on extensive community input.
-      This LGR is based on the Root Zone LGR for Arabic and relies on information contained or referenced therein, see [RZ-LGR-4-Arab]. 
-      Suitable extensions for the second level have been applied according to the [Guidelines]. The specific features related to the Arabic Language LGR were drafted by
-      a TF-AIDN sub-group (namely in alphabetical order: Abdalmonem Tharwat Galila , Abdeslam Nasri , Abdulaziz Al-Zoman, Abdulrahman Alghadir, Hazem Hezzah,
-      Nabil Benamar, Raed Alfayez, Tarik Merghani). In addition, Sarmad Hussain provided editorial support.</p>
-     
-      <p>For more information on methodology and contributors to the underlying Root Zone LGR, see [Proposal-Arabic], as well as [RZ-LGR-Overview].</p> 
+    <p>This reference LGR for the Arabic language for the 2nd Level has been edited by Michel Suignard and Asmus Freytag, based on extensive community input.
+     This LGR is based on the Root Zone LGR for Arabic and relies on information contained or referenced therein, see [RZ-LGR-4-Arab]. 
+     Suitable extensions for the second level have been applied according to the [Guidelines]. The specific features related to the Arabic Language LGR were drafted by
+     a TF-AIDN sub-group (namely in alphabetical order: Abdalmonem Tharwat Galila , Abdeslam Nasri , Abdulaziz Al-Zoman, Abdulrahman Alghadir, Hazem Hezzah,
+     Nabil Benamar, Raed Alfayez, Tarik Merghani). In addition, Sarmad Hussain provided editorial support.</p>
+
+    <p>For more information on methodology and contributors to the underlying Root Zone LGR, see [Proposal-Arabic], as well as [RZ-LGR-Overview].</p> 
 
     <h2>References</h2>
     <h3>General references for the language</h3>
@@ -320,12 +305,12 @@
         http://archive.icann.org/en/topics/new-gtlds/arabic-vip-issues-report-07oct11-en.pdf </dd>
     </dl>
 
-        <p>For references consulted particularly in designing the repertoire for the Arabic language LGR for the second level,
-            please see details in the <a href="#table_of_references">Table of References</a> below. 
-            Reference [0]  refers to Unicode Standard version in which the
-            corresponding code points were initially encoded. References [100] and above correspond to sources
-            justifying the inclusion of the corresponding code points. Entries in the table may have
-            multiple source reference values. References [150] and [160] indicate the source for common rules.</p> 
+    <p>For references consulted particularly in designing the repertoire for the Arabic language LGR for the second level,
+      please see details in the <a href="#table_of_references">Table of References</a> below. 
+      Reference [0]  refers to Unicode Standard version in which the
+      corresponding code points were initially encoded. References [100] and above correspond to sources
+      justifying the inclusion of the corresponding code points. Entries in the table may have
+      multiple source reference values. References [150] and [160] indicate the source for common rules.</p> 
 
         ]]></description>
     <references>
@@ -749,86 +734,11 @@
         <class by-ref="joins-to-the-right" />
       </look-ahead>
     </rule>
-    <rule name="no-mix-kaf-keheh" ref="100" comment="WLE Rule 1: do not mix Arabic letters KAF and KEHEH in the same label">
-      <choice>
-        <rule>
-          <char cp="0643" />
-          <any count="0+" />
-          <char cp="06A9" />
-        </rule>
-        <rule>
-          <char cp="06A9" />
-          <any count="0+" />
-          <char cp="0643" />
-        </rule>
-      </choice>
-    </rule>
-    <rule name="no-mix-alef-maksura-farsi-yeh" ref="100" comment="WLE Rule 3: do not mix Arabic letters ALEF MAKSURA and FARSI YEH in the same label">
-      <choice>
-        <rule>
-          <char cp="0649" />
-          <any count="0+" />
-          <char cp="06CC" />
-        </rule>
-        <rule>
-          <char cp="06CC" />
-          <any count="0+" />
-          <char cp="0649" />
-        </rule>
-      </choice>
-    </rule>
-    <rule name="no-mix-heh-goal" ref="100" comment="WLE Rule 4: do not mix Arabic letters HEH and HEH GOAL in the same label">
-      <choice>
-        <rule>
-          <char cp="0647" />
-          <any count="0+" />
-          <char cp="06C1" />
-        </rule>
-        <rule>
-          <char cp="06C1" />
-          <any count="0+" />
-          <char cp="0647" />
-        </rule>
-      </choice>
-    </rule>
-    <rule name="no-mix-heh-doachashmee" ref="100" comment="WLE Rule 7: do not mix Arabic letters HEH and HEH DOACHASHMEE in the same label">
-      <choice>
-        <rule>
-          <char cp="0647" />
-          <any count="0+" />
-          <char cp="06BE" />
-        </rule>
-        <rule>
-          <char cp="06BE" />
-          <any count="0+" />
-          <char cp="0647" />
-        </rule>
-      </choice>
-    </rule>
-    <rule name="no-mix-teh-marbuta-goal" ref="100" comment="WLE Rule 8: do not mix Arabic letters TEH MARBUTA and FEH WITH DOT MOVED BELOW in the same label">
-      <choice>
-        <rule>
-          <char cp="0629" />
-          <any count="0+" />
-          <char cp="06C3" />
-        </rule>
-        <rule>
-          <char cp="06C3" />
-          <any count="0+" />
-          <char cp="0629" />
-        </rule>
-      </choice>
-    </rule>
     <!--Action elements go here - order defines precedence-->
     <action disp="invalid" not-match="single-language-label" comment="all labels (including variants) must be entirely within one of four languages" />
     <action disp="invalid" match="digit-mixing" comment="a label matching the RFC 5892 and RFC 5893 restriction on digit mixing is invalid" />
     <action disp="invalid" match="leading-combining-mark" comment="RFC 5892: labels with leading combining marks are invalid  &#x235F;" />
     <action disp="invalid" any-variant="out-of-repertoire-var" comment="disallow code points that are out of repertoire" />
-    <action disp="invalid" match="no-mix-kaf-keheh" comment="do not mix Arabic letters KAF and KEHEH in the same label" />
-    <action disp="invalid" match="no-mix-alef-maksura-farsi-yeh" comment="do not mix Arabic letters ALEF MAKSURA and FARSI YEH in the same label" />
-    <action disp="invalid" match="no-mix-heh-goal" comment="do not mix Arabic letters HEH and HEH GOAL in the same label" />
-    <action disp="invalid" match="no-mix-heh-doachashmee" comment="do not mix Arabic letters HEH and HEH DOACHASHMEE in the same label" />
-    <action disp="invalid" match="no-mix-teh-marbuta-goal" comment="do not mix Arabic letters TEH MARBUTA and FEH WITH DOT MOVED BELOW in the same label" />
     <action disp="blocked" any-variant="blocked" comment="any variant label containing blocked variants is blocked &#x235F;" />
     <action disp="blocked" any-variant="optionally-allocatable" comment="optional allocation for certain within-repertoire variants; to make allocation possible, change (blocked) to (allocatable)" />
     <action disp="allocatable" any-variant="optionally-activated" comment="optional delegation for certain cross-repertoire variants; to make delegation mandatory, change (allocatable) to (activated)" />
