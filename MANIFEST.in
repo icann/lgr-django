@@ -5,20 +5,35 @@ include etc/requirements.txt
 include etc/nginx/lgr-django.conf etc/systemd/lgr-django.service etc/systemd/lgr-django.conf etc/systemd/lgr-celery.service
 include doc doc/conf.py doc/index.rst doc/Makefile
 recursive-include doc/_static *
-include docker/Dockerfile docker/start.sh
 include src/lgr_web/resources/lgr.rng
 include src/lgr_web/resources/lgr/README.txt
-recursive-include src/lgr_editor/locale *
-recursive-include src/lgr_editor/templates *
-recursive-include src/lgr_editor/static *
+recursive-include src/lgr_advanced/locale *
+recursive-include src/lgr_advanced/templates *
+recursive-include src/lgr_advanced/lgr_editor/locale *
+recursive-include src/lgr_advanced/lgr_editor/templates *
+recursive-include src/lgr_advanced/lgr_editor/static *
+recursive-include src/lgr_advanced/lgr_renderer/locale *
+recursive-include src/lgr_advanced/lgr_renderer/templates *
+recursive-include src/lgr_advanced/lgr_tools/templates *
+recursive-include src/lgr_advanced/lgr_tools/locale *
+recursive-include src/lgr_advanced/lgr_validator/templates *
+recursive-include src/lgr_advanced/lgr_validator/locale *
+recursive-include src/lgr_auth/templates *
+recursive-include src/lgr_auth/locale *
+recursive-include src/lgr_basic/templates *
+recursive-include src/lgr_basic/locale *
+recursive-include src/lgr_idn_table_review/locale *
+recursive-include src/lgr_idn_table_review/templates *
+recursive-include src/lgr_idn_table_review/idn_admin/locale *
+recursive-include src/lgr_idn_table_review/idn_admin/templates *
+recursive-include src/lgr_idn_table_review/idn_icann/locale *
+recursive-include src/lgr_idn_table_review/idn_icann/templates *
+recursive-include src/lgr_idn_table_review/idn_tool/locale *
+recursive-include src/lgr_idn_table_review/idn_tool/templates *
+recursive-include src/lgr_session/locale *
 recursive-include src/lgr_web/locale *
 recursive-include src/lgr_web/templates *
 recursive-include src/lgr_web/assets *
 recursive-include src/lgr_web/settings *.template
 recursive-include src/lgr_web/resources *.xml
-recursive-include src/lgr_validator/templates *
-recursive-include src/lgr_validator/locale *
-recursive-include src/lgr_tools/templates *
-recursive-include src/lgr_tools/locale *
-recursive-include src/lgr_renderer/templates *
-recursive-include src/lgr_renderer/locale *
+
