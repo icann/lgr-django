@@ -1,0 +1,30 @@
+{{- range .Values.microservices }}
+  {{- if .web }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}-{{ template "lgr.region" $.Values }}{{ $.Values.env }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    app: {{ $.Values.app }}
+    env: {{ $.Values.env }}
+spec:
+  {{- if .web.nodePort }}
+  type: NodePort
+  {{- end }}
+  sessionAffinity: None
+  ports:
+    - port: {{ .web.port }}
+      name: {{ .name }}
+      protocol: {{ .web.protocol }}
+      targetPort: {{ .web.port }}
+      {{- if .web.nodePort }}
+      nodePort: {{ .web.nodePort }}
+      {{- end }}
+  selector:
+    app: {{ $.Values.app }}
+    env: {{ $.Values.env  }}
+    srv: {{ .name }}
+  {{- end }}
+{{- end }}

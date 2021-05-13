@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-{{ template "lgr.region" .Values }}{{ .Values.env }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.app }}
+    env: {{ .Values.env }}
+data:
+  lgrURL: {{ .Values.lgr.URL }}
+  lgrEmail: {{ .Values.lgr.Email }}
+  lgrSentinel1: {{ .Values.lgr.Sentinel1 }}
+  lgrSentinel2: {{ .Values.lgr.Sentinel2 }}
+  lgrSentinel3: {{ .Values.lgr.Sentinel3 }}
+
+  lgrSentinelPort: {{ .Values.lgr.sentinelPort | quote }}
+
+  lgrCeleryRedisDB: {{ .Values.lgr.CeleryRedisDB | quote }}
+  lgrDjangoRedisDB: {{ .Values.lgr.DjangoRedisDB | quote }}
+  lgrSentinelMaster: {{ .Values.lgr.SentinelMaster }}

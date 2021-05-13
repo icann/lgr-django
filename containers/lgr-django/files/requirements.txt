@@ -1,0 +1,16 @@
+# Core stuff
+Django==3.1.7
+django-widget-tweaks==1.4.8
+celery[redis]==5.0.5
+#django-redis==4.12.1
+django-redis @ git+https://github.com/j-bernard/django-redis.git
+django-autocomplete-light==3.5.1
+vine==5.0.0
+django-cleanup==5.1.0
+
+# LGR/Unicode modules
+picu==1.2
+munidata==2.1.0
+lgr-core @ git+https://github.com/icann/lgr-core.git@v4.0.0
+# Natural sorting implementation
+natsort==7.1.1

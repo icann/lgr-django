@@ -1,0 +1,72 @@
+{{- range .Values.microservices }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}-{{ template "lgr.region" $.Values }}{{ $.Values.env }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    app: {{ $.Values.app }}
+    env: {{ $.Values.env }}
+spec:
+  replicas: {{ $.Values.replicaCount }}
+  revisionHistoryLimit: {{ $.Values.historyLimit }}
+  selector:
+    matchLabels:
+      app: {{ $.Values.app }}
+      srv: {{ .name }}
+      env: {{ $.Values.env }}
+  template:
+    metadata:
+      labels:
+        app: {{ $.Values.app }}
+        srv: {{ .name }}
+        env: {{ $.Values.env }}
+    spec:
+      {{- if .volume }}
+      volumes:
+        - name: {{ $.Values.volume.storage.name }}
+          hostPath:
+            path: {{ $.Values.volume.storage.remotePath }}
+      {{- end }}
+      containers:
+        - image: {{ $.Values.repoPath }}/{{ .image }}:{{ $.Values.repoVer }}
+          name:  {{ .name }}
+          envFrom:
+            - configMapRef:
+                name: {{ $.Release.Name }}-{{ template "lgr.region" $.Values }}{{ $.Values.env }}
+            - secretRef:
+                name: lgr-secrets
+          imagePullPolicy: Always
+          {{- if .web }}
+          ports:
+            - containerPort: {{ .web.port }}
+              name:  {{ .name }}
+          {{- end }}
+          resources:
+            limits:
+              cpu: {{ .resources.limits.cpu | quote }}
+              memory: {{ .resources.limits.memory }}
+            requests:
+              cpu: {{ .resources.requests.cpu | quote }}
+              memory: {{ .resources.requests.memory }}
+          {{- if .volume }}
+          volumeMounts:
+            - name: {{ $.Values.volume.storage.name }}
+              mountPath: {{ $.Values.volume.storage.localPath }}
+              readOnly: false
+          # So that the pod can access the nfs shared volumes
+          {{- end }}
+          securityContext:
+            runAsUser: {{ .uid }}
+            runAsGroup: {{ .gid }}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      {{- if eq $.Values.cluster "k8" }}
+      nodeSelector:
+        node-role.kubernetes.io/node: 'true'
+        nodetype: 'worker'
+      imagePullSecrets:
+        - name: registrykey-webcluster
+      {{- end }}
+{{- end }}

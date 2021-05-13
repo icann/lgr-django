@@ -1,5 +1,0 @@
-*.pem
-*.key
-*.csr
-*.crt
-k8s-secret-registry.yaml

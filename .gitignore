@@ -34,10 +34,13 @@ doc/_build/
 # Local configuration
 src/lgr_web/settings/local.py
 
-# dev storage
+# storage
 src/lgr_web/output
 src/lgr_web/media
 
 # static
 src/lgr_web/static/
 !src/lgr_web/assets/chrome/select2/dist
+
+# Helm secret directory
+helm/secrets

@@ -1,0 +1,56 @@
+{{- range .Values.cronjobs }}
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ $.Release.Name }}-{{ .name }}-{{ template "lgr.region" $.Values }}{{ $.Values.env }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    app: {{ $.Values.app }}
+    env: {{ $.Values.env }}
+spec:
+  schedule: {{ .schedule }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: {{ $.Values.app }}
+            env: {{ $.Values.env }}
+        spec:
+          {{- if .volume }}
+          volumes:
+            - name: {{ $.Values.volume.storage.name }}
+              hostPath:
+                path: {{ $.Values.volume.storage.remotePath }}
+          {{- end }}
+          containers:
+            - name: {{ .name }}
+              image: {{ $.Values.repoPath }}/{{ .image }}:{{ $.Values.repoVer }}
+              envFrom:
+                - configMapRef:
+                    name: {{ $.Release.Name }}-{{ template "lgr.region" $.Values }}{{ $.Values.env }}
+                - secretRef:
+                    name: lgr-secrets
+              imagePullPolicy: Always
+              command: {{ .command }}
+              {{- if .volume }}
+              volumeMounts:
+                - name: {{ $.Values.volume.storage.name }}
+                  mountPath: {{ $.Values.volume.storage.localPath }}
+                  readOnly: false
+              {{- end }}
+              # So that the pod can access the nfs shared volumes
+              securityContext:
+                runAsUser: {{ .uid }}
+                runAsGroup: {{ .gid }}
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          {{- if eq $.Values.cluster "k8" }}
+          nodeSelector:
+            node-role.kubernetes.io/node: 'true'
+            nodetype: 'worker'
+          imagePullSecrets:
+            - name: registrykey-webcluster
+          {{- end }}
+{{- end }}
