@@ -48,6 +48,7 @@ microservices:
     name: gunicorn
     image: lgr-gunicorn
     volume: true
+    smtp: true
     uid: 30404
     gid: 0
     web:
@@ -87,6 +88,7 @@ microservices:
     uid: 30404
     gid: 0
     volume: true
+    smtp: true
     resources:
       limits:
         cpu: 2
@@ -94,3 +96,16 @@ microservices:
       requests:
         cpu: 200m
         memory: 1Gi
+
+smtp:
+  name: smtp
+  image: container-registry.icann.org/base-images/postfix-container.icann.org
+  email: eng@viagenie.ca
+  port: 25
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 200m
+      memory: 1Gi
