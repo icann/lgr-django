@@ -63,10 +63,11 @@ spec:
         {{- if .smtp }}
         - env:
           {{- with $.Values.smtp }}
-              {{- if eq $.Values.env "prod" }}
               - name: ICANNENVIRONMENT
+              {{- if eq $.Values.env "prod" }}
                 value: production
               {{- else }}
+                value: {{ $.Values.env }}
               - name: ICANN_EMAIL_INTERCEPT
                 value: {{ .email }}
               {{- end  }}
