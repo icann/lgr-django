@@ -24,7 +24,6 @@ spec:
               number: {{ .web.port }}
         {{- end }}
       {{- end }}
-    #host: {{ .Release.Name }}-{{ template "lgr.region" .Values }}{{ .Values.env }}
     host: {{ .Values.lgr.URL }}
 ---
 
