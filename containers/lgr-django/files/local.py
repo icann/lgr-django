@@ -35,11 +35,10 @@ SENTINELS = [
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": 'redis://' + os.environ.get('lgrSentinel1') + '/' + os.environ.get('lgrDjangoRedisDB'),
+        "LOCATION": 'redis://' + os.environ.get('lgrSentinelMaster') + '/' + os.environ.get('lgrDjangoRedisDB'),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.SentinelClient",
             "PASSWORD": os.environ.get('lgrRedisPwd'),
-            "SERVICE_NAME": os.environ.get('lgrSentinelMaster'),
             "SENTINELS": SENTINELS,
             "SENTINEL_KWARGS": {
                 'password': os.environ.get('lgrRedisPwd')
