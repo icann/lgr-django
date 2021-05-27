@@ -39,9 +39,18 @@ cronjobs:
     uid: 30404
     gid: 0
     command:
-      - ../manage.py cleanstorage
+      - /var/www/lgr/manage.py
+    args:
+      - cleanstorage
     schedule: "0 0 * * *"
     volume: true
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
 
 microservices:
   - gunicorn:
