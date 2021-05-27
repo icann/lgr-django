@@ -109,7 +109,7 @@ microservices:
 smtp:
   name: smtp
   image: container-registry.icann.org/base-images/postfix-container.icann.org
-  email: eng@viagenie.ca
+  email: idnprogram@icann.org
   port: 25
   resources:
     limits:
