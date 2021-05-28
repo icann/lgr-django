@@ -10,7 +10,7 @@ django-cleanup==5.1.0
 # LGR/Unicode modules
 picu==1.2
 munidata==2.1.0
-lgr-core==4.0.0
+lgr-core>=4.0.0
 
 # Natural sorting implementation
 natsort==7.1.1
