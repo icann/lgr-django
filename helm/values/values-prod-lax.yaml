@@ -1,0 +1,123 @@
+cluster: okd
+env: prod
+region: lax
+namespace: contracted-parties
+app:  lgr
+
+#TODO: Hardset values after the first deployement
+#clusterIP: 100.98.203.189
+#nodePort: 32288
+
+replicaCount: 1
+historyLimit: 3
+
+volume:
+  storage:
+    name: nfsstorage
+    #TODO: Create Shared directory
+    remotePath: /var/mnt/www/dynamic/lgrtool.icann.org/prod/storage #PLACEHOLDER_VALUE
+    localPath: /var/www/lgr/src/lgr_web/storage
+
+lgr:
+  URL: lgr.icann.org
+  Email: idnprogram@icann.org
+
+  Sentinel1: redis1.icann.org
+  Sentinel2: redis2.icann.org
+  Sentinel3: redis3.icann.org
+
+  sentinelPort: 26379
+
+  CeleryRedisDB: 5
+  DjangoRedisDB: 6
+  SentinelMaster: mymaster
+
+repoPath: container-registry.icann.org/icann
+repoVer: latest
+
+cronjobs:
+  - cleanup:
+    name: cleanup
+    image: lgr-django
+    uid: 30404
+    gid: 0
+    command:
+      - /var/www/lgr/manage.py
+    args:
+      - cleanstorage
+    schedule: "0 0 * * *"
+    volume: true
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+
+microservices:
+  - gunicorn:
+    name: gunicorn
+    image: lgr-gunicorn
+    volume: true
+    smtp: true
+    uid: 30404
+    gid: 0
+    web:
+      path: /
+      pathType: Prefix
+      port: 8000
+      protocol: TCP
+    resources:
+      limits:
+        cpu: 2
+        memory: 1Gi
+      requests:
+        cpu: 200m
+        memory: 1Gi
+
+  - static:
+    name: static
+    image: lgr-static
+    uid: 0
+    gid: 0
+    web:
+      path: /static
+      pathType: Prefix
+      port: 80
+      protocol: TCP
+    resources:
+      limits:
+        cpu: 1
+        memory: 1Gi
+      requests:
+        cpu: 200m
+        memory: 1Gi
+
+  - celery:
+    name: celery
+    image: lgr-celery
+    uid: 30404
+    gid: 0
+    volume: true
+    smtp: true
+    resources:
+      limits:
+        cpu: 2
+        memory: 8Gi
+      requests:
+        cpu: 200m
+        memory: 8Gi
+
+smtp:
+  name: smtp
+  image: container-registry.icann.org/base-images/postfix-container.icann.org
+  email: idnprogram@icann.org
+  port: 25
+  resources:
+    limits:
+      cpu: 1
+      memory: 1Gi
+    requests:
+      cpu: 200m
+      memory: 1Gi
