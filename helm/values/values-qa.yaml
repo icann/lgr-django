@@ -86,10 +86,10 @@ microservices:
     resources:
       limits:
         cpu: 1
-        memory: 1Gi
+        memory: 512Mi
       requests:
         cpu: 200m
-        memory: 1Gi
+        memory: 128Mi
 
   - celery:
     name: celery
@@ -114,7 +114,7 @@ smtp:
   resources:
     limits:
       cpu: 1
-      memory: 1Gi
+      memory: 512Mi
     requests:
       cpu: 200m
-      memory: 1Gi
+      memory: 128Mi
