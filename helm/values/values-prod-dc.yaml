@@ -2,7 +2,7 @@ cluster: okd
 env: prod
 region: dc
 namespace: contracted-parties
-app:  lgr
+app: lgr
 
 #TODO: Hardset values after the first deployement
 #clusterIP: 100.98.203.189
@@ -14,17 +14,16 @@ historyLimit: 3
 volume:
   storage:
     name: nfsstorage
-    #TODO: Create Shared directory
-    remotePath: /var/mnt/www/dynamic/lgrtool.icann.org/prod/storage #PLACEHOLDER_VALUE
+    remotePath: /var/mnt/www/idntable
     localPath: /var/www/lgr/src/lgr_web/storage
 
 lgr:
-  URL: lgr.icann.org
+  URL: lgrtool.icann.org
   Email: idnprogram@icann.org
 
-  Sentinel1: redis1.icann.org
-  Sentinel2: redis2.icann.org
-  Sentinel3: redis3.icann.org
+  Sentinel1: redis1.dc.icann.org
+  Sentinel2: redis2.dc.icann.org
+  Sentinel3: redis3.dc.icann.org
 
   sentinelPort: 26379
 
