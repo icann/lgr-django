@@ -33,11 +33,15 @@ metadata:
   name: {{ .Release.Name }}-ingress-controller-{{ template "lgr.region" .Values }}{{ .Values.env }}
   namespace: {{ .Values.namespace }}
 spec:
+  {{- if .Values.clusterIP }}
   clusterIP: {{ .Values.clusterIP }}
+  {{- end }}
   externalTrafficPolicy: Cluster
   ports:
-  - nodePort: {{ .Values.nodePort }}
-    port: 80
+  - port: 80
+    {{- if .Values.nodePort }}
+    nodePort: {{ .Values.nodePort }}
+    {{- end }}
     protocol: TCP
     targetPort: 80
   selector:
