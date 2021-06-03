@@ -18,7 +18,7 @@ volume:
     localPath: /var/www/lgr/src/lgr_web/storage
 
 lgr:
-  URL: lgrtool.icann.org
+  URL: lgr-tools.apps.openshift-prod-lax.icann.org
   Email: idnprogram@icann.org
 
   Sentinel1: redis1.lax.icann.org
