@@ -4,9 +4,7 @@ region: lax
 namespace: contracted-parties
 app: lgr
 
-#TODO: Hardset values after the first deployement
-#clusterIP: 100.98.203.189
-#nodePort: 32288
+nodePort: 32151
 
 replicaCount: 1
 historyLimit: 3
