@@ -11,6 +11,6 @@ django-cleanup==5.1.0
 # LGR/Unicode modules
 picu==1.2
 munidata==2.1.0
-lgr-core @ git+https://github.com/icann/lgr-core.git@v4.0.1
+lgr-core @ git+https://github.com/icann/lgr-core.git@v4.0.2
 # Natural sorting implementation
 natsort==7.1.1
