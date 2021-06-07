@@ -33,7 +33,7 @@ metadata:
   name: {{ .Release.Name }}-ingress-controller-{{ template "lgr.region" .Values }}{{ .Values.env }}
   namespace: {{ .Values.namespace }}
 spec:
-  {{- if .Values.clusterIP }}
+  {{- if eq .Values.env 'qa' }}
   clusterIP: {{ .Values.clusterIP }}
   {{- end }}
   externalTrafficPolicy: Cluster

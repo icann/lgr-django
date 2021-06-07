@@ -3,6 +3,7 @@ env: qa
 namespace: contracted-parties
 app:  lgr
 
+clusterIP: 100.98.203.189
 nodePort: 32288
 
 replicaCount: 1
