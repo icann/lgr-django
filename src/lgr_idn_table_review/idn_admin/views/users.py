@@ -38,6 +38,7 @@ class LgrUserCreateView(BaseAdminView, views.generic.CreateView):
         messages.add_message(self.request, messages.ERROR, _('Failed to create user'))
         return super().form_invalid(form)
 
+
 class LgrUserView(BaseAdminView, views.View):
 
     def get(self, request, *args, **kwargs):
