@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
     'lgr_session',
     'lgr_auth',
     'lgr_advanced',
@@ -62,13 +63,38 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'lgr_advanced.lgr_tools.middleware.UnicodeDecodeErrorMiddleWare'
+    'social_django.middleware.SocialAuthExceptionMiddleware',
+    'lgr_advanced.lgr_tools.middleware.UnicodeDecodeErrorMiddleWare',
 ]
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'  # for iframes containing popups
 
 # Custom auth user model
 AUTH_USER_MODEL = 'lgr_auth.LgrUser'
+
+# Social Authentication configuration
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.okta.OktaOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+
+# Okta OAuth configuration
+SOCIAL_AUTH_OKTA_OAUTH2_KEY = 'abc'
+SOCIAL_AUTH_OKTA_OAUTH2_SECRET = 'def'
+SOCIAL_AUTH_OKTA_OAUTH2_API_URL = 'https://icann.oktapreview.com/oauth2'
 
 # Redirect URL after auth
 LOGIN_REDIRECT_URL = '/'
@@ -92,6 +118,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },

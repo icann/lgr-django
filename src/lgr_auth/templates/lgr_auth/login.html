@@ -48,4 +48,8 @@
         <input type="hidden" name="next" value="{{ next }}">
     </form>
 
+    {% for backend in backends.backends %}
+        <a href="{% url "social:begin" backend %}">Connect with {{ backend }}</a>
+    {% endfor %}
+
 {% endblock %}
