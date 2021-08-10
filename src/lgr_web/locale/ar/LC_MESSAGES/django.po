@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 15:09+0000\n"
+"POT-Creation-Date: 2021-08-10 13:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_web/settings/default.py:202
+#: src/lgr_web/settings/default.py:230
 msgid "Arabic"
 msgstr ""
 
-#: src/lgr_web/settings/default.py:203
+#: src/lgr_web/settings/default.py:231
 msgid "English"
 msgstr ""
 
-#: src/lgr_web/settings/default.py:204
+#: src/lgr_web/settings/default.py:232
 msgid "French"
 msgstr ""
 
@@ -119,7 +119,7 @@ msgid "ICANN mode"
 msgstr ""
 
 #: src/lgr_web/templates/lgr_modes.html:35
-msgid "Generate ICANN IDN report"
+msgid "ICANN Staff Tools"
 msgstr ""
 
 #: src/lgr_web/templates/lgr_modes.html:39
@@ -127,5 +127,5 @@ msgid "Admin mode"
 msgstr ""
 
 #: src/lgr_web/templates/lgr_modes.html:41
-msgid "Manage IDN review tool"
+msgid "Manage LGR Tools"
 msgstr ""
