@@ -13,13 +13,14 @@ in another project would require some work:
   * `lgr_validator` contains the code related the label validation module.
   * `lgr_tools` contains the code related to all utilities: testing LGR and label sets, LGR comparisons, etc.
   * `lgr_renderer` contains the code and templates used to generate the static exports of the LGR (HTML only for now).
-* `lgr_auth` contains the authentication part that is used by some apps,
+* `lgr_auth` contains the authentication part that is used by some apps.
 * `lgr_basic` contains the code related to the simple LGR interface.
+* `lgr_models` contains common models for other applications.
 * `lgr_idn_table_review` contains the IDN table review tools. It is split into the following sub-modules:
-  * `idn_admin` contains the IDN table and ICANN users management part,
-  * `idn_icann` contains the IDN table ICANN review that launches a review on all the tables stored in IANA registry,
+  * `icann_tools` contains the IDN table ICANN review that launches a review on all the tables stored in IANA registry,
   * `idn_tool` contains a tool allowing reviewing IDN tables against the references LGRs managed by admin,
-* `lgr_session` defines a session object that allows manipulating some session objects and accessing and displaying storage,
+* `lgr_manage` contains the LGRs and users management part.
+* `lgr_session` defines a session object that allows manipulating some session objects and accessing and displaying storage.
 
 ## Acknowledgment
 
@@ -191,10 +192,9 @@ Some notes for developers
 
 #### Templates
 
-* `src/lgr_idn_table_review/templates` contains common templates for IDN review apps
-* `src/lgr_idn_table_review/idn_tool/templates` contains IDN tool specific templates
-* `src/lgr_idn_table_review/idn_icann/templates` contains IDN ICANN specific templates
-* `src/lgr_idn_table_review/idn_admin/templates` contains IDN admin specific templates
+* `src/lgr_icann/templates` contains ICANN staff tools specific templates
+* `src/lgr_idn_table/templates` contains common templates for IDN review apps and IDN tool specific templates
+* `src/lgr_manage/templates` contains admin tools specific templates
 * `src/lgr_web/templates` contains the base templates
 * `src/lgr_auth/templates` contains authentication templates
 * `src/lgr_basic/templates` contains simple interface (HTML output) templates

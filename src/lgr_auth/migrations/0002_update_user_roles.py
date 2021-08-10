@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='lgruser',
             name='role',
-            field=models.CharField(choices=[('Admin', 'Admin'), ('ICANN', 'ICANN'), ('User', 'User')], default='User',
+            field=models.CharField(choices=[('User', 'User'), ('ICANN', 'ICANN'), ('Admin', 'Admin')], default='User',
                                    max_length=16),
         ),
         migrations.RunPython(update_roles)

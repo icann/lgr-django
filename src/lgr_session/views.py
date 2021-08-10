@@ -12,7 +12,7 @@ from django.views.generic.base import View
 from lgr_advanced.api import LGRToolSession
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
 from lgr_auth.models import LgrRole
-from lgr_idn_table_review.idn_icann.api import LGRIcannSession
+from lgr_idn_table_review.icann_tools.api import LGRIcannSession
 from lgr_idn_table_review.idn_tool.api import LGRIdnReviewSession
 
 

@@ -1,0 +1,60 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-10 18:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:4
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:12
+msgid "ICANN IDN review tool"
+msgstr ""
+
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:7
+msgid "Switch mode"
+msgstr ""
+
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:19
+msgid "Generate report"
+msgstr ""
+
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:23
+msgid "Previously generated reports"
+msgstr ""
+
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:28
+#, python-format
+msgid "IDN table %(folder)s"
+msgstr ""
+
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:32
+#, python-format
+msgid "Are you sure you want to delete report %(folder)s?"
+msgstr ""
+
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:37
+msgid "No report"
+msgstr ""
+
+#: src/lgr_idn_table_review/icann_tools/views.py:34
+msgid "Generating report. You will receive an email upon completion."
+msgstr ""
+
+#: src/lgr_idn_table_review/icann_tools/views.py:57
+#, python-format
+msgid "ICANN Review Reports: %(folder)s"
+msgstr ""
