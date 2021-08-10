@@ -174,6 +174,33 @@ Both the session engine and result files may need a periodical cleaning. Conside
 User accounts and files uploaded in IDN admin mode are stored in a database.
 See the [official documentation](https://docs.djangoproject.com/en/3.2/ref/settings/#databases) to configure your database.
 
+Default database is `sqlite`, to use MariaDB, install `mysqlclient`:
+
+    $ (venv) pip install mysqlclient
+
+And set the following settings:
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mariadb',
+            'NAME': 'lgr',
+            'USER': 'lgr',
+            'PASSWORD': '1234',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
+
+In order to set up the database for the above configuration, do the following:
+
+    $ mysql -u root -p
+    MariaDB [(none)]> CREATE DATABASE lgr CHARACTER SET UTF8;
+    MariaDB [(none)]> CREATE USER lgr@localhost IDENTIFIED BY '1234';
+    MariaDB [(none)]> GRANT ALL PRIVILEGES ON lgr.* TO lgr@localhost;
+    MariaDB [(none)]> FLUSH PRIVILEGES;
+
+
+
 #### Celery
 
 Celery is used to handle asynchronous processing for long operations in background. A broker is used to transport messages. See Celery documentation on [broker configuration](http://docs.celeryproject.org/en/3.1/getting-started/brokers/).
@@ -224,6 +251,12 @@ of each Unicode version that we support.
 Keys are the Unicode version, like '6.3.0' Values are a dict of the kwargs to pass to the `munidata.manager.register`
 function along with the version.
 
+## Create admin
+
+Django comes with a management tool that we can use to create users with admin role.
+
+    $ (venv) ./manage.py createsuperuser --email=test@lgr.example
+
 ## Deploying application to production
 
 Please see Installation\_Guide
@@ -232,7 +265,7 @@ Please see Installation\_Guide
 
 To generate the documentation, go to the `doc` directory and run the following command:
 
-    (venv) $ make html
+    $ (venv) make html
 
 The generated documentation is available in `doc/_build/html/index.html`.
 
