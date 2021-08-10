@@ -53,6 +53,7 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.email control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.role control_width=8 %}
         <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>
     </form>
 {% endblock content-pane %}

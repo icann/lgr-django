@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from enum import IntEnum, auto
+from enum import Enum
 
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
@@ -20,7 +20,7 @@ class LgrUserManager(BaseUserManager):
         if not email:
             raise ValueError(_('Email is mandatory'))
         email = self.normalize_email(email)
-        kwargs.setdefault('role', LgrRole.ICANN.value)
+        kwargs.setdefault('role', LgrRole.USER.value)
         password = kwargs.pop('password', None)
         user = self.model(email=email, **kwargs)
         user.set_password(password)
@@ -36,9 +36,10 @@ class LgrUserManager(BaseUserManager):
         return user
 
 
-class LgrRole(IntEnum):
-    ADMIN = auto()
-    ICANN = auto()
+class LgrRole(Enum):
+    USER = 'User'
+    ICANN = 'ICANN'
+    ADMIN = 'Admin'
 
 
 class UAEmailField(models.EmailField):
@@ -54,7 +55,8 @@ class LgrUser(AbstractBaseUser):
                          error_messages={
                              'unique': _("An user with that email already exists."),
                          })
-    role = models.PositiveSmallIntegerField(default=LgrRole.ICANN.value)
+    role = models.CharField(max_length=16, choices=((r.value, r.value) for r in LgrRole), null=False,
+                            default=LgrRole.USER.value)
 
     # The username field will be the email address
     USERNAME_FIELD = 'email'

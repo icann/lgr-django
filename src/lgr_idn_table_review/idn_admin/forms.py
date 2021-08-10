@@ -49,4 +49,4 @@ class RefLgrCreateForm(forms.ModelForm):
 class UserCreateForm(forms.ModelForm):
     class Meta:
         model = LgrUser
-        fields = ['email']
+        fields = ['email', 'role']
