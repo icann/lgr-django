@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
+    'lgr_models',
     'lgr_session',
     'lgr_auth',
     'lgr_advanced',
@@ -48,9 +49,9 @@ INSTALLED_APPS = [
     'lgr_advanced.lgr_renderer',
     'lgr_basic',
     'lgr_idn_table_review',
-    'lgr_idn_table_review.idn_admin',
-    'lgr_idn_table_review.idn_icann',
+    'lgr_idn_table_review.icann_tools',
     'lgr_idn_table_review.idn_tool',
+    'lgr_manage',
     'widget_tweaks',
     'django_cleanup.apps.CleanupConfig',  # should be placed last
 ]

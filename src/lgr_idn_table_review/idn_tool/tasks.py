@@ -14,8 +14,8 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from lgr.tools.idn_review.review import review_lgr
-from lgr_idn_table_review.idn_admin.models import RefLgr, RzLgr, RzLgrMember
 from lgr_idn_table_review.idn_tool.api import IdnTableInfo
+from lgr_models.models import RefLgr, RzLgr, RzLgrMember
 
 logger = logging.getLogger(__name__)
 
