@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 15:10+0000\n"
+"POT-Creation-Date: 2021-08-10 13:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,11 +23,11 @@ msgstr ""
 msgid "Email is mandatory"
 msgstr ""
 
-#: src/lgr_auth/models.py:53
+#: src/lgr_auth/models.py:54
 msgid "Required. Valid email address"
 msgstr ""
 
-#: src/lgr_auth/models.py:55
+#: src/lgr_auth/models.py:56
 msgid "An user with that email already exists."
 msgstr ""
 

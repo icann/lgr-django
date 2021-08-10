@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 15:09+0000\n"
-"PO-Revision-Date: 2021-04-19 11:11-0400\n"
+"POT-Creation-Date: 2021-08-10 13:54+0000\n"
+"PO-Revision-Date: 2021-08-10 09:54-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,17 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0\n"
 
-#: src/lgr_web/settings/default.py:202
+#: src/lgr_web/settings/default.py:230
 msgid "Arabic"
 msgstr "Arabe"
 
-#: src/lgr_web/settings/default.py:203
+#: src/lgr_web/settings/default.py:231
 msgid "English"
 msgstr "Anglais"
 
-#: src/lgr_web/settings/default.py:204
+#: src/lgr_web/settings/default.py:232
 msgid "French"
 msgstr "Français"
 
@@ -128,16 +128,22 @@ msgid "ICANN mode"
 msgstr "Mode ICANN"
 
 #: src/lgr_web/templates/lgr_modes.html:35
-msgid "Generate ICANN IDN report"
-msgstr "Générer le rapport IDN ICANN"
+msgid "ICANN Staff Tools"
+msgstr "Outils ICANN"
 
 #: src/lgr_web/templates/lgr_modes.html:39
 msgid "Admin mode"
 msgstr "Mode admin"
 
 #: src/lgr_web/templates/lgr_modes.html:41
-msgid "Manage IDN review tool"
-msgstr "Administrer l'outil de vérification IDN"
+msgid "Manage LGR Tools"
+msgstr "Administrer les outils LGR"
+
+#~ msgid "Generate ICANN IDN report"
+#~ msgstr "Générer le rapport IDN ICANN"
+
+#~ msgid "Manage IDN review tool"
+#~ msgstr "Administrer l'outil de vérification IDN"
 
 #, fuzzy
 #~| msgid "LGR sets"

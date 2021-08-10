@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 15:09+0000\n"
+"POT-Creation-Date: 2021-08-10 13:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: src/lgr_advanced/lgr_editor/forms/codepoint.py:15
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:52
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:57
 msgid "When"
 msgstr ""
 
@@ -30,7 +30,7 @@ msgstr ""
 
 #: src/lgr_advanced/lgr_editor/forms/codepoint.py:17
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/_editor_base.html:31
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:40
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:43
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/validate_lgr/compute_stats.html:71
 msgid "Tags"
 msgstr ""
@@ -39,76 +39,76 @@ msgstr ""
 msgid "space-separated tags"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:48
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:102
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:38
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:112
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:49
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:49
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:103
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:41
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:115
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:54
 msgid "Code point"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:49
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:103
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:50
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:104
 msgid "Override repertoire"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:54
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:55
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/_editor_base.html:22
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:22
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:27
 msgid "Code points"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:58
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:59
 msgid "Disabled code points"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:65
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:66
 msgid "First code point"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:66
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:67
 msgid "Last code point"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:72
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:73
 #, python-format
 msgid ""
 "Last code point (%(last_cp)s) must not be smaller than the first code point "
 "(%(first_cp)s)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:78
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:79
 #: src/lgr_advanced/lgr_editor/forms/importer.py:16
 #: src/lgr_advanced/lgr_editor/forms/importer.py:30
 #: src/lgr_advanced/lgr_editor/forms/metadata.py:54
 msgid "Validating repertoire"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:82
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:83
 msgid "Script"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:84
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:97
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:85
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:98
 msgid "Manual import"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:93
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:94
 msgid "Select a file"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:95
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:96
 msgid "File type"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:133
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:134
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:127
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:128
 msgid "Cannot add when and not-when rules simultaneously"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:136
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:137
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:140
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:130
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:131
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:134
 msgid "Please provide at least one value"
 msgstr ""
 
@@ -176,7 +176,7 @@ msgid "Unicode version"
 msgstr ""
 
 #: src/lgr_advanced/lgr_editor/forms/metadata.py:51
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:228
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:233
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/references.html:14
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/references.html:51
 msgid "Description"
@@ -203,7 +203,7 @@ msgid "Invalid format"
 msgstr ""
 
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/_editor_base.html:25
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:54
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:59
 msgid "References"
 msgstr ""
 
@@ -233,7 +233,7 @@ msgid "%(lgr_name)s"
 msgstr ""
 
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/_rule_editor_widgets.html:5
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:245
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:250
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/metadata.html:33
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/rules_edit.html:40
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/rules_edit.html:71
@@ -251,7 +251,7 @@ msgid "Save"
 msgstr ""
 
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/_rule_editor_widgets.html:11
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:166
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:171
 msgid "Edit"
 msgstr ""
 
@@ -259,8 +259,8 @@ msgstr ""
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/add_list_from_script.html:11
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/add_list_import.html:11
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/add_list_range.html:11
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:69
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:90
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:72
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:93
 msgid "Next"
 msgstr ""
 
@@ -271,202 +271,202 @@ msgid ""
 "are not redirected automatically."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:21
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:24
 msgid "Populate variants"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:25
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:28
 msgid "Expand range(s)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:27
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:106
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:30
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:109
 msgid "Add code point(s)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:39
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:42
 msgid "Character Name"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:41
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:51
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:44
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:56
 msgid "Comments"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:42
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:56
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:45
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:61
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/references.html:17
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/tags.html:14
 msgid "Action"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:52
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:55
 msgid "Add Rule"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:57
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:60
 msgid "There is no rule in the current LGR"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:60
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:63
 msgid "Close"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:66
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:69
 msgid ""
 "<p>This rule will be added to <b><span class=\"nbr-selected\"></span> "
 "codepoint(s)</b></p>"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:82
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:275
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:85
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:283
 msgid "Add Tags"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:87
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:90
 msgid ""
 "<p>These tags will be added to <b><span class=\"nbr-selected\"></span> "
 "codepoint(s)</b></p>"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:115
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:118
 msgid "Code point range"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:118
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:121
 msgid "Code point from script"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:121
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:124
 msgid "Import from file"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:133
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:136
 msgid "Add Code Point"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:224
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:232
 msgid "Variant(s)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:240
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:248
 msgid "See code point"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:243
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:251
 msgid "Expand range"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:273
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:297
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:281
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:305
 msgid "➡ Select code point(s) to apply batch action..."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:274
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:282
 msgid "Add WLE"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:295
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:303
 msgid "➡ Apply batch action..."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:26
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:31
 #, python-format
 msgid "Code point appeared in Unicode version: %(age)s"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:35
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:40
 msgid "Add variant"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:50
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:55
 msgid "Type"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:53
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:58
 msgid "Not When"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:74
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:79
 msgid "Code point is not in LGR"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:105
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:110
 msgid "Are you sure you want to delete this variant?"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:105
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:110
 msgid "Delete variant"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:106
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:111
 msgid "Edit references"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:115
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:120
 msgid "Range characters do not have variants."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:117
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:122
 msgid "Code point has not variant"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:138
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:143
 msgid "Save variants, tags, context rules and comment"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:160
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:165
 msgid "No references associated with code point."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:173
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:178
 msgid "Are you sure you want to delete this code point?"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:175
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:180
 msgid "Delete code point"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:186
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:191
 msgid "Edit References for <span></span>"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:192
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:197
 msgctxt "button title"
 msgid "Delete reference"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:201
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:206
 msgid "Add an existing reference"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:210
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:215
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/references.html:60
 msgid "Add"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:216
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:221
 msgid "Create a new reference"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:220
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:225
 msgid "Error when adding reference"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:224
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:229
 msgid "Reference ID (optional)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:232
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:237
 msgid "URL (optional)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:238
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:243
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/references.html:44
 msgid "New reference"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:246
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:251
 msgid "Save changes"
 msgstr ""
 
@@ -799,48 +799,48 @@ msgstr ""
 msgid "LGR rebuild OK"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:160
+#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:177
 #, python-format
 msgid "Automatically added codepoint %s from out-of-repertoire-var variant"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:163
+#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:180
 #, python-format
 msgid "New variant %s added"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:249
+#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:267
 msgid "Code point edited"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:302
-#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:336
+#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:320
+#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:355
 msgid "References updated successfully"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:339
+#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:358
 #, python-format
 msgid ""
 "Variant %(var_codepoint)s for code point %(codepoint)s with when=%(when)s "
 "and not-when=%(not_when)s could not be found"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:372
+#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:391
 #, python-format
 msgid "Code point %s has been deleted"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:396
+#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:415
 #, python-format
 msgid "Variant %(var_cp)s with when='%(when)s' and not-when='%(not_when)s'"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:402
+#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:421
 #, python-format
 msgid "%(var_msg_prefix)s has been deleted"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:405
+#: src/lgr_advanced/lgr_editor/views/codepoints/codepoint.py:424
 #, python-format
 msgid "%(var_msg_prefix)s could not be deleted because it was not found"
 msgstr ""
@@ -855,38 +855,38 @@ msgstr ""
 msgid "No code point in input file"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:101
+#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:115
 #, python-format
 msgid "New code point %s added"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:187
+#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:202
 msgid "Rule"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:187
+#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:202
 msgid "Tag(s)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:188
+#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:203
 msgid "rule"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:188
+#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:203
 msgid "tag(s)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:192
+#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:207
 #, python-format
 msgid "%(operation)s successfully added to %(nb_cp)s code point(s)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:198
+#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:213
 #, python-format
 msgid "%(nb_cp)s code points were not updated to avoid invalid %(operation)s"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:311
+#: src/lgr_advanced/lgr_editor/views/codepoints/list.py:326
 msgid "Variants populated"
 msgstr ""
 
@@ -916,7 +916,7 @@ msgstr ""
 msgid "Meta data saved"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/reference.py:89
+#: src/lgr_advanced/lgr_editor/views/reference.py:102
 msgid "New reference created"
 msgstr ""
 

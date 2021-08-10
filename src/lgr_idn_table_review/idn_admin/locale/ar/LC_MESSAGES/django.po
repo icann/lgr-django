@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 15:10+0000\n"
+"POT-Creation-Date: 2021-08-10 13:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgid "Common LGR file"
 msgstr ""
 
 #: src/lgr_idn_table_review/idn_admin/forms.py:23
-#: src/lgr_idn_table_review/idn_admin/forms.py:44
+#: src/lgr_idn_table_review/idn_admin/forms.py:45
 #: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/ref_lgr.html:11
 #: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/rz_lgr.html:11
 msgid "Name"
@@ -39,7 +39,7 @@ msgstr ""
 msgid "Language/script tag"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_admin/forms.py:43
+#: src/lgr_idn_table_review/idn_admin/forms.py:44
 msgid "Reference LGR file"
 msgstr ""
 
@@ -89,7 +89,7 @@ msgstr ""
 
 #: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/ref_lgr.html:50
 #: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/rz_lgr.html:69
-#: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/user_management.html:56
+#: src/lgr_idn_table_review/idn_admin/templates/lgr_idn_table_review_admin/user_management.html:57
 msgid "Add"
 msgstr ""
 
