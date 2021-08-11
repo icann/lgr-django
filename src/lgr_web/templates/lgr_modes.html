@@ -6,42 +6,50 @@
 {% endblock %}
 
 {% block content %}
-    <div class="col-md-12">
-        <p>{% trans "Select your mode:" %}</p>
-    </div>
-    <div class="col-md-6">
-        <a class="panel panel-default btn" href="{% url "lgr_basic_mode" %}" title="{% trans "Basic mode" %}">
-            <div class="panel-body">
-                <b><span class="glyphicon glyphicon-ok">&nbsp;</span>{% trans "Validate label(s) against an LGR" %}
-                </b>
-            </div>
-        </a>
-    </div>
-    <div class="col-md-6">
-        <a class="panel panel-default btn" href="{% url "lgr_review_mode" %}" title="{% trans "Review mode" %}">
-            <div class="panel-body">
-                <b><span class="glyphicon glyphicon-copy">&nbsp;</span>{% trans "Review IDN table(s)" %}</b>
-            </div>
-        </a>
-    </div>
-    <div class="col-md-12">
-        <a class="panel panel-default btn" href="{% url "lgr_advanced_mode" %}" title="{% trans "Advanced mode" %}">
-            <div class="panel-body">
-                <span class="glyphicon glyphicon-wrench">&nbsp;</span>{% trans "Advanced LGR Tools" %}
-            </div>
-        </a>
-        <a class="panel panel-default btn" href="{% url "lgr_idn_icann_mode" %}" title="{% trans "ICANN mode" %}">
-            <div class="panel-body">
-                <span class="glyphicon glyphicon-lock">&nbsp;</span>{% trans "ICANN Staff Tools" %}
-            </div>
-        </a>
-
-        <a class="panel panel-default btn" href="{% url "lgr_idn_admin_mode" %}" title="{% trans "Admin mode" %}">
-            <div class="panel-body">
-                <span class="glyphicon glyphicon-lock">&nbsp;</span>{% trans "Manage LGR Tools" %}
-            </div>
-        </a>
-    </div>
+    {% if user.is_authenticated %}
+        <div class="col-md-12">
+            <p>{% trans "Select your mode:" %}</p>
+        </div>
+        <div class="col-md-6">
+            <a class="panel panel-default btn" href="{% url "lgr_basic_mode" %}" title="{% trans "Basic mode" %}">
+                <div class="panel-body">
+                    <b><span class="glyphicon glyphicon-ok">&nbsp;</span>{% trans "Validate label(s) against an LGR" %}
+                    </b>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a class="panel panel-default btn" href="{% url "lgr_review_mode" %}" title="{% trans "Review mode" %}">
+                <div class="panel-body">
+                    <b><span class="glyphicon glyphicon-copy">&nbsp;</span>{% trans "Review IDN table(s)" %}</b>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-12">
+            <a class="panel panel-default btn" href="{% url "lgr_advanced_mode" %}" title="{% trans "Advanced mode" %}">
+                <div class="panel-body">
+                    <span class="glyphicon glyphicon-wrench">&nbsp;</span>{% trans "Advanced LGR Tools" %}
+                </div>
+            </a>
+            {% if user.is_icann %}
+            <a class="panel panel-default btn" href="{% url "lgr_idn_icann_mode" %}" title="{% trans "ICANN mode" %}">
+                <div class="panel-body">
+                    <span class="glyphicon glyphicon-lock">&nbsp;</span>{% trans "ICANN Staff Tools" %}
+                </div>
+            </a>
+            {% endif %}
+            {% if user.is_admin %}
+            <a class="panel panel-default btn" href="{% url "lgr_idn_admin_mode" %}" title="{% trans "Admin mode" %}">
+                <div class="panel-body">
+                    <span class="glyphicon glyphicon-lock">&nbsp;</span>{% trans "Manage LGR Tools" %}
+                </div>
+            </a>
+            {% endif %}
+        </div>
+    {% else %}
+        {% url 'login' as login_url %}
+        <p>{% blocktrans %}Please <a href="{{ login_url }}">login</a> to access the LGR tools.{% endblocktrans %}</p>
+    {% endif %}
     <div class="clearfix"></div>
 
 {% endblock %}

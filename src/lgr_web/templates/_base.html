@@ -71,13 +71,17 @@
                                 </li>
                                 <li class="dropdown-item">
                                     <a class="btn" href="{% url 'logout' %}">
-                                        <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
-                                        Logout
+                                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                                        {% trans 'Logout' %}
                                     </a>
                                 </li>
                             </ul>
-                            <div class="btn-group">
-
+                            </div>
+                        {% else %}
+                            <a class="btn btn-default" href="{% url 'login' %}">
+                                <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                                {% trans 'Login' %}
+                            </a>
                         {% endif %}
                     {% endblock %}
                 </div>

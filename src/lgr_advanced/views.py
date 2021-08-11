@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, FormView
 
 from lgr.utils import cp_to_ulabel, format_cp
@@ -12,7 +13,7 @@ from lgr_advanced.utils import list_built_in_lgr
 from lgr_web.views import Interfaces, INTERFACE_SESSION_MODE_KEY
 
 
-class LGRViewMixin:
+class LGRViewMixin(LoginRequiredMixin):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
@@ -35,7 +36,7 @@ class AdvancedModeView(LGRViewMixin, TemplateView):
         return ctx
 
 
-class LabelFormsView(FormView):
+class LabelFormsView(LoginRequiredMixin, FormView):
     form_class = LabelFormsForm
     template_name = 'lgr_advanced/label_forms.html'
 
