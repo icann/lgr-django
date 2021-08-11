@@ -3,6 +3,7 @@ import logging
 import uuid
 
 from dal_select2.views import Select2GroupListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponse
 from django.urls import reverse_lazy, reverse
@@ -22,7 +23,7 @@ from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 logger = logging.getLogger(__name__)
 
 
-class IdnTableReviewViewMixin:
+class IdnTableReviewViewMixin(LoginRequiredMixin):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
@@ -136,7 +137,7 @@ class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, View):
         return resp
 
 
-class RefLgrAutocomplete(Select2GroupListView):
+class RefLgrAutocomplete(LoginRequiredMixin, Select2GroupListView):
 
     # XXX Uncomment this and remove the other method when upgrading django-autocomplete-light to a version that
     #     supports it (should be > 3.8.2) and that is working correctly

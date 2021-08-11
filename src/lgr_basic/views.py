@@ -5,6 +5,7 @@ from io import StringIO
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView
@@ -21,7 +22,7 @@ from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 from .forms import ValidateLabelSimpleForm
 
 
-class BasicModeView(FormView):
+class BasicModeView(LoginRequiredMixin, FormView):
     form_class = ValidateLabelSimpleForm
     template_name = 'lgr_basic/basic_mode.html'
 

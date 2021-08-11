@@ -63,3 +63,9 @@ class LgrUser(AbstractBaseUser):
 
     # Define custom User manager class
     objects = LgrUserManager()
+
+    def is_icann(self):
+        return self.role in (LgrRole.ICANN.value, LgrRole.ADMIN.value)
+
+    def is_admin(self):
+        return self.role == LgrRole.ADMIN.value
