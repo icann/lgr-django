@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 18:05+0000\n"
+"POT-Creation-Date: 2021-08-11 13:27+0000\n"
 "PO-Revision-Date: 2021-02-26 16:00-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -178,7 +178,7 @@ msgstr "Télécharger %(file)s"
 msgid "Are you sure you want to delete report %(file)s?"
 msgstr "Êtes-vous sûr(e) de vouloir supprimer ce rapport %(file)s ?"
 
-#: src/lgr_basic/views.py:84
+#: src/lgr_basic/views.py:85
 msgid ""
 "Input label generates too many variants to compute them all quickly. You "
 "need to enter your email address and will receive a notification once "

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 18:05+0000\n"
+"POT-Creation-Date: 2021-08-11 13:27+0000\n"
 "PO-Revision-Date: 2021-03-24 20:08-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -108,12 +108,12 @@ msgstr "LGR avec laquelle effectuer la vérification"
 msgid "Review"
 msgstr "Vérifier"
 
-#: src/lgr_idn_table_review/idn_tool/views.py:55
+#: src/lgr_idn_table_review/idn_tool/views.py:56
 #, python-format
 msgid "%(filename)s is an invalid IDN table"
 msgstr "%(filename)s est une table IDN invalide"
 
-#: src/lgr_idn_table_review/idn_tool/views.py:123
+#: src/lgr_idn_table_review/idn_tool/views.py:124
 #, python-format
 msgid "IDN Table Review Reports: %(folder)s"
 msgstr "Rapport de Vérification de Table IDN: %(folder)s"

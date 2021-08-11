@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 18:05+0000\n"
+"POT-Creation-Date: 2021-08-11 13:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,12 +104,12 @@ msgstr ""
 msgid "Review"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_tool/views.py:55
+#: src/lgr_idn_table_review/idn_tool/views.py:56
 #, python-format
 msgid "%(filename)s is an invalid IDN table"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_tool/views.py:123
+#: src/lgr_idn_table_review/idn_tool/views.py:124
 #, python-format
 msgid "IDN Table Review Reports: %(folder)s"
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-10 18:05+0000\n"
+"POT-Creation-Date: 2021-08-11 13:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_web/settings/default.py:231
+#: src/lgr_web/settings/default.py:226
 msgid "Arabic"
 msgstr ""
 
-#: src/lgr_web/settings/default.py:232
+#: src/lgr_web/settings/default.py:227
 msgid "English"
 msgstr ""
 
-#: src/lgr_web/settings/default.py:233
+#: src/lgr_web/settings/default.py:228
 msgid "French"
 msgstr ""
 
@@ -43,17 +43,25 @@ msgstr ""
 msgid "About LGR Toolset"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:59 src/lgr_web/templates/_base.html:120
+#: src/lgr_web/templates/_base.html:59 src/lgr_web/templates/_base.html:124
 msgid "About"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:104
+#: src/lgr_web/templates/_base.html:75
+msgid "Logout"
+msgstr ""
+
+#: src/lgr_web/templates/_base.html:83
+msgid "Login"
+msgstr ""
+
+#: src/lgr_web/templates/_base.html:108
 msgid ""
 "If you have questions, please contact <a href=\"mailto:globalsupport@icann."
 "org\">globalsupport@icann.org</a>"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:127
+#: src/lgr_web/templates/_base.html:131
 msgid "Close"
 msgstr ""
 
@@ -86,46 +94,51 @@ msgstr ""
 msgid "Welcome to the LGR (Label Generation Ruleset) Tools"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:10
+#: src/lgr_web/templates/lgr_modes.html:11
 msgid "Select your mode:"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:13
+#: src/lgr_web/templates/lgr_modes.html:14
 msgid "Basic mode"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:15
+#: src/lgr_web/templates/lgr_modes.html:16
 msgid "Validate label(s) against an LGR"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:21
+#: src/lgr_web/templates/lgr_modes.html:22
 msgid "Review mode"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:23
+#: src/lgr_web/templates/lgr_modes.html:24
 msgid "Review IDN table(s)"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:28
+#: src/lgr_web/templates/lgr_modes.html:29
 msgid "Advanced mode"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:30
+#: src/lgr_web/templates/lgr_modes.html:31
 msgid "Advanced LGR Tools"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:33
+#: src/lgr_web/templates/lgr_modes.html:35
 msgid "ICANN mode"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:35
+#: src/lgr_web/templates/lgr_modes.html:37
 msgid "ICANN Staff Tools"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:39
+#: src/lgr_web/templates/lgr_modes.html:42
 msgid "Admin mode"
 msgstr ""
 
-#: src/lgr_web/templates/lgr_modes.html:41
+#: src/lgr_web/templates/lgr_modes.html:44
 msgid "Manage LGR Tools"
+msgstr ""
+
+#: src/lgr_web/templates/lgr_modes.html:51
+#, python-format
+msgid "Please <a href=\"%(login_url)s\">login</a> to access the LGR tools."
 msgstr ""
