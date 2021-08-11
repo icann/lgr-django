@@ -35,12 +35,13 @@ class BasicModeView(LoginRequiredMixin, FormView):
         ctx = {}
         results = []
 
-        email_address = form.cleaned_data['email']
         labels_cp = form.cleaned_data['labels']
         labels_file = form.cleaned_data.get('labels_file')
         rz_lgr = form.cleaned_data['rz_lgr']
         ctx['lgr_id'] = rz_lgr  # needed to download results as csv
         collisions = form.cleaned_data['collisions']
+        email_address = self.request.user.email
+
         tlds = None
         tld_json = {}
         if collisions:
@@ -56,7 +57,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
             # data will be sent by email instead of on the ui
             ctx['validation_to'] = email_address
             if collisions:
-                basic_collision_task.delay(lgr_json, labels_json, tld_json, email_address, storage_path, True)
+                basic_collision_task.delay(lgr_json, labels_json, tld_json, email_address, storage_path, annotate=True)
                 ctx['collision_to'] = email_address
             else:
                 annotate_task.delay(lgr_json, labels_json, email_address, storage_path)
@@ -71,7 +72,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
                     check_collisions = [l[0] for l in read_labels(StringIO(data))]
                 else:
                     basic_collision_task.delay(lgr_json, labels_json, tld_json, email_address, storage_path,
-                                               False)
+                                               annotate=False)
                     ctx['collision_to'] = email_address
 
             for label_cplist in labels_cp:

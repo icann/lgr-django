@@ -45,9 +45,6 @@ def evaluate_label_from_info(session,
     """
     ctx = {}
     need_async = lgr_info.lgr.estimate_variant_number(label_cplist) > settings.LGR_VALIDATION_MAX_VARS_SYNCHRONOUS
-    if need_async and not email:
-        raise NeedAsyncProcess
-
     udata = get_db_by_version(lgr_info.lgr.metadata.unicode_version)
     if lgr_info.is_set:
         script_lgr_info = None
@@ -94,7 +91,6 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
     def __init__(self):
         super().__init__()
         self.result = {}
-        self.email_required = False
 
     def get_initial(self):
         initial = super().get_initial()
@@ -127,7 +123,6 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
         ctx['result'] = self.result
         ctx['lgr_id'] = self.lgr_id
         ctx['is_set'] = self.lgr_info.is_set or self.lgr_set_id is not None
-        ctx['email_required'] = self.email_required
 
         if self.lgr_set_id:
             lgr_set_info = self.session.select_lgr(self.lgr_set_id)
@@ -142,7 +137,6 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
     def form_valid(self, form):
         label_cplist = form.cleaned_data['label']
         script_lgr_name = form.cleaned_data.get('script', None)
-        email = form.cleaned_data['email']
         if self.lgr_info.is_set:
             set_labels_file = form.cleaned_data['set_labels']
             if set_labels_file is not None:
@@ -150,18 +144,14 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
                     self.lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
                                                                         set_labels_file.read())
         try:
-            self.result = evaluate_label_from_info(self.session, self.lgr_info, label_cplist, script_lgr_name, email,
+            self.result = evaluate_label_from_info(self.session, self.lgr_info, label_cplist, script_lgr_name,
+                                                   self.request.user.email,
                                                    threshold_include_vars=self.threshold_include_vars)
         except UnicodeError as ex:
             if self.output_func:
                 return self._redirect_on_error(ex)
 
             messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
-        except NeedAsyncProcess:
-            messages.add_message(self.request, messages.INFO,
-                                 _('Input label generates too many variants to compute them all quickly. '
-                                   'You need to enter your email address and will receive a notification once process is done'))
-            self.email_required = True
         except LGRException as ex:
             return self._redirect_on_error(ex)
 

@@ -8,7 +8,6 @@ from lgr_advanced.api import LGRInfo
 from lgr_advanced.lgr_editor.forms.fields import ROOT_ZONES, FILE_FIELD_ENCODING_HELP
 from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_advanced.lgr_tools.forms import UAEmailField
 from lgr_advanced.unidb import get_db_by_version
 
 
@@ -21,21 +20,11 @@ class ValidateLabelSimpleForm(forms.Form):
                                                            'placeholder': _('Label')}))
     labels_file = forms.FileField(label='', help_text=FILE_FIELD_ENCODING_HELP,
                                   required=False)
-    email = UAEmailField(label='', required=False,
-                         widget=forms.TextInput(attrs={'id': 'email-task',
-                                                       'placeholder': _('Email address for tasks results')}),
-                         help_text=_("As the computing may be very long, we will warn by e-mail once the result can "
-                                     "be downloaded."))
     collisions = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'id': 'check-for-collision'}),
                                     required=False)
 
     def clean(self):
         cleaned_data = super(ValidateLabelSimpleForm, self).clean()
-        if (self.cleaned_data.get('collisions') and len(cleaned_data.get('labels', [])) > 1) or self.cleaned_data.get(
-                'labels_file'):
-            if not self.cleaned_data.get('email'):
-                self.add_error('email', _('E-mail is mandatory to get the tasks results'))
-
         if 'labels' not in self.errors and not cleaned_data.get('labels') and not cleaned_data.get('labels_file'):
             self.add_error('labels', _('Required'))
             self.add_error('labels_file', _('Required'))

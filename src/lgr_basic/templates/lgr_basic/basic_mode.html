@@ -99,11 +99,6 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-group" id="form-email-task">
-                        <div class="col-sm-12">
-                            {% include "lgr_editor/_form_field.html" with field=form.email %}
-                        </div>
-                    </div>
                     {% if validation_to and collision_to %}
                         <div class="row">
                             <div class="col-sm-12">
@@ -235,28 +230,9 @@
             input.closest('.col').find('input').val('');
         }
 
-        function isEmailPartVisible() {
-            let isVisible = false;
-            if (isFormUploadActivated === true || ($('#check-for-collision').is(':checked') && $('.label-text').length > 1)) {
-                isVisible = true;
-            }
-
-            if (isVisible === true) {
-                $('#form-email-task').css('display', 'block');
-            } else {
-                $('#form-email-task').css('display', 'none');
-            }
-        }
-
         function buttonValidateEnabled() {
             const isCheckForCollision = isFormUploadActivated === true || ($('#check-for-collision').is(':checked') && $('.label-text').length > 1);
             let emptyLabel = false;
-
-            if (isCheckForCollision === true) {
-                if ($('#email-task').val() === '') {
-                    return setButtonStatusEnabled(false);
-                }
-            }
 
             if (isFormUploadActivated === false) {
                 $('.form-label').each((index, el) => {
@@ -290,7 +266,6 @@
             $(el).parent().parent().remove();
             $('.add-label').last().css('display', 'inline-block');
             buttonValidateEnabled();
-            isEmailPartVisible();
         }
 
         function parseLabelsStart(labelsList) {
@@ -330,7 +305,6 @@
 
             $('.add-label').last().css('display', 'inline-block');
             buttonValidateEnabled();
-            isEmailPartVisible();
         }
 
         buttonValidateEnabled();
@@ -338,7 +312,6 @@
         function OnloadFunction(coll_enabled) {
             $('#check-for-collision').prop('checked', coll_enabled)
             $('.add-label').last().css('display', 'inline-block');
-            isEmailPartVisible();
             parseLabelsStart($('#id_labels').val());
             changeRzValue();
             $('.search-clear').click(() => {
@@ -355,8 +328,6 @@
                 data.forEach((el) => {
                     if (el.name === 'labels' && !isFormUploadActivated) {
                         labelString += el.value + ';';
-                    } else if ((isFormUploadActivated === true || $('#check-for-collision').is(':checked')) && el.name === 'email') {
-                        sendData.push({name: 'email', value: el.value})
                     } else if (el.name === 'rz_lgr') {
                         sendData.push({name: 'rz_lgr', value: el.value})
                     }
@@ -429,7 +400,6 @@
                 isFormUploadActivated = true;
                 $('#form-upload-label').css('display', 'block');
                 $('#form-text-label').css('display', 'none');
-                isEmailPartVisible();
             }
 
             $('.upload-labels-list').click(() => {
@@ -443,15 +413,12 @@
                     $('#form-text-label').css('display', 'block');
                 }
 
-                isEmailPartVisible();
-
                 sessionStorage.setItem('isFormUploadActivated', isFormUploadActivated);
 
                 buttonValidateEnabled();
             });
 
             $('#check-for-collision').change(function () {
-                isEmailPartVisible();
                 buttonValidateEnabled();
             });
 
