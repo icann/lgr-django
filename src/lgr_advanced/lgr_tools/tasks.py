@@ -83,18 +83,18 @@ def _lgr_tool_task(storage_path, base_filename, email_subject,
 
 
 @shared_task
-def diff_task(lgr_json_1, lgr_json_2, labels_json, email_address, collision, full_dump,
-              with_rules, storage_path):
+def diff_task(lgr_json_1, lgr_json_2, labels_json, collision, full_dump,
+              with_rules, email_address, storage_path):
     """
     Launch difference computation for a list of labels between two LGR
 
     :param lgr_json_1: The first LGRInfo as a JSON object.
     :param lgr_json_2: The second LGRInfo as a JSON object.
     :param labels_json: The LabelInfo as a JSON object.
-    :param email_address: The e-mail address where the results will be sent
     :param collision: Whether we also compute collisions
     :param full_dump: Whether we also output a full dump
     :param with_rules: Whether we also output rules
+    :param email_address: The e-mail address where the results will be sent
     :param storage_path: The place where results will be stored
     :return:
     """
@@ -126,17 +126,17 @@ def diff_task(lgr_json_1, lgr_json_2, labels_json, email_address, collision, ful
 
 
 @shared_task
-def collision_task(lgr_json, labels_json, tld_json, email_address, full_dump,
-                   with_rules, storage_path):
+def collision_task(lgr_json, labels_json, tld_json, full_dump,
+                   with_rules, email_address, storage_path):
     """
     Compute collision between labels in an LGR
 
     :param lgr_json: The LGRInfo as a JSON object.
     :param labels_json: The LabelInfo as a JSON object containing labels to check for coliision.
     :param tld_json: The LabelInfo as a JSON object containing TLDs.
-    :param email_address: The e-mail address where the results will be sent
     :param full_dump: Whether we also output a full dump
     :param with_rules: Whether we also output rules
+    :param email_address: The e-mail address where the results will be sent
     :param storage_path: The place where results will be stored
     """
     lgr = LGRInfo.from_dict(lgr_json).lgr
@@ -231,13 +231,13 @@ def annotate_task(lgr_json, labels_json, email_address, storage_path):
 
 
 @shared_task
-def lgr_set_annotate_task(lgr_json, script_lgr_json, labels_json, email_address, storage_path):
+def lgr_set_annotate_task(lgr_json, labels_json, script_lgr_json, email_address, storage_path):
     """
     Compute dispositions of labels in a LGR.
 
     :param lgr_json: The LGRInfo as a JSON object.
-    :param script_lgr_json: The LGRinfo for the script used to check label validity as a JSON object.
     :param labels_json: The LabelInfo as a JSON object.
+    :param script_lgr_json: The LGRinfo for the script used to check label validity as a JSON object.
     :param email_address: The e-mail address where the results will be sent
     :param storage_path: The place where results will be stored
     """

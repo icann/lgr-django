@@ -28,6 +28,7 @@ from ..views import LGRViewMixin
 
 class LGRToolBaseView(LGRViewMixin, FormView):
     initial_field = 'lgr'
+    async_method = None
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
@@ -36,6 +37,7 @@ class LGRToolBaseView(LGRViewMixin, FormView):
         if self.lgr_id:
             self.lgr_info = self.session.select_lgr(self.lgr_id)
         self.action = None
+        self.email_address = request.user.email
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -53,8 +55,21 @@ class LGRToolBaseView(LGRViewMixin, FormView):
             'lgr_id': self.lgr_id or '',
             'lgr': self.lgr_info.lgr if self.lgr_info else '',
             'is_set': self.lgr_info.is_set if self.lgr_info else '',
+            'email': self.email_address,
         })
         return ctx
+
+    def get_async_method(self, lgr_info):
+        return self.async_method
+
+    def call_async(self, lgr_info, *args, **kwargs):
+        if not self.async_method:
+            raise RuntimeError
+
+        method = self.get_async_method(lgr_info)
+
+        method.delay(lgr_info.to_dict(), *args, **kwargs, email_address=self.email_address,
+                     storage_path=self.session.get_storage_path())
 
 
 class LGRToolBaseSetCompatibleView(LGRToolBaseView):
@@ -147,12 +162,12 @@ class LGRCompareView(LGRToolBaseView):
 class LGRDiffView(LGRToolBaseView):
     form_class = LGRDiffSelector
     template_name = 'lgr_tools/diff.html'
+    async_method = diff_task
 
     def form_valid(self, form):
         lgr_id_1 = form.cleaned_data['lgr_1']
         lgr_id_2 = form.cleaned_data['lgr_2']
         labels_file = form.cleaned_data['labels']
-        email_address = form.cleaned_data['email']
         collision = form.cleaned_data['collision']
         full_dump = form.cleaned_data['full_dump']
         with_rules = form.cleaned_data['with_rules']
@@ -160,22 +175,17 @@ class LGRDiffView(LGRToolBaseView):
         lgr_info_1 = self.session.select_lgr(lgr_id_1)
         lgr_info_2 = self.session.select_lgr(lgr_id_2)
 
-        storage_path = self.session.get_storage_path()
-
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
                                           labels_file.read()).to_dict()
-        lgr_1_json = lgr_info_1.to_dict()
         lgr_2_json = lgr_info_2.to_dict()
-        diff_task.delay(lgr_1_json, lgr_2_json, labels_json, email_address, collision,
-                        full_dump, with_rules, storage_path)
+        self.call_async(lgr_info_1, lgr_2_json, labels_json, collision, full_dump, with_rules)
 
         ctx = self.get_context_data()
         ctx.update({
             'lgr_1': lgr_info_1,
             'lgr_2': lgr_info_2,
             'labels_file': labels_file.name,
-            'email': email_address,
         })
         return render(self.request, 'lgr_tools/wait_diff.html', context=ctx)
 
@@ -183,18 +193,16 @@ class LGRDiffView(LGRToolBaseView):
 class LGRCollisionView(LGRToolBaseView):
     form_class = LGRCollisionSelector
     template_name = 'lgr_tools/collision.html'
+    async_method = collision_task
 
     def form_valid(self, form):
         lgr_id = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
-        email_address = form.cleaned_data['email']
         full_dump = form.cleaned_data['full_dump']
         with_rules = form.cleaned_data['with_rules']
         with_tlds = False
 
         lgr_info = self.session.select_lgr(lgr_id)
-
-        storage_path = self.session.get_storage_path()
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
@@ -202,9 +210,7 @@ class LGRCollisionView(LGRToolBaseView):
         if form.cleaned_data['download_tlds']:
             tlds_json = LabelInfo.from_form('TLDs', download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
             with_tlds = True
-        lgr_json = lgr_info.to_dict()
-        collision_task.delay(lgr_json, labels_json, tlds_json, email_address, full_dump, with_rules,
-                             storage_path)
+        self.call_async(lgr_info, labels_json, tlds_json, full_dump, with_rules)
 
         ctx = self.get_context_data()
         ctx.update({
@@ -212,7 +218,6 @@ class LGRCollisionView(LGRToolBaseView):
             'labels_file': labels_file.name,
             'icann_tlds': settings.ICANN_TLDS,
             'with_tlds': with_tlds,
-            'email': email_address,
         })
         return render(self.request, 'lgr_tools/wait_coll.html', context=ctx)
 
@@ -226,16 +231,18 @@ class LGRAnnotateView(LGRToolBaseSetCompatibleView):
         if self.lgr_info and self.lgr_info.set_labels_info:
             initial['set_labels'] = self.lgr_info.set_labels_info
         return initial
+    
+    def get_async_method(self, lgr_info):
+        if lgr_info.is_set:
+            return lgr_set_annotate_task
+        return annotate_task
 
     def form_valid(self, form):
         ctx = self.get_context_data()
         lgr_id = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
-        email_address = form.cleaned_data['email']
 
         lgr_info = self.session.select_lgr(lgr_id)
-
-        storage_path = self.session.get_storage_path()
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
@@ -247,21 +254,21 @@ class LGRAnnotateView(LGRToolBaseSetCompatibleView):
                 if lgr_info.set_labels_info is None or lgr_info.set_labels_info.name != set_labels_file.name:
                     lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
                                                                    set_labels_file.read())
-        lgr_json = lgr_info.to_dict()
-        if not lgr_info.is_set:
-            annotate_task.delay(lgr_json, labels_json, email_address, storage_path)
-        else:
+
+        async_kwargs = {}
+        if lgr_info.is_set:
             script_lgr_id = form.cleaned_data['script']
             script_lgr_info = self.session.select_lgr(script_lgr_id, lgr_set_id=lgr_id)
 
             script_lgr_json = script_lgr_info.to_dict()
-            lgr_set_annotate_task.delay(lgr_json, script_lgr_json, labels_json, email_address, storage_path)
             ctx['script'] = script_lgr_id
+            async_kwargs = {'script_lgr_json': script_lgr_json}
+
+        self.call_async(lgr_info, labels_json, **async_kwargs)
 
         ctx.update({
             'lgr_info': lgr_info,
             'labels_file': labels_file.name,
-            'email': email_address,
         })
         return render(self.request, 'lgr_tools/wait_annotate.html', context=ctx)
 
@@ -269,16 +276,14 @@ class LGRAnnotateView(LGRToolBaseSetCompatibleView):
 class LGRCrossScriptVariantsView(LGRToolBaseSetCompatibleView):
     form_class = LGRCrossScriptVariantsSelector
     template_name = 'lgr_tools/cross_script_variants.html'
+    async_method = cross_script_variants_task
 
     def form_valid(self, form):
         ctx = self.get_context_data()
         lgr_id = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
-        email_address = form.cleaned_data['email']
 
         lgr_info = self.session.select_lgr(lgr_id)
-
-        storage_path = self.session.get_storage_path()
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
@@ -289,13 +294,11 @@ class LGRCrossScriptVariantsView(LGRToolBaseSetCompatibleView):
             script_lgr = self.session.select_lgr(script_lgr_id, lgr_set_id=lgr_id)
             lgr_info = script_lgr
 
-        cross_script_variants_task.delay(lgr_info.to_dict(), labels_json,
-                                         email_address, storage_path)
+        cross_script_variants_task.delay(lgr_info.to_dict(), labels_json)
 
         ctx.update({
             'lgr_info': lgr_info,
             'labels_file': labels_file.name,
-            'email': email_address,
         })
         return render(self.request, 'lgr_tools/wait_cross_scripts.html', context=ctx)
 
@@ -335,25 +338,22 @@ class LGRHarmonizeView(LGRToolBaseView):
 class LGRComputeVariants(LGRToolBaseView):
     form_class = LGRComputeVariantsSelector
     template_name = 'lgr_tools/variants.html'
+    async_method = validate_labels_task
 
     def form_valid(self, form):
         lgr_id = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
-        email_address = form.cleaned_data['email']
 
         lgr_info = self.session.select_lgr(lgr_id)
-
-        storage_path = self.session.get_storage_path()
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
         lgr_json = lgr_info.to_dict()
-        validate_labels_task.delay(lgr_json, labels_json, email_address, storage_path)
+        self.call_async(lgr_json, labels_json)
 
         ctx = self.get_context_data()
         ctx.update({
             'lgr_info': lgr_info,
             'labels_file': labels_file.name,
-            'email': email_address,
         })
         return render(self.request, 'lgr_tools/wait_variants.html', context=ctx)

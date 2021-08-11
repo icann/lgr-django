@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+import re
 from enum import Enum
 
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
+from django.core import validators
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
-from lgr_advanced.lgr_tools.forms import UAEmailValidator
 
 
 class LgrUserManager(BaseUserManager):
@@ -40,6 +40,12 @@ class LgrRole(Enum):
     USER = 'User'
     ICANN = 'ICANN'
     ADMIN = 'Admin'
+
+
+class UAEmailValidator(validators.EmailValidator):
+    # same Email Validator class with unicode characters instead of a-z0-9
+    user_regex = validators._lazy_re_compile(r".+", re.IGNORECASE)
+    domain_regex = validators._lazy_re_compile(r".+", re.IGNORECASE)
 
 
 class UAEmailField(models.EmailField):

@@ -25,16 +25,13 @@
             <tbody>
             {{ form.media }}
             {% for field in form %}
-                {% if field.html_name != 'email' %}
-                    <tr>
-                        <td>{{ field.html_name }}</td>
-                        <td>{% include "lgr_editor/_form_field_no_label.html" with field=field %}</td>
-                    </tr>
-                {% endif %}
+                <tr>
+                    <td>{{ field.html_name }}</td>
+                    <td>{% include "lgr_editor/_form_field_no_label.html" with field=field %}</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
-        {% include "lgr_editor/_form_field_no_label.html" with field=form.email %}
         <button id="submit" type="submit" class="btn btn-primary btn-block">{% trans "Review" %}</button>
     </form>
 {% endblock content %}

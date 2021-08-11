@@ -9,7 +9,6 @@ from django.forms import FileField
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
-from lgr_advanced.lgr_tools.forms import UAEmailField
 
 
 class LGRIdnTableReviewForm(forms.Form):
@@ -29,15 +28,8 @@ class LGRIdnTableReviewForm(forms.Form):
 
 
 class IdnTableReviewSelectReferenceForm(forms.Form):
-    email = UAEmailField(label=_("E-mail"),
-                         help_text=_('As the computing may be very long, we will warn by e-mail once the result can be '
-                                     'downloaded'),
-                         required=False,
-                         widget=forms.TextInput(attrs={'placeholder': 'Email address for tasks results'}))
 
     def __init__(self, *args, **kwargs):
-        # from lgr_idn_table_review.idn_tool.views import RefLgrAutocomplete
-
         idn_tables = kwargs.pop('idn_tables', [])
         self.lgrs = kwargs.pop('lgrs', {})
         super().__init__(*args, **kwargs)
@@ -46,7 +38,6 @@ class IdnTableReviewSelectReferenceForm(forms.Form):
             self.fields[idn_table_name] = forms.ChoiceField(label=idn_table_name,
                                                             required=True,
                                                             choices=((lgr, lgr) for lgr in self.lgrs.keys()),
-                                                            # choices=RefLgrAutocomplete.get_list(),
                                                             widget=autocomplete.ListSelect2(url='ref-lgr-autocomplete',
                                                                                             attrs={
                                                                                                 'data-language': None
@@ -55,8 +46,6 @@ class IdnTableReviewSelectReferenceForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         for field in cleaned_data:
-            if field == 'email':
-                continue
             lgr_name = cleaned_data[field]
             # replace lgr value by a tuple (lgr_type, value), this is necessary as dal does not allow us to use values
             # different than display in choices. The next version should allow that (see commented part below)
@@ -67,11 +56,6 @@ class IdnTableReviewSelectReferenceForm(forms.Form):
 #     supports it (should be > 3.8.2) and that is working correctly
 #     Check view as well to update RefLgrAutocomplete and remove lgrs from IdnTableReviewSelectReferenceView.get_form_kwargs
 # class IdnTableReviewSelectReferenceForm(forms.Form):
-#     email = UAEmailField(label=_("E-mail"),
-#                          help_text=_('As the computing may be very long, we will warn by e-mail once the result can be '
-#                                      'downloaded'),
-#                          required=False,
-#                          widget=forms.TextInput(attrs={'placeholder': 'Email address for tasks results'}))
 #
 #     def __init__(self, *args, **kwargs):
 #         from lgr_idn_table_review.idn_tool.views import RefLgrAutocomplete

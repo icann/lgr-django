@@ -65,7 +65,7 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
     success_url = reverse_lazy('lgr_review_report_folders')
 
     def form_valid(self, form):
-        email_address = form.cleaned_data.pop('email', None)
+        email_address = self.request.user.email
         report_id = self.kwargs.get('report_id')
 
         idn_tables = []
@@ -73,14 +73,9 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
             idn_table_info = self.session.select_lgr(idn_table, uid=report_id)
             idn_tables.append((idn_table_info.to_dict(), lgr_info))
 
-        if email_address:
-            idn_table_review_task.delay(idn_tables, report_id, email_address, self.session.get_storage_path(),
-                                        self.request.build_absolute_uri(self.get_success_url()),
-                                        self.request.build_absolute_uri('/').rstrip('/'))
-        else:
-            idn_table_review_task(idn_tables, report_id, None, self.session.get_storage_path(),
-                                  self.request.build_absolute_uri(self.get_success_url()),
-                                  self.request.build_absolute_uri('/').rstrip('/'))
+        idn_table_review_task.delay(idn_tables, report_id, email_address, self.session.get_storage_path(),
+                                    self.request.build_absolute_uri(self.get_success_url()),
+                                    self.request.build_absolute_uri('/').rstrip('/'))
 
         return super(IdnTableReviewSelectReferenceView, self).form_valid(form)
 

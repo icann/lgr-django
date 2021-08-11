@@ -16,17 +16,6 @@ LGR_COMPARE_ACTIONS = (
     ("DIFF", _("Diff")))
 
 
-class UAEmailValidator(validators.EmailValidator):
-    # same Email Validator class with unicode characters instead of a-z0-9
-    user_regex = validators._lazy_re_compile(r".+", re.IGNORECASE)
-    domain_regex = validators._lazy_re_compile(r".+", re.IGNORECASE)
-
-
-class UAEmailField(forms.EmailField):
-    widget = TextInput
-    default_validators = [UAEmailValidator()]
-
-
 class DataSelectWidget(Select):
     """
     Add data to select widget options
@@ -104,10 +93,6 @@ class LGRDiffSelector(forms.Form):
                              help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}",
                              required=True)
 
-    email = UAEmailField(label=_("E-mail"),
-                         help_text=_('Provide your e-mail address'),
-                         required=True)
-
     collision = forms.BooleanField(label=_("Check collisions"),
                                    help_text=_('Also check for collision of '
                                                'labels in both LGR'),
@@ -140,10 +125,6 @@ class LGRCollisionSelector(forms.Form):
 
     labels = forms.FileField(label=_("Labels"),
                              help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}")
-
-    email = UAEmailField(label=_("E-mail"),
-                         help_text=_('Provide your e-mail address'),
-                         required=True)
 
     full_dump = forms.BooleanField(label=_("Full dump"),
                                    help_text=_('Print a full dump'),
@@ -199,19 +180,11 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
                              help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}",
                              required=True)
 
-    email = UAEmailField(label=_("E-mail"),
-                         help_text=_('Provide your e-mail address'),
-                         required=True)
-
 
 class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
     labels = forms.FileField(label=_("Labels"),
                              help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}",
                              required=True)
-
-    email = UAEmailField(label=_("E-mail"),
-                         help_text=_('Provide your e-mail address'),
-                         required=True)
 
 
 class LGRHarmonizeSelector(forms.Form):
@@ -243,10 +216,6 @@ class LGRComputeVariantsSelector(forms.Form):
 
     labels = forms.FileField(label=_("Labels"),
                              help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}")
-
-    email = UAEmailField(label=_("E-mail"),
-                         help_text=_('Provide your e-mail address'),
-                         required=True)
 
     def __init__(self, *args, **kwargs):
         session_lgrs = kwargs.pop('session_lgrs', [])
