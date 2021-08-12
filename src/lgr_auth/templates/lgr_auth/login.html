@@ -1,5 +1,5 @@
 {% extends "_base.html" %}
-{% load i18n %}
+{% load static i18n lgr_auth %}
 
 {% block html_title %}{% trans 'LGR Tools login' %}{% endblock %}
 
@@ -48,8 +48,15 @@
         <input type="hidden" name="next" value="{{ next }}">
     </form>
 
-    {% for backend in backends.backends %}
-        <a href="{% url "social:begin" backend %}">Connect with {{ backend }}</a>
-    {% endfor %}
+    {% if backends.backends|length > 0 %}
+        <div class="oauth-login">
+            <p><b>{% trans 'Sign in with:' %}</b></p>
+            <div>
+                {% for backend in backends.backends %}
+                    <a type="button" class='btn btn-default btn-xs' href="{% url "social:begin" backend %}"><img src="{% static backend|oauth_logo %}" alt=" " width="30" height="30"> {{ backend|oauth_name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
 
 {% endblock %}

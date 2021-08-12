@@ -408,3 +408,16 @@ a.panel {
     padding-top: 0px;
     padding-left: 4px;
 }
+
+.oauth-login {
+    padding: 10px;
+    border: 1px solid;
+    border-color: #ccc;
+    width: 20%;
+    margin: 5px auto;
+    border-radius: 3px;
+}
+
+.oauth-login a {
+    margin: 10px;
+}
