@@ -78,6 +78,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
   * [django-redis-cache](https://github.com/sebleier/django-redis-cache) [BSD License]
   * [django-autocomplete-light](https://github.com/yourlabs/django-autocomplete-light/) [MIT License]
   * [django-cleanup](https://github.com/un1t/django-cleanup) [MIT License]
+  * [social-auth-app-django](https://github.com/python-social-auth/social-app-django) [BSD License]
 * A [redis](https://redis.io/) server for cache and asynchronous computations
 
  For documentation generation:

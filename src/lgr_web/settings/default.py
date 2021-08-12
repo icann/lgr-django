@@ -76,26 +76,22 @@ AUTH_USER_MODEL = 'lgr_auth.LgrUser'
 # Social Authentication configuration
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.okta.OktaOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 SOCIAL_AUTH_PIPELINE = (
+    # 'social_core.pipeline.debug.debug',
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    'social_core.pipeline.social_auth.associate_by_email',
+    # be very careful with that if some accounts allows non verified emails
+    # 'social_core.pipeline.social_auth.associate_by_email',
     'social_core.pipeline.user.create_user',
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
 )
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
-
-# Okta OAuth configuration
-SOCIAL_AUTH_OKTA_OAUTH2_KEY = 'abc'
-SOCIAL_AUTH_OKTA_OAUTH2_SECRET = 'def'
-SOCIAL_AUTH_OKTA_OAUTH2_API_URL = 'https://icann.oktapreview.com/oauth2'
 
 # Redirect URL after auth
 LOGIN_REDIRECT_URL = '/'
