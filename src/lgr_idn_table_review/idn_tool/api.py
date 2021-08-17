@@ -6,13 +6,13 @@ api -
 import logging
 from io import BytesIO
 
-from django.conf import settings
-
 from lgr.parser.heuristic_parser import HeuristicParser
 from lgr.parser.xml_parser import LGR_NS
 from lgr_advanced import unidb
 from lgr_advanced.api import OLD_LGR_NS
+from lgr_idn_table_review.idn_tool.models import IdnReviewReport
 from lgr_session.api import LGRSession, LGRSerializer
+from lgr_session.views import StorageType
 
 logger = logging.getLogger(__name__)
 
@@ -58,4 +58,5 @@ class IdnTableInfo(LGRSerializer):
 class LGRIdnReviewSession(LGRSession):
     lgr_session_key = IDN_TABLES_SESSION_KEY
     lgr_serializer = IdnTableInfo
-    storage_location = settings.IDN_REVIEW_USER_OUTPUT_STORAGE_LOCATION
+    storage_model = IdnReviewReport
+    storage_type = StorageType.IDN_REVIEW_USER_MODE

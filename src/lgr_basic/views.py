@@ -50,17 +50,16 @@ class BasicModeView(LoginRequiredMixin, FormView):
         lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr, with_unidb=True))
         lgr_info.update_xml()
         lgr_json = lgr_info.to_dict()
-        storage_path = self.session.get_storage_path()
 
         if labels_file:
             labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
             # data will be sent by email instead of on the ui
             ctx['validation_to'] = email_address
             if collisions:
-                basic_collision_task.delay(lgr_json, labels_json, tld_json, email_address, storage_path, annotate=True)
+                basic_collision_task.delay(lgr_json, labels_json, tld_json, email_address, annotate=True)
                 ctx['collision_to'] = email_address
             else:
-                annotate_task.delay(lgr_json, labels_json, email_address, storage_path)
+                annotate_task.delay(lgr_json, labels_json, email_address)
 
         else:
             labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp]).to_dict()
@@ -71,7 +70,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
                     data = tlds.decode('utf-8')
                     check_collisions = [l[0] for l in read_labels(StringIO(data))]
                 else:
-                    basic_collision_task.delay(lgr_json, labels_json, tld_json, email_address, storage_path,
+                    basic_collision_task.delay(lgr_json, labels_json, tld_json, email_address,
                                                annotate=False)
                     ctx['collision_to'] = email_address
 
@@ -96,6 +95,6 @@ class BasicModeView(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         ctx = super(BasicModeView, self).get_context_data(**kwargs)
-        ctx['storage'] = self.session.list_storage()
+        ctx['reports'] = self.session.list_storage()
         ctx.update(kwargs)
         return ctx

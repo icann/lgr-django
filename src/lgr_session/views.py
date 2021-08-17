@@ -2,18 +2,13 @@
 from enum import Enum
 
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.core.exceptions import SuspiciousOperation
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.http import Http404, FileResponse
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import View
 
-from lgr_advanced.api import LGRToolSession
-from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
-from lgr_auth.models import LgrRole
-from lgr_idn_table_review.icann_tools.api import LGRIcannSession
-from lgr_idn_table_review.idn_tool.api import LGRIdnReviewSession
+from lgr_session.api import LGRStorage
 
 
 class StorageType(Enum):
@@ -22,53 +17,46 @@ class StorageType(Enum):
     IDN_REVIEW_ICANN_MODE = 'rev_icann'
 
 
-class LGRSessionView(UserPassesTestMixin, View):
+class LGRSessionView(LoginRequiredMixin, UserPassesTestMixin, View):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.filename = self.kwargs.get('filename')
-        if not RE_SAFE_FILENAME.match(self.filename):
-            raise SuspiciousOperation()
-        self.folder = self.kwargs.get('folder', None)
-        if self.folder and not RE_SAFE_FILENAME.match(self.folder):
-            raise SuspiciousOperation()
+        self.report_id = self.kwargs.get('report_id')
+        self.pk = self.kwargs.get('pk', None)
         self.next = request.GET.get('next', '/')
         storage_type = self.kwargs.get('storage')
-        if StorageType(storage_type) == StorageType.TOOL:
-            self.session = LGRToolSession(self.request)
-        elif StorageType(storage_type) == StorageType.IDN_REVIEW_USER_MODE:
-            self.session = LGRIdnReviewSession(request)
-        elif StorageType(storage_type) == StorageType.IDN_REVIEW_ICANN_MODE:
-            self.session = LGRIcannSession(request)
-        else:
-            raise Http404
+        for subclass in LGRStorage.__subclasses__():
+            if not subclass.storage_model:
+                continue
+            if subclass.storage_model.storage_type == StorageType(storage_type):
+                self.session = subclass(request)
+                return
+        raise Http404
 
     def test_func(self):
-        storage_type = self.kwargs.get('storage')
-        if StorageType(storage_type) == StorageType.IDN_REVIEW_ICANN_MODE:
-            return self.request.user.is_authenticated and self.request.user.role in [LgrRole.ICANN.value,
-                                                                                     LgrRole.ADMIN.value]
-        return True
+        return self.session.storage_can_read()
 
 
-class DownloadFileView(LGRSessionView):
+class DownloadReportView(LGRSessionView):
 
     def get(self, request, *args, **kwargs):
         try:
-            res_file = self.session.storage_get_file(self.filename, subfolder=self.folder)
-            if res_file is None:
-                raise FileNotFoundError
-        except FileNotFoundError:
-            messages.error(request, _('Unable to download file %(filename)s') % {'filename': self.filename})
+            report = self.session.storage_get_report_file(self.pk)
+        except self.session.storage_model.DoesNotExist:
+            messages.error(request, _('Unable to download file from report %(pk)s') %
+                           {'pk': self.pk})
             return redirect(self.next)
-        response = FileResponse(res_file[0])
+        response = FileResponse(report.file)
         if 'display' not in self.request.GET:
-            response['Content-Disposition'] = 'attachment; filename={}'.format(self.filename)
+            response['Content-Disposition'] = 'attachment; filename={}'.format(report.filename)
         return response
 
 
-class DeleteFileView(LGRSessionView):
+class DeleteReportView(LGRSessionView):
 
     def get(self, request, *args, **kwargs):
-        self.session.storage_delete_file(self.filename, subfolder=self.folder)
+        if self.pk:
+            self.session.storage_delete_report_file(self.pk)
+        if self.report_id:
+            self.session.storage_delete_report(self.report_id)
         return redirect(self.next)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
@@ -8,7 +8,6 @@ from django.views.generic import TemplateView
 
 from lgr_auth.models import LgrRole
 from lgr_idn_table_review.icann_tools.api import LGRIcannSession
-from lgr_session.views import StorageType
 from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 from .tasks import idn_table_review_task
 
@@ -36,25 +35,29 @@ class IdnTableIcannModeView(BaseIcannView, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['folders'] = self.session.list_storage_folders()
+        context['reports'] = self.session.list_storage(reverse=False)
         return context
 
 
 class IdnTableIcannListReports(BaseIcannView, TemplateView):
-    template_name = 'lgr_idn_table_review/list_reports.html'
+    template_name = 'lgr_idn_table_review/list_report_files.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['storage'] = self.session.list_storage(subfolder=self.kwargs.get('folder'), reverse=False)
-        zipname = f"{self.kwargs.get('folder')}.zip"
-        if zipname in context['storage']:
-            context['storage'].remove(zipname)
-            context['zip'] = zipname
-        summary_name = f"{self.kwargs.get('folder')}-summary.html"
-        context['completed'] = False
-        if summary_name in context['storage']:
-            context['completed'] = True
-        context['title'] = _("ICANN Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
-        context['storage_type'] = StorageType.IDN_REVIEW_ICANN_MODE.value
+        zipname = f"{self.kwargs.get('report_id')}.zip"
+        summary_name = f"{self.kwargs.get('report_id')}-summary.html"
+        exclude_filter = [{'file__endswith': zipname},
+                          {'file__endswith': summary_name}]
+        if settings.DEBUG:
+            exclude_filter.append({'file__endswith': '.json'})
+        context['reports'] = self.session.list_storage(report_id=self.kwargs.get('report_id'), reverse=False,
+                                                       exclude=exclude_filter)
+        context['zip'] = self.session.storage_find_report_file(self.kwargs.get('report_id'), zipname)
+        context['completed'] = True
+        try:
+            context['summary'] = self.session.storage_find_report_file(self.kwargs.get('report_id'), summary_name)
+        except self.session.storage_model.DoesNotExist:
+            context['completed'] = False
+        context['title'] = _("ICANN Review Reports: %(report)s") % {'report': self.kwargs.get('report_id')}
         context['back_url'] = 'lgr_idn_icann_mode'
         return context

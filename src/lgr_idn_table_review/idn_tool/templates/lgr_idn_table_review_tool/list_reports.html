@@ -10,6 +10,9 @@
 
 {% block content-title %}
     {% trans "IDN Table Review Reports" %}
+    <button type="button" class="btn btn-default" onClick="window.location.reload();">
+        <i class="glyphicon glyphicon-refresh"></i>
+    </button>
 {% endblock %}
 
 {% block content %}
@@ -21,14 +24,17 @@
         {% endblocktrans %}
     </p>
     <ul>
-        {% for folder in folders %}
+        {% regroup reports by report_id as report_ids %}
+        {% for reports_grouped in report_ids %}
             <li>
-                <a href="{% url 'lgr_review_reports' folder=folder %}">{{ folder }}</a>
-                <a href="{% url 'delete_file' storage='rev_usr' filename=folder %}?next={{ request.path }}"
-                   class="delete_file confirm-prompt"
-                   data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ folder }}?{% endblocktrans %}">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </a>
+                {% with report=reports_grouped.list|first %}
+                    <a href="{% url 'lgr_review_report' report_id=report.report_id %}">{{ report.report_id }}</a>
+                    <a href="{% url 'delete_report' storage=report.storage report_id=report.report_id %}?next={{ request.path }}"
+                       class="delete_report confirm-prompt"
+                       data-confirmation-prompt="{% blocktrans with report.report_id as report_id %}Are you sure you want to delete report {{ report_id }}?{% endblocktrans %}">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                {% endwith %}
             </li>
         {% empty %}
             {% trans 'No report' %}

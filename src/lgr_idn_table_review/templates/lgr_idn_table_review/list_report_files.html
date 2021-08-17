@@ -33,23 +33,23 @@
         </tr>
         </thead>
         <tbody>
-        {% for file in storage %}
+        {% for report in reports %}
             <tr>
                 <td>
-                    <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?display=true&next={{ request.path }}"
+                    <a href="{% url 'download_report' storage=report.storage pk=report.pk %}?display=true&next={{ request.path }}"
                        target="_blank" rel="noopener noreferrer">
-                        {{ file }}
+                        {{ report.filename }}
                     </a>
                 </td>
                 <td>
-                    <a href="{% url 'download_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}"
+                    <a href="{% url 'download_report' storage=report.storage pk=report.pk %}?next={{ request.path }}"
                        class="btn btn-default">
                         <i class="glyphicon glyphicon-floppy-disk"></i>
                     </a>
                     &nbsp;
-                    <a href="{% url 'delete_file' storage=storage_type filename=file folder=folder %}?next={{ request.path }}"
-                       class="delete_file btn btn-default confirm-prompt"
-                       data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ file }}?{% endblocktrans %}">
+                    <a href="{% url 'delete_report' storage=report.storage pk=report.pk %}?next={{ request.path }}"
+                       class="delete_report btn btn-default confirm-prompt"
+                       data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ report.filename }}?{% endblocktrans %}">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>
                 </td>
@@ -68,11 +68,18 @@
                 {% else %}
                     title="{% trans 'Get the zip file containing all generated reports' %}">
                 {% endif %}
-        <a href="{% url 'download_file' storage=storage_type filename=zip folder=folder %}?next={{ request.path }}"
+        <a href="{% url 'download_report' storage=zip.storage pk=zip.pk %}?next={{ request.path }}"
            class="btn btn-default{% if not completed %} disabled{% endif %}"
            {% if not completed %}aria-disabled="true"{% endif %}>
-                <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;{% trans 'Download all' %}
-            </a>
+            <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;{% trans 'Download all' %}
+        </a>
+    {% endif %}
+    {% if summary %}
+        <a href="{% url 'download_report' storage=summary.storage pk=summary.pk %}?display=true&next={{ request.path }}"
+           class="btn btn-default{% if not completed %} disabled{% endif %}"
+           {% if not completed %}aria-disabled="true"{% endif %} target="_blank" rel="noopener noreferrer">
+            <i class="glyphicon glyphicon-list-alt"></i>&nbsp;{% trans 'Summary' %}
+        </a>
         </span>
     {% endif %}
 {% endblock content %}

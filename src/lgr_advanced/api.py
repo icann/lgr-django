@@ -23,6 +23,7 @@ from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.utils import (make_lgr_session_key,
                                 LGR_CACHE_TIMEOUT,
                                 LGR_OBJECT_CACHE_KEY)
+from lgr_advanced.lgr_tools.models import LGRToolReport
 from lgr_session.api import LGRSession, LGRSerializer
 
 logger = logging.getLogger(__name__)
@@ -240,7 +241,7 @@ def get_builtin_or_session_repertoire(session: LGRSession, repertoire_id):
 class LGRToolSession(LGRSession):
     lgr_session_key = LGRS_SESSION_KEY
     lgr_serializer = LGRInfo
-    storage_location = settings.TOOLS_OUTPUT_STORAGE_LOCATION
+    storage_model = LGRToolReport
     get_from_repertoire = True
     loader_function = get_builtin_or_session_repertoire
 

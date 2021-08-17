@@ -122,7 +122,7 @@
 
     <div class="col-md-4">
 
-    {% if storage %}
+    {% if reports %}
         <h3>{% trans "Your saved results" %}</h3>
         <p>
             {% blocktrans trimmed %}
@@ -131,11 +131,13 @@
             {% endblocktrans %}
         </p>
         <ul>
-            {% for file in storage %}
+            {% for report in reports %}
                 <li>
-                    <a href="{% url 'download_file' storage='tool' filename=file %}?next={{ request.path }}">{% blocktrans %}Download {{ file }}{% endblocktrans %}</a>
-                    <a href="{% url 'delete_file' storage='tool' filename=file %}" class="delete_file confirm-prompt"
-                       data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ file }}?{% endblocktrans %}">
+                    <a href="{% url 'download_report' storage=report.storage pk=report.pk %}?next={{ request.path }}">
+                        {% trans 'Download' %} {{ report.filename }}
+                    </a>
+                    <a href="{% url 'delete_report' storage=report.storage pk=report.pk %}" class="delete_report confirm-prompt"
+                       data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ report.filename }}?{% endblocktrans %}">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>
                 </li>

@@ -16,7 +16,7 @@ from lgr.metadata import Metadata
 from lgr_advanced.api import LGRInfo
 from lgr_idn_table_review.icann_tools.api import get_reference_lgr, NoRefLgrFound
 from lgr_idn_table_review.idn_tool.api import IdnTableInfo
-from lgr_models.models import RefLgr, RzLgrMember, RzLgr
+from lgr_models.models.lgr import RefLgr, RzLgrMember, RzLgr
 from lgr_web import settings
 
 logger = logging.getLogger('api')

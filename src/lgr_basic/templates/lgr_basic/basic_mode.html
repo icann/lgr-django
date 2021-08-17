@@ -153,7 +153,7 @@
                     {% endfor %}
                 </div>
 
-                {% if storage %}
+                {% if reports %}
                     <hr>
                     <b>{% trans 'Your saved results' %}</b>
                     <p>{% trans 'The following files contains your tools computation results.' %}</p>
@@ -162,14 +162,14 @@
                         {% trans 'Note that these files could be cleaned up regularly.' %}
                     </b>
                     <ul>
-                        {% for file in storage %}
+                        {% for report in reports %}
                             <li>
-                                <a href="{% url 'download_file' storage='tool' filename=file %}?next={{ request.path }}">
-                                    {% blocktrans %}Download {{ file }}{% endblocktrans %}
+                                <a href="{% url 'download_report' storage=report.storage pk=report.pk %}?next={{ request.path }}">
+                                    {% trans 'Download' %} {{ report.filename }}
                                 </a>
-                                <a href="{% url 'delete_file' storage='tool' filename=file %}?next={{ request.path }}"
-                                   data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ file }}?{% endblocktrans %}"
-                                   class="delete_file confirm-prompt">
+                                <a href="{% url 'delete_report' storage=report.storage pk=report.pk %}?next={{ request.path }}"
+                                   data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ report.filename }}?{% endblocktrans %}"
+                                   class="delete_report confirm-prompt">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
                             </li>
