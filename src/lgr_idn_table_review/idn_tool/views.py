@@ -16,8 +16,7 @@ from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
 from lgr_idn_table_review.idn_tool.api import LGRIdnReviewSession
 from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
-from lgr_models.models import RzLgr, RefLgr, RzLgrMember
-from lgr_session.views import StorageType
+from lgr_models.models.lgr import RzLgr, RefLgr, RzLgrMember
 from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 
 logger = logging.getLogger(__name__)
@@ -62,7 +61,7 @@ class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
 class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
     form_class = IdnTableReviewSelectReferenceForm
     template_name = 'lgr_idn_table_review_tool/select_reference.html'
-    success_url = reverse_lazy('lgr_review_report_folders')
+    success_url = reverse_lazy('lgr_review_reports')
 
     def form_valid(self, form):
         email_address = self.request.user.email
@@ -73,7 +72,7 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
             idn_table_info = self.session.select_lgr(idn_table, uid=report_id)
             idn_tables.append((idn_table_info.to_dict(), lgr_info))
 
-        idn_table_review_task.delay(idn_tables, report_id, email_address, self.session.get_storage_path(),
+        idn_table_review_task.delay(idn_tables, report_id, email_address,
                                     self.request.build_absolute_uri(self.get_success_url()),
                                     self.request.build_absolute_uri('/').rstrip('/'))
 
@@ -96,29 +95,30 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
         return kwargs
 
 
-class IdnTableReviewListReportFolders(IdnTableReviewViewMixin, TemplateView):
-    template_name = 'lgr_idn_table_review_tool/list_report_folders.html'
+class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
+    template_name = 'lgr_idn_table_review_tool/list_reports.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['folders'] = self.session.list_storage_folders()
+        context['reports'] = self.session.list_storage()
         return context
 
 
-class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
-    template_name = 'lgr_idn_table_review/list_reports.html'
+class IdnTableReviewListReport(IdnTableReviewViewMixin, TemplateView):
+    template_name = 'lgr_idn_table_review/list_report_files.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['storage'] = self.session.list_storage(subfolder=self.kwargs.get('folder'))
-        zipname = f"{self.kwargs.get('folder')}.zip"
-        if zipname in context['storage']:
-            context['storage'].remove(zipname)
-            context['zip'] = zipname
-        context['completed'] = True  # FIXME: we don't know if this if finished or not
-        context['title'] = _("IDN Table Review Reports: %(folder)s") % {'folder': self.kwargs.get('folder')}
-        context['storage_type'] = StorageType.IDN_REVIEW_USER_MODE.value
-        context['back_url'] = 'lgr_review_report_folders'
+        zipname = f"{self.kwargs.get('report_id')}.zip"
+        context['reports'] = self.session.list_storage(report_id=self.kwargs.get('report_id'),
+                                                       exclude={'file__endswith': zipname})
+        context['completed'] = True
+        try:
+            context['zip'] = self.session.storage_find_report_file(self.kwargs.get('report_id'), zipname)
+        except self.session.storage_model.DoesNotExist:
+            context['completed'] = False
+        context['title'] = _("IDN Table Review Reports: %(report)s") % {'report': self.kwargs.get('report_id')}
+        context['back_url'] = 'lgr_review_reports'
         return context
 
 

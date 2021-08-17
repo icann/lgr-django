@@ -31,7 +31,7 @@ class AdvancedModeView(LGRViewMixin, TemplateView):
             'lgr_xml': xml_files,
             'lgrs': self.session.list_lgr(),
             'lgr_id': '',
-            'storage': self.session.list_storage(),
+            'reports': self.session.list_storage(),
         })
         return ctx
 

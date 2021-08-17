@@ -16,9 +16,11 @@ from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.tools.utils import download_file
 from lgr.utils import tag_to_language_script
-from lgr_models.models import RefLgr, RzLgrMember, RzLgr
+from lgr_auth.models import LgrRole
+from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport
+from lgr_models.models.lgr import RefLgr, RzLgrMember, RzLgr
 from lgr_idn_table_review.idn_tool.api import IdnTableInfo
-from lgr_session.api import LgrStorage
+from lgr_session.api import LGRStorage
 
 logger = logging.getLogger(__name__)
 
@@ -33,14 +35,14 @@ class NoRefLgrFound(BaseException):
         self.message = msg
 
 
-class LGRIcannSession(LgrStorage):
-    storage_location = settings.IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION
+class LGRIcannSession(LGRStorage):
+    storage_model = IdnReviewIcannReport
 
     def __init__(self, request):
-        self.request = request
+        super().__init__(request.user, filter_on_user=False)
 
-    def get_storage_path(self, subfolder=None):
-        return os.path.join(self.storage_location, subfolder or '')
+    def storage_can_read(self):
+        return self.user.role in [LgrRole.ICANN.value, LgrRole.ADMIN.value]
 
 
 def get_icann_idn_repository_tables():

@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
 from lgr_auth.models import LgrUser
-from lgr_models.models import RzLgr, RzLgrMember, RefLgr
+from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 

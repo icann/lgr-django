@@ -20,19 +20,27 @@
         </button>
     </form>
     <hr>
-    <h2>{% trans 'Previously generated reports' %}</h2>
+    <h2>
+        {% trans 'Previously generated reports' %}
+        <button type="button" class="btn btn-default" onClick="window.location.reload();">
+            <i class="glyphicon glyphicon-refresh"></i>
+        </button>
+    </h2>
     <ul>
-        {% for folder in folders %}
-            <li>
-                <a href="{% url 'lgr_idn_icann_reports' folder=folder %}">
-                    {% blocktrans %}IDN table {{ folder }}{% endblocktrans %}
-                </a>
-                <a href="{% url 'delete_file' storage='rev_icann' filename=folder %}?next={{ request.path }}"
-                   class="delete_file confirm-prompt"
-                   data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ folder }}?{% endblocktrans %}">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </a>
-            </li>
+        {% regroup reports by report_id as report_ids %}
+        {% for reports_grouped in report_ids %}
+            {% with report=reports_grouped.list|first %}
+                <li>
+                    <a href="{% url 'lgr_idn_icann_reports' report_id=report.report_id %}">
+                        {% blocktrans with report.report_id as report_id %}IDN table {{ report_id }}{% endblocktrans %}
+                    </a>
+                    <a href="{% url 'delete_report' storage=report.storage report_id=report.report_id %}?next={{ request.path }}"
+                       class="delete_report confirm-prompt"
+                       data-confirmation-prompt="{% blocktrans with report.report_id as report_id %}Are you sure you want to delete report {{ report_id }}?{% endblocktrans %}">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                </li>
+            {% endwith %}
         {% empty %}
             {% trans 'No report' %}
         {% endfor %}

@@ -68,8 +68,7 @@ class LGRToolBaseView(LGRViewMixin, FormView):
 
         method = self.get_async_method(lgr_info)
 
-        method.delay(lgr_info.to_dict(), *args, **kwargs, email_address=self.email_address,
-                     storage_path=self.session.get_storage_path())
+        method.delay(lgr_info.to_dict(), *args, **kwargs, email_address=self.email_address)
 
 
 class LGRToolBaseSetCompatibleView(LGRToolBaseView):
@@ -135,12 +134,12 @@ class LGRCompareView(LGRToolBaseView):
                 with GzipFile(filename=base_filename, fileobj=sio, mode='w') as gzf:
                     gzf.write(lgr_xml.content)
 
-                filename = self.session.storage_save_file(f'{base_filename}.gz', sio)
+                report = self.session.storage_save_report_file(f'{base_filename}.gz', sio)
                 ctx = self.get_context_data()
                 ctx.update({
                     'lgr_1': lgr_info_1,
                     'lgr_2': lgr_info_2,
-                    'lgr_file_name': filename,
+                    'report': report,
                     'comp_type': self.action.lower(),
                     'error': lgr_xml.error
                 })
@@ -348,8 +347,7 @@ class LGRComputeVariants(LGRToolBaseView):
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
-        lgr_json = lgr_info.to_dict()
-        self.call_async(lgr_json, labels_json)
+        self.call_async(lgr_info, labels_json)
 
         ctx = self.get_context_data()
         ctx.update({

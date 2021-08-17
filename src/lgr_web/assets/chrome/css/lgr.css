@@ -411,8 +411,7 @@ a.panel {
 
 .oauth-login {
     padding: 10px;
-    border: 1px solid;
-    border-color: #ccc;
+    border: 1px solid #ccc;
     width: 20%;
     margin: 5px auto;
     border-radius: 3px;

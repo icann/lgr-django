@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.files import File
 from django.db import migrations
 
-from lgr_models.models import RefLgr, RzLgrMember
+from lgr_models.models.lgr import RefLgr, RzLgrMember
 
 SECOND_LEVEL_LANG = {
     'lgr-second-level-arabic-language-13jan21-en.xml': 'ar-Arab',

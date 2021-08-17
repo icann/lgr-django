@@ -280,13 +280,6 @@ LGR_STORAGE_LOCATION = os.path.join(BASE_DIR, 'resources', 'lgr')
 # Filepath of the LGR RNG schema file
 LGR_RNG_FILE = os.path.join(BASE_DIR, 'resources', 'lgr.rng')
 
-# For the tools output
-TOOLS_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'output', 'tools')
-
-# For IDN review output
-IDN_REVIEW_USER_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'output', 'idn_review', 'user')
-IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'output', 'idn_review', 'icann')
-
 MAX_USER_IDN_REVIEW_INPUT = 20
 
 # Duration in second for which the tools output files are stored

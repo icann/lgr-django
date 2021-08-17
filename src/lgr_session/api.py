@@ -7,13 +7,13 @@ import logging
 import os
 from abc import abstractmethod, ABC
 from typing import Type
-from uuid import uuid4
 
-from django.core.files.storage import FileSystemStorage
+from django.core.files import File
 from django.http import Http404
 
 from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.utils import list_root_zones, clean_repertoire_cache
+from lgr_models.models.report import LGRReport
 
 logger = logging.getLogger(__name__)
 
@@ -38,110 +38,110 @@ class LGRSerializer(ABC):
         pass
 
 
-class LgrStorage:
-    storage_location: str = None
+class LGRStorage:
+    storage_model: Type[LGRReport] = None
 
-    def get_storage_path(self, subfolder=None):
-        """
-        Get the storage path for the session
+    def __init__(self, user, filter_on_user=True):
+        self.user = user
+        self.filter_on_user = filter_on_user
 
-        :param subfolder: a subfolder for the path
-        :return: the storage location
-        """
-        # get or create a key for storage in the session,
-        try:
-            storage_key = self.request.session['storage']
-        except KeyError:
-            # generate a random key
-            storage_key = uuid4().hex
-            self.request.session['storage'] = storage_key
-        # the storage may still not be created here but now it has a path for
-        #  this session
-        return os.path.join(self.storage_location, storage_key, subfolder or '')
+    def _get_queryset(self, report_id=None, filename=None, pk=None):
+        query_kwargs = {}
+        if self.filter_on_user:
+            query_kwargs['owner'] = self.user
+        if pk:
+            query_kwargs['pk'] = pk
+        if report_id:
+            query_kwargs['report_id'] = report_id
+        if filename:
+            # use get in case we sometime we have a file having the same ending as another file name, therefore we
+            # would get an error instead of removing both files with no intention
+            # For now this should never append the way report naming is
+            query_kwargs['file__endswith'] = filename
+        return self.storage_model.objects.filter(**query_kwargs).distinct()
 
-    def list_storage(self, subfolder=None, reverse=True):
-        """
-        List files in the storage
-
-        :param subfolder: a subfolder where to look for files
-        :return: the list of files in storage
-        """
-        subfolder = subfolder or '.'
-        storage = FileSystemStorage(location=self.get_storage_path())
-        try:
-            files = storage.listdir(subfolder)
-        except OSError:
-            return []
-
-        return sorted(files[1], reverse=reverse)
-
-    def list_storage_folders(self, subfolder=None):
+    def list_storage(self, report_id=None, reverse=True, exclude=None):
         """
         List files in the storage
 
-        :param subfolder: a subfolder where to look for files
         :return: the list of files in storage
         """
-        storage = FileSystemStorage(location=self.get_storage_path(subfolder=subfolder))
-        try:
-            files = storage.listdir('.')
-        except OSError:
-            return []
+        queryset = self._get_queryset(report_id=report_id)
+        if reverse:
+            queryset = queryset.reverse()
+        if exclude:
+            if not isinstance(exclude, (list, tuple)):
+                exclude = [exclude]
+            for ex in exclude:
+                queryset = queryset.exclude(**ex)
 
-        return sorted(files[0], reverse=True)
+        return queryset
 
-    def storage_get_file(self, filename, subfolder=None):
+    def storage_find_report_file(self, report_id, filename):
+        """
+        Find a file in the storage from its filename
+
+        :param report_id: The ID of the report containing the file
+        :param filename: The name of the file to be returned
+        :return: A 2-tuple containing the File object and the file size
+        """
+        return self._get_queryset(report_id=report_id, filename=filename).get()
+
+    def storage_get_report_file(self, report_pk):
         """
         Get a file in the storage
 
-        :param filename: The name of the file to be returned
-        :param subfolder: a subfolder where to get the file
+        :param report_pk: The report pk
         :return: A 2-tuple containing the File object and the file size
         """
-        storage = FileSystemStorage(location=self.get_storage_path(subfolder=subfolder))
-        return storage.open(filename, 'rb'), storage.size(filename)
+        return self._get_queryset(pk=report_pk).get()
 
-    def storage_save_file(self, filename, data, mode=0o440):
+    def storage_save_report_file(self, filename, data, report_id=None):
         """
         Save a file in the storage
 
-        :param filename: The name of the file to save
+        :param filename: The name of the file to save for the report
         :param data: The content of the file to save
-        :param mode: File permissions mode
+        :param report_id: The name of the report to save (defaults to filename without extension)
         """
-        storage = FileSystemStorage(location=self.get_storage_path(), file_permissions_mode=mode)
-        return storage.save(filename, data)
+        if not report_id:
+            report_id = os.path.splitext(os.path.basename(filename))[0]
+        obj = self.storage_model.objects.create(owner=self.user,
+                                                report_id=report_id,
+                                                file=File(data, name=filename))
+        return obj
 
-    def storage_delete_file(self, filename, subfolder=None):
+    def storage_delete_report(self, report_id):
         """
         Delete a file from the storage
 
-        :param subfolder: a subfolder where to delete the file
-        :param filename: The name of the file to delete
+        :param report_id: The ID of the report containing the file
         """
-        storage = FileSystemStorage(location=self.get_storage_path(subfolder=subfolder))
+        self._get_queryset(report_id=report_id).delete()
 
-        try:
-            # if filename is a directory:
-            #  - remove all directories in it
-            for f in self.list_storage_folders(subfolder=os.path.join(subfolder or '', filename)):
-                self.storage_delete_file(f, subfolder=os.path.join(subfolder or '', filename))
-            #  - remove all files in it
-            for f in self.list_storage(subfolder=os.path.join(subfolder or '', filename)):
-                self.storage_delete_file(f, subfolder=os.path.join(subfolder or '', filename))
-            storage.delete(filename)
-        except NotImplementedError:
-            # should not happen
-            pass
+    def storage_delete_report_file(self, report_pk):
+        """
+        Delete a file from the storage
+
+        :param report_pk: The report pk
+        """
+        self._get_queryset(pk=report_pk).delete()
+
+    def storage_can_read(self):
+        """
+        Check if user can read in storage.
+        """
+        return True
 
 
-class LGRSession(LgrStorage):
+class LGRSession(LGRStorage):
     lgr_session_key: str = None
     lgr_serializer: Type[LGRSerializer] = None
     get_from_repertoire: bool = False
     loader_function = None  # function with session as first argument and repertoire as second
 
     def __init__(self, request):
+        super(LGRSession, self).__init__(request.user)
         self.request = request
 
     def list_lgr(self, uid=None):

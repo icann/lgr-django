@@ -63,9 +63,7 @@ def evaluate_label_from_info(session,
                                          threshold_include_vars=threshold_include_vars,
                                          idna_encoder=udata.idna_encode_label)
         else:
-            storage_path = session.get_storage_path()
-            lgr_set_validate_label_task.delay(lgr_info.to_dict(), script_lgr_info.to_dict(), label_cplist, email,
-                                              storage_path)
+            lgr_set_validate_label_task.delay(lgr_info.to_dict(), script_lgr_info.to_dict(), label_cplist, email)
             ctx['launched_as_task'] = True
     else:
         if not need_async:
@@ -74,8 +72,7 @@ def evaluate_label_from_info(session,
                                  idna_encoder=udata.idna_encode_label,
                                  check_collisions=check_collisions)
         else:
-            storage_path = session.get_storage_path()
-            validate_label_task.delay(lgr_info.to_dict(), label_cplist, email, storage_path)
+            validate_label_task.delay(lgr_info.to_dict(), label_cplist, email)
             ctx['launched_as_task'] = True
 
     return ctx

@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
 
-from lgr_models.models import RzLgr, RzLgrMember
+from lgr_models.models.lgr import RzLgr, RzLgrMember
 from lgr_manage.forms import RzLgrCreateForm
 from lgr_manage.views.common import BaseListAdminView, BaseAdminView
 
