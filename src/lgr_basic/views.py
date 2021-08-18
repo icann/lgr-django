@@ -9,7 +9,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView
-
 from lgr.exceptions import LGRException
 from lgr.tools.utils import download_file, read_labels
 from lgr.utils import cp_to_ulabel
@@ -37,7 +36,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
 
         labels_cp = form.cleaned_data['labels']
         labels_file = form.cleaned_data.get('labels_file')
-        rz_lgr = form.cleaned_data['rz_lgr']
+        rz_lgr: RzLgr = form.cleaned_data['rz_lgr']
         ctx['lgr_pk'] = rz_lgr  # needed to download results as csv
         collisions = form.cleaned_data['collisions']
         email_address = self.request.user.email

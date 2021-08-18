@@ -23,7 +23,7 @@ CACHE_TIMEOUT = 3600*24*30
 
 
 def get_by_name(repertoire_name, with_unidb=False):
-    repertoire_cache_key = "{}{}".format(REPERTOIRE_CACHE_KEY, repertoire_name)
+    repertoire_cache_key = "{}{}".format(REPERTOIRE_CACHE_KEY, repertoire_name).replace(' ', '')
     repertoire = cache.get(repertoire_cache_key)
     logger.debug("Get repertoire by name %s", repertoire_name)
     if not repertoire:

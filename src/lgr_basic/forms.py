@@ -4,14 +4,14 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.utils import parse_label_input
-from lgr_advanced.lgr_editor.forms.fields import ROOT_ZONES, FILE_FIELD_ENCODING_HELP
-from lgr_advanced.lgr_editor.repertoires import get_by_name
+from lgr_advanced.lgr_editor.forms.fields import FILE_FIELD_ENCODING_HELP
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.unidb import get_db_by_version
+from lgr_models.models.lgr import RzLgr
 
 
 class ValidateLabelSimpleForm(forms.Form):
-    rz_lgr = forms.ChoiceField(label='', required=True, choices=ROOT_ZONES, initial=ROOT_ZONES[-1][0])
+    rz_lgr = forms.ModelChoiceField(queryset=RzLgr.objects.all(), empty_label=None)
     labels = forms.CharField(label='', required=False,
                              widget=forms.TextInput(attrs={'name': '',
                                                            'class': 'form-label form-control',
@@ -36,9 +36,8 @@ class ValidateLabelSimpleForm(forms.Form):
         return cleaned_data
 
     def clean_labels(self):
-        rz_lgr = self.cleaned_data['rz_lgr']
-        lgr = get_by_name(rz_lgr, with_unidb=True)
-        udata = get_db_by_version(lgr.metadata.unicode_version)
+        rz_lgr_object: RzLgr = self.cleaned_data['rz_lgr']
+        udata = get_db_by_version(rz_lgr_object.to_lgr().metadata.unicode_version)
 
         value = self.cleaned_data['labels']
         labels = list()

@@ -22,6 +22,7 @@ from lgr_advanced.lgr_editor.forms import CreateLGRForm, ImportLGRForm
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel, SetLgrModel, LgrSetInfo
 from lgr_advanced.views import LGRViewMixin
+from lgr_models.models.lgr import LgrBaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +134,7 @@ class ImportLGRView(LGRViewMixin, FormView):
 
         return super().form_valid(form)
 
-    def _handle_lgr_file(self, lgr_file, validating_repertoire, lgr_set_info, lgr_set):
+    def _handle_lgr_file(self, lgr_file, validating_repertoire: LgrBaseModel, lgr_set_info, lgr_set):
         lgr_name = lgr_file.name
         if not RE_SAFE_FILENAME.match(lgr_name):
             raise SuspiciousOperation()
@@ -154,15 +155,15 @@ class ImportLGRView(LGRViewMixin, FormView):
         try:
             if lgr_set_info:
                 lgr_object = SetLgrModel.objects.create(owner=self.request.user,
-                                                 name=lgr_name,
-                                                 file=lgr_file,
-                                                 validating_repertoire=validating_repertoire,
-                                                 common=lgr_set_info)
+                                                        name=lgr_name,
+                                                        file=lgr_file,
+                                                        validating_repertoire=validating_repertoire,
+                                                        common=lgr_set_info)
             else:
                 lgr_object = LgrModel.objects.create(owner=self.request.user,
-                                              name=lgr_name,
-                                              file=lgr_file,
-                                              validating_repertoire=validating_repertoire)
+                                                     name=lgr_name,
+                                                     file=lgr_file,
+                                                     validating_repertoire=validating_repertoire)
         except Exception as import_error:
             logger.exception("Input is not valid")
             raise ImportLGRView.LGRImportException(lgr_exception_to_text(import_error))
