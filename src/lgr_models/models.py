@@ -2,9 +2,12 @@
 import os
 
 from django.db import models
+from lgr.core import LGR
 
 from lgr.parser.xml_parser import XMLParser
 from lgr.utils import tag_to_language_script
+
+from lgr_advanced.api import LGRInfo
 
 
 def get_upload_path(instance, filename):
@@ -30,9 +33,19 @@ class LgrModel(models.Model):
     def filename(self):
         return os.path.basename(self.file.name)
 
+    def to_lgr_info(self) -> LGRInfo:
+        self.file.seek(0)
+        return LGRInfo.from_dict(
+            {
+                'name': self.name,
+                'xml': self.file.read(),
+                'validate': False
+            })
+
 
 class RzLgr(LgrModel):
-    pass
+    def __str__(self):
+        return u'{0}'.format(self.name)
 
 
 class RefLgr(LgrModel):
@@ -56,5 +69,3 @@ class RzLgrMember(LgrModel):
         lgr = lgr_parser.parse_document()
         self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
         super().save(force_insert=False, force_update=True, using=using, update_fields=['language', 'script'])
-
-

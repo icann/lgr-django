@@ -9,15 +9,15 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView
-
 from lgr.exceptions import LGRException
 from lgr.tools.utils import download_file, read_labels
 from lgr.utils import cp_to_ulabel
-from lgr_advanced.api import LGRInfo, LabelInfo, LGRToolSession
-from lgr_advanced.lgr_editor.repertoires import get_by_name
+
+from lgr_advanced.api import LabelInfo, LGRToolSession
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import evaluate_label_from_info, NeedAsyncProcess
+from lgr_models.models import RzLgr
 from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 from .forms import ValidateLabelSimpleForm
 
@@ -37,8 +37,8 @@ class BasicModeView(LoginRequiredMixin, FormView):
 
         labels_cp = form.cleaned_data['labels']
         labels_file = form.cleaned_data.get('labels_file')
-        rz_lgr = form.cleaned_data['rz_lgr']
-        ctx['lgr_id'] = rz_lgr  # needed to download results as csv
+        rz_lgr: RzLgr = form.cleaned_data['rz_lgr']
+        ctx['lgr_id'] = rz_lgr.filename  # needed to download results as csv
         collisions = form.cleaned_data['collisions']
         email_address = self.request.user.email
 
@@ -47,7 +47,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
         if collisions:
             tlds = download_file(settings.ICANN_TLDS)[1].read().lower()
             tld_json = LabelInfo.from_form('TLDs', tlds).to_dict()
-        lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr, with_unidb=True))
+        lgr_info = rz_lgr.to_lgr_info()
         lgr_info.update_xml()
         lgr_json = lgr_info.to_dict()
         storage_path = self.session.get_storage_path()

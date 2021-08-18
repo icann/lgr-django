@@ -3,10 +3,13 @@
 views.py - Views for the LGR renderer.
 """
 from __future__ import unicode_literals
+
+from django.http import Http404, HttpResponse
 from django.views.generic import TemplateView
 
 from lgr_advanced.lgr_renderer.api import generate_context
 from lgr_advanced.views import LGRViewMixin
+from lgr_models.models import RzLgr
 
 
 class LGRRendererView(LGRViewMixin, TemplateView):
@@ -29,3 +32,9 @@ class LGRRendererView(LGRViewMixin, TemplateView):
         if 'save' in self.request.GET:
             html_response['Content-Disposition'] = 'attachment; filename="{}.html"'.format(self.lgr_info.lgr)
         return html_response
+
+
+class LGRRendererDbView(LGRRendererView):
+    def get(self, request, *args, **kwargs):
+        self.lgr_info = RzLgr.objects.get(pk=kwargs['lgr_pk']).to_lgr_info()
+        return super(LGRRendererView, self).get(request, *args, **kwargs)
