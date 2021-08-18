@@ -9,6 +9,7 @@ from . import views
 register_converter(LgrSlugConverter, 'lgr')
 
 urlpatterns = [
+    path('<str:format>/<int:lgr_pk>', views.LGRRendererDbView.as_view(), name='lgr_render_from_db'),
     path('<lgr:lgr_id>', views.LGRRendererView.as_view(), kwargs={'lgr_set_id': None}, name='lgr_render'),
     path('<lgr:lgr_set_id>/<lgr:lgr_id>', views.LGRRendererView.as_view(), name='lgr_render'),
 ]

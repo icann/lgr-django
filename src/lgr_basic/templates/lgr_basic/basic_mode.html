@@ -217,12 +217,12 @@
         function changeRzValue() {
             const val = $('#id_rz_lgr').val();
 
-            let renderLink = `{% url 'lgr_render' 'NEWVALUESTUB' %}`;
-            renderLink = renderLink.replace('NEWVALUESTUB', val);
+            let renderLink = `{% url 'lgr_render_from_db' format='html' lgr_pk=0 %}`;
+            renderLink = renderLink.replace('0', val);
             $('#renderLink').attr('href', renderLink);
 
-            let xmlLink = `{% url 'view_lgr_xml' 'NEWVALUESTUB' %}`;
-            xmlLink = xmlLink.replace('NEWVALUESTUB', val);
+            let xmlLink = `{% url 'lgr_render_from_db' format='xml' lgr_pk=0 %}`;
+            xmlLink = xmlLink.replace('0', val);
             $('#xmlLink').attr('href', xmlLink);
         }
 

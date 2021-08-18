@@ -19,6 +19,7 @@ from django.views.generic import FormView
 from lgr_advanced.lgr_editor.forms import CreateLGRForm, ImportLGRForm
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.views import LGRViewMixin
+from lgr_models.models import RzLgr
 
 logger = logging.getLogger(__name__)
 
@@ -112,7 +113,7 @@ class ImportLGRView(LGRViewMixin, FormView):
 
         return super().form_valid(form)
 
-    def _handle_lgr_file(self, lgr_file, validating_repertoire, is_set, lgr_info_set):
+    def _handle_lgr_file(self, lgr_file, validating_repertoire: RzLgr, is_set, lgr_info_set):
         lgr_id = lgr_file.name
         if not RE_SAFE_FILENAME.match(lgr_id):
             raise SuspiciousOperation()
@@ -131,9 +132,10 @@ class ImportLGRView(LGRViewMixin, FormView):
                                                      "Please rename it before importing it."))
 
         try:
+            self.session.save_lgr(validating_repertoire.to_lgr_info(), validating_repertoire.name)
             lgr_info = self.session.open_lgr(lgr_id,
                                              lgr_file.read(),
-                                             validating_repertoire=validating_repertoire,
+                                             validating_repertoire=validating_repertoire.name,
                                              validate=True,
                                              from_set=is_set)
         except Exception as import_error:
