@@ -34,9 +34,9 @@
                     <ul>
                         {% for lgr in local_lgrs.list %}
                             <li>
-                                <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
-                                <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr confirm-prompt"
-                                   data-confirmation-prompt="{% blocktrans with lgr=lgr.name %}Are you sure you want to delete LGR {{ lgr }}?{% endblocktrans %}">
+                                <a href="{% url 'codepoint_list' lgr.pk %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
+                                <a href="{% url 'delete_lgr' lgr.pk %}" class="delete_lgr confirm-prompt"
+                                   data-confirmation-prompt="{% blocktrans with lgr_name=lgr.name %}Are you sure you want to delete LGR {{ lgr_name }}?{% endblocktrans %}">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
                             </li>
@@ -47,10 +47,10 @@
                     <ul>
                         {% for lgr in local_lgrs.list %}
                             <li>
-                                <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
+                                <a href="{% url 'codepoint_list' lgr.pk %}">{% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
                                 <a href="#{{lgr.name}}" data-toggle="collapse" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-th-list"></i>&nbsp;{% blocktrans %}View embedded LGRs{% endblocktrans %}</a>
-                                <a href="{% url 'delete_lgr' lgr.name %}" class="delete_lgr confirm-prompt"
-                                   data-confirmation-prompt="{% blocktrans with lgr=lgr.name %}Are you sure you want to delete LGR {{ lgr }}?{% endblocktrans %}">
+                                <a href="{% url 'delete_lgr' lgr.pk %}" class="delete_lgr confirm-prompt"
+                                   data-confirmation-prompt="{% blocktrans with lgr_name=lgr.name %}Are you sure you want to delete LGR {{ lgr_name }}?{% endblocktrans %}">
                                     <i class="glyphicon glyphicon-trash"></i>
                                 </a>
                             </li>
@@ -60,9 +60,9 @@
                                     <div id="{{lgr.name}}" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <ul>
-                                                {% for lgr_info in lgr.lgr_set_dct %}
+                                                {% for set_lgr in lgr.embedded_lgrs %}
                                                     <li>
-                                                        <a href="{% url 'codepoint_list' lgr.name lgr_info.name %}">{% blocktrans with lgr_name=lgr_info.name %}View {{ lgr_name }}{% endblocktrans %}</a>
+                                                        <a href="{% url 'codepoint_list_set' set_lgr.pk %}">{% blocktrans with lgr_name=set_lgr.name %}View {{ lgr_name }}{% endblocktrans %}</a>
                                                     </li>
                                                 {% endfor %}
                                             </ul>

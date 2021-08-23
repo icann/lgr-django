@@ -20,10 +20,6 @@ class FileNameConverter(BaseConverter):
     regex = r'[\w\_\-\.]+'
 
 
-class LgrSlugConverter(BaseConverter):
-    regex = r'[\w\_\-\.]+'
-
-
 class CodePointSlugConverter(BaseConverter):
     regex = r'[0-9a-z-A-Z]{1,6}(-[0-9a-z-A-Z]{1,6})*'
 

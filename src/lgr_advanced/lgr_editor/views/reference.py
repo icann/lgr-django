@@ -29,7 +29,7 @@ class ReferenceViewMixin:
             'ref_id': ref_id,
             'description': ref.get('value', ''),
             'comment': ref.get('comment', '')
-        } for (ref_id, ref) in self.lgr_info.lgr.reference_manager.items()]
+        } for (ref_id, ref) in self.lgr.reference_manager.items()]
 
         add_reference_form = None
         references_form = None
@@ -42,18 +42,11 @@ class ReferenceViewMixin:
         add_reference_form = add_reference_form or ReferenceForm(prefix='add_reference', ro_id=False)
         references_form = references_form or ReferenceFormSet(initial=references,
                                                               prefix='references',
-                                                              disabled=self.lgr_info.is_set or self.lgr_set_id is not None)
+                                                              disabled=self.is_set_or_in_set())
         ctx.update({
             'add_reference_form': add_reference_form,
             'references_form': references_form,
-            'lgr': self.lgr_info.lgr,
-            'lgr_id': self.lgr_id,
-            'is_set': self.lgr_info.is_set or self.lgr_set_id is not None
         })
-        if self.lgr_set_id:
-            lgr_set_info = self.session.select_lgr(self.lgr_set_id)
-            ctx['lgr_set'] = lgr_set_info.lgr
-            ctx['lgr_set_id'] = self.lgr_set_id
         return ctx
 
 
@@ -82,7 +75,7 @@ class AddReferenceView(LGREditMixin, ReferenceViewMixin, FormView):
         return 'add_reference'
 
     def get_success_url(self):
-        return reverse('references', kwargs={'lgr_id': self.lgr_id})
+        return reverse('references', kwargs={'lgr_pk': self.lgr_pk})
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -97,8 +90,8 @@ class AddReferenceView(LGREditMixin, ReferenceViewMixin, FormView):
             description = form.cleaned_data['description']
             url = form.cleaned_data['comment']
             try:
-                self.lgr_info.lgr.reference_manager.add_reference(description, url, ref_id=ref_id or None)
-                self.session.save_lgr(self.lgr_info)
+                self.lgr.reference_manager.add_reference(description, url, ref_id=ref_id or None)
+                self.update_lgr()
                 messages.success(self.request, _('New reference created'))
             except LGRException as ex:
                 messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
@@ -119,11 +112,11 @@ class EditReferenceView(LGREditMixin, ReferenceViewMixin, FormView):
         return 'references'
 
     def get_success_url(self):
-        return reverse('references', kwargs={'lgr_id': self.lgr_id})
+        return reverse('references', kwargs={'lgr_pk': self.lgr_pk})
 
     def form_valid(self, form):
         logger.debug('Edit reference')
-        reference_manager = self.lgr_info.lgr.reference_manager
+        reference_manager = self.lgr.reference_manager
         for ref_form in form:
             ref_id = ref_form.cleaned_data['ref_id']
             description = ref_form.cleaned_data['description']
@@ -132,7 +125,7 @@ class EditReferenceView(LGREditMixin, ReferenceViewMixin, FormView):
                 reference_manager.update_reference(ref_id,
                                                    value=description,
                                                    comment=comment)
-                self.session.save_lgr(self.lgr_info)
+                self.update_lgr()
             except LGRException as ex:
                 messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
                 # do nothing to redirect to myself (success url) to refresh display
@@ -154,7 +147,7 @@ class ListReferenceJsonView(LGRHandlingBaseMixin, View):
             'ref_id': ref_id,
             'description': ref.get('value', ''),
             'comment': ref.get('comment', '')
-        } for (ref_id, ref) in self.lgr_info.lgr.reference_manager.items()]
+        } for (ref_id, ref) in self.lgr.reference_manager.items()]
 
         return JsonResponse(references, charset='UTF-8', safe=False)
 
@@ -170,13 +163,13 @@ class AddReferenceAjaxView(LGREditMixin, FormView):
         description = form.cleaned_data['description']
         url = form.cleaned_data['comment']
         try:
-            self.lgr_info.lgr.reference_manager.add_reference(description, url, ref_id=ref_id)
-            self.session.save_lgr(self.lgr_info)
+            self.lgr.reference_manager.add_reference(description, url, ref_id=ref_id)
+            self.update_lgr()
             references = [{
                 'ref_id': ref_id,
                 'description': ref.get('value', ''),
                 'comment': ref.get('comment', '')
-            } for (ref_id, ref) in self.lgr_info.lgr.reference_manager.items()]
+            } for (ref_id, ref) in self.lgr.reference_manager.items()]
             rv = {'ok': True, 'data': references}
         except LGRException as ex:
             rv = {'ok': False, 'error': lgr_exception_to_text(ex)}
@@ -195,15 +188,12 @@ class DeleteReferenceView(LGREditMixin, View):
     def get(self, request, *args, **kwargs):
         ref_id = self.kwargs['ref_id']
         logger.debug("Delete reference %s'", ref_id)
-        lgr_info = self.session.select_lgr(self.lgr_id)
-        if lgr_info.is_set:
-            return HttpResponseBadRequest('Cannot edit LGR set')
 
         try:
-            lgr_info.lgr.del_reference(ref_id)
-            self.session.save_lgr(lgr_info)
+            self.lgr.del_reference(ref_id)
+            self.update_lgr()
         except LGRException as ex:
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        return redirect('references', lgr_id=self.lgr_id)
+        return redirect('references', lgr_pk=self.lgr_pk)

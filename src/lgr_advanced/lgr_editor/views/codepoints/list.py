@@ -7,7 +7,6 @@ import logging
 from io import StringIO
 
 from django.contrib import messages
-from django.core.cache import cache
 from django.http import Http404, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -26,11 +25,8 @@ from lgr_advanced.lgr_editor.utils import slug_to_cp, render_char
 from lgr_advanced.lgr_editor.views.codepoints.mixins import CodePointMixin
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_advanced.utils import (make_lgr_session_key,
-                                LGR_REPERTOIRE_CACHE_KEY,
-                                cp_to_slug,
-                                render_name,
-                                LGR_CACHE_TIMEOUT)
+from lgr_advanced.utils import (cp_to_slug,
+                                render_name)
 
 logger = logging.getLogger(__name__)
 
@@ -41,12 +37,12 @@ class CodePointsViewMixin:
         ctx = super().get_context_data(**kwargs)
 
         has_range = False
-        for char in self.lgr_info.lgr.repertoire.all_repertoire():
+        for char in self.lgr.repertoire.all_repertoire():
             if isinstance(char, RangeChar):
                 has_range = True
                 break
 
-        rule_names = (('', ''),) + tuple((v, v) for v in self.lgr_info.lgr.rules)
+        rule_names = (('', ''),) + tuple((v, v) for v in self.lgr.rules)
         cp_form = None
         edit_codepoints_form = None
         form = ctx.get('form')
@@ -59,19 +55,12 @@ class CodePointsViewMixin:
         edit_codepoints_form = edit_codepoints_form or EditCodepointsForm(prefix='edit_codepoints',
                                                                           rule_names=rule_names,
                                                                           tags=((v, v) for v in
-                                                                                self.lgr_info.lgr.all_tags()))
+                                                                                self.lgr.all_tags()))
         ctx.update({
             'cp_form': cp_form,
             'edit_codepoints_form': edit_codepoints_form,
-            'lgr': self.lgr_info.lgr,
-            'lgr_id': self.lgr_id,
-            'is_set': self.lgr_info.is_set or self.lgr_set_id is not None,
             'has_range': has_range,
         })
-        if self.lgr_set_id:
-            lgr_set_info = self.session.select_lgr(self.lgr_set_id)
-            ctx['lgr_set'] = lgr_set_info.lgr
-            ctx['lgr_set_id'] = self.lgr_set_id
         return ctx
 
 
@@ -100,7 +89,7 @@ class AddCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
         return 'add_cp'
 
     def get_success_url(self):
-        return reverse('codepoint_list', kwargs={'lgr_id': self.lgr_id})
+        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk})
 
     def form_valid(self, form):
         logger.debug("Add CP")
@@ -108,10 +97,10 @@ class AddCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
         cp_or_sequence = form.cleaned_data['codepoint']
         override_repertoire = form.cleaned_data['override_repertoire']
         try:
-            self.lgr_info.lgr.add_cp(cp_or_sequence,
-                                     validating_repertoire=self.lgr_info.validating_repertoire,
-                                     override_repertoire=override_repertoire)
-            self.session.save_lgr(self.lgr_info)
+            self.lgr.add_cp(cp_or_sequence,
+                            validating_repertoire=self.validating_repertoire,
+                            override_repertoire=override_repertoire)
+            self.update_lgr()
             messages.success(self.request, _('New code point %s added') % format_cp(cp_or_sequence))
         except LGRException as ex:
             messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
@@ -126,16 +115,16 @@ class EditCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
     template_name = 'lgr_editor/codepoint_list.html'
 
     def get_success_url(self):
-        return reverse('codepoint_list', kwargs={'lgr_id': self.lgr_id})
+        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk})
 
     def get_prefix(self):
         return 'edit_codepoints'
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        rule_names = (('', ''),) + tuple((v, v) for v in self.lgr_info.lgr.rules)
+        rule_names = (('', ''),) + tuple((v, v) for v in self.lgr.rules)
         kwargs['rule_names'] = rule_names
-        kwargs['tags'] = tuple((v, v) for v in self.lgr_info.lgr.all_tags())
+        kwargs['tags'] = tuple((v, v) for v in self.lgr.all_tags())
         return kwargs
 
     def form_valid(self, form):
@@ -147,58 +136,58 @@ class EditCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
         edited = cd['cp_id']
         invalid = []
         for cp in [slug_to_cp(c) for c in edited]:
-            char = self.lgr_info.lgr.get_char(cp)
+            char = self.lgr.get_char(cp)
             new_tags = char.tags + tags
 
             try:
                 if isinstance(char, RangeChar):
                     # Delete codepoint range from LGR, then add it
-                    self.lgr_info.lgr.del_range(char.first_cp, char.last_cp)
-                    self.lgr_info.lgr.add_range(char.first_cp,
-                                                char.last_cp,
-                                                comment=char.comment,
-                                                when=when or char.when, not_when=not_when or char.not_when,
-                                                ref=char.references,
-                                                tag=new_tags)
+                    self.lgr.del_range(char.first_cp, char.last_cp)
+                    self.lgr.add_range(char.first_cp,
+                                       char.last_cp,
+                                       comment=char.comment,
+                                       when=when or char.when, not_when=not_when or char.not_when,
+                                       ref=char.references,
+                                       tag=new_tags)
                 else:
                     # Delete codepoint from LGR, then add it + its variants
-                    self.lgr_info.lgr.del_cp(char.cp)
-                    self.lgr_info.lgr.add_cp(char.cp,
-                                             comment=char.comment,
-                                             ref=char.references,
-                                             tag=new_tags,
-                                             when=when or char.when, not_when=not_when or char.not_when)
+                    self.lgr.del_cp(char.cp)
+                    self.lgr.add_cp(char.cp,
+                                    comment=char.comment,
+                                    ref=char.references,
+                                    tag=new_tags,
+                                    when=when or char.when, not_when=not_when or char.not_when)
                     for variant in char.get_variants():
-                        self.lgr_info.lgr.add_variant(char.cp,
-                                                      variant.cp,
-                                                      variant_type=variant.type,
-                                                      when=variant.when, not_when=variant.not_when,
-                                                      comment=variant.comment, ref=variant.references)
+                        self.lgr.add_variant(char.cp,
+                                             variant.cp,
+                                             variant_type=variant.type,
+                                             when=variant.when, not_when=variant.not_when,
+                                             comment=variant.comment, ref=variant.references)
             except (LGRFormatException, CharInvalidContextRule) as e:
                 logger.warning('Cannot update char tags/wle:', exc_info=e)
                 invalid.append(char)
                 # Need to revert the deletion
                 if isinstance(char, RangeChar):
-                    self.lgr_info.lgr.add_range(char.first_cp,
-                                                char.last_cp,
-                                                comment=char.comment,
-                                                when=char.when, not_when=char.not_when,
-                                                ref=char.references,
-                                                tag=char.tags)
+                    self.lgr.add_range(char.first_cp,
+                                       char.last_cp,
+                                       comment=char.comment,
+                                       when=char.when, not_when=char.not_when,
+                                       ref=char.references,
+                                       tag=char.tags)
                 else:
-                    self.lgr_info.lgr.add_cp(char.cp,
-                                             comment=char.comment,
-                                             ref=char.references,
-                                             tag=char.tags,
-                                             when=char.when, not_when=char.not_when)
+                    self.lgr.add_cp(char.cp,
+                                    comment=char.comment,
+                                    ref=char.references,
+                                    tag=char.tags,
+                                    when=char.when, not_when=char.not_when)
                     for variant in char.get_variants():
-                        self.lgr_info.lgr.add_variant(char.cp,
-                                                      variant.cp,
-                                                      variant_type=variant.type,
-                                                      when=variant.when, not_when=variant.not_when,
-                                                      comment=variant.comment, ref=variant.references)
+                        self.lgr.add_variant(char.cp,
+                                             variant.cp,
+                                             variant_type=variant.type,
+                                             when=variant.when, not_when=variant.not_when,
+                                             comment=variant.comment, ref=variant.references)
 
-        self.session.save_lgr(self.lgr_info)
+        self.update_lgr()
         operation = _('Rule') if 'add-rules' in self.request.POST else _('Tag(s)')
         operation_lowercase = _('rule') if 'add-rules' in self.request.POST else _('tag(s)')
         if len(edited) - len(invalid):
@@ -220,25 +209,22 @@ class EditCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
 class ListCodePointsJsonView(LGRHandlingBaseMixin, View):
 
     def get(self, request, *args, **kwargs):
-        udata = unidb.manager.get_db_by_version(self.lgr_info.lgr.metadata.unicode_version)
+        udata = unidb.manager.get_db_by_version(self.lgr.metadata.unicode_version)
 
-        repertoire_cache_key = make_lgr_session_key(LGR_REPERTOIRE_CACHE_KEY,
-                                                    request,
-                                                    self.lgr_id)
-        repertoire = cache.get(repertoire_cache_key)
+        repertoire = self.lgr_object.get_repertoire_cache()
         if repertoire is None:
             # Generate repertoire
             repertoire = []
-            for char in self.lgr_info.lgr.repertoire:
+            for char in self.lgr.repertoire:
                 cp_slug = cp_to_slug(char.cp)
-                kwargs = {'lgr_id': self.lgr_id, 'codepoint_id': cp_slug}
-                if self.lgr_set_id is not None:
-                    kwargs['lgr_set_id'] = self.lgr_set_id
+                kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug}
                 cp_view_url = reverse('codepoint_view', kwargs=kwargs)
+                if self.lgr_is_in_set:
+                    cp_view_url = reverse('codepoint_view_set', kwargs=kwargs)
                 actions = [cp_view_url]
                 is_range = isinstance(char, RangeChar)
                 if is_range:
-                    expand_url = reverse('expand_range', kwargs={'lgr_id': self.lgr_id,
+                    expand_url = reverse('expand_range', kwargs={'lgr_pk': self.lgr_pk,
                                                                  'codepoint_id': cp_slug})
                     actions.append(expand_url)
 
@@ -252,7 +238,7 @@ class ListCodePointsJsonView(LGRHandlingBaseMixin, View):
                     'is_range': is_range,
                     'actions': actions
                 })
-            cache.set(repertoire_cache_key, repertoire, LGR_CACHE_TIMEOUT)
+            self.lgr_object.set_repertoire_cache(repertoire)
 
         response = {'data': repertoire}
 
@@ -267,12 +253,12 @@ class ExpandRangesView(LGREditMixin, RedirectView):
 
     def get(self, request, *args, **kwargs):
         try:
-            self.lgr_info.lgr.expand_ranges()
+            self.lgr.expand_ranges()
         except LGRException as ex:
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        self.session.save_lgr(self.lgr_info)
+        self.update_lgr()
         return super().get(request, *args, **kwargs)
 
 
@@ -282,34 +268,32 @@ class ExpandRangeView(LGREditMixin, CodePointMixin, View):
     """
 
     def get(self, request, *args, **kwargs):
-        char = self.lgr_info.lgr.get_char(self.codepoint)
+        char = self.lgr.get_char(self.codepoint)
 
         if not isinstance(char, RangeChar):
             logger.error("Cannot expand non-range code point")
-            return redirect('codepoint_list', lgr_id=self.lgr_id)
+            return redirect('codepoint_list', lgr_pk=self.lgr_pk)
 
         try:
-            self.lgr_info.lgr.expand_range(char.first_cp, char.last_cp)
+            self.lgr.expand_range(char.first_cp, char.last_cp)
         except LGRException as ex:
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        self.session.save_lgr(self.lgr_info)
-        return redirect('codepoint_list', lgr_id=self.lgr_id)
+        self.update_lgr()
+        return redirect('codepoint_list', lgr_pk=self.lgr_pk)
 
 
-class PopulateVariantsView(LGRHandlingBaseMixin, RedirectView):
+class PopulateVariantsView(LGREditMixin, RedirectView):
     """
     Automatically populate variants to achieve transitivity and symmetry.
     """
     pattern_name = 'codepoint_list'
 
     def get(self, request, *args, **kwargs):
-        lgr = self.lgr_info.lgr
-
         if 'test' in request.GET:
             return JsonResponse({
-                'result': check_symmetry(lgr, None)[0] and check_transitivity(lgr, None)[0]
+                'result': check_symmetry(self.lgr, None)[0] and check_transitivity(self.lgr, None)[0]
             })
 
         log_output = StringIO()
@@ -321,10 +305,10 @@ class PopulateVariantsView(LGRHandlingBaseMixin, RedirectView):
         # reset its level
         populate_logger.addHandler(ch)
         populate_logger.setLevel('INFO')
-        lgr.populate_variants()
+        self.lgr.populate_variants()
         messages.add_message(request, messages.INFO, log_output.getvalue())
         messages.add_message(request, messages.SUCCESS, _("Variants populated"))
         populate_logger.removeHandler(ch)
         log_output.close()
-        self.session.save_lgr(self.lgr_info)
+        self.update_lgr()
         return super().get(request, *args, **kwargs)

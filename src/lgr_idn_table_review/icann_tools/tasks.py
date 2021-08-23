@@ -24,27 +24,17 @@ from lgr_idn_table_review.icann_tools.api import (get_icann_idn_repository_table
                                                   get_reference_lgr,
                                                   IANA_IDN_TABLES,
                                                   NoRefLgrFound)
-from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport
-from lgr_idn_table_review.idn_tool.api import IdnTableInfo
-from lgr_models.models.lgr import RefLgr, RzLgrMember
+from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport, IANAIdnTable
 from lgr_session.api import LGRStorage
 
 logger = logging.getLogger(__name__)
 
 
-def _review_idn_table(context: Dict, idn_table_info, absolute_url):
-    ref_lgr = get_reference_lgr(idn_table_info)
-    ref_lgr_info = IdnTableInfo.from_dict({
-        'name': ref_lgr.name,
-        'data': ref_lgr.file.read().decode('utf-8'),
-    })
+def _review_idn_table(context: Dict, idn_table: IANAIdnTable, absolute_url):
+    ref_lgr = get_reference_lgr(idn_table)
     context['ref_lgr'] = ref_lgr.name  # TODO put TLD/tag/version here instead of ref_lgr
-    if isinstance(ref_lgr, RefLgr):
-        context['ref_lgr_url'] = absolute_url + reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': ref_lgr.pk})
-    elif isinstance(ref_lgr, RzLgrMember):
-        context['ref_lgr_url'] = absolute_url + reverse('lgr_idn_admin_display_rz_lgr_member',
-                                                        kwargs={'rz_lgr_id': ref_lgr.rz_lgr.pk, 'lgr_id': ref_lgr.pk})
-    context.update(review_lgr(idn_table_info.lgr, ref_lgr_info.lgr))
+    context['ref_lgr_url'] = absolute_url + ref_lgr.dl_url()
+    context.update(review_lgr(idn_table.to_lgr(), ref_lgr.to_lgr()))
     return ref_lgr.name
 
 
@@ -53,16 +43,16 @@ def _json_date_converter(k):
         return k.__str__()
 
 
-def _create_review_report(idn_table_info, absolute_url, lgr_storage, report_id):
+def _create_review_report(idn_table: IANAIdnTable, absolute_url, lgr_storage, report_id):
     html_report = ''
     context = {
-        'idn_table': idn_table_info.name,
-        'idn_table_url': f'{IANA_IDN_TABLES}/tables/{idn_table_info.name}'
+        'idn_table': idn_table.name,
+        'idn_table_url': f'{IANA_IDN_TABLES}/tables/{idn_table.filename}'
     }
     flag = None
     ref_lgr_name = None
     try:
-        ref_lgr_name = _review_idn_table(context, idn_table_info, absolute_url)
+        ref_lgr_name = _review_idn_table(context, idn_table, absolute_url)
     except NoRefLgrFound as exc:
         logger.exception('Failed to get a reference LGR')
         context['reason'] = f'No Reference LGR was found to compare with IDN table:\n{exc.message}'
@@ -82,7 +72,7 @@ def _create_review_report(idn_table_info, absolute_url, lgr_storage, report_id):
                 break
     finally:
         if settings.DEBUG:
-            json_name = f'{os.path.splitext(idn_table_info.name)[0]}.json'
+            json_name = f'{os.path.splitext(idn_table.name)[0]}.json'
             json_data = StringIO()
             json.dump(context, json_data, default=_json_date_converter, indent=2)
             lgr_storage.storage_save_report_file(os.path.join('json', json_name), json_data, report_id=report_id)
@@ -111,15 +101,16 @@ def idn_table_review_task(absolute_url, email_address):
     today = time.strftime('%Y-%m-%d')
     with TemporaryFile() as f:
         with ZipFile(f, mode='w', compression=ZIP_DEFLATED) as zf:
-            for tlds, idn_table_info in get_icann_idn_repository_tables():
+            for tlds, idn_table in get_icann_idn_repository_tables():
                 count += len(tlds)
-                html_report, ref_lgr_name, flag = _create_review_report(idn_table_info, absolute_url,
+                html_report, ref_lgr_name, flag = _create_review_report(idn_table, absolute_url,
                                                                         lgr_storage, report_id)
                 for tld in tlds:
+                    lgr = idn_table.to_lgr()
                     tld_a_label = udata.idna_encode_label(tld)
                     # need to save a version per tld, processed and count will reflect that as well
-                    lang = idn_table_info.lgr.metadata.languages[0]
-                    version = idn_table_info.lgr.metadata.version.value
+                    lang = lgr.metadata.languages[0]
+                    version = lgr.metadata.version.value
                     filename = f"{tld_a_label.upper()}.{lang}.{version}.{today}.html"
                     report = lgr_storage.storage_save_report_file(filename, StringIO(html_report), report_id=report_id)
                     url = absolute_url + reverse('download_report', kwargs={
@@ -128,7 +119,7 @@ def idn_table_review_task(absolute_url, email_address):
                     }) + '?display=true'
                     if flag is not None:
                         processed.append({
-                            'name': f"{tld.upper()}.{lang}.{version}.{flag}.{idn_table_info.name}.{ref_lgr_name}",
+                            'name': f"{tld.upper()}.{lang}.{version}.{flag}.{idn_table.name}.{ref_lgr_name}",
                             'url': url
                         })
                     else:

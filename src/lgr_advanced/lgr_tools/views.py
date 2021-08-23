@@ -15,6 +15,7 @@ from lgr_advanced.lgr_tools.forms import (LGRCompareSelector,
                                           LGRCrossScriptVariantsSelector,
                                           LGRHarmonizeSelector,
                                           LGRComputeVariantsSelector)
+from lgr_models.models.lgr import LgrBaseModel, RzLgr
 from .tasks import (diff_task,
                     collision_task,
                     annotate_task,
@@ -22,6 +23,7 @@ from .tasks import (diff_task,
                     cross_script_variants_task,
                     validate_labels_task)
 from ..api import LabelInfo
+from ..models import LgrModel, SetLgrModel
 from ..utils import cp_to_slug
 from ..views import LGRViewMixin
 
@@ -32,71 +34,35 @@ class LGRToolBaseView(LGRViewMixin, FormView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.lgr_id = self.kwargs.get('lgr_id')
-        self.lgr_info = None
-        if self.lgr_id:
-            self.lgr_info = self.session.select_lgr(self.lgr_id)
-        self.action = None
+        self.lgr_pk = self.kwargs.get('lgr_pk')
         self.email_address = request.user.email
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['session_lgrs'] = self.session.list_lgr()
+        kwargs['user'] = self.request.user
         return kwargs
 
     def get_initial(self):
         initial = super().get_initial()
-        initial[self.initial_field] = self.lgr_id or ''
+        initial[self.initial_field] = self.lgr_pk or ''
         return initial
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx.update({
-            'lgr_id': self.lgr_id or '',
-            'lgr': self.lgr_info.lgr if self.lgr_info else '',
-            'is_set': self.lgr_info.is_set if self.lgr_info else '',
             'email': self.email_address,
         })
         return ctx
 
-    def get_async_method(self, lgr_info):
+    def get_async_method(self, lgr_object: LgrBaseModel):
         return self.async_method
 
-    def call_async(self, lgr_info, *args, **kwargs):
-        if not self.async_method:
+    def call_async(self, selected_lgr_object: LgrBaseModel, *args, **kwargs):
+        method = self.get_async_method(selected_lgr_object)
+        if not method:
             raise RuntimeError
 
-        method = self.get_async_method(lgr_info)
-
-        method.delay(lgr_info.to_dict(), *args, **kwargs, email_address=self.email_address)
-
-
-class LGRToolBaseSetCompatibleView(LGRToolBaseView):
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['session_lgrs'] = self.session.list_lgr()
-
-        # Retrieve complete list of all scripts defined in all sets
-        lgr_scripts = set()
-        for lgr_dct in self.session.list_lgr():
-            if lgr_dct['is_set']:
-                lgr_set = [l['name'] for l in lgr_dct['lgr_set_dct']]
-                scripts = []
-                for lgr_name in lgr_set:
-                    lgr_info = self.session.select_lgr(lgr_name, lgr_dct['name'])
-                    try:
-                        scripts.append((lgr_info.name, lgr_info.lgr.metadata.languages[0]))
-                    except (AttributeError, IndexError):
-                        pass
-                lgr_scripts |= set(scripts)
-        kwargs['scripts'] = list(lgr_scripts)
-        return kwargs
-
-    def get_initial(self):
-        initial = super().get_initial()
-        initial[self.initial_field] = self.lgr_id or ''
-        return initial
+        method.delay(self.request.user.pk, selected_lgr_object.pk, *args, **kwargs)
 
 
 class LGRCompareView(LGRToolBaseView):
@@ -105,21 +71,22 @@ class LGRCompareView(LGRToolBaseView):
     initial_field = 'lgr_1'
 
     def get_success_url(self):
-        return reverse('codepoint_list', kwargs={'lgr_id': self.lgr_id})
+        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk})
 
     def form_valid(self, form):
-        lgr_id_1 = form.cleaned_data['lgr_1']
-        lgr_id_2 = form.cleaned_data['lgr_2']
-        self.action = form.cleaned_data['action']
+        lgr_pk_1, lgr_pk_2 = (form.cleaned_data[lgr_id] for lgr_id in ('lgr_1', 'lgr_2'))
+        action = form.cleaned_data['action']
 
-        lgr_info_1 = self.session.select_lgr(lgr_id_1)
-        lgr_info_2 = self.session.select_lgr(lgr_id_2)
+        lgr_object_1, lgr_object_2 = (LgrModel.objects.get(owner=self.request.user, pk=pk)
+                                      for pk in (lgr_pk_1, lgr_pk_2))
 
-        if self.action in ['INTERSECTION', 'UNION']:
+        if action in ['INTERSECTION', 'UNION']:
             try:
-                self.lgr_id = lgr_intersect_union(self.session,
-                                                  lgr_info_1, lgr_info_2,
-                                                  self.action)
+                lgr_object = lgr_intersect_union(self.request.user,
+                                                 lgr_object_1.to_lgr(),
+                                                 lgr_object_2.to_lgr(),
+                                                 action)
+                self.lgr_pk = lgr_object.pk
             except LGRCompInvalidException as lgr_xml:
                 from io import BytesIO
                 from gzip import GzipFile
@@ -127,31 +94,31 @@ class LGRCompareView(LGRToolBaseView):
 
                 sio = BytesIO()
                 base_filename = '{comp_type}-of-{lgr1}-and-{lgr2}-{date}.xml'.format(
-                    comp_type=self.action.lower(),
-                    lgr1=lgr_info_1.name,
-                    lgr2=lgr_info_2.name,
+                    comp_type=action.lower(),
+                    lgr1=lgr_object_1.name,
+                    lgr2=lgr_object_2.name,
                     date=strftime('%Y%m%d_%H%M%S'))
                 with GzipFile(filename=base_filename, fileobj=sio, mode='w') as gzf:
                     gzf.write(lgr_xml.content)
 
-                report = self.session.storage_save_report_file(f'{base_filename}.gz', sio)
+                report = self.storage.storage_save_report_file(f'{base_filename}.gz', sio)
                 ctx = self.get_context_data()
                 ctx.update({
-                    'lgr_1': lgr_info_1,
-                    'lgr_2': lgr_info_2,
+                    'lgr_object_1': lgr_object_1,
+                    'lgr_object_2': lgr_object_2,
                     'report': report,
-                    'comp_type': self.action.lower(),
+                    'comp_type': action.lower(),
                     'error': lgr_xml.error
                 })
                 return render(self.request, 'lgr_tools/comp_invalid.html',
                               context=ctx)
         else:
-            content = lgr_comp_diff(lgr_info_1, lgr_info_2, form.cleaned_data['full_dump'])
+            content = lgr_comp_diff(lgr_object_1, lgr_object_2, form.cleaned_data['full_dump'])
             ctx = self.get_context_data()
             ctx.update({
                 'content': content,
-                'lgr_1': lgr_info_1,
-                'lgr_2': lgr_info_2,
+                'lgr_object_1': lgr_object_1,
+                'lgr_object_2': lgr_object_2,
             })
             return render(self.request, 'lgr_tools/comp_diff.html', context=ctx)
 
@@ -164,26 +131,24 @@ class LGRDiffView(LGRToolBaseView):
     async_method = diff_task
 
     def form_valid(self, form):
-        lgr_id_1 = form.cleaned_data['lgr_1']
-        lgr_id_2 = form.cleaned_data['lgr_2']
+        lgr_pk_1, lgr_pk_2 = (form.cleaned_data[lgr_id] for lgr_id in ('lgr_1', 'lgr_2'))
         labels_file = form.cleaned_data['labels']
         collision = form.cleaned_data['collision']
         full_dump = form.cleaned_data['full_dump']
         with_rules = form.cleaned_data['with_rules']
 
-        lgr_info_1 = self.session.select_lgr(lgr_id_1)
-        lgr_info_2 = self.session.select_lgr(lgr_id_2)
+        lgr_object_1, lgr_object_2 = (LgrModel.objects.get(owner=self.request.user, pk=pk)
+                                      for pk in (lgr_pk_1, lgr_pk_2))
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
                                           labels_file.read()).to_dict()
-        lgr_2_json = lgr_info_2.to_dict()
-        self.call_async(lgr_info_1, lgr_2_json, labels_json, collision, full_dump, with_rules)
+        self.call_async(lgr_object_1, lgr_object_2.pk, labels_json, collision, full_dump, with_rules)
 
         ctx = self.get_context_data()
         ctx.update({
-            'lgr_1': lgr_info_1,
-            'lgr_2': lgr_info_2,
+            'lgr_object_1': lgr_object_1,
+            'lgr_object_2': lgr_object_2,
             'labels_file': labels_file.name,
         })
         return render(self.request, 'lgr_tools/wait_diff.html', context=ctx)
@@ -195,13 +160,13 @@ class LGRCollisionView(LGRToolBaseView):
     async_method = collision_task
 
     def form_valid(self, form):
-        lgr_id = form.cleaned_data['lgr']
+        lgr_pk = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
         full_dump = form.cleaned_data['full_dump']
         with_rules = form.cleaned_data['with_rules']
         with_tlds = False
 
-        lgr_info = self.session.select_lgr(lgr_id)
+        lgr_object = LgrModel.objects.get(owner=self.request.user, pk=lgr_pk)
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
@@ -209,11 +174,11 @@ class LGRCollisionView(LGRToolBaseView):
         if form.cleaned_data['download_tlds']:
             tlds_json = LabelInfo.from_form('TLDs', download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
             with_tlds = True
-        self.call_async(lgr_info, labels_json, tlds_json, full_dump, with_rules)
+        self.call_async(lgr_object, labels_json, tlds_json, full_dump, with_rules)
 
         ctx = self.get_context_data()
         ctx.update({
-            'lgr_info': lgr_info,
+            'lgr_object': lgr_object,
             'labels_file': labels_file.name,
             'icann_tlds': settings.ICANN_TLDS,
             'with_tlds': with_tlds,
@@ -221,82 +186,80 @@ class LGRCollisionView(LGRToolBaseView):
         return render(self.request, 'lgr_tools/wait_coll.html', context=ctx)
 
 
-class LGRAnnotateView(LGRToolBaseSetCompatibleView):
+class LGRAnnotateView(LGRToolBaseView):
     form_class = LGRAnnotateSelector
     template_name = 'lgr_tools/annotate.html'
 
-    def get_initial(self):
-        initial = super().get_initial()
-        if self.lgr_info and self.lgr_info.set_labels_info:
-            initial['set_labels'] = self.lgr_info.set_labels_info
-        return initial
-    
-    def get_async_method(self, lgr_info):
-        if lgr_info.is_set:
+    def get_async_method(self, lgr_object: LgrModel):
+        if lgr_object.is_set():
             return lgr_set_annotate_task
         return annotate_task
 
     def form_valid(self, form):
         ctx = self.get_context_data()
-        lgr_id = form.cleaned_data['lgr']
+        lgr_pk = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
 
-        lgr_info = self.session.select_lgr(lgr_id)
+        lgr_object = LgrModel.objects.get(owner=self.request.user, pk=lgr_pk)
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
                                           labels_file.read()).to_dict()
-        if lgr_info.is_set:
+        async_kwargs = {'labels_json': labels_json}
+
+        if lgr_object.is_set():
             set_labels_file = form.cleaned_data['set_labels']
-            if set_labels_file is not None:
+            if not set_labels_file:
+                set_labels_info = LabelInfo(name='None', labels=[])
+            else:
                 # Handle label set
-                if lgr_info.set_labels_info is None or lgr_info.set_labels_info.name != set_labels_file.name:
-                    lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
-                                                                   set_labels_file.read())
+                set_labels_info = LabelInfo.from_form(set_labels_file.name,
+                                                      set_labels_file.read())
+            async_kwargs['set_labels_json'] = set_labels_info.to_dict()
 
-        async_kwargs = {}
-        if lgr_info.is_set:
-            script_lgr_id = form.cleaned_data['script']
-            script_lgr_info = self.session.select_lgr(script_lgr_id, lgr_set_id=lgr_id)
+        if lgr_object.is_set():
+            script_lgr_pk = form.cleaned_data['script']
+            ctx['script_lgr_pk'] = script_lgr_pk
+            async_kwargs['script_lgr_pk'] = script_lgr_pk
 
-            script_lgr_json = script_lgr_info.to_dict()
-            ctx['script'] = script_lgr_id
-            async_kwargs = {'script_lgr_json': script_lgr_json}
-
-        self.call_async(lgr_info, labels_json, **async_kwargs)
+        self.call_async(lgr_object, **async_kwargs)
 
         ctx.update({
-            'lgr_info': lgr_info,
+            'lgr_object': lgr_object,
             'labels_file': labels_file.name,
         })
         return render(self.request, 'lgr_tools/wait_annotate.html', context=ctx)
 
 
-class LGRCrossScriptVariantsView(LGRToolBaseSetCompatibleView):
+class LGRCrossScriptVariantsView(LGRToolBaseView):
     form_class = LGRCrossScriptVariantsSelector
     template_name = 'lgr_tools/cross_script_variants.html'
     async_method = cross_script_variants_task
 
     def form_valid(self, form):
         ctx = self.get_context_data()
-        lgr_id = form.cleaned_data['lgr']
+        lgr_pk = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
+        in_set = False
 
-        lgr_info = self.session.select_lgr(lgr_id)
+        lgr_object = LgrModel.objects.get(owner=self.request.user, pk=lgr_pk)
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
                                           labels_file.read()).to_dict()
 
-        if lgr_info.is_set:
-            script_lgr_id = form.cleaned_data['script']
-            script_lgr = self.session.select_lgr(script_lgr_id, lgr_set_id=lgr_id)
-            lgr_info = script_lgr
+        if lgr_object.is_set():
+            in_set = True
+            script_lgr_pk = form.cleaned_data['script']
+            script_lgr_object = SetLgrModel.objects.get(owner=self.request.user,
+                                                        pk=script_lgr_pk)
+            lgr_object = script_lgr_object
 
-        cross_script_variants_task.delay(lgr_info.to_dict(), labels_json)
+        self.call_async(lgr_object, in_set, labels_json)
 
         ctx.update({
-            'lgr_info': lgr_info,
+            'lgr_object': lgr_object,
+            'in_set': in_set,
             'labels_file': labels_file.name,
         })
         return render(self.request, 'lgr_tools/wait_cross_scripts.html', context=ctx)
@@ -314,21 +277,25 @@ class LGRHarmonizeView(LGRToolBaseView):
 
     def form_valid(self, form):
         ctx = self.get_context_data()
-        lgr_1_id, lgr_2_id = form.cleaned_data['lgr_1'], form.cleaned_data['lgr_2']
-        rz_lgr_id = form.cleaned_data['rz_lgr'] or None
+        lgr_pk_1, lgr_pk_2, rz_lgr_pk = (form.cleaned_data[lgr_id] for lgr_id in ('lgr_1', 'lgr_2', 'rz_lgr'))
 
-        lgr_1_info, lgr_2_info = (self.session.select_lgr(l) for l in (lgr_1_id, lgr_2_id))
-        rz_lgr = self.session.select_lgr(rz_lgr_id).lgr if rz_lgr_id is not None else None
+        lgr_object_1, lgr_object_2 = (LgrModel.objects.get(owner=self.request.user, pk=pk)
+                                      for pk in (lgr_pk_1, lgr_pk_2))
+        rz_lgr_object = RzLgr.objects.get(pk=rz_lgr_pk) if rz_lgr_pk else None
 
-        h_lgr_1_id, h_lgr_2_id, cp_review = lgr_harmonization(self.session, lgr_1_info.lgr, lgr_2_info.lgr, rz_lgr)
+        h_lgr_1_object, h_lgr_2_object, cp_review = lgr_harmonization(self.request.user,
+                                                                      lgr_object_1,
+                                                                      lgr_object_2,
+                                                                      rz_lgr_object)
 
         ctx.update({
-            'lgr_1': lgr_1_info,
-            'lgr_2': lgr_2_info,
-            'h_lgr_1_id': h_lgr_1_id,
-            'h_lgr_2_id': h_lgr_2_id,
-            'cp_review': ((h_lgr_1_id, ((c, cp_to_slug(c)) for c in cp_review[0])),
-                          (h_lgr_2_id, ((c, cp_to_slug(c)) for c in cp_review[1]))),
+            'lgr_object_1': lgr_object_1,
+            'lgr_object_2': lgr_object_2,
+            'h_lgr_object_1': h_lgr_1_object,
+            'h_lgr_object_2': h_lgr_2_object,
+            # TODO remove cp_review as not used anymore: from here and harmonization method
+            'cp_review': ((h_lgr_1_object.pk, ((c, cp_to_slug(c)) for c in cp_review[0])),
+                          (h_lgr_2_object.pk, ((c, cp_to_slug(c)) for c in cp_review[1]))),
             'has_cp_review': bool(cp_review[0]) or bool(cp_review[1])
         })
         return render(self.request, 'lgr_tools/harmonization_result.html', context=ctx)
@@ -340,18 +307,18 @@ class LGRComputeVariants(LGRToolBaseView):
     async_method = validate_labels_task
 
     def form_valid(self, form):
-        lgr_id = form.cleaned_data['lgr']
+        lgr_pk = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
 
-        lgr_info = self.session.select_lgr(lgr_id)
+        lgr_object = LgrModel.objects.get(owner=self.request.user, pk=lgr_pk)
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
-        self.call_async(lgr_info, labels_json)
+        self.call_async(lgr_object, labels_json)
 
         ctx = self.get_context_data()
         ctx.update({
-            'lgr_info': lgr_info,
+            'lgr_object': lgr_object,
             'labels_file': labels_file.name,
         })
         return render(self.request, 'lgr_tools/wait_variants.html', context=ctx)

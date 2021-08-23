@@ -16,6 +16,7 @@ from natsort import natsorted
 
 from lgr.char import RangeChar
 from lgr.utils import cp_to_str
+from lgr_models.models.lgr import LgrBaseModel
 
 logger = logging.getLogger('utils')
 
@@ -108,15 +109,13 @@ def list_built_in_lgr():
     return list_files(settings.LGR_STORAGE_LOCATION, reverse=False)
 
 
-def make_lgr_session_key(key, request, lgr_id, uid=None):
-    key = "{}:{}:{}".format(key, request.session.session_key, lgr_id)
-    if uid:
-        key += ':{}'.format(uid)
+def make_lgr_session_key(key, lgr: LgrBaseModel):
+    key = f"{key}:{lgr.__class__.__name__}:{lgr.pk}"
     args = hashlib.md5(force_bytes(key))
     return "{}.{}".format(LGR_CACHE_KEY_PREFIX, args.hexdigest())
 
 
-def clean_repertoire_cache(request, lgr_id, uid=None):
+def clean_repertoire_cache(request, lgr_pk):
     """
     Clean all repertoire-related caches.
 
@@ -126,5 +125,5 @@ def clean_repertoire_cache(request, lgr_id, uid=None):
     """
     cache.delete(make_lgr_session_key(LGR_REPERTOIRE_CACHE_KEY,
                                       request,
-                                      lgr_id, uid=uid))
+                                      lgr_pk))
 

@@ -20,11 +20,11 @@
     {% if not is_set %}
         <div class="text-right" id="add-codepoint">
             <div id="populate-button" style="display: none">
-                {% url 'populate_variants' lgr_id=lgr_id as populate_variants_url %}
+                {% url 'populate_variants' lgr_pk=lgr_pk as populate_variants_url %}
                 <a href="{{ populate_variants_url }}" class="btn btn-primary" title="Populate the symmetric and transitive variants"> {% trans "Populate variants" %}</a>
             </div>
             {% if has_range %}
-                {% url 'expand_ranges' lgr_id=lgr_id as expand_ranges_url %}
+                {% url 'expand_ranges' lgr_pk=lgr_pk as expand_ranges_url %}
                 <a href="{{ expand_ranges_url }}" class="btn btn-primary" title="Expand all ranges" >{% trans "Expand range(s)" %}</a>
             {% endif %}
             <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#add-codepoint-modal">{% trans "Add code point(s)" %}</a>
@@ -138,13 +138,13 @@
                             </form>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="addrange">
-                            <iframe id="range-iframe" data-url="{% url 'add_range' lgr_id %}" src="{% url 'add_range' lgr_id %}" frameborder="0" width="100%"></iframe>
+                            <iframe id="range-iframe" data-url="{% url 'add_range' lgr_pk %}" src="{% url 'add_range' lgr_pk %}" frameborder="0" width="100%"></iframe>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="addfromscript">
-                            <iframe id="from-script-iframe" data-url="{% url 'add_from_script' lgr_id %}" src="{% url 'add_from_script' lgr_id %}" frameborder="0" width="100%" style="height: 400px;"></iframe>
+                            <iframe id="from-script-iframe" data-url="{% url 'add_from_script' lgr_pk %}" src="{% url 'add_from_script' lgr_pk %}" frameborder="0" width="100%" style="height: 400px;"></iframe>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="import">
-                            <iframe id="import-file-iframe" data-url="{% url 'import_from_file' lgr_id %}" src="{% url 'import_from_file' lgr_id %}" frameborder="0" width="100%"></iframe>
+                            <iframe id="import-file-iframe" data-url="{% url 'import_from_file' lgr_pk %}" src="{% url 'import_from_file' lgr_pk %}" frameborder="0" width="100%"></iframe>
                         </div>
                     </div>
 
@@ -186,8 +186,8 @@
                         ['import-file-iframe', 'from-script-iframe'].forEach(function(frame) {
                             var iframe = $('#' + frame);
                             var tmp_lgr = $('#id_tmp_lgr', iframe.contents()).attr('value');
-                            var url = '{% url "delete_lgr" "TODO_REPLACE" %}'.replace('TODO_REPLACE', tmp_lgr);
                             if (tmp_lgr) {
+                                let url = '{% url "delete_lgr" lgr_pk=42 %}'.replace('42', tmp_lgr);
                                 $.ajax({
                                     type: "GET",
                                     url: url
@@ -200,10 +200,10 @@
                 window.location.href = $(this).data('url');
             });
 
-            {% if lgr_set_id %}
-                {% url 'codepoint_list_json' lgr_set_id=lgr_set_id lgr_id=lgr_id as json_url %}
+            {% if lgr_set %}
+                {% url 'codepoint_list_json_set' lgr_pk=lgr_pk as json_url %}
             {% else %}
-                {% url 'codepoint_list_json' lgr_id=lgr_id as json_url %}
+                {% url 'codepoint_list_json' lgr_pk=lgr_pk as json_url %}
             {% endif %}
 
             cp_table = $('#codepoints').DataTable({
@@ -224,7 +224,7 @@
                     "orderable": false,
                     "className": "select-checkbox"
                 },
-                    {% endif %}
+                {% endif %}
                 {
                     "data": "cp_disp",
                     "render": function(data, type, row) {
@@ -366,7 +366,7 @@
                 // Reset selection
                 tag_input.val(null).trigger('change');
                 // Test if we need to display the "Populate variants" button
-                $.get('{% url "populate_variants" lgr_id %}' + '?test',
+                $.get('{% url "populate_variants" lgr_pk %}' + '?test',
                     function(json) {
                         if (!json.result) {
                             $('#populate-button').show(200);

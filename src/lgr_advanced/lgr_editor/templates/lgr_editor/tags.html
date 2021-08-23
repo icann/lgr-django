@@ -17,20 +17,20 @@
         </thead>
         <tbody>
             {% for tag in tags %}
-                {% if lgr_set_id %}
-                    {% url 'tag_list_json' lgr_id=lgr_id lgr_set_id=lgr_set_id tag_id=tag.name as tag_list_json_url %}
+                {% if lgr_set %}
+                    {% url 'tag_list_json_set' lgr_pk=lgr_pk tag_id=tag.name as tag_list_json_url %}
                 {% else %}
-                    {% url 'tag_list_json' lgr_id=lgr_id tag_id=tag.name as tag_list_json_url %}
+                    {% url 'tag_list_json' lgr_pk=lgr_pk tag_id=tag.name as tag_list_json_url %}
                 {% endif %}
 
                 <tr id="tag_{{ tag.name }}">
                     <td class="tag-name">{{ tag.name }}</td>
                     <td class="tag-cp-list">
                         {% for cp in tag.codepoints %}
-                            {% if lgr_set_id %}
-                                {% url 'codepoint_view' lgr_id=lgr_id lgr_set_id=lgr_set_id codepoint_id=cp.cp_id as cp_view_url %}
+                            {% if lgr_set %}
+                                {% url 'codepoint_view_set' lgr_pk=lgr_pk codepoint_id=cp.cp_id as cp_view_url %}
                             {% else %}
-                                {% url 'codepoint_view' lgr_id=lgr_id codepoint_id=cp.cp_id as cp_view_url %}
+                                {% url 'codepoint_view' lgr_pk=lgr_pk codepoint_id=cp.cp_id as cp_view_url %}
                             {% endif %}
                             <a href="{{ cp_view_url }}">{{ cp.cp_disp }}</a> {# keep space #}
                         {% endfor %}
@@ -55,7 +55,7 @@
                         <a class="btn btn-default confirm-prompt"
                            title="{% trans 'Delete Tag' %}"
                            data-confirmation-prompt="{% blocktrans with tag=tag.name %}Are you sure you want to delete tag {{ tag }}?{% endblocktrans %}"
-                           href="{% url 'tag_delete' lgr_id=lgr_id tag_id=tag.name %}">
+                           href="{% url 'tag_delete' lgr_pk=lgr_pk tag_id=tag.name %}">
                             <i class="glyphicon glyphicon-trash"></i>
                         </a>
                     </td>
@@ -67,8 +67,9 @@
 
     {% if not is_set %}
         <div>
-            <i class="glyphicon glyphicon-info-sign"></i> {% blocktrans trimmed %}<span style="font-weight: bold">To create a new tag:</span>
-                Add it to a code point first to find it back in this list{% endblocktrans %}
+            <i class="glyphicon glyphicon-info-sign"></i> {% blocktrans trimmed %}
+            <span style="font-weight: bold">To create a new tag:</span>
+            Add it to a code point first to find it back in this list{% endblocktrans %}
         </div>
     {% endif %}
 

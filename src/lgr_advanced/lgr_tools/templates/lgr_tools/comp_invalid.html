@@ -2,9 +2,9 @@
 {% load i18n %}
 
 {% block content %}
-{% url 'codepoint_list' lgr_id=lgr_1.name as lgr_1_url %}
-{% url 'codepoint_list' lgr_id=lgr_2.name as lgr_2_url %}
-<h2>{% blocktrans with lgr_1_name=lgr_1.name lgr_2_name=lgr_2.name %}The {{ comp_type }} of <a href="{{ lgr_1_url }}">{{ lgr_1_name }}</a> with <a href="{{ lgr_2_url }}">{{ lgr_2_name }}</a> need editing to be valid.{% endblocktrans %}</h2>
+{% url 'codepoint_list' lgr_pk=lgr_object_1.pk as lgr_1_url %}
+{% url 'codepoint_list' lgr_pk=lgr_object_2.pk as lgr_2_url %}
+<h2>{% blocktrans with lgr_1_name=lgr_object_1.name lgr_2_name=lgr_object_2.name %}The {{ comp_type }} of <a href="{{ lgr_1_url }}">{{ lgr_1_name }}</a> with <a href="{{ lgr_2_url }}">{{ lgr_2_name }}</a> need editing to be valid.{% endblocktrans %}</h2>
 <p>{% trans "Please download and edit it manually before importing it in LGR Toolset." %}</p>
 
 <div>

@@ -1,7 +1,7 @@
 #! /bin/env python
 # -*- coding: utf-8 -*-
 """
-rule - 
+rule -
 """
 import logging
 
@@ -14,9 +14,9 @@ from lxml.etree import XMLSyntaxError
 
 from lgr.exceptions import LGRException
 from lgr.parser.xml_parser import LGR_NS
-from lgr_advanced.api import LGRInfo
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
+from lgr_advanced.models import LgrModel
 
 logger = logging.getLogger(__name__)
 
@@ -44,20 +44,13 @@ class ListRuleSimpleView(LGRHandlingBaseMixin, TemplateView):
         ctx = super().get_context_data(**kwargs)
 
         rules = {
-            'classes': '\n\n'.join(self.lgr_info.lgr.classes_xml),
-            'rules': '\n\n'.join(self.lgr_info.lgr.rules_xml),
-            'actions': '\n\n'.join(self.lgr_info.lgr.actions_xml),
+            'classes': '\n\n'.join(self.lgr.classes_xml),
+            'rules': '\n\n'.join(self.lgr.rules_xml),
+            'actions': '\n\n'.join(self.lgr.actions_xml),
         }
         ctx.update({
             'rules': rules,
-            'lgr': self.lgr_info.lgr,
-            'lgr_id': self.lgr_id,
-            'is_set': self.lgr_info.is_set or self.lgr_set_id is not None
         })
-        if self.lgr_set_id:
-            lgr_set_info = self.session.select_lgr(self.lgr_set_id)
-            ctx['lgr_set'] = lgr_set_info.lgr
-            ctx['lgr_set_id'] = self.lgr_set_id
 
         return ctx
 
@@ -70,7 +63,7 @@ class ListRuleView(LGRHandlingBaseMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         # set
-        if self.lgr_info.is_set or self.lgr_set_id is not None:
+        if self.is_set_or_in_set():
             return ListRuleSimpleView.as_view()(request, *args, **kwargs)
 
         return super().get(request, *args, **kwargs)
@@ -78,25 +71,26 @@ class ListRuleView(LGRHandlingBaseMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        lgr = self.lgr_info.lgr
         rules = {
             'classes': [{'name': cls_name, 'content': cls_xml} for cls_name, cls_xml in
-                        zip(lgr.classes, lgr.classes_xml)],
+                        zip(self.lgr.classes, self.lgr.classes_xml)],
             'rules': [{'name': rule_name, 'content': rule_xml} for rule_name, rule_xml in
-                      zip(lgr.rules, lgr.rules_xml)],
+                      zip(self.lgr.rules, self.lgr.rules_xml)],
             'actions': [{'name': action_idx, 'content': action_xml} for action_idx, action_xml in
-                        enumerate(lgr.actions_xml)],
+                        enumerate(self.lgr.actions_xml)],
         }
 
         # try to suggest a non-clashing class name, but a clash should not be catastrophic
+        new_class_name = 'untitled-class'
         for i in range(20):
             new_class_name = 'untitled-class-{}'.format(i)
-            if new_class_name not in self.lgr_info.lgr.classes_lookup:
+            if new_class_name not in self.lgr.classes_lookup:
                 break
 
+        new_rule_name = 'untitled-rule'
         for i in range(20):
             new_rule_name = 'untitled-rule-{}'.format(i)
-            if new_rule_name not in self.lgr_info.lgr.rules_lookup:
+            if new_rule_name not in self.lgr.rules_lookup:
                 break
 
         ctx.update({
@@ -104,10 +98,7 @@ class ListRuleView(LGRHandlingBaseMixin, TemplateView):
             'class_skeleton': CLASS_SKEL.format(new_class_name),
             'rule_skeleton': RULE_SKEL.format(new_rule_name),
             'action_skeleton': ACTION_SKEL,
-            'lgr': self.lgr_info.lgr,
-            'lgr_id': self.lgr_id,
             'NEW_ELEMENT_NAME_PARAM': NEW_ELEMENT_NAME_PARAM,
-            'is_set': False
         })
 
         return ctx
@@ -126,7 +117,6 @@ def _json_response(success, error_msg=None):
 
 
 class RuleEditAjaxView(LGREditMixin, View):
-
     class RuleEditException(BaseException):
 
         def __init__(self, msg):
@@ -141,11 +131,9 @@ class RuleEditAjaxView(LGREditMixin, View):
 
         try:
             msg = self.process_request(delete_action, body)
+            self.update_lgr(validate=True)
         except RuleEditAjaxView.RuleEditException as e:
             return _json_response(False, e.message)
-
-        try:
-            self.session.save_lgr(self.lgr_info)
         except LGRException as e:
             return _json_response(False, lgr_exception_to_text(e))
         except XMLSyntaxError as e:
@@ -156,112 +144,60 @@ class RuleEditAjaxView(LGREditMixin, View):
         return _json_response(True, msg)
 
 
-def _del_class(lgr, clsname):
-    del lgr.classes_lookup[clsname]
-    i = lgr.classes.index(clsname)
-    del lgr.classes[i]
-    del lgr.classes_xml[i]
-
-
-def _update_class(lgr, clsname, cls, body):
-    if clsname in lgr.classes_lookup:
-        del lgr.classes_lookup[clsname]  # `clsname` is the existing class name, `cls.name` is new (could be different)
-        lgr.classes_lookup[cls.name] = cls
-        i = lgr.classes.index(clsname)
-        lgr.classes[i] = clsname
-        lgr.classes_xml[i] = body
-    else:
-        lgr.add_class(cls)
-        lgr.classes_xml.append(body)
-
-
-def _parse_class(xml):
-    lgr_xml = LGR_SKEL.format(ns=LGR_NS, xml=xml).encode('utf-8')
-    lgr_info = LGRInfo.from_dict(
-        {
-            'xml': lgr_xml,
-            'validate': False,
-        },
-        lgr_loader_func=None
-    )
-    if lgr_info.lgr.classes_lookup:
-        return list(lgr_info.lgr.classes_lookup.values())[0]
-    else:
-        return None
-
-
 class RuleEditClassAjaxView(RuleEditAjaxView):
     def process_request(self, delete_action, body):
         if not delete_action and not body:
             raise self.RuleEditException(_('No body specified'))
 
-        lgr = self.lgr_info.lgr
-
         clsname = self.kwargs['clsname']
-        if clsname not in lgr.classes_lookup and clsname != NEW_ELEMENT_NAME_PARAM:
+        if clsname not in self.lgr.classes_lookup and clsname != NEW_ELEMENT_NAME_PARAM:
             raise self.RuleEditException(_('Class "%s" does not exist') % clsname)
 
         if delete_action:
-            _del_class(lgr, clsname)
+            self._del_class(clsname)
             msg = _('Class "%s" deleted.') % clsname
         else:
-            try:
-                cls = _parse_class(body)
-                if not cls:
-                    raise self.RuleEditException(_('No class element found'))
-                if cls.name is None:
-                    raise self.RuleEditException(_('Name attribute must be present'))
-            except LGRException as e:
-                raise self.RuleEditException(lgr_exception_to_text(e))
-            except XMLSyntaxError as e:
-                raise self.RuleEditException(_('Encountered XML syntax error: %s (line number may be wrong, '
-                                               'try subtracting one from the reported line number)') % (e,))
-            except Exception:
-                raise self.RuleEditException(_('Your XML is not valid'))
+            cls = self._parse_class(body)
+            if not cls:
+                raise self.RuleEditException(_('No class element found'))
+            if cls.name is None:
+                raise self.RuleEditException(_('Name attribute must be present'))
 
             if clsname != cls.name:
                 # user has renamed the class, check that there is no dupe
-                if cls.name in lgr.classes_lookup:
+                if cls.name in self.lgr.classes_lookup:
                     raise self.RuleEditException(_('Class "%s" already exists') % cls.name)
-            _update_class(lgr, clsname, cls, body)
+            self._update_class(clsname, cls, body)
             msg = _('Class "%s" saved.') % cls.name
 
         return msg
 
+    def _del_class(self, clsname):
+        del self.lgr.classes_lookup[clsname]
+        i = self.lgr.classes.index(clsname)
+        del self.lgr.classes[i]
+        del self.lgr.classes_xml[i]
 
-def _del_rule(lgr, rule_name):
-    del lgr.rules_lookup[rule_name]
-    i = lgr.rules.index(rule_name)
-    del lgr.rules[i]
-    del lgr.rules_xml[i]
+    def _update_class(self, clsname, cls, body):
+        if clsname in self.lgr.classes_lookup:
+            # `clsname` is the existing class name, `cls.name` is new (could be different)
+            del self.lgr.classes_lookup[clsname]
+            self.lgr.classes_lookup[cls.name] = cls
+            i = self.lgr.classes.index(clsname)
+            self.lgr.classes[i] = clsname
+            self.lgr.classes_xml[i] = body
+        else:
+            self.lgr.add_class(cls)
+            self.lgr.classes_xml.append(body)
 
-
-def _update_rule(lgr, rule_name, rule, body):
-    if rule_name in lgr.rules_lookup:
-        del lgr.rules_lookup[
-            rule_name]  # `rule_name` is the existing rule name, `rule.name` is new (could be different)
-        lgr.rules_lookup[rule.name] = rule
-        i = lgr.rules.index(rule_name)
-        lgr.rules[i] = rule_name
-        lgr.rules_xml[i] = body
-    else:
-        lgr.add_rule(rule)
-        lgr.rules_xml.append(body)
-
-
-def _parse_rule(xml):
-    lgr_xml = LGR_SKEL.format(ns=LGR_NS, xml=xml).encode('utf-8')
-    lgr_info = LGRInfo.from_dict(
-        {
-            'xml': lgr_xml,
-            'validate': False
-        },
-        lgr_loader_func=None
-    )
-    if lgr_info.lgr.rules_lookup:
-        return list(lgr_info.lgr.rules_lookup.values())[0]
-    else:
-        return None
+    @staticmethod
+    def _parse_class(xml):
+        lgr_xml = LGR_SKEL.format(ns=LGR_NS, xml=xml).encode('utf-8')
+        lgr = LgrModel.parse('tmp_class_edit', lgr_xml, False)
+        if lgr.classes_lookup:
+            return list(lgr.classes_lookup.values())[0]
+        else:
+            return None
 
 
 class RuleEditRuleAjaxView(RuleEditAjaxView):
@@ -269,71 +205,56 @@ class RuleEditRuleAjaxView(RuleEditAjaxView):
         if not delete_action and not body:
             raise self.RuleEditException(_('No body specified'))
 
-        lgr = self.lgr_info.lgr
-
         rulename = self.kwargs['rulename']
-        if rulename not in lgr.rules_lookup and rulename != NEW_ELEMENT_NAME_PARAM:
+        if rulename not in self.lgr.rules_lookup and rulename != NEW_ELEMENT_NAME_PARAM:
             raise self.RuleEditException(_('Rule "%s" does not exist') % rulename)
 
         if delete_action:
-            _del_rule(lgr, rulename)
+            self._del_rule(rulename)
             msg = _('Rule "%s" deleted.') % rulename
         else:
-            try:
-                rule = _parse_rule(body)
-                if not rule:
-                    raise self.RuleEditException(_('No rule element found'))
-                if rule.name is None:
-                    raise self.RuleEditException(_('Name attribute must be present'))
+            rule = self._parse_rule(body)
+            if not rule:
+                raise self.RuleEditException(_('No rule element found'))
+            if rule.name is None:
+                raise self.RuleEditException(_('Name attribute must be present'))
 
-                if rulename != rule.name:
-                    # user has renamed the rule, check that there is no dupe
-                    if rule.name in lgr.rules_lookup:
-                        raise self.RuleEditException(_('Rule "%s" already exists') % rule.name)
+            if rulename != rule.name:
+                # user has renamed the rule, check that there is no dupe
+                if rule.name in self.lgr.rules_lookup:
+                    raise self.RuleEditException(_('Rule "%s" already exists') % rule.name)
 
-                _update_rule(lgr, rulename, rule, body)
-
-                self.lgr_info.update_xml(validate=True)
-            except LGRException as e:
-                raise self.RuleEditException(lgr_exception_to_text(e))
-            except XMLSyntaxError as e:
-                raise self.RuleEditException(_('Encountered XML syntax error: %s (line number may be wrong, '
-                                               'try subtracting one from the reported line number)') % (e,))
-            except Exception:
-                raise self.RuleEditException(_('Your XML is not valid'))
+            self._update_rule(rulename, rule, body)
             msg = _('Rule "%s" saved.') % rule.name
 
         return msg
 
+    def _del_rule(self, rule_name):
+        del self.lgr.rules_lookup[rule_name]
+        i = self.lgr.rules.index(rule_name)
+        del self.lgr.rules[i]
+        del self.lgr.rules_xml[i]
 
-def _del_action(lgr, idx):
-    del lgr.actions[idx]
-    action_xml = lgr.actions_xml.pop(idx)
-    logger.debug('deleted action[%d]: %s', idx, action_xml)
+    def _update_rule(self, rule_name, rule, body):
+        if rule_name in self.lgr.rules_lookup:
+            # `rule_name` is the existing rule name, `rule.name` is new (could be different)
+            del self.lgr.rules_lookup[rule_name]
+            self.lgr.rules_lookup[rule.name] = rule
+            i = self.lgr.rules.index(rule_name)
+            self.lgr.rules[i] = rule_name
+            self.lgr.rules_xml[i] = body
+        else:
+            self.lgr.add_rule(rule)
+            self.lgr.rules_xml.append(body)
 
-
-def _update_action(lgr, idx, action, body):
-    if 0 <= idx < len(lgr.actions):
-        lgr.actions[idx] = action
-        lgr.actions_xml[idx] = body
-    else:
-        lgr.add_action(action)
-        lgr.actions_xml.append(body)
-
-
-def _parse_action(xml):
-    lgr_xml = LGR_SKEL.format(ns=LGR_NS, xml=xml).encode('utf-8')
-    lgr_info = LGRInfo.from_dict(
-        {
-            'xml': lgr_xml,
-            'validate': False
-        },
-        lgr_loader_func=None
-    )
-    if lgr_info.lgr.actions:
-        return lgr_info.lgr.actions[0]
-    else:
-        return None
+    @staticmethod
+    def _parse_rule(xml):
+        lgr_xml = LGR_SKEL.format(ns=LGR_NS, xml=xml).encode('utf-8')
+        lgr = LgrModel.parse('tmp_rule_edit', lgr_xml, False)
+        if lgr.rules_lookup:
+            return list(lgr.rules_lookup.values())[0]
+        else:
+            return None
 
 
 class RuleEditActionAjaxView(RuleEditAjaxView):
@@ -341,31 +262,43 @@ class RuleEditActionAjaxView(RuleEditAjaxView):
         if not delete_action and not body:
             raise self.RuleEditException(_('No body specified'))
 
-        lgr = self.lgr_info.lgr
-
         action_idx = self.kwargs['action_idx']
         action_idx = int(action_idx)  # 0-based
         # negative action_idx means to add new
-        if action_idx + 1 > len(lgr.actions):
+        if action_idx + 1 > len(self.lgr.actions):
             raise self.RuleEditException(_('Action "%s" does not exist') % action_idx)
 
         if delete_action:
-            _del_action(lgr, action_idx)
+            self._del_action(action_idx)
             msg = _('Action "%s" deleted.') % action_idx
         else:
-            try:
-                action = _parse_action(body)
-                if not action:
-                    raise self.RuleEditException(_('No action element found'))
-            except LGRException as e:
-                raise self.RuleEditException(lgr_exception_to_text(e))
-            except XMLSyntaxError as e:
-                raise self.RuleEditException(_('Encountered XML syntax error: %s (line number may be wrong, '
-                                               'try subtracting one from the reported line number)') % (e,))
-            except Exception:
-                raise self.RuleEditException(_('Your XML is not valid'))
+            action = self._parse_action(body)
+            if not action:
+                raise self.RuleEditException(_('No action element found'))
 
-            _update_action(lgr, action_idx, action, body)
+            self._update_action(action_idx, action, body)
             msg = _('Action saved.')
 
         return msg
+
+    def _del_action(self, idx):
+        del self.lgr.actions[idx]
+        action_xml = self.lgr.actions_xml.pop(idx)
+        logger.debug('deleted action[%d]: %s', idx, action_xml)
+
+    def _update_action(self, idx, action, body):
+        if 0 <= idx < len(self.lgr.actions):
+            self.lgr.actions[idx] = action
+            self.lgr.actions_xml[idx] = body
+        else:
+            self.lgr.add_action(action)
+            self.lgr.actions_xml.append(body)
+
+    @staticmethod
+    def _parse_action(xml):
+        lgr_xml = LGR_SKEL.format(ns=LGR_NS, xml=xml).encode('utf-8')
+        lgr = LgrModel.parse('tmp_action_edit', lgr_xml, False)
+        if lgr.actions:
+            return lgr.actions[0]
+        else:
+            return None

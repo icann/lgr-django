@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
 from lgr_auth.models import LgrRole
-from lgr_idn_table_review.icann_tools.api import LGRIcannSession
+from lgr_idn_table_review.icann_tools.api import LGRIcannStorage
 from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 from .tasks import idn_table_review_task
 
@@ -17,7 +17,7 @@ class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.IDN_ICANN.name
-        self.session = LGRIcannSession(request)
+        self.session = LGRIcannStorage(request.user)
 
     def test_func(self):
         return self.request.user.role in [LgrRole.ICANN.value, LgrRole.ADMIN.value]
@@ -35,7 +35,7 @@ class IdnTableIcannModeView(BaseIcannView, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['reports'] = self.session.list_storage(reverse=False)
+        context['reports'] = self.session.list_storage()
         return context
 
 

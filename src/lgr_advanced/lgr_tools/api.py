@@ -6,15 +6,19 @@ import time
 
 from django.utils.text import slugify
 
+from lgr.core import LGR
+from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.tools.annotate import annotate, lgr_set_annotate
 from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_sets
 from lgr.tools.cross_script_variants import cross_script_variants
 from lgr.tools.diff_collisions import diff, collision, basic_collision
 from lgr.tools.harmonize import harmonize
 from lgr.tools.utils import read_labels
-from lgr_advanced.api import LGRInfo
 from lgr_advanced.exceptions import LGRValidationException
 from lgr_advanced.lgr_validator.api import lgr_set_evaluate_label, evaluate_label, validation_results_to_csv
+from lgr_advanced.models import LgrModel
+from lgr_auth.models import LgrUser
+from lgr_models.models.lgr import RzLgr
 
 logger = logging.getLogger(__name__)
 
@@ -30,62 +34,55 @@ class LGRCompInvalidException(LGRValidationException):
         self.error = error
 
 
-def lgr_intersect_union(session, lgr_info_1, lgr_info_2, action):
+def lgr_intersect_union(user: LgrUser, lgr_object_1: LgrModel, lgr_object_2: LgrModel, action):
     """
     Compare 2 LGRs for union/intersection.
 
-    :param session: The LGRSession object.
-    :param lgr_info_1: The first LGR info object.
-    :param lgr_info_2: The second LGR info object.
+    :param user: The logged in user.
+    :param lgr_object_1: The first LGR object.
+    :param lgr_object_2: The second info object.
     :param action: One of "UNION", "INTERSECTION".
     :return: LGR id of generated LGR. If there is a validation error,
              LGRCompInvalidException is raised and contains the resulting XML
     """
     result_lgr = None
     if action == 'INTERSECTION':
-        result_lgr = intersect_lgrs(lgr_info_1.lgr, lgr_info_2.lgr)
+        result_lgr = intersect_lgrs(lgr_object_1.to_lgr(), lgr_object_2.to_lgr())
     elif action == 'UNION':
-        result_lgr = union_lgrs(lgr_info_1.lgr, lgr_info_2.lgr)
+        result_lgr = union_lgrs(lgr_object_1.to_lgr(), lgr_object_2.to_lgr())
 
-    # Generate new slug (LGR id)
-    lgr_id = slugify(result_lgr.name)
-
-    lgr_info = LGRInfo(name=lgr_id,
-                       lgr=result_lgr)
-    lgr_info.update_xml(pretty_print=True)
     try:
-        session.open_lgr(lgr_id, lgr_info.xml,
-                         validating_repertoire=None,
-                         validate=True)
+        result_lgr_object = LgrModel.from_lgr(user, result_lgr, validate=True)
     except LGRValidationException as e:
-        raise LGRCompInvalidException(lgr_info.xml, e.args[0])
+        xml = serialize_lgr_xml(result_lgr, pretty_print=True)
+        raise LGRCompInvalidException(xml, e.args[0])
 
-    return lgr_id
+    return result_lgr_object
 
 
-def lgr_comp_diff(lgr_info_1, lgr_info_2, full_dump=True):
+def lgr_comp_diff(lgr_object_1: LgrModel, lgr_object_2: LgrModel, full_dump=True):
     """
     Compare 2 LGRs with textual output.
 
-    :param lgr_info_1: The first LGR info object.
-    :param lgr_info_2: The second LGR info object.
+    :param lgr_object_1: The first LGR object.
+    :param lgr_object_2: The second info object.
     :param full_dump: Whether identical char should return something or not.
     :return: Text log to be displayed.
     """
     # if lgr_info_1 is a set then lgr_info_2 also and reciprocally
-    if not lgr_info_1.is_set:
-        content = diff_lgrs(lgr_info_1.lgr, lgr_info_2.lgr,
+    if not lgr_object_1.is_set():
+        content = diff_lgrs(lgr_object_1.to_lgr(), lgr_object_2.to_lgr(),
                             show_same=full_dump)
     else:
-        content = diff_lgr_sets(lgr_info_1.lgr, lgr_info_2.lgr,
-                                [lgr.lgr for lgr in lgr_info_1.lgr_set],
-                                [lgr.lgr for lgr in lgr_info_2.lgr_set],
+        content = diff_lgr_sets(lgr_object_1.to_lgr(), lgr_object_2.to_lgr(),
+                                [lgr_obj.to_lgr() for lgr_obj in lgr_object_1.embedded_lgrs()],
+                                [lgr_obj.to_lgr() for lgr_obj in lgr_object_2.embedded_lgrs()],
                                 show_same=full_dump)
 
     return content
 
 
-def lgr_diff_labels(lgr_1, lgr_2, labels_file,
+def lgr_diff_labels(lgr_1: LGR, lgr_2: LGR, labels_file,
                     show_collision,
                     full_dump,
                     with_rules):
@@ -104,11 +101,11 @@ def lgr_diff_labels(lgr_1, lgr_2, labels_file,
                 show_collision, full_dump, not with_rules)
 
 
-def lgr_collision_labels(lgr, labels_file, tlds_file, full_dump, with_rules):
+def lgr_collision_labels(lgr: LGR, labels_file, tlds_file, full_dump, with_rules):
     """
     Show difference between two LGR for a list of labels
 
-    :param lgr: The LGR object.
+    :param lgr: The LGR.
     :param labels_file: The file containing the list of labels
     :param tlds_file: The file containing the TLDs
     :param full_dump: Whether we output a full dump
@@ -118,11 +115,11 @@ def lgr_collision_labels(lgr, labels_file, tlds_file, full_dump, with_rules):
     return collision(lgr, labels_file, tlds_file, full_dump, not with_rules)
 
 
-def lgr_basic_collision_labels(lgr, labels_file, tlds_file, with_annotate):
+def lgr_basic_collision_labels(lgr: LGR, labels_file, tlds_file, with_annotate):
     """
     Show difference between two LGR for a list of labels
 
-    :param lgr: The LGR object.
+    :param lgr: The LGR.
     :param labels_file: The file containing the list of labels
     :param tlds_file: The file containing the TLDs
     :param with_annotate: Whether we annotate labels
@@ -131,22 +128,22 @@ def lgr_basic_collision_labels(lgr, labels_file, tlds_file, with_annotate):
     return basic_collision(lgr, labels_file, tlds_file, with_annotate)
 
 
-def lgr_annotate_labels(lgr, labels_file):
+def lgr_annotate_labels(lgr: LGR, labels_file):
     """
     Compute disposition of a list of labels in a LGR.
 
-    :param lgr: The LGR object.
+    :param lgr: The LGR.
     :param labels_file: The file containing the list of labels
     :return: Text log to be displayed
     """
     return annotate(lgr, labels_file)
 
 
-def lgr_set_annotate_labels(lgr, script_lgr, set_labels, labels_file):
+def lgr_set_annotate_labels(lgr: LGR, script_lgr, set_labels, labels_file):
     """
     Compute disposition of a list of labels in a LGR.
 
-    :param lgr: The LGR object.
+    :param lgr: The LGR.
     :param script_lgr: The LGR fo the script used to check label validity
     :param set_labels: The label of the LGR set
     :param labels_file: The file containing the list of labels
@@ -155,7 +152,7 @@ def lgr_set_annotate_labels(lgr, script_lgr, set_labels, labels_file):
     return lgr_set_annotate(lgr, script_lgr, set_labels, labels_file)
 
 
-def lgr_cross_script_variants(lgr, labels_file):
+def lgr_cross_script_variants(lgr: LGR, labels_file):
     """
     Compute cross-script variants of a list of labels in a LGR.
 
@@ -166,29 +163,26 @@ def lgr_cross_script_variants(lgr, labels_file):
     return cross_script_variants(lgr, labels_file)
 
 
-def lgr_harmonization(session, lgr_1, lgr_2, rz_lgr):
+def lgr_harmonization(user: LgrUser, lgr_object_1: LgrModel, lgr_object_2: LgrModel, rz_lgr_object: RzLgr):
     """
     Perform variant harmonization between 2 LGRs
 
-    :param session: The LGRSession object.
-    :param lgr_1: First LGR.
-    :param lgr_2: Second LGR.
-    :param rz_lgr: Optional related Rootzone LGR.
+    :param user: The logged in user.
+    :param lgr_object_1: First LGR object.
+    :param lgr_object_2: Second LGR object.
+    :param rz_lgr_object: Optional related Rootzone LGR object.
     """
-    h_lgr_1, h_lgr_2, cp_review = harmonize(lgr_1, lgr_2, rz_lgr)
+    h_lgr_1, h_lgr_2, cp_review = harmonize(lgr_object_1.to_lgr(), lgr_object_2.to_lgr(), rz_lgr_object.to_lgr())
 
     def _save_resulting_lgr(l):
         # Generate new slug (LGR id)
-        lgr_id = slugify("{}_harmonized_{}".format(l.name, time.strftime('%Y%m%d_%H%M%S')))
+        lgr_name = "{}_harmonized_{}".format(l.name, time.strftime('%Y%m%d_%H%M%S'))
 
-        lgr_info = LGRInfo(name=lgr_id,
-                           lgr=l)
-        lgr_info.update_xml(pretty_print=True)
-        session.save_lgr(lgr_info)
-        return lgr_id
+        lgr_object = LgrModel.from_lgr(user, l, name=lgr_name)
+        return lgr_object
 
-    (h_lgr_1_id, h_lgr_2_id) = (_save_resulting_lgr(l) for l in (h_lgr_1, h_lgr_2))
-    return h_lgr_1_id, h_lgr_2_id, cp_review
+    (h_lgr_1_object, h_lgr_2_object) = (_save_resulting_lgr(l) for l in (h_lgr_1, h_lgr_2))
+    return h_lgr_1_object, h_lgr_2_object, cp_review
 
 
 def _validate_label_task_helper(value, with_header=True):
@@ -217,11 +211,11 @@ def _validate_label_task_helper(value, with_header=True):
     return out_fn(out.getvalue())
 
 
-def lgr_validate_label(lgr, label, udata):
+def lgr_validate_label(lgr: LGR, label, udata):
     """
     Validate a label for an LGR.
 
-    :param lgr: The LGR to use for variant generation.
+    :param lgr_object: The LGR to use for variant generation.
     :param label: Label to validate.
     :param udata: The associated Unicode database.
     :return: CSV containing the label validation output.
@@ -229,7 +223,7 @@ def lgr_validate_label(lgr, label, udata):
     return _validate_label_task_helper(evaluate_label(lgr, label, -1, udata.idna_encode_label))
 
 
-def lgr_set_validate_label(lgr, script_lgr, set_labels, label, udata):
+def lgr_set_validate_label(lgr: LGR, script_lgr: LGR, set_labels, label, udata):
     """
         Validate a label for an LGR set.
 
@@ -244,7 +238,7 @@ def lgr_set_validate_label(lgr, script_lgr, set_labels, label, udata):
                                                               -1, udata.idna_encode_label))
 
 
-def lgr_validate_labels(lgr, labels_file, udata):
+def lgr_validate_labels(lgr: LGR, labels_file, udata):
     """
     Validate labels for an LGR.
 

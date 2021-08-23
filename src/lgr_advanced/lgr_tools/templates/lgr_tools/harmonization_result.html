@@ -3,16 +3,28 @@
 
 {% block content %}
 
-    {% url 'codepoint_list' lgr_id=h_lgr_1_id as h_lgr_1_url %}
-    {% url 'codepoint_list' lgr_id=h_lgr_2_id as h_lgr_2_url %}
+    {% url 'codepoint_list' lgr_pk=h_lgr_object_1.pk as h_lgr_1_url %}
+    {% url 'codepoint_list' lgr_pk=h_lgr_object_2.pk as h_lgr_2_url %}
 
-    <h2>{% blocktrans with lgr_1_name=lgr_1.name lgr_2_name=lgr_2.name %}Results of harmonization for {{lgr_1_name}} and {{lgr_2_name}}{% endblocktrans %}</h2>
+    <h2>
+        {% blocktrans trimmed with lgr_1_name=lgr_object_1.name lgr_2_name=lgr_object_2.name %}
+            Results of harmonization for {{ lgr_1_name }} and {{ lgr_2_name }}
+        {% endblocktrans %}
+    </h2>
 
     <h3>{% trans 'Resulting LGRs' %}</h3>
 
     <ul>
-        <li><a href="{{h_lgr_1_url}}">{% blocktrans with name=lgr_1.name %}View harmonized version of {{name}}{% endblocktrans %}</a></li>
-        <li><a href="{{h_lgr_2_url}}">{% blocktrans with name=lgr_2.name %}View harmonized version of {{name}}{% endblocktrans %}</a></li>
+        <li>
+            <a href="{{ h_lgr_1_url }}">
+                {% blocktrans with name=h_lgr_object_1.name %}View harmonized version of {{ name }}{% endblocktrans %}
+            </a>
+        </li>
+        <li>
+            <a href="{{ h_lgr_2_url }}">
+                {% blocktrans with name=h_lgr_object_2.name %}View harmonized version of {{ name }}{% endblocktrans %}
+            </a>
+        </li>
     </ul>
 
 {% endblock content %}

@@ -19,15 +19,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         with open(options['idn_table'], 'rb') as idn_table:
-            idn_table_info = IdnTableInfo.from_dict({
-                'name': options['idn_table'],
-                'data': idn_table.read().decode('utf-8'),
-            })
+            idn_table_info = IdnTableInfo(options['idn_table'], idn_table.read().decode('utf-8'))
         with open(options['reference_lgr'], 'rb') as ref_lgr:
-            ref_lgr_info = IdnTableInfo.from_dict({
-                'name': options['reference_lgr'],
-                'data': ref_lgr.read().decode('utf-8'),
-            })
+            ref_lgr_info = IdnTableInfo(options['reference_lgr'], ref_lgr.read().decode('utf-8'))
 
             context = review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
             html = render_to_string('lgr_idn_table_review/review.html', context)

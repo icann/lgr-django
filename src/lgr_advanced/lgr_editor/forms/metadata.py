@@ -40,8 +40,9 @@ class MetadataForm(forms.Form):
     version = forms.CharField(label=_("Version"), max_length=255, required=False)
     version_comment = forms.CharField(label=_("Version comment"), required=False)
     date = forms.DateField(label=_("Date"), widget=DateInputPlaceHolder(date.today().isoformat()), required=False)
-    scope = forms.CharField(label=_("Scope"), max_length=255, required=False, widget=TextInputPlaceHolder(
-        'example'))  # XXX: we may need to support multiple scope elements
+    # XXX: we may need to support multiple scope elements
+    scope = forms.CharField(label=_("Scope"), max_length=255, required=False,
+                            widget=TextInputPlaceHolder('example'))
     scope_type = forms.CharField(label=_("Scope type"), max_length=255, required=False,
                                  widget=TextInputPlaceHolder('domain'))
     validity_start = forms.DateField(label=_("Validity start"), widget=DateInputPlaceHolder(), required=False)
@@ -66,12 +67,11 @@ class MetadataForm(forms.Form):
         if additional_repertoires:
             # dynamically append the session LGRs (by copy, not by reference)
             self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + [
-                (_('My LGRs'), tuple((rname, rname) for rname in additional_repertoires))]
+                (_('My LGRs'), tuple(((lgr.__class__.__name__, lgr.pk), lgr.name) for lgr in additional_repertoires))]
         if disabled:
-            # do not enable to update references for LGRs in a set
+            # do not enable to update metadata for LGRs in a set
             for field in self.fields.values():
-                # field.disabled = True  XXX need django 1.9
-                field.widget.attrs['disabled'] = True
+                field.disabled = True
 
 
 class LanguageForm(forms.Form):

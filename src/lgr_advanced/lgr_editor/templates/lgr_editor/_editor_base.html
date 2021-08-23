@@ -4,18 +4,18 @@
 {% block html_title %}{{ lgr.name|title }}{% endblock %}
 
 {% block content %}
-    {% if lgr_set_id %}
-        {% url 'codepoint_list' lgr_set_id lgr_id as codepoint_list_url %}
-        {% url 'references' lgr_set_id lgr_id as references_url %}
-        {% url 'metadata' lgr_set_id lgr_id as metadata_url %}
-        {% url 'tags' lgr_set_id lgr_id as tags_url %}
-        {% url 'rules' lgr_set_id lgr_id as rules_url %}
+    {% if lgr_set %}
+        {% url 'codepoint_list_set' lgr_pk=lgr_object.pk as codepoint_list_url %}
+        {% url 'references_set' lgr_pk=lgr_object.pk as references_url %}
+        {% url 'metadata_set' lgr_pk=lgr_object.pk as metadata_url %}
+        {% url 'tags_set' lgr_pk=lgr_object.pk as tags_url %}
+        {% url 'rules_set' lgr_pk=lgr_object.pk as rules_url %}
     {% else %}
-        {% url 'codepoint_list' lgr_id as codepoint_list_url %}
-        {% url 'references' lgr_id as references_url %}
-        {% url 'metadata' lgr_id as metadata_url %}
-        {% url 'tags' lgr_id as tags_url %}
-        {% url 'rules' lgr_id as rules_url %}
+        {% url 'codepoint_list' lgr_pk=lgr_object.pk as codepoint_list_url %}
+        {% url 'references' lgr_pk=lgr_object.pk as references_url %}
+        {% url 'metadata' lgr_pk=lgr_object.pk as metadata_url %}
+        {% url 'tags' lgr_pk=lgr_object.pk as tags_url %}
+        {% url 'rules' lgr_pk=lgr_object.pk as rules_url %}
     {% endif %}
     <ul class="nav nav-tabs">
         <li role="presentation" class="{% block pane-cp-active %}{% endblock %}">
@@ -33,10 +33,10 @@
         <li role="presentation" class="{% block pane-rules-active %}{% endblock %}">
             <a href="{{ rules_url }}">{% trans "Rules" %}</a>
         </li>
-        {% if is_set and not lgr_set_id %}
+        {% if is_set and not lgr_set %}
         {# Merged LGR set: show all LGRs in the set #}
         <li role="presentation" class="{% block pane-embedded-active %}{% endblock %}">
-            <a href="{% url 'embedded_lgrs' lgr_id %}">{% trans "Embedded LGRs" %}</a>
+            <a href="{% url 'embedded_lgrs' lgr_pk=lgr_object.pk %}">{% trans "Embedded LGRs" %}</a>
         </li>
         {% endif %}
     </ul>

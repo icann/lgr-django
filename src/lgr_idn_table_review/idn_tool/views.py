@@ -1,20 +1,22 @@
 # -*- coding: utf-8 -*-
 import logging
-import uuid
+from datetime import datetime
 
 from dal_select2.views import Select2GroupListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import SuspiciousOperation
+from django.core.files import File
 from django.http import HttpResponse
 from django.urls import reverse_lazy, reverse
-from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import FormView, TemplateView
+from django.views.generic.detail import SingleObjectMixin
 
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
-from lgr_idn_table_review.idn_tool.api import LGRIdnReviewSession
+from lgr_idn_table_review.idn_tool.api import LGRIdnReviewStorage
 from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
+from lgr_idn_table_review.idn_tool.models import IdnTable
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_models.models.lgr import RzLgr, RefLgr, RzLgrMember
 from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
@@ -26,7 +28,7 @@ class IdnTableReviewViewMixin(LoginRequiredMixin):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.session = LGRIdnReviewSession(request)
+        self.storage = LGRIdnReviewStorage(request.user)
         request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.IDN_REVIEW.name
 
 
@@ -38,21 +40,23 @@ class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
         return reverse('lgr_review_select_reference', kwargs={'report_id': self.report_id})
 
     def form_valid(self, form):
-        self.report_id = str(uuid.uuid4())
-        for idn_table in self.request.FILES.getlist('idn_tables'):
-            idn_table_id = idn_table.name
-            if not RE_SAFE_FILENAME.match(idn_table_id):
+        self.report_id = datetime.now().strftime('%Y-%m-%d-%H%M%S.%f')
+        for idn_table_file in self.request.FILES.getlist('idn_tables'):
+            idn_table_name = idn_table_file.name
+            if not RE_SAFE_FILENAME.match(idn_table_name):
                 raise SuspiciousOperation()
             for ext in ['xml', 'txt']:
-                if idn_table_id.endswith(f'.{ext}'):
-                    idn_table_id = idn_table_id.rsplit('.', 1)[0]
+                if idn_table_name.endswith(f'.{ext}'):
+                    idn_table_name = idn_table_name.rsplit('.', 1)[0]
                     break
-            idn_table_id = slugify(idn_table_id)
             try:
-                self.session.open_lgr(idn_table_id, idn_table.read().decode('utf-8'), uid=self.report_id)
+                IdnTable.objects.create(file=File(idn_table_file),
+                                        name=idn_table_name,
+                                        owner=self.request.user,
+                                        report_id=self.report_id)
             except Exception:
-                logger.exception('Unable to parser IDN table %s', idn_table_id)
-                form.add_error('idn_tables', _('%(filename)s is an invalid IDN table') % {'filename': idn_table_id})
+                logger.exception('Unable to parser IDN table %s', idn_table_name)
+                form.add_error('idn_tables', _('%(filename)s is an invalid IDN table') % {'filename': idn_table_name})
                 return super().form_invalid(form)
 
         return super(IdnTableReviewModeView, self).form_valid(form)
@@ -63,16 +67,18 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
     template_name = 'lgr_idn_table_review_tool/select_reference.html'
     success_url = reverse_lazy('lgr_review_reports')
 
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.report_id = self.kwargs.get('report_id')
+
     def form_valid(self, form):
         email_address = self.request.user.email
-        report_id = self.kwargs.get('report_id')
 
         idn_tables = []
-        for idn_table, lgr_info in form.cleaned_data.items():
-            idn_table_info = self.session.select_lgr(idn_table, uid=report_id)
-            idn_tables.append((idn_table_info.to_dict(), lgr_info))
+        for idn_table_pk, lgr_info in form.cleaned_data.items():
+            idn_tables.append((idn_table_pk, lgr_info))
 
-        idn_table_review_task.delay(idn_tables, report_id, email_address,
+        idn_table_review_task.delay(idn_tables, self.report_id, email_address,
                                     self.request.build_absolute_uri(self.get_success_url()),
                                     self.request.build_absolute_uri('/').rstrip('/'))
 
@@ -80,9 +86,10 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super(IdnTableReviewSelectReferenceView, self).get_form_kwargs()
-        idn_tables = self.session.list_lgr(uid=self.kwargs.get('report_id'))
-        kwargs['idn_tables'] = [t['name'] for t in idn_tables]
+        idn_tables = IdnTable.objects.filter(owner=self.request.user, report_id=self.kwargs.get('report_id'))
+        kwargs['idn_tables'] = idn_tables
         lgrs = {}
+        # TODO use lgr ids instead of names only
         for name in list(RzLgr.objects.order_by('name').values_list('name', flat=True)):
             lgrs[name] = 'rz'
         for name in list(RzLgrMember.objects.order_by('name').values_list('name', flat=True)):
@@ -100,7 +107,7 @@ class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['reports'] = self.session.list_storage()
+        context['reports'] = self.storage.list_storage()
         return context
 
 
@@ -110,25 +117,27 @@ class IdnTableReviewListReport(IdnTableReviewViewMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         zipname = f"{self.kwargs.get('report_id')}.zip"
-        context['reports'] = self.session.list_storage(report_id=self.kwargs.get('report_id'),
+        context['reports'] = self.storage.list_storage(report_id=self.kwargs.get('report_id'),
                                                        exclude={'file__endswith': zipname})
         context['completed'] = True
         try:
-            context['zip'] = self.session.storage_find_report_file(self.kwargs.get('report_id'), zipname)
-        except self.session.storage_model.DoesNotExist:
+            context['zip'] = self.storage.storage_find_report_file(self.kwargs.get('report_id'), zipname)
+        except self.storage.storage_model.DoesNotExist:
             context['completed'] = False
         context['title'] = _("IDN Table Review Reports: %(report)s") % {'report': self.kwargs.get('report_id')}
         context['back_url'] = 'lgr_review_reports'
         return context
 
 
-class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, View):
+class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, SingleObjectMixin, View):
+    pk_url_kwarg = 'lgr_pk'
+    model = IdnTable
 
     def get(self, request, *args, **kwargs):
-        idn_table_info = self.session.select_lgr(self.kwargs.get('lgr_id'), uid=self.kwargs.get('report_id'))
+        idn_table = self.get_object(queryset=self.model.objects.filter(owner=request.user))
         # FIXME: should distinct txt and xml LGRs
-        resp = HttpResponse(idn_table_info.data, content_type='text/plain', charset='UTF-8')
-        resp['Content-disposition'] = 'attachment'
+        resp = HttpResponse(idn_table.file.read(), content_type='text/plain', charset='UTF-8')
+        resp['Content-disposition'] = f'attachment; filename={idn_table.filename}'
         return resp
 
 

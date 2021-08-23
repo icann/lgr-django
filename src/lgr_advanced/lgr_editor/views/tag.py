@@ -33,7 +33,7 @@ class ListTagView(LGRHandlingBaseMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        tag_classes = self.lgr_info.lgr.get_tag_classes()
+        tag_classes = self.lgr.get_tag_classes()
 
         tags = [{
             'name': tag,
@@ -47,14 +47,7 @@ class ListTagView(LGRHandlingBaseMixin, TemplateView):
 
         ctx.update({
             'tags': tags,
-            'lgr': self.lgr_info.lgr,
-            'lgr_id': self.lgr_id,
-            'is_set': self.lgr_info.is_set or self.lgr_set_id is not None
         })
-        if self.lgr_set_id:
-            lgr_set_info = self.session.select_lgr(self.lgr_set_id)
-            ctx['lgr_set'] = lgr_set_info.lgr
-            ctx['lgr_set_id'] = self.lgr_set_id
 
         return ctx
 
@@ -66,7 +59,7 @@ class ListTagJsonView(LGRHandlingBaseMixin, View):
 
     def get(self, request, *args, **kwargs):
         tag_id = self.kwargs['tag_id']
-        tag_classes = self.lgr_info.lgr.get_tag_classes()
+        tag_classes = self.lgr.get_tag_classes()
         if tag_id not in tag_classes:
             # Error
             return
@@ -77,10 +70,11 @@ class ListTagJsonView(LGRHandlingBaseMixin, View):
         cp_list = []
         for c in clz.codepoints:
             cp_slug = cp_to_slug((c,))
-            kwargs = {'lgr_id': self.lgr_id, 'codepoint_id': cp_slug}
-            if self.lgr_set_id is not None:
-                kwargs['lgr_set_id'] = self.lgr_set_id
-            cp_view_url = reverse('codepoint_view', kwargs=kwargs)
+            kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug}
+            view_name = 'codepoint_view'
+            if self.lgr_is_in_set:
+                view_name = 'codepoint_view_set'
+            cp_view_url = reverse(view_name, kwargs=kwargs)
             obj = {'cp_disp': render_cp_or_sequence(c), 'cp_view': cp_view_url}
             cp_list.append(obj)
             if len(cp_list) == 10:
@@ -102,13 +96,10 @@ class DeleteTagView(LGREditMixin, View):
     def get(self, request, *args, **kwargs):
         tag_id = self.kwargs['tag_id']
         logger.debug("Delete tag %s'", tag_id)
-        lgr_info = self.session.select_lgr(self.lgr_id)
-        if lgr_info.is_set:
-            return HttpResponseBadRequest('Cannot edit LGR set')
 
         try:
-            lgr_info.lgr.del_tag(tag_id)
-            self.session.save_lgr(lgr_info)
+            self.lgr.del_tag(tag_id)
+            self.update_lgr()
         except LGRException as ex:
             messages.add_message(request, messages.ERROR, lgr_exception_to_text(ex))
         else:
@@ -116,4 +107,4 @@ class DeleteTagView(LGREditMixin, View):
                                  _("References to tag %(tag)s have been removed from the repertoire. "
                                    "Do not forget to update any WLE that might reference it.") % {'tag': tag_id})
 
-        return redirect('tags', self.lgr_id)
+        return redirect('tags', self.lgr_pk)

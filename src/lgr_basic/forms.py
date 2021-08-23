@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.utils import parse_label_input
-from lgr_advanced.api import LGRInfo
 from lgr_advanced.lgr_editor.forms.fields import ROOT_ZONES, FILE_FIELD_ENCODING_HELP
 from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
@@ -38,8 +37,8 @@ class ValidateLabelSimpleForm(forms.Form):
 
     def clean_labels(self):
         rz_lgr = self.cleaned_data['rz_lgr']
-        lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr, with_unidb=True))
-        udata = get_db_by_version(lgr_info.lgr.metadata.unicode_version)
+        lgr = get_by_name(rz_lgr, with_unidb=True)
+        udata = get_db_by_version(lgr.metadata.unicode_version)
 
         value = self.cleaned_data['labels']
         labels = list()

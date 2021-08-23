@@ -3,14 +3,17 @@
 render_html - Django management command to render an LGR document into a HTML page.
 """
 from __future__ import unicode_literals
+
+import os
 import sys
 import io
 
+from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
-from lgr_advanced.api import LGRInfo
 from lgr_advanced.lgr_renderer.api import generate_context
+from lgr_models.models.lgr import LgrBaseModel
 
 
 class Command(BaseCommand):
@@ -18,17 +21,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         with open(options['xml'], 'rb') as lgr_xml:
-            lgr_info = LGRInfo.from_dict(
-                {
-                    'xml': lgr_xml.read(),
-                    'validate': options['validate'],
-                }, None
-            )
+            filename = os.path.basename(options['xml'])
+            name = os.path.splitext(filename)[0]
+            lgr_object = LgrBaseModel(file=File(lgr_xml, name=filename),
+                                      name=name)
 
-            lgr = lgr_info.lgr
+            lgr = lgr_object.to_lgr(validate=options['validate'])
             context = generate_context(lgr)
             html = render_to_string('lgr_renderer.html', context)
-            if 'output' not in options:
+            if not options['output']:
                 sys.stdout.write(html)
             else:
                 with io.open(options['output'], 'w', encoding='utf-8') as output_file:
