@@ -52,13 +52,14 @@ class LGRInfo(LGRSerializer):
         self.xml = new_xml
 
     @classmethod
-    def create(cls, name, unicode_version, validating_repertoire_name):
+    def create(cls, name, unicode_version, validating_repertoire_name, session=None):
         metadata = Metadata()
         metadata.version = Version('1')
         metadata.set_unicode_version(unicode_version)
         lgr = LGR(name, metadata=metadata)
         lgr.unicode_database = unidb.manager.get_db_by_version(unicode_version)
-        validating_repertoire = get_by_name(validating_repertoire_name) if validating_repertoire_name else None
+        validating_repertoire = get_builtin_or_session_repertoire(session,
+            validating_repertoire_name) if validating_repertoire_name else None
         lgr_info = cls(name, lgr=lgr, validating_repertoire=validating_repertoire)
         return lgr_info
 
@@ -262,7 +263,7 @@ class LGRToolSession(LGRSession):
                       validate=True, lgr_set=lgr_info_set)
         return merged_id
 
-    def new_lgr(self, lgr_id, unicode_version, validating_repertoire_name):
+    def new_lgr(self, lgr_id, unicode_version, validating_repertoire_name, session=None):
         """
         Create a new, blank LGR, and save it in session.
 
@@ -273,6 +274,7 @@ class LGRToolSession(LGRSession):
         """
         lgr_info = self.lgr_serializer.create(name=lgr_id,
                                               unicode_version=unicode_version,
-                                              validating_repertoire_name=validating_repertoire_name)
+                                              validating_repertoire_name=validating_repertoire_name,
+                                              session=session)
         self.save_lgr(lgr_info)
         return lgr_info

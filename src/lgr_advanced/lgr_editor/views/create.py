@@ -56,9 +56,12 @@ class NewLGRView(LGRViewMixin, FormView):
                           context={'error': _(
                               "The LGR you have tried to create already exists in your working session. Please use a new name.")})
 
+        validating_repertoire = form.cleaned_data['validating_repertoire']
+        self.session.save_lgr(validating_repertoire.to_lgr_info(), validating_repertoire.name)
         self.session.new_lgr(self.lgr_id,
                              form.cleaned_data['unicode_version'],
-                             form.cleaned_data['validating_repertoire'])
+                             validating_repertoire.name,
+                             session=self.session)
         return super(NewLGRView, self).form_valid(form)
 
 

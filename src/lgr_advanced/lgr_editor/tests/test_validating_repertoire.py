@@ -12,7 +12,7 @@ class TestValidatingRepertoire(LgrWebClientTestBase):
         values = [v[1] for v in dropdown.fields['validating_repertoire'].choices]
         self.assertListEqual(values, self.dropdown_labels)
 
-    def test_validating_repertoire_full(self):
+    def test_validating_repertoire_import_full(self):
         self.login()
 
         response = self.client.get('/a/editor/import/')
@@ -24,4 +24,17 @@ class TestValidatingRepertoire(LgrWebClientTestBase):
                                         {'validating_repertoire': values[0],
                                          'encoding': 'utf-8',
                                          'file': fp}, follow=True)
+        self.assertNotContains(response, 'Cannot import LGR file(s)', status_code=200)
+
+    def test_validating_repertoire_create_full(self):
+        self.login()
+
+        response = self.client.get('/a/editor/new/')
+        dropdown = response.context['form'].fields['validating_repertoire']
+        values = [v[1] for v in dropdown.choices if v[1]]
+        self.assertListEqual(values, self.dropdown_labels)
+        response = self.client.post('/a/editor/new/',
+                                    {'validating_repertoire': values[0],
+                                     'unicode_version': '6.3.0',
+                                     'name': 'test'}, follow=True)
         self.assertNotContains(response, 'Cannot import LGR file(s)', status_code=200)
