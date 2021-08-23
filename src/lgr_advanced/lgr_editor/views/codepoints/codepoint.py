@@ -9,7 +9,7 @@ from ast import literal_eval
 
 from django.conf import settings
 from django.contrib import messages
-from django.http import HttpResponseBadRequest, Http404
+from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -37,13 +37,13 @@ class CodePointViewMixin(CodePointMixin):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        udata = unidb.manager.get_db_by_version(self.lgr_info.lgr.metadata.unicode_version)
-        char = self.lgr_info.lgr.get_char(self.codepoint)
+        udata = unidb.manager.get_db_by_version(self.lgr.metadata.unicode_version)
+        char = self.lgr.get_char(self.codepoint)
         variants = []
         for v in char.get_variants():
             in_lgr = True
             try:
-                self.lgr_info.lgr.get_char(v.cp)
+                self.lgr.get_char(v.cp)
             except NotInLGR:
                 in_lgr = False
 
@@ -64,7 +64,7 @@ class CodePointViewMixin(CodePointMixin):
         # References
         cp_references = []
         for ref_id in char.references:
-            ref = self.lgr_info.lgr.reference_manager.get(str(ref_id), None)
+            ref = self.lgr.reference_manager.get(str(ref_id), None)
             if ref is None:
                 # Invalid reference id
                 continue
@@ -75,7 +75,7 @@ class CodePointViewMixin(CodePointMixin):
                 'comment': ref.get('comment', '')
             })
 
-        rule_names = (('', ''),) + tuple((v, v) for v in self.lgr_info.lgr.rules)
+        rule_names = (('', ''),) + tuple((v, v) for v in self.lgr.rules)
         add_variant_form = None
         variants_form = None
         codepoint_form = None
@@ -91,35 +91,28 @@ class CodePointViewMixin(CodePointMixin):
         variants_form = variants_form or CodepointVariantFormSet(initial=variants,
                                                                  prefix='variants',
                                                                  rules=rule_names,
-                                                                 disabled=self.lgr_info.is_set or self.lgr_set_id is not None)
+                                                                 disabled=self.is_set_or_in_set())
         codepoint_form = codepoint_form or CodepointForm(initial={'comment': char.comment,
                                                                   'tags': char.tags,
                                                                   'when': char.when,
                                                                   'not_when': char.not_when},
                                                          prefix='edit_cp',
                                                          rules=rule_names,
-                                                         tags=tuple((v, v) for v in self.lgr_info.lgr.all_tags()),
-                                                         disabled=self.lgr_info.is_set or self.lgr_set_id is not None)
+                                                         tags=tuple((v, v) for v in self.lgr.all_tags()),
+                                                         disabled=self.is_set_or_in_set())
         ctx.update({
             'add_variant_form': add_variant_form,
             'variants_form': variants_form,
             'codepoint_form': codepoint_form,
             'is_range': isinstance(char, RangeChar),
             'cp': self.codepoint_id,
-            'lgr': self.lgr_info.lgr,
-            'lgr_id': self.lgr_id,
             'variants': variants,
             'cp_references': cp_references,
             'cp_references_json': json.dumps(cp_references),
             'cp_disp': render_char(char),
             'name': render_name(char, udata),
             'age': render_age(char, udata),
-            'is_set': self.lgr_info.is_set or self.lgr_set_id is not None
         })
-        if self.lgr_set_id:
-            lgr_set_info = self.session.select_lgr(self.lgr_set_id)
-            ctx['lgr_set'] = lgr_set_info.lgr
-            ctx['lgr_set_id'] = self.lgr_set_id
         return ctx
 
 
@@ -148,7 +141,7 @@ class AddVariantView(LGREditMixin, CodePointViewMixin, FormView):
         return 'add_variant'
 
     def get_success_url(self):
-        return reverse('codepoint_view', kwargs={'lgr_id': self.lgr_id, 'codepoint_id': self.codepoint_id})
+        return reverse('codepoint_view', kwargs={'lgr_pk': self.lgr_pk, 'codepoint_id': self.codepoint_id})
 
     def form_valid(self, form):
         logger.debug('Add variant')
@@ -156,27 +149,27 @@ class AddVariantView(LGREditMixin, CodePointViewMixin, FormView):
             var_cp_sequence = form.cleaned_data['codepoint']
             override_repertoire = form.cleaned_data['override_repertoire']
             try:
-                self.lgr_info.lgr.add_variant(self.codepoint,
-                                              var_cp_sequence,
-                                              variant_type=settings.DEFAULT_VARIANT_TYPE,
-                                              validating_repertoire=self.lgr_info.validating_repertoire,
-                                              override_repertoire=override_repertoire)
-                if var_cp_sequence not in self.lgr_info.lgr.repertoire:
+                self.lgr.add_variant(self.codepoint,
+                                     var_cp_sequence,
+                                     variant_type=settings.DEFAULT_VARIANT_TYPE,
+                                     validating_repertoire=self.validating_repertoire,
+                                     override_repertoire=override_repertoire)
+                if var_cp_sequence not in self.lgr.repertoire:
                     # Added variant code point not in repertoire
                     # -> add it to the LGR
-                    self.lgr_info.lgr.add_cp(var_cp_sequence,
-                                             comment="Automatically added from out-of-repertoire variant")
-                    self.lgr_info.lgr.add_variant(var_cp_sequence, self.codepoint,
-                                                  variant_type=settings.DEFAULT_VARIANT_TYPE,
-                                                  comment="Automatically added to map back to out-of-repertoire variant")
+                    self.lgr.add_cp(var_cp_sequence,
+                                    comment="Automatically added from out-of-repertoire variant")
+                    self.lgr.add_variant(var_cp_sequence, self.codepoint,
+                                         variant_type=settings.DEFAULT_VARIANT_TYPE,
+                                         comment="Automatically added to map back to out-of-repertoire variant")
                     # Add identity mapping for newly added code point
-                    self.lgr_info.lgr.add_variant(var_cp_sequence, var_cp_sequence,
-                                                  variant_type='out-of-repertoire-var',
-                                                  comment='Out-of-repertoire-var')
+                    self.lgr.add_variant(var_cp_sequence, var_cp_sequence,
+                                         variant_type='out-of-repertoire-var',
+                                         comment='Out-of-repertoire-var')
                     messages.success(self.request,
                                      _('Automatically added codepoint %s from out-of-repertoire-var variant') %
                                      format_cp(var_cp_sequence))
-                self.session.save_lgr(self.lgr_info)
+                self.update_lgr()
                 messages.success(self.request, _('New variant %s added') % format_cp(var_cp_sequence))
             except LGRException as ex:
                 messages.add_message(self.request, messages.ERROR,
@@ -194,18 +187,18 @@ class EditCodePointView(LGREditMixin, CodePointViewMixin, FormView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.rule_names = (('', ''),) + tuple((v, v) for v in self.lgr_info.lgr.rules)
+        self.rule_names = (('', ''),) + tuple((v, v) for v in self.lgr.rules)
 
     def get_prefix(self):
         return 'edit_cp'
 
     def get_success_url(self):
-        return reverse('codepoint_view', kwargs={'lgr_id': self.lgr_id, 'codepoint_id': self.codepoint_id})
+        return reverse('codepoint_view', kwargs={'lgr_pk': self.lgr_pk, 'codepoint_id': self.codepoint_id})
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['rules'] = self.rule_names
-        kwargs['tags'] = tuple((v, v) for v in self.lgr_info.lgr.all_tags())
+        kwargs['tags'] = tuple((v, v) for v in self.lgr.all_tags())
         return kwargs
 
     def form_valid(self, form):
@@ -213,10 +206,10 @@ class EditCodePointView(LGREditMixin, CodePointViewMixin, FormView):
         variants_form = CodepointVariantFormSet(self.request.POST,
                                                 prefix='variants',
                                                 rules=self.rule_names,
-                                                disabled=self.lgr_info.is_set or self.lgr_set_id is not None)
+                                                disabled=self.is_set_or_in_set())
 
         comment = form.cleaned_data['comment'] or None
-        char = self.lgr_info.lgr.get_char(self.codepoint)
+        char = self.lgr.get_char(self.codepoint)
         when = form.cleaned_data['when'] or None
         not_when = form.cleaned_data['not_when'] or None
         ref = char.references
@@ -224,25 +217,25 @@ class EditCodePointView(LGREditMixin, CodePointViewMixin, FormView):
 
         try:
             if isinstance(char, RangeChar):
-                self.lgr_info.lgr.del_range(char.first_cp, char.last_cp)
+                self.lgr.del_range(char.first_cp, char.last_cp)
                 # No validating repertoire since
                 # the codepoint is being edited
-                self.lgr_info.lgr.add_range(char.first_cp,
-                                            char.last_cp,
-                                            comment=comment,
-                                            when=when, not_when=not_when,
-                                            ref=ref,
-                                            tag=tag)
+                self.lgr.add_range(char.first_cp,
+                                   char.last_cp,
+                                   comment=comment,
+                                   when=when, not_when=not_when,
+                                   ref=ref,
+                                   tag=tag)
             else:
                 if variants_form.is_valid():
                     # Delete codepoint from LGR, then add it + its variants
-                    self.lgr_info.lgr.del_cp(self.codepoint)
+                    self.lgr.del_cp(self.codepoint)
                     # No validating repertoire here neither
-                    self.lgr_info.lgr.add_cp(self.codepoint,
-                                             comment=comment,
-                                             ref=ref,
-                                             tag=tag,
-                                             when=when, not_when=not_when)
+                    self.lgr.add_cp(self.codepoint,
+                                    comment=comment,
+                                    ref=ref,
+                                    tag=tag,
+                                    when=when, not_when=not_when)
                     for v_form in variants_form:
                         variant_codepoint = slug_to_cp(v_form.cleaned_data['cp'])
                         variant_comment = v_form.cleaned_data['comment'] or None
@@ -251,19 +244,19 @@ class EditCodePointView(LGREditMixin, CodePointViewMixin, FormView):
                         variant_not_when = v_form.cleaned_data['not_when'] or None
                         variant_refs = literal_eval(v_form.cleaned_data['references'])
                         # No validating repertoire here neither
-                        self.lgr_info.lgr.add_variant(self.codepoint,
-                                                      variant_codepoint,
-                                                      comment=variant_comment,
-                                                      variant_type=variant_type,
-                                                      when=variant_when,
-                                                      not_when=variant_not_when,
-                                                      ref=variant_refs)
+                        self.lgr.add_variant(self.codepoint,
+                                             variant_codepoint,
+                                             comment=variant_comment,
+                                             variant_type=variant_type,
+                                             when=variant_when,
+                                             not_when=variant_not_when,
+                                             ref=variant_refs)
                 else:
                     logger.error('Edit CP: form is not valid')
                     logger.error(variants_form.errors)
 
             # Save edition
-            self.session.save_lgr(self.lgr_info)
+            self.update_lgr()
             messages.success(self.request, _('Code point edited'))
             # do nothing to redirect to myself (success url) to refresh display
         except LGRException as ex:
@@ -284,39 +277,39 @@ class CodePointUpdateReferencesView(LGREditMixin, CodePointMixin, RedirectView):
                          request.POST.getlist('ref_id'))  # filter away empty entries (an artifact of the editing form)
 
         try:
-            char = self.lgr_info.lgr.get_char(self.codepoint)
+            char = self.lgr.get_char(self.codepoint)
             tags = char.tags
             comment = char.comment
 
             if isinstance(char, RangeChar):
-                self.lgr_info.lgr.del_range(char.first_cp,
-                                            char.last_cp)
+                self.lgr.del_range(char.first_cp,
+                                   char.last_cp)
                 # No validating repertoire here since we're only updating references
-                self.lgr_info.lgr.add_range(char.first_cp,
-                                            char.last_cp,
-                                            comment=comment,
-                                            when=char.when,
-                                            not_when=char.not_when,
-                                            ref=ref_ids,  # update the ref ids
-                                            tag=tags)
+                self.lgr.add_range(char.first_cp,
+                                   char.last_cp,
+                                   comment=comment,
+                                   when=char.when,
+                                   not_when=char.not_when,
+                                   ref=ref_ids,  # update the ref ids
+                                   tag=tags)
             else:
-                self.lgr_info.lgr.del_cp(self.codepoint)
+                self.lgr.del_cp(self.codepoint)
                 # No validating repertoire either
-                self.lgr_info.lgr.add_cp(self.codepoint,
-                                         comment=char.comment,
-                                         when=char.when, not_when=char.not_when,
-                                         ref=ref_ids,  # update the ref ids
-                                         tag=tags)
+                self.lgr.add_cp(self.codepoint,
+                                comment=char.comment,
+                                when=char.when, not_when=char.not_when,
+                                ref=ref_ids,  # update the ref ids
+                                tag=tags)
                 for var in char.get_variants():
                     # add back the variants
-                    self.lgr_info.lgr.add_variant(self.codepoint,
-                                                  variant_cp=var.cp,
-                                                  variant_type=var.type,
-                                                  when=var.when,
-                                                  not_when=var.not_when,
-                                                  comment=var.comment,
-                                                  ref=var.references)
-            self.session.save_lgr(self.lgr_info)
+                    self.lgr.add_variant(self.codepoint,
+                                         variant_cp=var.cp,
+                                         variant_type=var.type,
+                                         when=var.when,
+                                         not_when=var.not_when,
+                                         comment=var.comment,
+                                         ref=var.references)
+            self.update_lgr()
             messages.success(request, _('References updated successfully'))
         except LGRException as ex:
             messages.add_message(request, messages.ERROR, lgr_exception_to_text(ex))
@@ -336,21 +329,21 @@ class VariantUpdateReferencesView(LGREditMixin, CodePointMixin, View):
                          self.request.POST.getlist('ref_id'))
 
         try:
-            char = self.lgr_info.lgr.get_char(self.codepoint)
+            char = self.lgr.get_char(self.codepoint)
             # find our variant
             for variant in char.get_variants():
                 if variant.cp == var_cp and variant.when == (var_when or None) and variant.not_when == (
                         var_not_when or None):
                     # found it!
                     char.del_variant(variant.cp, when=variant.when, not_when=variant.not_when)
-                    self.lgr_info.lgr.add_variant(self.codepoint,
-                                                  variant.cp,
-                                                  variant_type=variant.type,
-                                                  when=variant.when,
-                                                  not_when=variant.not_when,
-                                                  comment=variant.comment,
-                                                  ref=ref_ids)
-                    self.session.save_lgr(self.lgr_info)
+                    self.lgr.add_variant(self.codepoint,
+                                         variant.cp,
+                                         variant_type=variant.type,
+                                         when=variant.when,
+                                         not_when=variant.not_when,
+                                         comment=variant.comment,
+                                         ref=ref_ids)
+                    self.update_lgr()
                     messages.success(self.request,
                                      _('References updated successfully'))
                     break
@@ -369,7 +362,7 @@ class VariantUpdateReferencesView(LGREditMixin, CodePointMixin, View):
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        return redirect('codepoint_view', lgr_id=self.lgr_id, codepoint_id=self.codepoint_id)
+        return redirect('codepoint_view', lgr_pk=self.lgr_pk, codepoint_id=self.codepoint_id)
 
 
 class CodePointDeleteView(LGREditMixin, CodePointMixin, RedirectView):
@@ -380,20 +373,20 @@ class CodePointDeleteView(LGREditMixin, CodePointMixin, RedirectView):
 
     # TODO - only accept POST request
     def get(self, request, *args, **kwargs):
-        char = self.lgr_info.lgr.get_char(self.codepoint)
+        char = self.lgr.get_char(self.codepoint)
 
         try:
             if isinstance(char, RangeChar):
-                self.lgr_info.lgr.del_range(char.first_cp, char.last_cp)
+                self.lgr.del_range(char.first_cp, char.last_cp)
             else:
-                self.lgr_info.lgr.del_cp(self.codepoint)
-            self.session.save_lgr(self.lgr_info)
+                self.lgr.del_cp(self.codepoint)
+            self.update_lgr()
             messages.info(self.request, _("Code point %s has been deleted") % format_cp(self.codepoint))
         except LGRException as ex:
             messages.add_message(self.request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        return redirect('codepoint_list', lgr_id=self.lgr_id)
+        return redirect('codepoint_list', lgr_pk=self.lgr_pk)
 
 
 class VariantDeleteView(LGREditMixin, CodePointMixin, View):
@@ -404,20 +397,16 @@ class VariantDeleteView(LGREditMixin, CodePointMixin, View):
     # TODO - only accept POST request
     def get(self, request, *args, **kwargs):
         var_slug = self.kwargs['var_slug']
-        lgr_info = self.session.select_lgr(self.lgr_id)
-        if lgr_info.is_set:
-            return HttpResponseBadRequest('Cannot edit LGR set')
-
         var_cp, var_when, var_not_when = slug_to_var(var_slug)
 
         try:
-            r = lgr_info.lgr.del_variant(self.codepoint, var_cp, when=var_when or None, not_when=var_not_when or None)
+            r = self.lgr.del_variant(self.codepoint, var_cp, when=var_when or None, not_when=var_not_when or None)
             var_msg_prefix = _("Variant %(var_cp)s with when='%(when)s' and not-when='%(not_when)s'") \
                              % {'var_cp': format_cp(var_cp),
                                 'when': var_when,
                                 'not_when': var_not_when}
             if r:
-                self.session.save_lgr(lgr_info)
+                self.update_lgr()
                 messages.info(request, _("%(var_msg_prefix)s has been deleted") % {'var_msg_prefix': var_msg_prefix})
             else:
                 messages.error(request,
@@ -427,4 +416,4 @@ class VariantDeleteView(LGREditMixin, CodePointMixin, View):
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        return redirect('codepoint_view', lgr_id=self.lgr_id, codepoint_id=self.codepoint_id)
+        return redirect('codepoint_view', lgr_pk=self.lgr_pk, codepoint_id=self.codepoint_id)

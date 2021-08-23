@@ -26,8 +26,7 @@ class LGRRenderXMLView(LGRHandlingBaseMixin, View):
         self.force_download = self.kwargs.get('force_download', False)
 
     def get(self, request, *args, **kwargs):
-        self.lgr_info.update_xml(pretty_print=True)
-        resp = HttpResponse(self.lgr_info.xml, content_type='text/xml', charset='UTF-8')
+        resp = HttpResponse(self.lgr_object.file, content_type='text/xml', charset='UTF-8')
         if self.force_download:
-            resp['Content-disposition'] = 'attachment'
+            resp['Content-disposition'] = f'attachment; filename={self.lgr_object.filename}'
         return resp

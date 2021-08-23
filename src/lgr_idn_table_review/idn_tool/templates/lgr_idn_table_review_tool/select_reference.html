@@ -26,7 +26,7 @@
             {{ form.media }}
             {% for field in form %}
                 <tr>
-                    <td>{{ field.html_name }}</td>
+                    <td>{{ field.label }}</td>
                     <td>{% include "lgr_editor/_form_field_no_label.html" with field=field %}</td>
                 </tr>
             {% endfor %}

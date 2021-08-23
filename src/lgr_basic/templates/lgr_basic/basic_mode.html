@@ -149,7 +149,7 @@
 
                 <div id="results">
                     {% for result in results %}
-                        {% include "lgr_validator/_validated_results.html" with result=result lgr_id=lgr_id index=forloop.counter only %}
+                        {% include "lgr_validator/_validated_results.html" with result=result lgr_pk=lgr_pk index=forloop.counter only %}
                     {% endfor %}
                 </div>
 
@@ -217,12 +217,12 @@
         function changeRzValue() {
             const val = $('#id_rz_lgr').val();
 
-            let renderLink = `{% url 'lgr_render' 'NEWVALUESTUB' %}`;
-            renderLink = renderLink.replace('NEWVALUESTUB', val);
+            let renderLink = `{% url 'lgr_render' '42' %}`;
+            renderLink = renderLink.replace('42', val);
             $('#renderLink').attr('href', renderLink);
 
-            let xmlLink = `{% url 'view_lgr_xml' 'NEWVALUESTUB' %}`;
-            xmlLink = xmlLink.replace('NEWVALUESTUB', val);
+            let xmlLink = `{% url 'view_lgr_xml' '42' %}`;
+            xmlLink = xmlLink.replace('42', val);
             $('#xmlLink').attr('href', xmlLink);
         }
 

@@ -54,7 +54,7 @@
         </table>
 
         {# collision if this is a LGR set but not an LGR in a set #}
-        {% if result.collisions_checked and is_set and not lgr_set_id or result.collisions_checked and not is_set %}
+        {% if result.collisions_checked and is_set and not lgr_set or result.collisions_checked and not is_set %}
 
             {% if result.collisions_error or result.collision %}
                 <h3 class="text-danger"><i class="glyphicon glyphicon-remove"></i> {% trans "Collision(s) found" %}</h3>
@@ -173,7 +173,7 @@
                     {% endfor %}
 
                 {% elif result.num_variants > result.threshold_include_vars %}
-                    {% if not is_set or lgr_set_id %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
+                    {% if not is_set or lgr_set %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
                         <tr>
                             <td colspan="4" class="bg-warning">
                                 {% blocktrans trimmed %}
@@ -188,12 +188,12 @@
 
         {% if result.num_variants > result.threshold_include_vars %}
             {# TODO: Need to pass set_labels along #}
-            {% if lgr_set_id %}
-                {% url 'lgr_validate_csv' lgr_set_id=lgr_set_id lgr_id=lgr_id as lgr_validate_csv_url %}
+            {% if lgr_set %}
+                {% url 'lgr_validate_csv_set' lgr_pk=lgr_pk as lgr_validate_csv_url %}
             {% else %}
-                {% url 'lgr_validate_csv' lgr_id=lgr_id as lgr_validate_csv_url %}
+                {% url 'lgr_validate_csv' lgr_pk=lgr_pk as lgr_validate_csv_url %}
             {% endif %}
-            {% if not is_set or lgr_set_id %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
+            {% if not is_set or lgr_set %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
                 <a class="btn btn-info" href="{{ lgr_validate_csv_url }}?label={{ result.u_label|urlencode }}{% if result.script %}&script={{ result.script|urlencode }}{% endif %}">
                     <i class="glyphicon glyphicon-save"></i>
                         {% blocktrans %}Download results in CSV{% endblocktrans %}

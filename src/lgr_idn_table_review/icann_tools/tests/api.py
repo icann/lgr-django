@@ -13,10 +13,9 @@ from parameterized import parameterized
 
 from lgr.core import LGR
 from lgr.metadata import Metadata
-from lgr_advanced.api import LGRInfo
 from lgr_idn_table_review.icann_tools.api import get_reference_lgr, NoRefLgrFound
-from lgr_idn_table_review.idn_tool.api import IdnTableInfo
-from lgr_models.models.lgr import RefLgr, RzLgrMember, RzLgr
+from lgr_idn_table_review.icann_tools.models import IANAIdnTable
+from lgr_models.models.lgr import RefLgr, RzLgrMember, RzLgr, LgrBaseModel
 from lgr_web import settings
 
 logger = logging.getLogger('api')
@@ -317,10 +316,9 @@ class TestApi(TestCase):
                 metadata = Metadata()
                 metadata.add_language(lgr_data['language-tag'], force=True)
                 lgr = LGR(metadata=metadata)
-                info = LGRInfo(attrs['name'], lgr=lgr)
-                info.update_xml(pretty_print=True)
+                xml = LgrBaseModel._parse_lgr_xml(lgr)
                 with open(attrs['file'], 'wb') as f:
-                    f.write(info.xml)
+                    f.write(xml)
 
             lgr = model.objects.create(**attrs)
             if lgr_data.get('expected', False):
@@ -328,12 +326,12 @@ class TestApi(TestCase):
 
         idn_table_metadata = Metadata()
         idn_table_metadata.add_language(idn_table_language_tag, force=True)
-        idn_table_info = IdnTableInfo(idn_table_language_tag, "", LGR(metadata=idn_table_metadata))
+        idn_table_object = IANAIdnTable.from_lgr(None, LGR(metadata=idn_table_metadata), name=idn_table_language_tag)
 
         if expected:
-            self.assertEqual(get_reference_lgr(idn_table_info), expected)
+            self.assertEqual(get_reference_lgr(idn_table_object), expected)
         else:
-            self.assertRaises(NoRefLgrFound, get_reference_lgr, idn_table_info)
+            self.assertRaises(NoRefLgrFound, get_reference_lgr, idn_table_object)
 
     def tearDown(self):
         shutil.rmtree(self.test_path)

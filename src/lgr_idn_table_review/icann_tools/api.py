@@ -11,15 +11,15 @@ from urllib.request import urlopen
 
 import lxml.html
 from django.conf import settings
+from django.core.files import File
 
 from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.tools.utils import download_file
 from lgr.utils import tag_to_language_script
 from lgr_auth.models import LgrRole
-from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport
+from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport, IANAIdnTable
 from lgr_models.models.lgr import RefLgr, RzLgrMember, RzLgr
-from lgr_idn_table_review.idn_tool.api import IdnTableInfo
 from lgr_session.api import LGRStorage
 
 logger = logging.getLogger(__name__)
@@ -35,11 +35,11 @@ class NoRefLgrFound(BaseException):
         self.message = msg
 
 
-class LGRIcannSession(LGRStorage):
+class LGRIcannStorage(LGRStorage):
     storage_model = IdnReviewIcannReport
 
-    def __init__(self, request):
-        super().__init__(request.user, filter_on_user=False)
+    def __init__(self, user):
+        super().__init__(user, filter_on_user=False)
 
     def storage_can_read(self):
         return self.user.role in [LgrRole.ICANN.value, LgrRole.ADMIN.value]
@@ -67,26 +67,15 @@ def get_icann_idn_repository_tables():
             continue
         __, lang_script, version = basename.rsplit('.', 1)[0].split('_', 3)
         date = dates.get(url)
-        try:
-            name, data = download_file(IANA_URL + url)
-            info = IdnTableInfo.from_dict({
-                'name': name,
-                'data': data.read().decode('utf-8'),
-            })
-        except URLError:
-            logger.error('Cannot download %s', IANA_URL + url)
-            continue
-        except Exception:
-            logger.exception("Unable to parse IDN table at %s", IANA_URL + url)
-            continue
-        meta: Metadata = info.lgr.metadata
-        if date and not meta.date:
-            meta.set_date(date, force=True)
-        if not meta.languages:
-            meta.add_language(lang_script, force=True)
-        if not meta.version:
-            meta.version = Version(version)
-        yield tlds, info
+        name, data = download_file(IANA_URL + url)
+        idn_table = IANAIdnTable(file=File(data, name=name),
+                                 name=os.path.splitext(name)[0],
+                                 owner=None,
+                                 url=url,
+                                 date=date,
+                                 lang_script=lang_script,
+                                 version=version)
+        yield tlds, idn_table
 
 
 def _make_lgr_query(obj, q, logs, multiple_found_query=None):
@@ -113,14 +102,14 @@ def _make_lgr_query(obj, q, logs, multiple_found_query=None):
         return None
 
 
-def get_reference_lgr(idn_table_info: IdnTableInfo):
-    idn_table: LGR = idn_table_info.lgr
-    logger.info('Look for reference LGR for IDN table %s', idn_table_info.name)
+def get_reference_lgr(idn_table: IANAIdnTable):
+    lgr: LGR = idn_table.to_lgr()
+    logger.info('Look for reference LGR for IDN table %s', idn_table.name)
     logs = []
     try:
-        tag = idn_table.metadata.languages[0]
+        tag = lgr.metadata.languages[0]
     except IndexError:
-        logger.warning("No language tag in IDN table %s", idn_table)
+        logger.warning("No language tag in IDN table %s", lgr)
         raise NoRefLgrFound("No language tag in IDN table")
 
     language, script = tag_to_language_script(tag, use_suppress_script=True)

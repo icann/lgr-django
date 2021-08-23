@@ -19,17 +19,24 @@ class StorageType(Enum):
 
 class LGRSessionView(LoginRequiredMixin, UserPassesTestMixin, View):
 
+    def __storage_classes(self, klass=LGRStorage):
+        subclasses = set()
+        for subclass in klass.__subclasses__():
+            subclasses.add(subclass)
+            subclasses.update(self.__storage_classes(subclass))
+        return subclasses
+
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.report_id = self.kwargs.get('report_id')
         self.pk = self.kwargs.get('pk', None)
         self.next = request.GET.get('next', '/')
         storage_type = self.kwargs.get('storage')
-        for subclass in LGRStorage.__subclasses__():
+        for subclass in self.__storage_classes():
             if not subclass.storage_model:
                 continue
             if subclass.storage_model.storage_type == StorageType(storage_type):
-                self.session = subclass(request)
+                self.session = subclass(request.user)
                 return
         raise Http404
 
@@ -54,6 +61,7 @@ class DownloadReportView(LGRSessionView):
 
 class DeleteReportView(LGRSessionView):
 
+    # TODO make that a post
     def get(self, request, *args, **kwargs):
         if self.pk:
             self.session.storage_delete_report_file(self.pk)

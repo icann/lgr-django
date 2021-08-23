@@ -34,14 +34,13 @@ class IdnTableReviewSelectReferenceForm(forms.Form):
         self.lgrs = kwargs.pop('lgrs', {})
         super().__init__(*args, **kwargs)
 
-        for idn_table_name in idn_tables:
-            self.fields[idn_table_name] = forms.ChoiceField(label=idn_table_name,
-                                                            required=True,
-                                                            choices=((lgr, lgr) for lgr in self.lgrs.keys()),
-                                                            widget=autocomplete.ListSelect2(url='ref-lgr-autocomplete',
-                                                                                            attrs={
-                                                                                                'data-language': None
-                                                                                            }))
+        for idn_table in idn_tables:
+            self.fields[str(idn_table.pk)] = forms.ChoiceField(label=idn_table.name,
+                                                               required=True,
+                                                               choices=((lgr, lgr) for lgr in self.lgrs.keys()),
+                                                               widget=autocomplete.ListSelect2(
+                                                                   url='ref-lgr-autocomplete',
+                                                                   attrs={'data-language': None}))
 
     def clean(self):
         cleaned_data = super().clean()

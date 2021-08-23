@@ -27,7 +27,7 @@
                             <a class="btn btn-default confirm-prompt"
                                title="{% trans 'Delete reference' %}"
                                data-confirmation-prompt="{% trans 'Are you sure you want to delete this reference?' %}"
-                               href="{% url 'reference_delete' lgr_id=lgr_id ref_id=ref.ref_id.value %}">
+                               href="{% url 'reference_delete' lgr_pk=lgr_pk ref_id=ref.ref_id.value %}">
                                 <i class="glyphicon glyphicon-trash"></i>
                             </a>
                         </td>

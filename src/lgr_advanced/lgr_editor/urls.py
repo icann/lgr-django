@@ -3,8 +3,7 @@ from __future__ import unicode_literals
 
 from django.urls import path, register_converter
 
-from lgr_web.converters import (LgrSlugConverter,
-                                CodePointSlugConverter,
+from lgr_web.converters import (CodePointSlugConverter,
                                 VarSlugConverter,
                                 TagSlugConverter,
                                 FileNameConverter,
@@ -34,7 +33,6 @@ from .views.tag import ListTagView, ListTagJsonView, DeleteTagView
 from .views.validate import ValidateLGRView
 
 register_converter(FileNameConverter, 'filename')
-register_converter(LgrSlugConverter, 'lgr')
 register_converter(CodePointSlugConverter, 'cp')
 register_converter(VarSlugConverter, 'var')
 register_converter(TagSlugConverter, 'tag')
@@ -44,74 +42,79 @@ register_converter(ActionIndexConverter, 'action')
 urlpatterns = [
     # Import/Creation functions
     path('import/ref/<filename:filename>/', ImportReferenceLGRView.as_view(), name='import_reference_lgr'),
-    path('lgr/<lgr:lgr_id>/d/', DeleteLGRView.as_view(), name='delete_lgr'),
+    path('lgr/<int:lgr_pk>/d/', DeleteLGRView.as_view(), name='delete_lgr'),
     path('new/', NewLGRView.as_view(), name='new_lgr'),
     path('import/', ImportLGRView.as_view(), name='import_lgr'),
 
     # View/Export functions
-    path('lgr/view/<lgr:lgr_id>.xml', LGRRenderXMLView.as_view(), name='view_lgr_xml'),
-    path('lgr/view/<lgr:lgr_set_id>/<lgr:lgr_id>.xml', LGRRenderXMLView.as_view(), name='view_lgr_xml'),
-    path('lgr/download/<lgr:lgr_id>.xml', LGRRenderXMLView.as_view(), kwargs={'force_download': True},
-         name='download_lgr_xml'),
-    path('lgr/download/<lgr:lgr_set_id>/<lgr:lgr_id>.xml', LGRRenderXMLView.as_view, kwargs={'force_download': True},
-         name='download_lgr_xml'),
+    path('lgr/view/<int:lgr_pk>', LGRRenderXMLView.as_view(), name='view_lgr_xml'),
+    path('lgr/set/view/<int:lgr_pk>', LGRRenderXMLView.as_view(), name='view_lgr_xml_set', kwargs={'in_set': True}),
+    path('lgr/download/<int:lgr_pk>', LGRRenderXMLView.as_view(), name='download_lgr_xml',
+         kwargs={'force_download': True}),
+    path('lgr/set/download/<int:lgr_pk>.xml', LGRRenderXMLView.as_view(), name='download_lgr_xml_set',
+         kwargs={'force_download': True, 'in_set': True}),
 
     # Reference management functions
-    path('lgr/<lgr:lgr_id>/a/references/', AddReferenceAjaxView.as_view(), name='reference_add_ajax'),
-    path('lgr/<lgr:lgr_id>/references/', ReferenceView.as_view(), name='references'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/references/', ReferenceView.as_view(), name='references'),
-    path('lgr/<lgr:lgr_id>/references.json/', ListReferenceJsonView.as_view(), name='references_json'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/references.json/', ListReferenceJsonView.as_view(), name='references_json'),
-    path('lgr/<lgr:lgr_id>/d/references/<ref:ref_id>', DeleteReferenceView.as_view(), name='reference_delete'),
+    path('lgr/<int:lgr_pk>/a/references/', AddReferenceAjaxView.as_view(), name='reference_add_ajax'),
+    path('lgr/<int:lgr_pk>/references/', ReferenceView.as_view(), name='references'),
+    path('lgr/set/<int:lgr_pk>/references/', ReferenceView.as_view(), name='references_set', kwargs={'in_set': True}),
+    path('lgr/<int:lgr_pk>/references.json/', ListReferenceJsonView.as_view(), name='references_json'),
+    path('lgr/<int:lgr_pk>/references.json/', ListReferenceJsonView.as_view(), name='references_json_set',
+         kwargs={'in_set': True}),
+    path('lgr/<int:lgr_pk>/d/references/<ref:ref_id>', DeleteReferenceView.as_view(), name='reference_delete'),
 
     # Metadata management functions,
-    path('lgr/<lgr:lgr_id>/metadata/', MetadataView.as_view(), name='metadata'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/metadata/', MetadataView.as_view(), name='metadata'),
+    path('lgr/<int:lgr_pk>/metadata/', MetadataView.as_view(), name='metadata'),
+    path('lgr/set/<int:lgr_pk>/metadata/', MetadataView.as_view(), name='metadata_set', kwargs={'in_set': True}),
 
     # Tags management functions
-    path('lgr/<lgr:lgr_id>/tags', ListTagView.as_view(), name='tags'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/tags', ListTagView.as_view(), name='tags'),
-    path('lgr/<lgr:lgr_id>/d/tags/<tag:tag_id>', DeleteTagView.as_view(), name='tag_delete'),
-    path('lgr/<lgr:lgr_id>/tags/<tag:tag_id>', ListTagJsonView.as_view(), name='tag_list_json'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/tags/<tag:tag_id>', ListTagJsonView.as_view(), name='tag_list_json'),
+    path('lgr/<int:lgr_pk>/tags', ListTagView.as_view(), name='tags'),
+    path('lgr/set/<int:lgr_pk>/tags', ListTagView.as_view(), name='tags_set', kwargs={'in_set': True}),
+    path('lgr/<int:lgr_pk>/d/tags/<tag:tag_id>', DeleteTagView.as_view(), name='tag_delete'),
+    path('lgr/<int:lgr_pk>/tags/<tag:tag_id>', ListTagJsonView.as_view(), name='tag_list_json'),
+    path('lgr/<int:lgr_pk>/tags/<tag:tag_id>', ListTagJsonView.as_view(), name='tag_list_json_set',
+         kwargs={'in_set': True}),
 
     # Rules functions
-    path('lgr/<lgr:lgr_id>/rules/', ListRuleView.as_view(), name='rules'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/rules/', ListRuleView.as_view(), name='rules'),
+    path('lgr/<int:lgr_pk>/rules/', ListRuleView.as_view(), name='rules'),
+    path('lgr/set/<int:lgr_pk>/rules/', ListRuleView.as_view(), name='rules_set', kwargs={'in_set': True}),
 
-    path('lgr/<lgr:lgr_id>/rules/class/edit/<str:clsname>/', RuleEditClassAjaxView.as_view(), name='rule_edit_class'),
-    path('lgr/<lgr:lgr_id>/rules/rule/edit/<str:rulename>/', RuleEditRuleAjaxView.as_view(), name='rule_edit_rule'),
-    path('lgr/<lgr:lgr_id>/rules/action/edit/(<action:action_idx>/', RuleEditActionAjaxView.as_view(),
+    path('lgr/<int:lgr_pk>/rules/class/edit/<str:clsname>/', RuleEditClassAjaxView.as_view(), name='rule_edit_class'),
+    path('lgr/<int:lgr_pk>/rules/rule/edit/<str:rulename>/', RuleEditRuleAjaxView.as_view(), name='rule_edit_rule'),
+    path('lgr/<int:lgr_pk>/rules/action/edit/(<action:action_idx>/', RuleEditActionAjaxView.as_view(),
          name='rule_edit_action'),
 
     # Embedded LGR function
-    path('lgr/<lgr:lgr_id>/embedded/', EmbeddedLGRsView.as_view(), name='embedded_lgrs'),
+    path('lgr/<int:lgr_pk>/embedded/', EmbeddedLGRsView.as_view(), name='embedded_lgrs'),
 
     # Validation function
-    path('lgr/<lgr:lgr_id>/validate_lgr/', ValidateLGRView.as_view(), name='validate_lgr'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/validate_lgr/', ValidateLGRView.as_view(), name='validate_lgr'),
-    path('lgr/<lgr:lgr_id>/validate_lgr/s/', ValidateLGRView.as_view(),
-         kwargs={'output_func': _prepare_validation_html_file_response}, name='validate_lgr_save'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/validate_lgr/s/', ValidateLGRView.as_view(),
-         kwargs={'output_func': _prepare_validation_html_file_response}, name='validate_lgr_save'),
+    path('lgr/<int:lgr_pk>/validate_lgr/', ValidateLGRView.as_view(), name='validate_lgr'),
+    path('lgr/set/<int:lgr_pk>/validate_lgr/', ValidateLGRView.as_view(), name='validate_lgr_set',
+         kwargs={'in_set': True}),
+    path('lgr/<int:lgr_pk>/validate_lgr/s/', ValidateLGRView.as_view(), name='validate_lgr_save',
+         kwargs={'output_func': _prepare_validation_html_file_response}),
+    path('lgr/set/<int:lgr_pk>/validate_lgr/s/', ValidateLGRView.as_view(), name='validate_lgr_save',
+         kwargs={'output_func': _prepare_validation_html_file_response, 'in_set': True}),
 
     # Codepoint functions
-    path('lgr/<lgr:lgr_id>/v/<cp:codepoint_id>/', CodePointView.as_view(), name='codepoint_view'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/v/<cp:codepoint_id>/', CodePointView.as_view(), name='codepoint_view'),
-    path('lgr/<lgr:lgr_id>/e/<cp:codepoint_id>/', ExpandRangeView.as_view(), name='expand_range'),
-    path('lgr/<lgr:lgr_id>/e/', ExpandRangesView.as_view(), name='expand_ranges'),
-    path('lgr/<lgr:lgr_id>/p/', PopulateVariantsView.as_view(), name='populate_variants'),
-    path('lgr/<lgr:lgr_id>/r/<cp:codepoint_id>/', CodePointUpdateReferencesView.as_view(),
+    path('lgr/<int:lgr_pk>/v/<cp:codepoint_id>/', CodePointView.as_view(), name='codepoint_view'),
+    path('lgr/set/<int:lgr_pk>/v/<cp:codepoint_id>/', CodePointView.as_view(), name='codepoint_view_set',
+         kwargs={'in_set': True}),
+    path('lgr/<int:lgr_pk>/e/<cp:codepoint_id>/', ExpandRangeView.as_view(), name='expand_range'),
+    path('lgr/<int:lgr_pk>/e/', ExpandRangesView.as_view(), name='expand_ranges'),
+    path('lgr/<int:lgr_pk>/p/', PopulateVariantsView.as_view(), name='populate_variants'),
+    path('lgr/<int:lgr_pk>/r/<cp:codepoint_id>/', CodePointUpdateReferencesView.as_view(),
          name='codepoint_update_refs'),
-    path('lgr/<lgr:lgr_id>/vr/<cp:codepoint_id>/<var:var_slug>/', VariantUpdateReferencesView.as_view(),
+    path('lgr/<int:lgr_pk>/vr/<cp:codepoint_id>/<var:var_slug>/', VariantUpdateReferencesView.as_view(),
          name='var_update_refs'),
-    path('lgr/<lgr:lgr_id>/d/<cp:codepoint_id>/', CodePointDeleteView.as_view(), name='codepoint_delete'),
-    path('lgr/<lgr:lgr_id>/d/<cp:codepoint_id>/<var:var_slug>', VariantDeleteView.as_view(), name='variant_delete'),
-    path('lgr/<lgr:lgr_id>/r/', AddRangeView.as_view(), name='add_range'),
-    path('lgr/<lgr:lgr_id>/rs/', AddCodepointFromScriptView.as_view(), name='add_from_script'),
-    path('lgr/<lgr:lgr_id>/i/', ImportCodepointsFromFileView.as_view(), name='import_from_file'),
-    path('lgr/<lgr:lgr_id>/', ListCodePointsView.as_view(), name='codepoint_list'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/', ListCodePointsView.as_view(), name='codepoint_list'),
-    path('lgr/<lgr:lgr_id>/json', ListCodePointsJsonView.as_view(), name='codepoint_list_json'),
-    path('lgr/<lgr:lgr_set_id>/<lgr:lgr_id>/json', ListCodePointsJsonView.as_view(), name='codepoint_list_json'),
+    path('lgr/<int:lgr_pk>/d/<cp:codepoint_id>/', CodePointDeleteView.as_view(), name='codepoint_delete'),
+    path('lgr/<int:lgr_pk>/d/<cp:codepoint_id>/<var:var_slug>', VariantDeleteView.as_view(), name='variant_delete'),
+    path('lgr/<int:lgr_pk>/r/', AddRangeView.as_view(), name='add_range'),
+    path('lgr/<int:lgr_pk>/rs/', AddCodepointFromScriptView.as_view(), name='add_from_script'),
+    path('lgr/<int:lgr_pk>/i/', ImportCodepointsFromFileView.as_view(), name='import_from_file'),
+    path('lgr/<int:lgr_pk>/', ListCodePointsView.as_view(), name='codepoint_list'),
+    path('lgr/set/<int:lgr_pk>/', ListCodePointsView.as_view(), name='codepoint_list_set', kwargs={'in_set': True}),
+    path('lgr/<int:lgr_pk>/json', ListCodePointsJsonView.as_view(), name='codepoint_list_json'),
+    path('lgr/set/<int:lgr_pk>/json', ListCodePointsJsonView.as_view(), name='codepoint_list_json_set',
+         kwargs={'in_set': True}),
 ]

@@ -9,7 +9,7 @@
         {% endif %}
         {% for lgr in local_lgrs.list %}
             <li>
-                <a href="{% url 'codepoint_list' lgr.name %}">{% blocktrans with lgr_name=lgr.name %}{{ lgr_name }}{% endblocktrans %}</a>
+                <a href="{% url 'codepoint_list' lgr.pk %}">{% blocktrans with lgr_name=lgr.name %}{{ lgr_name }}{% endblocktrans %}</a>
             </li>
         {% endfor %}
         {% if local_lgrs.grouper %}

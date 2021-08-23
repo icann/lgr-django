@@ -6,9 +6,10 @@ from django.views.generic import TemplateView, FormView
 
 from lgr.utils import cp_to_ulabel, format_cp
 from lgr_advanced import unidb
-from lgr_advanced.api import LGRToolSession
+from lgr_advanced.api import LGRToolStorage
 from lgr_advanced.forms import LabelFormsForm
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
+from lgr_advanced.models import LgrModel
 from lgr_advanced.utils import list_built_in_lgr
 from lgr_web.views import Interfaces, INTERFACE_SESSION_MODE_KEY
 
@@ -17,7 +18,7 @@ class LGRViewMixin(LoginRequiredMixin):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.session = LGRToolSession(request)
+        self.storage = LGRToolStorage(request.user)
         request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.ADVANCED.name
 
 
@@ -29,9 +30,8 @@ class AdvancedModeView(LGRViewMixin, TemplateView):
         xml_files = list_built_in_lgr()
         ctx.update({
             'lgr_xml': xml_files,
-            'lgrs': self.session.list_lgr(),
-            'lgr_id': '',
-            'reports': self.session.list_storage(),
+            'lgrs': LgrModel.objects.filter(owner=self.request.user).all(),
+            'reports': self.storage.list_storage(),
         })
         return ctx
 

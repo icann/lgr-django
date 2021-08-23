@@ -17,7 +17,7 @@ def get_upload_path(instance, filename):
 class LGRReport(models.Model):
     file = models.FileField(upload_to=get_upload_path)
     report_id = models.CharField(max_length=256)
-    owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
+    owner = models.ForeignKey(to=LgrUser, on_delete=models.CASCADE, related_name='+')
     storage_type = None
 
     @property

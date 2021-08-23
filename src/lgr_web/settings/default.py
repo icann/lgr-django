@@ -321,7 +321,7 @@ LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE = 100
 LGR_VALIDATION_MAX_VARS_SYNCHRONOUS = 10000
 
 # A list of IDN tables to handle in ICANN IDN table review. None for all.
-ICANN_IDN_REVIEW_TABLES = None
+ICANN_IDN_REVIEW_TABLES = []
 
 
 ##### Celery configuration parameters #####

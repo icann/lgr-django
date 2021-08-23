@@ -208,8 +208,8 @@ def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
     * if eligible, variant labels (if any) are also generated and evaluated to determine
       their dispositions.
 
-    :param lgr: The LGR object
-    :param script_lgr: The LGR object for the script used to check label validity
+    :param lgr: The LGR
+    :param script_lgr: The LGR for the script used to check label validity
     :param label_cplist: The label to test, as an array of codepoints.
     :param set_labels: The labels in the lgr set
     :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.

@@ -27,14 +27,14 @@
             <div class="panel-body">
                 {% for class in rules.classes %}
                     <div class="clearfix rule-container">
-                        <form action="{% url 'rule_edit_class' lgr_id class.name %}">
+                        <form action="{% url 'rule_edit_class' lgr_pk class.name %}">
                             {% include "lgr_editor/_rule_editor_widgets.html" with rule=class %}
                         </form>
                     </div>
                 {% endfor %}
 
                 <div id="new-class-container" class="clearfix rule-container" style="display: none">
-                    <form action="{% url 'rule_edit_class' lgr_id NEW_ELEMENT_NAME_PARAM %}">
+                    <form action="{% url 'rule_edit_class' lgr_pk NEW_ELEMENT_NAME_PARAM %}">
                         <button class="btn btn-default cancel-new-rule cancel-editing pull-right">
                             <i class="glyphicon glyphicon-remove"></i> {% trans "Cancel" %}
                         </button>
@@ -58,14 +58,14 @@
             <div class="panel-body">
                 {% for rule in rules.rules %}
                     <div class="clearfix rule-container">
-                        <form action="{% url 'rule_edit_rule' lgr_id rule.name %}">
+                        <form action="{% url 'rule_edit_rule' lgr_pk rule.name %}">
                             {% include "lgr_editor/_rule_editor_widgets.html" with rule=rule %}
                         </form>
                     </div>
                 {% endfor %}
 
                 <div id="new-rule-container" class="clearfix rule-container" style="display: none">
-                    <form action="{% url 'rule_edit_rule' lgr_id NEW_ELEMENT_NAME_PARAM %}">
+                    <form action="{% url 'rule_edit_rule' lgr_pk NEW_ELEMENT_NAME_PARAM %}">
                         <button class="btn btn-default cancel-new-rule cancel-editing pull-right">
                             <i class="glyphicon glyphicon-remove"></i> {% trans "Cancel" %}
                         </button>
@@ -90,14 +90,14 @@
             <div class="panel-body">
                 {% for action in rules.actions %}
                     <div class="clearfix rule-container">
-                        <form action="{% url 'rule_edit_action' lgr_id forloop.counter0 %}">
+                        <form action="{% url 'rule_edit_action' lgr_pk forloop.counter0 %}">
                             {% include "lgr_editor/_rule_editor_widgets.html" with rule=action %}
                         </form>
                     </div>
                 {% endfor %}
 
                 <div id="new-action-container" class="clearfix rule-container" style="display: none">
-                    <form action="{% url 'rule_edit_action' lgr_id '-1' %}">
+                    <form action="{% url 'rule_edit_action' lgr_pk '-1' %}">
                         <button class="btn btn-default cancel-new-rule cancel-editing pull-right">
                             <i class="glyphicon glyphicon-remove"></i> {% trans "Cancel" %}
                         </button>

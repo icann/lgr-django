@@ -13,11 +13,11 @@ from django.views.generic import FormView
 from lgr.exceptions import LGRException
 from lgr.tools.utils import download_file, read_labels
 from lgr.utils import cp_to_ulabel
-from lgr_advanced.api import LGRInfo, LabelInfo, LGRToolSession
-from lgr_advanced.lgr_editor.repertoires import get_by_name
+from lgr_advanced.api import LabelInfo, LGRToolStorage
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
-from lgr_advanced.lgr_validator.views import evaluate_label_from_info, NeedAsyncProcess
+from lgr_advanced.lgr_validator.views import NeedAsyncProcess, evaluate_label_from_info
+from lgr_models.models.lgr import RzLgr
 from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 from .forms import ValidateLabelSimpleForm
 
@@ -29,7 +29,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.BASIC.name
-        self.session = LGRToolSession(request)
+        self.storage = LGRToolStorage(request.user)
 
     def form_valid(self, form):
         ctx = {}
@@ -38,7 +38,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
         labels_cp = form.cleaned_data['labels']
         labels_file = form.cleaned_data.get('labels_file')
         rz_lgr = form.cleaned_data['rz_lgr']
-        ctx['lgr_id'] = rz_lgr  # needed to download results as csv
+        ctx['lgr_pk'] = rz_lgr  # needed to download results as csv
         collisions = form.cleaned_data['collisions']
         email_address = self.request.user.email
 
@@ -47,19 +47,16 @@ class BasicModeView(LoginRequiredMixin, FormView):
         if collisions:
             tlds = download_file(settings.ICANN_TLDS)[1].read().lower()
             tld_json = LabelInfo.from_form('TLDs', tlds).to_dict()
-        lgr_info = LGRInfo(rz_lgr, lgr=get_by_name(rz_lgr, with_unidb=True))
-        lgr_info.update_xml()
-        lgr_json = lgr_info.to_dict()
-
         if labels_file:
             labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
             # data will be sent by email instead of on the ui
             ctx['validation_to'] = email_address
             if collisions:
-                basic_collision_task.delay(lgr_json, labels_json, tld_json, email_address, annotate=True)
+                basic_collision_task.delay(self.request.user.pk, rz_lgr, labels_json, tld_json,
+                                           annotate=True, lgr_model=RzLgr)
                 ctx['collision_to'] = email_address
             else:
-                annotate_task.delay(lgr_json, labels_json, email_address)
+                annotate_task.delay(self.request.user.pk, rz_lgr, labels_json, lgr_model=RzLgr)
 
         else:
             labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp]).to_dict()
@@ -70,13 +67,15 @@ class BasicModeView(LoginRequiredMixin, FormView):
                     data = tlds.decode('utf-8')
                     check_collisions = [l[0] for l in read_labels(StringIO(data))]
                 else:
-                    basic_collision_task.delay(lgr_json, labels_json, tld_json, email_address,
-                                               annotate=False)
+                    basic_collision_task.delay(self.request.user.pk, rz_lgr, labels_json, tld_json,
+                                               annotate=False, lgr_model=RzLgr)
                     ctx['collision_to'] = email_address
 
             for label_cplist in labels_cp:
                 try:
-                    results.append(evaluate_label_from_info(self.session, lgr_info, label_cplist, None, email_address,
+                    results.append(evaluate_label_from_info(self.request.user,
+                                                            rz_lgr,
+                                                            label_cplist,
                                                             check_collisions=check_collisions))
                 except UnicodeError as ex:
                     messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
@@ -95,6 +94,6 @@ class BasicModeView(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         ctx = super(BasicModeView, self).get_context_data(**kwargs)
-        ctx['reports'] = self.session.list_storage()
+        ctx['reports'] = self.storage.list_storage()
         ctx.update(kwargs)
         return ctx

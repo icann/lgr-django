@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import re
-
 from django import forms
-from django.core import validators
-from django.forms.widgets import Select, TextInput
+from django.forms.widgets import Select
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
+from lgr_advanced.models import LgrModel
+from lgr_models.models.lgr import RzLgr
 
 LGR_COMPARE_ACTIONS = (
     ("UNION", _("Union")),
@@ -61,20 +60,21 @@ class LGRCompareSelector(forms.Form):
                                    required=False)
 
     def __init__(self, *args, **kwargs):
-        session_lgrs = kwargs.pop('session_lgrs', [])
+        user = kwargs.pop('user', [])
         super(LGRCompareSelector, self).__init__(*args, **kwargs)
         need_empty = False
-        lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
-        lgrs = [lgr for lgr in session_lgrs if not lgr['is_set']]
-        if len(lgr_sets) < 2 or len(lgrs) < 2:
+        lgr_sets = LgrModel.objects.filter(owner=user, set_info__isnull=False)
+        lgrs = LgrModel.objects.filter(owner=user, set_info__isnull=True)
+        all_lgrs = LgrModel.objects.filter(owner=user)
+        if lgr_sets.count() < 2 or lgrs.count() < 2:
             need_empty = True
 
         # dynamically append the session LGRs (by copy, not by reference)
-        self.fields['lgr_1'].choices = ((_('LGR'), [(lgr['name'], lgr['name']) for lgr in lgrs]),
-                                        (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
-        self.fields['lgr_2'].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs)
-        self.fields['lgr_1'].widget.data = {lgr['name']: {'is-set': 'yes' if lgr['is_set'] else 'no'} for lgr in
-                                            session_lgrs}
+        self.fields['lgr_1'].choices = ((_('LGR'), [(lgr_obj.pk, lgr_obj.name) for lgr_obj in lgrs]),
+                                        (_('LGR set'), [(lgr_obj.pk, lgr_obj.name) for lgr_obj in lgr_sets]))
+        self.fields['lgr_2'].choices = ((lgr_obj.pk, lgr_obj.name) for lgr_obj in all_lgrs)
+        self.fields['lgr_1'].widget.data = {lgr_obj.pk: {'is-set': 'yes' if lgr_obj.is_set() else 'no'}
+                                            for lgr_obj in all_lgrs}
         self.fields['lgr_2'].widget.data = self.fields['lgr_1'].widget.data
         if need_empty:
             self.fields['lgr_2'].empty = True
@@ -108,11 +108,13 @@ class LGRDiffSelector(forms.Form):
                                     required=False)
 
     def __init__(self, *args, **kwargs):
-        session_lgrs = kwargs.pop('session_lgrs', [])
+        user = kwargs.pop('user', [])
         super(LGRDiffSelector, self).__init__(*args, **kwargs)
         # dynamically append the session LGRs (by copy, not by reference)
-        for lgr_f in ['lgr_1', 'lgr_2']:
-            self.fields[lgr_f].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs if not lgr['is_set'])
+        for lgr in ['lgr_1', 'lgr_2']:
+            self.fields[lgr].choices = ((lgr_obj.pk, lgr_obj.name) for lgr_obj in
+                                        LgrModel.objects.filter(owner=user,
+                                                                set_info__isnull=True))
 
 
 class LGRCollisionSelector(forms.Form):
@@ -136,10 +138,12 @@ class LGRCollisionSelector(forms.Form):
                                     required=False)
 
     def __init__(self, *args, **kwargs):
-        session_lgrs = kwargs.pop('session_lgrs', [])
+        user = kwargs.pop('user', [])
         super(LGRCollisionSelector, self).__init__(*args, **kwargs)
         # dynamically append the session LGRs (by copy, not by reference)
-        self.fields['lgr'].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs if not lgr['is_set'])
+        self.fields['lgr'].choices = ((lgr_obj.pk, lgr_obj.name) for lgr_obj in
+                                      LgrModel.objects.filter(owner=user,
+                                                              set_info__isnull=True))
 
 
 class LGRSetCompatibleForm(forms.Form):
@@ -153,19 +157,32 @@ class LGRSetCompatibleForm(forms.Form):
                                required=False)
 
     def __init__(self, *args, **kwargs):
-        session_lgrs = kwargs.pop('session_lgrs', {})
-        scripts = kwargs.pop('scripts', [])
+        user = kwargs.pop('user', [])
         super(LGRSetCompatibleForm, self).__init__(*args, **kwargs)
-        lgr_sets = [lgr for lgr in session_lgrs if lgr['is_set']]
-        lgrs = [lgr for lgr in session_lgrs if not lgr['is_set']]
-        # dynamically append the session LGRs (by copy, not by reference)
-        self.fields['lgr'].choices = ((_('LGR'), [(lgr['name'], lgr['name']) for lgr in lgrs]),
-                                      (_('LGR set'), [(lgr['name'], lgr['name']) for lgr in lgr_sets]))
-        self.fields['lgr'].widget.data = {lgr['name']: {'lgr-set': ','.join([l['name'] for l in lgr['lgr_set_dct']])}
-                                          for lgr in lgr_sets}
+        lgr_sets = LgrModel.objects.filter(owner=user, set_info__isnull=False)
+        lgrs = LgrModel.objects.filter(owner=user, set_info__isnull=True)
 
-        if scripts:
-            self.fields['script'].choices = scripts
+        lgr_scripts = set()
+        for lgr in lgr_sets:
+            scripts = []
+            for lgr_in_set_obj in lgr.embedded_lgrs():
+                lgr_in_set = lgr_in_set_obj.to_lgr()
+                try:
+                    scripts.append((lgr_in_set_obj.pk, lgr_in_set.metadata.languages[0]))
+                except (AttributeError, IndexError):
+                    pass
+            lgr_scripts |= set(scripts)
+
+        # dynamically append the session LGRs (by copy, not by reference)
+        self.fields['lgr'].choices = ((_('LGR'), [(lgr_obj.pk, lgr_obj.name) for lgr_obj in lgrs]),
+                                      (_('LGR set'), [(lgr_obj.pk, lgr_obj.name) for lgr_obj in lgr_sets]))
+        self.fields['lgr'].widget.data = {
+            lgr_obj.pk: {'lgr-set': ','.join(str(pk) for pk in lgr_obj.embedded_lgrs().values_list('pk', flat=True))}
+            for lgr_obj in lgr_sets
+        }
+
+        if lgr_scripts:
+            self.fields['script'].choices = lgr_scripts
 
 
 class LGRAnnotateSelector(LGRSetCompatibleForm):
@@ -201,12 +218,15 @@ class LGRHarmonizeSelector(forms.Form):
                                required=False)
 
     def __init__(self, *args, **kwargs):
-        session_lgrs = kwargs.pop('session_lgrs', {})
+        user = kwargs.pop('user', [])
         super(LGRHarmonizeSelector, self).__init__(*args, **kwargs)
         # dynamically append the session LGRs
-        for field_name in ('lgr_1', 'lgr_2', 'rz_lgr'):
-            self.fields[field_name].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs if not lgr['is_set'])
-        self.fields['rz_lgr'].choices = [('', ''), ] + self.fields['rz_lgr'].choices
+        for field_name in ('lgr_1', 'lgr_2'):
+            self.fields[field_name].choices = ((lgr_obj.pk, lgr_obj.name)
+                                               for lgr_obj in LgrModel.objects.filter(owner=user,
+                                                                                      set_info__isnull=True))
+        self.fields['rz_lgr'].choices = [('', ''), ] + list((lgr_obj.pk, lgr_obj.name)
+                                                            for lgr_obj in RzLgr.objects.all())
 
 
 class LGRComputeVariantsSelector(forms.Form):
@@ -218,7 +238,9 @@ class LGRComputeVariantsSelector(forms.Form):
                              help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}")
 
     def __init__(self, *args, **kwargs):
-        session_lgrs = kwargs.pop('session_lgrs', [])
+        user = kwargs.pop('user', [])
         super(LGRComputeVariantsSelector, self).__init__(*args, **kwargs)
         # dynamically append the session LGRs (by copy, not by reference)
-        self.fields['lgr'].choices = ((lgr['name'], lgr['name']) for lgr in session_lgrs if not lgr['is_set'])
+        self.fields['lgr'].choices = ((lgr_obj.pk, lgr_obj.name)
+                                      for lgr_obj in LgrModel.objects.filter(owner=user,
+                                                                             set_info__isnull=True))

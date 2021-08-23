@@ -17,13 +17,13 @@ class EmbeddedLGRsView(LGRHandlingBaseMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        if not self.lgr_info.is_set:
+        if not self.lgr_object.is_set():
             return HttpResponseBadRequest('LGR is not a set')
 
         ctx.update({
-            'lgr': self.lgr_info.lgr,
-            'lgr_id': self.lgr_id,
-            'embedded': self.lgr_info.lgr_set,
+            'lgr': self.lgr,
+            'lgr_object': self.lgr_object,
+            'embedded': self.lgr_object.embedded_lgrs(),
             'is_set': True
         })
         return ctx

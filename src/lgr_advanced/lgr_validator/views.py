@@ -5,17 +5,20 @@ from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
-from django.utils.translation import ugettext as _
 from django.views.generic import FormView
 
 from lgr.exceptions import LGRException
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
 from lgr_advanced.unidb import get_db_by_version
+from lgr_auth.models import LgrUser
+from lgr_models.models.lgr import LgrBaseModel, RzLgr
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
 from .forms import ValidateLabelForm
 from ..api import LabelInfo
+from ..lgr_editor.repertoires import get_by_name
 from ..lgr_editor.views.mixins import LGRHandlingBaseMixin
+from ..models import LgrModel
 
 
 class NeedAsyncProcess(Exception):
@@ -23,9 +26,69 @@ class NeedAsyncProcess(Exception):
     pass
 
 
-def evaluate_label_from_info(session,
-                             lgr_info, label_cplist, script_lgr_name,
-                             email,
+def evaluate_label_from_view(user: LgrUser,
+                             lgr_object: LgrBaseModel,
+                             label_cplist,
+                             script_lgr_pk=None,
+                             set_labels_info: LabelInfo = None,
+                             threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE,
+                             check_collisions=None):
+    """
+    Evaluate a label in an LGR.
+
+    This function is responsible to determine whether or not the evaluation process should be blocking/synchronous,
+    or launched as a celery task.
+
+    :param user: The current logged in user
+    :param lgr_object: The LGR object
+    :param label_cplist: The label to test, as an array of codepoints.
+    :param script_lgr_pk: Primary key of the LGR to use as the script LGR.
+    :param set_labels_info: The LabelInfo allocated in set
+    :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.
+                                   Set to negative to always return variants.
+    :param check_collisions: Check for collisions with the provided list of labels
+    :return: a dict containing results of the evaluation, empty if process is asynchronous.
+    """
+    ctx = {}
+    lgr = lgr_object.to_lgr()
+    need_async = lgr.estimate_variant_number(label_cplist) > settings.LGR_VALIDATION_MAX_VARS_SYNCHRONOUS
+    udata = get_db_by_version(lgr.metadata.unicode_version)
+    if lgr_object.is_set():
+        lgr_object: LgrModel
+        script_lgr_object = lgr_object.set_info.lgr_set.get(owner=user, pk=script_lgr_pk)
+        if not need_async:
+            set_labels = [] if not set_labels_info else set_labels_info.labels
+            ctx = lgr_set_evaluate_label(lgr,
+                                         script_lgr_object.to_lgr(),
+                                         label_cplist,
+                                         set_labels,
+                                         threshold_include_vars=threshold_include_vars,
+                                         idna_encoder=udata.idna_encode_label)
+        else:
+            if set_labels_info:
+                set_labels_json = set_labels_info.to_dict()
+            else:
+                set_labels_json = LabelInfo(name='None', labels=[])
+
+            lgr_set_validate_label_task.delay(user.pk, lgr_object.pk, script_lgr_object.pk,
+                                              label_cplist, set_labels_json)
+            ctx['launched_as_task'] = True
+    else:
+        if not need_async:
+            ctx = evaluate_label(lgr,
+                                 label_cplist,
+                                 threshold_include_vars=threshold_include_vars,
+                                 idna_encoder=udata.idna_encode_label,
+                                 check_collisions=check_collisions)
+        else:
+            validate_label_task.delay(user.pk, lgr_object.pk, label_cplist)
+            ctx['launched_as_task'] = True
+
+    return ctx
+
+
+# TODO remove once rz for basic will be loaded from db
+def evaluate_label_from_info(user, lgr_name, label_cplist,
                              threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE,
                              check_collisions=None):
     """
@@ -44,36 +107,17 @@ def evaluate_label_from_info(session,
     :return: a dict containing results of the evaluation, empty if process is asynchronous.
     """
     ctx = {}
-    need_async = lgr_info.lgr.estimate_variant_number(label_cplist) > settings.LGR_VALIDATION_MAX_VARS_SYNCHRONOUS
-    udata = get_db_by_version(lgr_info.lgr.metadata.unicode_version)
-    if lgr_info.is_set:
-        script_lgr_info = None
-        for set_lgr_info in lgr_info.lgr_set:
-            if script_lgr_name == set_lgr_info.name:
-                script_lgr_info = set_lgr_info
-                break
-        if not need_async:
-            if lgr_info.set_labels_info is None:
-                set_labels = []
-            else:
-                set_labels = lgr_info.set_labels_info.labels
-            # TODO if script_lgr_info is None
-            ctx = lgr_set_evaluate_label(lgr_info.lgr, script_lgr_info.lgr, label_cplist,
-                                         set_labels,
-                                         threshold_include_vars=threshold_include_vars,
-                                         idna_encoder=udata.idna_encode_label)
-        else:
-            lgr_set_validate_label_task.delay(lgr_info.to_dict(), script_lgr_info.to_dict(), label_cplist, email)
-            ctx['launched_as_task'] = True
+    lgr = get_by_name(lgr_name, with_unidb=True)
+    need_async = lgr.estimate_variant_number(label_cplist) > settings.LGR_VALIDATION_MAX_VARS_SYNCHRONOUS
+    udata = get_db_by_version(lgr.metadata.unicode_version)
+    if not need_async:
+        ctx = evaluate_label(lgr, label_cplist,
+                             threshold_include_vars=threshold_include_vars,
+                             idna_encoder=udata.idna_encode_label,
+                             check_collisions=check_collisions)
     else:
-        if not need_async:
-            ctx = evaluate_label(lgr_info.lgr, label_cplist,
-                                 threshold_include_vars=threshold_include_vars,
-                                 idna_encoder=udata.idna_encode_label,
-                                 check_collisions=check_collisions)
-        else:
-            validate_label_task.delay(lgr_info.to_dict(), label_cplist, email)
-            ctx['launched_as_task'] = True
+        validate_label_task.delay(user.pk, lgr.name, label_cplist, lgr_model=RzLgr)
+        ctx['launched_as_task'] = True
 
     return ctx
 
@@ -89,21 +133,16 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
         super().__init__()
         self.result = {}
 
-    def get_initial(self):
-        initial = super().get_initial()
-        if self.lgr_info is not None and self.lgr_info.set_labels_info is not None:
-            initial['set_labels'].initial = self.lgr_info.set_labels_info.name
-        return initial
-
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        udata = get_db_by_version(self.lgr_info.lgr.metadata.unicode_version)
+        udata = get_db_by_version(self.lgr.metadata.unicode_version)
         scripts = None
-        if self.lgr_info.is_set:
+        if self.lgr_object.is_set():
             scripts = []
-            for lgr_set_info in self.lgr_info.lgr_set:
+            for lgr_in_set_obj in self.lgr_object.embedded_lgrs():
+                lgr_in_set = lgr_in_set_obj.to_lgr()
                 try:
-                    scripts.append((lgr_set_info.name, lgr_set_info.lgr.metadata.languages[0]))
+                    scripts.append((lgr_in_set_obj.pk, lgr_in_set.metadata.languages[0]))
                 except (AttributeError, IndexError):
                     pass
         kwargs.update({
@@ -118,13 +157,6 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['result'] = self.result
-        ctx['lgr_id'] = self.lgr_id
-        ctx['is_set'] = self.lgr_info.is_set or self.lgr_set_id is not None
-
-        if self.lgr_set_id:
-            lgr_set_info = self.session.select_lgr(self.lgr_set_id)
-            ctx['lgr_set'] = lgr_set_info.lgr
-            ctx['lgr_set_id'] = self.lgr_set_id
 
         if self.noframe:
             ctx['base_template'] = 'lgr_advanced/_base_noframe.html'
@@ -133,16 +165,19 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
 
     def form_valid(self, form):
         label_cplist = form.cleaned_data['label']
-        script_lgr_name = form.cleaned_data.get('script', None)
-        if self.lgr_info.is_set:
+        script_lgr_pk = form.cleaned_data.get('script', None)
+        set_labels_info = None
+        if self.lgr_object.is_set():
             set_labels_file = form.cleaned_data['set_labels']
             if set_labels_file is not None:
-                if self.lgr_info.set_labels_info is None or self.lgr_info.set_labels_info.name != set_labels_file.name:
-                    self.lgr_info.set_labels_info = LabelInfo.from_form(set_labels_file.name,
-                                                                        set_labels_file.read())
+                set_labels_info = LabelInfo.from_form(set_labels_file.name,
+                                                      set_labels_file.read())
         try:
-            self.result = evaluate_label_from_info(self.session, self.lgr_info, label_cplist, script_lgr_name,
-                                                   self.request.user.email,
+            self.result = evaluate_label_from_view(self.request.user,
+                                                   self.lgr_object,
+                                                   label_cplist,
+                                                   script_lgr_pk=script_lgr_pk,
+                                                   set_labels_info=set_labels_info,
                                                    threshold_include_vars=self.threshold_include_vars)
         except UnicodeError as ex:
             if self.output_func:
