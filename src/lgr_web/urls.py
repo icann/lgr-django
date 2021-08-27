@@ -15,6 +15,7 @@ import lgr_auth.urls
 import lgr_basic.urls
 import lgr_idn_table_review.urls
 import lgr_manage.urls
+import lgr_renderer.urls
 import lgr_session.urls
 from .views import LGRModesView, LGRSwitchModeView, LGRAboutView, LanguageAutocomplete
 
@@ -25,6 +26,7 @@ urlpatterns = [
     path('m/', include(lgr_manage.urls.urlpatterns)),
     path('auth/', include(lgr_auth.urls.urlpatterns)),
     path('storage/', include(lgr_session.urls.urlpatterns)),
+    path('render/', include(lgr_renderer.urls.urlpatterns)),
 
     # autocompletion
     path('language-autocomplete/', LanguageAutocomplete.as_view(), name='language-autocomplete'),

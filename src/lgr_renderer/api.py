@@ -21,8 +21,8 @@ from lgr.classes import TAG_CLASSNAME_PREFIX
 from lgr.exceptions import NotInLGR
 
 from lgr_advanced import unidb
-from lgr_advanced.lgr_editor.utils import (cp_to_str)
-from lgr_advanced.lgr_renderer.utils import render_glyph
+from lgr_advanced.lgr_editor.utils import cp_to_str
+from lgr_renderer.utils import render_glyph
 from lgr_advanced.utils import render_cp, render_name, cp_to_slug
 
 logger = logging.getLogger(__name__)

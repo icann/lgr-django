@@ -46,12 +46,12 @@ INSTALLED_APPS = [
     'lgr_advanced.lgr_editor',
     'lgr_advanced.lgr_validator',
     'lgr_advanced.lgr_tools',
-    'lgr_advanced.lgr_renderer',
     'lgr_basic',
     'lgr_idn_table_review',
     'lgr_idn_table_review.icann_tools',
     'lgr_idn_table_review.idn_tool',
     'lgr_manage',
+    'lgr_renderer',
     'lgr_utils',
     'widget_tweaks',
     'django_cleanup.apps.CleanupConfig',  # should be placed last
