@@ -147,11 +147,11 @@
             {% url 'view_lgr_xml_set' lgr_pk=lgr_pk as view_lgr_xml_url %}
             {% url 'view_lgr_xml_set' lgr_pk=lgr_pk as view_lgr_xml_url %}
             {% url 'download_lgr_xml_set' lgr_pk=lgr_pk as download_lgr_xml_url %}
-            {% url 'lgr_render_set' lgr_pk=lgr_pk as lgr_render_url %}
+            {% url 'lgr_render' lgr_pk=lgr_pk model='setlgrmodel' as lgr_render_url %}
         {% else %}
             {% url 'view_lgr_xml' lgr_pk=lgr_pk as view_lgr_xml_url %}
             {% url 'download_lgr_xml' lgr_pk=lgr_pk as download_lgr_xml_url %}
-            {% url 'lgr_render' lgr_pk=lgr_pk as lgr_render_url %}
+            {% url 'lgr_render' lgr_pk=lgr_pk model='lgrmodel' as lgr_render_url %}
         {% endif %}
         <a class="btn btn-default show-tooltip"
            data-toggle="modal" data-target="#validation-modal"

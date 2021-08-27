@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.urls import path
+from django.urls import path, register_converter
 
 from . import views
+from .converters import LgrModelConverter
+
+register_converter(LgrModelConverter, 'lgr_model')
+
 
 urlpatterns = [
-    path('<int:lgr_pk>', views.LGRRendererDbView.as_view(), name='lgr_render_from_db'),
-    path('<int:lgr_pk>', views.LGRRendererView.as_view(), name='lgr_render'),
-    path('set/<int:lgr_pk>', views.LGRRendererView.as_view(), kwargs={'in_set': True}, name='lgr_render_set'),
+    path('<lgr_model:model>/<int:lgr_pk>', views.LGRRendererView.as_view(), name='lgr_render'),
 ]

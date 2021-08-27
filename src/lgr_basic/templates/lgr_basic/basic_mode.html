@@ -217,7 +217,7 @@
         function changeRzValue() {
             const val = $('#id_rz_lgr').val();
 
-            let renderLink = `{% url 'lgr_render_from_db' lgr_pk=0 %}`;
+            let renderLink = `{% url 'lgr_render' model='rzlgr' lgr_pk=0 %}`;
             renderLink = renderLink.replace('0', val);
             $('#renderLink').attr('href', renderLink);
 

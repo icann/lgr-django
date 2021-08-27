@@ -14,6 +14,7 @@ from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.utils import tag_to_language_script
 from lgr_auth.models import LgrUser
+from lgr_utils.utils import get_all_subclasses_recursively
 from lgr_web import settings
 
 

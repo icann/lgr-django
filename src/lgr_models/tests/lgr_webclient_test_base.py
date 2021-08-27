@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from lgr_auth.models import LgrUser
-from lgr_models.models import RzLgr
+from lgr_models.models.lgr import RzLgr
 
 
 class LgrWebClientTestBase(TestCase):

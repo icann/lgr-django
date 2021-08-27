@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import View
 
 from lgr_session.api import LGRStorage
+from lgr_utils.utils import get_all_subclasses_recursively
 
 
 class StorageType(Enum):
@@ -19,20 +20,13 @@ class StorageType(Enum):
 
 class LGRSessionView(LoginRequiredMixin, UserPassesTestMixin, View):
 
-    def __storage_classes(self, klass=LGRStorage):
-        subclasses = set()
-        for subclass in klass.__subclasses__():
-            subclasses.add(subclass)
-            subclasses.update(self.__storage_classes(subclass))
-        return subclasses
-
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.report_id = self.kwargs.get('report_id')
         self.pk = self.kwargs.get('pk', None)
         self.next = request.GET.get('next', '/')
         storage_type = self.kwargs.get('storage')
-        for subclass in self.__storage_classes():
+        for subclass in get_all_subclasses_recursively(LGRStorage):
             if not subclass.storage_model:
                 continue
             if subclass.storage_model.storage_type == StorageType(storage_type):
