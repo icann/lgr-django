@@ -44,3 +44,6 @@ src/lgr_web/static/
 
 # Helm secret directory
 helm/secrets
+
+# SQLite dev db
+src/lgr_web/dev.db

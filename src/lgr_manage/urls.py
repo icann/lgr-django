@@ -3,6 +3,7 @@ from django.urls import path
 
 from lgr_manage.views.reference_lgr import RefLgrView, RefLgrDeleteView, DisplayRefLgrView
 from lgr_manage.views.rz_lgr import RzLgrView, RzLgrDeleteView, DisplayRzLgrView, DisplayRzLgrMemberView
+from lgr_manage.views.unicode_versions import LgrUnicodeVersionsView, LgrUnicodeVersionView
 from lgr_manage.views.users import LgrUserView, LgrUserDeleteView
 
 urlpatterns = [
@@ -16,5 +17,7 @@ urlpatterns = [
     path('ref-lgr/<int:lgr_id>/delete', RefLgrDeleteView.as_view(), name='lgr_idn_admin_delete_ref_lgr'),
     path('ref-lgr/<int:lgr_id>', DisplayRefLgrView.as_view(), name='lgr_idn_admin_display_ref_lgr'),
     path('users', LgrUserView.as_view(), name='lgr_idn_admin_user_management'),
+    path('unicode-versions', LgrUnicodeVersionsView.as_view(), name='lgr_idn_admin_unicode_versions'),
+    path('unicode-version/<int:pk>', LgrUnicodeVersionView.as_view(), name='lgr_idn_admin_unicode_version_detail'),
     path('users/<int:user_id>/delete', LgrUserDeleteView.as_view(), name='lgr_idn_admin_delete_user'),
 ]

@@ -1,0 +1,31 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block html_title %}{% trans 'IDN review tool admin' %}{% endblock %}
+
+{% block navbar-right %}
+    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
+    {{ block.super }}
+{% endblock %}
+
+{% block content-title %}
+    {% trans 'IDN review tool admin' %}
+{% endblock %}
+
+{% block content %}
+    <h2>{% trans 'Edit Unicode Version' %} </h2>
+    <form class="form-horizontal" role="form" method="post">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.version control_width=8 %}
+        {% include "lgr_editor/_form_field_checkbox.html" with field=form.activated control_width=8 %}
+        <button id="submit" type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+    </form>
+{% endblock content %}
+{#    <h2>{% trans 'New Root Zone LGR' %}</h2>#}
+{#    <form class="form-horizontal" method="post" enctype="multipart/form-data">#}
+{#        {% csrf_token %}#}
+{#        {% include "lgr_editor/_form_field.html" with field=form.name control_width=8 %}#}
+{#        {% include "lgr_editor/_form_field.html" with field=form.file control_width=8 %}#}
+{#        {% include "lgr_editor/_form_field.html" with field=form.repository control_width=8 %}#}
+{#        <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>#}
+{#    </form>#}

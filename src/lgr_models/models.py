@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 
+from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from lgr.core import LGR
 
 from lgr.parser.xml_parser import XMLParser
@@ -69,3 +71,8 @@ class RzLgrMember(LgrModel):
         lgr = lgr_parser.parse_document()
         self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
         super().save(force_insert=False, force_update=True, using=using, update_fields=['language', 'script'])
+
+
+class UnicodeVersion(models.Model):
+    version = models.CharField(max_length=255, unique=True)
+    activated = models.BooleanField()

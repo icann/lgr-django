@@ -1,0 +1,37 @@
+{% extends "lgr_idn_table_review_admin/_idn_table_review_admin_base.html" %}
+{% load i18n %}
+
+{% block unicode-versions-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h2>{% trans 'Unicode Versions List' %}</h2>
+
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">{% trans 'Version' %}</th>
+            <th scope="col">{% trans 'Activated' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for u in object_list %}
+            <tr>
+                <td>{{ u.version }}</td>
+                <td>{{ u.activated }}</td>
+                <td>
+                    <a class="btn btn-edit-var-refs" href="{% url 'lgr_idn_admin_unicode_version_detail' pk=u.pk %}">{% trans "Edit" %}</a>
+                </td>
+
+            </tr>
+            </tbody>
+            {% empty %}
+            <tr>
+                <td colspan="3">{% trans 'No unicode version defined.' %}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock content-pane %}
+
+{% block html_body_more %}
+    {{ block.super }}
+{% endblock html_body_more %}

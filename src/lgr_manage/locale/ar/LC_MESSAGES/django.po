@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-11 13:27+0000\n"
+"POT-Creation-Date: 2021-08-26 14:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,6 +63,10 @@ msgstr ""
 msgid "User management"
 msgstr ""
 
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:27
+msgid "Unicode Versions"
+msgstr ""
+
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:7
 msgid "Existing Reference LGRs"
 msgstr ""
@@ -111,6 +115,22 @@ msgstr ""
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:63
 msgid "New Root Zone LGR"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:7
+msgid "Unicode Versions List"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:12
+msgid "Version"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:13
+msgid "Activated"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:27
+msgid "No unicode version defined."
 msgstr ""
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:7

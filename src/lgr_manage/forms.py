@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from dal import autocomplete
 from django import forms
-from django.forms import FileField
+from django.forms import FileField, CharField
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
 from lgr_auth.models import LgrUser
-from lgr_models.models import RzLgr, RzLgrMember, RefLgr
+from lgr_models.models import RzLgr, RzLgrMember, RefLgr, UnicodeVersion
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 
@@ -50,3 +50,11 @@ class UserCreateForm(forms.ModelForm):
     class Meta:
         model = LgrUser
         fields = ['email', 'role']
+
+
+class UnicodeVersionForm(forms.ModelForm):
+    version = CharField(disabled=True)
+
+    class Meta:
+        model = UnicodeVersion
+        fields = '__all__'
