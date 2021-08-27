@@ -11,7 +11,7 @@ from lgr_models.models.lgr import RzLgr
 
 
 class ValidateLabelSimpleForm(forms.Form):
-    rz_lgr = forms.ModelChoiceField(queryset=RzLgr.objects.all(), empty_label=None)
+    rz_lgr = forms.ModelChoiceField(label='', queryset=RzLgr.objects.all(), empty_label=None)
     labels = forms.CharField(label='', required=False,
                              widget=forms.TextInput(attrs={'name': '',
                                                            'class': 'form-label form-control',
