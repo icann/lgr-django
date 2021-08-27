@@ -1,0 +1,57 @@
+{% extends "lgr_manage/_idn_table_review_admin_base.html" %}
+{% load i18n %}
+
+{% block unicode-versions-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h2>{% trans 'Unicode Versions List' %}</h2>
+
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">{% trans 'Version' %}</th>
+            <th scope="col">{% trans 'Activated' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for u in object_list %}
+            <tr>
+                <td>{{ u.version }}</td>
+                <td>
+                    <form method="post" action="{% url "lgr_idn_admin_unicode_version_update" pk=u.pk %}">
+                        {% csrf_token %}
+                        {% if u.activated %}
+                            <input type="hidden" name="activated" value="False">
+                            <button type="submit" class="btn" style="background-color:transparent">
+                                <span class="glyphicon glyphicon-check"></span>
+                            </button>
+                        {% else %}
+                            <input type="hidden" name="activated" value="True">
+                            <button type="submit" class="btn" style="background-color:transparent">
+                                <span class="glyphicon glyphicon-unchecked"></span>
+                            </button>
+                        {% endif %}
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+            {% empty %}
+            <tr>
+                <td colspan="3">{% trans 'No unicode version defined.' %}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>{% trans 'New Unicode Version' %}</h2>
+    <p>{% trans 'Note: this new version must be available in the website internal configurations to be displayed above' %}</p>
+    <form class="form-horizontal" role="form" method="post" action="{% url "create_unicode_version" %}">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.version control_width=8 %}
+        {% include "lgr_editor/_form_field_checkbox.html" with field=form.activated control_width=8 %}
+        <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>
+    </form>
+{% endblock content-pane %}
+
+{% block html_body_more %}
+    {{ block.super }}
+{% endblock html_body_more %}

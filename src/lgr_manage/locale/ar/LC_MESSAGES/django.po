@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-11 13:27+0000\n"
+"POT-Creation-Date: 2021-08-30 15:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,10 +44,13 @@ msgstr ""
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:4
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:12
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:4
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:12
 msgid "IDN review tool admin"
 msgstr ""
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:7
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:7
 msgid "Switch mode"
 msgstr ""
 
@@ -61,6 +64,10 @@ msgstr ""
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:24
 msgid "User management"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:27
+msgid "Unicode Versions"
 msgstr ""
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:7
@@ -111,6 +118,30 @@ msgstr ""
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:63
 msgid "New Root Zone LGR"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:16
+msgid "Edit Unicode Version"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:21
+msgid "Save"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:7
+msgid "Unicode Versions List"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:12
+msgid "Version"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:13
+msgid "Activated"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:40
+msgid "No unicode version defined."
 msgstr ""
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:7

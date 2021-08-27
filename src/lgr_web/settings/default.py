@@ -314,6 +314,8 @@ UNICODE_DATABASES = {
     },
 }
 
+# default unicode version in dropdowns across the application
+DEFAULT_UNICODE_VERSION = '6.3.0'
 
 # Validator will display variants inline if there are no more than the specified number of variants
 # Otherwise, only a .csv download link is offered.

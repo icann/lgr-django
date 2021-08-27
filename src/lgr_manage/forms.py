@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from dal import autocomplete
 from django import forms
-from django.forms import FileField
+from django.forms import FileField, CharField
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
-from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, MSR
+from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, MSR, UnicodeVersion
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 
@@ -46,7 +46,6 @@ class RefLgrCreateForm(forms.ModelForm):
 
 
 class MSRCreateForm(forms.ModelForm):
-
     class Meta:
         model = MSR
         fields = '__all__'
@@ -55,3 +54,16 @@ class MSRCreateForm(forms.ModelForm):
             'name': _('Name'),
         }
 
+
+class UnicodeVersionUpdateForm(forms.ModelForm):
+    version = CharField(disabled=True)
+
+    class Meta:
+        model = UnicodeVersion
+        fields = '__all__'
+
+
+class UnicodeVersionCreateForm(forms.ModelForm):
+    class Meta:
+        model = UnicodeVersion
+        fields = '__all__'

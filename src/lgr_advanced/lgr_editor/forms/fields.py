@@ -6,15 +6,11 @@ import logging
 from itertools import chain
 from typing import List
 
-from django.conf import settings
 from django.core.cache import cache
 from django.utils.encoding import force_bytes
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_models.models.lgr import LgrBaseModel, RzLgr, MSR
-
-UNICODE_VERSIONS = tuple((v, v) for v in settings.SUPPORTED_UNICODE_VERSIONS)
-DEFAULT_UNICODE_VERSION = settings.SUPPORTED_UNICODE_VERSIONS[0]
 
 FILE_FIELD_ENCODING_HELP = _('File must be encoded in UTF-8 and using 0x0A line ending.')
 

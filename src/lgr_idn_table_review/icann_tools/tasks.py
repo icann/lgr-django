@@ -16,12 +16,12 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
 from lgr.tools.idn_review.review import review_lgr
-from lgr_advanced.lgr_editor.forms import DEFAULT_UNICODE_VERSION
 from lgr_auth.models import LgrUser
 from lgr_idn_table_review.icann_tools.api import (get_icann_idn_repository_tables,
                                                   get_reference_lgr,
                                                   NoRefLgrFound)
 from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport, IANAIdnTable
+from lgr_models.models.lgr import UnicodeVersion
 from lgr_session.api import LGRStorage
 from lgr_utils import unidb
 
@@ -86,7 +86,7 @@ def idn_table_review_task(absolute_url, email_address):
     :param email_address: The e-mail address where the results will be sent
     """
     report_id = datetime.now().strftime('%Y-%m-%d-%H%M%S.%f')
-    udata = unidb.manager.get_db_by_version(DEFAULT_UNICODE_VERSION)
+    udata = unidb.manager.get_db_by_version(UnicodeVersion.default())
     user = LgrUser.objects.get(email=email_address)
 
     lgr_storage = LGRStorage(user)

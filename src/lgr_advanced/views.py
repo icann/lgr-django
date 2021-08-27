@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, FormView
 
 from lgr.utils import cp_to_ulabel, format_cp
-from lgr_models.models.lgr import RzLgr
-from lgr_utils import unidb
 from lgr_advanced.api import LGRToolStorage
 from lgr_advanced.forms import LabelFormsForm
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel
 from lgr_advanced.utils import list_built_in_lgr
+from lgr_models.models.lgr import RzLgr
+from lgr_models.models.lgr import UnicodeVersion
+from lgr_utils import unidb
 from lgr_web.views import Interfaces, INTERFACE_SESSION_MODE_KEY
 
 
@@ -43,15 +43,15 @@ class LabelFormsView(LoginRequiredMixin, FormView):
     form_class = LabelFormsForm
     template_name = 'lgr_advanced/label_forms.html'
 
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['unicode_version'] = UnicodeVersion.default()
+        return initial
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.label = ''
         self.udata = None
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['unicode_versions'] = ((v, v) for v in settings.SUPPORTED_UNICODE_VERSIONS)
-        return kwargs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -67,7 +67,7 @@ class LabelFormsView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         self.label = form.cleaned_data['label']
-        unicode_version = form.cleaned_data['unicode_version']
-        self.udata = unidb.manager.get_db_by_version(unicode_version)
+        unicode_version: UnicodeVersion = form.cleaned_data['unicode_version']
+        self.udata = unidb.manager.get_db_by_version(unicode_version.version)
 
         return self.render_to_response(self.get_context_data(form=form))

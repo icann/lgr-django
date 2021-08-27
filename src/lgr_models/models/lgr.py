@@ -7,6 +7,7 @@ from io import BytesIO
 from django.core.cache import cache
 from django.core.files import File
 from django.db import models
+from django.db.models import QuerySet
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 
@@ -276,3 +277,30 @@ class MSR(LgrBaseModel):
     def display_url(self):
         # FIXME view should be in models app
         return reverse('lgr_admin_display_msr', kwargs={'lgr_pk': self.pk})
+
+
+class UnicodeVersion(models.Model):
+    version = models.CharField(max_length=255, unique=True)
+    activated = models.BooleanField()
+
+    class Meta:
+        ordering = ['version']
+
+    def __str__(self):
+        return self.version
+
+    @classmethod
+    def default(cls) -> 'UnicodeVersion':
+        if hasattr(settings, 'DEFAULT_UNICODE_VERSION'):
+            return cls.all().get(version=settings.DEFAULT_UNICODE_VERSION)
+        return cls.all().first()
+
+    @classmethod
+    def all(cls) -> QuerySet['UnicodeVersion']:
+        supported_versions = set(settings.SUPPORTED_UNICODE_VERSIONS).intersection(
+            settings.UNICODE_DATABASES.keys())
+        return UnicodeVersion.objects.filter(version__in=supported_versions)
+
+    @classmethod
+    def get_activated(cls) -> QuerySet['UnicodeVersion']:
+        return cls.all().filter(activated=True)

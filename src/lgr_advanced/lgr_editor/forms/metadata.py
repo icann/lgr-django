@@ -8,8 +8,9 @@ from django import forms
 from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext_lazy as _
 
+from lgr_models.models.lgr import UnicodeVersion
 from lgr_web.utils import IANA_LANG_REGISTRY
-from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, ValidatingRepertoire
+from .fields import ValidatingRepertoire
 from .utils import BaseDisableableFormSet
 
 
@@ -47,11 +48,10 @@ class MetadataForm(forms.Form):
                                  widget=TextInputPlaceHolder('domain'))
     validity_start = forms.DateField(label=_("Validity start"), widget=DateInputPlaceHolder(), required=False)
     validity_end = forms.DateField(label=_("Validity end"), widget=DateInputPlaceHolder(), required=False)
-    unicode_version = forms.ChoiceField(label=_("Unicode version"), choices=UNICODE_VERSIONS,
-                                        initial=DEFAULT_UNICODE_VERSION, required=False)
+
     description = forms.CharField(label=_("Description"), widget=forms.Textarea, required=False)
     description_type = forms.ChoiceField(label=_("Description type"), choices=DESCRIPTION_CONTENT_TYPES, required=False)
-
+    unicode_version = forms.ChoiceField(label=_("Unicode version"), required=False)
     validating_repertoire = forms.ChoiceField(label=_("Validating repertoire"),
                                               choices=(
                                                   ('', ''),
@@ -62,6 +62,9 @@ class MetadataForm(forms.Form):
         additional_repertoires = kwargs.pop('additional_repertoires', [])
         disabled = kwargs.pop('disabled')
         super(MetadataForm, self).__init__(*args, **kwargs)
+        self.fields['unicode_version'].choices = tuple((v.version, v.version) for v in UnicodeVersion.all())
+        self.fields['unicode_version'].initial = (UnicodeVersion.default(), UnicodeVersion.default())
+
         self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + [
             (_('Built-in'), ValidatingRepertoire.choices())
         ]

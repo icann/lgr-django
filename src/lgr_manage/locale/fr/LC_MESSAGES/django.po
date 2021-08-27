@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-11 13:27+0000\n"
+"POT-Creation-Date: 2021-08-30 15:00+0000\n"
 "PO-Revision-Date: 2021-02-26 16:05-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -43,10 +43,13 @@ msgstr "Fichier pour la LGR de référence"
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:4
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:12
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:4
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:12
 msgid "IDN review tool admin"
 msgstr "Admin de l'outil de vérification IDN"
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:7
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:7
 msgid "Switch mode"
 msgstr "Changer de mode"
 
@@ -61,6 +64,10 @@ msgstr "LGRs de référence"
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:24
 msgid "User management"
 msgstr "Gestion des utilisateurs"
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:27
+msgid "Unicode Versions"
+msgstr "Versions d'Unicode"
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:7
 msgid "Existing Reference LGRs"
@@ -111,6 +118,22 @@ msgstr "Aucun LGR pour la Root Zone."
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:63
 msgid "New Root Zone LGR"
 msgstr "Nouvelle LGR pour la Root Zone"
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:7
+msgid "Unicode Versions List"
+msgstr "Liste des versions d'Unicode"
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:12
+msgid "Version"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:13
+msgid "Activated"
+msgstr "Activée"
+
+#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:40
+msgid "No unicode version defined."
+msgstr "Pas de version d'unicode définie"
 
 #: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:7
 msgid "Admin user"
@@ -175,7 +198,6 @@ msgstr "Échec à la création de l'utilisateur"
 #~ "Le(s) fichier(s) doivent être encodés en UTF-8 et utiliser le retour à la "
 #~ "ligne UNIX."
 
-#, python-format
 #~ msgid ""
 #~ "\n"
 #~ "                                    Display %(remain)s more files\n"

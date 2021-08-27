@@ -3,10 +3,11 @@ from __future__ import unicode_literals
 
 from django import forms
 from django.core import validators
+from django.forms.utils import ErrorList
 from django.utils.translation import ugettext_lazy as _
 
-from .fields import (DEFAULT_UNICODE_VERSION,
-                     FILE_FIELD_ENCODING_HELP, ValidatingRepertoire)
+from lgr_models.models.lgr import UnicodeVersion
+from .fields import FILE_FIELD_ENCODING_HELP, ValidatingRepertoire
 
 
 class NewLGRForm(forms.Form):
@@ -24,8 +25,16 @@ class NewLGRForm(forms.Form):
 
 class CreateLGRForm(NewLGRForm):
     name = forms.CharField(label=_("Name"))
-    unicode_version = forms.CharField(widget=forms.HiddenInput(),
-                                      initial=DEFAULT_UNICODE_VERSION)
+    unicode_version = forms.CharField(widget=forms.HiddenInput())
+
+    def __init__(self, data=None, files=None, auto_id='id_%s', prefix=None, initial=None, error_class=ErrorList,
+                 label_suffix=None, empty_permitted=False, field_order=None, use_required_attribute=None,
+                 renderer=None):
+        super().__init__(data, files, auto_id, prefix, initial, error_class, label_suffix, empty_permitted, field_order,
+                         use_required_attribute, renderer)
+        self.fields['unicode_version'] = forms.CharField(
+            widget=forms.HiddenInput(),
+            initial=(UnicodeVersion.default(), UnicodeVersion.default()))
 
 
 class ImportLGRForm(NewLGRForm):

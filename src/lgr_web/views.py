@@ -2,10 +2,10 @@
 from enum import Enum, auto
 
 from dal import autocomplete
-from django.conf import settings
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
+from lgr_models.models.lgr import UnicodeVersion
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 INTERFACE_SESSION_MODE_KEY = 'mode'
@@ -54,7 +54,7 @@ class LGRAboutView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['output'] = {"versions": settings.SUPPORTED_UNICODE_VERSIONS}
+        ctx['output'] = {"versions": (v.version for v in UnicodeVersion.all())}
         return ctx
 
 
