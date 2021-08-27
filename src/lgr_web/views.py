@@ -6,6 +6,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
+from lgr_business.unicode_versions import UnicodeVersions
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 INTERFACE_SESSION_MODE_KEY = 'mode'
@@ -51,10 +52,11 @@ class LGRAboutView(TemplateView):
     About dialog
     """
     template_name = 'about.html'
+    unicode_versions = UnicodeVersions()
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['output'] = {"versions": settings.SUPPORTED_UNICODE_VERSIONS}
+        ctx['output'] = {"versions": (v.version for v in self.unicode_versions.get())}
         return ctx
 
 

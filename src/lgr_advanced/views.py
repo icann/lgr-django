@@ -10,6 +10,7 @@ from lgr_advanced.api import LGRToolSession
 from lgr_advanced.forms import LabelFormsForm
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.utils import list_built_in_lgr
+from lgr_business.unicode_versions import UnicodeVersions
 from lgr_web.views import Interfaces, INTERFACE_SESSION_MODE_KEY
 
 
@@ -39,6 +40,7 @@ class AdvancedModeView(LGRViewMixin, TemplateView):
 class LabelFormsView(LoginRequiredMixin, FormView):
     form_class = LabelFormsForm
     template_name = 'lgr_advanced/label_forms.html'
+    unicode_versions = UnicodeVersions()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -47,7 +49,7 @@ class LabelFormsView(LoginRequiredMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['unicode_versions'] = ((v, v) for v in settings.SUPPORTED_UNICODE_VERSIONS)
+        kwargs['unicode_versions'] = ((v.version, v.version) for v in self.unicode_versions.get_activated())
         return kwargs
 
     def get_context_data(self, **kwargs):

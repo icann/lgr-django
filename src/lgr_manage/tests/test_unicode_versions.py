@@ -1,17 +1,9 @@
-from django.conf import settings
-
+from lgr_business.unicode_versions import UnicodeVersions
 from lgr_models.models import UnicodeVersion
-from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
+from lgr_models.tests.test_unicode_version import TestUnicodeVersion
 
 
-class TestUnicodeVersion(LgrWebClientTestBase):
-
-    def setUp(self):
-        self.versions_supported = set(settings.SUPPORTED_UNICODE_VERSIONS).intersection(
-            settings.UNICODE_DATABASES.keys())
-        # this test require that at least one version of unicode is supported:
-        self.a_version_supported = set(self.versions_supported).pop()
-        self.a_unicode_version = UnicodeVersion.objects.get(version=self.a_version_supported)
+class TestUnicodeVersions(TestUnicodeVersion):
 
     def test_manage_tabs(self):
         self.login()
@@ -37,3 +29,4 @@ class TestUnicodeVersion(LgrWebClientTestBase):
         self.client.post(f'/m/unicode-versions/{self.a_unicode_version.pk}/update', {'activated': True})
         new_unicode_version = UnicodeVersion.objects.get(version=self.a_version_supported)
         self.assertEqual(new_unicode_version.activated, True)
+        self.assertListEqual([new_unicode_version], list(UnicodeVersions().get_activated()))
