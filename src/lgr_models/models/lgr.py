@@ -45,6 +45,9 @@ class LgrBaseModel(models.Model):
         ordering = ['name']
         abstract = True
 
+    def __str__(self):
+        return self.name
+
     @property
     def filename(self):
         return os.path.basename(self.file.name)
