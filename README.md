@@ -12,7 +12,6 @@ in another project would require some work:
   * `lgr_editor` contains the code related to the LGR web-editor.
   * `lgr_validator` contains the code related the label validation module.
   * `lgr_tools` contains the code related to all utilities: testing LGR and label sets, LGR comparisons, etc.
-  * `lgr_renderer` contains the code and templates used to generate the static exports of the LGR (HTML only for now).
 * `lgr_auth` contains the authentication part that is used by some apps.
 * `lgr_basic` contains the code related to the simple LGR interface.
 * `lgr_models` contains common models for other applications.
@@ -20,7 +19,9 @@ in another project would require some work:
   * `icann_tools` contains the IDN table ICANN review that launches a review on all the tables stored in IANA registry,
   * `idn_tool` contains a tool allowing reviewing IDN tables against the references LGRs managed by admin,
 * `lgr_manage` contains the LGRs and users management part.
+* `lgr_renderer` contains the code and templates used to generate the static exports of the LGR (HTML only for now).
 * `lgr_session` defines a session object that allows manipulating some session objects and accessing and displaying storage.
+* `lgr_utils` provides common shared utilities for lgr apps
 
 ## Acknowledgment
 
@@ -226,8 +227,8 @@ Some notes for developers
 * `src/lgr_web/templates` contains the base templates
 * `src/lgr_auth/templates` contains authentication templates
 * `src/lgr_basic/templates` contains simple interface (HTML output) templates
+* `src/lgr_renderer/templates` contains LGR renderers (html output) templates
 * `src/lgr_advanced/templates` contains common template for LGR advanced apps
-* `src/lgr_advanced/lgr_renderer/templates` contains LGR renderers (html output) templates
 * `src/lgr_advanced/lgr_validator/templates` contains LGR validator specific templates
 * `src/lgr_advanced/lgr_tools/templates` contains LGR tools specific templates
 * `src/lgr_advanced/lgr_editor/templates` contains LGR editor specific templates

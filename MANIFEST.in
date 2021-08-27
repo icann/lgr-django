@@ -12,8 +12,6 @@ recursive-include src/lgr_advanced/templates *
 recursive-include src/lgr_advanced/lgr_editor/locale *
 recursive-include src/lgr_advanced/lgr_editor/templates *
 recursive-include src/lgr_advanced/lgr_editor/static *
-recursive-include src/lgr_advanced/lgr_renderer/locale *
-recursive-include src/lgr_advanced/lgr_renderer/templates *
 recursive-include src/lgr_advanced/lgr_tools/templates *
 recursive-include src/lgr_advanced/lgr_tools/locale *
 recursive-include src/lgr_advanced/lgr_validator/templates *
@@ -32,6 +30,8 @@ recursive-include src/lgr_idn_table_review/idn_tool/locale *
 recursive-include src/lgr_idn_table_review/idn_tool/templates *
 recursive-include src/lgr_manage/locale *
 recursive-include src/lgr_manage/templates *
+recursive-include src/lgr_renderer/locale *
+recursive-include src/lgr_renderer/templates *
 recursive-include src/lgr_session/locale *
 recursive-include src/lgr_web/locale *
 recursive-include src/lgr_web/templates *
