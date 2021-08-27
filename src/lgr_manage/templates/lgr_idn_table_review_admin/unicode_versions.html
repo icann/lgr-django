@@ -17,11 +17,22 @@
         {% for u in object_list %}
             <tr>
                 <td>{{ u.version }}</td>
-                <td>{{ u.activated }}</td>
                 <td>
-                    <a class="btn btn-edit-var-refs" href="{% url 'lgr_idn_admin_unicode_version_detail' pk=u.pk %}">{% trans "Edit" %}</a>
+                    <form method="post" action="{% url "lgr_idn_admin_unicode_version_update" pk=u.pk %}">
+                        {% csrf_token %}
+                        {% if u.activated %}
+                            <input type="hidden" name="activated" value="False">
+                            <button type="submit" class="btn" style="background-color:transparent">
+                                <span class="glyphicon glyphicon-check"></span>
+                            </button>
+                        {% else %}
+                            <input type="hidden" name="activated" value="True">
+                            <button type="submit" class="btn" style="background-color:transparent">
+                                <span class="glyphicon glyphicon-unchecked"></span>
+                            </button>
+                        {% endif %}
+                    </form>
                 </td>
-
             </tr>
             </tbody>
             {% empty %}
