@@ -14,7 +14,6 @@ from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.utils import tag_to_language_script
 from lgr_auth.models import LgrUser
-from lgr_utils.utils import get_all_subclasses_recursively
 from lgr_web import settings
 
 
@@ -81,7 +80,7 @@ class LgrBaseModel(models.Model):
 
     def to_lgr(self, validate=False) -> LGR:
         # TODO move from advanced to models
-        from lgr_advanced import unidb
+        from lgr_utils import unidb
 
         lgr = self._from_cache()
         if lgr is None:
@@ -130,7 +129,7 @@ class LgrBaseModel(models.Model):
         # TODO move from advanced to models
         from lgr_advanced.api import OLD_LGR_NS
         from lgr_advanced.exceptions import LGRValidationException
-        from lgr_advanced import unidb
+        from lgr_utils import unidb
 
         data = data.decode('utf-8').replace(OLD_LGR_NS, LGR_NS)
 

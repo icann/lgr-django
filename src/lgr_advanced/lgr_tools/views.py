@@ -24,7 +24,7 @@ from .tasks import (diff_task,
                     validate_labels_task)
 from ..api import LabelInfo
 from ..models import LgrModel, SetLgrModel
-from ..utils import cp_to_slug
+from lgr_utils.cp import cp_to_slug
 from ..views import LGRViewMixin
 
 

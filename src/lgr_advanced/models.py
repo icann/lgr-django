@@ -14,7 +14,7 @@ from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.tools.merge_set import merge_lgr_set
-from lgr_advanced import unidb
+from lgr_utils import unidb
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_models.models.report import LGRReport
 

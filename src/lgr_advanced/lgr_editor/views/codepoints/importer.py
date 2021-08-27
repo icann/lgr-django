@@ -7,7 +7,6 @@ import logging
 from io import StringIO
 
 from django.contrib import messages
-from django.http import HttpResponseBadRequest
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.html import format_html_join
@@ -21,7 +20,7 @@ from lgr.parser.line_parser import LineParser
 from lgr.parser.rfc3743_parser import RFC3743Parser
 from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.utils import format_cp
-from lgr_advanced import unidb
+from lgr_utils import unidb
 from lgr_advanced.lgr_editor.forms import (AddMultiCodepointsForm,
                                            AddRangeForm,
                                            ImportCodepointsFromFileForm,
@@ -31,7 +30,7 @@ from lgr_advanced.lgr_editor.utils import slug_to_cp
 from lgr_advanced.lgr_editor.views.mixins import LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel
-from lgr_advanced.utils import (cp_to_slug)
+from lgr_utils.cp import cp_to_slug
 
 logger = logging.getLogger(__name__)
 

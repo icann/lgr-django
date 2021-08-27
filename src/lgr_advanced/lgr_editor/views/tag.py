@@ -18,7 +18,7 @@ from lgr.exceptions import LGRException
 from lgr_advanced.lgr_editor.utils import render_cp_or_sequence
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_advanced.utils import cp_to_slug
+from lgr_utils.cp import cp_to_slug
 
 logger = logging.getLogger(__name__)
 

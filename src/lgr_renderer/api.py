@@ -10,20 +10,18 @@ import logging
 import re
 from itertools import islice
 
+from django.utils.html import format_html_join, format_html, mark_safe
+from django.utils.translation import ugettext_lazy as _
 from natsort import natsorted
 
-from django.utils.translation import ugettext_lazy as _
-from django.utils.html import format_html_join, format_html, mark_safe
-
-from lgr.matcher import AnchorMatcher
-from lgr.validate.lgr_stats import generate_stats
 from lgr.classes import TAG_CLASSNAME_PREFIX
 from lgr.exceptions import NotInLGR
-
-from lgr_advanced import unidb
-from lgr_advanced.lgr_editor.utils import cp_to_str
+from lgr.matcher import AnchorMatcher
+from lgr.utils import cp_to_str
+from lgr.validate.lgr_stats import generate_stats
 from lgr_renderer.utils import render_glyph
-from lgr_advanced.utils import render_cp, render_name, cp_to_slug
+from lgr_utils import unidb
+from lgr_utils.cp import render_cp, render_name, cp_to_slug
 
 logger = logging.getLogger(__name__)
 
@@ -233,7 +231,7 @@ def _generate_context_classes(lgr, udata):
             continue
         try:
             clz_members = clz.get_pattern(lgr.rules_lookup, lgr.classes_lookup,
-                                           udata, as_set=True) & repertoire
+                                          udata, as_set=True) & repertoire
         except RuntimeError:
             clz_members = []
         clz_members_len = len(clz_members)
@@ -264,6 +262,7 @@ def _generate_context_rules(lgr, udata, context_rules, trigger_rules):
     :param trigger_rules: List of rule names used in actions.
     :return: Context to be used in template.
     """
+
     def _has_anchor_rule(rule):
         """Utility function that test if a rule has an anchor."""
         if isinstance(rule, AnchorMatcher):

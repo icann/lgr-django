@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, FormView
 
 from lgr.utils import cp_to_ulabel, format_cp
-from lgr_advanced import unidb
+from lgr_utils import unidb
 from lgr_advanced.api import LGRToolStorage
 from lgr_advanced.forms import LabelFormsForm
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text

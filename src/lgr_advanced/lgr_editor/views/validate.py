@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
 
-from lgr_advanced import unidb
+from lgr_utils import unidb
 from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
 

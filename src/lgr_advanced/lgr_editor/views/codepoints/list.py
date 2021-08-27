@@ -18,15 +18,14 @@ from lgr.char import RangeChar
 from lgr.exceptions import LGRException, LGRFormatException, CharInvalidContextRule
 from lgr.utils import format_cp
 from lgr.validate import check_symmetry, check_transitivity
-from lgr_advanced import unidb
+from lgr_utils import unidb
 from lgr_advanced.lgr_editor.forms import (AddCodepointForm,
                                            EditCodepointsForm)
 from lgr_advanced.lgr_editor.utils import slug_to_cp, render_char
 from lgr_advanced.lgr_editor.views.codepoints.mixins import CodePointMixin
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_advanced.utils import (cp_to_slug,
-                                render_name)
+from lgr_utils.cp import render_name, cp_to_slug
 
 logger = logging.getLogger(__name__)
 

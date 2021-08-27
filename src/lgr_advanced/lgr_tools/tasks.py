@@ -16,7 +16,7 @@ from lgr_advanced.api import LabelInfo, LGRToolStorage
 from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel, SetLgrModel
-from lgr_advanced.unidb import get_db_by_version
+from lgr_utils.unidb import get_db_by_version
 from lgr_advanced.lgr_tools.api import (lgr_diff_labels,
                                         lgr_collision_labels,
                                         lgr_annotate_labels,

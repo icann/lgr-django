@@ -12,7 +12,8 @@ from django.utils.html import mark_safe, format_html, format_html_join
 
 from lgr.char import RangeChar
 from lgr.utils import cp_to_str
-from lgr_advanced.utils import cp_to_slug, list_files
+from lgr_advanced.utils import list_files
+from lgr_utils.cp import cp_to_slug
 
 HTML_UNICODE_FORMAT = '<bdi>&#x%06X;</bdi>'
 

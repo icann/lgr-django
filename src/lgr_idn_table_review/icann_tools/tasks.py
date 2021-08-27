@@ -17,7 +17,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 
 from lgr.tools.idn_review.review import review_lgr
-from lgr_advanced import unidb
+from lgr_utils import unidb
 from lgr_advanced.lgr_editor.forms import DEFAULT_UNICODE_VERSION
 from lgr_auth.models import LgrUser
 from lgr_idn_table_review.icann_tools.api import (get_icann_idn_repository_tables,
