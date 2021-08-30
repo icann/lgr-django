@@ -8,8 +8,9 @@ from django import forms
 from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext_lazy as _
 
+from lgr_models.models.lgr import RzLgr
 from lgr_web.utils import IANA_LANG_REGISTRY
-from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, VALIDATING_REPERTOIRES, DEFAULT_VALIDATING_REPERTOIRE
+from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, DEFAULT_VALIDATING_REPERTOIRE, VALIDATING_REPERTOIRES
 from .utils import BaseDisableableFormSet
 
 
@@ -57,7 +58,6 @@ class MetadataForm(forms.Form):
                                                   ('', ''),
                                                   (_('Built-in'), VALIDATING_REPERTOIRES),
                                               ),
-                                              initial=DEFAULT_VALIDATING_REPERTOIRE,
                                               required=False)
 
     def __init__(self, *args, **kwargs):
@@ -67,7 +67,9 @@ class MetadataForm(forms.Form):
         if additional_repertoires:
             # dynamically append the session LGRs (by copy, not by reference)
             self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + [
-                (_('My LGRs'), tuple(((lgr.__class__.__name__, lgr.pk), lgr.name) for lgr in additional_repertoires))]
+                (_('My LGRs'), tuple((lgr.to_tuple(), lgr.name) for lgr in additional_repertoires)),
+            ]
+        self.fields['validating_repertoire'].initial = kwargs['initial'].get('validating_repertoire')
         if disabled:
             # do not enable to update metadata for LGRs in a set
             for field in self.fields.values():

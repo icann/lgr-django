@@ -52,8 +52,8 @@ def get_all_scripts_from_repertoire(unicode_database):
     if not scripts:
         logger.info("Scripts not in cache")
         scripts = set()
-        for rep in list_validating_repertoires():
-            validating_repertoire = get_by_name(rep)
+        for validating_repertoire_object in list_validating_repertoires():
+            validating_repertoire = validating_repertoire_object.to_lgr()
             for char in validating_repertoire.repertoire.all_repertoire():
                 for cp in char.cp:
                     try:

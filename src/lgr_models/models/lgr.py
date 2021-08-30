@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import hashlib
 import os
+from ast import literal_eval
 from io import BytesIO
 
 from django.core.cache import cache
@@ -67,6 +68,24 @@ class LgrBaseModel(models.Model):
     def dl_url(self):
         raise NotImplementedError
 
+    @classmethod
+    def from_tuple(cls, model_pk_tuple, user=None):
+        """
+        Get a LGR object from a tuple containing the model_name and pk
+        """
+        from lgr_models.utils import get_model_from_name
+
+        if not model_pk_tuple:
+            return
+
+        if not isinstance(model_pk_tuple, tuple):
+            model_pk_tuple = literal_eval(model_pk_tuple)
+        model_name, pk = model_pk_tuple
+        return get_model_from_name(model_name).get_object(user, pk)
+
+    def to_tuple(self):
+        return self._meta.label, self.pk
+
     @staticmethod
     def upload_path(instance, filename):
         return os.path.join(f'user_{instance.owner.id}', filename)
@@ -79,7 +98,7 @@ class LgrBaseModel(models.Model):
         # TODO move from advanced to models
         from lgr_advanced.utils import LGR_CACHE_KEY_PREFIX
 
-        key = f"{key}:{self.__class__.__name__}:{self.pk}"
+        key = f"{key}:{self._meta.label}:{self.pk}"
         args = hashlib.md5(force_bytes(key))
         return "{}.{}".format(LGR_CACHE_KEY_PREFIX, args.hexdigest())
 

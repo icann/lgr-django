@@ -52,7 +52,8 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
             'validity_end': metadata.validity_end,
             'description': description,
             'description_type': description_type,
-            'validating_repertoire': self.lgr_object.validating_repertoire,
+            'validating_repertoire': [self.validating_repertoire.to_tuple()
+                                      if self.validating_repertoire else ('', '')],
         }
 
         # add other repertoires available in the user's session
@@ -115,9 +116,8 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
                 metadata.description = Description(value=cd['description'],
                                                    description_type=cd['description_type'] or None)
 
-            # TODO if validating repertoire is an user LGR this won't work
-            # TODO when validating repertoire as an user LGR is supported, need to create a copy
-            self.lgr_object.validating_repertoire = cd['validating_repertoire']
+            self.lgr_object.validating_repertoire = self.model.from_tuple(cd['validating_repertoire'],
+                                                                          user=self.request.user)
             if language_formset.is_valid():
                 # save languages
                 metadata.set_languages(filter(None, (f.get('language') for f in language_formset.cleaned_data)))

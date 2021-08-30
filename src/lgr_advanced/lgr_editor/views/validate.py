@@ -11,9 +11,8 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
 
-from lgr_utils import unidb
-from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
+from lgr_utils import unidb
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +34,7 @@ class ValidateLGRView(LGRHandlingBaseMixin, View):
         except KeyError:
             pass
         if self.lgr_object.validating_repertoire:
-            validating_repertoire = get_by_name(self.lgr_object.validating_repertoire)
-            if validating_repertoire:
-                options['validating_repertoire'] = validating_repertoire
+            options['validating_repertoire'] = self.lgr_object.validating_repertoire.to_lgr()
         options['rng_filepath'] = settings.LGR_RNG_FILE
 
         results = self.lgr.validate(options)

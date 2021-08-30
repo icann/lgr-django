@@ -25,7 +25,7 @@ class LGRHandlingBaseMixin(LGRViewMixin):
         self.lgr_object: typing.Union[LgrModel, SetLgrModel] = None
         self.lgr: LGR = None
         self.model: LgrBaseModel = None
-        self.validating_repertoire = None
+        self.validating_repertoire: LgrBaseModel = None
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
@@ -33,7 +33,7 @@ class LGRHandlingBaseMixin(LGRViewMixin):
         self.model = self.kwargs.get('model', LgrModel)
         self.lgr_object = self.model.get_object(request.user, self.lgr_pk)
         if hasattr(self.lgr_object, 'validating_repertoire') and self.lgr_object.validating_repertoire:
-            self.validating_repertoire = get_by_name(self.lgr_object.validating_repertoire)
+            self.validating_repertoire = self.lgr_object.validating_repertoire
         self.lgr = self.lgr_object.to_lgr()
 
     def get_context_data(self, **kwargs):

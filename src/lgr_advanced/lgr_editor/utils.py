@@ -5,6 +5,7 @@ utils.py - utility functions for LGR Editor.
 from __future__ import unicode_literals
 
 import logging
+from typing import List
 from urllib.parse import quote_plus
 
 from django.conf import settings
@@ -13,6 +14,7 @@ from django.utils.html import mark_safe, format_html, format_html_join
 from lgr.char import RangeChar
 from lgr.utils import cp_to_str
 from lgr_advanced.utils import list_files
+from lgr_models.models.lgr import LgrBaseModel, RzLgr
 from lgr_utils.cp import cp_to_slug
 
 HTML_UNICODE_FORMAT = '<bdi>&#x%06X;</bdi>'
@@ -112,10 +114,11 @@ def slug_to_var(var_slug):
     return slug_to_cp(cp_slug), var_when, var_not_when
 
 
-def list_validating_repertoires():
+def list_validating_repertoires() -> List[LgrBaseModel]:
     """
     List XML LGR repertoire files stored at a specific location.
 
     :return: List of validating repertoires.
     """
-    return list_files(settings.REPERTOIRE_STORAGE_LOCATION)
+    # TODO support other types of repertoire
+    return RzLgr.objects.all()

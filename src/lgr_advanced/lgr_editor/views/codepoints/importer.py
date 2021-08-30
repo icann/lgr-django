@@ -20,16 +20,16 @@ from lgr.parser.line_parser import LineParser
 from lgr.parser.rfc3743_parser import RFC3743Parser
 from lgr.parser.rfc4290_parser import RFC4290Parser
 from lgr.utils import format_cp
-from lgr_utils import unidb
 from lgr_advanced.lgr_editor.forms import (AddMultiCodepointsForm,
                                            AddRangeForm,
                                            ImportCodepointsFromFileForm,
                                            AddCodepointFromScriptForm)
-from lgr_advanced.lgr_editor.repertoires import get_all_scripts_from_repertoire, get_by_name
+from lgr_advanced.lgr_editor.repertoires import get_all_scripts_from_repertoire
 from lgr_advanced.lgr_editor.utils import slug_to_cp
 from lgr_advanced.lgr_editor.views.mixins import LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel
+from lgr_utils import unidb
 from lgr_utils.cp import cp_to_slug
 
 logger = logging.getLogger(__name__)
@@ -313,7 +313,7 @@ class AddCodepointFromScriptView(MultiCodepointsView):
 
         cd = form.cleaned_data
         script = cd['script']
-        validating_repertoire = get_by_name(cd['validating_repertoire'])
+        validating_repertoire = self.model.from_tuple(cd['validating_repertoire'])
         validating_repertoire.expand_ranges()  # need to get through all code points
 
         codepoints = []

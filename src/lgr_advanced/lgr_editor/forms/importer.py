@@ -12,7 +12,7 @@ from .fields import (DEFAULT_UNICODE_VERSION,
 
 class NewLGRForm(forms.Form):
     #  TODO:  we need to add the other repertoires (and not just the root zone one) as well here:
-    validating_repertoire = forms.ModelChoiceField(queryset=RzLgr.objects.all(), empty_label=None, to_field_name='name')
+    validating_repertoire = forms.ModelChoiceField(queryset=RzLgr.objects.all(), required=False)
 
 
 class CreateLGRForm(NewLGRForm):
