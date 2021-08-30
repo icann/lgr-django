@@ -21,9 +21,6 @@ class EmbeddedLGRsView(LGRHandlingBaseMixin, TemplateView):
             return HttpResponseBadRequest('LGR is not a set')
 
         ctx.update({
-            'lgr': self.lgr,
-            'lgr_object': self.lgr_object,
             'embedded': self.lgr_object.embedded_lgrs(),
-            'is_set': True
         })
         return ctx

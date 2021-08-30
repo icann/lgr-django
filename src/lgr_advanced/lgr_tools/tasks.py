@@ -13,10 +13,7 @@ from django.core.mail import EmailMessage
 from lgr.exceptions import LGRException
 from lgr.utils import cp_to_ulabel
 from lgr_advanced.api import LabelInfo, LGRToolStorage
-from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_advanced.models import LgrModel, SetLgrModel
-from lgr_utils.unidb import get_db_by_version
 from lgr_advanced.lgr_tools.api import (lgr_diff_labels,
                                         lgr_collision_labels,
                                         lgr_annotate_labels,
@@ -26,7 +23,10 @@ from lgr_advanced.lgr_tools.api import (lgr_diff_labels,
                                         lgr_set_validate_label,
                                         lgr_validate_labels,
                                         lgr_basic_collision_labels)
+from lgr_advanced.models import LgrModel, SetLgrModel
 from lgr_auth.models import LgrUser
+from lgr_models.utils import get_model_from_name
+from lgr_utils.unidb import get_db_by_version
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +74,6 @@ def _lgr_tool_task(user, base_filename, email_subject,
         sio.close()
         email.send()
 
-
 @shared_task
 def diff_task(user_pk, lgr_pk_1, lgr_pk_2, labels_json, collision, full_dump,
               with_rules):
@@ -91,8 +90,8 @@ def diff_task(user_pk, lgr_pk_1, lgr_pk_2, labels_json, collision, full_dump,
     :return:
     """
     user = LgrUser.objects.get(pk=user_pk)
-    lgr1 = LgrModel.objects.get(owner=user, pk=lgr_pk_1).to_lgr()
-    lgr2 = LgrModel.objects.get(owner=user, pk=lgr_pk_2).to_lgr()
+    lgr1 = LgrModel.get_object(user, lgr_pk_1).to_lgr()
+    lgr2 = LgrModel.get_object(user, lgr_pk_2).to_lgr()
     labels_info = LabelInfo.from_dict(labels_json)
 
     logger.info("Starting task 'diff' between %s and %s, for file %s",
@@ -130,7 +129,7 @@ def collision_task(user_pk, lgr_pk, labels_json, tld_json, full_dump, with_rules
     :param with_rules: Whether we also output rules
     """
     user = LgrUser.objects.get(pk=user_pk)
-    lgr = LgrModel.objects.get(owner=user, pk=lgr_pk).to_lgr()
+    lgr = LgrModel.get_object(user, lgr_pk).to_lgr()
     labels_info = LabelInfo.from_dict(labels_json)
     tlds_info = LabelInfo.from_dict(tld_json) if tld_json else None
 
@@ -165,11 +164,8 @@ def basic_collision_task(user_pk, lgr_pk, labels_json, tld_json, annotate=False,
     :param lgr_model: The model of the LGR in database
     """
     user = LgrUser.objects.get(pk=user_pk)
-    if lgr_model != LgrModel:
-        # XXX hack while rz is not loaded from DB
-        lgr = get_by_name(lgr_pk, with_unidb=True)
-    else:
-        lgr = lgr_model.objects.get(owner=user, pk=lgr_pk).to_lgr()
+    lgr_model = get_model_from_name(lgr_model)
+    lgr = lgr_model.get_object(user, lgr_pk).to_lgr()
     labels_info = LabelInfo.from_dict(labels_json)
     tlds_info = LabelInfo.from_dict(tld_json) if tld_json else None
     task_name = "collisions"
@@ -205,11 +201,8 @@ def annotate_task(user_pk, lgr_pk, labels_json, lgr_model=LgrModel):
     :param lgr_model: The model of the LGR in database
     """
     user = LgrUser.objects.get(pk=user_pk)
-    if lgr_model != LgrModel:
-        # XXX hack while rz is not loaded from DB
-        lgr = get_by_name(lgr_pk, with_unidb=True)
-    else:
-        lgr = lgr_model.objects.get(owner=user, pk=lgr_pk).to_lgr()
+    lgr_model = get_model_from_name(lgr_model)
+    lgr = lgr_model.get_object(user, lgr_pk).to_lgr()
     labels_info = LabelInfo.from_dict(labels_json)
 
     logger.info("Starting task 'annotate' for %s, for file %s",
@@ -240,8 +233,8 @@ def lgr_set_annotate_task(user_pk, lgr_pk, labels_json, set_labels_json, script_
     :param script_lgr_pk: The LGR primary key for the script used to check label validity.
     """
     user = LgrUser.objects.get(pk=user_pk)
-    lgr = LgrModel.objects.get(owner=user, pk=lgr_pk).to_lgr()
-    script_lgr = SetLgrModel.objects.get(owner=user, pk=script_lgr_pk).to_lgr()
+    lgr = LgrModel.get_object(user, lgr_pk).to_lgr()
+    script_lgr = SetLgrModel.get_object(user, script_lgr_pk).to_lgr()
     labels_info = LabelInfo.from_dict(labels_json)
     set_labels_info = LabelInfo.from_dict(set_labels_json)
 
@@ -276,7 +269,7 @@ def cross_script_variants_task(user_pk, lgr_pk, in_set, labels_json):
     """
     user = LgrUser.objects.get(pk=user_pk)
     lgr_model = SetLgrModel if in_set else LgrModel
-    lgr = lgr_model.objects.get(owner=user, pk=lgr_pk).to_lgr()
+    lgr = lgr_model.get_object(user, lgr_pk).to_lgr()
     labels_info = LabelInfo.from_dict(labels_json)
 
     logger.info("Starting task 'cross-script variants' for %s, for file %s",
@@ -306,11 +299,8 @@ def validate_label_task(user_pk, lgr_pk, label, lgr_model=LgrModel):
     :param lgr_model: The model of the LGR in database
     """
     user = LgrUser.objects.get(pk=user_pk)
-    if lgr_model != LgrModel:
-        # XXX hack while rz is not loaded from DB
-        lgr = get_by_name(lgr_pk, with_unidb=True)
-    else:
-        lgr = lgr_model.objects.get(owner=user, pk=lgr_pk).to_lgr()
+    lgr_model = get_model_from_name(lgr_model)
+    lgr = lgr_model.get_object(user, lgr_pk).to_lgr()
     udata = get_db_by_version(lgr.metadata.unicode_version)
 
     logger.info("Starting task 'validate label' for %s, for input label '%s'",
@@ -342,9 +332,9 @@ def lgr_set_validate_label_task(user_pk, lgr_pk, script_lgr_pk, label, set_label
     :param set_labels_json: The LabelInfo allocated in set as a JSON object.
     """
     user = LgrUser.objects.get(pk=user_pk)
-    lgr = LgrModel.objects.get(owner=user, pk=lgr_pk).to_lgr()
+    lgr = LgrModel.get_object(user, lgr_pk).to_lgr()
     udata = get_db_by_version(lgr.metadata.unicode_version)
-    script_lgr = SetLgrModel.objects.get(owner=user, pk=script_lgr_pk).to_lgr()
+    script_lgr = SetLgrModel.get_object(user, script_lgr_pk).to_lgr()
     set_labels_info = LabelInfo.from_dict(set_labels_json)
 
     logger.info("Starting task 'validate label' for %s, for input label '%s'", lgr.name, label)
@@ -378,7 +368,7 @@ def validate_labels_task(user_pk, lgr_pk, labels_json):
     :param labels_json: The LabelInfo as a JSON object.
     """
     user = LgrUser.objects.get(pk=user_pk)
-    lgr = LgrModel.objects.get(owner=user, pk=lgr_pk).to_lgr()
+    lgr = LgrModel.get_object(user, lgr_pk).to_lgr()
     labels_info = LabelInfo.from_dict(labels_json)
     udata = get_db_by_version(lgr.metadata.unicode_version)
 

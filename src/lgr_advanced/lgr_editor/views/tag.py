@@ -70,11 +70,8 @@ class ListTagJsonView(LGRHandlingBaseMixin, View):
         cp_list = []
         for c in clz.codepoints:
             cp_slug = cp_to_slug((c,))
-            kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug}
-            view_name = 'codepoint_view'
-            if self.lgr_is_in_set:
-                view_name = 'codepoint_view_set'
-            cp_view_url = reverse(view_name, kwargs=kwargs)
+            kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug, 'model': self.lgr_object.model_name}
+            cp_view_url = reverse('codepoint_view', kwargs=kwargs)
             obj = {'cp_disp': render_cp_or_sequence(c), 'cp_view': cp_view_url}
             cp_list.append(obj)
             if len(cp_list) == 10:
@@ -107,4 +104,4 @@ class DeleteTagView(LGREditMixin, View):
                                  _("References to tag %(tag)s have been removed from the repertoire. "
                                    "Do not forget to update any WLE that might reference it.") % {'tag': tag_id})
 
-        return redirect('tags', self.lgr_pk)
+        return redirect('tags', lgr_pk=self.lgr_pk, model=self.lgr_object.model_name)

@@ -6,9 +6,11 @@
 {% block content-pane %}
     <h3>{% trans 'List of LGRs in the set' %}</h3>
     <ul>
-        {% for lgr in embedded %}
+        {% for e_lgr in embedded %}
             <li>
-                <a href="{% url 'codepoint_list_set' lgr.pk %}">{% blocktrans with lgr_name=lgr.name %}{{ lgr_name }}{% endblocktrans %}</a>
+                <a href="{% url 'codepoint_list' lgr_pk=e_lgr.pk model=e_lgr.model_name %}">
+                    {% blocktrans with lgr_name=e_lgr.name %}{{ lgr_name }}{% endblocktrans %}
+                </a>
             </li>
         {% endfor %}
     </ul>

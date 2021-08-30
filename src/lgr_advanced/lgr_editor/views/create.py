@@ -35,17 +35,17 @@ class NewLGRView(LGRViewMixin, FormView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.lgr_pk = None
+        self.lgr_object = None
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx.update({
-            'lgrs': LgrModel.objects.filter(owner=self.request.user)
+            'lgrs': LgrModel.objects.filter(owner=self.request.user),
         })
         return ctx
 
     def get_success_url(self):
-        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk})
+        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_object.pk, 'model': self.lgr_object.model_name})
 
     def form_valid(self, form):
         lgr_name = form.cleaned_data['name']
@@ -55,12 +55,12 @@ class NewLGRView(LGRViewMixin, FormView):
         if LgrModel.objects.filter(owner=self.request.user, name=lgr_name).exists():
             logger.error("Import existing LGR")
             return render(self.request, 'lgr_editor/import_invalid.html',
-                          context={'error': _("The LGR you have tried to create already exists in your working session. Please use a new name.")})
+                          context={'error': _(
+                              "The LGR you have tried to create already exists in your working session. Please use a new name.")})
 
-        lgr_object = LgrModel.new(self.request.user, lgr_name,
-                                  form.cleaned_data['unicode_version'],
-                                  form.cleaned_data['validating_repertoire'])
-        self.lgr_pk = lgr_object.pk
+        self.lgr_object = LgrModel.new(self.request.user, lgr_name,
+                                       form.cleaned_data['unicode_version'],
+                                       form.cleaned_data['validating_repertoire'])
         return super(NewLGRView, self).form_valid(form)
 
 
@@ -78,7 +78,6 @@ class ImportLGRView(LGRViewMixin, FormView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.lgr_pk = None
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -88,7 +87,7 @@ class ImportLGRView(LGRViewMixin, FormView):
         return ctx
 
     def get_success_url(self):
-        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk})
+        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_object.pk, 'model': self.lgr_object.model_name})
 
     @transaction.atomic
     def form_valid(self, form):
@@ -103,9 +102,8 @@ class ImportLGRView(LGRViewMixin, FormView):
         lgr_set = []
         for lgr_file in lgr_files:
             try:
-                lgr_object = self._handle_lgr_file(lgr_file, validating_repertoire, lgr_set_info, lgr_set)
-                lgr_set.append(lgr_object)
-                self.lgr_pk = lgr_object.pk
+                self.lgr_object = self._handle_lgr_file(lgr_file, validating_repertoire, lgr_set_info, lgr_set)
+                lgr_set.append(self.lgr_object)
             except ImportLGRView.LGRImportException as exc:
                 return render(self.request, 'lgr_editor/import_invalid.html',
                               context={'error': exc.error})
@@ -122,12 +120,11 @@ class ImportLGRView(LGRViewMixin, FormView):
                 except Exception as import_error:
                     logger.exception("Merge LGR from set is invalid")
                     raise ImportLGRView.LGRImportException(lgr_exception_to_text(import_error))
-                lgr_object = LgrModel.objects.create(file=File(BytesIO(data), name=f'{set_name}.xml'),
-                                                     owner=self.request.user,
-                                                     name=set_name)
-                lgr_set_info.lgr = lgr_object
+                self.lgr_object = LgrModel.objects.create(file=File(BytesIO(data), name=f'{set_name}.xml'),
+                                                          owner=self.request.user,
+                                                          name=set_name)
+                lgr_set_info.lgr = self.lgr_object
                 lgr_set_info.save()
-                self.lgr_pk = lgr_object.pk
             except ImportLGRView.LGRImportException as exc:
                 return render(self.request, 'lgr_editor/import_invalid.html',
                               context={'error': exc.error})
@@ -184,11 +181,10 @@ class ImportReferenceLGRView(LGRViewMixin, View):
         if lgr_name.endswith('.xml'):
             lgr_name = lgr_name.rsplit('.', 1)[0]
         with open(os.path.join(settings.LGR_STORAGE_LOCATION, lgr_name + '.xml'), 'rb') as f:
-            lgr_object = LgrModel.objects.create(owner=request.user,
-                                                 file=File(f, name=f'{lgr_name}.xml'),
-                                                 name=lgr_name)
-            self.lgr_pk = lgr_object.pk
-        return redirect('codepoint_list', lgr_pk=self.lgr_pk)
+            self.lgr_object = LgrModel.objects.create(owner=request.user,
+                                                      file=File(f, name=f'{lgr_name}.xml'),
+                                                      name=lgr_name)
+        return redirect('codepoint_list', lgr_pk=self.lgr_object.pk, model=self.lgr_object.model_name)
 
 
 class DeleteLGRView(LGRViewMixin, View):
@@ -202,5 +198,5 @@ class DeleteLGRView(LGRViewMixin, View):
 
     # TODO make that a post
     def get(self, request, *args, **kwargs):
-        LgrModel.objects.get(owner=request.user, pk=self.lgr_pk).delete()
+        LgrModel.get_object(request.user, self.lgr_pk).delete()
         return redirect('/')

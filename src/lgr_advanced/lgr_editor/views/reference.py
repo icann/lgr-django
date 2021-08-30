@@ -42,7 +42,7 @@ class ReferenceViewMixin:
         add_reference_form = add_reference_form or ReferenceForm(prefix='add_reference', ro_id=False)
         references_form = references_form or ReferenceFormSet(initial=references,
                                                               prefix='references',
-                                                              disabled=self.is_set_or_in_set())
+                                                              disabled=self.lgr_is_set_or_in_set())
         ctx.update({
             'add_reference_form': add_reference_form,
             'references_form': references_form,
@@ -75,7 +75,7 @@ class AddReferenceView(LGREditMixin, ReferenceViewMixin, FormView):
         return 'add_reference'
 
     def get_success_url(self):
-        return reverse('references', kwargs={'lgr_pk': self.lgr_pk})
+        return reverse('references', kwargs={'lgr_pk': self.lgr_pk, 'model': self.lgr_object.model_name})
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -112,7 +112,7 @@ class EditReferenceView(LGREditMixin, ReferenceViewMixin, FormView):
         return 'references'
 
     def get_success_url(self):
-        return reverse('references', kwargs={'lgr_pk': self.lgr_pk})
+        return reverse('references', kwargs={'lgr_pk': self.lgr_pk, 'model': self.lgr_object.model_name})
 
     def form_valid(self, form):
         logger.debug('Edit reference')
@@ -196,4 +196,4 @@ class DeleteReferenceView(LGREditMixin, View):
             messages.add_message(request, messages.ERROR,
                                  lgr_exception_to_text(ex))
 
-        return redirect('references', lgr_pk=self.lgr_pk)
+        return redirect('references', lgr_pk=self.lgr_pk, model=self.lgr_object.model_name)

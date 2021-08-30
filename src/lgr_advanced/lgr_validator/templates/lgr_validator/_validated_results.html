@@ -188,13 +188,8 @@
 
         {% if result.num_variants > result.threshold_include_vars %}
             {# TODO: Need to pass set_labels along #}
-            {% if lgr_set %}
-                {% url 'lgr_validate_csv_set' lgr_pk=lgr_pk as lgr_validate_csv_url %}
-            {% else %}
-                {% url 'lgr_validate_csv' lgr_pk=lgr_pk as lgr_validate_csv_url %}
-            {% endif %}
             {% if not is_set or lgr_set %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
-                <a class="btn btn-info" href="{{ lgr_validate_csv_url }}?label={{ result.u_label|urlencode }}{% if result.script %}&script={{ result.script|urlencode }}{% endif %}">
+                <a class="btn btn-info" href="{% url 'lgr_validate_csv' lgr_pk=lgr_object.pk model=lgr_object.model_name  %}?label={{ result.u_label|urlencode }}{% if result.script %}&script={{ result.script|urlencode }}{% endif %}">
                     <i class="glyphicon glyphicon-save"></i>
                         {% blocktrans %}Download results in CSV{% endblocktrans %}
                 </a>

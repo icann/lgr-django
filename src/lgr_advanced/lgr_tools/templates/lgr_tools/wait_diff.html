@@ -2,10 +2,10 @@
 {% load i18n %}
 
 {% block content %}
-{% url 'codepoint_list' lgr_pk=lgr_object_1.name as lgr_1_url %}
-{% url 'codepoint_list' lgr_pk=lgr_object_2.name as lgr_2_url %}
+{% url 'codepoint_list' lgr_pk=lgr_object_1.name model=lgr_object_1.model_name as lgr_1_url %}
+{% url 'codepoint_list' lgr_pk=lgr_object_2.name model=lgr_object_2.model_name as lgr_2_url %}
 <h2>
-    {% blocktrans trimmed with lgr_1_name=lgr_object_1.name lgr_object_2=lgr_2.name %}
+    {% blocktrans trimmed with lgr_1_name=lgr_object_1.name lgr_2_name=lgr_object_2.name %}
         Computing diff on labels provided in file {{ labels_file }} between <a href="{{ lgr_1_url }}">{{ lgr_1_name }}</a>
         and <a href="{{ lgr_2_url }}">{{ lgr_2_name }}</a>
     {% endblocktrans %}

@@ -215,7 +215,7 @@ def lgr_validate_label(lgr: LGR, label, udata):
     """
     Validate a label for an LGR.
 
-    :param lgr_object: The LGR to use for variant generation.
+    :param lgr: The LGR to use for variant generation.
     :param label: Label to validate.
     :param udata: The associated Unicode database.
     :return: CSV containing the label validation output.

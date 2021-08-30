@@ -3,8 +3,8 @@
 
 {% block content %}
 
-    {% url 'codepoint_list' lgr_pk=h_lgr_object_1.pk as h_lgr_1_url %}
-    {% url 'codepoint_list' lgr_pk=h_lgr_object_2.pk as h_lgr_2_url %}
+    {% url 'codepoint_list' lgr_pk=h_lgr_object_1.pk model=h_lgr_object_1.model_name as h_lgr_1_url %}
+    {% url 'codepoint_list' lgr_pk=h_lgr_object_2.pk model=h_lgr_object_2.model_name as h_lgr_2_url %}
 
     <h2>
         {% blocktrans trimmed with lgr_1_name=lgr_object_1.name lgr_2_name=lgr_object_2.name %}

@@ -59,7 +59,7 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
         kwargs['additional_repertoires'] = LgrModel.objects.filter(owner=self.request.user).exclude(
             name=self.lgr_object.name)
 
-        kwargs['disabled'] = self.lgr_is_in_set
+        kwargs['disabled'] = self.lgr_is_in_set()
 
         return kwargs
 
@@ -69,8 +69,8 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
                                            prefix='lang',
                                            initial=[{'language': l} for l in
                                                     self.lgr.metadata.languages],
-                                           disabled=self.lgr_is_in_set)
-        if self.lgr_is_in_set:
+                                           disabled=self.lgr_is_in_set())
+        if self.lgr_is_in_set():
             # do not enable to update metadata for LGRs in a set => do not need an extra widget
             language_formset.extra = 0
 
@@ -81,7 +81,7 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
         return ctx
 
     def get_success_url(self):
-        return reverse('metadata', kwargs={'lgr_pk': self.lgr_pk})
+        return reverse('metadata', kwargs={'lgr_pk': self.lgr_pk, 'model': self.lgr_object.model_name})
 
     def form_valid(self, form):
         # main `MetadataForm` is valid, now test for `LanguageFormSet`

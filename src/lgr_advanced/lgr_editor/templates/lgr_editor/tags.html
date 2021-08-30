@@ -17,27 +17,19 @@
         </thead>
         <tbody>
             {% for tag in tags %}
-                {% if lgr_set %}
-                    {% url 'tag_list_json_set' lgr_pk=lgr_pk tag_id=tag.name as tag_list_json_url %}
-                {% else %}
-                    {% url 'tag_list_json' lgr_pk=lgr_pk tag_id=tag.name as tag_list_json_url %}
-                {% endif %}
-
                 <tr id="tag_{{ tag.name }}">
                     <td class="tag-name">{{ tag.name }}</td>
                     <td class="tag-cp-list">
                         {% for cp in tag.codepoints %}
-                            {% if lgr_set %}
-                                {% url 'codepoint_view_set' lgr_pk=lgr_pk codepoint_id=cp.cp_id as cp_view_url %}
-                            {% else %}
-                                {% url 'codepoint_view' lgr_pk=lgr_pk codepoint_id=cp.cp_id as cp_view_url %}
-                            {% endif %}
-                            <a href="{{ cp_view_url }}">{{ cp.cp_disp }}</a> {# keep space #}
+                            <a href="{% url 'codepoint_view' lgr_pk=lgr_object.pk model=lgr_object.model_name codepoint_id=cp.cp_id %}">
+                                {{ cp.cp_disp }}
+                            </a> {# keep space #}
                         {% endfor %}
                         {% if tag.view_more %}
                             <a href="javascript:" onClick="toggleTable($('#table-full-{{ forloop.counter }}'))" style="float: right">{% blocktrans with nb_cp=tag.nb_cp %}View all ({{ nb_cp }}){% endblocktrans %}</a>
                             <div id="table-full-{{ forloop.counter }}" style="display: none; margin-top: 10px; border-top: 1px silver solid; padding-top: 10px">
-                                <table class="full_cp display" data-list-url="{{ tag_list_json_url }}">
+                                <table class="full_cp display"
+                                       data-list-url="{% url 'tag_list_json' lgr_pk=lgr_object.pk model=lgr_object.model_name tag_id=tag.name %}">
                                     <thead>
                                         <tr>
                                             <th></th>

@@ -2,9 +2,11 @@
 {% load i18n %}
 
 {% block content %}
-{% url 'codepoint_list' lgr_pk=lgr_object.pk as lgr_url %}
+{% url 'codepoint_list' lgr_pk=lgr_object.pk model=lgr_object.model_name as lgr_url %}
 <h2>
-{% blocktrans with lgr_name=lgr_object.name %}Computing collisions on labels provided in file {{ labels_file }} in LGR <a href="{{ lgr_url }}">{{ lgr_name }}</a>{% endblocktrans %}
+{% blocktrans trimmed with lgr_name=lgr_object.name %}
+    Computing collisions on labels provided in file {{ labels_file }} in LGR <a href="{{ lgr_url }}">{{ lgr_name }}</a>
+{% endblocktrans %}
 {% if with_tlds %}
     {% blocktrans %} and also check with <a href="{{ icann_tlds }}">ICANN TLDs</a>{% endblocktrans %}
 {% endif %}

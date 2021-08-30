@@ -48,9 +48,21 @@ class LgrBaseModel(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def get_object(cls, user, pk):
+        query_kwargs = {'pk': pk}
+        if not cls._meta.get_field('owner').null:
+            # only include owner in model where it is mandatory, meaning objects are private
+            query_kwargs['owner'] = user
+        return cls.objects.get(**query_kwargs)
+
     @property
     def filename(self):
         return os.path.basename(self.file.name)
+
+    @property
+    def model_name(self):
+        return self.__class__.__name__
 
     def dl_url(self):
         raise NotImplementedError

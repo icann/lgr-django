@@ -1,0 +1,32 @@
+#! /bin/env python
+# -*- coding: utf-8 -*-
+"""
+utils
+"""
+import logging
+
+from django.apps import apps
+
+from lgr_models.models.lgr import LgrBaseModel
+
+logger = logging.getLogger(__name__)
+
+ALL_LGR_MODELS = {}
+
+
+def get_model_from_name(model_name_or_model):
+    model = model_name_or_model
+    if isinstance(model_name_or_model, str):
+        model = apps.get_model(model_name_or_model)
+    return model
+
+
+def get_model_from_url_name(model_name):
+    global ALL_LGR_MODELS
+
+    if not ALL_LGR_MODELS:
+        for model in apps.get_models():
+            if issubclass(model, LgrBaseModel):
+                # XXX this may lead to conflicts if some different apps have the same model name
+                ALL_LGR_MODELS[model._meta.label.lower().replace('model', '').rsplit('.', 1)[-1]] = model
+    return ALL_LGR_MODELS[model_name.lower()]

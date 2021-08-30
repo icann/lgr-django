@@ -12,19 +12,19 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, FormView
-from django.views.generic.base import View, RedirectView
+from django.views.generic.base import View
 
 from lgr.char import RangeChar
 from lgr.exceptions import LGRException, LGRFormatException, CharInvalidContextRule
 from lgr.utils import format_cp
 from lgr.validate import check_symmetry, check_transitivity
-from lgr_utils import unidb
 from lgr_advanced.lgr_editor.forms import (AddCodepointForm,
                                            EditCodepointsForm)
 from lgr_advanced.lgr_editor.utils import slug_to_cp, render_char
 from lgr_advanced.lgr_editor.views.codepoints.mixins import CodePointMixin
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
+from lgr_utils import unidb
 from lgr_utils.cp import render_name, cp_to_slug
 
 logger = logging.getLogger(__name__)
@@ -88,7 +88,7 @@ class AddCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
         return 'add_cp'
 
     def get_success_url(self):
-        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk})
+        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk, 'model': self.lgr_object.model_name})
 
     def form_valid(self, form):
         logger.debug("Add CP")
@@ -114,7 +114,7 @@ class EditCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
     template_name = 'lgr_editor/codepoint_list.html'
 
     def get_success_url(self):
-        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk})
+        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk, 'model': self.lgr_object.model_name})
 
     def get_prefix(self):
         return 'edit_codepoints'
@@ -216,10 +216,8 @@ class ListCodePointsJsonView(LGRHandlingBaseMixin, View):
             repertoire = []
             for char in self.lgr.repertoire:
                 cp_slug = cp_to_slug(char.cp)
-                kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug}
+                kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug, 'model': self.lgr_object.model_name}
                 cp_view_url = reverse('codepoint_view', kwargs=kwargs)
-                if self.lgr_is_in_set:
-                    cp_view_url = reverse('codepoint_view_set', kwargs=kwargs)
                 actions = [cp_view_url]
                 is_range = isinstance(char, RangeChar)
                 if is_range:
@@ -244,11 +242,10 @@ class ListCodePointsJsonView(LGRHandlingBaseMixin, View):
         return JsonResponse(response)
 
 
-class ExpandRangesView(LGREditMixin, RedirectView):
+class ExpandRangesView(LGREditMixin, View):
     """
     Expand all ranges into code points.
     """
-    pattern_name = 'codepoint_list'
 
     def get(self, request, *args, **kwargs):
         try:
@@ -258,7 +255,7 @@ class ExpandRangesView(LGREditMixin, RedirectView):
                                  lgr_exception_to_text(ex))
 
         self.update_lgr()
-        return super().get(request, *args, **kwargs)
+        return redirect('codepoint_list', lgr_pk=self.lgr_pk, model=self.lgr_object.model_name)
 
 
 class ExpandRangeView(LGREditMixin, CodePointMixin, View):
@@ -271,7 +268,7 @@ class ExpandRangeView(LGREditMixin, CodePointMixin, View):
 
         if not isinstance(char, RangeChar):
             logger.error("Cannot expand non-range code point")
-            return redirect('codepoint_list', lgr_pk=self.lgr_pk)
+            return redirect('codepoint_list', lgr_pk=self.lgr_pk, model=self.lgr_object.model_name)
 
         try:
             self.lgr.expand_range(char.first_cp, char.last_cp)
@@ -280,14 +277,13 @@ class ExpandRangeView(LGREditMixin, CodePointMixin, View):
                                  lgr_exception_to_text(ex))
 
         self.update_lgr()
-        return redirect('codepoint_list', lgr_pk=self.lgr_pk)
+        return redirect('codepoint_list', lgr_pk=self.lgr_pk, model=self.lgr_object.model_name)
 
 
-class PopulateVariantsView(LGREditMixin, RedirectView):
+class PopulateVariantsView(LGREditMixin, View):
     """
     Automatically populate variants to achieve transitivity and symmetry.
     """
-    pattern_name = 'codepoint_list'
 
     def get(self, request, *args, **kwargs):
         if 'test' in request.GET:
@@ -310,4 +306,4 @@ class PopulateVariantsView(LGREditMixin, RedirectView):
         populate_logger.removeHandler(ch)
         log_output.close()
         self.update_lgr()
-        return super().get(request, *args, **kwargs)
+        return redirect('codepoint_list', lgr_pk=self.lgr_pk, model=self.lgr_object.model_name)

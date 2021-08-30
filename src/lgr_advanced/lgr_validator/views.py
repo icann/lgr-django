@@ -12,11 +12,10 @@ from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
 from lgr_utils.unidb import get_db_by_version
 from lgr_auth.models import LgrUser
-from lgr_models.models.lgr import LgrBaseModel, RzLgr
+from lgr_models.models.lgr import LgrBaseModel
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
 from .forms import ValidateLabelForm
 from ..api import LabelInfo
-from ..lgr_editor.repertoires import get_by_name
 from ..lgr_editor.views.mixins import LGRHandlingBaseMixin
 from ..models import LgrModel
 
@@ -81,43 +80,8 @@ def evaluate_label_from_view(user: LgrUser,
                                  idna_encoder=udata.idna_encode_label,
                                  check_collisions=check_collisions)
         else:
-            validate_label_task.delay(user.pk, lgr_object.pk, label_cplist)
+            validate_label_task.delay(user.pk, lgr_object.pk, label_cplist, lgr_model=lgr_object._meta.label)
             ctx['launched_as_task'] = True
-
-    return ctx
-
-
-# TODO remove once rz for basic will be loaded from db
-def evaluate_label_from_info(user, lgr_name, label_cplist,
-                             threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE,
-                             check_collisions=None):
-    """
-    Evaluate a label in an LGR.
-
-    This function is responsible to determine whether or not the evaluation process should be blocking/synchronous,
-    or launched as a celery task.
-
-    :param lgr_info: The LGR Info object
-    :param label_cplist: The label to test, as an array of codepoints.
-    :param script_lgr_name: Name of the LGR to use as the script LGR.
-    :param email: Required to launch processing in task queue.
-    :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.
-                                   Set to negative to always return variants.
-    :param check_collisions: Check for collisions with the provided list of labels
-    :return: a dict containing results of the evaluation, empty if process is asynchronous.
-    """
-    ctx = {}
-    lgr = get_by_name(lgr_name, with_unidb=True)
-    need_async = lgr.estimate_variant_number(label_cplist) > settings.LGR_VALIDATION_MAX_VARS_SYNCHRONOUS
-    udata = get_db_by_version(lgr.metadata.unicode_version)
-    if not need_async:
-        ctx = evaluate_label(lgr, label_cplist,
-                             threshold_include_vars=threshold_include_vars,
-                             idna_encoder=udata.idna_encode_label,
-                             check_collisions=check_collisions)
-    else:
-        validate_label_task.delay(user.pk, lgr.name, label_cplist, lgr_model=RzLgr)
-        ctx['launched_as_task'] = True
 
     return ctx
 

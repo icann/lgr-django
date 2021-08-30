@@ -63,7 +63,7 @@ class ListRuleView(LGRHandlingBaseMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         # set
-        if self.is_set_or_in_set():
+        if self.lgr_is_set_or_in_set():
             return ListRuleSimpleView.as_view()(request, *args, **kwargs)
 
         return super().get(request, *args, **kwargs)
@@ -106,7 +106,6 @@ class ListRuleView(LGRHandlingBaseMixin, TemplateView):
 
 # TODO - warn if the LGR already has duplicate classes or rules, we cannot reliably work on them
 # TODO - prevent class or rule from being deleted if it is being referenced
-# TODO - convert functional views into into CBV
 
 
 def _json_response(success, error_msg=None):

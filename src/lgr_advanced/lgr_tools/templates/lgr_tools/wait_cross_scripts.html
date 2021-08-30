@@ -2,13 +2,9 @@
 {% load i18n %}
 
 {% block content %}
-    {% if in_set %}
-        {% url 'codepoint_list_set' lgr_pk=lgr_pk as lgr_url %}
-    {% else %}
-        {% url 'codepoint_list' lgr_pk=lgr_pk as lgr_url %}
-    {% endif %}
+    {% url 'codepoint_list' lgr_pk=lgr_object.pk model=lgr_object.model_name as lgr_url %}
 <h2>
-    {% blocktrans with lgr_name=lgr.name %}Computing cross-script variants on labels provided in file {{ labels_file }} in LGR <a href="{{ lgr_url }}">{{ lgr_name }}</a>{% endblocktrans %}
+    {% blocktrans with lgr_name=lgr_object.name %}Computing cross-script variants on labels provided in file {{ labels_file }} in LGR <a href="{{ lgr_url }}">{{ lgr_name }}</a>{% endblocktrans %}
 </h2>
 <div>
 {% blocktrans %}As the computing may be very long, once completed, an e-mail will be sent at the provided address: {{ email }}{% endblocktrans %}

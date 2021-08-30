@@ -16,6 +16,7 @@ from lgr_advanced.lgr_tools.forms import (LGRCompareSelector,
                                           LGRHarmonizeSelector,
                                           LGRComputeVariantsSelector)
 from lgr_models.models.lgr import LgrBaseModel, RzLgr
+from lgr_utils.cp import cp_to_slug
 from .tasks import (diff_task,
                     collision_task,
                     annotate_task,
@@ -24,7 +25,6 @@ from .tasks import (diff_task,
                     validate_labels_task)
 from ..api import LabelInfo
 from ..models import LgrModel, SetLgrModel
-from lgr_utils.cp import cp_to_slug
 from ..views import LGRViewMixin
 
 
@@ -71,20 +71,20 @@ class LGRCompareView(LGRToolBaseView):
     initial_field = 'lgr_1'
 
     def get_success_url(self):
-        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk})
+        return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk, 'model': 'lgr'})
 
     def form_valid(self, form):
         lgr_pk_1, lgr_pk_2 = (form.cleaned_data[lgr_id] for lgr_id in ('lgr_1', 'lgr_2'))
         action = form.cleaned_data['action']
 
-        lgr_object_1, lgr_object_2 = (LgrModel.objects.get(owner=self.request.user, pk=pk)
+        lgr_object_1, lgr_object_2 = (LgrModel.get_object(self.request.user, pk)
                                       for pk in (lgr_pk_1, lgr_pk_2))
 
         if action in ['INTERSECTION', 'UNION']:
             try:
                 lgr_object = lgr_intersect_union(self.request.user,
-                                                 lgr_object_1.to_lgr(),
-                                                 lgr_object_2.to_lgr(),
+                                                 lgr_object_1,
+                                                 lgr_object_2,
                                                  action)
                 self.lgr_pk = lgr_object.pk
             except LGRCompInvalidException as lgr_xml:
@@ -137,7 +137,7 @@ class LGRDiffView(LGRToolBaseView):
         full_dump = form.cleaned_data['full_dump']
         with_rules = form.cleaned_data['with_rules']
 
-        lgr_object_1, lgr_object_2 = (LgrModel.objects.get(owner=self.request.user, pk=pk)
+        lgr_object_1, lgr_object_2 = (LgrModel.get_object(self.request.user, pk)
                                       for pk in (lgr_pk_1, lgr_pk_2))
 
         # need to transmit json serializable data
@@ -166,7 +166,7 @@ class LGRCollisionView(LGRToolBaseView):
         with_rules = form.cleaned_data['with_rules']
         with_tlds = False
 
-        lgr_object = LgrModel.objects.get(owner=self.request.user, pk=lgr_pk)
+        lgr_object = LgrModel.get_object(self.request.user, lgr_pk)
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
@@ -200,7 +200,7 @@ class LGRAnnotateView(LGRToolBaseView):
         lgr_pk = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
 
-        lgr_object = LgrModel.objects.get(owner=self.request.user, pk=lgr_pk)
+        lgr_object = LgrModel.get_object(self.request.user, lgr_pk)
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
@@ -242,7 +242,7 @@ class LGRCrossScriptVariantsView(LGRToolBaseView):
         labels_file = form.cleaned_data['labels']
         in_set = False
 
-        lgr_object = LgrModel.objects.get(owner=self.request.user, pk=lgr_pk)
+        lgr_object = LgrModel.get_object(self.request.user, lgr_pk)
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
@@ -251,8 +251,7 @@ class LGRCrossScriptVariantsView(LGRToolBaseView):
         if lgr_object.is_set():
             in_set = True
             script_lgr_pk = form.cleaned_data['script']
-            script_lgr_object = SetLgrModel.objects.get(owner=self.request.user,
-                                                        pk=script_lgr_pk)
+            script_lgr_object = SetLgrModel.get_object(self.request.user, script_lgr_pk)
             lgr_object = script_lgr_object
 
         self.call_async(lgr_object, in_set, labels_json)
@@ -279,9 +278,9 @@ class LGRHarmonizeView(LGRToolBaseView):
         ctx = self.get_context_data()
         lgr_pk_1, lgr_pk_2, rz_lgr_pk = (form.cleaned_data[lgr_id] for lgr_id in ('lgr_1', 'lgr_2', 'rz_lgr'))
 
-        lgr_object_1, lgr_object_2 = (LgrModel.objects.get(owner=self.request.user, pk=pk)
+        lgr_object_1, lgr_object_2 = (LgrModel.get_object(self.request.user, pk)
                                       for pk in (lgr_pk_1, lgr_pk_2))
-        rz_lgr_object = RzLgr.objects.get(pk=rz_lgr_pk) if rz_lgr_pk else None
+        rz_lgr_object = RzLgr.get_object(self.request.user, rz_lgr_pk) if rz_lgr_pk else None
 
         h_lgr_1_object, h_lgr_2_object, cp_review = lgr_harmonization(self.request.user,
                                                                       lgr_object_1,
@@ -310,7 +309,7 @@ class LGRComputeVariants(LGRToolBaseView):
         lgr_pk = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
 
-        lgr_object = LgrModel.objects.get(owner=self.request.user, pk=lgr_pk)
+        lgr_object = LgrModel.get_object(self.request.user, lgr_pk)
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()

@@ -17,11 +17,7 @@ class LGRRendererView(LoginRequiredMixin, TemplateView):
         super().setup(request, *args, **kwargs)
         lgr_pk = self.kwargs['lgr_pk']
         lgr_model = self.kwargs['model']
-        query_kwargs = {'pk': lgr_pk}
-        if not lgr_model._meta.get_field('owner').null:
-            # only include owner in model where it is mandatory, meaning objects are private
-            query_kwargs['owner'] = request.user
-        lgr_object = lgr_model.objects.get(**query_kwargs)
+        lgr_object = lgr_model.get_object(request.user, lgr_pk)
         self.lgr = lgr_object.to_lgr()
 
     def get_context_data(self, **kwargs):

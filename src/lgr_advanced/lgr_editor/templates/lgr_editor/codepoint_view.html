@@ -19,12 +19,7 @@
 {% block content %}
     <ol class="breadcrumb">
         <li>
-            {% if lgr_set %}
-                {% url 'codepoint_list_set' lgr_pk=lgr_pk as codepoint_list %}
-            {% else %}
-                {% url 'codepoint_list' lgr_pk=lgr_pk as codepoint_list %}
-            {% endif %}
-            <a href="{{ codepoint_list }}">{% trans "Code points" %}</a>
+            <a href="{% url 'codepoint_list' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">{% trans "Code points" %}</a>
         </li>
         <li class="active">{{ cp_disp }} {{ name }}</li>
     </ol>
@@ -64,15 +59,6 @@
                     {% for char in variants_form %}
                         {{ char.in_lgr }}
                     <tr>
-                        {% if lgr_set %}
-                            {% url 'codepoint_view_set' lgr_pk=lgr_pk codepoint_id=char.cp.value as cp_url %}
-                            {% url 'references_json_set' lgr_pk=lgr_pk as references_json_url %}
-                            {% url 'references_set' lgr_pk=lgr_pk as references_url %}
-                        {% else %}
-                            {% url 'codepoint_view' lgr_pk=lgr_pk codepoint_id=char.cp.value as cp_url %}
-                            {% url 'references_json' lgr_pk=lgr_pk as references_json_url %}
-                            {% url 'references' lgr_pk=lgr_pk as references_url %}
-                        {% endif %}
                         <td style="display:none;">{{ char.cp }}</td>
                         <td>
                             {% if not char.in_lgr.value %}
@@ -81,7 +67,7 @@
                         </td>
                         <td class="codepoint-display">
                             {% if char.in_lgr.value %}
-                                <a href="{{ cp_url }}">
+                                <a href="{% url 'codepoint_view' lgr_pk=lgr_object.pk model=lgr_object.model_name codepoint_id=char.cp.value %}">
                                     {{ char.cp_disp.value }}
                                     <br>{{ char.name.value }}
                                 </a>
@@ -98,9 +84,14 @@
                         <td class="codepoint-conditional">{{ char.not_when }}</td>
                         <td>
                             {{ char.references }}
-                            <ul class="references" data-cp-disp="{{ char.cp_disp.value }}" data-references-json-url="{{ references_json_url }}">
+                            <ul class="references" data-cp-disp="{{ char.cp_disp.value }}"
+                                data-references-json-url="{% url 'references_json' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">
                             {% for ref_id in char.reference_list %}
-                                <li data-refid="{{ ref_id }}"><a href="{{ references_url }}#ref_{{ref_id}}">{{ ref_id }}</a></li>
+                                <li data-refid="{{ ref_id }}">
+                                    <a href="{% url 'references' lgr_pk=lgr_object.pk model=lgr_object.model_name %}#ref_{{ref_id}}">
+                                        {{ ref_id }}
+                                    </a>
+                                </li>
                             {% endfor %}
                             </ul>
                         </td>
@@ -150,12 +141,7 @@
     <h3>References</h3>
 
     <div id="cp_references">
-        {% if lgr_set %}
-            {% url 'references_json_set' lgr_pk=lgr_pk as references_json_url %}
-        {% else %}
-            {% url 'references_json' lgr_pk=lgr_pk as references_json_url %}
-        {% endif %}
-        <ul data-references-json-url="{{ references_json_url }}">
+        <ul data-references-json-url="{% url 'references_json' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">
             {% for ref in cp_references %}
                 <li data-refid="{{ ref.ref_id }}">
                     {{ ref.ref_id }} - {{ ref.description }}
@@ -167,7 +153,7 @@
         </ul>
         {% if not is_set %}
         <a href="#"
-           data-cp-update-ref-url="{% url 'codepoint_update_refs' lgr_pk=lgr_pk codepoint_id=cp %}"
+           data-cp-update-ref-url="{% url 'codepoint_update_refs' lgr_pk=lgr_object.pk codepoint_id=cp %}"
            class="btn btn-default edit-refs"><i class="glyphicon glyphicon-pencil"></i> {% trans "Edit" %}</a>
         {% endif %}
     </div>
@@ -238,7 +224,8 @@
                             <input type="text" name="new_ref_comment" id="new-ref-comment"/>
                         </p>
                         <p>
-                            <button class="btn btn-default btn-xs new-ref" data-url="{% url 'reference_add_ajax' lgr_pk=lgr_pk %}">
+                            <button class="btn btn-default btn-xs new-ref"
+                                    data-url="{% url 'reference_add_ajax' lgr_pk=lgr_pk %}">
                                 <i class="glyphicon glyphicon-plus"></i>
                                 {% trans "New reference" %}
                             </button>

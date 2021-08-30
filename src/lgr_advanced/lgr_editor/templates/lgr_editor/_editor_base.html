@@ -4,34 +4,21 @@
 {% block html_title %}{{ lgr.name|title }}{% endblock %}
 
 {% block content %}
-    {% if lgr_set %}
-        {% url 'codepoint_list_set' lgr_pk=lgr_object.pk as codepoint_list_url %}
-        {% url 'references_set' lgr_pk=lgr_object.pk as references_url %}
-        {% url 'metadata_set' lgr_pk=lgr_object.pk as metadata_url %}
-        {% url 'tags_set' lgr_pk=lgr_object.pk as tags_url %}
-        {% url 'rules_set' lgr_pk=lgr_object.pk as rules_url %}
-    {% else %}
-        {% url 'codepoint_list' lgr_pk=lgr_object.pk as codepoint_list_url %}
-        {% url 'references' lgr_pk=lgr_object.pk as references_url %}
-        {% url 'metadata' lgr_pk=lgr_object.pk as metadata_url %}
-        {% url 'tags' lgr_pk=lgr_object.pk as tags_url %}
-        {% url 'rules' lgr_pk=lgr_object.pk as rules_url %}
-    {% endif %}
     <ul class="nav nav-tabs">
         <li role="presentation" class="{% block pane-cp-active %}{% endblock %}">
-            <a href="{{ codepoint_list_url }}">{% trans "Code points" %}</a>
+            <a href="{% url 'codepoint_list' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">{% trans "Code points" %}</a>
         </li>
         <li role="presentation" class="{% block pane-ref-active %}{% endblock %}">
-            <a href="{{ references_url }}">{% trans "References" %}</a>
+            <a href="{% url 'references' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">{% trans "References" %}</a>
         </li>
         <li role="presentation" class="{% block pane-md-active %}{% endblock %}">
-            <a href="{{ metadata_url }}">{% trans "Meta data" %}</a>
+            <a href="{% url 'metadata' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">{% trans "Meta data" %}</a>
         </li>
         <li role="presentation" class="{% block pane-tag-active %}{% endblock %}">
-            <a href="{{ tags_url }}">{% trans "Tags" %}</a>
+            <a href="{% url 'tags' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">{% trans "Tags" %}</a>
         </li>
         <li role="presentation" class="{% block pane-rules-active %}{% endblock %}">
-            <a href="{{ rules_url }}">{% trans "Rules" %}</a>
+            <a href="{% url 'rules' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">{% trans "Rules" %}</a>
         </li>
         {% if is_set and not lgr_set %}
         {# Merged LGR set: show all LGRs in the set #}

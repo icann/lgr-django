@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block content %}
-{% url 'codepoint_list' lgr_id=lgr_object.pk as lgr_url %}
+{% url 'codepoint_list' lgr_pk=lgr_object.pk model=lgr_object.model_name as lgr_url %}
 <h2>
     {% blocktrans trimmed with lgr_name=lgr_object.name %}
         Computing variants of labels provided in file {{ labels_file }} in LGR <a href="{{ lgr_url }}">{{ lgr_name }}</a>

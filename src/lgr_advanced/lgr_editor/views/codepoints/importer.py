@@ -103,7 +103,13 @@ class MultiCodepointsView(LGREditMixin, FormView):
         return TemplateResponse(
             request=self.request,
             template=self.success_template_name,
-            context={'url': reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_pk})},
+            context={
+                'url': reverse('codepoint_list',
+                               kwargs={
+                                   'lgr_pk': self.lgr_pk,
+                                   'model': self.lgr_object.model_name
+                               })
+            },
             using=self.template_engine,
         )
 
@@ -160,10 +166,10 @@ class MultiCodepointsView(LGREditMixin, FormView):
                 # The temporary LGR already exists... This should not happen
                 logger.warning("Temporary LGR already exists... delete it")
                 LgrModel.objects.filter(owner=self.request.user, name=tmp_lgr_name).delete()
-            tmp_lgr_object = LgrModel.objects.new(self.request.user,
-                                                  tmp_lgr_name,
-                                                  lgr.metadata.unicode_version,
-                                                  self.validating_repertoire)
+            tmp_lgr_object = LgrModel.new(self.request.user,
+                                          tmp_lgr_name,
+                                          lgr.metadata.unicode_version,
+                                          self.validating_repertoire)
             tmp_lgr = tmp_lgr_object.to_lgr()
             self._copy_characters(lgr, input_lgr, force=True)
             tmp_lgr_object.update(tmp_lgr)

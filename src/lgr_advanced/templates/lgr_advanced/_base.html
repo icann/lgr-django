@@ -12,22 +12,15 @@
            data-placement="bottom">{% trans "LGR Tools" %}</a>
         {% if lgr %}
             {% if lgr_set %}
-                /<a href="{% url 'codepoint_list' lgr_set_object.pk %}"
+                /<a href="{% url 'codepoint_list' lgr_pk=lgr_set_object.pk model=lgr_set_object.model_name %}"
                     title="{{ lgr_set.name }} {% if lgr_set.metadata and lgr_set.metadata.version.comment %}- {{ lgr_set.metadata.version.comment }}{% endif %}">{{ lgr_set.name }}</a>
-                /<a href="{% url 'codepoint_list' lgr_pk %}"
-                    title="{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}">{{ lgr.name }}
-                {% if not cp %}{% if lgr.metadata and lgr.metadata.version.comment %}-
-                    {{ lgr.metadata.version.comment|truncatechars:60 }}{% endif %}{% endif %}</a>
-                {% if cp %}/
-                    <a href="{% url 'codepoint_view' lgr_pk=lgr_pk codepoint_id=cp %}">{{ cp_disp }} {{ name }}</a>
-                {% endif %}
-            {% else %}
-                /<a href="{% url 'codepoint_list' lgr_pk=lgr_pk %}"
-                    title="{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}">{{ lgr.name }}
-                {% if not cp %}{% if lgr.metadata and lgr.metadata.version.comment %}-
-                    {{ lgr.metadata.version.comment|truncatechars:60 }}{% endif %}{% endif %}</a>
-                {% if cp %}/ <a href="{% url 'codepoint_view' lgr_pk=lgr_pk codepoint_id=cp %}">{{ cp_disp }} {{ name }}</a>
-                {% endif %}
+            {% endif %}
+            /<a href="{% url 'codepoint_list' lgr_pk=lgr_object.pk model=lgr_object.model_name %}"
+                title="{{ lgr.name }} {% if lgr.metadata and lgr.metadata.version.comment %}- {{ lgr.metadata.version.comment }}{% endif %}">{{ lgr.name }}
+            {% if not cp %}{% if lgr.metadata and lgr.metadata.version.comment %}-
+                {{ lgr.metadata.version.comment|truncatechars:60 }}{% endif %}{% endif %}</a>
+            {% if cp %}/&nbsp;
+                <a href="{% url 'codepoint_view' lgr_pk=lgr_object.pk model=lgr_object.model_name codepoint_id=cp %}">{{ cp_disp }} {{ name }}</a>
             {% endif %}
         {% endif %}
     </p>
@@ -53,13 +46,13 @@
             <span class="caret"></span>
         </a>
         {% if lgr_pk %}
-            {% if lgr_set %}
-                {% url 'lgr_tools_compare_set' lgr_pk=lgr_pk as lgr_tools_compare_url %}
-                {% url 'lgr_tools_diff_set' lgr_pk=lgr_pk as lgr_tools_diff_url %}
-                {% url 'lgr_tools_collisions_set' lgr_pk=lgr_pk as lgr_tools_collisions_url %}
-                {% url 'lgr_tools_annotate_set' lgr_pk=lgr_pk as lgr_tools_annotate_url %}
-                {% url 'lgr_tools_variants_set' lgr_pk=lgr_pk as lgr_tools_variants_url %}
-                {% url 'lgr_tools_cross_script_set' lgr_pk=lgr_pk as lgr_tools_cross_script_url %}
+            {% if lgr_set_object %}
+                {% url 'lgr_tools_compare_set' lgr_pk=lgr_set_object.pk as lgr_tools_compare_url %}
+                {% url 'lgr_tools_diff_set' lgr_pk=lgr_set_object.pk as lgr_tools_diff_url %}
+                {% url 'lgr_tools_collisions_set' lgr_pk=lgr_set_object.pk as lgr_tools_collisions_url %}
+                {% url 'lgr_tools_annotate_set' lgr_pk=lgr_set_object.pk as lgr_tools_annotate_url %}
+                {% url 'lgr_tools_variants_set' lgr_pk=lgr_set_object.pk as lgr_tools_variants_url %}
+                {% url 'lgr_tools_cross_script_set' lgr_pk=lgr_set_object.pk as lgr_tools_cross_script_url %}
             {% else %}
                 {% url 'lgr_tools_compare' lgr_pk=lgr_pk as lgr_tools_compare_url %}
                 {% url 'lgr_tools_diff' lgr_pk=lgr_pk as lgr_tools_diff_url %}
@@ -142,17 +135,7 @@
 
 {% block navbar-right %}
     <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
-    {% if lgr_pk %}
-        {% if lgr_set %}
-            {% url 'view_lgr_xml_set' lgr_pk=lgr_pk as view_lgr_xml_url %}
-            {% url 'view_lgr_xml_set' lgr_pk=lgr_pk as view_lgr_xml_url %}
-            {% url 'download_lgr_xml_set' lgr_pk=lgr_pk as download_lgr_xml_url %}
-            {% url 'lgr_render' lgr_pk=lgr_pk model='setlgrmodel' as lgr_render_url %}
-        {% else %}
-            {% url 'view_lgr_xml' lgr_pk=lgr_pk as view_lgr_xml_url %}
-            {% url 'download_lgr_xml' lgr_pk=lgr_pk as download_lgr_xml_url %}
-            {% url 'lgr_render' lgr_pk=lgr_pk model='lgrmodel' as lgr_render_url %}
-        {% endif %}
+    {% if lgr_object %}
         <a class="btn btn-default show-tooltip"
            data-toggle="modal" data-target="#validation-modal"
            title="{% trans 'Validate label against LGR' %}" data-placement="bottom">
@@ -176,20 +159,21 @@
             <ul class="dropdown-menu">
                 <li class="btn btn-block show-tooltip">
                     <a title="{% trans 'Preview LGR file' %}" data-placement="bottom"
-                       href="{{ view_lgr_xml_url }}" target="_blank" rel="noopener noreferrer">
+                       href="{% url 'view_lgr_xml' lgr_pk=lgr_object.pk model=lgr_object.model_name %}"
+                       target="_blank" rel="noopener noreferrer">
                         <i class="glyphicon glyphicon-eye-open"></i>
                         {% trans "View XML" %}
                     </a>
                 </li>
                 <li class="btn btn-block show-tooltip">
                     <a title="{% trans 'Download LGR file' %}" data-placement="bottom"
-                       href="{{ download_lgr_xml_url }}">
+                       href="{% url 'download_lgr_xml' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">
                         <i class="glyphicon glyphicon-save"></i> {% trans "Download" %}
                     </a>
                 </li>
                 <li class="btn btn-block show-tooltip">
                     <a title="{% trans 'HTML Output' %}" data-placement="bottom"
-                       href="{{ lgr_render_url }}" target="_blank" rel="noopener noreferrer">
+                       href="{% url 'lgr_render' lgr_pk=lgr_object.pk model=lgr_object.model_name %}" target="_blank" rel="noopener noreferrer">
                         <i class="glyphicon glyphicon-globe"></i>
                         {% trans "HTML Output" %}
                     </a>
@@ -207,16 +191,10 @@
 
 
 {% block html_body_more %}
-    <!-- LGR Validation Modal -->
-    {% if lgr_pk %}
-        {% if lgr_set %}
-            {% url 'validate_lgr_set' lgr_pk=lgr_pk as validate_lgr_url %}
-            {% url 'validate_lgr_save_set' lgr_pk=lgr_pk as validate_lgr_save_url %}
-        {% else %}
-            {% url 'validate_lgr' lgr_pk=lgr_pk as validate_lgr_url %}
-            {% url 'validate_lgr_save' lgr_pk=lgr_pk as validate_lgr_save_url %}
-        {% endif %}
-        <div class="modal fade" id="lgr-validate-modal" data-lgr-validate-modal-url="{{ validate_lgr_url }}">
+    {% if lgr_object %}
+        <!-- LGR Validation Modal -->
+        <div class="modal fade" id="lgr-validate-modal"
+             data-lgr-validate-modal-url="{% url 'validate_lgr' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -228,7 +206,7 @@
                         <div class="spinner"><img src="{% static 'chrome/img/spinner.gif' %}" alt=""></div>
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-info" href="{{ validate_lgr_save_url }}">
+                        <a class="btn btn-info" href="{% url 'validate_lgr_save' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">
                             <i class="glyphicon glyphicon-save"></i>
                             {% trans 'Save results' %}
                         </a>
@@ -237,16 +215,10 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-    {% endif %}
 
-    <!-- Validation Modal -->
-    {% if lgr_pk %}
-        {% if lgr_set %}
-            {% url 'lgr_validate_label_noframe_set' lgr_pk=lgr_pk as lgr_validate_label_noframe_url %}
-        {% else %}
-            {% url 'lgr_validate_label_noframe' lgr_pk=lgr_pk as lgr_validate_label_noframe_url %}
-        {% endif %}
-        <div class="modal fade" id="validation-modal" data-validate-url="{{ lgr_validate_label_noframe_url }}">
+        <!-- Validation Modal -->
+        <div class="modal fade" id="validation-modal"
+             data-validate-url="{% url 'lgr_validate_label_noframe' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -255,8 +227,8 @@
                         <h4 class="modal-title">{% trans "Validate label" %}</h4>
                     </div>
                     <div id="validation-modal-body" class="modal-body" style="height: 85vh;">
-                        <iframe id="validation-model-iframe" data-url="{{ lgr_validate_label_noframe_url }}"
-                                src="{{ lgr_validate_label_noframe_url }}" width="100%" height="98%"
+                        <iframe id="validation-model-iframe" data-url="{% url 'lgr_validate_label_noframe' lgr_pk=lgr_object.pk model=lgr_object.model_name %}"
+                                src="{% url 'lgr_validate_label_noframe' lgr_pk=lgr_object.pk model=lgr_object.model_name %}" width="100%" height="98%"
                                 style="border: none;"></iframe>
                     </div>
                 </div><!-- /.modal-content -->
