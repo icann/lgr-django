@@ -114,8 +114,15 @@
         {% endblocktrans %}
         </p>
         <ul>
-            {% for xml in lgr_xml %}
-                <li><a href="{% url 'import_reference_lgr' xml %}">{% blocktrans %}Open {{xml}}{% endblocktrans %}</a></li>
+            {% for lgr_file in built_in_lgr_files %}
+                <li><a href="{% url 'import_reference_lgr_from_file' lgr_file %}">
+                    {% blocktrans %}Open {{lgr_file}}{% endblocktrans %}
+                </a></li>
+            {% endfor %}
+            {% for lgr_obj in built_in_lgrs %}
+                <li><a href="{% url 'import_reference_lgr' lgr_pk=lgr_obj.pk model=lgr_obj.model_name %}">
+                    {% blocktrans %}Open {{lgr_obj}}{% endblocktrans %}
+                </a></li>
             {% endfor %}
         </ul>
 

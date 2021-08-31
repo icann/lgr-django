@@ -22,6 +22,7 @@ from .views.codepoints.list import (ExpandRangeView,
                                     ListCodePointsJsonView,
                                     ListCodePointsView)
 from .views.create import (DeleteLGRView,
+                           ImportReferenceLGRFromFileView,
                            ImportReferenceLGRView,
                            NewLGRView,
                            ImportLGRView)
@@ -43,7 +44,8 @@ register_converter(LgrModelConverter, 'lgr_model')
 
 urlpatterns = [
     # Import/Creation functions
-    path('import/ref/<filename:filename>/', ImportReferenceLGRView.as_view(), name='import_reference_lgr'),
+    path('import/ref/<filename:filename>/', ImportReferenceLGRFromFileView.as_view(), name='import_reference_lgr_from_file'),
+    path('import/ref/<lgr_model:model>/<int:lgr_pk>', ImportReferenceLGRView.as_view(), name='import_reference_lgr'),
     path('lgr/<int:lgr_pk>/d/', DeleteLGRView.as_view(), name='delete_lgr'),
     path('new/', NewLGRView.as_view(), name='new_lgr'),
     path('import/', ImportLGRView.as_view(), name='import_lgr'),

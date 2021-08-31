@@ -19,6 +19,7 @@ from django.views import View
 from django.views.generic import FormView
 
 from lgr_advanced.lgr_editor.forms import CreateLGRForm, ImportLGRForm
+from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel, SetLgrModel, LgrSetInfo
 from lgr_advanced.views import LGRViewMixin
@@ -168,7 +169,7 @@ class ImportLGRView(LGRViewMixin, FormView):
         return lgr_object
 
 
-class ImportReferenceLGRView(LGRViewMixin, View):
+class ImportReferenceLGRFromFileView(LGRViewMixin, View):
     """
     Import a built-in LGR to user's session.
     """
@@ -184,6 +185,20 @@ class ImportReferenceLGRView(LGRViewMixin, View):
             self.lgr_object = LgrModel.objects.create(owner=request.user,
                                                       file=File(f, name=f'{lgr_name}.xml'),
                                                       name=lgr_name)
+        return redirect('codepoint_list', lgr_pk=self.lgr_object.pk, model=self.lgr_object.model_name)
+
+
+class ImportReferenceLGRView(LGRHandlingBaseMixin, View):
+    """
+    Import a reference LGR to user's session.
+    """
+
+    def get(self, request, *args, **kwargs):
+        with self.lgr_object.file.open() as f:
+            self.lgr_object = LgrModel.objects.create(owner=request.user,
+                                                      file=File(f,
+                                                                name=self.lgr_object.filename),
+                                                      name=self.lgr_object.name)
         return redirect('codepoint_list', lgr_pk=self.lgr_object.pk, model=self.lgr_object.model_name)
 
 

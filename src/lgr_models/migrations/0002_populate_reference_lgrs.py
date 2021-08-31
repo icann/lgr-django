@@ -67,8 +67,8 @@ def initial_data(apps, schema_editor):
 
     resouces_path = os.path.join(settings.BASE_DIR, 'resources')
     second_level = os.path.join(resouces_path, 'idn_ref', 'second-level-reference-lgr')
-    root_zone_members = os.path.join(resouces_path, 'idn_ref', 'root-zone', 'lgr-4')
-    root_zone = os.path.join(resouces_path, 'lgr')
+    root_zone = os.path.join(resouces_path, 'idn_ref', 'root-zone')
+    root_zone_members = os.path.join(root_zone, 'lgr-4')
 
     for lgr in os.listdir(second_level):
         with open(os.path.join(second_level, lgr), 'r') as f:
