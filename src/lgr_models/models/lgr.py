@@ -155,6 +155,7 @@ class LgrBaseModel(models.Model):
         return lgr_object
 
     def _parse(self, validate):
+        self.file.seek(0)
         data = self.file.read()
         return self.parse(self.name, data, validate)
 
