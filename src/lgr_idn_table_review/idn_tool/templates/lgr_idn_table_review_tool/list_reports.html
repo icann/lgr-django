@@ -29,7 +29,7 @@
             <li>
                 {% with report=reports_grouped.list|first %}
                     <a href="{% url 'lgr_review_report' report_id=report.report_id %}">{{ report.report_id }}</a>
-                    <a href="{% url 'delete_report' storage=report.storage report_id=report.report_id %}?next={{ request.path }}"
+                    <a href="{% url 'delete_report_file' storage=report.storage report_id=report.report_id %}?next={{ request.path }}"
                        class="delete_report confirm-prompt"
                        data-confirmation-prompt="{% blocktrans with report.report_id as report_id %}Are you sure you want to delete report {{ report_id }}?{% endblocktrans %}">
                         <i class="glyphicon glyphicon-trash"></i>

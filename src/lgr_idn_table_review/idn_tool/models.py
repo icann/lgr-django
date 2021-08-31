@@ -29,4 +29,3 @@ class IdnTable(LgrBaseModel):
 
     def dl_url(self):
         return reverse('lgr_review_display_idn_table', kwargs={'lgr_pk': self.pk})
-

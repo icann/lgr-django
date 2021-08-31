@@ -6,7 +6,6 @@ models.py -
 import os
 from io import BytesIO
 
-from django.core.cache import cache
 from django.core.files import File
 from django.db import models
 

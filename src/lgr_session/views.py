@@ -38,7 +38,7 @@ class LGRSessionView(LoginRequiredMixin, UserPassesTestMixin, View):
         return self.session.storage_can_read()
 
 
-class DownloadReportView(LGRSessionView):
+class DownloadReportFileView(LGRSessionView):
 
     def get(self, request, *args, **kwargs):
         try:
@@ -53,7 +53,7 @@ class DownloadReportView(LGRSessionView):
         return response
 
 
-class DeleteReportView(LGRSessionView):
+class DeleteReportFileView(LGRSessionView):
 
     # TODO make that a post
     def get(self, request, *args, **kwargs):

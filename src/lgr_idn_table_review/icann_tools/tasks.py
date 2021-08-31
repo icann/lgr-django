@@ -113,7 +113,7 @@ def idn_table_review_task(absolute_url, email_address):
                     version = lgr.metadata.version.value
                     filename = f"{tld_a_label.upper()}.{lang}.{version}.{today}.html"
                     report = lgr_storage.storage_save_report_file(filename, StringIO(html_report), report_id=report_id)
-                    url = absolute_url + reverse('download_report', kwargs={
+                    url = absolute_url + reverse('download_report_file', kwargs={
                         'storage': report.storage,
                         'pk': report.pk,
                     }) + '?display=true'
