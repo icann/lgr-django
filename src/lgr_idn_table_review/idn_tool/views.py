@@ -88,17 +88,6 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
         kwargs = super(IdnTableReviewSelectReferenceView, self).get_form_kwargs()
         idn_tables = IdnTable.objects.filter(owner=self.request.user, report_id=self.kwargs.get('report_id'))
         kwargs['idn_tables'] = idn_tables
-        lgrs = {}
-        # TODO use lgr ids instead of names only
-        for name in list(RzLgr.objects.order_by('name').values_list('name', flat=True)):
-            lgrs[name] = 'rz'
-        for name in list(RzLgrMember.objects.order_by('name').values_list('name', flat=True)):
-            lgrs[name] = 'rz_member'
-        for name in list(RefLgr.objects.order_by('name').values_list('name', flat=True)):
-            lgrs[name] = 'ref'
-
-        kwargs['lgrs'] = lgrs
-
         return kwargs
 
 
@@ -143,27 +132,13 @@ class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, SingleObjectMixin, 
 
 class RefLgrAutocomplete(LoginRequiredMixin, Select2GroupListView):
 
-    # XXX Uncomment this and remove the other method when upgrading django-autocomplete-light to a version that
-    #     supports it (should be > 3.8.2) and that is working correctly
-    #     Check in forms as well to use the relevant IdnTableReviewSelectReferenceForm
-    # @staticmethod
-    # def get_list():
-    #     lgr_choices = []
-    #     for rz in RzLgr.objects.order_by('name').values_list('name', flat=True):
-    #         rz_member_choices = ((('rz', rz), rz),) + tuple((('rz_member', name), name) for name in
-    #                                                         RzLgrMember.objects.order_by('name').values_list('name',
-    #                                                                                                          flat=True))
-    #         lgr_choices += [((rz, rz), rz_member_choices)]
-    #     lgr_choices += [(('Ref. LGR', 'Ref. LGR'), tuple(
-    #         (('ref', name), name) for name in RefLgr.objects.order_by('name').values_list('name', flat=True)))]
-    #     return lgr_choices
-
     @staticmethod
     def get_list():
         lgr_choices = []
-        lgr_choices += [('Ref. LGR', tuple(RefLgr.objects.order_by('name').values_list('name', flat=True)))]
-        for rz in RzLgr.objects.order_by('name').values_list('name', flat=True):
-            rz_member_choices = (rz,) + tuple(
-                RzLgrMember.objects.filter(rz_lgr__name=rz).order_by('name').values_list('name', flat=True))
-            lgr_choices += [(rz, rz_member_choices)]
+        for rz in RzLgr.objects.all():
+            rz_member_choices = ((str(rz.to_tuple()), rz.name),) + tuple(
+                (str(rz_member.to_tuple()), rz_member.name) for rz_member in RzLgrMember.objects.filter(rz_lgr=rz))
+            lgr_choices += [((rz.name, rz.name), rz_member_choices)]
+        lgr_choices += [(('Ref. LGR', 'Ref. LGR'), tuple(
+            ((str(ref_lgr.to_tuple()), ref_lgr.name) for ref_lgr in RefLgr.objects.all())))]
         return lgr_choices

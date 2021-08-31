@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import logging
-from ast import literal_eval
 from io import StringIO
 from tempfile import TemporaryFile
 from typing import Dict
@@ -14,21 +13,13 @@ from lgr.tools.idn_review.review import review_lgr
 from lgr_auth.models import LgrUser
 from lgr_idn_table_review.idn_tool.api import LGRIdnReviewStorage
 from lgr_idn_table_review.idn_tool.models import IdnTable
-from lgr_models.models.lgr import RefLgr, RzLgr, RzLgrMember
+from lgr_models.models.lgr import LgrBaseModel
 
 logger = logging.getLogger(__name__)
 
 
 def _review_idn_table(context: Dict, idn_table: IdnTable, lgr_info, absolute_url):
-    lgr_type, lgr_name = literal_eval(lgr_info)
-    if lgr_type == 'ref':
-        ref_lgr = RefLgr.objects.get(name=lgr_name)
-    elif lgr_type == 'rz_member':
-        ref_lgr = RzLgrMember.objects.get(name=lgr_name)
-    elif lgr_type == 'rz':
-        ref_lgr = RzLgr.objects.get(name=lgr_name)
-    else:
-        raise RuntimeError(f'Wrong LGR type: {lgr_type}')
+    ref_lgr = LgrBaseModel.from_tuple(lgr_info)
     context.update({
         'ref_lgr': ref_lgr.name,
         'ref_lgr_url': absolute_url + ref_lgr.dl_url()
@@ -71,7 +62,7 @@ def idn_table_review_task(idn_tables, report_id, email_address, download_link, a
     with TemporaryFile() as f:
         with ZipFile(f, mode='w', compression=ZIP_DEFLATED) as zf:
             for idn_table_pk, lgr_info in idn_tables:
-                idn_table = IdnTable.objects.get(owner=user, pk=idn_table_pk)
+                idn_table = IdnTable.get_object(user, idn_table_pk)
                 html_report = _create_review_report(idn_table, lgr_info, absolute_url)
                 filename = f"{idn_table.name}.html"
                 zf.writestr(filename, html_report)

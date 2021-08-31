@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'dal',
     'dal_select2',
+    'django.contrib.admin',  # XXX needed by django-autocomplete-light 3.8.2 (see https://github.com/yourlabs/django-autocomplete-light/issues/1195#issuecomment-905648958)
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
