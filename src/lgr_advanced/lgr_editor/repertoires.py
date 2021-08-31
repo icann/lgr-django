@@ -6,42 +6,15 @@ repertoires.py - functions for dealing with installed repertoires
 from __future__ import unicode_literals
 
 import logging
-import os
-
-from django.conf import settings
-
-from lgr.parser.xml_parser import XMLParser
-from lgr_utils import unidb
-from .utils import list_validating_repertoires
 
 from django.core.cache import cache
+
+from .utils import list_validating_repertoires
 
 logger = logging.getLogger(__name__)
 REPERTOIRE_CACHE_KEY = 'validating-repertoire'
 SCRIPTS_CACHE_KEY = 'scripts'
-CACHE_TIMEOUT = 3600*24*30
-
-
-def get_by_name(repertoire_name, with_unidb=False):
-    repertoire_cache_key = "{}{}".format(REPERTOIRE_CACHE_KEY, repertoire_name).replace(' ', '')
-    repertoire = cache.get(repertoire_cache_key)
-    logger.debug("Get repertoire by name %s", repertoire_name)
-    if not repertoire:
-        logger.info("%s parsing file as not in cache", repertoire_name)
-        repertoire_path = os.path.join(settings.REPERTOIRE_STORAGE_LOCATION, '{}.xml'.format(repertoire_name))
-        parser = XMLParser(repertoire_path, repertoire_name)
-        if with_unidb:
-            unicode_version = parser.unicode_version()
-            parser.unicode_database = unidb.manager.get_db_by_version(unicode_version)
-        repertoire = parser.parse_document()
-        repertoire.expand_ranges()  # need to get through all code points
-        cache.set(repertoire_cache_key, repertoire, CACHE_TIMEOUT)
-    elif with_unidb:
-        # need to retrieve unicode database as it is not retrieved from cache
-        unicode_version = repertoire.metadata.unicode_version
-        repertoire.unicode_database = unidb.manager.get_db_by_version(unicode_version)
-
-    return repertoire
+CACHE_TIMEOUT = 3600 * 24 * 30
 
 
 def get_all_scripts_from_repertoire(unicode_database):

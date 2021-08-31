@@ -9,7 +9,6 @@ import typing
 from django.http import HttpResponseBadRequest
 
 from lgr.core import LGR
-from lgr_advanced.lgr_editor.repertoires import get_by_name
 from lgr_advanced.models import LgrModel, SetLgrModel
 from lgr_advanced.views import LGRViewMixin
 from lgr_models.models.lgr import LgrBaseModel
