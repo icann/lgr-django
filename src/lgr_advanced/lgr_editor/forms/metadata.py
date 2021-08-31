@@ -9,7 +9,7 @@ from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_web.utils import IANA_LANG_REGISTRY
-from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, VALIDATING_REPERTOIRES
+from .fields import UNICODE_VERSIONS, DEFAULT_UNICODE_VERSION, ValidatingRepertoire
 from .utils import BaseDisableableFormSet
 
 
@@ -55,7 +55,6 @@ class MetadataForm(forms.Form):
     validating_repertoire = forms.ChoiceField(label=_("Validating repertoire"),
                                               choices=(
                                                   ('', ''),
-                                                  (_('Built-in'), VALIDATING_REPERTOIRES),
                                               ),
                                               required=False)
 
@@ -63,6 +62,9 @@ class MetadataForm(forms.Form):
         additional_repertoires = kwargs.pop('additional_repertoires', [])
         disabled = kwargs.pop('disabled')
         super(MetadataForm, self).__init__(*args, **kwargs)
+        self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + [
+            (_('Built-in'), ValidatingRepertoire.choices())
+        ]
         if additional_repertoires:
             # dynamically append the session LGRs (by copy, not by reference)
             self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + [

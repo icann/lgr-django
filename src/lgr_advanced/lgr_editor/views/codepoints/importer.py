@@ -24,7 +24,6 @@ from lgr_advanced.lgr_editor.forms import (AddMultiCodepointsForm,
                                            AddRangeForm,
                                            ImportCodepointsFromFileForm,
                                            AddCodepointFromScriptForm)
-from lgr_advanced.lgr_editor.repertoires import get_all_scripts_from_repertoire
 from lgr_advanced.lgr_editor.utils import slug_to_cp
 from lgr_advanced.lgr_editor.views.mixins import LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
@@ -304,7 +303,7 @@ class AddCodepointFromScriptView(MultiCodepointsView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['scripts'] = get_all_scripts_from_repertoire(self.lgr.unicode_database)
+        kwargs['unicode_database'] = self.lgr.unicode_database
         return kwargs
 
     def form_valid(self, form):

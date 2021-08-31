@@ -6,10 +6,9 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.utils import parse_single_cp_input, parse_codepoint_input
+from lgr_advanced.lgr_editor.forms.fields import (ValidatingRepertoire,
+                                                  FILE_FIELD_ENCODING_HELP)
 from lgr_advanced.widgets import DataSelectWidget
-from .fields import (VALIDATING_REPERTOIRES,
-                     DEFAULT_VALIDATING_REPERTOIRE,
-                     FILE_FIELD_ENCODING_HELP)
 from .utils import MultipleChoiceFieldNoValidation
 
 SUPPORTED_CODEPOINT_INPUT_FILES = [
@@ -79,8 +78,7 @@ class AddRangeForm(forms.Form):
 class AddCodepointFromScriptForm(forms.Form):
     validating_repertoire = forms.ChoiceField(label=_("Validating repertoire"),
                                               required=True,
-                                              choices=VALIDATING_REPERTOIRES,
-                                              initial=DEFAULT_VALIDATING_REPERTOIRE,
+                                              initial=ValidatingRepertoire.default_choice(),
                                               widget=DataSelectWidget)
     script = forms.ChoiceField(label=_("Script"),
                                required=True)
@@ -88,9 +86,12 @@ class AddCodepointFromScriptForm(forms.Form):
                                        required=False)
 
     def __init__(self, *args, **kwargs):
-        scripts = kwargs.pop('scripts', set())
+        unicode_database = kwargs.pop('unicode_database')
+        scripts = ValidatingRepertoire.scripts(unicode_database)
         super(AddCodepointFromScriptForm, self).__init__(*args, **kwargs)
-        self.fields['script'].choices = sorted(set((s, s) for vr_scripts in scripts.values() for s in vr_scripts))
+        self.fields['script'].choices = sorted(
+            set((s, s) for vr_scripts in scripts.values() for s in vr_scripts))
+        self.fields['validating_repertoire'].choices = ValidatingRepertoire.choices()
         self.fields['validating_repertoire'].widget.data = {
             k: {'scripts': ','.join(v)} for k, v in scripts.items()
         }
