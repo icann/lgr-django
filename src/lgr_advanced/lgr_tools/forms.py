@@ -2,9 +2,9 @@
 from __future__ import unicode_literals
 
 from django import forms
-from django.forms.widgets import Select
 from django.utils.translation import ugettext_lazy as _
 
+from lgr_advanced.widgets import DataSelectWidget
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
 from lgr_advanced.models import LgrModel
 from lgr_models.models.lgr import RzLgr
@@ -13,30 +13,6 @@ LGR_COMPARE_ACTIONS = (
     ("UNION", _("Union")),
     ("INTERSECTION", _("Intersection")),
     ("DIFF", _("Diff")))
-
-
-class DataSelectWidget(Select):
-    """
-    Add data to select widget options
-    Data is a dict with key option value containing a dict of data name with data value
-    """
-    allow_multiple_selected = False
-
-    def __init__(self, attrs=None, choices=(), data=None):
-        super(DataSelectWidget, self).__init__(attrs)
-        self.data = data
-
-    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
-        """
-        Yield all "subwidgets" of this widget. Used to enable iterating
-        options from a BoundField for choice widgets.
-        """
-        option = super(DataSelectWidget, self).create_option(name, value, label, selected, index, subindex, attrs)
-        for key, val in self.data.get(value, {}).items():
-            # attrs won't be displayed if val is False and will be displayed without argument if val is True
-            option['attrs']['data-{}'.format(key)] = val
-
-        return option
 
 
 class LGRCompareSelector(forms.Form):

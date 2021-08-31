@@ -12,3 +12,39 @@
         </div>
     </form>
 {% endblock content %}
+
+
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            // hide and unhide with wrap
+            function hide_option(selector) {
+                $(selector).wrap('<span/>');
+                $(selector).attr('data-hidden', true);
+                $(selector).removeAttr('selected');
+            };
+            function show_option(selector) {
+                $(selector + '[data-hidden=true]').unwrap();
+                $(selector).attr('data-hidden', false);
+            };
+            function update_scripts() {
+                var scripts_str = $('#id_validating_repertoire option:selected').data('scripts');
+                // unwrap then wrap each option to avoid double wraps
+                show_option('#id_script option');
+                hide_option('#id_script option');
+                if(scripts_str) {
+                    // populate script options
+                    var scripts = scripts_str.split(',');
+                    scripts.forEach(function(name) {
+                        // unwrap available scripts
+                        show_option('#id_script option[value=' + name + ']');
+                    });
+                }
+            }
+            $('#id_validating_repertoire').change(function(){update_scripts()});
+            update_scripts();
+        });
+    </script>
+{% endblock html_body_more %}

@@ -151,7 +151,7 @@ class MultiCodepointsView(LGREditMixin, FormView):
                 else:
                     codepoint.append(self.format_cp_choice(char.cp))
 
-            if len(codepoint) == 0:
+            if not codepoint and not disabled_codepoint:
                 messages.add_message(self.request,
                                      messages.ERROR,
                                      _("No code point in input file"))
@@ -302,18 +302,17 @@ class AddCodepointFromScriptView(MultiCodepointsView):
     form_class = AddCodepointFromScriptForm
     template_name = 'lgr_editor/add_list_from_script.html'
 
-    def get(self, request, *args, **kwargs):
-        scripts = get_all_scripts_from_repertoire(self.lgr.unicode_database)
-        self.initial['scripts'] = [(s, s) for s in sorted(scripts)]
-
-        return super(AddCodepointFromScriptView, self).get(request, *args, **kwargs)
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['scripts'] = get_all_scripts_from_repertoire(self.lgr.unicode_database)
+        return kwargs
 
     def form_valid(self, form):
         self.template_name = 'lgr_editor/add_list.html'
 
         cd = form.cleaned_data
         script = cd['script']
-        validating_repertoire = self.model.from_tuple(cd['validating_repertoire'])
+        validating_repertoire = self.model.from_tuple(cd['validating_repertoire']).to_lgr()
         validating_repertoire.expand_ranges()  # need to get through all code points
 
         codepoints = []
@@ -321,11 +320,8 @@ class AddCodepointFromScriptView(MultiCodepointsView):
             # XXX: Assume validating repertoire only contains single CP
             cp = char.cp[0]
             if script == self.lgr.unicode_database.get_script(cp, alpha4=True):
-                try:
-                    self.lgr.get_char(cp)
-                except LGRException:
-                    codepoints.append(cp)
+                codepoints.append(cp)
 
         fake_lgr = LGR(name=script)
-        fake_lgr.add_codepoints(codepoints)
+        fake_lgr.add_codepoints(set(codepoints))
         return self._handle_discrete(self.lgr, fake_lgr, cd['manual_import'])
