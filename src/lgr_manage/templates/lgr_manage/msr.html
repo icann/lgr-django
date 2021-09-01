@@ -1,0 +1,73 @@
+{% extends "lgr_manage/_idn_table_review_admin_base.html" %}
+{% load i18n static %}
+
+{% block msr-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h2>{% trans 'Existing MSRs' %}</h2>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">{% trans 'Name' %}</th>
+            <th scope="col">{% trans 'Action' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for msr in object_list %}
+            <tr>
+                <td>
+                    <a href="{{ msr.display_url }}" target="_blank"
+                       rel="noopener noreferrer">
+                        {{ msr.name }}
+                    </a>
+                </td>
+                <td>
+                    <form method="post" action="{% url "lgr_admin_delete_msr" lgr_pk=msr.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-default confirm-prompt"
+                                data-confirmation-prompt="{% blocktrans with lgr=msr.name %}Are you sure you want to delete LGR {{ lgr }}?{% endblocktrans %}">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        {% empty %}
+            <tr>
+                <td colspan="3">{% trans 'No MSR.' %}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2>{% trans 'New MSR' %}</h2>
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {% include "lgr_editor/_form_field.html" with field=form.name control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.file control_width=8 %}
+        <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>
+    </form>
+{% endblock content-pane %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            function enable_submit_button() {
+                if ($('#id_name').val() !== "" &&
+                    $('#id_file').prop('files').length > 0) {
+                    $('#submit').removeAttr('disabled')
+                } else {
+                    $('#submit').attr('disabled', 'disabled')
+                }
+            }
+
+            $('#id_name').change(function () {
+                enable_submit_button()
+            });
+            $('#id_file').change(function () {
+                enable_submit_button()
+            });
+            enable_submit_button();
+        });
+    </script>
+{% endblock html_body_more %}

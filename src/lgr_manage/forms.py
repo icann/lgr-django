@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
 from lgr_auth.models import LgrUser
-from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr
+from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, MSR
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 
@@ -42,6 +42,17 @@ class RefLgrCreateForm(forms.ModelForm):
         fields = '__all__'
         labels = {
             'file': _('Reference LGR file'),
+            'name': _('Name'),
+        }
+
+
+class MSRCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = MSR
+        fields = '__all__'
+        labels = {
+            'file': _('MSR'),
             'name': _('Name'),
         }
 

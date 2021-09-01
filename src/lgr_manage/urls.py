@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.urls import path
 
+from lgr_manage.views.msr import MSRView, MSRDeleteView, DisplayMSRView
 from lgr_manage.views.reference_lgr import RefLgrView, RefLgrDeleteView, DisplayRefLgrView
 from lgr_manage.views.rz_lgr import RzLgrView, RzLgrDeleteView, DisplayRzLgrView, DisplayRzLgrMemberView
 from lgr_manage.views.users import LgrUserView, LgrUserDeleteView
@@ -15,9 +16,9 @@ urlpatterns = [
     path('ref-lgr', RefLgrView.as_view(), name='lgr_admin_ref_lgr'),
     path('ref-lgr/<int:lgr_pk>/delete', RefLgrDeleteView.as_view(), name='lgr_admin_delete_ref_lgr'),
     path('ref-lgr/<int:lgr_pk>', DisplayRefLgrView.as_view(), name='lgr_admin_display_ref_lgr'),
-    path('msr', RefLgrView.as_view(), name='lgr_admin_ref_lgr'),
-    path('msr/<int:lgr_pk>/delete', RefLgrDeleteView.as_view(), name='lgr_admin_delete_msr'),
-    path('msr/<int:lgr_pk>', DisplayRefLgrView.as_view(), name='lgr_admin_display_msr'),
+    path('msr', MSRView.as_view(), name='lgr_admin_msr'),
+    path('msr/<int:lgr_pk>/delete', MSRDeleteView.as_view(), name='lgr_admin_delete_msr'),
+    path('msr/<int:lgr_pk>', DisplayMSRView.as_view(), name='lgr_admin_display_msr'),
     path('users', LgrUserView.as_view(), name='lgr_admin_user_management'),
     path('users/<int:usr_pk>/delete', LgrUserDeleteView.as_view(), name='lgr_admin_delete_user'),
 ]

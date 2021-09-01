@@ -20,6 +20,9 @@
         <li role="presentation" class="{% block ref-lgr-active %}{% endblock %}">
             <a href="{% url 'lgr_admin_ref_lgr' %}">{% trans "Reference LGRs" %}</a>
         </li>
+        <li role="presentation" class="{% block msr-active %}{% endblock %}">
+            <a href="{% url 'lgr_admin_msr' %}">{% trans "MSRs" %}</a>
+        </li>
         <li role="presentation" class="{% block user-management-active %}{% endblock %}">
             <a href="{% url 'lgr_admin_user_management' %}">{% trans "User management" %}</a>
         </li>

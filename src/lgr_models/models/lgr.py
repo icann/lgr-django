@@ -27,6 +27,8 @@ def get_upload_path(instance, filename):
         return os.path.join(base_path, 'reference_lgr', filename)
     if instance._meta.object_name == 'RzLgrMember':
         return os.path.join(base_path, 'rz_lgr', instance.rz_lgr.name, filename)
+    if instance._meta.object_name == 'MSR':
+        return os.path.join(base_path, 'msr', filename)
     # if you need to use other LgrBaseModel in migration, this won't work as historical models don't includes method.
     # See https://docs.djangoproject.com/en/3.1/topics/migrations/#historical-models
     # If you need this in a migration, define the method and the migration and set it to the historical model.
@@ -262,3 +264,13 @@ class RzLgrMember(LgrBaseModel):
         lgr = lgr_parser.parse_document()
         self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
         super().save(force_insert=False, force_update=True, using=using, update_fields=['language', 'script'])
+
+
+class MSR(LgrBaseModel):
+    # make name unique and owner nullable
+    name = models.CharField(max_length=128, unique=True)
+    owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
+
+    def display_url(self):
+        # FIXME view should be in models app
+        return reverse('lgr_admin_display_msr', kwargs={'lgr_pk': self.pk})
