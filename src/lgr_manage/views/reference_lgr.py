@@ -55,11 +55,11 @@ class RefLgrView(BaseAdminView, views.View):
 class RefLgrDeleteView(BaseAdminView, views.generic.DeleteView):
     model = RefLgr
     success_url = reverse_lazy('lgr_admin_ref_lgr')
-    pk_url_kwarg = 'lgr_id'
+    pk_url_kwarg = 'lgr_pk'
 
 
 class DisplayRefLgrView(SingleObjectMixin, views.View):
-    pk_url_kwarg = 'lgr_id'
+    pk_url_kwarg = 'lgr_pk'
     model = RefLgr
 
     def get(self, request, *args, **kwargs):

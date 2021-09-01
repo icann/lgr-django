@@ -24,7 +24,7 @@
                 </td>
                 <td>{{ ref_lgr.language_script }}</td>
                 <td>
-                    <form method="post" action="{% url "lgr_admin_delete_ref_lgr" lgr_id=ref_lgr.pk %}">
+                    <form method="post" action="{% url "lgr_admin_delete_ref_lgr" lgr_pk=ref_lgr.pk %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-default confirm-prompt"
                                 data-confirmation-prompt="{% blocktrans with lgr=ref_lgr.name %}Are you sure you want to delete LGR {{ lgr }}?{% endblocktrans %}">

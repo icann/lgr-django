@@ -221,7 +221,7 @@
             renderLink = renderLink.replace('0', val);
             $('#renderLink').attr('href', renderLink);
 
-            let xmlLink = `{% url 'lgr_admin_display_rz_lgr' lgr_id=0 %}`;
+            let xmlLink = `{% url 'lgr_admin_display_rz_lgr' lgr_pk=0 %}`;
             xmlLink = xmlLink.replace('0', val);
             $('#xmlLink').attr('href', xmlLink);
         }

@@ -55,11 +55,11 @@ class RzLgrView(BaseAdminView, views.View):
 class RzLgrDeleteView(BaseAdminView, views.generic.DeleteView):
     model = RzLgr
     success_url = reverse_lazy('lgr_admin_rz_lgr')
-    pk_url_kwarg = 'lgr_id'
+    pk_url_kwarg = 'lgr_pk'
 
 
 class DisplayRzLgrView(SingleObjectMixin, views.View):
-    pk_url_kwarg = 'lgr_id'
+    pk_url_kwarg = 'lgr_pk'
     model = RzLgr
 
     def get(self, request, *args, **kwargs):
@@ -68,7 +68,7 @@ class DisplayRzLgrView(SingleObjectMixin, views.View):
 
 
 class DisplayRzLgrMemberView(SingleObjectMixin, views.View):
-    pk_url_kwarg = 'lgr_id'
+    pk_url_kwarg = 'lgr_pk'
     model = RzLgrMember
 
     def get(self, request, *args, **kwargs):
@@ -76,4 +76,4 @@ class DisplayRzLgrMemberView(SingleObjectMixin, views.View):
         return HttpResponse(lgr.file.read(), content_type='text/xml', charset='UTF-8')
 
     def get_queryset(self):
-        return self.model.objects.filter(rz_lgr__pk=self.kwargs.get('rz_lgr_id'))
+        return self.model.objects.filter(rz_lgr__pk=self.kwargs.get('rz_lgr_pk'))

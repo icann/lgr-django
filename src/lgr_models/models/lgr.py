@@ -224,7 +224,7 @@ class RzLgr(LgrBaseModel):
 
     def display_url(self):
         # FIXME view should be in models app
-        return reverse('lgr_admin_display_rz_lgr', kwargs={'lgr_id': self.pk})
+        return reverse('lgr_admin_display_rz_lgr', kwargs={'lgr_pk': self.pk})
 
 
 class RefLgr(LgrBaseModel):
@@ -237,7 +237,7 @@ class RefLgr(LgrBaseModel):
 
     def display_url(self):
         # FIXME view should be in models app
-        return reverse('lgr_admin_display_ref_lgr', kwargs={'lgr_id': self.pk})
+        return reverse('lgr_admin_display_ref_lgr', kwargs={'lgr_pk': self.pk})
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.language, self.script = tag_to_language_script(self.language_script)
@@ -254,7 +254,7 @@ class RzLgrMember(LgrBaseModel):
 
     def display_url(self):
         # FIXME view should be in models app
-        return reverse('lgr_admin_display_rz_lgr_member', kwargs={'rz_lgr_id': self.rz_lgr.pk, 'lgr_id': self.pk})
+        return reverse('lgr_admin_display_rz_lgr_member', kwargs={'rz_lgr_pk': self.rz_lgr.pk, 'lgr_pk': self.pk})
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         super().save(force_insert, force_update, using, update_fields)

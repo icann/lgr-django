@@ -54,4 +54,4 @@ class LgrUserView(BaseAdminView, views.View):
 class LgrUserDeleteView(BaseAdminView, views.generic.DeleteView):
     model = LgrUser
     success_url = reverse_lazy('lgr_admin_user_management')
-    pk_url_kwarg = 'user_id'
+    pk_url_kwarg = 'user_pk'
