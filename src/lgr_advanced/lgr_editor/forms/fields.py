@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import hashlib
 import logging
 from typing import List
 
 from django.conf import settings
 from django.core.cache import cache
+from django.utils.encoding import force_bytes
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_models.models.lgr import LgrBaseModel, RzLgr
@@ -37,12 +39,21 @@ class ValidatingRepertoire:
         return '', ''
 
     @classmethod
+    def _cache_key(cls, unicode_database, vr_model, vr_pk):
+        # TODO move from advanced to models
+        from lgr_advanced.utils import LGR_CACHE_KEY_PREFIX
+
+        key = f'{cls.SCRIPTS_CACHE_KEY}:{unicode_database.get_unicode_version()}:{vr_model}:{vr_pk}'
+        args = hashlib.md5(force_bytes(key))
+        return "{}.{}".format(LGR_CACHE_KEY_PREFIX, args.hexdigest())
+
+    @classmethod
     def scripts(cls, unicode_database):
         logger.debug("Get scripts for Unicode %s", unicode_database.get_unicode_version())
         scripts = dict()
         for validating_repertoire_object in cls.list():
             vr_model, vr_pk = validating_repertoire_object.to_tuple()
-            scripts_cache_key = f'{cls.SCRIPTS_CACHE_KEY}:{unicode_database.get_unicode_version()}:{vr_model}:{vr_pk}'
+            scripts_cache_key = cls._cache_key(unicode_database, vr_model, vr_pk)
             vr_scripts = cache.get(scripts_cache_key)
             if not vr_scripts:
                 vr_scripts = set()
