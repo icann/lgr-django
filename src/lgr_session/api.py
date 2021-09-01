@@ -36,7 +36,7 @@ class LGRStorage:
             query_kwargs['file__endswith'] = filename
         return self.storage_model.objects.filter(**query_kwargs).distinct()
 
-    def list_storage(self, report_id=None, reverse=True, exclude=None, group_by=None):
+    def list_storage(self, report_id=None, reverse=True, exclude=None):
         """
         List files in the storage
 

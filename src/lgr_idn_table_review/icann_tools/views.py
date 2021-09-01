@@ -17,7 +17,7 @@ class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.IDN_ICANN.name
-        self.session = LGRIcannStorage(request.user)
+        self.storage = LGRIcannStorage(request.user)
 
     def test_func(self):
         return self.request.user.role in [LgrRole.ICANN.value, LgrRole.ADMIN.value]
@@ -35,7 +35,7 @@ class IdnTableIcannModeView(BaseIcannView, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['reports'] = self.session.list_storage()
+        context['reports'] = self.storage.list_storage()
         return context
 
 
@@ -50,13 +50,13 @@ class IdnTableIcannListReports(BaseIcannView, TemplateView):
                           {'file__endswith': summary_name}]
         if settings.DEBUG:
             exclude_filter.append({'file__endswith': '.json'})
-        context['reports'] = self.session.list_storage(report_id=self.kwargs.get('report_id'), reverse=False,
+        context['reports'] = self.storage.list_storage(report_id=self.kwargs.get('report_id'), reverse=False,
                                                        exclude=exclude_filter)
-        context['zip'] = self.session.storage_find_report_file(self.kwargs.get('report_id'), zipname)
+        context['zip'] = self.storage.storage_find_report_file(self.kwargs.get('report_id'), zipname)
         context['completed'] = True
         try:
-            context['summary'] = self.session.storage_find_report_file(self.kwargs.get('report_id'), summary_name)
-        except self.session.storage_model.DoesNotExist:
+            context['summary'] = self.storage.storage_find_report_file(self.kwargs.get('report_id'), summary_name)
+        except self.storage.storage_model.DoesNotExist:
             context['completed'] = False
         context['title'] = _("ICANN Review Reports: %(report)s") % {'report': self.kwargs.get('report_id')}
         context['back_url'] = 'lgr_idn_icann_mode'

@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 
 from lgr.tools.idn_review.review import review_lgr
 from lgr_auth.models import LgrUser
-from lgr_idn_table_review.idn_tool.api import LGRIdnReviewStorage
+from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
 from lgr_idn_table_review.idn_tool.models import IdnTable
 from lgr_models.models.lgr import LgrBaseModel
 
@@ -58,7 +58,7 @@ def idn_table_review_task(idn_tables, report_id, email_address, download_link, a
     """
     user = LgrUser.objects.get(email=email_address)
 
-    storage = LGRIdnReviewStorage(user)
+    storage = LGRIdnReviewApi(user)
     with TemporaryFile() as f:
         with ZipFile(f, mode='w', compression=ZIP_DEFLATED) as zf:
             for idn_table_pk, lgr_info in idn_tables:

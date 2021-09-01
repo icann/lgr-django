@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
-from datetime import datetime
 
 from dal_select2.views import Select2GroupListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import SuspiciousOperation
-from django.core.files import File
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views import View
@@ -14,9 +13,8 @@ from django.views.generic import FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
-from lgr_idn_table_review.idn_tool.api import LGRIdnReviewStorage
+from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
 from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
-from lgr_idn_table_review.idn_tool.models import IdnTable
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_models.models.lgr import RzLgr, RefLgr, RzLgrMember
 from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
@@ -28,7 +26,7 @@ class IdnTableReviewViewMixin(LoginRequiredMixin):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.storage = LGRIdnReviewStorage(request.user)
+        self.api = LGRIdnReviewApi(request.user)
         request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.IDN_REVIEW.name
 
 
@@ -40,7 +38,7 @@ class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
         return reverse('lgr_review_select_reference', kwargs={'report_id': self.report_id})
 
     def form_valid(self, form):
-        self.report_id = datetime.now().strftime('%Y-%m-%d-%H%M%S.%f')
+        self.report_id = self.api.generate_report_id()
         for idn_table_file in self.request.FILES.getlist('idn_tables'):
             idn_table_name = idn_table_file.name
             if not RE_SAFE_FILENAME.match(idn_table_name):
@@ -50,10 +48,9 @@ class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
                     idn_table_name = idn_table_name.rsplit('.', 1)[0]
                     break
             try:
-                IdnTable.objects.create(file=File(idn_table_file),
-                                        name=idn_table_name,
-                                        owner=self.request.user,
-                                        report_id=self.report_id)
+                self.api.create_lgr(idn_table_file,
+                                    idn_table_name,
+                                    self.report_id)
             except Exception:
                 logger.exception('Unable to parser IDN table %s', idn_table_name)
                 form.add_error('idn_tables', _('%(filename)s is an invalid IDN table') % {'filename': idn_table_name})
@@ -86,8 +83,7 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super(IdnTableReviewSelectReferenceView, self).get_form_kwargs()
-        idn_tables = IdnTable.objects.filter(owner=self.request.user, report_id=self.kwargs.get('report_id'))
-        kwargs['idn_tables'] = idn_tables
+        kwargs['idn_tables'] = self.api.get_lgrs_in_report(self.report_id)
         return kwargs
 
 
@@ -96,7 +92,7 @@ class IdnTableReviewListReports(IdnTableReviewViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['reports'] = self.storage.list_storage()
+        context['reports'] = self.api.list_storage()
         return context
 
 
@@ -106,12 +102,12 @@ class IdnTableReviewListReport(IdnTableReviewViewMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         zipname = f"{self.kwargs.get('report_id')}.zip"
-        context['reports'] = self.storage.list_storage(report_id=self.kwargs.get('report_id'),
-                                                       exclude={'file__endswith': zipname})
+        context['reports'] = self.api.list_storage(report_id=self.kwargs.get('report_id'),
+                                                   exclude={'file__endswith': zipname})
         context['completed'] = True
         try:
-            context['zip'] = self.storage.storage_find_report_file(self.kwargs.get('report_id'), zipname)
-        except self.storage.storage_model.DoesNotExist:
+            context['zip'] = self.api.storage_find_report_file(self.kwargs.get('report_id'), zipname)
+        except self.api.storage_model.DoesNotExist:
             context['completed'] = False
         context['title'] = _("IDN Table Review Reports: %(report)s") % {'report': self.kwargs.get('report_id')}
         context['back_url'] = 'lgr_review_reports'
@@ -120,14 +116,24 @@ class IdnTableReviewListReport(IdnTableReviewViewMixin, TemplateView):
 
 class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, SingleObjectMixin, View):
     pk_url_kwarg = 'lgr_pk'
-    model = IdnTable
+    model = LGRIdnReviewApi.lgr_model
 
     def get(self, request, *args, **kwargs):
-        idn_table = self.get_object(queryset=self.model.objects.filter(owner=request.user))
+        idn_table = self.get_object(queryset=self.api.lgr_queryset())
         # FIXME: should distinct txt and xml LGRs
-        resp = HttpResponse(idn_table.file.read(), content_type='text/plain', charset='UTF-8')
+        content_type = 'text/plain'
+        if idn_table.filename.endswith('xml'):
+            content_type = 'text/xml'
+        resp = HttpResponse(idn_table.file.read(), content_type=content_type, charset='UTF-8')
         resp['Content-disposition'] = f'attachment; filename={idn_table.filename}'
         return resp
+
+
+class IdnTableReviewDeleteReport(IdnTableReviewViewMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        self.api.delete_report(self.kwargs.get('report_id'))
+        return redirect(request.GET.get('next', '/'))
 
 
 class RefLgrAutocomplete(LoginRequiredMixin, Select2GroupListView):
