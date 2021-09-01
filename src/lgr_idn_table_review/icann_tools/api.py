@@ -6,7 +6,6 @@ api -
 import logging
 import os
 from collections import defaultdict
-from urllib.error import URLError
 from urllib.request import urlopen
 
 import lxml.html
@@ -14,7 +13,6 @@ from django.conf import settings
 from django.core.files import File
 
 from lgr.core import LGR
-from lgr.metadata import Metadata, Version
 from lgr.tools.utils import download_file
 from lgr.utils import tag_to_language_script
 from lgr_auth.models import LgrRole

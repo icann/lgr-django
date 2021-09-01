@@ -7,29 +7,32 @@ from __future__ import unicode_literals
 import io
 import sys
 
+from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
 from lgr.tools.idn_review.review import review_lgr
-from lgr_idn_table_review.idn_tool.api import IdnTableInfo
+from lgr_models.models.lgr import LgrBaseModel
 
 
 class Command(BaseCommand):
     help = 'IDN Table Review Tool'
 
     def handle(self, *args, **options):
-        with open(options['idn_table'], 'rb') as idn_table:
-            idn_table_info = IdnTableInfo(options['idn_table'], idn_table.read().decode('utf-8'))
-        with open(options['reference_lgr'], 'rb') as ref_lgr:
-            ref_lgr_info = IdnTableInfo(options['reference_lgr'], ref_lgr.read().decode('utf-8'))
+        with open(options['idn_table'], 'rb') as idn_table_file:
+            idn_table = LgrBaseModel(name=options['idn_table'],
+                                     file=File(idn_table_file))
+            with open(options['reference_lgr'], 'rb') as ref_lgr_file:
+                ref_lgr = LgrBaseModel(name=options['reference_lgr'],
+                                       file=File(ref_lgr_file))
+                context = review_lgr(idn_table.to_lgr(), ref_lgr.to_lgr())
 
-            context = review_lgr(idn_table_info.lgr, ref_lgr_info.lgr)
-            html = render_to_string('lgr_idn_table_review/review.html', context)
-            if not options['output']:
-                sys.stdout.write(html)
-            else:
-                with io.open(options['output'], 'w', encoding='utf-8') as output_file:
-                    output_file.write(html)
+        html = render_to_string('lgr_idn_table_review/review.html', context)
+        if not options['output']:
+            sys.stdout.write(html)
+        else:
+            with io.open(options['output'], 'w', encoding='utf-8') as output_file:
+                output_file.write(html)
 
     def add_arguments(self, parser):
         parser.add_argument('idn_table', help='The IDN table to review')

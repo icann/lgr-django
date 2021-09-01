@@ -12,8 +12,8 @@ from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
-from lgr_advanced.lgr_renderer.api import generate_context
 from lgr_models.models.lgr import LgrBaseModel
+from lgr_renderer.api import generate_context
 
 
 class Command(BaseCommand):

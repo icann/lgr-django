@@ -4,8 +4,6 @@ from __future__ import unicode_literals
 import logging
 import time
 
-from django.utils.text import slugify
-
 from lgr.core import LGR
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.tools.annotate import annotate, lgr_set_annotate
@@ -14,10 +12,10 @@ from lgr.tools.cross_script_variants import cross_script_variants
 from lgr.tools.diff_collisions import diff, collision, basic_collision
 from lgr.tools.harmonize import harmonize
 from lgr.tools.utils import read_labels
-from lgr_models.exceptions import LGRValidationException
 from lgr_advanced.lgr_validator.api import lgr_set_evaluate_label, evaluate_label, validation_results_to_csv
 from lgr_advanced.models import LgrModel
 from lgr_auth.models import LgrUser
+from lgr_models.exceptions import LGRValidationException
 from lgr_models.models.lgr import RzLgr
 
 logger = logging.getLogger(__name__)
