@@ -34,14 +34,14 @@
             {% if user.is_icann %}
             <a class="panel panel-default btn" href="{% url "lgr_idn_icann_mode" %}" title="{% trans "ICANN mode" %}">
                 <div class="panel-body">
-                    <span class="glyphicon glyphicon-lock">&nbsp;</span>{% trans "ICANN Staff Tools" %}
+                    <span class="glyphicon glyphicon-globe">&nbsp;</span>{% trans "ICANN Staff Tools" %}
                 </div>
             </a>
             {% endif %}
             {% if user.is_admin %}
             <a class="panel panel-default btn" href="{% url "lgr_idn_admin_mode" %}" title="{% trans "Admin mode" %}">
                 <div class="panel-body">
-                    <span class="glyphicon glyphicon-lock">&nbsp;</span>{% trans "Manage LGR Tools" %}
+                    <span class="glyphicon glyphicon-cog">&nbsp;</span>{% trans "Manage LGR Tools" %}
                 </div>
             </a>
             {% endif %}
