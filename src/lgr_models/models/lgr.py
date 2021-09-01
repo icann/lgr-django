@@ -15,6 +15,8 @@ from lgr.parser.xml_parser import XMLParser, LGR_NS
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.utils import tag_to_language_script
 from lgr_auth.models import LgrUser
+from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException, LGRValidationException
+from lgr_utils import unidb
 from lgr_web import settings
 
 
@@ -117,25 +119,24 @@ class LgrBaseModel(models.Model):
             return None
         return cache.get(self._cache_key(self.lgr_cache_key))
 
-    def to_lgr(self, validate=False) -> LGR:
+    def to_lgr(self, validate=False, with_unidb=True, expand_ranges=False) -> LGR:
         # TODO move from advanced to models
         from lgr_utils import unidb
 
         lgr = self._from_cache()
         if lgr is None:
-            lgr = self._parse(validate)
+            lgr = self._parse(validate, with_unidb=with_unidb)
             self._to_cache(lgr)
         else:
             # Need to manually load unicode database because it is stripped during serialization
             unicode_version = lgr.metadata.unicode_version
             lgr.unicode_database = unidb.manager.get_db_by_version(unicode_version)
+        if expand_ranges:
+            lgr.expand_ranges()
         return lgr
 
     @classmethod
     def _parse_lgr_xml(cls, lgr, validate=False):
-        # TODO move from advanced to models
-        from lgr_advanced.exceptions import LGRValidationException
-
         data = serialize_lgr_xml(lgr, pretty_print=True)
         if validate:
             parser = cls.lgr_parser(BytesIO(data), lgr.name)
@@ -159,17 +160,15 @@ class LgrBaseModel(models.Model):
         lgr_object._to_cache(lgr)
         return lgr_object
 
-    def _parse(self, validate):
+    def _parse(self, validate, with_unidb):
         self.file.seek(0)
         data = self.file.read()
-        return self.parse(self.name, data, validate)
+        return self.parse(self.name, data, validate, with_unidb=with_unidb)
 
     @classmethod
-    def parse(cls, name, data, validate):
+    def parse(cls, name, data, validate, with_unidb=False):
         # TODO move from advanced to models
         from lgr_advanced.api import OLD_LGR_NS
-        from lgr_advanced.exceptions import LGRValidationException
-        from lgr_utils import unidb
 
         data = data.decode('utf-8').replace(OLD_LGR_NS, LGR_NS)
 
@@ -198,21 +197,24 @@ class LgrBaseModel(models.Model):
         # user's input (add codepoint, validation of LGR).
 
         # Do we need to validate against Unicode?
-        if validate:
+        if validate and with_unidb:
             # Retrieve Unicode version to set appropriate Unicode database
             unicode_version = parser.unicode_version()
-            parser.unicode_database = unidb.manager.get_db_by_version(
-                unicode_version)
-
+            try:
+                parser.unicode_database = unidb.manager.get_db_by_version(unicode_version)
+            except KeyError as e:
+                raise LGRUnsupportedUnicodeVersionException(e)
         # Actually parse document
         lgr = parser.parse_document()
 
         # If we did not set the actual Unicode database, do it now
-        if not validate:
+        if not validate and with_unidb:
             # Retrieve Unicode version to set appropriate Unicode database
             unicode_version = lgr.metadata.unicode_version
-            lgr.unicode_database = unidb.manager.get_db_by_version(
-                unicode_version)
+            try:
+                lgr.unicode_database = unidb.manager.get_db_by_version(unicode_version)
+            except KeyError as e:
+                raise LGRUnsupportedUnicodeVersionException(e)
         return lgr
 
     def is_set(self):

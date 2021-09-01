@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 import lgr.exceptions
 from lgr.utils import format_cp
 from picu.exceptions import IDNAException
-from lgr_advanced.exceptions import LGRValidationException
+from lgr_models.exceptions import LGRValidationException, LGRUnsupportedUnicodeVersionException
 
 
 def lgr_exception_to_text(exception):
@@ -118,6 +118,8 @@ def lgr_exception_to_text(exception):
         message = _('A general exception occurred in the LGR API')
     elif isinstance(exception, LGRValidationException):
         message = _('LGR is not valid (%(args)s)') % {'args': exception.args[0]}
+    elif isinstance(exception, LGRUnsupportedUnicodeVersionException):
+        message = _('Unicode version (%(args)s) is not supported by the system') % {'args': exception.args[0]}
     elif isinstance(exception, lgr.exceptions.LGRInvalidLabelException):
         message = _('Label %(label)s is not valid in the LGR (%(message)s)') % {
             'label': exception.label,

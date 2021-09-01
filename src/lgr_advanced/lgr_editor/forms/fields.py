@@ -58,7 +58,7 @@ class ValidatingRepertoire:
             if not vr_scripts:
                 vr_scripts = set()
                 logger.info(f'Scripts for {validating_repertoire_object.name} not in cache')
-                validating_repertoire = validating_repertoire_object.to_lgr()
+                validating_repertoire = validating_repertoire_object.to_lgr(with_unidb=False, expand_ranges=True)
                 for char in validating_repertoire.repertoire.all_repertoire():
                     for cp in char.cp:
                         try:

@@ -40,8 +40,8 @@ class IANAIdnTable(LgrBaseModel):
         managed = False  # do not manage this model, this is only used to create objects that won't be saved in the DB
         # unique_together = ['url', 'date']
 
-    def _parse(self, validate) -> LGR:
-        lgr = super(IANAIdnTable, self)._parse(validate)
+    def _parse(self, validate, with_unidb) -> LGR:
+        lgr = super(IANAIdnTable, self)._parse(validate, with_unidb)
         meta: Metadata = lgr.metadata
         if self.date and not meta.date:
             meta.set_date(self.date.strftime('%Y-%m-%d'), force=True)

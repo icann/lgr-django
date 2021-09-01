@@ -93,45 +93,44 @@ class ImportLGRView(LGRViewMixin, FormView):
     def get_success_url(self):
         return reverse('codepoint_list', kwargs={'lgr_pk': self.lgr_object.pk, 'model': self.lgr_object.model_name})
 
-    @transaction.atomic
     def form_valid(self, form):
         lgr_files = self.request.FILES.getlist('file')
         is_set = len(lgr_files) > 1
-        validating_repertoire = form.cleaned_data['validating_repertoire']
+        validating_repertoire = LgrBaseModel.from_tuple(form.cleaned_data['validating_repertoire'],
+                                                        self.request.user)
 
         lgr_set_info = None
         if is_set:
             lgr_set_info = LgrSetInfo.objects.create()
 
         lgr_set = []
-        for lgr_file in lgr_files:
-            try:
-                self.lgr_object = self._handle_lgr_file(lgr_file, validating_repertoire, lgr_set_info, lgr_set)
-                lgr_set.append(self.lgr_object)
-            except ImportLGRView.LGRImportException as exc:
-                return render(self.request, 'lgr_editor/import_invalid.html',
-                              context={'error': exc.error})
+        try:
+            with transaction.atomic():
+                for lgr_file in lgr_files:
+                    self.lgr_object = self._handle_lgr_file(lgr_file, validating_repertoire, lgr_set_info, lgr_set)
+                    lgr_set.append(self.lgr_object)
 
-        if is_set:
-            try:
-                set_name = form.cleaned_data['set_name']
-                if LgrModel.objects.filter(owner=self.request.user, name=set_name).exists():
-                    logger.error("Import existing LGR set name")
-                    raise ImportLGRView.LGRImportException(
-                        _("The LGR set name already exists. Please use another name."))
-                try:
-                    data = lgr_set_info.merge(set_name)
-                except Exception as import_error:
-                    logger.exception("Merge LGR from set is invalid")
-                    raise ImportLGRView.LGRImportException(lgr_exception_to_text(import_error))
-                self.lgr_object = LgrModel.objects.create(file=File(BytesIO(data), name=f'{set_name}.xml'),
-                                                          owner=self.request.user,
-                                                          name=set_name)
-                lgr_set_info.lgr = self.lgr_object
-                lgr_set_info.save()
-            except ImportLGRView.LGRImportException as exc:
-                return render(self.request, 'lgr_editor/import_invalid.html',
-                              context={'error': exc.error})
+                if is_set:
+                    set_name = form.cleaned_data['set_name']
+                    if LgrModel.objects.filter(owner=self.request.user, name=set_name).exists():
+                        logger.error("Import existing LGR set name")
+                        raise ImportLGRView.LGRImportException(
+                            _("The LGR set name already exists. Please use another name."))
+                    try:
+                        data = lgr_set_info.merge(set_name)
+                    except Exception as import_error:
+                        logger.exception("Merge LGR from set is invalid")
+                        raise ImportLGRView.LGRImportException(lgr_exception_to_text(import_error))
+                    self.lgr_object = LgrModel.objects.create(file=File(BytesIO(data), name=f'{set_name}.xml'),
+                                                              owner=self.request.user,
+                                                              name=set_name)
+                    # validate merged LGR
+                    self.lgr_object.to_lgr(validate=True, with_unidb=True)
+                    lgr_set_info.lgr = self.lgr_object
+                    lgr_set_info.save()
+        except ImportLGRView.LGRImportException as exc:
+            return render(self.request, 'lgr_editor/import_invalid.html',
+                          context={'error': exc.error})
 
         return super().form_valid(form)
 
@@ -165,6 +164,8 @@ class ImportLGRView(LGRViewMixin, FormView):
                                                      name=lgr_name,
                                                      file=lgr_file,
                                                      validating_repertoire=validating_repertoire)
+            # validate LGR
+            lgr_object.to_lgr(validate=True, with_unidb=True)
         except Exception as import_error:
             logger.exception("Input is not valid")
             raise ImportLGRView.LGRImportException(lgr_exception_to_text(import_error))

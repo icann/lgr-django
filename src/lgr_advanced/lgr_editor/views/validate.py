@@ -34,7 +34,8 @@ class ValidateLGRView(LGRHandlingBaseMixin, View):
         except KeyError:
             pass
         if self.lgr_object.validating_repertoire:
-            options['validating_repertoire'] = self.lgr_object.validating_repertoire.to_lgr()
+            options['validating_repertoire'] = self.lgr_object.validating_repertoire.to_lgr(with_unidb=False,
+                                                                                            expand_ranges=True)
         options['rng_filepath'] = settings.LGR_RNG_FILE
 
         results = self.lgr.validate(options)
