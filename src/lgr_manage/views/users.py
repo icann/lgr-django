@@ -12,7 +12,7 @@ from lgr_manage.views.common import BaseListAdminView, BaseAdminView
 class LgrUserListView(BaseListAdminView):
     model = LgrUser
     queryset = LgrUser.objects.filter(role=LgrRole.ICANN.value).order_by('email')
-    template_name = 'lgr_idn_table_review_admin/user_management.html'
+    template_name = 'lgr_manage/user_management.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -23,8 +23,8 @@ class LgrUserListView(BaseListAdminView):
 class LgrUserCreateView(BaseAdminView, views.generic.CreateView):
     model = LgrUser
     form_class = UserCreateForm
-    template_name = 'lgr_idn_table_review_admin/user_management.html'
-    success_url = reverse_lazy('lgr_idn_admin_user_management')
+    template_name = 'lgr_manage/user_management.html'
+    success_url = reverse_lazy('lgr_admin_user_management')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -53,5 +53,5 @@ class LgrUserView(BaseAdminView, views.View):
 
 class LgrUserDeleteView(BaseAdminView, views.generic.DeleteView):
     model = LgrUser
-    success_url = reverse_lazy('lgr_idn_admin_user_management')
+    success_url = reverse_lazy('lgr_admin_user_management')
     pk_url_kwarg = 'user_id'

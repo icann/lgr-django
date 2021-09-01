@@ -223,7 +223,8 @@ class RzLgr(LgrBaseModel):
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
 
     def display_url(self):
-        return reverse('lgr_idn_admin_display_rz_lgr', kwargs={'lgr_id': self.pk})
+        # FIXME view should be in models app
+        return reverse('lgr_admin_display_rz_lgr', kwargs={'lgr_id': self.pk})
 
 
 class RefLgr(LgrBaseModel):
@@ -235,7 +236,8 @@ class RefLgr(LgrBaseModel):
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
 
     def display_url(self):
-        return reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': self.pk})
+        # FIXME view should be in models app
+        return reverse('lgr_admin_display_ref_lgr', kwargs={'lgr_id': self.pk})
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.language, self.script = tag_to_language_script(self.language_script)
@@ -251,7 +253,8 @@ class RzLgrMember(LgrBaseModel):
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
 
     def display_url(self):
-        return reverse('lgr_idn_admin_display_rz_lgr_member', kwargs={'rz_lgr_id': self.rz_lgr.pk, 'lgr_id': self.pk})
+        # FIXME view should be in models app
+        return reverse('lgr_admin_display_rz_lgr_member', kwargs={'rz_lgr_id': self.rz_lgr.pk, 'lgr_id': self.pk})
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         super().save(force_insert, force_update, using, update_fields)

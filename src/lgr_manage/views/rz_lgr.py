@@ -13,7 +13,7 @@ from lgr_manage.views.common import BaseListAdminView, BaseAdminView
 
 class RzLgrListView(BaseListAdminView):
     model = RzLgr
-    template_name = 'lgr_idn_table_review_admin/rz_lgr.html'
+    template_name = 'lgr_manage/rz_lgr.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -24,8 +24,8 @@ class RzLgrListView(BaseListAdminView):
 class RzLgrCreateView(BaseAdminView, views.generic.CreateView):
     model = RzLgr
     form_class = RzLgrCreateForm
-    template_name = 'lgr_idn_table_review_admin/rz_lgr.html'
-    success_url = reverse_lazy('lgr_idn_admin_rz_lgr')
+    template_name = 'lgr_manage/rz_lgr.html'
+    success_url = reverse_lazy('lgr_admin_rz_lgr')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -54,7 +54,7 @@ class RzLgrView(BaseAdminView, views.View):
 
 class RzLgrDeleteView(BaseAdminView, views.generic.DeleteView):
     model = RzLgr
-    success_url = reverse_lazy('lgr_idn_admin_rz_lgr')
+    success_url = reverse_lazy('lgr_admin_rz_lgr')
     pk_url_kwarg = 'lgr_id'
 
 
