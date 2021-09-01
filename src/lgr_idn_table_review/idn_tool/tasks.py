@@ -22,7 +22,7 @@ def _review_idn_table(context: Dict, idn_table: IdnTable, lgr_info, absolute_url
     ref_lgr = LgrBaseModel.from_tuple(lgr_info)
     context.update({
         'ref_lgr': ref_lgr.name,
-        'ref_lgr_url': absolute_url + ref_lgr.dl_url()
+        'ref_lgr_url': absolute_url + ref_lgr.display_url()
     })
     context.update(review_lgr(idn_table.to_lgr(), ref_lgr.to_lgr()))
 
@@ -31,7 +31,7 @@ def _create_review_report(idn_table: IdnTable, lgr_info, absolute_url):
     html_report = ''
     context = {
         'idn_table': idn_table.name,
-        'idn_table_url': absolute_url + idn_table.dl_url()
+        'idn_table_url': absolute_url + idn_table.display_url()
     }
     try:
         _review_idn_table(context, idn_table, lgr_info, absolute_url)

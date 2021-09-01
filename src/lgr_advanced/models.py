@@ -12,6 +12,7 @@ from django.core.cache import cache
 from django.core.files import File
 from django.db import models
 from django.db.models import Q
+from django.urls import reverse
 
 from lgr.core import LGR
 from lgr.metadata import Metadata, Version
@@ -53,6 +54,12 @@ class CommonLgrModel(LgrBaseModel):
 
     class Meta:
         abstract = True
+
+    def display_url(self):
+        return reverse('view_lgr_xml', kwargs={'model': self.model_name, 'lgr_pk': self.pk})
+
+    def download_url(self):
+        return reverse('download_lgr_xml', kwargs={'model': self.model_name, 'lgr_pk': self.pk})
 
 
 class LgrModel(CommonLgrModel, RepertoireCacheMixin):

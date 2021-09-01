@@ -65,8 +65,11 @@ class LgrBaseModel(models.Model):
     def model_name(self):
         return self.__class__.__name__
 
-    def dl_url(self):
+    def display_url(self):
         raise NotImplementedError
+
+    def download_url(self):
+        return self.display_url()
 
     @classmethod
     def from_tuple(cls, model_pk_tuple, user=None):
@@ -219,7 +222,7 @@ class RzLgr(LgrBaseModel):
     name = models.CharField(max_length=128, unique=True)
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
 
-    def dl_url(self):
+    def display_url(self):
         return reverse('lgr_idn_admin_display_rz_lgr', kwargs={'lgr_id': self.pk})
 
 
@@ -231,7 +234,7 @@ class RefLgr(LgrBaseModel):
     name = models.CharField(max_length=128, unique=True)
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
 
-    def dl_url(self):
+    def display_url(self):
         return reverse('lgr_idn_admin_display_ref_lgr', kwargs={'lgr_id': self.pk})
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
@@ -247,7 +250,7 @@ class RzLgrMember(LgrBaseModel):
     name = models.CharField(max_length=128, unique=True)
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
 
-    def dl_url(self):
+    def display_url(self):
         return reverse('lgr_idn_admin_display_rz_lgr_member', kwargs={'rz_lgr_id': self.rz_lgr.pk, 'lgr_id': self.pk})
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):

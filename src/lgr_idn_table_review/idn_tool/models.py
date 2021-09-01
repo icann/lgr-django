@@ -27,7 +27,7 @@ class IdnTable(LgrBaseModel):
 
     report_id = models.CharField(max_length=256)
 
-    def dl_url(self):
+    def display_url(self):
         return reverse('lgr_review_display_idn_table', kwargs={'lgr_pk': self.pk})
 
     @staticmethod

@@ -159,7 +159,7 @@
             <ul class="dropdown-menu">
                 <li class="btn btn-block show-tooltip">
                     <a title="{% trans 'Preview LGR file' %}" data-placement="bottom"
-                       href="{% url 'view_lgr_xml' lgr_pk=lgr_object.pk model=lgr_object.model_name %}"
+                       href="{{ lgr_object.display_url }}"
                        target="_blank" rel="noopener noreferrer">
                         <i class="glyphicon glyphicon-eye-open"></i>
                         {% trans "View XML" %}
@@ -167,7 +167,7 @@
                 </li>
                 <li class="btn btn-block show-tooltip">
                     <a title="{% trans 'Download LGR file' %}" data-placement="bottom"
-                       href="{% url 'download_lgr_xml' lgr_pk=lgr_object.pk model=lgr_object.model_name %}">
+                       href="{{ lgr_object.download_url }}">
                         <i class="glyphicon glyphicon-save"></i> {% trans "Download" %}
                     </a>
                 </li>

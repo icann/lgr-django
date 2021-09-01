@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 def _review_idn_table(context: Dict, idn_table: IANAIdnTable, absolute_url):
     ref_lgr = get_reference_lgr(idn_table)
     context['ref_lgr'] = ref_lgr.name  # TODO put TLD/tag/version here instead of ref_lgr
-    context['ref_lgr_url'] = absolute_url + ref_lgr.dl_url()
+    context['ref_lgr_url'] = absolute_url + ref_lgr.display_url()
     context.update(review_lgr(idn_table.to_lgr(), ref_lgr.to_lgr()))
     return ref_lgr.name
 
