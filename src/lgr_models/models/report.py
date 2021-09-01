@@ -3,6 +3,7 @@
 import os
 
 from django.db import models
+from django.urls import reverse
 
 from lgr_auth.models import LgrUser
 
@@ -34,3 +35,10 @@ class LGRReport(models.Model):
     @staticmethod
     def upload_path(instance, filename):
         return os.path.join(instance.storage, f'user_{instance.owner.id}', filename)
+
+    def to_url(self):
+        return reverse('download_report_file', kwargs={'storage': self.storage, 'pk': self.pk})
+
+    def delete_url(self):
+        return reverse('delete_report_file', kwargs={'storage': self.storage, 'pk': self.pk})
+

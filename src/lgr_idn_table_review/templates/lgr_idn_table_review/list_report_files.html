@@ -36,18 +36,18 @@
         {% for report in reports %}
             <tr>
                 <td>
-                    <a href="{% url 'download_report_file' storage=report.storage pk=report.pk %}?display=true&next={{ request.path }}"
+                    <a href="{{ report.to_url }}?display=true&next={{ request.path }}"
                        target="_blank" rel="noopener noreferrer">
                         {{ report.filename }}
                     </a>
                 </td>
                 <td>
-                    <a href="{% url 'download_report_file' storage=report.storage pk=report.pk %}?next={{ request.path }}"
+                    <a href="{{ report.to_url }}?next={{ request.path }}"
                        class="btn btn-default">
                         <i class="glyphicon glyphicon-floppy-disk"></i>
                     </a>
                     &nbsp;
-                    <a href="{% url 'delete_report_file' storage=report.storage pk=report.pk %}?next={{ request.path }}"
+                    <a href="{{ report.delete_url }}?next={{ request.path }}"
                        class="delete_report btn btn-default confirm-prompt"
                        data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ report.filename }}?{% endblocktrans %}">
                         <i class="glyphicon glyphicon-trash"></i>
@@ -68,14 +68,14 @@
                 {% else %}
                     title="{% trans 'Get the zip file containing all generated reports' %}">
                 {% endif %}
-        <a href="{% url 'download_report_file' storage=zip.storage pk=zip.pk %}?next={{ request.path }}"
+        <a href="{{ zip.to_url }}?next={{ request.path }}"
            class="btn btn-default{% if not completed %} disabled{% endif %}"
            {% if not completed %}aria-disabled="true"{% endif %}>
             <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;{% trans 'Download all' %}
         </a>
     {% endif %}
     {% if summary %}
-        <a href="{% url 'download_report_file' storage=summary.storage pk=summary.pk %}?display=true&next={{ request.path }}"
+        <a href="{{ summary.to_url }}?display=true&next={{ request.path }}"
            class="btn btn-default{% if not completed %} disabled{% endif %}"
            {% if not completed %}aria-disabled="true"{% endif %} target="_blank" rel="noopener noreferrer">
             <i class="glyphicon glyphicon-list-alt"></i>&nbsp;{% trans 'Summary' %}
