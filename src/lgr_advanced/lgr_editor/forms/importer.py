@@ -5,14 +5,21 @@ from django import forms
 from django.core import validators
 from django.utils.translation import ugettext_lazy as _
 
-from lgr_models.models.lgr import RzLgr
 from .fields import (DEFAULT_UNICODE_VERSION,
-                     FILE_FIELD_ENCODING_HELP)
+                     FILE_FIELD_ENCODING_HELP, ValidatingRepertoire)
 
 
 class NewLGRForm(forms.Form):
-    #  TODO:  we need to add the other repertoires (and not just the root zone one) as well here:
-    validating_repertoire = forms.ModelChoiceField(queryset=RzLgr.objects.all(), required=False)
+    validating_repertoire = forms.ChoiceField(label=_("Validating repertoire"),
+                                              help_text=_('Code points will be limited to the selected repertoire'),
+                                              required=False,
+                                              choices=(('', ''),),
+                                              initial=ValidatingRepertoire.default_choice())
+
+    def __init__(self, *args, **kwargs):
+        super(NewLGRForm, self).__init__(*args, **kwargs)
+        self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + list(
+            ValidatingRepertoire.choices())
 
 
 class CreateLGRForm(NewLGRForm):

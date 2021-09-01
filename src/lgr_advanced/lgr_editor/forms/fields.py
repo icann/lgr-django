@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import hashlib
 import logging
+from itertools import chain
 from typing import List
 
 from django.conf import settings
@@ -10,7 +11,7 @@ from django.core.cache import cache
 from django.utils.encoding import force_bytes
 from django.utils.translation import ugettext_lazy as _
 
-from lgr_models.models.lgr import LgrBaseModel, RzLgr
+from lgr_models.models.lgr import LgrBaseModel, RzLgr, MSR
 
 UNICODE_VERSIONS = tuple((v, v) for v in settings.SUPPORTED_UNICODE_VERSIONS)
 DEFAULT_UNICODE_VERSION = settings.SUPPORTED_UNICODE_VERSIONS[0]
@@ -27,8 +28,7 @@ class ValidatingRepertoire:
 
     @classmethod
     def list(cls) -> List[LgrBaseModel]:
-        # TODO support other types of repertoire
-        return RzLgr.objects.all()
+        return sorted(list(chain(RzLgr.objects.all(), MSR.objects.all())), key=lambda l: l.name)
 
     @classmethod
     def choices(cls):

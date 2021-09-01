@@ -28,6 +28,7 @@ from lgr_advanced.lgr_editor.utils import slug_to_cp
 from lgr_advanced.lgr_editor.views.mixins import LGREditMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel
+from lgr_models.models.lgr import LgrBaseModel
 from lgr_utils import unidb
 from lgr_utils.cp import cp_to_slug
 
@@ -311,8 +312,8 @@ class AddCodepointFromScriptView(MultiCodepointsView):
 
         cd = form.cleaned_data
         script = cd['script']
-        validating_repertoire = self.model.from_tuple(cd['validating_repertoire']).to_lgr()
-        validating_repertoire.expand_ranges()  # need to get through all code points
+        validating_repertoire = LgrBaseModel.from_tuple(cd['validating_repertoire']).to_lgr(with_unidb=False,
+                                                                                            expand_ranges=True)
 
         codepoints = []
         for char in validating_repertoire.repertoire.all_repertoire():

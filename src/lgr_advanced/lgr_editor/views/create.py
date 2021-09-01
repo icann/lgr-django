@@ -56,12 +56,15 @@ class NewLGRView(LGRViewMixin, FormView):
         if LgrModel.objects.filter(owner=self.request.user, name=lgr_name).exists():
             logger.error("Import existing LGR")
             return render(self.request, 'lgr_editor/import_invalid.html',
-                          context={'error': _(
-                              "The LGR you have tried to create already exists in your working session. Please use a new name.")})
+                          context={
+                              'error': _("The LGR you have tried to create already exists in your working session. "
+                                         "Please use a new name.")
+                          })
 
         self.lgr_object = LgrModel.new(self.request.user, lgr_name,
                                        form.cleaned_data['unicode_version'],
-                                       form.cleaned_data['validating_repertoire'])
+                                       LgrBaseModel.from_tuple(form.cleaned_data['validating_repertoire'],
+                                                               self.request.user))
         return super(NewLGRView, self).form_valid(form)
 
 

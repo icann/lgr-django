@@ -16,6 +16,7 @@ from lgr_advanced.lgr_editor.forms import MetadataForm, LanguageFormSet
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel
+from lgr_models.models.lgr import LgrBaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -116,8 +117,8 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
                 metadata.description = Description(value=cd['description'],
                                                    description_type=cd['description_type'] or None)
 
-            self.lgr_object.validating_repertoire = self.model.from_tuple(cd['validating_repertoire'],
-                                                                          user=self.request.user)
+            self.lgr_object.validating_repertoire = LgrBaseModel.from_tuple(cd['validating_repertoire'],
+                                                                            user=self.request.user)
             if language_formset.is_valid():
                 # save languages
                 metadata.set_languages(filter(None, (f.get('language') for f in language_formset.cleaned_data)))
