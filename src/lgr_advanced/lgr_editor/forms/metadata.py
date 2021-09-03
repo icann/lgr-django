@@ -62,7 +62,7 @@ class MetadataForm(forms.Form):
         additional_repertoires = kwargs.pop('additional_repertoires', [])
         disabled = kwargs.pop('disabled')
         super(MetadataForm, self).__init__(*args, **kwargs)
-        self.fields['unicode_version'].choices = tuple((v.version, v.version) for v in UnicodeVersion.all())
+        self.fields['unicode_version'].choices = tuple((v.version, v.version) for v in UnicodeVersion.get_activated())
         self.fields['unicode_version'].initial = (UnicodeVersion.default(), UnicodeVersion.default())
 
         self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + [

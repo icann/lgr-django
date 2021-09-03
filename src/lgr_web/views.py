@@ -54,7 +54,7 @@ class LGRAboutView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['output'] = {"versions": (v.version for v in UnicodeVersion.all())}
+        ctx['output'] = {"versions": (v.version for v in UnicodeVersion.get_activated())}
         return ctx
 
 
