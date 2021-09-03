@@ -1,0 +1,24 @@
+{% extends "_base.html" %}
+{% load i18n %}
+
+{% block html_title %}{% trans 'LGR Tools user edition' %}{% endblock %}
+
+{% block navbar-right %}
+    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
+    {{ block.super }}
+{% endblock %}
+
+{% block content-title %}
+    {% blocktrans with email=user.email %}Edit user {{ email }}{% endblocktrans %}
+{% endblock %}
+
+{% block content %}
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.first_name control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.last_name control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.email control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.role control_width=8 %}
+        <button id="submit" type="submit" class="btn btn-primary">{% trans "Update" %}</button>
+    </form>
+{% endblock content %}

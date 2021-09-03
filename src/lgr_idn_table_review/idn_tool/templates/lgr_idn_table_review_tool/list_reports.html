@@ -28,15 +28,17 @@
         {% for reports_grouped in report_ids %}
             <li>
                 {% with report=reports_grouped.list|first %}
-                    <form method="post" action="{% url "lgr_review_delete_report" report_id=report.report_id %}?next={{ request.path }}">
-                        <a href="{% url 'lgr_review_report' report_id=report.report_id %}">{{ report.report_id }}</a>
+                    <form id="form-delete-{{ report_id }}" method="post"
+                          action="{% url "lgr_review_delete_report" report_id=report.report_id %}?next={{ request.path }}">
                         {% csrf_token %}
-                        <button type="submit" class="delete_report confirm-prompt"
-                                style="border: none; background: none;"
-                                data-confirmation-prompt="{% blocktrans with report.report_id as report_id %}Are you sure you want to delete report {{ report_id }}?{% endblocktrans %}">
-                            <span class="glyphicon glyphicon-trash" style="color :#333"></span>
-                        </button>
                     </form>
+                    <a href="{% url 'lgr_review_report' report_id=report.report_id %}">{{ report.report_id }}</a>
+                    <a href="#"
+                       class="delete_report confirm-prompt"
+                       data-confirmation-prompt="{% blocktrans with report.report_id as report_id %}Are you sure you want to delete report {{ report_id }}?{% endblocktrans %}"
+                       data-confirmation-action="$('#form-delete-{{ report_id }}').submit()">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
                 {% endwith %}
             </li>
         {% empty %}

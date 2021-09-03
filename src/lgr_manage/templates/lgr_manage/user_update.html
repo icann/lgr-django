@@ -1,0 +1,44 @@
+{% extends "lgr_manage/_idn_table_review_admin_base.html" %}
+{% load i18n %}
+
+{% block user-management-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h2>{% blocktrans with email=object.email %}Edit user {{ email }}{% endblocktrans %}</h2>
+
+    {% if not object.enabled %}
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            {% trans 'User is disabled' %}&nbsp;
+            <a href="#" onclick="$('#form-enable').submit()" class="btn btn-warning">
+                {% trans 'Enable' %}
+            </a>
+        </div>
+    {% endif %}
+
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.first_name control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.last_name control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.email control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.role control_width=8 %}
+        <a type="button" class="btn btn-default" href="{% url 'lgr_admin_user_management' %}">{% trans 'Back' %}</a>
+        <button id="submit" type="submit" class="btn btn-primary">{% trans "Update" %}</button>
+        {% if object.enabled %}
+            <a href="#" onclick="$('#form-enable').submit()" class="btn btn-warning">
+                {% trans 'Disable' %}
+            </a>
+        {% endif %}
+        <a href="#" class="btn btn-danger confirm-prompt"
+           data-confirmation-prompt="{% blocktrans with email=object.email %}Are you sure you want to delete user {{ object }}?{% endblocktrans %}"
+           data-confirmation-action="$('#form-delete').submit()">
+            {% trans 'Delete' %}
+        </a>
+    </form>
+    <form id="form-enable" method="post"
+          action="{% url "lgr_admin_change_user_status" user_pk=object.pk %}?next={{ request.path }}">
+        {% csrf_token %}
+    </form>
+    <form id="form-delete" method="post" action="{% url "lgr_admin_delete_user" user_pk=object.pk %}">
+        {% csrf_token %}
+    </form>
+{% endblock content-pane %}

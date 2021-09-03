@@ -3,15 +3,18 @@ from django import views
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import RedirectView
+from django.views.generic.detail import SingleObjectMixin
 
+from lgr_auth.forms import UserForm
 from lgr_auth.models import LgrUser, LgrRole
-from lgr_manage.forms import UserCreateForm
+from lgr_auth.views import LgrUserUpdateView
 from lgr_manage.views.common import BaseListAdminView, BaseAdminView
 
 
 class LgrUserListView(BaseListAdminView):
     model = LgrUser
-    queryset = LgrUser.objects.filter(role=LgrRole.ICANN.value).order_by('email')
+    queryset = LgrUser.objects.all()
     template_name = 'lgr_manage/user_management.html'
 
     def get_context_data(self, **kwargs):
@@ -22,7 +25,7 @@ class LgrUserListView(BaseListAdminView):
 
 class LgrUserCreateView(BaseAdminView, views.generic.CreateView):
     model = LgrUser
-    form_class = UserCreateForm
+    form_class = UserForm
     template_name = 'lgr_manage/user_management.html'
     success_url = reverse_lazy('lgr_admin_user_management')
 
@@ -49,6 +52,29 @@ class LgrUserView(BaseAdminView, views.View):
     def post(self, request, *args, **kwargs):
         view = LgrUserCreateView.as_view()
         return view(request, *args, **kwargs)
+
+
+class LgrUserAdminUpdateView(BaseAdminView, LgrUserUpdateView):
+    template_name = 'lgr_manage/user_update.html'
+    success_url_name = 'lgr_admin_update_user'
+
+    def get_queryset(self):
+        return LgrUser.objects.exclude(role__exact=LgrRole.ADMIN)
+
+
+class LgrUserChangeStatusView(BaseAdminView, SingleObjectMixin, RedirectView):
+    model = LgrUser
+    url = reverse_lazy('lgr_admin_user_management')
+    pk_url_kwarg = 'user_pk'
+    enable = None
+
+    def get_redirect_url(self, *args, **kwargs):
+        return self.request.GET.get('next', super(LgrUserChangeStatusView, self).get_redirect_url(*args, **kwargs))
+
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.enable(not user.enabled())
+        return super(LgrUserChangeStatusView, self).post(request, *args, **kwargs)
 
 
 class LgrUserDeleteView(BaseAdminView, views.generic.DeleteView):

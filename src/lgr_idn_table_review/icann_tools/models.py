@@ -12,6 +12,7 @@ from django.db import models
 from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.parser.heuristic_parser import HeuristicParser
+from lgr_auth.models import LgrUser
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_models.models.report import LGRReport
 from lgr_session.views import StorageType
@@ -29,12 +30,15 @@ class IANAIdnTable(LgrBaseModel):
     """
     Model for a IANA IDN table, not meant to be saved in the database
     """
+
     lgr_parser = HeuristicParser
 
     url = models.URLField()
     date = models.DateField()
     lang_script = models.CharField(max_length=16)
     version = models.DecimalField(max_digits=2, decimal_places=1)
+    # on delete user do nothing since this is unmanaged
+    owner = models.ForeignKey(to=LgrUser, on_delete=models.DO_NOTHING, related_name='+')
 
     class Meta:
         managed = False  # do not manage this model, this is only used to create objects that won't be saved in the DB

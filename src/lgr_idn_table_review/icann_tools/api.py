@@ -15,7 +15,6 @@ from django.core.files import File
 from lgr.core import LGR
 from lgr.tools.utils import download_file
 from lgr.utils import tag_to_language_script
-from lgr_auth.models import LgrRole
 from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport, IANAIdnTable
 from lgr_models.models.lgr import RefLgr, RzLgrMember, RzLgr
 from lgr_session.api import LGRStorage
@@ -40,7 +39,7 @@ class LGRIcannStorage(LGRStorage):
         super().__init__(user, filter_on_user=False)
 
     def storage_can_read(self):
-        return self.user.role in [LgrRole.ICANN.value, LgrRole.ADMIN.value]
+        return self.user.is_icann()
 
 
 def get_icann_idn_repository_tables():

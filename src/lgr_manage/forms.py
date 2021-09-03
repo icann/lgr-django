@@ -5,7 +5,6 @@ from django.forms import FileField
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
-from lgr_auth.models import LgrUser
 from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, MSR
 from lgr_web.utils import IANA_LANG_REGISTRY
 
@@ -56,8 +55,3 @@ class MSRCreateForm(forms.ModelForm):
             'name': _('Name'),
         }
 
-
-class UserCreateForm(forms.ModelForm):
-    class Meta:
-        model = LgrUser
-        fields = ['email', 'role']

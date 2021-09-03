@@ -5,6 +5,7 @@ from enum import Enum
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.core import validators
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -63,6 +64,15 @@ class LgrUser(AbstractBaseUser):
                          })
     role = models.CharField(max_length=16, choices=((r.value, r.value) for r in LgrRole), null=False,
                             default=LgrRole.USER.value)
+    first_name = models.CharField(_('first name'), max_length=150, blank=True)
+    last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    is_active = models.BooleanField(_('active'), default=True)
+    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')
+        ordering = ['email']
 
     # The username field will be the email address
     USERNAME_FIELD = 'email'
@@ -75,3 +85,21 @@ class LgrUser(AbstractBaseUser):
 
     def is_admin(self):
         return self.role == LgrRole.ADMIN.value
+
+    def enable(self, enable):
+        self.is_active = enable
+        self.save(update_fields=['is_active'])
+
+    def enabled(self):
+        return self.is_active
+
+    def get_full_name(self):
+        """
+        Return the first_name plus the last_name, with a space in between.
+        """
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        """Return the short name for the user."""
+        return self.first_name

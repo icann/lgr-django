@@ -4,26 +4,32 @@
 {% block user-management-active %}active{% endblock %}
 
 {% block content-pane %}
-    <h2>{% trans 'Admin user' %}</h2>
-    <form class="form-horizontal" method="post" action="{% url "password_reset" %}">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-primary">
-            <input type="hidden" name="email" value="{{ request.user.email }}">
-            {% trans 'Send password reset link' %}
-        </button>
-    </form>
-    <h2>{% trans 'ICANN users' %}</h2>
-    <table class="table">
+    <h2>{% trans 'Existing Users' %}</h2>
+    <table id="users" class="table">
         <thead class="thead-light">
         <tr>
+            <th scope="col"></th>
+            <th scope="col">{% trans 'Name' %}</th>
             <th scope="col">{% trans 'Email' %}</th>
+            <th scope="col">{% trans 'Enabled' %}</th>
+            <th scope="col">{% trans 'Role' %}</th>
             <th scope="col">{% trans 'Actions' %}</th>
         </tr>
         </thead>
         <tbody>
         {% for user in object_list %}
             <tr>
+                <td></td>
+                <td>{{ user.get_full_name }}</td>
                 <td>{{ user.email }}</td>
+                <td>
+                    {% if user.enabled %}
+                        <i class="glyphicon glyphicon-ok"></i>
+                    {% else %}
+                        <i class="glyphicon glyphicon-remove"></i>
+                    {% endif %}
+                </td>
+                <td>{{ user.role }}</td>
                 <td style="display: flex">
                     <form method="post" action="{% url "password_reset" %}">
                         {% csrf_token %}
@@ -33,25 +39,56 @@
                         </button>
                     </form>
                     &nbsp;
-                    <form method="post" action="{% url "lgr_admin_delete_user" user_id=user.pk %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-default confirm-prompt"
-                                data-confirmation-prompt="{% blocktrans with user=user.email %}Are you sure you want to delete user {{ user }}?{% endblocktrans %}">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-                    </form>
+                    {% if not user.is_admin %}
+                        <div class="btn-group">
+                            <a type="button" class="btn btn-warning"
+                               href="{% url 'lgr_admin_update_user' user_pk=user.pk %}">
+                                {% trans 'Edit' %}
+                            </a>
+                            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">{% trans 'Toggle Dropdown' %}</span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <form id="form-enable-{{ user.pk }}" method="post"
+                                          action="{% url "lgr_admin_change_user_status" user_pk=user.pk %}">
+                                        {% csrf_token %}
+                                    </form>
+                                    <a href="#" onclick="$('#form-enable-{{ user.pk }}').submit()">
+                                        {% if user.enabled %}{% trans 'Disable' %}{% else %}{% trans 'Enable' %}{% endif %}
+                                    </a>
+                                </li>
+                                <li>
+                                    <form id="form-delete-{{ user.pk }}" method="post"
+                                          action="{% url "lgr_admin_delete_user" user_pk=user.pk %}">
+                                        {% csrf_token %}
+                                    </form>
+                                    <a href="#" class="confirm-prompt"
+                                       data-confirmation-prompt="{% blocktrans with user=user.email %}Are you sure you want to delete user {{ user }}?{% endblocktrans %}"
+                                       data-confirmation-action="$('#form-delete-{{ user.pk }}').submit()">
+                                        {% trans 'Delete' %}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% elif user == request.user %}
+                        <a type="button" class="btn btn-primary"
+                           href="{% url 'lgr_update_user' user_pk=user.pk %}">
+                            {% trans 'Edit' %}
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
             </tbody>
-        {% empty %}
-            <tr>
-                <td colspan="3">{% trans 'No ICANN user.' %}</td>
-            </tr>
         {% endfor %}
     </table>
     <h2>{% trans 'Create new ICANN user' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.first_name control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.last_name control_width=8 %}
         {% include "lgr_editor/_form_field.html" with field=form.email control_width=8 %}
         {% include "lgr_editor/_form_field.html" with field=form.role control_width=8 %}
         <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>

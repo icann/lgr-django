@@ -120,7 +120,6 @@ class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, SingleObjectMixin, 
 
     def get(self, request, *args, **kwargs):
         idn_table = self.get_object(queryset=self.api.lgr_queryset())
-        # FIXME: should distinct txt and xml LGRs
         content_type = 'text/plain'
         if idn_table.filename.endswith('xml'):
             content_type = 'text/xml'

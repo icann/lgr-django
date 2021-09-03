@@ -6,6 +6,7 @@ from django.urls import path
 
 # patterns from django.contrib.auth.urls
 from lgr_auth.forms import LgrPasswordResetForm
+from lgr_auth.views import LgrUserUpdateView
 
 urlpatterns = [
     path('login/', views.LoginView.as_view(template_name='lgr_auth/login.html', extra_context={'reset_mode': True}),
@@ -31,4 +32,6 @@ urlpatterns = [
          views.PasswordResetCompleteView.as_view(template_name='lgr_auth/password_reset_complete.html',
                                                  extra_context={'reset_mode': True}),
          name='password_reset_complete'),
+    path('users/<int:user_pk>', LgrUserUpdateView.as_view(), name='lgr_update_user'),
+
 ]
