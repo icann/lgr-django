@@ -19,10 +19,9 @@ from lgr.tools.idn_review.review import review_lgr
 from lgr_auth.models import LgrUser
 from lgr_idn_table_review.icann_tools.api import (get_icann_idn_repository_tables,
                                                   get_reference_lgr,
-                                                  NoRefLgrFound)
-from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport, IANAIdnTable
+                                                  NoRefLgrFound, LGRIcannStorage)
+from lgr_idn_table_review.icann_tools.models import IANAIdnTable
 from lgr_models.models.lgr import UnicodeVersion
-from lgr_session.api import LGRStorage
 from lgr_utils import unidb
 
 logger = logging.getLogger(__name__)
@@ -86,12 +85,10 @@ def idn_table_review_task(absolute_url, email_address):
     :param email_address: The e-mail address where the results will be sent
     """
     report_id = datetime.now().strftime('%Y-%m-%d-%H%M%S.%f')
-    udata = unidb.manager.get_db_by_version(UnicodeVersion.default())
+    udata = unidb.manager.get_db_by_version(UnicodeVersion.default().version)
     user = LgrUser.objects.get(email=email_address)
 
-    lgr_storage = LGRStorage(user)
-    # XXX: will improve that later once session will be rewritten as well
-    lgr_storage.storage_model = IdnReviewIcannReport
+    lgr_storage = LGRIcannStorage(user)
 
     count = 0
     processed = []
