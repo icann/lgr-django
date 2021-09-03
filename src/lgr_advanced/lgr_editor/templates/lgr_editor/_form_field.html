@@ -3,7 +3,7 @@
     <label class="col-sm-{{ label_width|default:2 }} control-label" for="id_{{ field.name }}">{{ field.label }}</label>
     <div class="col col-sm-{{ control_width|default:10 }}">
             {{ field|add_class:"form-control" }}
-        {% if field.field.widget.input_type == 'text' %}
+        {% if field.field.widget.input_type == 'text' or field.field.widget.input_type == 'email' %}
             <span onClick="cleanInput($(this))" class="search-clear glyphicon glyphicon-remove-circle"></span>
         {% endif %}
         {% if field.errors %}
@@ -17,8 +17,3 @@
         {% endif %}
     </div>
 </div>
-<script type="text/javascript">
-    function cleanInput (input) {
-        input.closest('.col').find('input').val('');
-    }
-</script>

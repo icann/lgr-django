@@ -149,6 +149,10 @@
         }
         return confirm(msg);
     }
+
+    function cleanInput (input) {
+        input.closest('.col').find('input').val('');
+    }
 </script>
 {% block html_body_more %}{% endblock %}
 </body>
