@@ -1,4 +1,4 @@
-from lgr_models.models import UnicodeVersion
+from lgr_models.models.lgr import UnicodeVersion
 from lgr_models.tests.test_unicode_version import TestUnicodeVersion
 
 

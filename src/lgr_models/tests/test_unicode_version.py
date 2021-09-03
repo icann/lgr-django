@@ -2,7 +2,7 @@ import unittest
 
 from django.test import override_settings
 
-from lgr_models.models import UnicodeVersion
+from lgr_models.models.lgr import UnicodeVersion
 from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
 from lgr_web import settings
 
