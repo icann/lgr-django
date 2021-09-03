@@ -291,9 +291,10 @@ class UnicodeVersion(models.Model):
 
     @classmethod
     def default(cls) -> 'UnicodeVersion':
-        if hasattr(settings, 'DEFAULT_UNICODE_VERSION'):
-            return cls.all().get(version=settings.DEFAULT_UNICODE_VERSION)
-        return cls.all().first()
+        if hasattr(settings, 'DEFAULT_UNICODE_VERSION') and cls.get_activated().filter(
+                version=settings.DEFAULT_UNICODE_VERSION).exists():
+            return cls.get_activated().get(version=settings.DEFAULT_UNICODE_VERSION)
+        return cls.get_activated().first()
 
     @classmethod
     def all(cls) -> QuerySet['UnicodeVersion']:
