@@ -20,7 +20,6 @@ from lgr_advanced.lgr_editor.forms import DEFAULT_UNICODE_VERSION
 from lgr_auth.models import LgrUser
 from lgr_idn_table_review.icann_tools.api import (get_icann_idn_repository_tables,
                                                   get_reference_lgr,
-                                                  IANA_IDN_TABLES,
                                                   NoRefLgrFound)
 from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport, IANAIdnTable
 from lgr_session.api import LGRStorage
@@ -46,7 +45,7 @@ def _create_review_report(idn_table: IANAIdnTable, absolute_url, lgr_storage, re
     html_report = ''
     context = {
         'idn_table': idn_table.name,
-        'idn_table_url': f'{IANA_IDN_TABLES}/tables/{idn_table.filename}'
+        'idn_table_url': idn_table.download_url()
     }
     flag = None
     ref_lgr_name = None

@@ -69,7 +69,7 @@ def get_icann_idn_repository_tables():
         idn_table = IANAIdnTable(file=File(data, name=name),
                                  name=os.path.splitext(name)[0],
                                  owner=None,
-                                 url=url,
+                                 url=IANA_URL + url,
                                  date=date,
                                  lang_script=lang_script,
                                  version=version)

@@ -78,3 +78,6 @@ class IANAIdnTable(LgrBaseModel):
 
     def _from_cache(self) -> LGR:
         return None
+
+    def display_url(self):
+        return self.url
