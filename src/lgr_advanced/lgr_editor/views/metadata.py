@@ -28,8 +28,8 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
     form_class = MetadataForm
     template_name = 'lgr_editor/metadata.html'
 
-    def get_form_kwargs(self):
-        kwargs = super(MetadataView, self).get_form_kwargs()
+    def get_initial(self):
+        initial = super().get_initial()
 
         metadata = self.lgr.metadata
         language = metadata.languages[0] if len(metadata.languages) > 0 else ""
@@ -41,7 +41,7 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
             description = metadata.description.value
             description_type = metadata.description.description_type or ""
 
-        kwargs['initial'] = {
+        initial.update({
             'version': metadata.version.value if metadata.version else "",
             'version_comment': metadata.version.comment if metadata.version else "",
             'date': metadata.date,
@@ -55,7 +55,11 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
             'description_type': description_type,
             'validating_repertoire': [self.validating_repertoire.to_tuple()
                                       if self.validating_repertoire else ('', '')],
-        }
+        })
+        return initial
+
+    def get_form_kwargs(self):
+        kwargs = super(MetadataView, self).get_form_kwargs()
 
         # add other repertoires available in the user's session
         kwargs['additional_repertoires'] = LgrModel.objects.filter(owner=self.request.user).exclude(

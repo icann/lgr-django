@@ -63,7 +63,6 @@ class MetadataForm(forms.Form):
         disabled = kwargs.pop('disabled')
         super(MetadataForm, self).__init__(*args, **kwargs)
         self.fields['unicode_version'].choices = tuple((v.version, v.version) for v in UnicodeVersion.get_activated())
-        self.fields['unicode_version'].initial = (UnicodeVersion.default(), UnicodeVersion.default())
 
         self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + [
             (_('Built-in'), ValidatingRepertoire.choices())
@@ -73,7 +72,6 @@ class MetadataForm(forms.Form):
             self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + [
                 (_('My LGRs'), tuple((lgr.to_tuple(), lgr.name) for lgr in additional_repertoires)),
             ]
-        self.fields['validating_repertoire'].initial = kwargs['initial'].get('validating_repertoire')
         if disabled:
             # do not enable to update metadata for LGRs in a set
             for field in self.fields.values():
