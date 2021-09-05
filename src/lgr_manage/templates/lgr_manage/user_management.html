@@ -1,14 +1,17 @@
 {% extends "lgr_manage/_idn_table_review_admin_base.html" %}
 {% load i18n %}
 
+{% block html_head_more %}
+    <link rel="stylesheet" href="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.css"/>
+{% endblock %}
+
 {% block user-management-active %}active{% endblock %}
 
 {% block content-pane %}
     <h2>{% trans 'Existing Users' %}</h2>
-    <table id="users" class="table">
+    <table id="user-table" class="table">
         <thead class="thead-light">
         <tr>
-            <th scope="col"></th>
             <th scope="col">{% trans 'Name' %}</th>
             <th scope="col">{% trans 'Email' %}</th>
             <th scope="col">{% trans 'Enabled' %}</th>
@@ -19,7 +22,6 @@
         <tbody>
         {% for user in object_list %}
             <tr>
-                <td></td>
                 <td>{{ user.get_full_name }}</td>
                 <td>{{ user.email }}</td>
                 <td>
@@ -81,8 +83,8 @@
                     {% endif %}
                 </td>
             </tr>
-            </tbody>
         {% endfor %}
+        </tbody>
     </table>
     <h2>{% trans 'Create new ICANN user' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -97,6 +99,7 @@
 
 {% block html_body_more %}
     {{ block.super }}
+    <script src="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.js"></script>
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
             function enable_submit_button() {
@@ -111,6 +114,27 @@
                 enable_submit_button()
             });
             enable_submit_button();
-        });
+
+            $('#user-table').DataTable({
+                "responsive": true,
+                "info": true,
+                "scrollX": false,
+                "searching": true,
+                "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "All"]],
+                "columns": [
+                    null,
+                    null,
+                    {
+                        "searchable": false,
+                        "orderable": false,
+                    },
+                    null,
+                    {
+                        "searchable": false,
+                        "orderable": false,
+                    }
+                ]
+            });
+        })
     </script>
 {% endblock html_body_more %}
