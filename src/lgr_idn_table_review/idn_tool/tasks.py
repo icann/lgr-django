@@ -57,21 +57,32 @@ def idn_table_review_task(idn_tables, report_id, email_address, download_link, a
     :return:
     """
     user = LgrUser.objects.get(email=email_address)
+    api = LGRIdnReviewApi(user)
 
-    storage = LGRIdnReviewApi(user)
+    email = EmailMessage(subject='IDN table review',
+                         to=[user.email])
+    try:
+        process_idn_tables(api, absolute_url, idn_tables, report_id)
+    except Exception:
+        email.body = f"IDN table review failed for report '{report_id}'.\n" \
+                     "Please launch a new task or report the problem if you got this error more than once.\n" \
+                     "Best regards"
+        api.delete_report(report_id)
+    else:
+        email.body = f"IDN table review has been successfully completed.\n" \
+                     f"You should now be able to download it from {download_link} under the path: " \
+                     f"'{report_id}'.\nPlease refresh the home page if you don't see the link.\nBest regards"
+    finally:
+        email.send()
+
+
+def process_idn_tables(api, absolute_url, idn_tables, report_id):
     with TemporaryFile() as f:
         with ZipFile(f, mode='w', compression=ZIP_DEFLATED) as zf:
             for idn_table_pk, lgr_info in idn_tables:
-                idn_table = IdnTable.get_object(user, idn_table_pk)
+                idn_table = api.get_lgr(idn_table_pk)
                 html_report = _create_review_report(idn_table, lgr_info, absolute_url)
                 filename = f"{idn_table.name}.html"
                 zf.writestr(filename, html_report)
-                storage.storage_save_report_file(filename, StringIO(html_report), report_id=report_id)
-        storage.storage_save_report_file(f'{report_id}.zip', f, report_id=report_id)
-
-    email = EmailMessage(subject='IDN table review',
-                         to=[email_address])
-    email.body = f"IDN table review has been successfully completed.\n" \
-                 f"You should now be able to download it from {download_link} under the path: " \
-                 f"'{report_id}'.\nPlease refresh the home page if you don't see the link.\nBest regards"
-    email.send()
+                api.storage_save_report_file(filename, StringIO(html_report), report_id=report_id)
+        api.storage_save_report_file(f'{report_id}.zip', f, report_id=report_id)

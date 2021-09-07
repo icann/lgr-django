@@ -48,7 +48,7 @@ class IANAIdnTable(LgrBaseModel):
         lgr = super(IANAIdnTable, self)._parse(validate, with_unidb)
         meta: Metadata = lgr.metadata
         if self.date and not meta.date:
-            meta.set_date(self.date.strftime('%Y-%m-%d'), force=True)
+            meta.set_date(self.date, force=True)
         if not meta.languages:
             meta.add_language(self.lang_script, force=True)
         if not meta.version:

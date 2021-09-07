@@ -56,11 +56,13 @@ class IdnTableIcannListReports(BaseIcannView, TemplateView):
             exclude_filter.append({'file__endswith': '.json'})
         context['reports'] = self.storage.list_storage(report_id=self.kwargs.get('report_id'), reverse=False,
                                                        exclude=exclude_filter)
-        context['zip'] = self.storage.storage_find_report_file(self.kwargs.get('report_id'), zipname)
         context['completed'] = True
         try:
+            context['zip'] = self.storage.storage_find_report_file(self.kwargs.get('report_id'), zipname)
             context['summary'] = self.storage.storage_find_report_file(self.kwargs.get('report_id'), summary_name)
         except self.storage.storage_model.DoesNotExist:
+            messages.warning(self.request,
+                             _('Task is still being processed, please come back later for the full report.'))
             context['completed'] = False
         context['title'] = _("ICANN Review Reports: %(report)s") % {'report': self.kwargs.get('report_id')}
         context['back_url'] = 'lgr_idn_icann_mode'

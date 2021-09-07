@@ -28,10 +28,11 @@ logger = logging.getLogger(__name__)
 
 
 def _review_idn_table(context: Dict, idn_table: IANAIdnTable, absolute_url):
-    ref_lgr = get_reference_lgr(idn_table)
+    idn_table_lgr = idn_table.to_lgr()
+    ref_lgr = get_reference_lgr(idn_table_lgr)
     context['ref_lgr'] = ref_lgr.name  # TODO put TLD/tag/version here instead of ref_lgr
     context['ref_lgr_url'] = absolute_url + ref_lgr.display_url()
-    context.update(review_lgr(idn_table.to_lgr(), ref_lgr.to_lgr()))
+    context.update(review_lgr(idn_table_lgr, ref_lgr.to_lgr()))
     return ref_lgr.name
 
 
@@ -85,11 +86,29 @@ def idn_table_review_task(absolute_url, email_address):
     :param email_address: The e-mail address where the results will be sent
     """
     report_id = datetime.now().strftime('%Y-%m-%d-%H%M%S.%f')
-    udata = unidb.manager.get_db_by_version(UnicodeVersion.default().version)
     user = LgrUser.objects.get(email=email_address)
 
-    lgr_storage = LGRIcannStorage(user)
+    email = EmailMessage(subject='ICANN IDN table review',
+                         to=[user.email])
+    try:
+        process_idn_tables(user, absolute_url, report_id)
+    except Exception:
+        email.body = f"ICANN IDN table review failed for report '{report_id}'.\n" \
+                     "Please launch a new task or report the problem if you got this error more than once.\n" \
+                     "Best regards"
+    else:
+        email.body = f"ICANN IDN table review has been successfully completed.\n" \
+                     f"You should now be able to download it from your ICANN review " \
+                     f"home screen under the path: '{report_id}'.\n" \
+                     f"Please refresh the home page if you don't see the link.\n" \
+                     f"Best regards"
+    finally:
+        email.send()
 
+
+def process_idn_tables(user, absolute_url, report_id):
+    udata = unidb.manager.get_db_by_version(UnicodeVersion.default().version)
+    lgr_storage = LGRIcannStorage(user)
     count = 0
     processed = []
     unprocessed = []
@@ -97,6 +116,7 @@ def idn_table_review_task(absolute_url, email_address):
     with TemporaryFile() as f:
         with ZipFile(f, mode='w', compression=ZIP_DEFLATED) as zf:
             for tlds, idn_table in get_icann_idn_repository_tables():
+                logger.info('Process IDN table %s', idn_table.filename)
                 count += len(tlds)
                 html_report, ref_lgr_name, flag = _create_review_report(idn_table, absolute_url,
                                                                         lgr_storage, report_id)
@@ -129,12 +149,3 @@ def idn_table_review_task(absolute_url, email_address):
         'unprocessed': unprocessed
     })
     lgr_storage.storage_save_report_file(f'{report_id}-summary.html', StringIO(summary_report), report_id=report_id)
-
-    email = EmailMessage(subject='ICANN IDN table review completed',
-                         to=[email_address])
-    email.body = f"ICANN IDN table review has been successfully completed.\n" \
-                 f"You should now be able to download it from your ICANN review " \
-                 f"home screen under the path: '{report_id}'.\n" \
-                 f"Please refresh the home page if you don't see the link.\n" \
-                 f"Best regards"
-    email.send()

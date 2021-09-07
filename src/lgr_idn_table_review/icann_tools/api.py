@@ -99,9 +99,8 @@ def _make_lgr_query(obj, q, logs, multiple_found_query=None):
         return None
 
 
-def get_reference_lgr(idn_table: IANAIdnTable):
-    lgr: LGR = idn_table.to_lgr()
-    logger.info('Look for reference LGR for IDN table %s', idn_table.name)
+def get_reference_lgr(lgr: LGR):
+    logger.info('Look for reference LGR for IDN table %s', lgr.name)
     logs = []
     try:
         tag = lgr.metadata.languages[0]

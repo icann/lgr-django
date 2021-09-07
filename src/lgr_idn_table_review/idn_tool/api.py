@@ -25,6 +25,9 @@ class LGRIdnReviewApi(LGRStorage):
     def lgr_queryset(self):
         return self.lgr_model.objects.filter(owner=self.user)
 
+    def get_lgr(self, pk):
+        return self.lgr_model.get_object(self.user, pk)
+
     def create_lgr(self, file, name, report_id):
         return IdnTable.objects.create(file=File(file),
                                        name=name,

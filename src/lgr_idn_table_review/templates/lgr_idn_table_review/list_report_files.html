@@ -55,28 +55,24 @@
     <br>
     <a class="btn btn-primary" href="{% url back_url %}">{% trans "Back" %}</a>
     &nbsp;
-    {% if zip %}
-        <span data-toggle="tooltip" data-placement="top"
-                {# put tooltip around button as it won't work on disabled button #}
-                {% if not completed %}
-              title="{% trans 'Wait until full report is completed for the file to be valid' %}">
-                {% else %}
-                    title="{% trans 'Get the zip file containing all generated reports' %}">
-                {% endif %}
-        <a href="{{ zip.to_url }}?next={{ request.path }}"
-           class="btn btn-default{% if not completed %} disabled{% endif %}"
-           {% if not completed %}aria-disabled="true"{% endif %}>
-            <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;{% trans 'Download all' %}
-        </a>
-    {% endif %}
-    {% if summary %}
-        <a href="{{ summary.to_url }}?display=true&next={{ request.path }}"
-           class="btn btn-default{% if not completed %} disabled{% endif %}"
-           {% if not completed %}aria-disabled="true"{% endif %} target="_blank" rel="noopener noreferrer">
-            <i class="glyphicon glyphicon-list-alt"></i>&nbsp;{% trans 'Summary' %}
-        </a>
-        </span>
-    {% endif %}
+    <span data-toggle="tooltip" data-placement="top"
+            {# put tooltip around button as it won't work on disabled button #}
+            {% if not completed %}
+          title="{% trans 'Wait until full report is completed for the file to be valid' %}">
+            {% else %}
+                title="{% trans 'Get the zip file containing all generated reports' %}">
+            {% endif %}
+    <a href="{{ zip.to_url }}?next={{ request.path }}"
+       class="btn btn-default{% if not completed %} disabled{% endif %}"
+       {% if not completed %}aria-disabled="true"{% endif %}>
+        <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;{% trans 'Download all' %}
+    </a>
+    <a href="{{ summary.to_url }}?display=true&next={{ request.path }}"
+       class="btn btn-default{% if not completed %} disabled{% endif %}"
+       {% if not completed %}aria-disabled="true"{% endif %} target="_blank" rel="noopener noreferrer">
+        <i class="glyphicon glyphicon-list-alt"></i>&nbsp;{% trans 'Summary' %}
+    </a>
+    </span>
 {% endblock content %}
 
 

@@ -53,9 +53,11 @@ class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
                     idn_table_name = idn_table_name.rsplit('.', 1)[0]
                     break
             try:
-                self.api.create_lgr(idn_table_file,
-                                    idn_table_name,
-                                    self.report_id)
+                lgr = self.api.create_lgr(idn_table_file,
+                                          idn_table_name,
+                                          self.report_id)
+                # check LGR can be parsed
+                lgr.to_lgr()
             except Exception:
                 logger.exception('Unable to parser IDN table %s', idn_table_name)
                 form.add_error('idn_tables', _('%(filename)s is an invalid IDN table') % {'filename': idn_table_name})
