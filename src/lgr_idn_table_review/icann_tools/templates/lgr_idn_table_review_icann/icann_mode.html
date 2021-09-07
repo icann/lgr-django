@@ -3,11 +3,6 @@
 
 {% block html_title %}{% trans 'ICANN IDN review tool' %}{% endblock %}
 
-{% block navbar-right %}
-    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
-    {{ block.super }}
-{% endblock %}
-
 {% block content-title %}
     {% trans 'ICANN IDN review tool' %}
 {% endblock %}

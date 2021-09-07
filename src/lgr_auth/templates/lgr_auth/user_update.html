@@ -3,11 +3,6 @@
 
 {% block html_title %}{% trans 'LGR Tools user edition' %}{% endblock %}
 
-{% block navbar-right %}
-    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
-    {{ block.super }}
-{% endblock %}
-
 {% block content-title %}
     {% blocktrans with email=user.email %}Edit user {{ email }}{% endblocktrans %}
 {% endblock %}

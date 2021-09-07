@@ -18,7 +18,6 @@ from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import NeedAsyncProcess, evaluate_label_from_view
 from lgr_models.models.lgr import RzLgr
-from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 from .forms import ValidateLabelSimpleForm
 
 
@@ -28,7 +27,6 @@ class BasicModeView(LoginRequiredMixin, FormView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.BASIC.name
         self.storage = LGRToolStorage(request.user)
 
     def form_valid(self, form):
@@ -96,7 +94,8 @@ class BasicModeView(LoginRequiredMixin, FormView):
         ctx = super(BasicModeView, self).get_context_data(**kwargs)
         ctx.update({
             'reports': self.storage.list_storage(),
-            'model': RzLgr
+            'model': RzLgr,
+            'home_url_name': 'lgr_basic_mode'
         })
         ctx.update(kwargs)
         return ctx

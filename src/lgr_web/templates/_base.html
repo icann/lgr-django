@@ -37,8 +37,8 @@
                     <div class="navbar-form navbar-left">
                         {% block navbar-left %}
                             <p>
-                                {% if reset_mode %}
-                                    {% url 'lgr_modes' as home %}
+                                {% if home_url_name %}
+                                    {% url home_url_name as home %}
                                 {% else %}
                                     {% url 'lgr_home' as home %}
                                 {% endif %}
@@ -52,7 +52,10 @@
                         {% endblock %}
                     </div>
                     <div class="navbar-form navbar-right">
-                    {% block navbar-right %}
+                        {% if home_url_name %}
+                            <a class="header-link" href="{% url 'lgr_home' %}">{% trans "Switch mode" %}</a>
+                        {% endif %}
+                        {% block navbar-right %}
                         <a class="btn btn-default show-tooltip"
                            data-toggle="modal" data-target="#about-modal"
                            title="{% trans 'About LGR Toolset' %}" data-placement="bottom">

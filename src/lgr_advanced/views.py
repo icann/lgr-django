@@ -12,7 +12,6 @@ from lgr_advanced.utils import list_built_in_lgr
 from lgr_models.models.lgr import RzLgr
 from lgr_models.models.lgr import UnicodeVersion
 from lgr_utils import unidb
-from lgr_web.views import Interfaces, INTERFACE_SESSION_MODE_KEY
 
 
 class LGRViewMixin(LoginRequiredMixin):
@@ -20,7 +19,13 @@ class LGRViewMixin(LoginRequiredMixin):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.storage = LGRToolStorage(request.user)
-        request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.ADVANCED.name
+
+    def get_context_data(self, **kwargs):
+        ctx = super(LGRViewMixin, self).get_context_data(**kwargs)
+        ctx.update({
+            'home_url_name': 'lgr_advanced_mode'
+        })
+        return ctx
 
 
 class AdvancedModeView(LGRViewMixin, TemplateView):

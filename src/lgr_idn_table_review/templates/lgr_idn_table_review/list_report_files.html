@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.css"/>
 {% endblock %}
 
-{% block navbar-right %}
-    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
-    {{ block.super }}
-{% endblock %}
-
 {% block content-title %}
     {{ title }}
 {% endblock %}

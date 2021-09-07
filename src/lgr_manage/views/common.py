@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from django import views
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic import ListView
 
 from lgr_auth.models import LgrRole
-from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 
 
 class BaseAdminView(LoginRequiredMixin, UserPassesTestMixin):
@@ -12,8 +11,11 @@ class BaseAdminView(LoginRequiredMixin, UserPassesTestMixin):
         return self.request.user.role == LgrRole.ADMIN.value
 
 
-class BaseListAdminView(BaseAdminView, views.generic.ListView):
+class BaseListAdminView(BaseAdminView, ListView):
 
-    def setup(self, request, *args, **kwargs):
-        request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.IDN_ADMIN.name
-        return super().setup(request, *args, **kwargs)
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx.update({
+            'home_url_name': 'lgr_admin_mode'
+        })
+        return ctx

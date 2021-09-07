@@ -17,7 +17,7 @@ import lgr_idn_table_review.urls
 import lgr_manage.urls
 import lgr_renderer.urls
 import lgr_session.urls
-from .views import LGRModesView, LGRSwitchModeView, LGRAboutView, LanguageAutocomplete
+from .views import LGRModesView, LGRAboutView, LanguageAutocomplete
 
 urlpatterns = [
     path('a/', include(lgr_advanced.urls.urlpatterns)),
@@ -35,7 +35,6 @@ urlpatterns = [
 
     path('about/', LGRAboutView.as_view(), name='about'),
 
-    path('switch/', LGRSwitchModeView.as_view(), name='lgr_modes'),
     path('social/', include('social_django.urls')),
     path('', LGRModesView.as_view(), name='lgr_home'),
 ]

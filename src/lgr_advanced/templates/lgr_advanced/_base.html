@@ -6,9 +6,9 @@
 {% endblock %}
 {% block navbar-content %}
     <p>
-        <a href="{% url 'lgr_home' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip"
+        <a href="{% url 'lgr_advanced_mode' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip"
            data-placement="bottom"><i class="glyphicon glyphicon-home"></i></a>
-        <a href="{% url 'lgr_home' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip"
+        <a href="{% url 'lgr_advanced_mode' %}" title="{% trans 'Go to home screen' %}" class="show-tooltip"
            data-placement="bottom">{% trans "LGR Tools" %}</a>
         {% if lgr %}
             {% if lgr_set %}
@@ -134,7 +134,6 @@
 {% endblock navbar-left %}
 
 {% block navbar-right %}
-    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
     {% if lgr_object %}
         <a class="btn btn-default show-tooltip"
            data-toggle="modal" data-target="#validation-modal"

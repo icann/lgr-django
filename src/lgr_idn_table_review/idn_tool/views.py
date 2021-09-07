@@ -17,7 +17,6 @@ from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
 from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_models.models.lgr import RzLgr, RefLgr, RzLgrMember
-from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +26,13 @@ class IdnTableReviewViewMixin(LoginRequiredMixin):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.api = LGRIdnReviewApi(request.user)
-        request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.IDN_REVIEW.name
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx.update({
+            'home_url_name': 'lgr_review_mode'
+        })
+        return ctx
 
 
 class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):

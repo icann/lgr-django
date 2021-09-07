@@ -3,11 +3,6 @@
 
 {% block html_title %}{% trans 'IDN Table Review reports' %}{% endblock %}
 
-{% block navbar-right %}
-    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
-    {{ block.super }}
-{% endblock %}
-
 {% block content-title %}
     {% trans "IDN Table Review Reports" %}
     <button type="button" class="btn btn-default" onClick="window.location.reload();">

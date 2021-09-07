@@ -2,8 +2,6 @@
 {% load i18n static %}
 {% block html_title %}{% trans 'LGR Label Validation Tool' %}{% endblock %}
 {% block navbar-right %}
-    <a class="header-link" href="{% url 'lgr_modes' %}">{% trans "Switch mode" %}</a>
-
     <a class="btn btn-default show-tooltip"
        data-toggle="modal" data-target="#label-forms-modal"
        title="{% trans 'Display all label forms' %}" data-placement="bottom">

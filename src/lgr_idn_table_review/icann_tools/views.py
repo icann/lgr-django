@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
 from lgr_idn_table_review.icann_tools.api import LGRIcannStorage
-from lgr_web.views import INTERFACE_SESSION_MODE_KEY, Interfaces
 from .tasks import idn_table_review_task
 
 
@@ -15,11 +14,17 @@ class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        request.session[INTERFACE_SESSION_MODE_KEY] = Interfaces.IDN_ICANN.name
         self.storage = LGRIcannStorage(request.user)
 
     def test_func(self):
         return self.request.user.is_icann()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx.update({
+            'home_url_name': 'lgr_idn_icann_mode'
+        })
+        return ctx
 
 
 class IdnTableIcannModeView(BaseIcannView, TemplateView):
