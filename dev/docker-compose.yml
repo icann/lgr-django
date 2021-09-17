@@ -1,0 +1,110 @@
+version: '3.9'
+services:
+
+  lgr-reverseproxy:
+    container_name: lgr-reverseproxy
+    image: traefik:latest
+    restart: unless-stopped
+    command:
+      - "--providers.docker=true"
+      - "--api.dashboard=true"
+      - "--entrypoints.http.address=:8080"
+    ports:
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.http.routers.lgr-reverseproxy.entrypoints=http"
+      - "traefik.http.routers.lgr-reverseproxy.rule=(Host(`localhost`) && PathPrefix(`/reverseproxy`))"
+      - "traefik.http.routers.lgr-reverseproxy.service=api@internal"
+
+  lgr-maria:
+    container_name: lgr-maria
+    image: mariadb:latest
+    restart: unless-stopped
+    volumes:
+      - lgr-maria:/var/lib/mysql
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: 'yes'
+      MARIADB_DATABASE: lgr
+      MARIADB_USER: lgr
+      #Please don't use Plain password in any kind of production environement
+      MARIADB_PASSWORD: UNSECURE_DEV_PWD
+
+  lgr-redis:
+    container_name: lgr-redis
+    image: redis:latest
+    restart: unless-stopped
+    volumes:
+      - lgr-redis:/data
+    command:
+      - "redis-server"
+      - "--appendonly yes"
+
+  lgr-gunicorn:
+    container_name: lgr-gunicorn
+    image: lgr-gunicorn:latest
+    restart: unless-stopped
+    volumes:
+      - lgr-storage:/var/www/lgr/src/lgr_web/storage
+    environment:
+      lgrURL: localhost
+      lgrMariaDB: lgr
+      #The email system won't work in dev, but value must be set
+      lgrEmail: not@working.org
+      lgrMariaUser: lgr
+      #Please don't use Plain password in any kind of production environement
+      lgrMariaPwd: UNSECURE_DEV_PWD
+      lgrMariaHost: lgr-maria
+      lgrRedisHost: lgr-redis
+      lgrRedisPort: 6379
+      #Again, don't use Plain password in any kind of production environement
+      lgrSecretKey: UNSECURE_SECRET_KEY
+    labels:
+      - "traefik.http.routers.lgr-gunicorn.entrypoints=http"
+      - "traefik.http.routers.lgr-gunicorn.rule=Host(`localhost`)"
+
+  lgr-celery:
+    container_name: lgr-celery
+    image: lgr-celery:latest
+    restart: unless-stopped
+    volumes:
+      - lgr-storage:/var/www/lgr/src/lgr_web/storage
+    environment:
+      lgrURL: localhost
+      lgrMariaDB: lgr
+      #The email system won't work in dev, but value must be set
+      lgrEmail: not@working.org
+      lgrMariaUser: lgr
+      #Please don't use Plain password in any kind of production environement
+      lgrMariaPwd: UNSECURE_DEV_PWD
+      lgrMariaHost: lgr-maria
+      lgrRedisHost: lgr-redis
+      lgrRedisPort: 6379
+      #Again, don't use Plain password in any kind of production environement
+      lgrSecretKey: UNSECURE_SECRET_KEY
+
+  lgr-static:
+    container_name: lgr-static
+    image: lgr-static:latest
+    restart: unless-stopped
+    environment:
+      lgrURL: localhost
+      lgrMariaDB: lgr
+      #The email system won't work in dev, but value must be set
+      lgrEmail: not@working.org
+      lgrMariaUser: lgr
+      #Please don't use Plain password in any kind of production environement
+      lgrMariaPwd: UNSECURE_DEV_PWD
+      lgrMariaHost: lgr-maria
+      lgrRedisHost: lgr-redis
+      lgrRedisPort: 6379
+      #Again, don't use Plain password in any kind of production environement
+      lgrSecretKey: UNSECURE_SECRET_KEY
+    labels:
+      - "traefik.http.routers.lgr-static.entrypoints=http"
+      - "traefik.http.routers.lgr-static.rule=(Host(`localhost`) && PathPrefix(`/static`))"
+volumes:
+  lgr-storage:
+  lgr-maria:
+  lgr-redis:
