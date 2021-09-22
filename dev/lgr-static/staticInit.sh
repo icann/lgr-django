@@ -1,0 +1,1 @@
+../../containers/lgr-static/staticInit.sh

@@ -2,7 +2,6 @@
 Django==3.1.7
 django-widget-tweaks==1.4.8
 celery[redis]==5.0.5
-#django-redis==4.12.1
 django-redis @ git+https://github.com/jazzband/django-redis.git@683ebcf16a5c342d9794552c9897c8baa2d6b0be
 django-autocomplete-light==3.5.1
 vine==5.0.0
@@ -14,5 +13,9 @@ django-celery-beat==2.2.0
 picu==1.2
 munidata==2.1.0
 lgr-core @ git+https://github.com/icann/lgr-core.git@v4.0.2
+
 # Natural sorting implementation
 natsort==7.1.1
+
+# OAuth support
+social-auth-app-django==5.0.0
