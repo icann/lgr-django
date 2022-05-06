@@ -2,11 +2,11 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, UpdateView, CreateView
 
 from lgr_manage.forms import UnicodeVersionUpdateForm, UnicodeVersionCreateForm
-from lgr_manage.views.common import BaseAdminView
+from lgr_manage.views.common import BaseListAdminView, BaseAdminView
 from lgr_models.models.lgr import UnicodeVersion
 
 
-class LgrUnicodeVersionsListView(BaseAdminView, ListView):
+class LgrUnicodeVersionsListView(BaseListAdminView, ListView):
     template_name = 'lgr_manage/unicode_versions.html'
     queryset = UnicodeVersion.all()
     model = UnicodeVersion
