@@ -1,3 +1,5 @@
+from django.db.models import Value, IntegerField
+from django.db.models.functions import Replace, Cast
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView, CreateView
 
@@ -8,7 +10,10 @@ from lgr_models.models.lgr import UnicodeVersion
 
 class LgrUnicodeVersionsListView(BaseListAdminView):
     template_name = 'lgr_manage/unicode_versions.html'
-    queryset = UnicodeVersion.all()
+    # 10.0.0, 14.0.0, 9.0.0 -> 1400, 1000, 900 (to properly sort versions)
+    queryset = UnicodeVersion.all().order_by(
+      Cast(Replace('version', Value('.'), Value('')), output_field=IntegerField())
+    ).reverse()
     model = UnicodeVersion
 
     def get_context_data(self, **kwargs):

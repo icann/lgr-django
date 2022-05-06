@@ -285,9 +285,6 @@ class UnicodeVersion(models.Model):
     version = models.CharField(max_length=255, unique=True)
     activated = models.BooleanField()
 
-    class Meta:
-        ordering = ['version']
-
     def __str__(self):
         return self.version
 
