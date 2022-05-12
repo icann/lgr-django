@@ -187,11 +187,23 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'INFO',
         },
+        'lgr_advanced.lgr_validator': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
         'lgr_basic': {
             'handlers': ['console'],
             'level': 'INFO',
         },
         'lgr_idn_table_review': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'lgr_manage': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+        'lgr_renderer': {
             'handlers': ['console'],
             'level': 'INFO',
         },

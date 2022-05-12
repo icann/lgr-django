@@ -18,9 +18,14 @@ if DEBUG:
         }
     }
 
-    LOGGING['loggers']['lgr_basic']['level'] = 'DEBUG'
     LOGGING['loggers']['lgr_web']['level'] = 'DEBUG'
-    LOGGING['loggers']['lgr_editor']['level'] = 'DEBUG'
+    LOGGING['loggers']['lgr_advanced']['level'] = 'DEBUG'
+    LOGGING['loggers']['lgr_auth']['level'] = 'DEBUG'
+    LOGGING['loggers']['lgr_basic']['level'] = 'DEBUG'
+    LOGGING['loggers']['lgr_idn_table_review']['level'] = 'DEBUG'
+    LOGGING['loggers']['lgr_manage']['level'] = 'DEBUG'
+    LOGGING['loggers']['lgr_renderer']['level'] = 'DEBUG'
+    LOGGING['loggers']['lgr_session']['level'] = 'DEBUG'
     LOGGING['loggers']['lgr']['level'] = 'DEBUG'
     LOGGING['loggers']['lgr-rule-logger']['level'] = 'DEBUG'
     LOGGING['loggers']['celery']['level'] = 'DEBUG'
