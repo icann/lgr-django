@@ -15,7 +15,7 @@ urlpatterns = [
     path('rz-lgr/<int:lgr_pk>', DisplayRzLgrView.as_view(), name='lgr_admin_display_rz_lgr'),
     path('rz-lgr/<int:rz_lgr_pk>/<int:lgr_pk>', DisplayRzLgrMemberView.as_view(),
          name='lgr_admin_display_rz_lgr_member'),
-    path('rz-lgr/isactive', RzLgrIsActiveView.setActive, name='lgr_admin_isactive_rz_lgr'),
+    path('rz-lgr/isactive', RzLgrIsActiveView.as_view(), name='lgr_admin_isactive_rz_lgr'),
     path('ref-lgr', RefLgrView.as_view(), name='lgr_admin_ref_lgr'),
     path('ref-lgr/<int:lgr_pk>/delete', RefLgrDeleteView.as_view(), name='lgr_admin_delete_ref_lgr'),
     path('ref-lgr/<int:lgr_pk>', DisplayRefLgrView.as_view(), name='lgr_admin_display_ref_lgr'),

@@ -56,7 +56,15 @@ class MSRCreateForm(forms.ModelForm):
 
 
 class MSRIsActiveForm(forms.Form):
-    active = forms.ModelChoiceField(label='', queryset=MSR.objects.all(), empty_label=None, initial=MSR.objects.filter(active=True).first().pk)
+    active = forms.ModelChoiceField(label='', queryset=MSR.objects.all(), empty_label=None,
+                                    initial=MSR.objects.filter(active=True).first().pk if MSR.objects.filter(
+                                        active=True).exists() else 1)
+
+
+class RzLgrIsActiveForm(forms.Form):
+    active = forms.ModelChoiceField(label='', queryset=RzLgr.objects.all(), empty_label=None,
+                                    initial=RzLgr.objects.filter(active=True).first().pk if RzLgr.objects.filter(
+                                        active=True).exists() else 1)
 
 
 class UnicodeVersionUpdateForm(forms.ModelForm):

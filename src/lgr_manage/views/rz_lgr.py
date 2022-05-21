@@ -6,8 +6,9 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
 
+from lgr_manage.views.AjaxFormMixin import AjaxFormMixin
 from lgr_models.models.lgr import RzLgr, RzLgrMember
-from lgr_manage.forms import RzLgrCreateForm
+from lgr_manage.forms import RzLgrCreateForm, RzLgrIsActiveForm
 from lgr_manage.views.common import BaseListAdminView, BaseAdminView
 
 
@@ -18,6 +19,10 @@ class RzLgrListView(BaseListAdminView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = RzLgrCreateForm()
+        context['active_choice_form'] = RzLgrIsActiveForm(
+            initial={'active': RzLgr.objects.filter(active=True).first().pk if RzLgr.objects.filter(
+                active=True).exists() else 1})
+
         return context
 
 
@@ -78,22 +83,9 @@ class DisplayRzLgrMemberView(SingleObjectMixin, views.View):
     def get_queryset(self):
         return self.model.objects.filter(rz_lgr__pk=self.kwargs.get('rz_lgr_pk'))
 
-class RzLgrIsActiveView(BaseAdminView):
 
-    def setActive(request):
-        msr_pk = request.GET.get('msr', None)
-        msg = ''
-        try:
-            old_active = RzLgr.objects.filter(active=True).first().pk
-            RzLgr.objects.filter(active=True).update(active=False)
-            new_active = RzLgr.objects.get(pk=msr_pk)
-            new_active.active = True
-            new_active.save(update_fields=['active'])
-        except:
-            msg = 'an error has occured'
-
-        data = {
-            'old_active': old_active,
-            'msg': msg
-        }
-        return JsonResponse(data)
+class RzLgrIsActiveView(AjaxFormMixin, views.generic.edit.FormView):
+    model = RzLgr
+    form_class = RzLgrIsActiveForm
+    template_name = 'lgr_manage/rz_lgr.html'
+    success_url = reverse_lazy('lgr_admin_rz_lgr')

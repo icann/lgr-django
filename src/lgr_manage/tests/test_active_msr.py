@@ -5,4 +5,5 @@ class MyTestCase(LgrWebClientTestBase):
     def test_update_active_when_logged_in(self):
         self.login()
 
-        self.assertEqual(True, False)
+        response = self.client.get('/m/msr')
+        self.assertContains(response, '<a href="/m/rz-lgr">Root Zone LGRs</a>', status_code=200)

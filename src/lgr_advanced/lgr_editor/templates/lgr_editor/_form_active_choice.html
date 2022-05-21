@@ -1,0 +1,66 @@
+{% load i18n static %}
+
+<h2>{% trans title %}</h2>
+<form class="form-horizontal" id="active-choice-form" url-data="{% url url %}">
+    {% csrf_token %}
+    {{ active_choice_form.media }}
+    <div class="form-group" id="active-form-group">
+        {% include "lgr_editor/_form_field.html" with field=active_choice_form.active control_width=8 %}
+        <div id="select-active-error" class="empty"></div>
+    </div>
+</form>
+<script type="text/javascript">
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = getCookie('csrftoken');
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+    $("#id_active").change(function () {
+        var $myForm = $('#active-choice-form')
+        event.preventDefault()
+        var $formData = $(this).serialize()
+        var $thisURL = $myForm.attr('url-data') // or set your own url
+        $.ajax({
+            method: "POST",
+            url: $thisURL,
+            data: $formData,
+            success: handleFormSuccess,
+            error: handleFormError,
+        })
+
+        function handleFormSuccess(data, textStatus, jqXHR) {
+            $("#status_" + data.old_active).addClass("empty").removeClass("glyphicon glyphicon-ok-sign");
+            $("#status_" + $('#id_active').val()).removeClass("empty").addClass("glyphicon glyphicon-ok-sign");
+        }
+
+        function handleFormError(jqXHR, textStatus, errorThrown) {
+            $('#active-form-group').addClass('has-error')
+            $("#select-active-error").text(errorThrown).addClass("help-block").removeClass("empty")
+        }
+    });
+</script>

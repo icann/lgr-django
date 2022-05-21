@@ -68,17 +68,7 @@
             </tr>
         {% endfor %}
     </table>
-    <h2>{% trans 'Select Active Zone LGR' %}</h2>
-    <form class="form-horizontal" id="msr-choice-form">
-        {% csrf_token %}
-        <select class="form-control" id="active-choice">
-            {% for rz_lgr in object_list %}
-                <option value="{{ rz_lgr.pk }}" {% if rz_lgr.active %}
-                        selected="selected" {% endif %}>{{ rz_lgr.name }}</option>
-            {% endfor %}
-        </select>
-        <div id="select-active-error" class="empty"></div>
-    </form>
+    {% include "lgr_editor/_form_active_choice.html" with url="lgr_admin_isactive_rz_lgr" title="Select Active Zone LGR" %}
 
     <h2>{% trans 'New Root Zone LGR' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
@@ -128,29 +118,6 @@
             }
 
             display_more_collapsed();
-        });
-
-        $("#active-choice").change(function () {
-            $("#select-active-error").removeClass("alert alert-danger");
-            var msr_pk = $(this).val();
-            $.ajax({
-                url: 'msr/isactive',
-                data: {
-                    'msr': msr_pk
-                },
-                dataType: 'json',
-                success: function (data) {
-                    if (data.msg) {
-                        console.log(data.msg)
-                        $("#select-active-error").text(data.msg);
-                        $("#select-active-error").addClass("alert alert-danger");
-                    } else {
-                        $("#status_" + msr_pk).addClass("glyphicon glyphicon-ok-sign").removeClass("empty");
-                        $("#status_" + data.old_active).addClass("empty").removeClass("glyphicon glyphicon-ok-sign");
-                    }
-                }
-            });
-
         });
     </script>
 {% endblock html_body_more %}
