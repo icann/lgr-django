@@ -55,6 +55,10 @@ class MSRCreateForm(forms.ModelForm):
         }
 
 
+class MSRIsActiveForm(forms.Form):
+    active = forms.ModelChoiceField(label='', queryset=MSR.objects.all(), empty_label=None, initial=MSR.objects.filter(active=True).first().pk)
+
+
 class UnicodeVersionUpdateForm(forms.ModelForm):
     version = CharField(disabled=True)
 

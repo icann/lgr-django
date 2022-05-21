@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import views
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
@@ -77,3 +77,23 @@ class DisplayRzLgrMemberView(SingleObjectMixin, views.View):
 
     def get_queryset(self):
         return self.model.objects.filter(rz_lgr__pk=self.kwargs.get('rz_lgr_pk'))
+
+class RzLgrIsActiveView(BaseAdminView):
+
+    def setActive(request):
+        msr_pk = request.GET.get('msr', None)
+        msg = ''
+        try:
+            old_active = RzLgr.objects.filter(active=True).first().pk
+            RzLgr.objects.filter(active=True).update(active=False)
+            new_active = RzLgr.objects.get(pk=msr_pk)
+            new_active.active = True
+            new_active.save(update_fields=['active'])
+        except:
+            msg = 'an error has occured'
+
+        data = {
+            'old_active': old_active,
+            'msg': msg
+        }
+        return JsonResponse(data)

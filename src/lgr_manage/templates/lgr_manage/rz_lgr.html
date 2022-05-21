@@ -10,6 +10,7 @@
         <tr>
             <th scope="col">{% trans 'Name' %}</th>
             <th scope="col">{% trans 'Files' %}</th>
+            <th scope="col">{% trans 'Active' %}</th>
             <th scope="col">{% trans 'Action' %}</th>
         </tr>
         </thead>
@@ -44,6 +45,13 @@
                     {% endif %}
                 </td>
                 <td>
+                    {% if rz_lgr.active %}
+                        <span class="glyphicon glyphicon-ok-sign" id="status_{{ rz_lgr.pk }}"></span>
+                    {% else %}
+                        <span class="empty" id="status_{{ rz_lgr.pk }}"></span>
+                    {% endif %}
+                </td>
+                <td>
                     <form method="post" action="{% url "lgr_admin_delete_rz_lgr" lgr_pk=rz_lgr.pk %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-default confirm-prompt"
@@ -60,6 +68,18 @@
             </tr>
         {% endfor %}
     </table>
+    <h2>{% trans 'Select Active Zone LGR' %}</h2>
+    <form class="form-horizontal" id="msr-choice-form">
+        {% csrf_token %}
+        <select class="form-control" id="active-choice">
+            {% for rz_lgr in object_list %}
+                <option value="{{ rz_lgr.pk }}" {% if rz_lgr.active %}
+                        selected="selected" {% endif %}>{{ rz_lgr.name }}</option>
+            {% endfor %}
+        </select>
+        <div id="select-active-error" class="empty"></div>
+    </form>
+
     <h2>{% trans 'New Root Zone LGR' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -108,6 +128,29 @@
             }
 
             display_more_collapsed();
+        });
+
+        $("#active-choice").change(function () {
+            $("#select-active-error").removeClass("alert alert-danger");
+            var msr_pk = $(this).val();
+            $.ajax({
+                url: 'msr/isactive',
+                data: {
+                    'msr': msr_pk
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.msg) {
+                        console.log(data.msg)
+                        $("#select-active-error").text(data.msg);
+                        $("#select-active-error").addClass("alert alert-danger");
+                    } else {
+                        $("#status_" + msr_pk).addClass("glyphicon glyphicon-ok-sign").removeClass("empty");
+                        $("#status_" + data.old_active).addClass("empty").removeClass("glyphicon glyphicon-ok-sign");
+                    }
+                }
+            });
+
         });
     </script>
 {% endblock html_body_more %}

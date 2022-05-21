@@ -9,6 +9,7 @@
         <thead class="thead-light">
         <tr>
             <th scope="col">{% trans 'Name' %}</th>
+            <th scope="col">{% trans 'Active' %}</th>
             <th scope="col">{% trans 'Action' %}</th>
         </tr>
         </thead>
@@ -20,6 +21,13 @@
                        rel="noopener noreferrer">
                         {{ msr.name }}
                     </a>
+                </td>
+                <td>
+                    {% if msr.active %}
+                        <span class="glyphicon glyphicon-ok-sign" id="status_{{ msr.pk }}"></span>
+                    {% else %}
+                        <span class="empty" id="status_{{ msr.pk }}"></span>
+                    {% endif %}
                 </td>
                 <td>
                     <form method="post" action="{% url "lgr_admin_delete_msr" lgr_pk=msr.pk %}">
@@ -38,6 +46,68 @@
             </tr>
         {% endfor %}
     </table>
+    <h2>{% trans 'Select Active MSR' %}</h2>
+    <form class="form-horizontal" id="msr-choice-form" url-data="{% url 'lgr_admin_isactive_msr' %}">
+        {% csrf_token %}
+        <div id="select-active-error" class="empty"></div>
+        {{ msr_choice_form.media }}
+        {% include "lgr_editor/_form_field.html" with field=msr_choice_form.active control_width=8 %}
+    </form>
+    <script type="text/javascript">
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        $("#id_active").change(function () {
+            var $myForm = $('.msr-choice-form')
+            event.preventDefault()
+            var $formData = $(this).serialize()
+            var $thisURL = $myForm.attr('data-url') || window.location.href // or set your own url
+            console.log($thisURL)
+            $.ajax({
+                method: "POST",
+                url: "/m/msr/isactive",
+                data: $formData,
+                success: handleFormSuccess,
+                error: handleFormError,
+            })
+
+            function handleFormSuccess(data, textStatus, jqXHR) {
+                $("#status_"+data.old_active).addClass("empty").removeClass("glyphicon glyphicon-ok-sign");
+                $("#status_"+$('#id_active').val()).removeClass("empty").addClass("glyphicon glyphicon-ok-sign");
+            }
+
+            function handleFormError(jqXHR, textStatus, errorThrown) {
+                console.log("troc")
+            }
+        });
+    </script>
     <h2>{% trans 'New MSR' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -51,6 +121,36 @@
 {% block html_body_more %}
     {{ block.super }}
     <script type="text/javascript">
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
         jQuery(document).ready(function ($) {
             function enable_submit_button() {
                 if ($('#id_name').val() !== "" &&
@@ -68,6 +168,29 @@
                 enable_submit_button()
             });
             enable_submit_button();
+        });
+        $("#id_active").change(function () {
+            var $myForm = $('.msr-choice-form')
+            event.preventDefault()
+            var $formData = $(this).serialize()
+            var $thisURL = $myForm.attr('data-url') || window.location.href // or set your own url
+            console.log($thisURL)
+            $.ajax({
+                method: "POST",
+                url: "/m/msr/isactive",
+                data: $formData,
+                success: handleFormSuccess,
+                error: handleFormError,
+            })
+
+            function handleFormSuccess(data, textStatus, jqXHR) {
+                $("#status_"+data.old_active).addClass("empty").removeClass("glyphicon glyphicon-ok-sign");
+                $("#status_"+$('#id_active').val()).removeClass("empty").addClass("glyphicon glyphicon-ok-sign");
+            }
+
+            function handleFormError(jqXHR, textStatus, errorThrown) {
+                console.log("troc")
+            }
         });
     </script>
 {% endblock html_body_more %}

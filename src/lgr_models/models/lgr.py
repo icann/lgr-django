@@ -226,6 +226,7 @@ class RzLgr(LgrBaseModel):
     # make name unique and owner nullable
     name = models.CharField(max_length=128, unique=True)
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
+    active = models.BooleanField(default=False)
 
     def display_url(self):
         # FIXME view should be in models app
@@ -273,6 +274,7 @@ class MSR(LgrBaseModel):
     # make name unique and owner nullable
     name = models.CharField(max_length=128, unique=True)
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
+    active = models.BooleanField(default=False)
 
     def display_url(self):
         # FIXME view should be in models app

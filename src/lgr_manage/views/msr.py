@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from django import views
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
 
-from lgr_manage.forms import MSRCreateForm
+from lgr_manage.forms import MSRCreateForm, MSRIsActiveForm
+from lgr_manage.views.AjaxFormMixin import AjaxFormMixin
 from lgr_manage.views.common import BaseListAdminView, BaseAdminView
 from lgr_models.models.lgr import MSR
 
@@ -18,6 +19,7 @@ class MSRListView(BaseListAdminView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = MSRCreateForm()
+        context['msr_choice_form'] = MSRIsActiveForm(initial={'active': MSR.objects.filter(active=True).first().pk})
         return context
 
 
@@ -56,6 +58,13 @@ class MSRDeleteView(BaseAdminView, views.generic.DeleteView):
     model = MSR
     success_url = reverse_lazy('lgr_admin_msr')
     pk_url_kwarg = 'lgr_pk'
+
+
+class MSRIsActiveView(AjaxFormMixin, views.generic.edit.FormView):
+    model = MSR
+    form_class = MSRIsActiveForm
+    template_name = 'lgr_manage/msr.html'
+    success_url = reverse_lazy('lgr_admin_msr')
 
 
 class DisplayMSRView(SingleObjectMixin, views.View):

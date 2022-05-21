@@ -1,0 +1,45 @@
+from django.forms.utils import ErrorList
+from django.http import JsonResponse
+
+from lgr_manage.views.common import BaseAdminView
+from django.utils.translation import ugettext_lazy as _
+import logging
+
+
+class AjaxFormMixin(BaseAdminView):
+
+    model = None
+
+    def form_valid(self, form):
+        active_pk = form.cleaned_data['active'].pk
+        msg = ''
+
+        old_active = None
+        try:
+            old_active_entity = self.model.objects.filter(active=True)
+            if old_active_entity.exists():
+                old_active = old_active_entity.first().pk
+                old_active_entity.update(active=False)
+
+            new_active = self.model.objects.get(pk=active_pk)
+            new_active.active = True
+            new_active.save(update_fields=['active'])
+        except:
+            msg = _("Error processing active MSR")
+            errors = form._errors.setdefault("active", ErrorList())
+            errors.append(msg)
+            self.form_invalid(self, form)
+            logging.exception(msg)
+
+        data = {
+            'old_active': old_active,
+            'msg': msg
+        }
+        return JsonResponse(data)
+
+    def form_invalid(self, form):
+        response = super(AjaxFormMixin, self).form_invalid(form)
+        if self.request.is_ajax():
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
