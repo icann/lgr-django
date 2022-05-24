@@ -24,7 +24,7 @@ def initial_data(apps, schema_editor):
                     OldRzLgr.objects.using(db_alias).create(name=name,
                                                             file=File(f, name=lgr))
 
-    for lgr in RzLgr.objects.all():
+    for lgr in OldRzLgr.objects.all():
         lgr.save()
 
 
