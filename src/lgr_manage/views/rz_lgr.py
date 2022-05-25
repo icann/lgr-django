@@ -26,7 +26,7 @@ class RzLgrListView(BaseListAdminView):
 
     def initial_active(self):
         active = RzLgr.objects.filter(active=True).first()
-        if (active):
+        if active:
             return active.pk
 
         return 1

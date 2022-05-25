@@ -26,7 +26,7 @@ class AjaxFormMixin(BaseAdminView):
             new_active.save(update_fields=['active'])
         except:
             msg = _("Error processing active indicator")
-            form.add_error('active', ErrorList())
+            form.add_error('active', msg)
             logging.exception(msg)
             return self.form_invalid(self, form)
 
