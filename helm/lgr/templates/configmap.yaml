@@ -18,3 +18,6 @@ data:
   lgrCeleryRedisDB: {{ .Values.lgr.CeleryRedisDB | quote }}
   lgrDjangoRedisDB: {{ .Values.lgr.DjangoRedisDB | quote }}
   lgrSentinelMaster: {{ .Values.lgr.SentinelMaster }}
+
+  lgrGunicornURL: {{ .Release.Name }}-{{ .Values.microservices.gunicorn.name }}-{{ template "lgr.region" $.Values }}{{ $.Values.env }}:{{ .Values.microservices.gunicorn.web.port }}
+  lgrStaticPort: {{ .Values.microservices.static.web.port | quote }}

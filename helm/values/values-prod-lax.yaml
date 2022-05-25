@@ -4,8 +4,6 @@ region: lax
 namespace: contracted-parties
 app: lgr
 
-nodePort: 32151
-
 replicaCount: 1
 historyLimit: 3
 
@@ -53,7 +51,7 @@ cronjobs:
         memory: 128Mi
 
 microservices:
-  - gunicorn:
+  gunicorn:
     name: gunicorn
     image: lgr-gunicorn
     volume: true
@@ -73,7 +71,7 @@ microservices:
         cpu: 200m
         memory: 1Gi
 
-  - static:
+  static:
     name: static
     image: lgr-static
     uid: 0
@@ -81,8 +79,9 @@ microservices:
     web:
       path: /static
       pathType: Prefix
-      port: 80
+      port: 8000
       protocol: TCP
+      nodePort: 32151
     resources:
       limits:
         cpu: 1
@@ -91,7 +90,7 @@ microservices:
         cpu: 200m
         memory: 128Mi
 
-  - celery:
+  celery:
     name: celery
     image: lgr-celery
     uid: 30404

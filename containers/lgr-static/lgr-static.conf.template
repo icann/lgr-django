@@ -1,0 +1,12 @@
+server {
+  listen       ${lgrStaticPort} default_server;
+  listen       [::]:${lgrStaticPort} default_server;
+  server_name  _;
+
+  location / {
+    proxy_pass http://${lgrGunicornURL};
+  }
+  location /static {
+    alias /var/www/lgr/src/lgr_web/static;
+  }
+}

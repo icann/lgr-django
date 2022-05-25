@@ -10,7 +10,7 @@ RUN sed -i 's|error_log /var/log/nginx/error.log;|error_log /dev/stdout info;|' 
 RUN sed -i 's|access_log  /var/log/nginx/access.log  main;|access_log /dev/stdout;|' /etc/nginx/nginx.conf
 
 COPY staticInit.sh /usr/local/bin/
-COPY lgr-static.conf /etc/nginx/default.d/
+COPY lgr-static.conf.template /etc/nginx/templates/
 
 WORKDIR $BASE_DIR/src
 ENTRYPOINT ["staticInit.sh"]

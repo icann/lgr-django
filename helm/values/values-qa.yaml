@@ -3,9 +3,6 @@ env: qa
 namespace: contracted-parties
 app:  lgr
 
-clusterIP: 100.98.203.189
-nodePort: 32288
-
 replicaCount: 1
 historyLimit: 3
 
@@ -53,7 +50,7 @@ cronjobs:
         memory: 128Mi
 
 microservices:
-  - gunicorn:
+  gunicorn:
     name: gunicorn
     image: lgr-gunicorn
     volume: true
@@ -73,16 +70,18 @@ microservices:
         cpu: 200m
         memory: 1Gi
 
-  - static:
+  static:
     name: static
     image: lgr-static
     uid: 0
     gid: 0
+    clusterIP: 100.98.203.189
     web:
       path: /static
       pathType: Prefix
-      port: 80
+      port: 8000
       protocol: TCP
+      nodePort: 32288
     resources:
       limits:
         cpu: 1
@@ -91,7 +90,7 @@ microservices:
         cpu: 200m
         memory: 128Mi
 
-  - celery:
+  celery:
     name: celery
     image: lgr-celery
     uid: 30404

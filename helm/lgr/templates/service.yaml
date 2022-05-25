@@ -10,10 +10,19 @@ metadata:
     app: {{ $.Values.app }}
     env: {{ $.Values.env }}
 spec:
-  {{- if .web.nodePort }}
-  type: NodePort
+  {{- if .web.clusterIP }}
+  clusterIP: {{ .web.clusterIP }}
   {{- end }}
+  {{- if .web.nodePort }}
+  externalTrafficPolicy: Cluster
+  type: NodePort
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800
+  {{- else }}
   sessionAffinity: None
+  {{- end }}
   ports:
     - port: {{ .web.port }}
       name: {{ .name }}
