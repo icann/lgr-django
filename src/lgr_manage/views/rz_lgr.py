@@ -20,10 +20,16 @@ class RzLgrListView(BaseListAdminView):
         context = super().get_context_data(**kwargs)
         context['form'] = RzLgrCreateForm()
         context['active_choice_form'] = RzLgrIsActiveForm(
-            initial={'active': RzLgr.objects.filter(active=True).first().pk if RzLgr.objects.filter(
-                active=True).exists() else 1})
+            initial={'active': self.initial_active()})
 
         return context
+
+    def initial_active(self):
+        active = RzLgr.objects.filter(active=True).first()
+        if (active):
+            return active.pk
+
+        return 1
 
 
 class RzLgrCreateView(BaseAdminView, views.generic.CreateView):

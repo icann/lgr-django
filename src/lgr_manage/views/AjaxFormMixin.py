@@ -25,11 +25,10 @@ class AjaxFormMixin(BaseAdminView):
             new_active.active = True
             new_active.save(update_fields=['active'])
         except:
-            msg = _("Error processing active MSR")
-            errors = form._errors.setdefault("active", ErrorList())
-            errors.append(msg)
-            self.form_invalid(self, form)
+            msg = _("Error processing active indicator")
+            form.add_error('active', ErrorList())
             logging.exception(msg)
+            return self.form_invalid(self, form)
 
         data = {
             'old_active': old_active,

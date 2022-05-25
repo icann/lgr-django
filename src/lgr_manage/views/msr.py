@@ -20,9 +20,15 @@ class MSRListView(BaseListAdminView):
         context = super().get_context_data(**kwargs)
         context['form'] = MSRCreateForm()
         context['active_choice_form'] = MSRIsActiveForm(
-            initial={'active': MSR.objects.filter(active=True).first().pk if MSR.objects.filter(
-                active=True).exists() else 1})
+            initial={'active': self.initial_active()})
         return context
+
+    def initial_active(self):
+        active = MSR.objects.filter(active=True).first()
+        if (active):
+            return active.pk
+
+        return 1
 
 
 class MSRCreateView(BaseAdminView, views.generic.CreateView):
