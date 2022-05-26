@@ -5,6 +5,7 @@ server {
 
   location / {
     proxy_pass http://${lgrGunicornURL};
+    proxy_set_header    Host $host;
   }
   location /static {
     alias /var/www/lgr/src/lgr_web/static;
