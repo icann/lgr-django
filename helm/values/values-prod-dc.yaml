@@ -81,8 +81,7 @@ microservices:
       pathType: Prefix
       port: 8000
       protocol: TCP
-      #TODO: Ask for the production value
-      #nodePort: 32288
+      nodePort: 32288
     resources:
       limits:
         cpu: 1
