@@ -28,8 +28,7 @@
                         {% blocktrans trimmed %}
                             The server was unable to complete the request, most likely because too many resources were
                             required to compute the query.
-                            If you check for collision, the result may be still processing and will be sent to your
-                            email.
+                            If you check for collision, the result may be still processing.
                             Please wait before submitting again.
                         {% endblocktrans %}
                     </div>
@@ -97,48 +96,48 @@
                             </label>
                         </div>
                     </div>
-                    {% if validation_to and collision_to %}
+                    {% if validation_task and collision_task %}
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="alert alert-success">
-                                    {% blocktrans trimmed with email=collision_to %}
-                                        Your request was sent successfully, the collision and validation tasks
-                                        processing can take minutes, even hours.<br>
-                                        The result will be sent to {{ email }}. Do not resubmit until you receive the
-                                        report.
+                                    {% url 'list_process' as task_status_url %}
+                                    {% blocktrans trimmed  %}
+                                      Your request was sent successfully, the collision and validation tasks
+                                      processing can take minutes, even hours.<br>
+                                      You can follow your task progression on the
+                                      <a href="{{ task_status_url }}">task status page</a>.
                                     {% endblocktrans %}
                                 </div>
                             </div>
                         </div>
-                    {% else %}
-                        {% if validation_to %}
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="alert alert-success">
-                                        {% blocktrans trimmed with email=validation_to %}
-                                            Your request was sent successfully, the validation task processing can take
-                                            minutes, even hours.<br>
-                                            The result will be sent to {{ email }}. Do not resubmit until you receive
-                                            the report.
-                                        {% endblocktrans %}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if collision_to %}
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="alert alert-success">
-                                        {% blocktrans trimmed with email=collision_to %}
-                                            Your request was sent successfully, the collision task processing can take
-                                            minutes, even hours.<br>
-                                            The result will be sent to {{ email }}. Do not resubmit until you receive
-                                            the report.
-                                        {% endblocktrans %}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
+                    {% elif validation_task %}
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="alert alert-success">
+                            {% url 'list_process' as task_status_url %}
+                            {% blocktrans trimmed  %}
+                              Your request was sent successfully, the validation task processing can take
+                              minutes, even hours.<br>
+                              You can follow your task progression on the
+                              <a href="{{ task_status_url }}">task status page</a>.
+                            {% endblocktrans %}
+                          </div>
+                        </div>
+                      </div>
+                    {% elif collision_task %}
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="alert alert-success">
+                            {% url 'list_process' as task_status_url %}
+                            {% blocktrans trimmed  %}
+                              Your request was sent successfully, the collision task processing can take
+                              minutes, even hours.<br>
+                              You can follow your task progression on the
+                              <a href="{{ task_status_url }}">task status page</a>.
+                            {% endblocktrans %}
+                          </div>
+                        </div>
+                      </div>
                     {% endif %}
                     <button class="btn btn-primary btn-block" id="validate-label-form">
                         {% trans 'Validate' %}

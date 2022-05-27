@@ -1,0 +1,159 @@
+{% extends "_base.html" %}
+{% load i18n widget_tweaks %}
+
+{% block html_title %}{% trans 'LGR Process List' %}{% endblock %}
+
+{% block content-title %}
+  {{ title }}
+{% endblock %}
+
+{% block html_head_more %}
+  <style>
+      .progress {
+          margin-bottom: 0;
+      }
+
+      .min-cell {
+          width: 1%;
+          white-space: nowrap;
+      }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <button id="refresh-button" onclick="switchRefresh()" class="btn pull-right" title="{% trans 'Switch Refreshing' %}">
+    {% trans "Auto Refresh" %}
+  </button>
+  <h1>{% trans 'Tasks' %}</h1>
+  {% load i18n %}
+
+  <table class="table table-responsive">
+    {% for task in tasks %}
+      <tr>
+        <td class="min-cell">{{ task.name }} - {{ task.creation_date }}</td>
+        <td class="min-cell">
+          {% if task.report %}
+            <a href="{{ task.report.to_url }}?next={{ request.path }}"
+               class="btn btn-default show-tooltip"
+               title="{% trans 'Download report' %}"
+               data-placement="bottom">
+              <i class="glyphicon glyphicon-save"></i>
+              {% trans "Download report" %}
+            </a>
+          {% endif %}
+        </td>
+        <td>
+          {% if task.status == 'SUCCESS' %}
+            <div class="progress">
+              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                   aria-valuemax="100" style="width: 100%">
+                {% trans 'Success' %}
+              </div>
+            </div>
+            {% elif task.status == 'STARTED' %}
+            <div class="progress">
+              <div class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar"
+                   aria-valuenow="55" aria-valuemin="0"
+                   aria-valuemax="100" style="width: 55%">
+                {% trans 'In Progress' %}
+              </div>
+            </div>
+            {% elif task.status == 'FAILURE' %}
+            <div class="progress">
+              <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                   aria-valuemax="100" style="width: 100%">
+                {% trans 'Failed' %}
+              </div>
+            </div>
+            {% elif task.status == 'PENDING' %}
+            <div class="progress">
+              <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="5" aria-valuemin="0"
+                   aria-valuemax="100" style="width: 5%">
+                {% trans 'Pending' %}
+              </div>
+            </div>
+            {% elif task.status == 'RETRY' %}
+            <div class="progress">
+              <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="10" aria-valuemin="0"
+                   aria-valuemax="100" style="width: 10%">
+                {% trans 'Retry' %}
+              </div>
+            </div>
+            {% elif task.status == 'REVOKED' %}
+            <div class="progress">
+              <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="90" aria-valuemin="0"
+                   aria-valuemax="100" style="width: 90%">
+                {% trans 'Canceled' %}
+              </div>
+            </div>
+            {% elif task.status == 'EXPIRED' %}
+            <div class="progress">
+              <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0"
+                   aria-valuemax="100" style="width: 20%">
+                {% trans 'Expired' %}
+              </div>
+            </div>
+          {% endif %}
+        </td>
+        <td>
+          {% if task.status != 'STARTED' %}
+            <form method="post"
+                  action="{% url "delete_process" task_id=task.id %}?next={{ request.path }}">
+              {% csrf_token %}
+              {% if task.status == 'PENDING' or task.status == 'RETRY' %}
+                <button type="submit" class="btn btn-default confirm-prompt" onclick="disableRefresh()"
+                        data-confirmation-prompt="{% trans 'Are you sure you want to cancel this task?' %}">
+                <span class="glyphicon glyphicon-stop"></span>
+              {% else %}
+                <button type="submit" class="btn btn-default">
+                <span class="glyphicon glyphicon-trash"></span>
+              {% endif %}
+              </button>
+            </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  {% if tasks %}
+    <form method="post" action="{% url "delete_finished" %}?next={{ request.path }}">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-danger confirm-prompt" onclick="disableRefresh()"
+              data-confirmation-prompt="{% trans 'Are you sure you want to clean tasks?' %}">
+        <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete completed tasks' %}
+      </button>
+    </form>
+  {% else %}
+    <p>{% trans 'No task registered' %}</p>
+  {% endif %}
+{% endblock %}
+
+{% block html_body_more %}
+  <script>
+  var refresh = false
+  var previous_refresh = false
+  function refreshWindow() {
+      if (refresh === true) {
+        window.location.reload()
+      }
+  }
+  function disableRefresh() {
+    previous_refresh = refresh
+    refresh = false
+  }
+  function actionConfirmed(result) {
+    refresh = previous_refresh
+  }
+  function switchRefresh() {
+    refresh = !refresh
+    if (refresh) {
+      $('#refresh-button').html("{% trans 'Stop Refreshing' %}")
+    } else {
+        $('#refresh-button').html("{% trans 'Auto Refresh' %}")
+    }
+  }
+  $(document).ready(function ($) {
+      setTimeout('refreshWindow()', 5000)
+  })
+  </script>
+{% endblock %}

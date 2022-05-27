@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_results',
     'social_django',
     'lgr_models',
     'lgr_session',
     'lgr_auth',
+    'lgr_tasks',
     'lgr_advanced',
     'lgr_advanced.lgr_editor',
     'lgr_advanced.lgr_validator',
@@ -95,12 +97,13 @@ SOCIAL_AUTH_PIPELINE = (
 )
 SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
+
 # Redirect URL after auth
 LOGIN_REDIRECT_URL = '/'
 # Default LOGIN URL (use named URLs)
 LOGIN_URL = '/auth/login'
 # Redirect URL after logout
-LOGOUT_REDIRECT_URL = '/switch/'
+LOGOUT_REDIRECT_URL = '/'
 
 ROOT_URLCONF = 'lgr_web.urls'
 
@@ -357,5 +360,9 @@ CELERY_QUEUES = (
 )
 
 BROKER_URL = 'redis://localhost:6379/0'
+
+# Django Celery Results configuration
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
 
 ##### /Celery configuration parameters #####

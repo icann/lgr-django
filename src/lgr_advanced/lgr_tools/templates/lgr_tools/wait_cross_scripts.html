@@ -7,7 +7,11 @@
     {% blocktrans with lgr_name=lgr_object.name %}Computing cross-script variants on labels provided in file {{ labels_file }} in LGR <a href="{{ lgr_url }}">{{ lgr_name }}</a>{% endblocktrans %}
 </h2>
 <div>
-{% blocktrans %}As the computing may be very long, once completed, an e-mail will be sent at the provided address: {{ email }}{% endblocktrans %}
+  {% url 'list_process' as task_status_url %}
+  {% blocktrans trimmed  %}
+    The computing may be very long, you can follow your task progression on the
+    <a href="{{ task_status_url }}">task status page</a>.
+  {% endblocktrans %}
 </div>
 
 {% endblock content %}

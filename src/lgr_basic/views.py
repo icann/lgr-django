@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 from django.views.generic import FormView
 
@@ -18,6 +20,7 @@ from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import NeedAsyncProcess, evaluate_label_from_view
 from lgr_models.models.lgr import RzLgr
+from lgr_tasks.models import LgrTaskModel
 from .forms import ValidateLabelSimpleForm
 
 
@@ -38,7 +41,6 @@ class BasicModeView(LoginRequiredMixin, FormView):
         rz_lgr: RzLgr = form.cleaned_data['rz_lgr']
         ctx['lgr_object'] = rz_lgr  # needed to download results as csv
         collisions = form.cleaned_data['collisions']
-        email_address = self.request.user.email
 
         tlds = None
         tld_json = {}
@@ -47,14 +49,20 @@ class BasicModeView(LoginRequiredMixin, FormView):
             tld_json = LabelInfo.from_form('TLDs', tlds).to_dict()
         if labels_file:
             labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
-            # data will be sent by email instead of on the ui
-            ctx['validation_to'] = email_address
+            ctx['validation_task'] = True
+            task_name = _('Annotate labels on LGR %s') % rz_lgr.pk
             if collisions:
-                basic_collision_task.delay(self.request.user.pk, rz_lgr.pk, labels_json, tld_json,
-                                           annotate=True, lgr_model=RzLgr._meta.label)
-                ctx['collision_to'] = email_address
+                task_name = _('Compute collisions and annotate labels on LGR %s') % rz_lgr.pk
+            task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
+                                               name=task_name,
+                                               user=self.request.user)
+            if collisions:
+                basic_collision_task.apply_async((self.request.user.pk, rz_lgr.pk, labels_json, tld_json,
+                                                  True, RzLgr._meta.label), task_id=task.pk)
+                ctx['collision_task'] = True
             else:
-                annotate_task.delay(self.request.user.pk, rz_lgr.pk, labels_json, lgr_model=RzLgr._meta.label)
+                annotate_task.apply_async((self.request.user.pk, rz_lgr.pk, labels_json, RzLgr._meta.label),
+                                          task_id=task.pk)
 
         else:
             labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp]).to_dict()
@@ -65,9 +73,12 @@ class BasicModeView(LoginRequiredMixin, FormView):
                     data = tlds.decode('utf-8')
                     check_collisions = [l[0] for l in read_labels(StringIO(data))]
                 else:
-                    basic_collision_task.delay(self.request.user.pk, rz_lgr.pk, labels_json, tld_json,
-                                               annotate=False, lgr_model=RzLgr._meta.label)
-                    ctx['collision_to'] = email_address
+                    task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
+                                                       name=_('Compute collisions on LGR %s') % rz_lgr.pk,
+                                                       user=self.request.user)
+                    basic_collision_task.apply_async((self.request.user.pk, rz_lgr.pk, labels_json, tld_json,
+                                                      False, RzLgr._meta.label), task_id=task.pk)
+                    ctx['collision_task'] = True
 
             for label_cplist in labels_cp:
                 try:
@@ -79,10 +90,9 @@ class BasicModeView(LoginRequiredMixin, FormView):
                     messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
                 except NeedAsyncProcess:
                     messages.add_message(self.request, messages.INFO,
-                                         _('Input label generates too many variants to compute them all quickly. '
-                                           'You need to enter your email address and will receive a notification once '
-                                           'process is done'))
-                    ctx['email_required'] = True
+                                         mark_safe(_('Input label generates too many variants to compute them all '
+                                                     'quickly. You can follow your task progression on the %s.') % (
+                                             f"<a href='{reverse('list_process')}'>{_('task status page')}</a>")))
                 except LGRException as ex:
                     messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
                     # redirect to myself to refresh display

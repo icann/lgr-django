@@ -5,8 +5,7 @@ from tempfile import TemporaryFile
 from typing import Dict
 from zipfile import ZipFile, ZIP_DEFLATED
 
-from celery import shared_task
-from django.core.mail import EmailMessage
+from celery import shared_task, current_task
 from django.template.loader import render_to_string
 
 from lgr.tools.idn_review.review import review_lgr
@@ -14,6 +13,7 @@ from lgr_auth.models import LgrUser
 from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
 from lgr_idn_table_review.idn_tool.models import IdnTable
 from lgr_models.models.lgr import LgrBaseModel
+from lgr_tasks.models import LgrTaskModel
 
 logger = logging.getLogger(__name__)
 
@@ -45,35 +45,39 @@ def _create_review_report(idn_table: IdnTable, lgr_info, absolute_url):
 
 
 @shared_task
-def idn_table_review_task(idn_tables, report_id, email_address, download_link, absolute_url):
+def idn_table_review_task(user_pk, idn_tables, report_id, absolute_url):
     """
     Review IDN tables
 
+    :param user_pk: The user primary key
     :param idn_tables: The IDN table pk to review associated to their reference LGR information as a tuple
     :param report_id: The report ID
-    :param email_address: The e-mail address where the results will be sent
-    :param download_link: The link where the file will be available
     :param absolute_url: The absolute website url
     :return:
     """
-    user = LgrUser.objects.get(email=email_address)
+    user = LgrUser.objects.get(pk=user_pk)
     api = LGRIdnReviewApi(user)
 
-    email = EmailMessage(subject='IDN table review',
-                         to=[user.email])
+    # ensure report_id is unique
+    while api.storage_model.objects.filter(report_id=report_id).exists():
+        idx = 0
+        try:
+            rid, i = report_id.rsplit('-', 1)
+            idx = int(i)
+        except:
+            report_id += f'-{idx + 1}'
+        else:
+            report_id = f'{rid}-{idx + 1}'
+
     try:
-        process_idn_tables(api, absolute_url, idn_tables, report_id)
+        report = process_idn_tables(api, absolute_url, idn_tables, report_id)
     except Exception:
-        email.body = f"IDN table review failed for report '{report_id}'.\n" \
-                     "Please launch a new task or report the problem if you got this error more than once.\n" \
-                     "Best regards"
+        logger.exception('IDN table review failed')
         api.delete_report(report_id)
+        raise
     else:
-        email.body = f"IDN table review has been successfully completed.\n" \
-                     f"You should now be able to download it from {download_link} under the path: " \
-                     f"'{report_id}'.\nPlease refresh the home page if you don't see the link.\nBest regards"
-    finally:
-        email.send()
+        LgrTaskModel.objects.filter(pk=current_task.request.id).update(report=report)
+    return f'{user} - {report_id}.zip'
 
 
 def process_idn_tables(api, absolute_url, idn_tables, report_id):
@@ -85,4 +89,4 @@ def process_idn_tables(api, absolute_url, idn_tables, report_id):
                 filename = f"{idn_table.name}.html"
                 zf.writestr(filename, html_report)
                 api.storage_save_report_file(filename, StringIO(html_report), report_id=report_id)
-        api.storage_save_report_file(f'{report_id}.zip', f, report_id=report_id)
+        return api.storage_save_report_file(f'{report_id}.zip', f, report_id=report_id)

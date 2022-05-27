@@ -4,16 +4,16 @@ import logging
 import os
 import time
 import traceback
-from datetime import date, datetime
+from datetime import date
 from io import StringIO
 from tempfile import TemporaryFile
 from typing import Dict
 from zipfile import ZipFile, ZIP_DEFLATED
 
-from celery import shared_task
+from celery import shared_task, current_task
 from django.conf import settings
-from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.utils import timezone
 
 from lgr.tools.idn_review.review import review_lgr
 from lgr_auth.models import LgrUser
@@ -22,6 +22,7 @@ from lgr_idn_table_review.icann_tools.api import (get_icann_idn_repository_table
                                                   NoRefLgrFound, LGRIcannStorage)
 from lgr_idn_table_review.icann_tools.models import IANAIdnTable
 from lgr_models.models.unicode import UnicodeVersion
+from lgr_tasks.models import LgrTaskModel
 from lgr_utils import unidb
 
 logger = logging.getLogger(__name__)
@@ -78,32 +79,24 @@ def _create_review_report(idn_table: IANAIdnTable, absolute_url, lgr_storage, re
 
 
 @shared_task
-def idn_table_review_task(absolute_url, email_address):
+def idn_table_review_task(user_pk, absolute_url):
     """
     Review all IDN tables
 
+    :param user_pk: The user primary key
     :param absolute_url: The absolute website url
-    :param email_address: The e-mail address where the results will be sent
     """
-    report_id = datetime.now().strftime('%Y-%m-%d-%H%M%S.%f')
-    user = LgrUser.objects.get(email=email_address)
+    report_id = timezone.now().strftime('%Y-%m-%d-%H%M%S.%f')
+    user = LgrUser.objects.get(pk=user_pk)
 
-    email = EmailMessage(subject='ICANN IDN table review',
-                         to=[user.email])
     try:
-        process_idn_tables(user, absolute_url, report_id)
+        report = process_idn_tables(user, absolute_url, report_id)
     except Exception:
-        email.body = f"ICANN IDN table review failed for report '{report_id}'.\n" \
-                     "Please launch a new task or report the problem if you got this error more than once.\n" \
-                     "Best regards"
+        logger.exception('ICANN IDN table review failed')
+        raise
     else:
-        email.body = f"ICANN IDN table review has been successfully completed.\n" \
-                     f"You should now be able to download it from your ICANN review " \
-                     f"home screen under the path: '{report_id}'.\n" \
-                     f"Please refresh the home page if you don't see the link.\n" \
-                     f"Best regards"
-    finally:
-        email.send()
+        LgrTaskModel.objects.filter(pk=current_task.request.id).update(report=report)
+    return f'{user} - {report_id}.zip'
 
 
 def process_idn_tables(user, absolute_url, report_id):
@@ -140,7 +133,7 @@ def process_idn_tables(user, absolute_url, report_id):
                             'url': url
                         })
                     zf.writestr(filename, html_report)
-        lgr_storage.storage_save_report_file(f'{report_id}.zip', f, report_id=report_id)
+        report = lgr_storage.storage_save_report_file(f'{report_id}.zip', f, report_id=report_id)
 
     summary_report = render_to_string('lgr_idn_table_review_icann/summary_report.html', {
         'count': count,
@@ -148,4 +141,6 @@ def process_idn_tables(user, absolute_url, report_id):
         'processed': processed,
         'unprocessed': unprocessed
     })
-    lgr_storage.storage_save_report_file(f'{report_id}-summary.html', StringIO(summary_report), report_id=report_id)
+    lgr_storage.storage_save_report_file(f'{report_id}-summary.html', StringIO(summary_report),
+                                         report_id=report_id)
+    return report

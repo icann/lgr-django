@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
+import uuid
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
 from lgr_idn_table_review.icann_tools.api import LGRIcannStorage
+from lgr_tasks.models import LgrTaskModel
 from .tasks import idn_table_review_task
 
 
@@ -31,10 +36,16 @@ class IdnTableIcannModeView(BaseIcannView, TemplateView):
     template_name = 'lgr_idn_table_review_icann/icann_mode.html'
 
     def post(self, request, *args, **kwargs):
-        idn_table_review_task.delay(self.request.build_absolute_uri('/').rstrip('/'),
-                                    self.request.user.email)
+        task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
+                                           name=_('ICANN IDN Tables Review'),
+                                           user=self.request.user)
+        idn_table_review_task.apply_async((self.request.user.pk,
+                                           self.request.build_absolute_uri('/').rstrip('/')),
+                                          task_id=task.pk)
 
-        messages.info(request, _('Generating report. You will receive an email upon completion.'))
+        messages.info(request,
+                      mark_safe(_('Generating report. You can follow your task progression in the %s.') % (
+                          f"<a href='{reverse('list_process')}'>{_('task status page')}</a>")))
         return redirect('lgr_idn_icann_mode')
 
     def get_context_data(self, **kwargs):

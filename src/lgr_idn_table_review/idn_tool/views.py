@@ -7,7 +7,7 @@ from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ngettext
 from django.views import View
 from django.views.generic import FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
@@ -17,6 +17,7 @@ from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
 from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_models.models.lgr import RzLgr, RefLgr, RzLgrMember
+from lgr_tasks.models import LgrTaskModel
 
 logger = logging.getLogger(__name__)
 
@@ -76,15 +77,18 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
         self.report_id = self.kwargs.get('report_id')
 
     def form_valid(self, form):
-        email_address = self.request.user.email
-
         idn_tables = []
         for idn_table_pk, lgr_info in form.cleaned_data.items():
             idn_tables.append((idn_table_pk, lgr_info))
 
-        idn_table_review_task.delay(idn_tables, self.report_id, email_address,
-                                    self.request.build_absolute_uri(self.get_success_url()),
-                                    self.request.build_absolute_uri('/').rstrip('/'))
+        task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
+                                           name=ngettext('Review of %(count)d IDN table',
+                                                         'Review of %(count)d IDN tables',
+                                                         len(idn_tables)) % {'count': len(idn_tables)},
+                                           user=self.request.user)
+        idn_table_review_task.apply_async((self.request.user.pk, idn_tables, self.report_id,
+                                           self.request.build_absolute_uri('/').rstrip('/')),
+                                          task_id=task.pk)
 
         return super(IdnTableReviewSelectReferenceView, self).form_valid(form)
 

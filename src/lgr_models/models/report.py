@@ -29,9 +29,6 @@ class LGRReport(models.Model):
     def storage(self):
         return self.storage_type.value
 
-    class Meta:
-        abstract = True
-
     @staticmethod
     def upload_path(instance, filename):
         return os.path.join(instance.storage, f'user_{instance.owner.id}', filename)

@@ -12,6 +12,11 @@
 {% endif %}
 </h2>
 <div>
-{% blocktrans %}As the computing may be very long, once completed, an e-mail will be sent at the provided address: {{ email }}{% endblocktrans %}</div>
+{% url 'list_process' as task_status_url %}
+<p>{% blocktrans trimmed  %}
+  The computing may be very long, you can follow your task progression on the
+  <a href="{{ task_status_url }}">task status page</a>.
+{% endblocktrans %}</p>
+</div>
 
 {% endblock content %}

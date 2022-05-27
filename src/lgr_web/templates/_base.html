@@ -17,6 +17,17 @@
     <script src="{% static 'chrome/js/vendor/jquery.min.js' %}"></script>
     <script src="{% static 'chrome/js/vendor/jquery-ui.min.js' %}"></script>
     <script src="{% static 'chrome/bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <style>
+      .btn-negative {
+          color: #fff;
+          background-color: #222;
+      }
+      .btn-negative:hover {
+          color: #e6e6e6;
+          text-decoration: none;
+      }
+    </style>
     {% block html_head_more %}{% endblock %}
 </head>
 <body style="padding-top: 20px;">
@@ -55,12 +66,15 @@
                         {% if home_url_name %}
                             <a class="header-link" href="{% url 'lgr_home' %}">{% trans "Switch mode" %}</a>
                         {% endif %}
+                        {% if user.is_authenticated %}
+                            <a href="{% url 'list_process' %}" class="btn btn-negative"><b>{% trans 'Tasks' %}</b></a>
+                            <a class="btn btn-default show-tooltip"
+                               data-toggle="modal" data-target="#about-modal"
+                               title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
+                              <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
+                            </a>
+                        {% endif %}
                         {% block navbar-right %}
-                        <a class="btn btn-default show-tooltip"
-                           data-toggle="modal" data-target="#about-modal"
-                           title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
-                            <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
-                        </a>
                         {% if user.is_authenticated %}
                             <div class="btn-group">
                             <a class="btn btn-default dropdown-toggle pull-right" href="#" data-toggle="dropdown"
@@ -158,6 +172,10 @@
         let result = confirm(msg);
         if (action && result) {
             eval(action)
+        }
+        // callback to call when OK is clicked
+        if (typeof window.actionConfirmed === "function") {
+          actionConfirmed(result);
         }
         return result;
     }

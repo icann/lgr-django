@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import uuid
+
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 
 from lgr.tools.utils import download_file
@@ -16,6 +19,7 @@ from lgr_advanced.lgr_tools.forms import (LGRCompareSelector,
                                           LGRHarmonizeSelector,
                                           LGRComputeVariantsSelector)
 from lgr_models.models.lgr import LgrBaseModel, RzLgr
+from lgr_tasks.models import LgrTaskModel
 from lgr_utils.cp import cp_to_slug
 from .tasks import (diff_task,
                     collision_task,
@@ -35,7 +39,6 @@ class LGRToolBaseView(LGRViewMixin, FormView):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.lgr_pk = self.kwargs.get('lgr_pk')
-        self.email_address = request.user.email
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -47,22 +50,21 @@ class LGRToolBaseView(LGRViewMixin, FormView):
         initial[self.initial_field] = self.lgr_pk or ''
         return initial
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx.update({
-            'email': self.email_address,
-        })
-        return ctx
-
     def get_async_method(self, lgr_object: LgrBaseModel):
         return self.async_method
 
-    def call_async(self, selected_lgr_object: LgrBaseModel, *args, **kwargs):
+    def get_task_name(self, lgr_object: LgrBaseModel):
+        raise NotImplementedError
+
+    def call_async(self, selected_lgr_object: LgrBaseModel, *args):
         method = self.get_async_method(selected_lgr_object)
         if not method:
             raise RuntimeError
 
-        method.delay(self.request.user.pk, selected_lgr_object.pk, *args, **kwargs)
+        task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
+                                           name=self.get_task_name(selected_lgr_object),
+                                           user=self.request.user)
+        method.apply_async((self.request.user.pk, selected_lgr_object.pk, *args), task_id=task.pk)
 
 
 class LGRCompareView(LGRToolBaseView):
@@ -130,6 +132,9 @@ class LGRDiffView(LGRToolBaseView):
     template_name = 'lgr_tools/diff.html'
     async_method = diff_task
 
+    def get_task_name(self, lgr_object: LgrBaseModel):
+        return _(f'Diff with LGR %s') % lgr_object.name
+
     def form_valid(self, form):
         lgr_pk_1, lgr_pk_2 = (form.cleaned_data[lgr_id] for lgr_id in ('lgr_1', 'lgr_2'))
         labels_file = form.cleaned_data['labels']
@@ -158,6 +163,9 @@ class LGRCollisionView(LGRToolBaseView):
     form_class = LGRCollisionSelector
     template_name = 'lgr_tools/collision.html'
     async_method = collision_task
+
+    def get_task_name(self, lgr_object: LgrBaseModel):
+        return _('Collision with LGR %s') % lgr_object.name
 
     def form_valid(self, form):
         lgr_pk = form.cleaned_data['lgr']
@@ -195,6 +203,12 @@ class LGRAnnotateView(LGRToolBaseView):
             return lgr_set_annotate_task
         return annotate_task
 
+    def get_task_name(self, lgr_object: LgrBaseModel):
+        if lgr_object.is_set():
+            return _(f'Annotation on LGR set %s') % lgr_object.name
+        else:
+            return _(f'Annotation on LGR %s') % lgr_object.name
+
     def form_valid(self, form):
         ctx = self.get_context_data()
         lgr_pk = form.cleaned_data['lgr']
@@ -205,7 +219,7 @@ class LGRAnnotateView(LGRToolBaseView):
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name,
                                           labels_file.read()).to_dict()
-        async_kwargs = {'labels_json': labels_json}
+        async_args = [labels_json]
 
         if lgr_object.is_set():
             set_labels_file = form.cleaned_data['set_labels']
@@ -215,14 +229,14 @@ class LGRAnnotateView(LGRToolBaseView):
                 # Handle label set
                 set_labels_info = LabelInfo.from_form(set_labels_file.name,
                                                       set_labels_file.read())
-            async_kwargs['set_labels_json'] = set_labels_info.to_dict()
+            async_args.append(set_labels_info.to_dict())
 
         if lgr_object.is_set():
             script_lgr_pk = form.cleaned_data['script']
             ctx['script_lgr_pk'] = script_lgr_pk
-            async_kwargs['script_lgr_pk'] = script_lgr_pk
+            async_args.append(script_lgr_pk)
 
-        self.call_async(lgr_object, **async_kwargs)
+        self.call_async(lgr_object, *async_args)
 
         ctx.update({
             'lgr_object': lgr_object,
@@ -235,6 +249,9 @@ class LGRCrossScriptVariantsView(LGRToolBaseView):
     form_class = LGRCrossScriptVariantsSelector
     template_name = 'lgr_tools/cross_script_variants.html'
     async_method = cross_script_variants_task
+
+    def get_task_name(self, lgr_object: LgrBaseModel):
+        return _(f'Cross-scrip variants computation on LGR %s') % lgr_object.name
 
     def form_valid(self, form):
         ctx = self.get_context_data()
@@ -304,6 +321,9 @@ class LGRComputeVariants(LGRToolBaseView):
     form_class = LGRComputeVariantsSelector
     template_name = 'lgr_tools/variants.html'
     async_method = validate_labels_task
+
+    def get_task_name(self, lgr_object: LgrBaseModel):
+        return _(f'Variant computation on LGR %s') % lgr_object.name
 
     def form_valid(self, form):
         lgr_pk = form.cleaned_data['lgr']

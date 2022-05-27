@@ -7,6 +7,7 @@ import logging
 from datetime import datetime
 
 from django.core.files import File
+from django.utils import timezone
 
 from lgr_idn_table_review.idn_tool.models import IdnReviewReport, IdnTable
 from lgr_session.api import LGRStorage
@@ -20,7 +21,7 @@ class LGRIdnReviewApi(LGRStorage):
 
     @staticmethod
     def generate_report_id():
-        return datetime.now().strftime('%Y-%m-%d-%H%M%S.%f')
+        return timezone.now().strftime('%Y-%m-%d-%H%M%S.%f')
 
     def lgr_queryset(self):
         return self.lgr_model.objects.filter(owner=self.user)

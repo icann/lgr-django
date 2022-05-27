@@ -6,7 +6,11 @@
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.lgr %}
         {% include "lgr_editor/_form_field.html" with field=form.labels %}
-        <p>{% blocktrans %}As the computing may be very long, we will warn by e-mail once the result can be downloaded.{% endblocktrans %}</p>
+        {% url 'list_process' as task_status_url %}
+        <p>{% blocktrans trimmed  %}
+          The computing may be very long, you can follow your task progression on the
+          <a href="{{ task_status_url }}">task status page</a>.
+        {% endblocktrans %}</p>
         {% for hidden in form.hidden_fields %}
             {{ hidden }}
         {% endfor %}

@@ -7,7 +7,11 @@
         {% include "lgr_editor/_form_field.html" with field=form.lgr %}
         {% include "lgr_editor/_form_field_checkbox.html" with field=form.download_tlds %}
         {% include "lgr_editor/_form_field.html" with field=form.labels %}
-        <p>{% blocktrans %}As the computing may be very long, we will warn by e-mail once the result can be downloaded.{% endblocktrans %}</p>
+        {% url 'list_process' as task_status_url %}
+        <p>{% blocktrans trimmed  %}
+          The computing may be very long, you can follow your task progression on the
+          <a href="{{ task_status_url }}">task status page</a>.
+        {% endblocktrans %}</p>
         {% include "lgr_editor/_form_field_checkbox.html" with field=form.full_dump label_width=7 field_width=8 %}
         {% include "lgr_editor/_form_field_checkbox.html" with field=form.with_rules label_width=7 field_width=8 %}
         {% for hidden in form.hidden_fields %}
