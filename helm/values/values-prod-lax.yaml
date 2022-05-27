@@ -81,7 +81,7 @@ microservices:
       pathType: Prefix
       port: 8000
       protocol: TCP
-      nodePort: 32151
+      nodePort: 32100
     resources:
       limits:
         cpu: 1
