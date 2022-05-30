@@ -173,10 +173,6 @@
         if (action && result) {
             eval(action)
         }
-        // callback to call when OK is clicked
-        if (typeof window.actionConfirmed === "function") {
-          actionConfirmed(result);
-        }
         return result;
     }
 

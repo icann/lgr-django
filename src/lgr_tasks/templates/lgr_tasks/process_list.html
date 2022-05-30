@@ -21,11 +21,12 @@
 {% endblock %}
 
 {% block content %}
-  <button id="refresh-button" onclick="switchRefresh()" class="btn pull-right" title="{% trans 'Switch Refreshing' %}">
-    {% trans "Auto Refresh" %}
-  </button>
-  <h1>{% trans 'Tasks' %}</h1>
-  {% load i18n %}
+  <h1>
+    {% trans 'Tasks' %}
+    <button type="button" class="btn btn-default" onClick="window.location.reload();">
+      <i class="glyphicon glyphicon-refresh"></i>
+    </button>
+  </h1>
 
   <table class="table table-responsive">
     {% for task in tasks %}
@@ -101,7 +102,7 @@
                   action="{% url "delete_process" task_id=task.id %}?next={{ request.path }}">
               {% csrf_token %}
               {% if task.status == 'PENDING' or task.status == 'RETRY' %}
-                <button type="submit" class="btn btn-default confirm-prompt" onclick="disableRefresh()"
+                <button type="submit" class="btn btn-default confirm-prompt"
                         data-confirmation-prompt="{% trans 'Are you sure you want to cancel this task?' %}">
                 <span class="glyphicon glyphicon-stop"></span>
               {% else %}
@@ -118,7 +119,7 @@
   {% if tasks %}
     <form method="post" action="{% url "delete_finished" %}?next={{ request.path }}">
       {% csrf_token %}
-      <button type="submit" class="btn btn-danger confirm-prompt" onclick="disableRefresh()"
+      <button type="submit" class="btn btn-danger confirm-prompt"
               data-confirmation-prompt="{% trans 'Are you sure you want to clean tasks?' %}">
         <span class="glyphicon glyphicon-trash"></span> {% trans 'Delete completed tasks' %}
       </button>
@@ -126,34 +127,4 @@
   {% else %}
     <p>{% trans 'No task registered' %}</p>
   {% endif %}
-{% endblock %}
-
-{% block html_body_more %}
-  <script>
-  var refresh = false
-  var previous_refresh = false
-  function refreshWindow() {
-      if (refresh === true) {
-        window.location.reload()
-      }
-  }
-  function disableRefresh() {
-    previous_refresh = refresh
-    refresh = false
-  }
-  function actionConfirmed(result) {
-    refresh = previous_refresh
-  }
-  function switchRefresh() {
-    refresh = !refresh
-    if (refresh) {
-      $('#refresh-button').html("{% trans 'Stop Refreshing' %}")
-    } else {
-        $('#refresh-button').html("{% trans 'Auto Refresh' %}")
-    }
-  }
-  $(document).ready(function ($) {
-      setTimeout('refreshWindow()', 5000)
-  })
-  </script>
 {% endblock %}
