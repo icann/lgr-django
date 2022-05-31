@@ -67,12 +67,14 @@
        {% if not completed %}aria-disabled="true"{% endif %}>
         <i class="glyphicon glyphicon-floppy-disk"></i>&nbsp;{% trans 'Download all' %}
     </a>
-    <a href="{{ summary.to_url }}?display=true&next={{ request.path }}"
-       class="btn btn-default{% if not completed %} disabled{% endif %}"
-       {% if not completed %}aria-disabled="true"{% endif %} target="_blank" rel="noopener noreferrer">
-        <i class="glyphicon glyphicon-list-alt"></i>&nbsp;{% trans 'Summary' %}
-    </a>
     </span>
+    {% if summary %}
+      <a href="{{ summary.to_url }}?display=true&next={{ request.path }}"
+         class="btn btn-default{% if not completed %} disabled{% endif %}"
+         {% if not completed %}aria-disabled="true"{% endif %} target="_blank" rel="noopener noreferrer">
+          <i class="glyphicon glyphicon-list-alt"></i>&nbsp;{% trans 'Summary' %}
+      </a>
+    {% endif %}
 {% endblock content %}
 
 
