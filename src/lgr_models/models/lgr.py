@@ -22,7 +22,7 @@ from lgr_web import settings
 
 
 def get_upload_path(instance, filename):
-    base_path = 'idn_table_review'
+    base_path = 'lgr'
     # need to test on object_name because instance may not be a real object instance if called in a migration
     if instance._meta.object_name == 'RzLgr':
         return os.path.join(base_path, 'rz_lgr', filename)
@@ -32,9 +32,9 @@ def get_upload_path(instance, filename):
         return os.path.join(base_path, 'rz_lgr', instance.rz_lgr.name, filename)
     if instance._meta.object_name == 'MSR':
         return os.path.join(base_path, 'msr', filename)
-    # if you need to use other LgrBaseModel in migration, this won't work as historical models don't includes method.
+    # if you need to use other LgrBaseModel in migration, this won't work as historical models don't include method.
     # See https://docs.djangoproject.com/en/3.1/topics/migrations/#historical-models
-    # If you need this in a migration, define the method and the migration and set it to the historical model.
+    # If you need this in a migration, define the method in the migration and set it to the historical model.
     return os.path.join('lgr', instance.upload_path(instance, filename))
 
 
