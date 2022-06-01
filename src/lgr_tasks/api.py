@@ -32,7 +32,10 @@ def get_task_info(user, task_id=None):
         pending = [t['id'] for t in sum(ireserved.values() or [], [])]
     if ischeduled:
         pending += [t['id'] for t in sum(ischeduled.values() or [], [])]
-    revoked = i.revoked().values()
+    irevoked = i.revoked()
+    revoked = []
+    if irevoked:
+        revoked = sum(irevoked.values() or [], [])
     tasks = []
     query = Q(user=user)
     found_active = False
@@ -84,4 +87,6 @@ def _get_report_instance(report):
         except Exception:
             continue
         else:
-            return report
+            break
+
+    return report
