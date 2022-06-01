@@ -341,6 +341,7 @@ LGR_VALIDATION_MAX_VARS_SYNCHRONOUS = 10000
 
 # A list of IDN tables to handle in ICANN IDN table review. None for all.
 ICANN_IDN_REVIEW_TABLES = []
+# ICANN_IDN_REVIEW_TABLES = ['aaa_zh_3.0.xml']
 
 
 ##### Celery configuration parameters #####
@@ -353,6 +354,7 @@ CELERYD_HIJACK_ROOT_LOGGER = False
 
 CELERYD_TASK_SOFT_TIME_LIMIT = 60*60*24  # 24h
 CELERYD_TASK_TIME_LIMIT = 3600*25  # 25h
+# CELERY_ALWAYS_EAGER = True  # set to True to skip using queues
 
 CELERY_QUEUES = (
     Queue('celery', routing_key='transient',
