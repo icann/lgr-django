@@ -1,3 +1,5 @@
+import unittest
+
 from lgr_models.models.lgr import UnicodeVersion
 from lgr_models.tests.test_unicode_version import TestUnicodeVersion
 
@@ -11,8 +13,10 @@ class TestUnicodeVersions(TestUnicodeVersion):
         self.assertContains(response, '<a href="/m/rz-lgr">Root Zone LGRs</a>', status_code=200)
         self.assertContains(response, '<a href="/m/ref-lgr">Reference LGRs</a>')
         self.assertContains(response, '<a href="/m/users">User management</a>')
-        self.assertContains(response, '<a href="/m/unicode-versions">Unicode Versions</a>')
+        # FIXME: disabled for now
+        # self.assertContains(response, '<a href="/m/unicode-versions">Unicode Versions</a>')
 
+    @unittest.skip('Disabled for now')
     def test_unicode_tab(self):
         self.login()
 
@@ -21,6 +25,7 @@ class TestUnicodeVersions(TestUnicodeVersion):
         # check that all unicode versions are unactivated by default, and that the hidden input is the reverse: True:
         self.assertContains(response, """<input type="hidden" name="activated" value="True">""")
 
+    @unittest.skip('Disabled for now')
     def test_unicode_edit(self):
         self.login()
 
@@ -30,6 +35,7 @@ class TestUnicodeVersions(TestUnicodeVersion):
         self.assertEqual(new_unicode_version.activated, True)
         self.assertListEqual([new_unicode_version], list(UnicodeVersion.get_activated()))
 
+    @unittest.skip('Disabled for now')
     def test_unicode_create(self):
         self.login()
 

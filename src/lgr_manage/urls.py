@@ -3,9 +3,14 @@ from django.urls import path
 
 from lgr_manage.views.msr import MSRView, MSRDeleteView, DisplayMSRView, MSRIsActiveView
 from lgr_manage.views.reference_lgr import RefLgrView, RefLgrDeleteView, DisplayRefLgrView
-from lgr_manage.views.rz_lgr import RzLgrView, RzLgrDeleteView, DisplayRzLgrView, DisplayRzLgrMemberView, RzLgrIsActiveView
-from lgr_manage.views.unicode_versions import LgrUnicodeVersionUpdateView, LgrUnicodeVersionsListView, \
-    LgrUnicodeVersionCreateView
+from lgr_manage.views.rz_lgr import (RzLgrView,
+                                     RzLgrDeleteView,
+                                     DisplayRzLgrView,
+                                     DisplayRzLgrMemberView,
+                                     RzLgrIsActiveView)
+# from lgr_manage.views.unicode_versions import (LgrUnicodeVersionUpdateView,
+#                                                LgrUnicodeVersionsListView,
+#                                                LgrUnicodeVersionCreateView)
 from lgr_manage.views.users import LgrUserView, LgrUserDeleteView, LgrUserChangeStatusView, LgrUserAdminUpdateView
 
 urlpatterns = [
@@ -27,9 +32,9 @@ urlpatterns = [
     path('users/<int:user_pk>/update', LgrUserAdminUpdateView.as_view(), name='lgr_admin_update_user'),
     path('users/<int:user_pk>/delete', LgrUserDeleteView.as_view(), name='lgr_admin_delete_user'),
     path('users/<int:user_pk>/status', LgrUserChangeStatusView.as_view(), name='lgr_admin_change_user_status'),
-    path('unicode-versions', LgrUnicodeVersionsListView.as_view(), name='lgr_idn_admin_unicode_versions'),
-    path('unicode-versions/<int:pk>/update', LgrUnicodeVersionUpdateView.as_view(),
-         name='lgr_idn_admin_unicode_version_update'),
-    path('unicode-versions/create', LgrUnicodeVersionCreateView.as_view(),
-         name='create_unicode_version')
+    # path('unicode-versions', LgrUnicodeVersionsListView.as_view(), name='lgr_idn_admin_unicode_versions'),
+    # path('unicode-versions/<int:pk>/update', LgrUnicodeVersionUpdateView.as_view(),
+    #      name='lgr_idn_admin_unicode_version_update'),
+    # path('unicode-versions/create', LgrUnicodeVersionCreateView.as_view(),
+    #      name='create_unicode_version')
 ]
