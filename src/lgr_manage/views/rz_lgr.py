@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
 
-from lgr_manage.views.AjaxFormMixin import AjaxFormMixin
+from lgr_manage.views.ajax_mixin import AjaxFormViewMixin
 from lgr_models.models.lgr import RzLgr, RzLgrMember
 from lgr_manage.forms import RzLgrCreateForm, RzLgrIsActiveForm
 from lgr_manage.views.common import BaseListAdminView, BaseAdminView
@@ -90,7 +90,7 @@ class DisplayRzLgrMemberView(SingleObjectMixin, views.View):
         return self.model.objects.filter(rz_lgr__pk=self.kwargs.get('rz_lgr_pk'))
 
 
-class RzLgrIsActiveView(AjaxFormMixin, views.generic.edit.FormView):
+class RzLgrIsActiveView(AjaxFormViewMixin, views.generic.edit.FormView):
     model = RzLgr
     form_class = RzLgrIsActiveForm
     template_name = 'lgr_manage/rz_lgr.html'

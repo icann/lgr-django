@@ -1,13 +1,12 @@
-from django.forms.utils import ErrorList
-from django.http import JsonResponse
-
-from lgr_manage.views.common import BaseAdminView
-from django.utils.translation import ugettext_lazy as _
 import logging
 
+from django.http import JsonResponse
+from django.utils.translation import ugettext_lazy as _
 
-class AjaxFormMixin(BaseAdminView):
+from lgr_manage.views.common import BaseAdminView
 
+
+class AjaxFormViewMixin(BaseAdminView):
     model = None
 
     def form_valid(self, form):
@@ -37,7 +36,7 @@ class AjaxFormMixin(BaseAdminView):
         return JsonResponse(data)
 
     def form_invalid(self, form):
-        response = super(AjaxFormMixin, self).form_invalid(form)
+        response = super(AjaxFormViewMixin, self).form_invalid(form)
         if self.request.is_ajax():
             return JsonResponse(form.errors, status=400)
         else:

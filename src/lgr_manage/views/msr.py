@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
 
 from lgr_manage.forms import MSRCreateForm, MSRIsActiveForm
-from lgr_manage.views.AjaxFormMixin import AjaxFormMixin
+from lgr_manage.views.ajax_mixin import AjaxFormViewMixin
 from lgr_manage.views.common import BaseListAdminView, BaseAdminView
 from lgr_models.models.lgr import MSR
 
@@ -68,7 +68,7 @@ class MSRDeleteView(BaseAdminView, views.generic.DeleteView):
     pk_url_kwarg = 'lgr_pk'
 
 
-class MSRIsActiveView(AjaxFormMixin, views.generic.edit.FormView):
+class MSRIsActiveView(AjaxFormViewMixin, views.generic.edit.FormView):
     model = MSR
     form_class = MSRIsActiveForm
     template_name = 'lgr_manage/msr.html'
