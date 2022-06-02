@@ -21,7 +21,7 @@ from lgr_idn_table_review.icann_tools.api import (get_icann_idn_repository_table
                                                   get_reference_lgr,
                                                   NoRefLgrFound, LGRIcannStorage)
 from lgr_idn_table_review.icann_tools.models import IANAIdnTable
-from lgr_models.models.lgr import UnicodeVersion
+from lgr_models.models.unicode import UnicodeVersion
 from lgr_utils import unidb
 
 logger = logging.getLogger(__name__)

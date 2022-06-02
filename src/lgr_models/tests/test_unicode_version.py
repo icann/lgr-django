@@ -2,7 +2,7 @@ import unittest
 
 from django.test import override_settings
 
-from lgr_models.models.lgr import UnicodeVersion
+from lgr_models.models.unicode import UnicodeVersion
 from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
 from lgr_web import settings
 
@@ -52,5 +52,8 @@ class TestUnicodeVersionModel(TestUnicodeVersion):
             '8.0.0',
             '9.0.0',
             '10.0.0',
+            '11.0.0',
+            '12.0.0',
+            '13.0.0',
             '14.0.0'
         })

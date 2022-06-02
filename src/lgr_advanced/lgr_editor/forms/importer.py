@@ -6,7 +6,7 @@ from django.core import validators
 from django.forms.utils import ErrorList
 from django.utils.translation import ugettext_lazy as _
 
-from lgr_models.models.lgr import UnicodeVersion
+from lgr_models.models.unicode import UnicodeVersion
 from .fields import FILE_FIELD_ENCODING_HELP, ValidatingRepertoire
 
 

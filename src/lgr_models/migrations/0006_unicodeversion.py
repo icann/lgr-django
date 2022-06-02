@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('version', models.CharField(max_length=255, unique=True)),
-                ('activated', models.BooleanField()),
+                ('activated', models.BooleanField(default=True)),
             ],
             options={'ordering': ['version']}
         ),

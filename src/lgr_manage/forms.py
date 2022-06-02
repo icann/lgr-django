@@ -5,7 +5,8 @@ from django.forms import FileField, CharField
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
-from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, MSR, UnicodeVersion
+from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, MSR
+from lgr_models.models.unicode import UnicodeVersion
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 

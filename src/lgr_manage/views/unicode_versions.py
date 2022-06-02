@@ -5,7 +5,7 @@ from django.views.generic import UpdateView, CreateView
 
 from lgr_manage.forms import UnicodeVersionUpdateForm, UnicodeVersionCreateForm
 from lgr_manage.views.common import BaseAdminMixin, BaseListAdminView
-from lgr_models.models.lgr import UnicodeVersion
+from lgr_models.models.unicode import UnicodeVersion
 
 
 class LgrUnicodeVersionsListView(BaseListAdminView):

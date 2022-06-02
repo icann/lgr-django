@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.utils import parse_label_input
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_models.models.lgr import UnicodeVersion
+from lgr_models.models.unicode import UnicodeVersion
 from lgr_utils import unidb
 
 

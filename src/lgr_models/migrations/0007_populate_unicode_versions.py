@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.db import migrations
 
-from lgr_models.models.lgr import UnicodeVersion
+from lgr_models.models.unicode import UnicodeVersion
 
 
 def get_supported_unicode_versions():
@@ -19,12 +19,15 @@ def initial_data(apps, schema_editor):
         '7.0.0',
         '8.0.0',
         '9.0.0',
-        '10.0.0'
+        '10.0.0',
+        '11.0.0',
+        '12.0.0',
+        '13.0.0',
+        '14.0.0'
     ]
 
     for supported_version in known_unicode_versions:
-        old_unicode_version.objects.using(schema_editor.connection.alias).create(version=supported_version,
-                                                                                 activated=False)
+        old_unicode_version.objects.using(schema_editor.connection.alias).create(version=supported_version)
 
 
 class Migration(migrations.Migration):

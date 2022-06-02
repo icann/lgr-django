@@ -10,7 +10,7 @@ from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel
 from lgr_advanced.utils import list_built_in_lgr
 from lgr_models.models.lgr import RzLgr
-from lgr_models.models.lgr import UnicodeVersion
+from lgr_models.models.unicode import UnicodeVersion
 from lgr_utils import unidb
 
 

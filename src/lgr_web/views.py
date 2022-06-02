@@ -4,7 +4,7 @@ from enum import Enum, auto
 from dal import autocomplete
 from django.views.generic import TemplateView
 
-from lgr_models.models.lgr import UnicodeVersion
+from lgr_models.models.unicode import UnicodeVersion
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 
