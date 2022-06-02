@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Root Zone LGR for the Arabic Script">5</version>
-    <date>2022-03-24</date>
+    <date>2022-05-26</date>
     <language>und-Arab</language>
     <scope type="domain">.</scope>
     <unicode-version>11.0.0</unicode-version>
@@ -14,9 +14,7 @@
        For more details on this LGR and additional background on the script, see
        TF-AIDN, “Proposal for Arabic Script Root Zone LGR”, Version 3.4, 18 November 2015 [Proposal-Arabic].
        This file is one of a set of LGR files that together form an integrated LGR for the DNS Root Zone [RZ-LGR-5]. 
-       The format of this file follows [RFC 7940].</p> 
-         
-      <p class="notice">This is a DRAFT document released for public comments and not final. For details on how to submit comments see the announcement for public comments on Root Zone LGR-5 on the ICANN website. https://icann.org/idn</p>
+       The format of this file follows [RFC 7940].</p>
 
 <h2>Repertoire</h2> 
       <p>The repertoire is described in Section 3.2 of [Proposal-Arabic] and 
@@ -51,7 +49,7 @@
        <p>The specification of variants in the Root Zone LGR follows the guidelines in [RFC 8228].</p>
 
       <h2>Character Classes</h2>
-      <p>This proposal does not define named character classes.</p>
+      <p>This LGR does not define named character classes.</p>
 
       <h2>Whole Label Evaluation (WLE) and Context Rules</h2>
       <h3>Default Whole Label Evaluation Rules and Actions</h3>
@@ -68,7 +66,7 @@
         <li><b>no-mix-heh-goal-ae</b> &mdash; WLE Rule 5: do not mix Arabic letters HEH GOAL and AE in the same label</li>
         <li><b>no-mix-heh-ae</b> &mdash; WLE Rule 6: do not mix Arabic letters HEH and AE in the same label</li>
         <li><b>no-mix-heh-doachashmee</b> &mdash; WLE Rule 7: do not mix Arabic letters HEH and HEH DOACHASHMEE in the same label</li>
-        <li><b>no-mix-teh-marbuta-goal</b> &mdash; WLE Rule 8: do not mix Arabic letters TEH MARBUTA and FEH WITH DOT MOVED BELOW in the same label</li>
+        <li><b>no-mix-teh-marbuta-goal</b> &mdash; WLE Rule 8: do not mix Arabic letters TEH MARBUTA and TEH MARBUTA GOAL in the same label</li>
         <li><b>no-mix-noon-with-three-dots-above-yeh-with-three-dots-below</b> &mdash; WLE Rule 9: do not mix Arabic letters NOON WITH THREE DOTS ABOVE and YEH WITH THREE DOTS BELOW in the same label</li>
         <li><b>no-mix-peh-noon-with-three-dots-above</b> &mdash; WLE Rule 10: do not mix Arabic letters PEH and NOON WITH THREE DOTS ABOVE in the same label</li>
         <li><b>no-mix-feh-with-dot-moved-below</b> &mdash; WLE Rule 11:do not mix Arabic letters FEH and FEH WITH DOT MOVED BELOW in the same label</li>
@@ -89,7 +87,7 @@
         <dt>[EGIDS]</dt>
         <dd>Lewis and Simons, “EGIDS: Expanded Graded Intergenerational Disruption Scale,”
          documented in [SIL-Ethnologue] and summarized here:
-         https://en.wikipedia.org/wiki/Expanded_Graded_Intergenerational_Disruption_Scale_(EGIDS</dd>
+         https://en.wikipedia.org/wiki/Expanded_Graded_Intergenerational_Disruption_Scale_(EGIDS)</dd>
         <dt>[IAB]</dt>
         <dd>Internet Architecture Board (IAB), “IAB Statement on Identifiers and Unicode 7.0.0”
          https://www.iab.org/documents/correspondence-reports-documents/2015-2/iab-statement-on-identifiers-and-unicode-7-0-0/</dd>
@@ -99,21 +97,21 @@
         <dt>[Proposal-Arabic]</dt>
         <dd>TF-AIDN, “Proposal for Arabic Script Root Zone LGR”, Version 3.4, 18 November 2015 https://www.icann.org/en/system/files/files/arabic-lgr-proposal-18nov15-en.pdf</dd>  
         <dt>[RFC 6365]</dt> 
-        <dd>Hoffman, P. and J. Klensin, “Terminology Used in Internationalization in the IETF”, BCP 166, RFC 6365, DOI 10.17487/RFC6365, September 2011, http://www.rfc-editor.org/info/rfc6365</dd>
+        <dd>Hoffman, P. and J. Klensin, “Terminology Used in Internationalization in the IETF”, BCP 166, RFC 6365, DOI 10.17487/RFC6365, September 2011, https://www.rfc-editor.org/info/rfc6365</dd>
         <dt>[RFC 7940]</dt>
-        <dd> Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, http://www.rfc-editor.org/info/rfc7940</dd>
+        <dd> Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, https://www.rfc-editor.org/info/rfc7940</dd>
         <dt>[RFC 8228]</dt>
         <dd>A. Freytag, “Guidance on Designing Label Generation Rulesets (LGRs) Supporting Variant Labels”, RFC 8228, August 2017,
         https://www.rfc-editor.org/info/rfc8228</dd>
         <dt>[RZ-LGR-5-Overview]</dt>
-        <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-24mar22-en.pdf</dd>
+        <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
 
         <dt>[RZ-LGR-5]</dt>
-        <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 24 March 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.xml <br/>
-         <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.html</i></dd>
+        <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 26 May 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.xml <br/>
+         <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.html</i></dd>
         <dt>[Unicode 11.0]</dt>
         <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) 
-         http://www.unicode.org/versions/Unicode11.0.0/</dd>
+         https://www.unicode.org/versions/Unicode11.0.0/</dd>
         <dt>[TF-AIDN]</dt>
         <dd>Blog, “Task Force for Arabic Script IDNs” https://www.icann.org/news/blog/what-is-the-task-force-on-arabic-script-idns-tf-aidn-up-to</dd>
       </dl>
@@ -133,52 +131,52 @@
       <reference id="12" comment="Any code point originally encoded in Unicode 6.1">The Unicode Standard 6.1</reference>
       <reference id="100">El-Sherbiny, A., Farah, M., Oueichek, I., and A. Al-Zoman, 
       “Linguistic Guidelines for the Use of the Arabic Language in Internet Domains”, RFC 5564, February 2010 https://www.rfc-editor.org/info/rfc5564</reference>
-      <reference id="101">Omniglot, “Hausa” http://omniglot.com/writing/hausa.htm</reference>
-      <reference id="102">Omniglot, “Kashmiri” http://omniglot.com/writing/kashmiri.htm</reference>
-      <reference id="103">Omniglot, “Kazakh” http://omniglot.com/writing/kazakh.htm</reference>
-      <reference id="104">Omniglot, “Khowar” http://omniglot.com/writing/khowar.htm</reference>
-      <reference id="105">Omniglot, “Kirghiz” http://omniglot.com/writing/kirghiz.htm</reference>
-      <reference id="106">Omniglot, “Kurdish” http://omniglot.com/writing/kurdish.htm</reference>
-      <reference id="107">Omniglot, “Malay” http://omniglot.com/writing/malay.htm</reference>
-      <reference id="108">Omniglot, “Pashto” http://omniglot.com/writing/pashto.htm</reference>
-      <reference id="109">Omniglot, “Persian(Farsi)” http://omniglot.com/writing/persian.htm</reference>
-      <reference id="110">Omniglot, “Saraiki” http://omniglot.com/writing/saraiki.htm</reference>
-      <reference id="111">Omniglot, “Sindhi” http://omniglot.com/writing/sindhi.htm</reference>
-      <reference id="112">Omniglot, “Urdu” http://omniglot.com/writing/urdu.htm</reference>
-      <reference id="113">Omniglot, “Wolof” http://omniglot.com/writing/wolof.htm</reference>
+      <reference id="101">Omniglot, “Hausa” https://omniglot.com/writing/hausa.htm</reference>
+      <reference id="102">Omniglot, “Kashmiri” https://omniglot.com/writing/kashmiri.htm</reference>
+      <reference id="103">Omniglot, “Kazakh” https://omniglot.com/writing/kazakh.htm</reference>
+      <reference id="104">Omniglot, “Khowar” https://omniglot.com/writing/khowar.htm</reference>
+      <reference id="105">Omniglot, “Kirghiz” https://omniglot.com/writing/kirghiz.htm</reference>
+      <reference id="106">Omniglot, “Kurdish” https://omniglot.com/writing/kurdish.htm</reference>
+      <reference id="107">Omniglot, “Malay” https://omniglot.com/writing/malay.htm</reference>
+      <reference id="108">Omniglot, “Pashto” https://omniglot.com/writing/pashto.htm</reference>
+      <reference id="109">Omniglot, “Persian(Farsi)” https://omniglot.com/writing/persian.htm</reference>
+      <reference id="110">Omniglot, “Saraiki” https://omniglot.com/writing/saraiki.htm</reference>
+      <reference id="111">Omniglot, “Sindhi” https://omniglot.com/writing/sindhi.htm</reference>
+      <reference id="112">Omniglot, “Urdu” https://omniglot.com/writing/urdu.htm</reference>
+      <reference id="113">Omniglot, “Wolof” https://omniglot.com/writing/wolof.htm</reference>
       <reference id="114">Omniglot, “Uyghur https://omniglot.com/writing/uyghur.htm</reference>
-      <reference id="115">Unicode, Kashmiri, Yeh http://www.unicode.org/L2/L2009/09215-kashmiri.pdf</reference>
-      <reference id="116">Unicode, Chad ANT, pp. 19-20 http://www.unicode.org/L2/L2010/10288r-arabic-proposal.pdf</reference>
-      <reference id="117">Unicode, DPLN, p.21 http://www.unicode.org/L2/L2010/10288r-arabic-proposal.pdf</reference>
-      <reference id="118">Unicode, Jawi and Moroccan Arabic GAF, http://www.unicode.org/L2/L2003/03176-gafs.pdf</reference>
-      <reference id="119">Unicode, Chadian, p.5 http://www.unicode.org/L2/L2010/10288r-arabic-proposal.pdf</reference>
-      <reference id="120">Wolof, Paul Timothy http://paul-timothy.net/pages/ajamisenegal/primers/je_sais_le_wolofal_harmattan_20-oct-2015_a4.pdf</reference>
+      <reference id="115">Unicode, Kashmiri, Yeh https://www.unicode.org/L2/L2009/09215-kashmiri.pdf</reference>
+      <reference id="116">Unicode, Chad ANT, pp. 19-20 https://www.unicode.org/L2/L2010/10288r-arabic-proposal.pdf</reference>
+      <reference id="117">Unicode, DPLN, p.21 https://www.unicode.org/L2/L2010/10288r-arabic-proposal.pdf</reference>
+      <reference id="118">Unicode, Jawi and Moroccan Arabic GAF, https://www.unicode.org/L2/L2003/03176-gafs.pdf</reference>
+      <reference id="119">Unicode, Chadian, p.5 https://www.unicode.org/L2/L2010/10288r-arabic-proposal.pdf</reference>
+      <reference id="120">Wolof, Paul Timothy https://paul-timothy.net/pages/ajamisenegal/primers/je_sais_le_wolofal_harmattan_20-oct-2015_a4.pdf</reference>
       <reference id="121">Hausa, pp. 261-289 Warren-Rothlin, Andy (2014): West African scripts and Arabic-script orthographies in socio-political context. Meikal Mumin, Kees (C.) H. Versteegh (Eds.): The Arabic script in Africa. Studies in the use of a writing system. Leiden, Boston: Brill (Studies in Semitic Languages and Linguistics, 71) </reference>
-      <reference id="122">Mandika, Bamana, pp. 225-260 Vydrin, Valentin Feodos'evich; Dumestre, Gérard (2014): Manding Ajami samples. In Meikal Mumin, Kees (C.) H. Versteegh (Eds.): The Arabic script in Africa. Studies in the use of a writing system. Leiden, Boston: Brill (Studies in Semitic Languages and Linguistics, 71) </reference>
+      <reference id="122">Mandika, Bamana, pp. 225-260 Vydrin, Valentin Feodos’evich; Dumestre, Gérard (2014): Manding Ajami samples. In Meikal Mumin, Kees (C.) H. Versteegh (Eds.): The Arabic script in Africa. Studies in the use of a writing system. Leiden, Boston: Brill (Studies in Semitic Languages and Linguistics, 71) </reference>
       <reference id="123">Ethiopian, Wetter, Andreas (2006): Arabic in Ethiopia. In Kees (C.) H. Versteegh (Ed.): Encyclopedia of Arabic Language and Linguistics. Volume I. A-Ed, vol. 2. With assistance of Mushira Eid, Alaa Elgibali, Manfred Woidich, Andrzej Zaborski. Leiden: E. J. Brill, pp. 51-56. </reference>
       <reference id="124">Western Arabic, Qaf with three dots above, city of Gabes, Tunisia </reference>
-      <reference id="125">Urdu, Heh goal with hamza above, Section 3 in http://www.columbia.edu/~mk2580/urdu_section/handouts/izafat.pdf</reference>
-      <reference id="126">Urdu, Teh marbuta goal, Code point UZT 76 of Urdu Zabta Takhti 1.01, the official code page standard for Govt. of Pakistan, approved in 2001; see http://cle.org.pk/Publication/papers/2001/uzt1.01.pdf</reference>
-      <reference id="127">Kurdish-Sorani, p.7 in http://www.fas.harvard.edu/~iranian/Sorani/sorani_1_grammar.pdf</reference>
+      <reference id="125">Urdu, Heh goal with hamza above, Section 3 in https://www.columbia.edu/~mk2580/urdu_section/handouts/izafat.pdf</reference>
+      <reference id="126">Urdu, Teh marbuta goal, Code point UZT 76 of Urdu Zabta Takhti 1.01, the official code page standard for Govt. of Pakistan, approved in 2001; see https://cle.org.pk/Publication/papers/2001/uzt1.01.pdf</reference>
+      <reference id="127">Kurdish-Sorani, p.7 in https://www.fas.harvard.edu/~iranian/Sorani/sorani_1_grammar.pdf</reference>
       <reference id="128">Wolof, Beh with dot below and three dots above, “Wolofal Orthography” by Galen Currah, revised 20 May 2011 </reference>
       <reference id="129">Malay, Jawi Keyboard standard by Department of Standards Malaysia https://en.wikipedia.org/wiki/Jawi_keyboard (Accessed on 13 November 2015)</reference>
-      <reference id="130">Ajami usage, “Language planning in West Africa - who writes the script?” by Friederike Lüpke; http://www.elpublishing.org/docs/1/02/ldd02_08.pdf</reference>
+      <reference id="130">Ajami usage, “Language planning in West Africa - who writes the script?” by Friederike Lüpke; https://www.elpublishing.org/docs/1/02/ldd02_08.pdf</reference>
       <reference id="131">Scott Clark, “Alphabet and Orthography Statement For Fulfulde [FUB] Ajamiya”, SIL, Yaoundé, Cameroon, 2007, https://www.sil.org/system/files/reapdata/11/59/46/115946668959791144133440092187534320035/AlphabetandOrthographyStatementforFulfuldeFUBAjamiyafortheinternet.pdf (Accessed on June 17 2019)</reference>
-      <reference id="132">Hausa, Newspapers and books published in Hausa using Arabic script, http://aflang.humanities.ucla.edu/language-materials/chadic-languages/hausa/hausa-online-grammar/pronunciation-writing/hausa-writing/</reference>
-      <reference id="133">Kyrgyz, http://www.ethnologue.com/language/kir</reference>
-      <reference id="134">Kyrgyz, http://www.ethnologue.com/country/CN/languages</reference>
+      <reference id="132">Hausa, Newspapers and books published in Hausa using Arabic script, https://aflang.humanities.ucla.edu/language-materials/chadic-languages/hausa/hausa-online-grammar/pronunciation-writing/hausa-writing/</reference>
+      <reference id="133">Kyrgyz, https://www.ethnologue.com/language/kir</reference>
+      <reference id="134">Kyrgyz, https://www.ethnologue.com/country/CN/languages</reference>
       <reference id="135">Urdu, https://www.bbc.com/urdu</reference>
-      <reference id="136">Wikipedia: “Kyrgyz alphabets”, http:s//en.wikipedia.org/wiki/Kazakh_alphabets (accessed on 13 November 2015)</reference>
-      <reference id="137">Malay, Information technology - Jawi Coded Character Set for Information Interchange MS 2443:2012, Department of Standards, Malaysia.  http://www.jsm.gov.my</reference>
+      <reference id="136">Wikipedia: “Kyrgyz alphabets”, https://en.wikipedia.org/wiki/Kazakh_alphabets (accessed on 13 November 2015)</reference>
+      <reference id="137">Malay, Information technology - Jawi Coded Character Set for Information Interchange MS 2443:2012, Department of Standards, Malaysia.  https://www.jsm.gov.my</reference>
       <reference id="138">Pashto Academy Peshawar University </reference>
       <reference id="140">Kurdish, https://kurdpress.com/</reference>
       <reference id="141" comment="Combining Hamza not recommended for use by IAB statement and combining marks not included by TF-AIDN;     So combined form needs to be included">Internet Architecture Board (IAB), “IAB Statement on Identifiers and Unicode 7.0.0”
 	   https://www.iab.org/documents/correspondence-reports-documents/2015-2/iab-statement-on-identifiers-and-unicode-7-0-0/</reference>
-      <reference id="142">An introduction to Latin-Script Uyghur: by Waris Abdukerim Janbaz ,State Library of Victoria, 2006, http://docplayer.net/42224797-An-introduction-to-latin-script-uyghur.html</reference>
+      <reference id="142">An introduction to Latin-Script Uyghur: by Waris Abdukerim Janbaz ,State Library of Victoria, 2006, https://docplayer.net/42224797-An-introduction-to-latin-script-uyghur.html</reference>
       <reference id="143">Torwali online and printed dictionaries </reference>
       <reference id="144">Wikipedia: “Jawi keyboard” https://en.wikipedia.org/wiki/Jawi_keyboard (Accessed on 13 November 2015)</reference>
       <reference id="145">Wikipedia: “Saraiki alphabet” https://en.wikipedia.org/wiki/Saraiki_alphabet (Accessed on 13 November 2015)</reference>
-      <reference id="146">ANT (Alphabet National du Tchad) is the national standard for Chad/Tchad; See Figures in L2/10-288R (used for “tr” sound as given in the table in Section 6.1.2): http://www.unicode.org/L2/L2010/10288r-arabic-proposal.pdf and Appendix B</reference>
+      <reference id="146">ANT (Alphabet National du Tchad) is the national standard for Chad/Tchad; See Figures in L2/10-288R (used for “tr” sound as given in the table in Section 6.1.2): https://www.unicode.org/L2/L2010/10288r-arabic-proposal.pdf and Appendix B</reference>
       <reference id="147">Wolof, https://www.openbookpublishers.com/htmlreader/978-1-78374-062-8/11.Ngom.xhtml</reference>
     </references>
   </meta>
@@ -667,7 +665,7 @@
         </rule>
       </choice>
     </rule>
-    <rule name="no-mix-teh-marbuta-goal" ref="100" comment="WLE Rule 8: do not mix Arabic letters TEH MARBUTA and FEH WITH DOT MOVED BELOW in the same label">
+    <rule name="no-mix-teh-marbuta-goal" ref="100" comment="WLE Rule 8: do not mix Arabic letters TEH MARBUTA and TEH MARBUTA GOAL in the same label">
       <choice>
         <rule>
           <char cp="0629" />

@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Root Zone LGR for the Korean Script">5</version>
-    <date>2022-03-24</date>
+    <date>2022-05-26</date>
     <language>und-Kore</language>
     <scope type="domain">.</scope>
     <unicode-version>11.0.0</unicode-version>
@@ -21,8 +21,6 @@ including the appendices [Proposal-Korean-Appendices].
 This file is one of a set of LGR files that together form an integrated LGR for the DNS Root Zone [RZ-LGR-5]. 
 The format of this file follows [RFC 7940].</p>
 
-      <p class="notice">This is a DRAFT document released for public comments and not final. For details on how to submit comments see the announcement for public comments on Root Zone LGR-5 on the ICANN website. https://icann.org/idn</p>
-      
 <h2>Repertoire</h2>
 <p>The repertoire includes 11,172 Hangul syllables and 4,758 Hanja characters 
 for a total of 15,930 code points (11,172 + 4,758). 
@@ -77,11 +75,11 @@ For more details, see Section 6 “Variants” in [Proposal-Korean].</p>
 <h3>Source References for Variants</h3>
 <p>The following source references are used for variant entries in this LGR:</p>
   <ul>
-    <li>[201] - Korean-specific variants among Hanja (Table 1-1 in Appendix F)</li>
-    <li>[202] - Korean-specific variants between Hangul and in-repertoire Hanja (Table 1-2 in Appendix F)</li>
-    <li>[203] - Korean-specific variants between Hanja and out-of-repertoire Hanja (Table 1-3 in Appendix F)</li>
-    <li>[204] - In-repertoire Hanja variants originating from [300] (Table 2-1 in Appendix F)</li>
-    <li>[300] - in-repertoire variants originating from the Chinese LGR [CLGR]</li>
+    <li>[201] &ndash; Korean-specific variants among Hanja (Table 1-1 in Appendix F)</li>
+    <li>[202] &ndash; Korean-specific variants between Hangul and in-repertoire Hanja (Table 1-2 in Appendix F)</li>
+    <li>[203] &ndash; Korean-specific variants between Hanja and out-of-repertoire Hanja (Table 1-3 in Appendix F)</li>
+    <li>[204] &ndash; In-repertoire Hanja variants originating from [300] (Table 2-1 in Appendix F)</li>
+    <li>[300] &ndash; in-repertoire variants originating from the Chinese LGR [CLGR]</li>
   </ul>
 
 <h2>Character Classes</h2>
@@ -110,9 +108,11 @@ For further details on methodology and contributors, see Sections 4 and 8 in [Pr
 <h2>References</h2>
 <p>References [0] to [3] refer to the Unicode Standard versions in which corresponding code points were initially encoded. 
 For example, a reference value of [3] means a character was first encoded in Unicode Version 3.0.</p>
-<p>References [101] and up indicate that the code point is included in one of the following source references:
- [101] 'kIRG_KSource' values starting by K0 in the Unihan database and
- [102] 'kIICore' values including the letter 'K'(indicating source) in the Unihan database.</p>
+<p>References [101] and up indicate that the code point is included in one of the following source references:</p>
+<ul>
+<li>[101] &ndash; ‘kIRG_KSource’ values starting by K0 in the Unihan database [Unihan]</li>
+<li>[102] &ndash; ‘kIICore’ values including the letter ‘K’(indicating source) in the Unihan database.</li>
+</ul>
 
 <p>Entries in the table may have multiple source reference values.</p>
 
@@ -136,17 +136,19 @@ https://www.icann.org/en/system/files/files/proposal-korean-lgr-appendices-01may
 
 <dt>[RFC 7940]</dt>
 <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, 
-http://www.rfc-editor.org/info/rfc7940.</dd> 
+https://www.rfc-editor.org/info/rfc7940.</dd> 
 
 <dt>[RZ-LGR-5-Overview]</dt>
-<dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”,24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-24mar22-en.pdf</dd>
+<dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”,26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
 <dt>[RZ-LGR-5]</dt>
-<dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 24 March 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.xml <br/>
-<i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.html</i></dd>
+<dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 26 May 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.xml <br/>
+<i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.html</i></dd>
 <dt>[Unicode 11.0]</dt>
 <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, 
 (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) 
-http://www.unicode.org/versions/Unicode11.0.0/</dd>
+https://www.unicode.org/versions/Unicode11.0.0/</dd>
+<dt>[Unihan]</dt>
+<dd>The Unicode Consortium, UAX#38 "The Unicode Han Database (Unihan)", Latest version available at: http://unicode.org/reports/tr38/</dd>
 </dl>
 
 <p>For additional detail on references cited in the remainder of the document refer to the Table of References below. </p>
@@ -155,11 +157,11 @@ http://www.unicode.org/versions/Unicode11.0.0/</dd>
 
 ]]></description>
     <references>
-      <reference id="0">Unicode 1.1 </reference>
-      <reference id="1">Unicode 2.0 </reference>
-      <reference id="3">Unicode 3.0 </reference>
-      <reference id="101">'kIRG_KSource' values starting by K0 in the Unihan database </reference>
-      <reference id="102">'kIICore' values including the letter 'K'(indicating source) in the Unihan database </reference>
+      <reference id="0" comment="Any code point originally encoded in Unicode 1.1">Unicode 1.1</reference>
+      <reference id="1" comment="Any code point originally encoded in Unicode 2.0">Unicode 2.0</reference>
+      <reference id="3" comment="Any code point originally encoded in Unicode 3.0">Unicode 3.0</reference>
+      <reference id="101">‘kIRG_KSource’ values starting by K0 in the Unihan database </reference>
+      <reference id="102">‘kIICore’ values including the letter ‘K’(indicating source) in the Unihan database </reference>
       <reference id="201" comment="Korean specific variants between Hanja">Table 1-1, from worksheet: ‘K_LGR_v2.3_20210501_vg_37+4+3’ in Appendix F, found in Appendices to “Proposal for a Korean Script Root Zone LGR”, 1 May 2021 (ZIP), 
                    https://www.icann.org/en/system/files/files/proposal-korean-lgr-appendices-01may21-en.zip</reference>
       <reference id="202" comment="Korean specific variants between Hangul and in-repertoire Hanja">Table 1-2, from worksheet: ‘K_LGR_v2.3_20210501_vg_37+4+3’in Appendix F, found in Appendices to “Proposal for a Korean Script Root Zone LGR”, 1 May 2021 (ZIP), 
@@ -168,7 +170,7 @@ http://www.unicode.org/versions/Unicode11.0.0/</dd>
                    https://www.icann.org/en/system/files/files/proposal-korean-lgr-appendices-01may21-en.zip</reference>
       <reference id="204" comment="In repertoire Hanja variants originating from [300]">Table 2-1, from worksheet: ‘K_LGR_v2.3_20210501_vg_exp’in Appendix F, found in Appendices to “Proposal for a Korean Script Root Zone LGR”, 1 May 2021 (ZIP), 
                    https://www.icann.org/en/system/files/files/proposal-korean-lgr-appendices-01may21-en.zip</reference>
-      <reference id="300" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-chinese-script-24mar22-en.html">Root Zone Label Generation Rules for Chinese, 24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-chinese-script-24mar22-en.xml</reference>
+      <reference id="300" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-chinese-script-26may22-en.html">Root Zone Label Generation Rules for Chinese, 26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-chinese-script-26may22-en.xml</reference>
     </references>
   </meta>
   <data>

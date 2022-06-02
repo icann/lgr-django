@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Root Zone LGR for the Hebrew Script">5</version>
-    <date>2022-03-24</date>
+    <date>2022-05-26</date>
     <language>und-Hebr</language>
     <scope type="domain">.</scope>
     <unicode-version>11.0.0</unicode-version>
@@ -16,8 +16,6 @@
     Zone Label Generation Ruleset (LGR)”, Version 1.3 [Proposal-Hebrew].
     This file is one of a set of LGR files that together form an integrated LGR for the DNS Root Zone [RZ-LGR-5]. 
     The format of this file follows [RFC 7940].</p>
-    
-    <p class="notice">This is a DRAFT document released for public comments and not final. For details on how to submit comments see the announcement for public comments on Root Zone LGR-5 on the ICANN website. https://icann.org/idn</p>
 
     <h2>Repertoire</h2>
     <p>According to Section 5, “Repertoire” in [Proposal-Hebrew], the Hebrew LGR contains 27 single code points, 5 of which are variants (final forms) of 5 others. 
@@ -84,18 +82,18 @@
      <dd>Hebrew Generation Panel, “Proposal for a Hebrew Script Root Zone Label Generation Ruleset (LGR)”, Version 1.3, 24 April 2019, https://www.icann.org/en/system/files/files/proposal-hebrew-lgr-24apr19-en.pdf</dd>
 
      <dt>[RFC 7940]</dt>
-     <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, http://www.rfc-editor.org/info/rfc7940</dd> 
+     <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, https://www.rfc-editor.org/info/rfc7940</dd> 
 
       <dt>[RFC 8228]</dt>
      <dd>A. Freytag, “Guidance on Designing Label Generation Rulesets (LGRs) Supporting Variant Labels”, RFC 8228, August 2017,
      https://www.rfc-editor.org/info/rfc8228</dd>
 
      <dt>[RZ-LGR-5-Overview]</dt>
-     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-24mar22-en.pdf</dd>
+     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
 
      <dt>[RZ-LGR-5]</dt>
-     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 24 March 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.xml <br/>
-     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.html</i></dd>
+     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 26 May 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.xml <br/>
+     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.html</i></dd>
 
     <dt>[RZ-LGR-4-Hebr]</dt>
     <dd>ICANN, Root Zone Label Generation Rules for the Hebrew Script (und-Hebr), Version 4, 5 November 2020 (XML)
@@ -104,7 +102,7 @@
 
      <dt>[Unicode 11.0]</dt>
      <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) 
-     http://www.unicode.org/versions/Unicode11.0.0/</dd>
+     https://www.unicode.org/versions/Unicode11.0.0/</dd>
      
      <dt>[IL-IDN]</dt>
      <dd>Hebrew IDN Table for .IL 

@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Root Zone LGR for the Chinese Script">5</version>
-    <date>2022-03-24</date>
+    <date>2022-05-26</date>
     <language>und-Hani</language>
     <scope type="domain">.</scope>
     <unicode-version>11.0.0</unicode-version>
@@ -14,8 +14,6 @@
       see “Proposal for a Chinese Script      Root Zone LGR” [Proposal-Chinese] including the appendices [Proposal-Chinese-Appendices]. 
       This file is one of a set of LGR files that together form an integrated LGR for the DNS Root Zone [RZ-LGR-5].
       The format of this file follows [RFC 7940].</p>
-    
-    <p class="notice">This is a DRAFT document released for public comments and not final. For details on how to submit comments see the announcement for public comments on Root Zone LGR-5 on the ICANN website. https://icann.org/idn</p>
 
     <h2>Repertoire</h2>
       <p>The Root Zone repertoire for the Chinese script contains 19,685 single code points.
@@ -196,7 +194,7 @@
 
      <dt>[RFC 7940]</dt>
      <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, 
-       RFC 7940, August 2016, http://www.rfc-editor.org/info/rfc7940</dd> 
+       RFC 7940, August 2016, https://www.rfc-editor.org/info/rfc7940</dd> 
 
      <dt>[RFC 8228]</dt>
       <dd>A. Freytag, “Guidance on Designing Label Generation Rulesets (LGRs) Supporting Variant Labels”, RFC 8228, August 2017,
@@ -208,15 +206,15 @@
     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-4-chinese-script-05nov20-en.html</i></dd>
 
      <dt>[RZ-LGR-5-Overview]</dt>
-     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-24mar22-en.pdf</dd>
+     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
 
      <dt>[RZ-LGR-5]</dt>
-     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 24 March 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.xml <br/>
-     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.html</i></dd>
+     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 26 May 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.xml <br/>
+     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.html</i></dd>
 
      <dt>[Unicode 11.0]</dt>
      <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) 
-     http://www.unicode.org/versions/Unicode11.0.0/</dd>      
+     https://www.unicode.org/versions/Unicode11.0.0/</dd>      
     </dl>
    <p>For additional detail on references cited in the remainder of the document refer to the Table of References below. 
    Where links to certain references are not available, the data may be archived as part of [Proposal-Chinese].</p> 
@@ -225,18 +223,18 @@
       <reference id="0" comment="Any code point originally encoded in Unicode 1.1">The Unicode Standard 1.1</reference>
       <reference id="3" comment="Any code point originally encoded in Unicode 3.0">The Unicode Standard 3.0</reference>
       <reference id="4" comment="Any code point originally encoded in Unicode 3.1">The Unicode Standard 3.1</reference>
-      <reference id="100" comment="Also documented in Appendices G.1 and G.2">CDNC Chinese Characters and Variants Table http://www.cdnc.asia/file/unicode-1-2.txt</reference>
-      <reference id="200" comment="Also documented in Appendices M.1 and M.2">DotAsia, .ASIA ZH IDN Language Table http://www.iana.org/domains/idn-tables/tables/asia_zh_1.1.txt</reference>
-      <reference id="300">Table of General Standard Chinese Characters by China's State Council http://www.gov.cn/zwgk/2013-08/19/content_2469793.htm</reference>
+      <reference id="100" comment="Also documented in Appendices G.1 and G.2">CDNC Chinese Characters and Variants Table https://www.cdnc.asia/file/unicode-1-2.txt</reference>
+      <reference id="200" comment="Also documented in Appendices M.1 and M.2">DotAsia, .ASIA ZH IDN Language Table https://www.iana.org/domains/idn-tables/tables/asia_zh_1.1.txt</reference>
+      <reference id="300">Table of General Standard Chinese Characters by China’s State Council https://www.gov.cn/zwgk/2013-08/19/content_2469793.htm</reference>
       <reference id="400">JGP Repertoire 201703, as documented in Appendix B </reference>
       <reference id="500">KGP Repertoire 201703, as documented in Appendix C </reference>
-      <reference id="600">IICORE International Ideographs Core http://hanzi.unihan.com.cn/downloads/IIcoreMappingTable.txt</reference>
+      <reference id="600">IICORE International Ideographs Core https://hanzi.unihan.com.cn/downloads/IIcoreMappingTable.txt</reference>
       <reference id="101" comment="Variants that match in both CDNC code point and variant type">CDNC Chinese Characters and Variants Table, as documented in Appendices G.1 and G.2</reference>
       <reference id="102" comment="Variants that match only in CDNC code point but not variant type">CDNC Chinese Characters and Variants Table, as documented in Appendices G.1 and G.2</reference>
       <reference id="103" comment="Variants that match no CDNC code point">CDNC Chinese Characters and Variants Table, as documented in Appendices G.1 and G.2</reference>
-      <reference id="201" comment="Variants that match in both dotAsia code point and variant type">dotASIA ZH IDN Language Table http://www.iana.org/domains/idn-tables/tables/asia_zh_1.1.txt</reference>
-      <reference id="202" comment="Variants that match only in dotAsia code point but not variant type">dotASIA ZH IDN Language Table http://www.iana.org/domains/idn-tables/tables/asia_zh_1.1.txt</reference>
-      <reference id="203" comment="Variants that match no dotAsia code point">dotASIA ZH IDN Language Table http://www.iana.org/domains/idn-tables/tables/asia_zh_1.1.txt</reference>
+      <reference id="201" comment="Variants that match in both dotAsia code point and variant type">dotASIA ZH IDN Language Table https://www.iana.org/domains/idn-tables/tables/asia_zh_1.1.txt</reference>
+      <reference id="202" comment="Variants that match only in dotAsia code point but not variant type">dotASIA ZH IDN Language Table https://www.iana.org/domains/idn-tables/tables/asia_zh_1.1.txt</reference>
+      <reference id="203" comment="Variants that match no dotAsia code point">dotASIA ZH IDN Language Table https://www.iana.org/domains/idn-tables/tables/asia_zh_1.1.txt</reference>
       <reference id="301" comment="Variants that match in both CGP Intrernal Review code point and variant type">CGP Internal Review, as documented in Appendix N</reference>
       <reference id="501" comment="Variants that match only in KGP variant groups">KLGP Proposal</reference>
       <reference id="701" comment="Variants that match suggestions by the Integration Panel">IP Communication May 2019, as documented in Appendix F</reference>

@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Root Zone LGR for the Oriya Script">5</version>
-    <date>2022-03-24</date>
+    <date>2022-05-26</date>
     <language>und-Orya</language>
     <scope type="domain">.</scope>
     <unicode-version>11.0.0</unicode-version>
@@ -19,8 +19,6 @@
    <p>While Oriya is the name under which the script is encoded in Unicode, and is therefore used here
    to formally identify the script, the name Odia has become the preferred name in English for both script 
    and language as it is closer to the pronunciation of their native names.</p>
-
-    <p class="notice">This is a DRAFT document released for public comments and not final. For details on how to submit comments see the announcement for public comments on Root Zone LGR-5 on the ICANN website. https://icann.org/idn</p>
 
 <h2>Repertoire</h2>
     <p>According to Section 5, “Repertoire” in [Proposal-Oriya], the Oriya LGR contains 62 single code points. 
@@ -151,7 +149,7 @@
      <dt>[EGIDS]</dt>
      <dd>Lewis and Simons, “EGIDS: Expanded Graded Intergenerational Disruption Scale,”
       documented in [SIL-Ethnologue] and summarized here:
-      https://en.wikipedia.org/wiki/Expanded_Graded_Intergenerational_Disruption_Scale_(EGIDS</dd>
+      https://en.wikipedia.org/wiki/Expanded_Graded_Intergenerational_Disruption_Scale_(EGIDS)</dd>
 
     <dt>[MSR-5]</dt>
     <dd>Integration Panel, “Maximal Starting Repertoire — MSR-5 Overview and Rationale”, 24 June 2021,
@@ -161,7 +159,7 @@
      <dd>Neo-Brahmi Generation Panel, “Proposal for an Oriya Script Root Zone Label Generation Rule-set “, 6 March 2019, https://www.icann.org/en/system/files/files/proposal-oriya-lgr-06mar19-en.pdf</dd>
 
     <dt>[RFC 7940]</dt>
-     <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, http://www.rfc-editor.org/info/rfc7940</dd> 
+     <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, https://www.rfc-editor.org/info/rfc7940</dd> 
      
      <dt>[RFC 8228]</dt>
      <dd>A. Freytag, “Guidance on Designing Label Generation Rulesets (LGRs) Supporting Variant Labels”, RFC 8228, August 2017,
@@ -173,20 +171,20 @@
       <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/lgr-4-oriya-script-05nov20-en.html</i></dd>
 
      <dt>[RZ-LGR-5-Overview]</dt>
-     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-24mar22-en.pdf</dd>
+     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
 
      <dt>[RZ-LGR-5]</dt>
-     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 24 March 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.xml <br/>
-     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.html</i></dd>
+     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 26 May 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.xml <br/>
+     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.html</i></dd>
 
      <dt>[SIL-Ethnologue]</dt>
      <dd>David M. Eberhard, Gary F. Simons &amp; Charles D. Fennig (eds.). 2021.
      Ethnologue: Languages of the World, Twenty fourth edition. Dallas, Texas: SIL
-     International. Online version available as http://www.ethnologue.com</dd>
+     International. Online version available as https://www.ethnologue.com</dd>
 
      <dt>[Unicode 11.0]</dt>
      <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) 
-     http://www.unicode.org/versions/Unicode11.0.0/</dd>
+     https://www.unicode.org/versions/Unicode11.0.0/</dd>
      </dl>
       <p>For references consulted particularly in designing the repertoire for the Oriya script for the Root Zone 
         please see details in the <a href="#table_of_references">Table of References</a> below. 
@@ -202,7 +200,7 @@
       <reference id="102">Wikipedia, “Odia (Oriya) alphabet” https://en.wikipedia.org/wiki/Odia_alphabet</reference>
       <reference id="103">Wikipedia. “Odia language” https://en.wikipedia.org/wiki/Odia_language</reference>
       <reference id="104">Wikipedia, “Oriya (Unicode block)” https://en.wikipedia.org/wiki/Oriya_(Unicode_block)</reference>
-      <reference id="105">Odisha State Govt. Primary School Grade 1 e-book “HasaKhela”: by Odisha Primary Education Programme Authority http://opepa.odisha.gov.in/website/Download/e-Text-Book/CLass%20I/Hasa%20Khela%20Part%20II/Haso%20Khelo-II-Page-112.pdf</reference>
+      <reference id="105">Odisha State Govt. Primary School Grade 1 e-book “HasaKhela”: by Odisha Primary Education Programme Authority https://opepa.odisha.gov.in/website/Download/e-Text-Book/CLass%20I/Hasa%20Khela%20Part%20II/Haso%20Khelo-II-Page-112.pdf</reference>
       <reference id="3" comment="Any code point originally encoded in Unicode 3.0">The Unicode Standard 3.0</reference>
     </references>
   </meta>

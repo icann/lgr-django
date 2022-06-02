@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Root Zone LGR for the Latin Script">5</version>
-    <date>2022-03-24</date>
+    <date>2022-05-26</date>
     <language>und-Latn</language>
     <scope type="domain">.</scope>
     <unicode-version>11.0.0</unicode-version>
@@ -16,8 +16,6 @@
     This file is one of a set of LGR files that together form an integrated LGR for the DNS Root Zone [RZ-LGR-5].
     The format of this file follows [RFC 7940].</p>
 
-    <p class="notice">This is a DRAFT document released for public comments and not final. For details on how to submit comments see the announcement for public comments on Root Zone LGR-5 on the ICANN website. https://icann.org/idn</p>
-    
     <h2>Repertoire</h2>
     <p>According to Section 5, “Repertoire” in [Proposal-Latin], the repertoire contains
     the 197 code points needed to write hundreds of languages in the Latin script. An additional 7 code points are available
@@ -134,7 +132,7 @@
     out-of-repertoire variants are defined with a comment “Cross-script homoglyph” or “Cross-script near homoglyph” respectively.</p>
 
     <p>Because variant mappings, including cross-script variants, must be symmetric and transitive this LGR inherits additional 
-    blocked cross-script and in-script variants by integration; while not further identified, all such variants are listed here
+    blocked cross-script and in-script variants by integration; while not alwayas further identified, all such variants are listed here
     in full  for ease of   reference. However, always use the Common LGR [RZ-LGR-5] for determining cross-script 
     collisions of labels.</p>
 
@@ -195,14 +193,14 @@
     <dt>[EGIDS]</dt>
      <dd>Lewis and Simons, “EGIDS: Expanded Graded Intergenerational Disruption Scale,”
       documented in [SIL-Ethnologue] and summarized here:
-      https://en.wikipedia.org/wiki/Expanded_Graded_Intergenerational_Disruption_Scale_(EGIDS</dd>
+      https://en.wikipedia.org/wiki/Expanded_Graded_Intergenerational_Disruption_Scale_(EGIDS)</dd>
 
     <dt>[MSR-5]</dt>
     <dd>Integration Panel, “Maximal Starting Repertoire — MSR-5 Overview and Rationale”, 24 June 2021,
     https://www.icann.org/en/system/files/files/msr-5-overview-24jun21-en.pdf</dd>
 
     <dt>[Omniglot]</dt>
-    <dd>Omniglot, “Writing Systems by Language”, http://www.omniglot.com/writing/langalph.htm (accessed on 13 January 2022)</dd>
+    <dd>Omniglot, “Writing Systems by Language”, https://www.omniglot.com/writing/langalph.htm (accessed on 13 January 2022)</dd>
 
     <dt>[Proposal-Latin]</dt> 
     <dd>Latin Generation Panel, “Proposal for a Latin Script Root Zone Label Generation Rule-Set (LGR)”, 27 January 2022, https://www.icann.org/en/system/files/files/proposal-latin-lgr-27jan22-en.pdf</dd>
@@ -212,26 +210,26 @@
     27 January 2022 (ZIP), https://www.icann.org/en/system/files/files/proposal-latin-lgr-appendices-27jan22-en.zip</dd>
 
     <dt>[RFC 7940]</dt>
-    <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, http://www.rfc-editor.org/info/rfc7940. </dd> 
+    <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, https://www.rfc-editor.org/info/rfc7940. </dd> 
 
     <dt>[RFC 8228]</dt>
     <dd>A. Freytag, “Guidance on Designing Label Generation Rulesets (LGRs) Supporting Variant Labels”, RFC 8228, August 2017,
     https://www.rfc-editor.org/info/rfc8228</dd>
 
      <dt>[RZ-LGR-5-Overview]</dt>
-     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-24mar22-en.pdf</dd>
+     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
 
       <dt>[RZ-LGR-5]</dt>
-     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 24 March 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.xml <br/>
-     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.html</i></dd>
+     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 26 May 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.xml <br/>
+     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.html</i></dd>
 
      <dt>[SIL-Ethnologue]</dt>
      <dd>David M. Eberhard, Gary F. Simons &amp; Charles D. Fennig (eds.). 2021.
      Ethnologue: Languages of the World, Twenty fourth edition. Dallas, Texas: SIL
-     International. Online version available as http://www.ethnologue.com</dd>
+     International. Online version available as https://www.ethnologue.com</dd>
 
     <dt>[Unicode 11.0]</dt>
-    <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) http://www.unicode.org/versions/Unicode11.0.0/</dd>
+    <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) https://www.unicode.org/versions/Unicode11.0.0/</dd>
     </dl>
     
     <p>For references consulted particularly in designing the repertoire for the Latin script for the Root Zone 
@@ -246,13 +244,13 @@
       <reference id="0" comment="Any code point originally encoded in Unicode 1.1">The Unicode Standard 1.1</reference>
       <reference id="3" comment="Any code point originally encoded in Unicode 3.0">The Unicode Standard 3.0</reference>
       <reference id="8" comment="Any code point originally encoded in Unicode 5.0">The Unicode Standard 5.0</reference>
-      <reference id="99" comment="Any code point cited is part of the Basic Latin (ASCII) set">CO Controls and Basic Latin, The Unicode Standard https://unicode.org/charts/PDF/U0000.pdf/</reference>
+      <reference id="99" comment="Any code point cited is part of the Basic Latin (ASCII) set">CO Controls and Basic Latin, The Unicode Standard https://unicode.org/charts/PDF/U0000.pdf</reference>
       <reference id="100">ICANN, Second Level Reference Label Generation Rules for Spanish https://www.icann.org/sites/default/files/packages/lgr/lgr-second-level-spanish-30aug16-en.html (Accessed on 31 August 2018)</reference>
       <reference id="101">Omniglot, Czech (čeština) https://www.omniglot.com/writing/czech.htm (Accessed on 31 August 2018)</reference>
       <reference id="102">Omniglot, Icelandic (Íslenska) https://www.omniglot.com/writing/icelandic.htm (Accessed on 31 August 2018)</reference>
       <reference id="103">Omniglot, Faroese (føroyskt mál) https://www.omniglot.com/writing/faroese.htm (Accessed on 31 August 2018)</reference>
       <reference id="105">Omniglot, Chuukese (Chuuk) https://www.omniglot.com/writing/chuukese.htm (Accessed on 31 August 2018)</reference>
-      <reference id="106">SCRIPTSOURCE, Galician written with Latin script http://www.webcitation.org/6siTI8ieQ (Accessed on 31 August 2018)</reference>
+      <reference id="106">SCRIPTSOURCE, Galician written with Latin script https://www.webcitation.org/6siTI8ieQ (Accessed on 31 August 2018)</reference>
       <reference id="107">Omniglot, Lule Sámi (julevsámegiella) https://www.omniglot.com/writing/lulesami.htm (Accessed on 31 August 2018)</reference>
       <reference id="108">Wikipedia, Northern Sami https://en.wikipedia.org/wiki/Northern_Sami (Accessed on 4 September 2018)</reference>
       <reference id="109">Omniglot, Vietnamese (tiếng việt / 㗂越) https://www.omniglot.com/writing/vietnamese.htm (Accessed on 4 September 2018)</reference>
@@ -269,7 +267,7 @@
       <reference id="123">Omniglot, Swedish (svenska) https://www.omniglot.com/writing/swedish.htm (Accessed on 4 September 2018)</reference>
       <reference id="124">Omniglot, Yapese (Waab) https://www.omniglot.com/writing/yapese.htm (Accessed on 4 September 2018)</reference>
       <reference id="125">Omniglot, Dinka (Thuɔŋjäŋ) https://www.omniglot.com/writing/dinka.php (Accessed on 4 September 2018)</reference>
-      <reference id="126">Omniglot, Kaqchikel (Kaqchikel Ch'ab'äl) https://www.omniglot.com/writing/kaqchikel.htm (Accessed on 4 September 2018)</reference>
+      <reference id="126">Omniglot, Kaqchikel (Kaqchikel Ch’ab’äl) https://www.omniglot.com/writing/kaqchikel.htm (Accessed on 4 September 2018)</reference>
       <reference id="127">Omniglot, Bashkir/Bashkort (Башҡорт теле / Başqort tele) https://www.omniglot.com/writing/bashkir.htm (Accessed on 4 September 2018)</reference>
       <reference id="128">Omniglot, Alsatian (Ëlsässisch) https://www.omniglot.com/writing/alsatian.htm (Accessed on 4 September 2018)</reference>
       <reference id="129">Wikipedia, Nuer language https://en.wikipedia.org/wiki/Nuer_language (Accessed on 4 September 2018)</reference>
@@ -285,19 +283,19 @@
       <reference id="139">Omniglot, Danish (dansk) https://www.omniglot.com/writing/danish.htm (Accessed on 4 September 2018)</reference>
       <reference id="140">Omniglot, Chamorro (chamoru) https://www.omniglot.com/writing/chamorro.htm (Accessed on 4 September 2018)</reference>
       <reference id="141">Omniglot, Umbundu (Úmbúndú) https://www.omniglot.com/writing/umbundu.htm (Accessed on 4 September 2018)</reference>
-      <reference id="142">Omniglot, Guaraní (Avañe'ẽ) https://www.omniglot.com/writing/guarani.htm (Accessed on 4 September 2018)</reference>
+      <reference id="142">Omniglot, Guaraní (Avañe’ẽ) https://www.omniglot.com/writing/guarani.htm (Accessed on 4 September 2018)</reference>
       <reference id="143">Wikipedia, Guarani alphabet https://en.wikipedia.org/wiki/Guarani_alphabet (Accessed on 4 September 2018)</reference>
       <reference id="144">Omniglot, Nauruan (Ekaiairũ Naoero) https://www.omniglot.com/writing/nauruan.htm (Accessed on 4 September 2018)</reference>
       <reference id="145">Omniglot, Khoekhoe (Khoekhoegowab) https://www.omniglot.com/writing/khoekhoe.htm (Accessed on 4 September 2018)</reference>
       <reference id="146">Omniglot, Nuer (Naath) https://www.omniglot.com/writing/nuer.htm (Accessed on 4 September 2018)</reference>
       <reference id="147">Omniglot, Hausa (Harshen Hausa / هَرْشَن هَوْسَ) https://www.omniglot.com/writing/hausa.htm  (Accessed on 4 September 2018)</reference>
       <reference id="148">Omniglot, Dagaare https://www.omniglot.com/writing/dagaare.htm (Accessed on 4 September 2018)</reference>
-      <reference id="149">Omniglot, Fula (Fulfulde, Pulaar, Pular'Fulaare) https://www.omniglot.com/writing/fula.htm (Accessed on 4 September 2018)</reference>
+      <reference id="149">Omniglot, Fula (Fulfulde, Pulaar, Pular’Fulaare) https://www.omniglot.com/writing/fula.htm (Accessed on 4 September 2018)</reference>
       <reference id="150">Omniglot, Croatian (Hrvatski) https://www.omniglot.com/writing/croatian.htm (Accessed on 4 September 2018)</reference>
       <reference id="151">Omniglot, Serbian (српски / srpski) https://www.omniglot.com/writing/serbian.htm (Accessed on 4 September 2018)</reference>
       <reference id="152">Wikipedia, Polish language https://en.wikipedia.org/wiki/Polish_language (Accessed on 4 September 2018)</reference>
       <reference id="153">Omniglot, Slovak (slovenčina) https://www.omniglot.com/writing/slovak.htm (Accessed on 4 September 2018)</reference>
-      <reference id="154">Evertype Publishing, Lithuanian lietuvių kalba Version 1.1 http://www.evertype.com/alphabets/lithuanian.pdf (Accessed on 4 September 2018)</reference>
+      <reference id="154">Evertype Publishing, Lithuanian lietuvių kalba Version 1.1 https://www.evertype.com/alphabets/lithuanian.pdf (Accessed on 4 September 2018)</reference>
       <reference id="157">Omniglot, Turkish (Türkçe) https://www.omniglot.com/writing/turkish.htm (Accessed on 4 September 2018)</reference>
       <reference id="158">Omniglot, Kurdish (Kurdî / کوردی) https://www.omniglot.com/writing/kurdish.htm (Accessed on 4 September 2018)</reference>
       <reference id="159">Omniglot, Azerbaijani (آذربايجانجا ديلي / Азәрбајҹан дили / Azərbaycan dili) https://www.omniglot.com/writing/azeri.htm (Accessed on 4 September 2018)</reference>
@@ -309,7 +307,7 @@
       <reference id="169">Wikipedia, Fon language https://en.wikipedia.org/wiki/Fon_language  (Accessed on 4 September 2018)</reference>
       <reference id="170">Omniglot, Ewe (Eʋegbe) https://www.omniglot.com/writing/ewe.htm (Accessed on 4 September 2018)</reference>
       <reference id="172">Omniglot, Sorbian (hornjoserbsce/dolnoserbski) https://www.omniglot.com/writing/sorbian.htm (Accessed on 4 September 2018)</reference>
-      <reference id="173">Peace corps, Botswana, An Introduction to Setswana Language http://files.peacecorps.gov/multimedia/audio/languagelessons/botswana/Bw_Setswana_Language_Lessons.pdf (Accessed on 4 September 2018)</reference>
+      <reference id="173">Peace corps, Botswana, An Introduction to Setswana Language https://files.peacecorps.gov/multimedia/audio/languagelessons/botswana/Bw_Setswana_Language_Lessons.pdf (Accessed on 4 September 2018)</reference>
       <reference id="174">Omniglot, Tswana (Setswana) https://www.omniglot.com/writing/tswana.php (Accessed on 4 September 2018)</reference>
       <reference id="175">Wikipedia, Afrikaans https://en.wikipedia.org/wiki/Afrikaans (Accessed on 4 September 2018)</reference>
       <reference id="176">Omniglot, Albanian (shqip / gjuha shqipe) https://www.omniglot.com/writing/albanian.htm (Accessed on 4 September 2018)</reference>
@@ -331,7 +329,7 @@
       <reference id="194">Omniglot, Duala (Duálá) https://www.omniglot.com/writing/duala.php (Accessed on 4 September 2018)</reference>
       <reference id="195">Omniglot, Soga (Lusoga) https://www.omniglot.com/writing/soga.htm (Accessed on 4 September 2018)</reference>
       <reference id="196">Omniglot, Alur (Lur) https://www.omniglot.com/writing/alur.htm (Accessed on 4 September 2018)</reference>
-      <reference id="197">Omniglot, Mandinka (Mandi'nka kango / لغة مندنكا) https://www.omniglot.com/writing/mandinka.htm (Accessed on 4 September 2018)</reference>
+      <reference id="197">Omniglot, Mandinka (Mandi’nka kango / لغة مندنكا) https://www.omniglot.com/writing/mandinka.htm (Accessed on 4 September 2018)</reference>
       <reference id="198">Omniglot, Acholi (Lwo) https://www.omniglot.com/writing/acholi.htm (Accessed on 4 September 2018)</reference>
       <reference id="199">Omniglot, Bambara (Bamanankan) https://www.omniglot.com/writing/bambara.htm (Accessed on 4 September 2018)</reference>
       <reference id="200">Omniglot, Raga (Hano) https://www.omniglot.com/writing/raga.htm (Accessed on 4 September 2018)</reference>
@@ -341,7 +339,7 @@
       <reference id="204">School of English, Adam Michiewicz University, Poznań, Poland, Poznań Studies in Contemporary Linguistics 43(1),2007, pp. 169-180, A Demographic Igbo Orthography https://www.degruyter.com/downloadpdf/j/psicl.2007.43.issue-1/v10010-007-0009-0/v10010-007-0009-0.pdf (Accessed on 4 September 2018)</reference>
       <reference id="205">Omniglot, Igbo (Asụsụ Igbo) https://www.omniglot.com/writing/igbo.htm (Accessed on 4 September 2018)</reference>
       <reference id="206">ItalianPod101, Italian Accents and Proper Italian Pronunciation https://www.italianpod101.com/italian-accents (Accessed on 4 September 2018)</reference>
-      <reference id="208">Reverso Dictionary, venerdì translation | Italian-English dictionary http://dictionary.reverso.net/italian-english/venerd%C3%AC (Accessed on 4 September 2018)</reference>
+      <reference id="208">Reverso Dictionary, venerdì translation | Italian-English dictionary https://dictionary.reverso.net/italian-english/venerd%C3%AC (Accessed on 4 September 2018)</reference>
       <reference id="209">Omniglot, Kikuyu (Gĩkũyũ) https://www.omniglot.com/writing/kikuyu.htm (Accessed on 4 September 2018)</reference>
       <reference id="210">Omniglot, Hixkaryána https://www.omniglot.com/writing/hixkaryana.htm (Accessed on 4 September 2018)</reference>
       <reference id="211">Omniglot, Maasai (ɔl Maa) https://www.omniglot.com/writing/maasai.htm (Accessed on 4 September 2018)</reference>
@@ -349,7 +347,7 @@
       <reference id="213">Omniglot, Jenesis. The Bible in Marshallese, 2009., Contributed by Wolfgang Kuhl https://www.omniglot.com/babel/marshallese.htm (Accessed on 4 September 2018)</reference>
       <reference id="214">Wikipedia, Cedilla https://en.wikipedia.org/wiki/Cedilla#Marshallese (Accessed on 4 September 2018)</reference>
       <reference id="215">Wikipedia, Marshallese language https://en.wikipedia.org/wiki/Marshallese_language#Display_issues (Accessed on 4 September 2018)</reference>
-      <reference id="216">Trussel, Marshallese-English Online Dictionary http://www.trussel2.com/MOD/ (Accessed on 4 September 2018)</reference>
+      <reference id="216">Trussel, Marshallese-English Online Dictionary https://www.trussel2.com/MOD/ (Accessed on 4 September 2018)</reference>
       <reference id="218">Omniglot, Susu (Sosoxi) https://www.omniglot.com/writing/susu.htm (Accessed on 4 September 2018)</reference>
       <reference id="219">Omniglot, Zarma (Zarmaciine) https://www.omniglot.com/writing/zarma.htm (Accessed on 4 September 2018)</reference>
       <reference id="220">Omniglot, Pitjantjatjara https://www.omniglot.com/writing/pitjantjatjara.htm (Accessed on 4 September 2018)</reference>
@@ -362,7 +360,7 @@
       <reference id="227">Omniglot, Cape Verdean Creole (Kriolu) https://www.omniglot.com/writing/kriol.php (Accessed on 4 September 2018)</reference>
       <reference id="228">Omniglot, Waray-Waray https://www.omniglot.com/writing/waray.php (Accessed on 4 September 2018)</reference>
       <reference id="229">Omniglot, Lozi (siLozi) https://www.omniglot.com/writing/lozi.htm (Accessed on 4 September 2018)</reference>
-      <reference id="230">africanlanguages.com, Sesotho sa Leboa (Northern Sotho) http://africanlanguages.com/northern_sotho/ (Accessed on 4 September 2018)</reference>
+      <reference id="230">africanlanguages.com, Sesotho sa Leboa (Northern Sotho) https://africanlanguages.com/northern_sotho/ (Accessed on 4 September 2018)</reference>
       <reference id="232">Wikipedia, Chechen language https://en.wikipedia.org/wiki/Chechen_language (Accessed on 4 September 2018)</reference>
       <reference id="233">Omniglot, Hungarian (magyar) https://www.omniglot.com/writing/hungarian.htm (Accessed on 4 September 2018)</reference>
       <reference id="234">Wikipedia, Hungarian alphabet https://en.wikipedia.org/wiki/Hungarian_alphabet (Accessed on 4 September 2018)</reference>
@@ -377,7 +375,7 @@
       <reference id="245">Wikipedia, Papiamento https://en.wikipedia.org/wiki/Papiamento (Accessed on 4 September 2018)</reference>
       <reference id="246">Omniglot, Papiamento (Papiamentu) https://www.omniglot.com/writing/papiamento.php (Accessed on 4 September 2018)</reference>
       <reference id="247">Omniglot, Chichewa (Chicheŵa) https://www.omniglot.com/writing/chichewa.php (Accessed on 4 September 2018)</reference>
-      <reference id="248">Native Languages of the Americas website, Vocabulary in Native American Languages: Mam Words http://www.native-languages.org/mam_words.htm (Accessed on 4 September 2018)</reference>
+      <reference id="248">Native Languages of the Americas website, Vocabulary in Native American Languages: Mam Words https://www.native-languages.org/mam_words.htm (Accessed on 4 September 2018)</reference>
       <reference id="249">Omniglot, Mam (Qyol Mam) https://www.omniglot.com/writing/mam.htm (Accessed on 4 September 2018)</reference>
       <reference id="250">Wikipedia, Pulaar language https://en.wikipedia.org/wiki/Pulaar_language (Accessed on 4 September 2018)</reference>
       <reference id="251">Wikipedia, Fula language https://en.wikipedia.org/wiki/Fula_language#Writing_systems (Accessed on 4 September 2018)</reference>
@@ -1496,7 +1494,7 @@
     <action disp="blocked" any-variant="blocked" comment="any variant label containing blocked variants is blocked &#x235F;" />
     <action disp="valid" all-variants="r-eszett r-dotless" comment="any remaining label containing only original code points is valid" />
     <action disp="allocatable" all-variants="r-eszett dotted" comment="any label with all dotted letters i and sharp s as applied for is allocatable" />
-    <action disp="allocatable" all-variants="eszett-to-ss r-dotless" comment="any label with no sharp and dotless letters i as applied for is allocatable" />
+    <action disp="allocatable" all-variants="eszett-to-ss r-dotless" comment="any label with no sharp s and dotless letters i as applied for is allocatable" />
     <action disp="allocatable" all-variants="eszett-to-ss dotted" comment="any label with no sharp s and all dotted letters i is allocatable" />
     <action disp="blocked" any-variant="eszett-to-ss dotted" comment="any variant label with a mix of variant forms is blocked" />
     <action disp="allocatable" all-variants="allocatable" comment="variant labels with all variants allocatable are allocatable &#x235F;" />

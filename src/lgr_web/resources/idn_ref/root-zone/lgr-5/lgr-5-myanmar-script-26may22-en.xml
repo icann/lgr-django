@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Root Zone LGR for the Myanmar Script">5</version>
-    <date>2022-03-24</date>
+    <date>2022-05-26</date>
     <language>und-Mymr</language>
     <scope type="domain">.</scope>
     <unicode-version>11.0.0</unicode-version>
@@ -17,8 +17,6 @@
      This file is one of a set of LGR files that together form an integrated LGR for the DNS Root Zone [RZ-LGR-5].
      The format of this file follows [RFC 7940].</p>
 
-    <p class="notice">This is a DRAFT document released for public comments and not final. For details on how to submit comments see the announcement for public comments on Root Zone LGR-5 on the ICANN website. https://icann.org/idn</p>
-    
 <h2>Repertoire</h2>
     <p>The Root Zone LGR for the Myanmar script lists 163 entries in total; 
     consisting of 98 Myanmar script unique code points and 65 sequences. 
@@ -28,13 +26,13 @@
     <p>The repertoire includes code points used by languages written in Myanmar script 
     that fall within levels 1 to 4 on the [EGIDS] scale, as well as EGIDS 5 languages 
     which have more than 500,000 users are included in the analysis. 
-    They are Burmese, Shan, Rakhine, S'gaw Karen, Mon, Pa'O Karen. 
+    They are Burmese, Shan, Rakhine, S’gaw Karen, Mon, Pa’O Karen. 
     (See also [Ethnologue].)
     A non-exhaustive list of languages using each code point can be found in the comments. 
     For more details, see Section 5 “Repertoire” in [Proposal-Myanmar].</p>
     
-    <p>Note: In this proposal, to avoid confusion, the term 'Myanmar' is used for the Myanmar script
-    and the term 'Burmese' is used for the Myanmar language. </p>
+    <p>Note: In this document, to avoid confusion, the term ‘Myanmar’ is used for the Myanmar script
+    and the term ‘Burmese’ is used for the Myanmar language. </p>
     
     <p>The repertoire is based on [MSR-5], which is a subset of [Unicode 11.0].</p>
 
@@ -57,11 +55,11 @@
        <p><b>Variant Dispositions:</b> The disposition for some variants is “blocked” : only a single version of 
        the label should be in the root-zone at one time, while all other variants are excluded. The disposition for the
        remaining in-script variants is “allocatable”, allowing more than one variant to be delegated to the same 
-       entity. See Section 6.1 in [Proposal-Myanmar]. </p>
+       entity. See Section 6.1 in [Proposal-Myanmar].</p>
 
        <p>Variants that have the same meaning, pronunciation and property should not appear both in the same string. 
        Based on the language, only one variant should be chosen and written consistently. The LGR contains rules 
-       and other constraints on variants that prohibit mixed-language labels and arbitrary mixture of variants. 
+       and other constraints on variants that prohibit arbitrary mixture of variants. 
        See Section 7 in [Proposal-Myanmar].</p>
 
       <p>Some additional code point combinations could create visual variants; however the WLE rules 
@@ -139,7 +137,7 @@
 
     <p><b>Medials:</b> Medials are used to enhance the sound of Consonants. They are also noted 
     as Dependent Consonants as they need a leading Consonant to attach to. All five 
-    languages in this proposal use Medials. See Section 3.3.4, “Diacritic - Medials” 
+    languages supported by this LGR  use Medials. See Section 3.3.4, “Diacritic - Medials” 
     of [Proposal-Myanmar].</p>
     
     <p><b>Virama:</b> U+1039 MYANMAR SIGN VIRAMA is used in Burmese and Mon. 
@@ -149,7 +147,7 @@
     However. a repetition of Consonant + Virama + Consonant is not allowed to prevent rendering issues.  
     See Section 3.3.5, “Diacritic - Tone Marks and Other Signs” in [Proposal-Myanmar].</p>
     
-    <p><b>Killer or Asat:</b> U+103A MYANMAR SIGN ASAT is used in Burmese and Mon.
+    <p><b>Killer or Asat:</b> U+103A MYANMAR SIGN ASAT is used in all languages.
     This sign is used to remove the consonant sound of a letter and take only the vowel 
     property to create more vowel sounds out of consonants. Except for defined sequences, 
     Asat cannot follow other Diacritics. See Section 3.3.5, “Diacritic - Tone Marks and Other Signs” in [Proposal-Myanmar].</p>
@@ -183,7 +181,7 @@
    <p>The LGR includes the set of required default WLE rules and actions applicable to 
     the Root Zone and defined in [MSR-5]. They are marked with &#x235F;. The 
     default prohibition on leading combining marks is equivalent to ensuring that 
-    a label only starts with a consonant or vowel.</p>
+    a label only starts with a consonant or independent vowel.</p>
 
     <h3>Myanmar-specific Rules</h3>
     <p>There are constraints on the context for many of the character classes in Myanmar. 
@@ -195,13 +193,13 @@
      <p>The following shorthand names for sequences are used in the description or definition of 
      these rules:</p>
     <ul>
-    <li>S11 &mdash; Myanmar letter NGA followed by Asat and Virama</li>
+    <li>S11 &mdash; Myanmar letter NGA followed by Asat and Virama (Kinzi)</li>
     <li>S12, S14, S15 &mdash; long-vowel sequences</li>
     <li>S16, S17 &mdash;   Asat sequences</li>
-    <li>ST4 &mdash; a Pa'O Karen tone sequence</li>
-    <li>ST1, ST2, ST3  &mdash; Skaw Karen tone sequences</li>
+    <li>ST4 &mdash; a Pa’O Karen tone sequence</li>
+    <li>ST1, ST2, ST3  &mdash; Sgaw Karen tone sequences</li>
     <li>S_Mon4 &mdash; Mon Kinzi</li>
-    <li>S_Mon5 - S_Mon16; Mon dependent vowel sequences </li>
+    <li>S_Mon5 - S_Mon16 &mdash; Mon dependent vowel sequences</li>
     </ul>
     
     <p>The rules are: </p>
@@ -241,7 +239,7 @@
      <li>virama: must be between two c (c+v+c). But c cannot be between v to prevent v+c+v+c</li>
      <li>t_long and t_short: must follow c or m or lv or S12</li>
      <li>sh_tone must follow sh_vowel or (c + k) or s_sh2 or s_sh5</li>
-     <li>pao_tone must follow dv or m or k, except U+1037 or U+1308</li>
+     <li>pao_tone must follow dv or m or k, except U+1037 or U+1038</li>
      <li>ST4 must follow U+1031, U+1032, S12, S14, or S15</li>
      <li>ST1, ST2, ST3 or Sgaw_Tone must follow c or m or dv</li>
      <li>S_Mon4 must follow c or m or dv and another c must follow S_Mon4</li>
@@ -323,7 +321,7 @@
      <dt>[EGIDS]</dt>
      <dd>Lewis and Simons, “EGIDS: Expanded Graded Intergenerational Disruption Scale,”
       documented in [SIL-Ethnologue] and summarized here:
-      https://en.wikipedia.org/wiki/Expanded_Graded_Intergenerational_Disruption_Scale_(EGIDS</dd>
+      https://en.wikipedia.org/wiki/Expanded_Graded_Intergenerational_Disruption_Scale_(EGIDS)</dd>
 
      <dt>[Ethnologue]</dt>
      <dd>Ethnologue, Myanmar, (Accessed 6 October 2019) https://www.ethnologue.com/country/MM</dd>
@@ -338,27 +336,27 @@
 
      <dt>[RFC 7940]</dt>
      <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, 
-     RFC 7940, August 2016, http://www.rfc-editor.org/info/rfc7940. </dd> 
+     RFC 7940, August 2016, https://www.rfc-editor.org/info/rfc7940. </dd> 
 
     <dt>[RFC 8228]</dt>
     <dd>A. Freytag, “Guidance on Designing Label Generation Rulesets (LGRs) Supporting Variant Labels”, RFC 8228, August 2017,
     https://www.rfc-editor.org/info/rfc8228</dd>
 
     <dt>[RZ-LGR-5-Overview]</dt>
-    <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-24mar22-en.pdf</dd>
+    <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
 
     <dt>[RZ-LGR-5]</dt>
-    <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 24 March 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.xml <br/>
-     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.html</i></dd>
+    <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 26 May 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.xml <br/>
+     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.html</i></dd>
 
      <dt>[SIL-Ethnologue]</dt>
      <dd>David M. Eberhard, Gary F. Simons &amp; Charles D. Fennig (eds.). 2021.
      Ethnologue: Languages of the World, Twenty fourth edition. Dallas, Texas: SIL
-     International. Online version available as http://www.ethnologue.com</dd>
+     International. Online version available as https://www.ethnologue.com</dd>
 
      <dt>[Unicode 11.0]</dt>
      <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) 
-     http://www.unicode.org/versions/Unicode11.0.0/</dd>
+     https://www.unicode.org/versions/Unicode11.0.0/</dd>
     </dl>
     
     <p>For more details for references [101] and up refer to the <a href="#table_of_references">Table of References</a> below.</p>
@@ -376,9 +374,9 @@
       https://www.unicode.org/notes/tn11/UTN11_4.pdf</reference>
       <reference id="105" comment="code points used for Shan">Section “Shan”, p. 41ff in “Representing Myanmar in Unicode”, UTN#11, Details and Examples, Version 4,  
       https://www.unicode.org/notes/tn11/UTN11_4.pdf</reference>
-      <reference id="108" comment="code points used for Pa'o Karen">Section “Pa'o Karen”, p. 37ff in “Representing Myanmar in Unicode”, UTN#11, Details and Examples, Version 4,  
+      <reference id="108" comment="code points used for Pa’O Karen">Section “Pa’o Karen”, p. 37ff in “Representing Myanmar in Unicode”, UTN#11, Details and Examples, Version 4,  
  	  https://www.unicode.org/notes/tn11/UTN11_4.pdf</reference>
-      <reference id="110" comment="code points used for Sgaw Karen">Section “Sgaw Karen”, p. 33ff in “Representing Myanmar in Unicode”, UTN#11, Details and Examples, Version 4,  
+      <reference id="110" comment="code points used for S’gaw Karen">Section “Sgaw Karen”, p. 33ff in “Representing Myanmar in Unicode”, UTN#11, Details and Examples, Version 4,  
  	  https://www.unicode.org/notes/tn11/UTN11_4.pdf</reference>
     </references>
   </meta>
@@ -414,21 +412,21 @@
       <var cp="1002" type="blocked" comment="Cross-script homoglyph" />
       <var cp="10D8" type="blocked" comment="Cross-script homoglyph" />
     </char>
-    <char cp="1000" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="1000" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
     <char cp="1000 1039 1000" not-when="follows-or-precedes-virama" comment="SV1, See6.1">
       <var cp="1023" type="blocked" comment="Myanmar variant" />
     </char>
     <char cp="1000 103B 103D 1014 103A 102F 1015 103A" comment="SS06, Exception to WLE rule #1" />
-    <char cp="1001" not-when="between-virama" tag="c C_103B C_103C C_mon C_shan CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)">
+    <char cp="1001" not-when="between-virama" tag="c C_103B C_103C C_mon C_shan CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)">
       <var cp="1001" type="r-set1" comment="Code point from grapheme-set 1" />
       <var cp="1076" type="set1-to-set2" comment="Myanmar variant; grapheme-set 2" />
     </char>
-    <char cp="1002" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)">
+    <char cp="1002" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)">
       <var cp="0D31" type="blocked" comment="Cross-script homoglyph" />
       <var cp="10D8" type="blocked" comment="Cross-script homoglyph" />
     </char>
-    <char cp="1003" not-when="between-virama" tag="c C_103B C_103C C_mon sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
-    <char cp="1004" not-when="between-virama" tag="c C_103B C_103C C_103E C_shan c2 c3 CMM3 CMM5 sc:Mymr" ref="3 101 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Pa'O Karen (5)">
+    <char cp="1003" not-when="between-virama" tag="c C_103B C_103C C_mon sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
+    <char cp="1004" not-when="between-virama" tag="c C_103B C_103C C_103E C_shan c2 c3 CMM3 CMM5 sc:Mymr" ref="3 101 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Pa’O Karen (5)">
       <var cp="0063" type="blocked" comment="Cross-script near homoglyph" />
       <var cp="1004" not-when="followed-by-c-end" type="r-set1" comment="Code point from grapheme-set 1" />
       <var cp="105A" not-when="followed-by-c-end" type="set1-to-set2" comment="Myanmar variant; grapheme-set 2" />
@@ -446,66 +444,66 @@
       <var cp="105A 103A 1039" type="blocked" comment="Myanmar variant" />
     </char>
     <char cp="1004 103C 103E" comment="C_MM4, See Appendix B" />
-    <char cp="1005" not-when="between-virama" tag="c C_103E C_mon sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
-    <char cp="1006" not-when="between-virama" tag="c C_103B C_103C C_mon sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
-    <char cp="1007" not-when="between-virama" tag="c C_mon sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)" />
-    <char cp="1008" not-when="between-virama" tag="c C_n103D sc:Mymr" ref="3 101 108" comment="Burmese (1), Pa'O Karen (5)">
+    <char cp="1005" not-when="between-virama" tag="c C_103E C_mon sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
+    <char cp="1006" not-when="between-virama" tag="c C_103B C_103C C_mon sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
+    <char cp="1007" not-when="between-virama" tag="c C_mon sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)" />
+    <char cp="1008" not-when="between-virama" tag="c C_n103D sc:Mymr" ref="3 101 108" comment="Burmese (1), Pa’O Karen (5)">
       <var cp="1008" type="r-set1" comment="Code point from grapheme-set 1" />
       <var cp="105B" type="set1-to-set2" comment="Myanmar variant; grapheme-set 2" />
     </char>
-    <char cp="1009" not-when="between-virama" tag="c C_103E C_mon c2 c3 CMM5 sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)" />
-    <char cp="100A" not-when="between-virama" tag="c C_103E C_mon c2 c3 CMM5 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
-    <char cp="100B" not-when="between-virama" tag="c sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)" />
-    <char cp="100C" not-when="between-virama" tag="c sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)" />
-    <char cp="100D" not-when="between-virama" tag="c sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)" />
-    <char cp="100E" not-when="between-virama" tag="c sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)" />
-    <char cp="100F" not-when="between-virama" tag="c C_103B C_103C C_103E C_mon c2 c3 CMM5 sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)" />
-    <char cp="1010" not-when="between-virama" tag="c C_103B C_103C C_mon C_shan CMM1 CMM3 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)">
+    <char cp="1009" not-when="between-virama" tag="c C_103E C_mon c2 c3 CMM5 sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)" />
+    <char cp="100A" not-when="between-virama" tag="c C_103E C_mon c2 c3 CMM5 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
+    <char cp="100B" not-when="between-virama" tag="c sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)" />
+    <char cp="100C" not-when="between-virama" tag="c sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)" />
+    <char cp="100D" not-when="between-virama" tag="c sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)" />
+    <char cp="100E" not-when="between-virama" tag="c sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)" />
+    <char cp="100F" not-when="between-virama" tag="c C_103B C_103C C_103E C_mon c2 c3 CMM5 sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)" />
+    <char cp="1010" not-when="between-virama" tag="c C_103B C_103C C_mon C_shan CMM1 CMM3 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)">
       <var cp="10D7" type="blocked" comment="Cross-script homoglyph" />
     </char>
-    <char cp="1011" not-when="between-virama" tag="c C_103B C_103C C_mon C_shan CMM1 CMM3 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)" />
-    <char cp="1012" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
-    <char cp="1013" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)" />
-    <char cp="1014" not-when="between-virama" tag="c C_103B C_103C C_103E C_mon c2 c3 CMM1 CMM3 CMM5 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="1011" not-when="between-virama" tag="c C_103B C_103C C_mon C_shan CMM1 CMM3 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)" />
+    <char cp="1012" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
+    <char cp="1013" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)" />
+    <char cp="1014" not-when="between-virama" tag="c C_103B C_103C C_103E C_mon c2 c3 CMM1 CMM3 CMM5 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
     <char cp="1014 103B 103E" comment="C_MM2, See Appendix B" />
     <char cp="1014 103C 103E" comment="C_MM4, See Appendix B" />
-    <char cp="1015" not-when="between-virama" tag="c C_103B C_103C C_mon C_shan CMM1 CMM3 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="1015" not-when="between-virama" tag="c C_103B C_103C C_mon C_shan CMM1 CMM3 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)" />
     <char cp="1015 102C 103A" comment="Variant Target">
       <var cp="101F 103A" type="blocked" comment="Myanmar variant" />
     </char>
     <char cp="1015 1039 1015 102C" not-when="follows-or-precedes-virama" comment="SV2,Exception to Rule 14" />
-    <char cp="1016" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
-    <char cp="1017" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)" />
-    <char cp="1018" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
-    <char cp="1019" not-when="between-virama" tag="c C_103B C_103C C_103E C_mon C_shan c2 c3 CMM1 CMM3 CMM5 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="1016" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
+    <char cp="1017" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)" />
+    <char cp="1018" not-when="between-virama" tag="c C_103B C_103C C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
+    <char cp="1019" not-when="between-virama" tag="c C_103B C_103C C_103E C_mon C_shan c2 c3 CMM1 CMM3 CMM5 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)" />
     <char cp="1019 103B 103E" comment="C_MM2, See Appendix B" />
     <char cp="1019 103C 103D 103E" comment="CMMM, See Appendix B" />
     <char cp="1019 103C 103E" comment="C_MM4, See Appendix B" />
-    <char cp="101A" not-when="between-virama" tag="c C_103B C_103E C_mon C_shan c2 CMM1 CMM5 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="101A" not-when="between-virama" tag="c C_103B C_103E C_mon C_shan c2 CMM1 CMM5 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)" />
     <char cp="101A 1031 102C 1000 103A 103B 102C 1038" comment="SS07, Exception to WLE rule #3 Asat 103A follows Medial 103B" />
     <char cp="101A 103B 103E" comment="C_MM2, See Appendix B" />
-    <char cp="101B" not-when="between-virama" tag="c C_103E C_mon C_shan CMM5 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="101B" not-when="between-virama" tag="c C_103E C_mon C_shan CMM5 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)" />
     <char cp="101B 103E" comment="SV3,Section 6.1">
       <var cp="1061" type="blocked" comment="Myanmar variant" />
     </char>
-    <char cp="101C" not-when="between-virama" tag="c C_103B C_103E C_mon C_shan CMM1 CMM5 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="101C" not-when="between-virama" tag="c C_103B C_103E C_mon C_shan CMM1 CMM5 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)" />
     <char cp="101C 1000 103A 103B 102C" comment="SS08,Exception to WLE rule #3 Asat 103A follows Medial  103B" />
     <char cp="101C 103B 103E" comment="C_MM2, See Appendix B" />
-    <char cp="101D" not-when="between-virama" tag="c C_103B C_103E C_mon C_shan c3 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)">
+    <char cp="101D" not-when="between-virama" tag="c C_103B C_103E C_mon C_shan c3 sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)">
       <var cp="006F" type="blocked" comment="Cross-script near homoglyph" />
       <var cp="0B20" type="blocked" comment="Cross-script homoglyph" />
       <var cp="0D20" type="blocked" comment="Cross-script homoglyph" />
     </char>
-    <char cp="101E" not-when="between-virama" tag="c C_103E C_mon C_shan sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="101E" not-when="between-virama" tag="c C_103E C_mon C_shan sc:Mymr" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)" />
     <char cp="101E 103B 103E" comment="C_MM2, See Appendix B" />
     <char cp="101E 103C 1014 103A" ref="103" comment="SS10, The only Mon word with U+101E U+103C" />
     <char cp="101E 103C 1083 1087" ref="105" comment="SS09, The only Shan word with U+101E U+103C" />
-    <char cp="101F" not-when="between-virama" tag="c C_103B C_103C C_103E C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="101F" not-when="between-virama" tag="c C_103B C_103C C_103E C_mon CMM1 CMM3 sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
     <char cp="101F 103A" comment="Variant Target">
       <var cp="1015 102C 103A" type="blocked" comment="Myanmar variant" />
     </char>
-    <char cp="1020" not-when="between-virama" tag="c C_103E C_mon sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)" />
-    <char cp="1021" not-when="between-virama" tag="c C_mon sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="1020" not-when="between-virama" tag="c C_103E C_mon sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)" />
+    <char cp="1021" not-when="between-virama" tag="c C_mon sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
     <char cp="1022" not-when="between-virama" tag="c C_103C C_shan CMM1 sc:Mymr" ref="9 105" comment="Shan (3)" />
     <char cp="1023" tag="iv sc:Mymr" ref="3 101 103" comment="Burmese (1), Mon (5)">
       <var cp="1000 1039 1000" type="blocked" comment="Myanmar variant" />
@@ -518,35 +516,35 @@
     <char cp="1025 102F 1038" comment="SS02, U+1025 cannot join with other signs" />
     <char cp="1026" tag="iv sc:Mymr" ref="3 101" comment="Burmese (1)," />
     <char cp="1026 1038" comment="SS03, U+1026 can only join with U+1038, not with other signs" />
-    <char cp="1027" tag="c iv sc:Mymr" ref="3 101 110" comment="Burmese (1), S'gaw Karen (3)" />
+    <char cp="1027" tag="c iv sc:Mymr" ref="3 101 110" comment="Burmese (1), S’gaw Karen (3)" />
     <char cp="1028" tag="iv sc:Mymr" ref="9 103" comment="Mon (5)" />
     <char cp="1029" tag="iv sc:Mymr" ref="3 101 103" comment="Burmese (1), Mon (5)" />
     <char cp="102A" tag="iv sc:Mymr" ref="3 101 103" comment="Burmese (1), Mon (5)" />
-    <char cp="102B" when="follows-c-m" tag="dv lv sc:Mymr" ref="9 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)">
+    <char cp="102B" when="follows-c-m" tag="dv lv sc:Mymr" ref="9 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)">
       <var cp="102B" when="follows-c-m-except-1002-1015-101D" type="r-set1" comment="Code point from grapheme-set 1" />
       <var cp="102C" when="follows-c-m-except-1002-1015-101D" type="set1-to-set2" comment="Myanmar variant; grapheme-set 2" />
     </char>
     <char cp="102B 1036" when="follows-c-m" ref="103" comment="S_Mon5, Dependent Vowel Sequence for Mon Language. (See 3.3.3.4)" />
-    <char cp="102C" when="follows-c-m-except-1002-1015-101D" tag="dv lv sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa'O Karen (5)">
+    <char cp="102C" when="follows-c-m-except-1002-1015-101D" tag="dv lv sc:Mymr" ref="3 101 103 108" comment="Burmese (1), Mon (5), Pa’O Karen (5)">
       <var cp="102B" when="follows-c-m-except-1002-1015-101D" type="set2-to-set1" comment="Myanmar variant; grapheme-set 1" />
       <var cp="102C" when="follows-c-m-except-1002-1015-101D" type="r-set2" comment="Code point from grapheme-set 2" />
     </char>
     <char cp="102C 1036" when="follows-c-m" ref="103" comment="S_Mon6, Dependent Vowel Sequence for Mon Language. (See 3.3.3.4)" />
-    <char cp="102C 103A" when="follows-c-m-dv" ref="110" comment="ST2,Used as tone sequence in S'gaw Karen. (See 3.3.5.3)" />
-    <char cp="102D" when="follows-c-m" tag="dv sc:Mymr sh_vowel" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="102C 103A" when="follows-c-m-dv" ref="110" comment="ST2,Used as tone sequence in S’gaw Karen. (See 3.3.5.3)" />
+    <char cp="102D" when="follows-c-m" tag="dv sc:Mymr sh_vowel" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)" />
     <char cp="102D 102F" when="follows-c-m" comment="S12,long vowel sequence, For WLE Rule #10, #11" />
     <char cp="102D 102F 1032" when="follows-c-m" ref="103" comment="S_Mon7, Dependent Vowel Sequence for Mon Language. (See 3.3.3.4)" />
     <char cp="102D 1030" when="follows-c-m" ref="105" comment="S_Sh3, dependent vowel sequence for Shan .  (See 3.3.3.2)" />
     <char cp="102D 1036" when="follows-c-m" comment="S18, long vowel sequence" />
-    <char cp="102E" when="follows-c-m" tag="dv lv sc:Mymr sh_vowel" ref="3 101 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Pa'O Karen (5)">
+    <char cp="102E" when="follows-c-m" tag="dv lv sc:Mymr sh_vowel" ref="3 101 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Pa’O Karen (5)">
       <var cp="102E" type="r-set1" comment="Code point from grapheme-set 1" />
       <var cp="1033" type="set1-to-set2" comment="Myanmar variant; grapheme-set 2" />
     </char>
-    <char cp="102F" when="follows-c-m" tag="dv sc:Mymr sh_vowel" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="102F" when="follows-c-m" tag="dv sc:Mymr sh_vowel" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)" />
     <char cp="102F 1032" when="follows-c-m" ref="108" comment="S_Pao, dependent vowel sequence for Pa’O Karen; must follow c_pao or m_pao (See 3.3.3.5)" />
     <char cp="102F 1036" when="follows-c-m" comment="S13, long vowel sequence for WLE Rule #1, #8, #11" />
-    <char cp="1030" when="follows-c-m" tag="dv lv sc:Mymr sh_vowel" ref="3 101 103 105 108 110" comment="Burmese (1), S'gaw Karen (3), Shan (3), Mon (5), Pa'O Karen (5)" />
-    <char cp="1031" when="follows-c-m" tag="dv lv sc:Mymr sh_vowel" ref="3 101 103 105 108" comment="Burmese (1), Shan (3), Mon (5), Pa'O Karen (5)">
+    <char cp="1030" when="follows-c-m" tag="dv lv sc:Mymr sh_vowel" ref="3 101 103 105 108 110" comment="Burmese (1), S’gaw Karen (3), Shan (3), Mon (5), Pa’O Karen (5)" />
+    <char cp="1031" when="follows-c-m" tag="dv lv sc:Mymr sh_vowel" ref="3 101 103 105 108" comment="Burmese (1), Shan (3), Mon (5), Pa’O Karen (5)">
       <var cp="0B47" type="blocked" comment="Cross-script homoglyph" />
     </char>
     <char cp="1031 102B" when="follows-c-m" comment="S14, long vowel sequence for WLE Rule #1, #11" />
@@ -561,7 +559,7 @@
     <char cp="1031 1032" when="follows-c-m" ref="103" comment="S_Mon10, Dependent Vowel Sequence for Mon Language. (See 3.3.3.4)" />
     <char cp="1031 1083" when="follows-c-m" ref="105" comment="S_Sh1, dependent vowel sequence for Shan.(See 3.3.3.2)" />
     <char cp="1031 1083 103A" when="follows-c-m" ref="105" comment="S_Sh2, dependent vowel sequence for Shan. (See 3.3.3.2)" />
-    <char cp="1032" when="follows-c-m" tag="dv lv sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="1032" when="follows-c-m" tag="dv lv sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
     <char cp="1032 102B" when="follows-c-m" ref="103" comment="S_Mon11, Dependent Vowel Sequence for Mon Language. (See 3.3.3.4)" />
     <char cp="1032 102C" when="follows-c-m" ref="103" comment="S_Mon12, Dependent Vowel Sequence for Mon Language. (See 3.3.3.4)" />
     <char cp="1033" when="follows-c-m" tag="dv sc:Mymr" ref="9 103" comment="Mon (5)">
@@ -571,25 +569,25 @@
     <char cp="1034" when="follows-c-m" tag="dv sc:Mymr" ref="9 103" comment="Mon (5)" />
     <char cp="1035" when="follows-c-m" tag="ov sc:Mymr" ref="9 105" comment="Shan (3)" />
     <char cp="1035 102F" when="follows-c-m" ref="103" comment="S_Mon3, dependent vowel sequence for Mon. (See 3.3.3.4)" />
-    <char cp="1036" when="follows-c-m" tag="a dv lv sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
-    <char cp="1037" when="follows-c-m-lv-s12" tag="dv sc:Mymr t_short" ref="3 101 108 110" comment="Burmese (1), S'gaw Karen (3), Pa'O Karen (5)" />
+    <char cp="1036" when="follows-c-m" tag="a dv lv sc:Mymr" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
+    <char cp="1037" when="follows-c-m-lv-s12" tag="dv sc:Mymr t_short" ref="3 101 108 110" comment="Burmese (1), S’gaw Karen (3), Pa’O Karen (5)" />
     <char cp="1037 103A" when="follows-cc2-mc2-dvc2-ovc2" comment="S16, short vowel sequence for WLE Rule #5" />
     <char cp="1037 AA7B" when="follows-beforeST4-set" ref="108" comment="ST4, Used as tone sequence in Pa’O Karen. (See 3.3.5.5)" />
-    <char cp="1038" when="follows-c-m-lv-s12" tag="dv sc:Mymr t_long" ref="3 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="1038" when="follows-c-m-lv-s12" tag="dv sc:Mymr t_long" ref="3 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
     <char cp="1039" when="between-c" tag="sc:Mymr virama" ref="3 101 103" comment="Burmese (1), Mon (5)" />
-    <char cp="103A" when="follows-cc-mc-dvc-ovc" tag="k sc:Mymr" ref="9 101 103 105 108 110" comment="Burmese (1), Shan (3), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="103A" when="follows-cc-mc-dvc-ovc" tag="k sc:Mymr" ref="9 101 103 105 108 110" comment="Burmese (1), Shan (3), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
     <char cp="103A 1038" when="follows-cc3-mc3-dvc3-ovc3" comment="S17, long tone sequence, For WLE Rule #5" />
-    <char cp="103B" when="follows-c_103B" tag="C_n103D m sc:Mymr" ref="9 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="103B" when="follows-c_103B" tag="C_n103D m sc:Mymr" ref="9 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
     <char cp="103B 103D" when="follows-cmm1" comment="MM1, See Appendix B" />
-    <char cp="103C" when="follows-c_103C" tag="C_n103D m sc:Mymr" ref="9 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="103C" when="follows-c_103C" tag="C_n103D m sc:Mymr" ref="9 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
     <char cp="103C 103D" when="follows-cmm3" comment="MM3, See Appendix B" />
-    <char cp="103D" when="follows-c-except-c_n103D" tag="m sc:Mymr" ref="9 101 103 108 110" comment="Burmese (1), S'gaw Karen (3), Mon (5), Pa'O Karen (5)" />
+    <char cp="103D" when="follows-c-except-c_n103D" tag="m sc:Mymr" ref="9 101 103 108 110" comment="Burmese (1), S’gaw Karen (3), Mon (5), Pa’O Karen (5)" />
     <char cp="103D 103E" when="follows-cmm5" comment="MM5, See Appendix B" />
-    <char cp="103E" when="follows-c_103E" tag="m sc:Mymr" ref="9 101 103 110" comment="Burmese (1), S'gaw Karen (3), Mon (5)" />
+    <char cp="103E" when="follows-c_103E" tag="m sc:Mymr" ref="9 101 103 110" comment="Burmese (1), S’gaw Karen (3), Mon (5)" />
     <char cp="103E 103A" when="follows-c_103E" ref="103" comment="S_Mon13, Dependent Vowel Sequence for Mon Language. (See 3.3.3.4)" />
     <char cp="103E 103A 1031" when="follows-c_103E" ref="103" comment="S_Mon14, Dependent Vowel Sequence for Mon Language. (See 3.3.3.4)" />
     <char cp="103E 103A 1031 102C" when="follows-c_103E" ref="103" comment="S_Mon15, Dependent Vowel Sequence for Mon Language. (See 3.3.3.4)" />
-    <char cp="103F" when="follows-c-m-dv-1023-1025" tag="c c1 sc:Mymr" ref="9 101 108" comment="Burmese (1) , Pa'O Karen (5)" />
+    <char cp="103F" when="follows-c-m-dv-1023-1025" tag="c c1 sc:Mymr" ref="9 101 108" comment="Burmese (1) , Pa’O Karen (5)" />
     <char cp="105A" not-when="between-virama" tag="c C_mon C_n103D sc:Mymr" ref="9 103" comment="Mon (5)">
       <var cp="1004" not-when="followed-by-c-end" type="set2-to-set1" comment="Myanmar variant; grapheme-set 1" />
       <var cp="105A" not-when="followed-by-c-end" type="r-set2" comment="Code point from grapheme-set 2" />
@@ -614,15 +612,15 @@
     <char cp="105D" not-when="between-virama" tag="c C_mon C_n103D sc:Mymr" ref="9 103" comment="Mon (5)" />
     <char cp="105E" when="follows-c_mon" tag="m M_mon sc:Mymr" ref="9 103" comment="Mon (5)" />
     <char cp="105F" when="follows-c_mon" tag="m M_mon sc:Mymr" ref="9 103" comment="Mon (5)" />
-    <char cp="1060" when="follows-c_mon" tag="m M_mon sc:Mymr" ref="9 103 110" comment="S'gaw Karen (3), Mon (5)" />
-    <char cp="1061" not-when="between-virama" tag="c sc:Mymr" ref="9 110" comment="S'gaw Karen (3)">
+    <char cp="1060" when="follows-c_mon" tag="m M_mon sc:Mymr" ref="9 103 110" comment="S’gaw Karen (3), Mon (5)" />
+    <char cp="1061" not-when="between-virama" tag="c sc:Mymr" ref="9 110" comment="S’gaw Karen (3)">
       <var cp="101B 103E" type="blocked" comment="Myanmar variant" />
     </char>
-    <char cp="1062" when="follows-c-m" tag="dv ov sc:Mymr" ref="9 105 110" comment="S'gaw Karen (3), Shan (3)" />
-    <char cp="1062 103A" when="follows-c-m-dv" ref="110" comment="ST1, Used as tone sequence in S'gaw Karen. (See 3.3.5.3)" />
+    <char cp="1062" when="follows-c-m" tag="dv ov sc:Mymr" ref="9 105 110" comment="S’gaw Karen (3), Shan (3)" />
+    <char cp="1062 103A" when="follows-c-m-dv" ref="110" comment="ST1, Used as tone sequence in S’gaw Karen. (See 3.3.5.3)" />
     <char cp="1062 1086" when="follows-c-m" ref="105" comment="S_Sh4, dependent vowel sequence for Shan. (See 3.3.3.2)" />
-    <char cp="1063 103A" when="follows-c-m-dv" ref="110" comment="ST3, Used as tone sequence in S'gaw Karen. (See 3.3.5.3)" />
-    <char cp="1064" when="follows-c-m-dv" tag="sc:Mymr sgaw_tone" ref="9 110" comment="S'gaw Karen (3)" />
+    <char cp="1063 103A" when="follows-c-m-dv" ref="110" comment="ST3, Used as tone sequence in S’gaw Karen. (See 3.3.5.3)" />
+    <char cp="1064" when="follows-c-m-dv" tag="sc:Mymr sgaw_tone" ref="9 110" comment="S’gaw Karen (3)" />
     <char cp="1075" not-when="between-virama" tag="c C_103B C_103C C_shan c3 CMM1 sc:Mymr" ref="9 105" comment="Shan (3)" />
     <char cp="1076" not-when="between-virama" tag="c C_103B C_103C C_shan CMM1 sc:Mymr" ref="9 105" comment="Shan (3)">
       <var cp="1001" type="set2-to-set1" comment="Myanmar variant; grapheme-set 1" />

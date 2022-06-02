@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Root Zone LGR for the Thai Script">5</version>
-    <date>2022-03-24</date>
+    <date>2022-05-26</date>
     <language>und-Thai</language>
     <scope type="domain">.</scope>
     <unicode-version>11.0.0</unicode-version>
@@ -15,8 +15,6 @@
       Root Zone. For more details on this LGR and additional background on the script, see “Proposal for the Thai Script Root Zone LGR” [Proposal-Thai].
       This file is one of a set of LGR files that together form an integrated LGR for the DNS Root Zone [RZ-LGR-5]. 
       The format of this file follows [RFC 7940]. </p>
-      
-      <p class="notice">This is a DRAFT document released for public comments and not final. For details on how to submit comments see the announcement for public comments on Root Zone LGR-5 on the ICANN website. https://icann.org/idn</p>
 
 <h2>Repertoire</h2>
       <p>In addition to the 68 single code points according to Section 5 “Repertoire” in [Proposal-Thai], three 
@@ -104,17 +102,17 @@
         <dd>Thai Generation Panel, “Proposal for the Thai Script Root Zone LGR”, 25 May 2017,
               https://www.icann.org/en/system/files/files/proposal-thai-lgr-25may17-en.pdf</dd>
         <dt>[RFC 7940]</dt>
-        <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, http://www.rfc-editor.org/info/rfc7940</dd>
+        <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, https://www.rfc-editor.org/info/rfc7940</dd>
         <dt>[RZ-LGR-5-Overview]</dt>
-        <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-24mar22-en.pdf</dd>
+        <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
 
         <dt>[RZ-LGR-5]</dt>
-        <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 24 March 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.xml <br/>
-           <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.html</i></dd>
+        <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 26 May 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.xml <br/>
+           <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.html</i></dd>
 
         <dt>[Unicode 11.0]</dt>
         <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) 
-          http://www.unicode.org/versions/Unicode11.0.0/</dd>
+          https://www.unicode.org/versions/Unicode11.0.0/</dd>
        </dl>
        <p>For references consulted particularly in designing the repertoire for the Thai script for the Root Zone 
         please see details in the <a href="#table_of_references">Table of References</a> below. 
@@ -125,7 +123,7 @@
 ]]></description>
     <references>
       <reference id="0" comment="Any code point originally encoded in Unicode 1.1">The Unicode Standard 1.1</reference>
-      <reference id="100">Thai Industrial Standard (TIS) 1566-2541(1988) http://www.ratchakitcha.soc.go.th/DATA/PDF/2542/E/088/9.PDF</reference>
+      <reference id="100">Thai Industrial Standard (TIS) 1566-2541(1988) https://www.ratchakitcha.soc.go.th/DATA/PDF/2542/E/088/9.PDF</reference>
       <reference id="101">Computers and the Thai Language https://lexitron.nectec.or.th/KM_HL5001/file_HL5001/Paper/Inter%20Journal/krrn_52085.pdf</reference>
     </references>
   </meta>

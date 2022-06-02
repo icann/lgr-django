@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Root Zone LGR for the Japanese Script">5</version>
-    <date>2022-03-24</date>
+    <date>2022-05-26</date>
     <language>und-Jpan</language>
     <scope type="domain">.</scope>
     <unicode-version>11.0.0</unicode-version>
@@ -16,8 +16,6 @@
           including the appendices [Proposal-Japanese-Appendices]. 
           This file is one of a set of LGR files that together form an integrated LGR for the DNS Root Zone [RZ-LGR-5].
           The format of this file follows [RFC 7940].</p>
-
-           <p class="notice">This is a DRAFT document released for public comments and not final. For details on how to submit comments see the announcement for public comments on Root Zone LGR-5 on the ICANN website. https://icann.org/idn</p>
 
         <h2>Repertoire</h2>
           <p>The repertoire includes 6,356 Han characters, 85 Hiragana characters, 89 Katakana characters, and 2 Common (quasi-Kanji) characters for a total of 
@@ -34,14 +32,7 @@
        and one or more references documenting sufficient justification for inclusion in the repertoire; see “References” below.</p>
 
         <h2>Character Classes</h2>
-          <p>This LGR defines the following named character classes:</p>
-          <ul>
-            <li><b>katakana</b> &mdash; Katakana code points including Small Katakana (U+30A1, U+30A3, U+30A5, U+30A7, U+30A9, U+30C3, U+30E3, U+30E5, U+30E7, U+30EE, U+30F5, U+30F6), Katakana iteration marks (U+30FD, U+30FE) and prolonged sound mark (U+30FC)</li>
-            <li><b>hiragana</b> &mdash; Hiragana code points including Small Hiragana (U+3041, U+3043, U+3045, U+3047, U+3049, U+3063, U+3083, U+3085, U+3087, U+308E) and Hiragana iteration marks (U+309D, U+309E)</li>
-            <li><b>han</b> &mdash; Han (Kanji) code points consisting of CJK Unified Ideographs plus the ideographic iteration mark (U+3005) and the ideographic closing mark (U+3006)</li>
-            <li><b>japanese-code-point</b> &mdash; union of katakana, hiragana and han</li>
-          </ul>
-        <p>Note: these character classes are defined for documentation; they are not referenced by any rules defined in this LGR.</p>
+          <p>This LGR defines no named character classes.</p>
 
        <h2>Variants</h2>
 
@@ -112,16 +103,16 @@
            <dd>Appendices to “Proposal for a Japanese Script Root Zone LGR”, 
            20 December 2021 (ZIP), https://www.icann.org/en/system/files/files/proposal-japanese-lgr-appendices-20dec21-en.zip</dd>
           <dt>[RFC 7940]</dt>
-            <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, http://www.rfc-editor.org/info/rfc7940</dd>
+            <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, https://www.rfc-editor.org/info/rfc7940</dd>
           <dt>[RFC 8228]</dt>
             <dd>A. Freytag, “Guidance on Designing Label Generation Rulesets (LGRs) Supporting Variant Labels”, RFC 8228, August 2017, https://www.rfc-editor.org/info/rfc8228</dd>
           <dt>[RZ-LGR-5-Overview]</dt>
-            <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”,24 March 2022             , https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-24mar22-en.pdf</dd>
+            <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”,26 May 2022             , https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
           <dt>[RZ-LGR-5]</dt>
-           <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 24 March 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.xml <br/>
-           <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.html</i></dd>
+           <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 26 May 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.xml <br/>
+           <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.html</i></dd>
           <dt>[Unicode 11.0]</dt>
-             <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) http://www.unicode.org/versions/Unicode11.0.0/</dd>
+             <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) https://www.unicode.org/versions/Unicode11.0.0/</dd>
           </dl>
           <p>For additional detail on references cited in the remainder of the document refer to the Table of References below.</p>
           <p>Where links to certain references are not available, the data may be archived as part of [Proposal-Japanese].</p>
@@ -130,7 +121,7 @@
       <reference id="0" comment="Any code point originally encoded in Unicode 1.1">The Unicode Standard 1.1</reference>
       <reference id="100">JIS X 0208:1997, Japanese Industrial Standard, 7-bit and 8-bit double byte coded KANJI sets for information interchange, https://www.jisc.go.jp/, see also https://en.wikipedia.org/wiki/JIS_X_0208</reference>
       <reference id="101">Research paper: Survey on the User Perception of the Homographic Character Set Specified by JGP, Appendix B to [Proposal-Japanese], https://www.icann.org/en/system/files/files/proposal-japanese-lgr-appendices-20dec21-en.zipf</reference>
-      <reference id="300" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-chinese-script-24mar22-en.html">Root Zone Label Generation Rules for Chinese, 24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-chinese-script-24mar22-en.xml</reference>
+      <reference id="300" comment="non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-chinese-script-26may22-en.html">Root Zone Label Generation Rules for Chinese, 26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-chinese-script-26may22-en.xml</reference>
     </references>
   </meta>
   <data>
@@ -10571,9 +10562,6 @@
   <!--Rules section goes here-->
   <rules>
     <!--Character class definitions go here-->
-    <class name="katakana" from-tag="sc:Kana" comment="Any Katakana code point" />
-    <class name="hiragana" from-tag="sc:Hira" comment="Any Hiragana code point" />
-    <class name="han" from-tag="sc:Hani" comment="Any Han (Kanji) code point" />
     <!--Whole label evaluation and context rules go here-->
     <rule name="leading-combining-mark" comment="Default WLE rule matching labels with leading combining marks &#x235F;">
       <start />
@@ -10582,7 +10570,7 @@
         <class property="gc:Mc" />
       </union>
     </rule>
-    <rule name="at-start-of-label" comment="No small kana, iteration mark or prolonged sound mark mayt start a label">
+    <rule name="at-start-of-label" comment="No small kana, iteration mark or prolonged sound mark may start a label">
       <look-behind>
         <start />
       </look-behind>

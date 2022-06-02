@@ -2,7 +2,7 @@
 <lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
   <meta>
     <version comment="Root Zone LGR for the Tamil Script">5</version>
-    <date>2022-03-24</date>
+    <date>2022-05-26</date>
     <language>und-Taml</language>
     <scope type="domain">.</scope>
     <unicode-version>11.0.0</unicode-version>
@@ -14,7 +14,6 @@
 For more details on this LGR and additional background on the script, see “Proposal for a Tamil Script Root Zone Label Generation Rule-Set (LGR)” [Proposal-Tamil].
 This file is one of a set of LGR files that together form an integrated LGR for the DNS Root Zone [RZ-LGR-5]. 
 The format of this file follows [RFC 7940].</p>
-<p class="notice">This is a DRAFT document released for public comments and not final. For details on how to submit comments see the announcement for public comments on Root Zone LGR-5 on the ICANN website. https://icann.org/idn</p>
 
 <h2>Repertoire</h2>
 <p>According to Section 5, “Repertoire” in [Proposal-Tamil] the Tamil LGR contains 48 single code points and 4 sequences.
@@ -97,7 +96,7 @@ presented as context rules.</p>
 <p>The following whole-label rule and associated action prevent the mixing of two allocatable variants of the same sequence within the same label. 
 This reduces overproduction of variant labels. </p> 
 <ol start="4">
-<li>Two representations of 'Shri' cannot be mixed in the same label</li>
+<li>Two representations of ‘Shri’ cannot be mixed in the same label</li>
 </ol>
 <p>More details in Section 7, “Whole Label Evaluation Rules (WLE)” in [Proposal-Tamil].</p>
 <h2>Methodology and Contributors</h2>
@@ -108,6 +107,11 @@ This reduces overproduction of variant labels. </p>
     separate LGR, with the Neo-Brahmi GP ensuring that the fundamental philosophy behind building 
     each LGR is in sync with all other Brahmi-derived scripts. For further details on methodology and
     contributors, see Sections 4 and 8 in [Proposal-Tamil], as well as [RZ-LGR-5-Overview].</p>
+   <h3>Change from Version 4</h3>
+   <p>Changed the implementation of rule “preceded-by-X” to use “look-behind” instead of “look-ahead”.
+   As the rule prevents two adjacent Visargas, the change has no effect on the restriction imposed,
+   but the change makes it easier for a reader to verify that the rule is correctly implemented.</p>
+   
 <h2>References</h2>
 <p>The following general references are cited in this document:</p>
 <dl class="references">
@@ -117,20 +121,20 @@ This reduces overproduction of variant labels. </p>
 <dt>[Proposal-Tamil]</dt>
 <dd>Neo-Brahmi Generation Panel, “Proposal for a Tamil Script Root Zone Label Generation Rule-Set (LGR)”, 6 March 2019, https://www.icann.org/en/system/files/files/proposal-tamil-lgr-06mar19-en.pdf</dd>
 <dt>[RFC 7940]</dt>
-<dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, http://www.rfc-editor.org/info/rfc7940</dd>
+<dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, https://www.rfc-editor.org/info/rfc7940</dd>
 
     <dt>[RFC 8228]</dt>
     <dd>A. Freytag, “Guidance on Designing Label Generation Rulesets (LGRs) Supporting Variant Labels”, RFC 8228, August 2017,
     https://www.rfc-editor.org/info/rfc8228</dd>
       <dt>[RZ-LGR-5-Overview]</dt>
-       <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 24 March 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-24mar22-en.pdf</dd>
+       <dd>Integration Panel, “Root Zone Label Generation Rules (RZ LGR-5): Overview and Summary”, 26 May 2022, https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
 
      <dt>[RZ-LGR-5]</dt>
-     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 24 March 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.xml <br/>
-     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-24mar22-en.html</i></dd>
+     <dd>Integration Panel, “Root Zone Label Generation Rules (RZ-LGR-5)”, 26 May 2022 (XML), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.xml <br/>
+     <i>non-normative HTML presentation: https://www.icann.org/sites/default/files/lgr/rz-lgr-5-common-26may22-en.html</i></dd>
      <dt>[Unicode 11.0]</dt>
 <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1)
-http://www.unicode.org/versions/Unicode11.0.0/</dd>
+https://www.unicode.org/versions/Unicode11.0.0/</dd>
 </dl>
       <p>For references consulted particularly in designing the repertoire for the Tamil script for the Root Zone 
         please see details in the <a href="#table_of_references">Table of References</a> below. 
@@ -270,12 +274,12 @@ http://www.unicode.org/versions/Unicode11.0.0/</dd>
       <anchor />
     </rule>
     <rule name="preceded-by-X" comment="Section 7, WLE 3 , X cannot be preceded by X">
-      <anchor />
-      <look-ahead>
+      <look-behind>
         <class by-ref="X" />
-      </look-ahead>
+      </look-behind>
+      <anchor />
     </rule>
-    <rule name="no-mix-sri-shri" comment="Section 7: WLE 4: Two representations of 'Shri' cannot be mixed in the same label">
+    <rule name="no-mix-sri-shri" comment="Section 7: WLE 4: Two representations of ‘Shri’ cannot be mixed in the same label">
       <choice>
         <rule>
           <char cp="0BB6 0BCD 0BB0 0BC0" />
@@ -292,7 +296,7 @@ http://www.unicode.org/versions/Unicode11.0.0/</dd>
     <!--Action elements go here - order defines precedence-->
     <action disp="invalid" match="leading-combining-mark" comment="labels with leading combining marks are invalid &#x235F;" />
     <action disp="invalid" any-variant="out-of-repertoire-var" comment="any variant label with a code point out of repertoire is invalid &#x235F;" />
-    <action disp="invalid" match="no-mix-sri-shri" comment="do not mix two representations of 'Shri' in the same label" />
+    <action disp="invalid" match="no-mix-sri-shri" comment="do not mix two representations of ‘Shri’ in the same label" />
     <action disp="blocked" any-variant="blocked" comment="any variant label containing blocked variants is blocked &#x235F;" />
     <action disp="allocatable" all-variants="allocatable" comment="variant labels with all variants allocatable are allocatable &#x235F;" />
     <action disp="valid" comment="catch all (default action) &#x235F;" />
