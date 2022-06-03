@@ -26,8 +26,8 @@ class LgrWebClientTestBase(TestCase):
         response = self.client.get('/')
         self.assertContains(response, 'Welcome to the LGR (Label Generation Ruleset) Tools')
 
-    def login(self):
-        user = LgrUser.objects.create_superuser('test@lgr.example', '1234')
+    def login_admin(self):
+        user = LgrUser.objects.create_superuser('test-admin@lgr.example', '1234')
         is_logged_in = self.client.login(username=user.email, password='1234')
         self.assertTrue(is_logged_in)
         return user

@@ -13,7 +13,7 @@ class TestValidatingRepertoire(LgrWebClientTestBase):
         self.assertListEqual(values, [''] + sorted(self.default_root_zones + self.default_msr))
 
     def test_validating_repertoire_import_full(self):
-        self.login()
+        self.login_admin()
 
         response = self.client.get('/a/editor/import/')
         dropdown = response.context['form'].fields['validating_repertoire']
@@ -27,7 +27,7 @@ class TestValidatingRepertoire(LgrWebClientTestBase):
         self.assertNotContains(response, 'Cannot import LGR file(s)', status_code=200)
 
     def test_validating_repertoire_create_full(self):
-        self.login()
+        self.login_admin()
 
         response = self.client.get('/a/editor/new/')
         dropdown = response.context['form'].fields['validating_repertoire']

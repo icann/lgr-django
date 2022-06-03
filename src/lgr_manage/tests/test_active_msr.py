@@ -6,7 +6,7 @@ from lgr_models.models.lgr import MSR
 
 class MSRActiveTestCase(LgrWebClientTestBase):
     def test_access_active_when_logged_in(self):
-        self.login()
+        self.login_admin()
 
         response = self.client.get('/m/msr')
         self.assertContains(response,
@@ -19,7 +19,7 @@ class MSRActiveTestCase(LgrWebClientTestBase):
         self.assertEquals(response.url, '/auth/login?next=/m/msr')
 
     def test_update_active_when_logged_in(self):
-        self.login()
+        self.login_admin()
         self.client.post('/m/msr/isactive', data={'active': 2})
         response = self.client.post('/m/msr/isactive', data={'active': 4})
         self.assertContains(response, '"old_active": 2', status_code=HTTPStatus.OK)

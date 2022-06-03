@@ -12,9 +12,12 @@ class TestUnicodeVersion(LgrWebClientTestBase):
     def setUp(self):
         self.versions_supported = set(settings.SUPPORTED_UNICODE_VERSIONS).intersection(
             settings.UNICODE_DATABASES.keys())
-        # this test require that at least one version of unicode is supported:
+        # this test requires that at least one version of unicode is supported:
         self.a_version_supported = set(self.versions_supported).pop()
         self.a_unicode_version = UnicodeVersion.objects.get(version=self.a_version_supported)
+
+
+class TestUnicodeVersionModel(TestUnicodeVersion):
 
     @unittest.skip('These tests doesnt work, since overriding settings in classmethod seems to fail in Django')
     @override_settings(DEFAULT_UNICODE_VERSION='10.0.0',

@@ -7,7 +7,7 @@ class TestValidateLabelsAgainstDropDown(LgrWebClientTestBase):
     dropdown_label = 'RZ-LGR 4'
 
     def test_validate_labels_against_full(self):
-        self.login()
+        self.login_admin()
 
         response = self.client.get('/b/')
         dropdown = response.context['widget']

@@ -6,7 +6,7 @@ from lgr_models.models.lgr import RzLgr
 
 class RzLgrActiveTestCase(LgrWebClientTestBase):
     def test_access_active_when_logged_in(self):
-        self.login()
+        self.login_admin()
 
         response = self.client.get('/m/rz-lgr')
         self.assertContains(response,
@@ -19,7 +19,7 @@ class RzLgrActiveTestCase(LgrWebClientTestBase):
         self.assertEquals(response.url, '/auth/login?next=/m/rz-lgr')
 
     def test_update_active_when_logged_in(self):
-        self.login()
+        self.login_admin()
         self.client.post('/m/rz-lgr/isactive', data={'active': 2})
         response = self.client.post('/m/rz-lgr/isactive', data={'active': 4})
         self.assertContains(response, '"old_active": 2', status_code=HTTPStatus.OK)

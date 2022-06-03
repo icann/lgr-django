@@ -4,7 +4,7 @@ from lgr_models.tests.test_unicode_version import TestUnicodeVersion
 class TestLabelFormsView(TestUnicodeVersion):
 
     def test_unicode_versions(self):
-        self.login()
+        self.login_admin()
 
         self.a_unicode_version.activated = True
         self.a_unicode_version.save()
