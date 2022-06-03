@@ -12,3 +12,4 @@ class TestAdmin(LgrWebClientTestBase):
         self.assertContains(response, '<a href="/m/users">User management</a>')
         # FIXME: disable for now
         # self.assertContains(response, '<a href="/m/unicode-versions">Unicode Versions</a>')
+        self.assertContains(response, '<a href="/m/settings">Tool Setting</a>')

@@ -1,0 +1,14 @@
+{% extends "lgr_manage/_idn_table_review_admin_base.html" %}
+{% load i18n %}
+
+{% block settinfs-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h2>{% trans 'Settings' %}</h2>
+
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_limit control_width=8 %}
+        <button id="submit" type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+    </form>
+{% endblock content-pane %}

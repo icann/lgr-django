@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from lgr_auth.models import LgrUser
+from lgr_auth.models import LgrUser, LgrRole
 
 
 class LgrWebClientTestBase(TestCase):
@@ -25,6 +25,18 @@ class LgrWebClientTestBase(TestCase):
         """
         response = self.client.get('/')
         self.assertContains(response, 'Welcome to the LGR (Label Generation Ruleset) Tools')
+
+    def login_user(self):
+        user = LgrUser.objects.create_user(email='test-user@lgr.example', password='1234', role=LgrRole.USER.value)
+        is_logged_in = self.client.login(username=user.email, password='1234')
+        self.assertTrue(is_logged_in)
+        return user
+
+    def login_icann(self):
+        user = LgrUser.objects.create_user(email='test-icann@lgr.example', password='1234', role=LgrRole.ICANN.value)
+        is_logged_in = self.client.login(username=user.email, password='1234')
+        self.assertTrue(is_logged_in)
+        return user
 
     def login_admin(self):
         user = LgrUser.objects.create_superuser('test-admin@lgr.example', '1234')

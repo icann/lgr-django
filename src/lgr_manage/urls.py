@@ -8,6 +8,7 @@ from lgr_manage.views.rz_lgr import (RzLgrView,
                                      DisplayRzLgrView,
                                      DisplayRzLgrMemberView,
                                      RzLgrIsActiveView)
+from lgr_manage.views.settings import LgrSettingsView
 # from lgr_manage.views.unicode_versions import (LgrUnicodeVersionUpdateView,
 #                                                LgrUnicodeVersionsListView,
 #                                                LgrUnicodeVersionCreateView)
@@ -32,9 +33,9 @@ urlpatterns = [
     path('users/<int:user_pk>/update', LgrUserAdminUpdateView.as_view(), name='lgr_admin_update_user'),
     path('users/<int:user_pk>/delete', LgrUserDeleteView.as_view(), name='lgr_admin_delete_user'),
     path('users/<int:user_pk>/status', LgrUserChangeStatusView.as_view(), name='lgr_admin_change_user_status'),
-    # path('unicode-versions', LgrUnicodeVersionsListView.as_view(), name='lgr_idn_admin_unicode_versions'),
+    # path('unicode-versions', LgrUnicodeVersionsListView.as_view(), name='lgr_admin_unicode_versions'),
     # path('unicode-versions/<int:pk>/update', LgrUnicodeVersionUpdateView.as_view(),
-    #      name='lgr_idn_admin_unicode_version_update'),
-    # path('unicode-versions/create', LgrUnicodeVersionCreateView.as_view(),
-    #      name='create_unicode_version')
+    #      name='lgr_admin_unicode_version_update'),
+    # path('unicode-versions/create', LgrUnicodeVersionCreateView.as_view(), name='lgr_admin_create_unicode_version'),
+    path('settings', LgrSettingsView.as_view(), name='lgr_admin_settings')
 ]
