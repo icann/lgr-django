@@ -8,7 +8,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from lgr_models.models.lgr import RefLgr
 from lgr_manage.forms import RefLgrCreateForm
-from lgr_manage.views.common import BaseListAdminView, BaseAdminView
+from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin
 
 
 class RefLgrListView(BaseListAdminView):
@@ -21,7 +21,7 @@ class RefLgrListView(BaseListAdminView):
         return context
 
 
-class RefLgrCreateView(BaseAdminView, views.generic.CreateView):
+class RefLgrCreateView(BaseAdminMixin, views.generic.CreateView):
     model = RefLgr
     form_class = RefLgrCreateForm
     template_name = 'lgr_manage/ref_lgr.html'
@@ -41,7 +41,7 @@ class RefLgrCreateView(BaseAdminView, views.generic.CreateView):
         return super().form_invalid(form)
 
 
-class RefLgrView(BaseAdminView, views.View):
+class RefLgrView(BaseAdminMixin, views.View):
 
     def get(self, request, *args, **kwargs):
         view = RefLgrListView.as_view()
@@ -52,7 +52,7 @@ class RefLgrView(BaseAdminView, views.View):
         return view(request, *args, **kwargs)
 
 
-class RefLgrDeleteView(BaseAdminView, views.generic.DeleteView):
+class RefLgrDeleteView(BaseAdminMixin, views.generic.DeleteView):
     model = RefLgr
     success_url = reverse_lazy('lgr_admin_ref_lgr')
     pk_url_kwarg = 'lgr_pk'

@@ -9,7 +9,7 @@ from django.views.generic.detail import SingleObjectMixin
 from lgr_manage.views.ajax_mixin import AjaxFormViewMixin
 from lgr_models.models.lgr import RzLgr, RzLgrMember
 from lgr_manage.forms import RzLgrCreateForm, RzLgrIsActiveForm
-from lgr_manage.views.common import BaseListAdminView, BaseAdminView
+from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin
 
 
 class RzLgrListView(BaseListAdminView):
@@ -32,7 +32,7 @@ class RzLgrListView(BaseListAdminView):
         return 1
 
 
-class RzLgrCreateView(BaseAdminView, views.generic.CreateView):
+class RzLgrCreateView(BaseAdminMixin, views.generic.CreateView):
     model = RzLgr
     form_class = RzLgrCreateForm
     template_name = 'lgr_manage/rz_lgr.html'
@@ -52,7 +52,7 @@ class RzLgrCreateView(BaseAdminView, views.generic.CreateView):
         return super().form_invalid(form)
 
 
-class RzLgrView(BaseAdminView, views.View):
+class RzLgrView(BaseAdminMixin, views.View):
 
     def get(self, request, *args, **kwargs):
         view = RzLgrListView.as_view()
@@ -63,7 +63,7 @@ class RzLgrView(BaseAdminView, views.View):
         return view(request, *args, **kwargs)
 
 
-class RzLgrDeleteView(BaseAdminView, views.generic.DeleteView):
+class RzLgrDeleteView(BaseAdminMixin, views.generic.DeleteView):
     model = RzLgr
     success_url = reverse_lazy('lgr_admin_rz_lgr')
     pk_url_kwarg = 'lgr_pk'

@@ -9,7 +9,7 @@ from django.views.generic.detail import SingleObjectMixin
 from lgr_auth.forms import UserForm
 from lgr_auth.models import LgrUser, LgrRole
 from lgr_auth.views import LgrUserUpdateView
-from lgr_manage.views.common import BaseListAdminView, BaseAdminView
+from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin
 
 
 class LgrUserListView(BaseListAdminView):
@@ -23,7 +23,7 @@ class LgrUserListView(BaseListAdminView):
         return context
 
 
-class LgrUserCreateView(BaseAdminView, views.generic.CreateView):
+class LgrUserCreateView(BaseAdminMixin, views.generic.CreateView):
     model = LgrUser
     form_class = UserForm
     template_name = 'lgr_manage/user_management.html'
@@ -43,7 +43,7 @@ class LgrUserCreateView(BaseAdminView, views.generic.CreateView):
         return super().form_invalid(form)
 
 
-class LgrUserView(BaseAdminView, views.View):
+class LgrUserView(BaseAdminMixin, views.View):
 
     def get(self, request, *args, **kwargs):
         view = LgrUserListView.as_view()
@@ -54,7 +54,7 @@ class LgrUserView(BaseAdminView, views.View):
         return view(request, *args, **kwargs)
 
 
-class LgrUserAdminUpdateView(BaseAdminView, LgrUserUpdateView):
+class LgrUserAdminUpdateView(BaseAdminMixin, LgrUserUpdateView):
     template_name = 'lgr_manage/user_update.html'
     success_url_name = 'lgr_admin_update_user'
 
@@ -62,7 +62,7 @@ class LgrUserAdminUpdateView(BaseAdminView, LgrUserUpdateView):
         return LgrUser.objects.exclude(role__exact=LgrRole.ADMIN)
 
 
-class LgrUserChangeStatusView(BaseAdminView, SingleObjectMixin, RedirectView):
+class LgrUserChangeStatusView(BaseAdminMixin, SingleObjectMixin, RedirectView):
     model = LgrUser
     url = reverse_lazy('lgr_admin_user_management')
     pk_url_kwarg = 'user_pk'
@@ -77,7 +77,7 @@ class LgrUserChangeStatusView(BaseAdminView, SingleObjectMixin, RedirectView):
         return super(LgrUserChangeStatusView, self).post(request, *args, **kwargs)
 
 
-class LgrUserDeleteView(BaseAdminView, views.generic.DeleteView):
+class LgrUserDeleteView(BaseAdminMixin, views.generic.DeleteView):
     model = LgrUser
     success_url = reverse_lazy('lgr_admin_user_management')
     pk_url_kwarg = 'user_pk'

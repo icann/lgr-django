@@ -8,7 +8,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from lgr_manage.forms import MSRCreateForm, MSRIsActiveForm
 from lgr_manage.views.ajax_mixin import AjaxFormViewMixin
-from lgr_manage.views.common import BaseListAdminView, BaseAdminView
+from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin
 from lgr_models.models.lgr import MSR
 
 
@@ -31,7 +31,7 @@ class MSRListView(BaseListAdminView):
         return 1
 
 
-class MSRCreateView(BaseAdminView, views.generic.CreateView):
+class MSRCreateView(BaseAdminMixin, views.generic.CreateView):
     model = MSR
     form_class = MSRCreateForm
     template_name = 'lgr_manage/msr.html'
@@ -51,7 +51,7 @@ class MSRCreateView(BaseAdminView, views.generic.CreateView):
         return super().form_invalid(form)
 
 
-class MSRView(BaseAdminView, views.View):
+class MSRView(BaseAdminMixin, views.View):
 
     def get(self, request, *args, **kwargs):
         view = MSRListView.as_view()
@@ -62,7 +62,7 @@ class MSRView(BaseAdminView, views.View):
         return view(request, *args, **kwargs)
 
 
-class MSRDeleteView(BaseAdminView, views.generic.DeleteView):
+class MSRDeleteView(BaseAdminMixin, views.generic.DeleteView):
     model = MSR
     success_url = reverse_lazy('lgr_admin_msr')
     pk_url_kwarg = 'lgr_pk'

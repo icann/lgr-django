@@ -3,10 +3,10 @@ import logging
 from django.http import JsonResponse
 from django.utils.translation import ugettext_lazy as _
 
-from lgr_manage.views.common import BaseAdminView
+from lgr_manage.views.common import BaseAdminMixin
 
 
-class AjaxFormViewMixin(BaseAdminView):
+class AjaxFormViewMixin(BaseAdminMixin):
     model = None
 
     def form_valid(self, form):
