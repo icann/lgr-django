@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class LgrToolsConfig(AppConfig):
+class LgrTasksConfig(AppConfig):
     name = 'lgr_tasks'

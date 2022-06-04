@@ -11,6 +11,7 @@ from django.utils.encoding import force_bytes
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_models.models.lgr import LgrBaseModel, RzLgr, MSR
+from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
 
 FILE_FIELD_ENCODING_HELP = _('File must be encoded in UTF-8 and using 0x0A line ending.')
 
@@ -36,9 +37,6 @@ class ValidatingRepertoire:
 
     @classmethod
     def _cache_key(cls, unicode_database, vr_model, vr_pk):
-        # TODO move from advanced to models
-        from lgr_advanced.utils import LGR_CACHE_KEY_PREFIX
-
         key = f'{cls.SCRIPTS_CACHE_KEY}:{unicode_database.get_unicode_version()}:{vr_model}:{vr_pk}'
         args = hashlib.md5(force_bytes(key))
         return "{}.{}".format(LGR_CACHE_KEY_PREFIX, args.hexdigest())

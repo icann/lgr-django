@@ -11,8 +11,6 @@ from natsort import natsorted
 
 logger = logging.getLogger('utils')
 
-LGR_CACHE_KEY_PREFIX = 'lgr-cache'
-
 
 def list_files(location, startswith='', reverse=True):
     """

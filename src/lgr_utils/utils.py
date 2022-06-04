@@ -7,6 +7,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+LGR_CACHE_KEY_PREFIX = 'lgr-cache'
+
 
 def get_all_subclasses_recursively(klass):
     subclasses = set()

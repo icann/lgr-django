@@ -16,6 +16,7 @@ import os
 from django.utils.translation import ugettext_lazy as _
 from kombu import Queue
 
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_beat',
     'django_celery_results',
     'social_django',
     'lgr_models',
@@ -366,5 +368,18 @@ BROKER_URL = 'redis://localhost:6379/0'
 # Django Celery Results configuration
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
+
+# Periodic tasks
+INDEX_REFRESH_FREQUENCY = 3600 * 24
+CELERYBEAT_SCHEDULE = {
+    "calculate_index_variant_labels_tlds": {
+        "task": "lgr_tasks.tasks.calculate_index_variant_labels_tlds",
+        "schedule": INDEX_REFRESH_FREQUENCY,
+        'options': {
+            'expires': 3600 * 10,
+        },
+    },
+}
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 ##### /Celery configuration parameters #####

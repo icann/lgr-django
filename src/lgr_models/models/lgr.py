@@ -18,6 +18,7 @@ from lgr.utils import tag_to_language_script
 from lgr_auth.models import LgrUser
 from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException, LGRValidationException
 from lgr_utils import unidb
+from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
 
 
 def get_upload_path(instance, filename):
@@ -102,8 +103,6 @@ class LgrBaseModel(models.Model):
         return super().delete(*args, **kwargs)
 
     def _cache_key(self, key):
-        # TODO move from advanced to models
-        from lgr_advanced.utils import LGR_CACHE_KEY_PREFIX
 
         key = f"{key}:{self._meta.label}:{self.pk}"
         args = hashlib.md5(force_bytes(key))

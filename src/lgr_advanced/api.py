@@ -13,7 +13,6 @@ from lgr_session.api import LGRStorage
 logger = logging.getLogger(__name__)
 
 OLD_LGR_NS = 'http://www.iana.org/lgr/0.1'
-LGRS_SESSION_KEY = 'lgr'
 
 
 class LabelInfo(object):
