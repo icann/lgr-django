@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from django import views
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import RedirectView
+from django.views.generic import View, RedirectView, CreateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 
 from lgr_auth.forms import UserForm
@@ -23,7 +22,7 @@ class LgrUserListView(BaseListAdminView):
         return context
 
 
-class LgrUserCreateView(BaseAdminMixin, views.generic.CreateView):
+class LgrUserCreateView(BaseAdminMixin, CreateView):
     model = LgrUser
     form_class = UserForm
     template_name = 'lgr_manage/user_management.html'
@@ -43,7 +42,7 @@ class LgrUserCreateView(BaseAdminMixin, views.generic.CreateView):
         return super().form_invalid(form)
 
 
-class LgrUserView(BaseAdminMixin, views.View):
+class LgrUserView(BaseAdminMixin, View):
 
     def get(self, request, *args, **kwargs):
         view = LgrUserListView.as_view()
@@ -77,7 +76,7 @@ class LgrUserChangeStatusView(BaseAdminMixin, SingleObjectMixin, RedirectView):
         return super(LgrUserChangeStatusView, self).post(request, *args, **kwargs)
 
 
-class LgrUserDeleteView(BaseAdminMixin, views.generic.DeleteView):
+class LgrUserDeleteView(BaseAdminMixin, DeleteView):
     model = LgrUser
     success_url = reverse_lazy('lgr_admin_user_management')
     pk_url_kwarg = 'user_pk'

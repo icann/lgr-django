@@ -4,6 +4,7 @@ import os
 from ast import literal_eval
 from io import BytesIO
 
+from django.conf import settings
 from django.core.cache import cache
 from django.core.files import File
 from django.db import models
@@ -17,7 +18,6 @@ from lgr.utils import tag_to_language_script
 from lgr_auth.models import LgrUser
 from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException, LGRValidationException
 from lgr_utils import unidb
-from lgr_web import settings
 
 
 def get_upload_path(instance, filename):

@@ -8,6 +8,7 @@ import logging
 import os
 import shutil
 
+from django.conf import settings
 from django.test import TestCase
 from parameterized import parameterized
 
@@ -15,7 +16,6 @@ from lgr.core import LGR
 from lgr.metadata import Metadata
 from lgr_idn_table_review.icann_tools.api import get_reference_lgr, NoRefLgrFound
 from lgr_models.models.lgr import RefLgr, RzLgrMember, RzLgr, LgrBaseModel
-from lgr_web import settings
 
 logger = logging.getLogger('api')
 

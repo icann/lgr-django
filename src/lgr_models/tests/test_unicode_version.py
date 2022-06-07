@@ -1,10 +1,10 @@
 import unittest
 
+from django.conf import settings
 from django.test import override_settings
 
 from lgr_models.models.unicode import UnicodeVersion
 from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
-from lgr_web import settings
 
 
 class TestUnicodeVersion(LgrWebClientTestBase):
@@ -19,7 +19,6 @@ class TestUnicodeVersion(LgrWebClientTestBase):
 
 class TestUnicodeVersionModel(TestUnicodeVersion):
 
-    @unittest.skip('These tests doesnt work, since overriding settings in classmethod seems to fail in Django')
     @override_settings(DEFAULT_UNICODE_VERSION='10.0.0',
                        SUPPORTED_UNICODE_VERSIONS=('6.3.0', '10.0.0'),
                        UNICODE_DATABASES={'6.3.0': {}, '10.0.0': {}})
@@ -28,7 +27,6 @@ class TestUnicodeVersionModel(TestUnicodeVersion):
         default_version = UnicodeVersion.default()
         self.assertEqual(default_version.version, '10.0.0')
 
-    @unittest.skip('These tests doesnt work, since overriding settings in classmethod seems to fail in Django')
     @override_settings(DEFAULT_UNICODE_VERSION='10.0.0',
                        SUPPORTED_UNICODE_VERSIONS=('6.3.0', '10.0.0'),
                        UNICODE_DATABASES={'6.3.0': {}, '10.0.0': {}})
