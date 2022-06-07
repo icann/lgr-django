@@ -2,15 +2,18 @@
 import os
 import re
 
-from django.db import migrations
 from django.conf import settings
 from django.core.files import File
+from django.db import migrations
 
+from lgr.parser.xml_parser import XMLParser
+from lgr.utils import tag_to_language_script
 from lgr_models.models.lgr import RzLgr
 
 
 def initial_data(apps, schema_editor):
     OldRzLgr: RzLgr = apps.get_model("lgr_models", "RzLgr")
+    OldRzLgrMember = apps.get_model("lgr_models", "RzLgrMember")
     resouces_path = os.path.join(settings.BASE_DIR, 'resources')
     default_root_zones = os.path.join(resouces_path, 'idn_ref', 'root-zone')
     db_alias = schema_editor.connection.alias
@@ -21,11 +24,25 @@ def initial_data(apps, schema_editor):
                 fname = os.path.splitext(lgr)[0]
                 name = re.sub(r'lgr-([1-9]+)-.*', r'RZ-LGR \1', fname)
                 if not OldRzLgr.objects.filter(name=name).exists():
-                    OldRzLgr.objects.using(db_alias).create(name=name,
-                                                            file=File(f, name=lgr))
+                    rz_lgr_id = int(name[-1])
+                    rz_lgr = OldRzLgr.objects.using(db_alias).create(name=name,
+                                                                     file=File(f, name=lgr))
 
-    for lgr in OldRzLgr.objects.all():
-        lgr.save()
+                root_zone_members = os.path.join(default_root_zones, f'lgr-{rz_lgr_id}')
+                if not os.path.exists(root_zone_members):
+                    continue
+                for mb_lgr in os.listdir(root_zone_members):
+                    with open(os.path.join(root_zone_members, mb_lgr), 'rb') as f:
+                        mb_name = os.path.splitext(mb_lgr)[0]
+                        if not OldRzLgrMember.objects.filter(name=mb_name).exists():
+                            lgr_parsed = XMLParser(f).parse_document()
+                            language, script = tag_to_language_script(lgr_parsed.metadata.languages[0])
+                            f.seek(0)
+                            OldRzLgrMember.objects.using(db_alias).create(name=mb_name,
+                                                                          rz_lgr=rz_lgr,
+                                                                          file=File(f, name=mb_lgr),
+                                                                          language=language,
+                                                                          script=script)
 
 
 class Migration(migrations.Migration):

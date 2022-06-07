@@ -262,11 +262,11 @@ class RzLgrMember(LgrBaseModel):
         return reverse('lgr_admin_display_rz_lgr_member', kwargs={'rz_lgr_pk': self.rz_lgr.pk, 'lgr_pk': self.pk})
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        super().save(force_insert, force_update, using, update_fields)
-        lgr_parser = XMLParser(self.file.path)
+        lgr_parser = XMLParser(self.file)
+        self.file.seek(0)
         lgr = lgr_parser.parse_document()
         self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
-        super().save(force_insert=False, force_update=True, using=using, update_fields=['language', 'script'])
+        super().save(force_insert, force_update, using, update_fields)
 
 
 class MSR(LgrBaseModel):

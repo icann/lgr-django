@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.files import File
 from django.db import migrations
 
-from lgr_models.models.lgr import RefLgr, RzLgrMember
+from lgr.utils import tag_to_language_script
 
 SECOND_LEVEL_LANG = {
     'lgr-second-level-arabic-language-13jan21-en.xml': 'ar-Arab',
@@ -61,36 +61,19 @@ def initial_data(apps, schema_editor):
     # We get the model from the versioned app registry;
     # if we directly import it, it'll be the wrong version
     OldRefLgr = apps.get_model("lgr_models", "RefLgr")
-    OldRzLgr = apps.get_model("lgr_models", "RzLgr")
-    OldRzLgrMember = apps.get_model("lgr_models", "RzLgrMember")
     db_alias = schema_editor.connection.alias
 
     resouces_path = os.path.join(settings.BASE_DIR, 'resources')
     second_level = os.path.join(resouces_path, 'idn_ref', 'second-level-reference-lgr')
-    root_zone = os.path.join(resouces_path, 'idn_ref', 'root-zone')
-    root_zone_members = os.path.join(root_zone, 'lgr-4')
 
     for lgr in os.listdir(second_level):
         with open(os.path.join(second_level, lgr), 'r') as f:
+            language, script = tag_to_language_script(SECOND_LEVEL_LANG[lgr])
             OldRefLgr.objects.using(db_alias).create(name=os.path.splitext(lgr)[0],
                                                      language_script=SECOND_LEVEL_LANG[lgr],
-                                                     file=File(f, name=lgr))
-
-    with open(os.path.join(root_zone, 'lgr-4-common-05nov20-en.xml'), 'r') as f:
-        rz_lgr = OldRzLgr.objects.using(db_alias).create(name="RZ-LGR 4",
-                                                         file=File(f, name='lgr-4-common-05nov20-en.xml'))
-
-    for lgr in os.listdir(root_zone_members):
-        with open(os.path.join(root_zone_members, lgr), 'rb') as f:
-            OldRzLgrMember.objects.using(db_alias).create(name=os.path.splitext(lgr)[0],
-                                                          rz_lgr=rz_lgr,
-                                                          file=File(f, name=lgr))
-
-    # call save on objects with real model to populate script and language fields
-    for lgr in RefLgr.objects.all():
-        lgr.save()
-    for lgr in RzLgrMember.objects.all():
-        lgr.save()
+                                                     file=File(f, name=lgr),
+                                                     language=language,
+                                                     script=script)
 
 
 class Migration(migrations.Migration):
