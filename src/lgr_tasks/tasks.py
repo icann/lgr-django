@@ -3,6 +3,7 @@ import hashlib
 import logging
 
 from celery import shared_task
+from django.conf import settings
 from django.utils.encoding import force_bytes
 
 from lgr.exceptions import NotInLGR
@@ -10,7 +11,6 @@ from lgr.tools.utils import download_file, read_labels
 from lgr_advanced.api import LabelInfo
 from lgr_models.models.lgr import RzLgr
 from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
-from lgr_web import settings
 from django.core.cache import cache
 
 logger = logging.getLogger(__name__)

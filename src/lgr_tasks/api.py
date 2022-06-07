@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
 
-from celery.states import STARTED, PENDING, REVOKED, SUCCESS
+from celery.states import STARTED, PENDING, REVOKED, SUCCESS, RETRY
 from django.db.models import Q
 from django.utils import timezone
 
@@ -37,7 +37,9 @@ def get_task_info(user, task_id=None):
     if irevoked:
         revoked = sum(irevoked.values() or [], [])
     tasks = []
-    query = Q(user=user)
+    query = Q()
+    if user:
+        query = Q(user=user)
     found_active = False
     if task_id:
         query &= Q(pk=task_id)
@@ -72,6 +74,13 @@ def get_task_info(user, task_id=None):
     if task_id and tasks:
         return tasks[0]
     return tasks
+
+
+def is_task_completed(task_id):
+    task = get_task_info(None, task_id)
+    if not task:
+        return False
+    return task['status'] not in [PENDING, STARTED, RETRY]
 
 
 def _get_report_instance(report):

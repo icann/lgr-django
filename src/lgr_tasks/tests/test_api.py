@@ -2,7 +2,7 @@
 from unittest.mock import patch
 
 import lgr_web.celery_app
-from lgr_tasks.api import get_task_info
+from lgr_tasks.api import get_task_info, is_task_completed
 from lgr_tasks.tests.common import TasksTestBase, MockCeleryControl, MockCeleryAsyncResult
 
 
@@ -158,3 +158,12 @@ class TestTasksApi(TasksTestBase):
             'report': None,
             'status': 'TESTING',
         }])
+
+    def test_is_task_completed(self):
+        self.given_task_completed(self.t1)
+        self.assertTrue(is_task_completed(1))
+        self.assertTrue(is_task_completed(2))
+        self.assertFalse(is_task_completed(3))
+        self.assertFalse(is_task_completed(4))
+        self.assertFalse(is_task_completed(5))
+        self.assertTrue(is_task_completed(6))

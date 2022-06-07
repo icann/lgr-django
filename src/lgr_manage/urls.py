@@ -8,7 +8,7 @@ from lgr_manage.views.rz_lgr import (RzLgrView,
                                      DisplayRzLgrView,
                                      DisplayRzLgrMemberView,
                                      RzLgrIsActiveView)
-from lgr_manage.views.settings import LgrSettingsView
+from lgr_manage.views.settings import LgrSettingsView, LgrCalculateIndexes
 # from lgr_manage.views.unicode_versions import (LgrUnicodeVersionUpdateView,
 #                                                LgrUnicodeVersionsListView,
 #                                                LgrUnicodeVersionCreateView)
@@ -37,5 +37,6 @@ urlpatterns = [
     # path('unicode-versions/<int:pk>/update', LgrUnicodeVersionUpdateView.as_view(),
     #      name='lgr_admin_unicode_version_update'),
     # path('unicode-versions/create', LgrUnicodeVersionCreateView.as_view(), name='lgr_admin_create_unicode_version'),
-    path('settings', LgrSettingsView.as_view(), name='lgr_admin_settings')
+    path('settings', LgrSettingsView.as_view(), name='lgr_admin_settings'),
+    path('settings/indexes', LgrCalculateIndexes.as_view(), name='lgr_admin_calculate_indexes')
 ]
