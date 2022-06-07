@@ -2,9 +2,22 @@
 
 from django.db import migrations, models
 
+from lgr_models.models.lgr import RzLgr, MSR
+
+
+def set_default(apps, schema_editor):
+    OldRzLgr: RzLgr = apps.get_model("lgr_models", "RzLgr")
+    OldMsr: MSR = apps.get_model("lgr_models", "MSR")
+
+    last_rz: RzLgr = OldRzLgr.objects.last()
+    last_rz.active = True
+    last_rz.save(update_fields=['active'])
+    last_msr: MSR = OldMsr.objects.last()
+    last_msr.active = True
+    last_msr.save(update_fields=['active'])
+
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('lgr_models', '0007_populate_unicode_versions'),
     ]
@@ -20,4 +33,5 @@ class Migration(migrations.Migration):
             name='active',
             field=models.BooleanField(default=False),
         ),
+        migrations.RunPython(set_default)
     ]
