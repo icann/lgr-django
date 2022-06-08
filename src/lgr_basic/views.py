@@ -95,8 +95,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
                                              f"<a href='{reverse('list_process')}'>{_('task status page')}</a>")))
                 except LGRException as ex:
                     messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
-                    # redirect to myself to refresh display
-                    return redirect('lgr_basic_mode')
+                    return self.render_to_response(self.get_context_data(results=results, **ctx))
 
         return self.render_to_response(self.get_context_data(results=results, **ctx))
 

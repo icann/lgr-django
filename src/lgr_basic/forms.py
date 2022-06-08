@@ -6,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from lgr.tools.utils import parse_label_input
 from lgr_advanced.lgr_editor.forms.fields import FILE_FIELD_ENCODING_HELP
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
+from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException
+from lgr_models.models.unicode import UnicodeVersion
 from lgr_utils.unidb import get_db_by_version
 from lgr_models.models.lgr import RzLgr
 
@@ -37,7 +39,11 @@ class ValidateLabelSimpleForm(forms.Form):
 
     def clean_labels(self):
         rz_lgr_object: RzLgr = self.cleaned_data['rz_lgr']
-        udata = get_db_by_version(rz_lgr_object.to_lgr().metadata.unicode_version)
+        try:
+            udata = get_db_by_version(rz_lgr_object.to_lgr().metadata.unicode_version)
+        except LGRUnsupportedUnicodeVersionException:
+            # fallback to default version
+            udata = get_db_by_version(UnicodeVersion.default().version)
 
         value = self.cleaned_data['labels']
         labels = list()

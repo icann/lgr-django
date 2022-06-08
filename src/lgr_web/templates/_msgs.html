@@ -1,5 +1,5 @@
 {% if messages %}
-    <div class="container">
+    <div id="messages" class="container">
         {% for message in messages %}
             <div class="alert{% if message.tags %} alert-{{ message.tags }} alert-dismissible {% endif %}">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">

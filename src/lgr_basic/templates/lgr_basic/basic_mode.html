@@ -38,6 +38,8 @@
                         <span></span>). {% trans 'Please contact the administrator before submitting again.' %}
                     </div>
 
+                    <div id="process-error" style="display: none;">
+                    </div>
 
                     <div class="form-group">
                         <label class="col-sm-4 col-lg-4 control-label">
@@ -361,6 +363,7 @@
                 $('#results').css('display', 'none');
                 $('#timeout-error').css('display', 'none');
                 $('#general-error').css('display', 'none');
+                $('#process-error').css('display', 'none');
 
                 $.ajax({
                     type: 'POST',
@@ -372,14 +375,20 @@
                     dataType: "HTML",
                     success: (response) => {
                         $("#content-basic").html($(response).filter('#content-basic').html());
+                        if ($(response).filter('#messages').length) {
+                          $('#process-error').css('display', 'block');
+                          $("#process-error").html($(response).filter('#messages').html());
+                        }
                         $('.fade-blocking').css('display', 'none');
                         OnloadFunction(coll_enabled);
                     },
                     error: (error) => {
                         console.error(error);
                         if (error && (error.status === 502 || error.status === 504)) {
+                            $('#process-error').css('display', 'none');
                             $('#timeout-error').css('display', 'block');
                         } else {
+                            $('#process-error').css('display', 'none');
                             $('#timeout-error').css('display', 'none');
                             $('#general-error').css('display', 'block');
                             $('#general-error').find("span").html(error ? error.status : null);
