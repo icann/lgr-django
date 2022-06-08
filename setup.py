@@ -23,6 +23,9 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
     ],
     install_requires=[
         # Core stuff
@@ -31,7 +34,10 @@ setup(
         'django-redis-cache',
         'django-autocomplete-light',
         'django-cleanup',
+        'django-celery-results',
+        'django-celery-beat',
         'celery',
+        'social-auth-app-django',
         # LGR/Unicode modules
         'lgr-core',
         'munidata',

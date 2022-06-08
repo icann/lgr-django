@@ -33,6 +33,8 @@ recursive-include src/lgr_manage/templates *
 recursive-include src/lgr_renderer/locale *
 recursive-include src/lgr_renderer/templates *
 recursive-include src/lgr_session/locale *
+recursive-include src/lgr_tasks/locale *
+recursive-include src/lgr_tasks/templates *
 recursive-include src/lgr_web/locale *
 recursive-include src/lgr_web/templates *
 recursive-include src/lgr_web/assets *

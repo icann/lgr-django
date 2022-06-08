@@ -1,0 +1,16 @@
+[Unit]
+Description=Celery periodic tasks launcher for LGR Toolset
+After=network.target
+
+[Service]
+WorkingDirectory=/var/www/lgr/lgr-django
+Environment="LD_LIBRARY_PATH=/usr/local/lib"
+ExecStart=/var/www/lgr/venv/bin/celery \
+--app=lgr_web \
+--workdir=/var/www/lgr/lgr-django/src \
+beat
+User=lgr
+Group=lgr
+
+[Install]
+WantedBy=multi-user.target

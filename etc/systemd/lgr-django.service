@@ -1,7 +1,7 @@
 [Unit]
 Description=LGR Django application
 After=network.target
-Wants=lgr-celery.service redis.service
+Wants=lgr-celery.service lgr-celery-beat.service redis.service
 After=redis.service
 
 [Service]

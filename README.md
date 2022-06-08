@@ -14,19 +14,20 @@ in another project would require some work:
   * `lgr_tools` contains the code related to all utilities: testing LGR and label sets, LGR comparisons, etc.
 * `lgr_auth` contains the authentication part that is used by some apps.
 * `lgr_basic` contains the code related to the simple LGR interface.
-* `lgr_models` contains common models for other applications.
 * `lgr_idn_table_review` contains the IDN table review tools. It is split into the following sub-modules:
   * `icann_tools` contains the IDN table ICANN review that launches a review on all the tables stored in IANA registry,
   * `idn_tool` contains a tool allowing reviewing IDN tables against the references LGRs managed by admin,
 * `lgr_manage` contains the LGRs and users management part.
+* `lgr_models` contains common models for other applications.
 * `lgr_renderer` contains the code and templates used to generate the static exports of the LGR (HTML only for now).
 * `lgr_session` defines a session object that allows manipulating some session objects and accessing and displaying storage.
-* `lgr_utils` provides common shared utilities for lgr apps
+* `lgr_tasks` provides asynchronous tasks management.
+* `lgr_utils` provides common shared utilities for lgr apps.
 
 ## Acknowledgment
 
-This toolset was implemented by Viagenie (Audric Schiltknecht, Julien Bernard,
-David Drouin, Vincent Gonzalez and Marc Blanchet) and Wil Tan on an ICANN contract.
+This toolset was implemented by Cofomo (formerly Viagenie) (Audric Schiltknecht, Julien Bernard, Guillaume Blanchet,
+Michel Bernier, David Drouin, Vincent Gonzalez and Marc Blanchet) and Wil Tan on an ICANN contract.
 
 ## License
 
@@ -79,6 +80,8 @@ THE POSSIBILITY OF SUCH DAMAGE.
   * [django-redis-cache](https://github.com/sebleier/django-redis-cache) [BSD License]
   * [django-autocomplete-light](https://github.com/yourlabs/django-autocomplete-light/) [MIT License]
   * [django-cleanup](https://github.com/un1t/django-cleanup) [MIT License]
+  * [django-celery-results](https://github.com/celery/django-celery-results) [BSD License]
+  * [django-celery-beat](https://github.com/celery/django-celery-beat) [BSD License]
   * [social-auth-app-django](https://github.com/python-social-auth/social-app-django) [BSD License]
 * A [redis](https://redis.io/) server for cache and asynchronous computations
 
@@ -86,6 +89,10 @@ THE POSSIBILITY OF SUCH DAMAGE.
 
 * [Sphinx](http://www.sphinx-doc.org/en/stable/)
 * [Graphviz](http://www.graphviz.org/)
+
+For testing
+
+* [parameterized](https://github.com/wolever/parameterized)
 
 
 ### Installing ICU4C
@@ -212,6 +219,23 @@ To launch celery, in a venv-enabled console:
 
     $ (venv) ./venv/bin/celery --app=lgr_web --workdir=./src worker --concurrency=2
 
+##### Periodic tasks
+
+Celery beat is used to trigger Celery periodic tasks. The task schedule is configured in the project settings:
+
+    CELERYBEAT_SCHEDULE = {
+        "calculate_index_variant_labels_tlds": {
+            "task": "lgr_tasks.tasks.calculate_index_variant_labels_tlds",
+            "schedule": 3600 * 24,
+        }
+    }
+    CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+The beat scheduler can be launched, in a venv-enabled console:
+
+    $ (venv) ./venv/bin/celery --app=lgr_web --workdir=./src beat
+
+
 ### Hacking
 
 Some notes for developers
@@ -226,8 +250,9 @@ Some notes for developers
 * `src/lgr_manage/templates` contains admin tools specific templates
 * `src/lgr_web/templates` contains the base templates
 * `src/lgr_auth/templates` contains authentication templates
-* `src/lgr_basic/templates` contains simple interface (HTML output) templates
-* `src/lgr_renderer/templates` contains LGR renderers (html output) templates
+* `src/lgr_basic/templates` contains simple interface templates
+* `src/lgr_renderer/templates` contains LGR renderers (HTML output) templates
+* `src/lgr_tasks/templates` contains tasks monitoring templates
 * `src/lgr_advanced/templates` contains common template for LGR advanced apps
 * `src/lgr_advanced/lgr_validator/templates` contains LGR validator specific templates
 * `src/lgr_advanced/lgr_tools/templates` contains LGR tools specific templates

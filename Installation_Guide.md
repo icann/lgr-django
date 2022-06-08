@@ -78,6 +78,10 @@ For example, to install ICU 52 (Unicode 6.3), as root:
 
 The current supported ICU versions (and their corresponding Unicode version) are:
 
+* ICU 70 (Unicode 14.0)
+* ICU 67 (Unicode 13.0)
+* ICU 64 (Unicode 12.0)
+* ICU 62 (Unicode 11.0)
 * ICU 60 (Unicode 10.0)
 * ICU 58 (Unicode 9.0)
 * ICU 56 (Unicode 8.0)
@@ -173,19 +177,20 @@ To serve the application, the following architecture in used:
 
 * The celery application is used to launch background tasks.
 * The gunicorn application server is used to run the python code.
-* A redis server is used to store messages between the webapp interface and the celery application.
+* A redis server is used to store messages between the webapp interface and the celery application and for caching.
 * The nginx webserver will act as a frontend proxy as well as serving static content.
 * Requests related to the application are relayed to the gunicorn server.
 
-### Celery configuration
+### Celery configurations
 
-The celery process will be launched by the systemd service manager.
+The celery processes will be launched by the systemd service manager.
 
-Copy the provided service file to systemd's configuration directory:
+Copy the provided service files to systemd's configuration directory:
 
 	# cp /var/www/lgr/lgr-django/etc/systemd/lgr-celery.service /etc/systemd/system/
+	# cp /var/www/lgr/lgr-django/etc/systemd/lgr-celery-beat.service /etc/systemd/system/
 
-The process will be automatically started with the gunicorn service so there is nothing more to do.
+The processes will be automatically started with the gunicorn service so there is nothing more to do.
 
 ### Gunicorn configuration
 
