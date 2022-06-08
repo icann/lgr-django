@@ -112,16 +112,16 @@ def _get_collisions(lgr, label_cplist, labels, idna_encoder, lgr_actions, is_set
 
     # check for collisions
     indexes = get_collisions(lgr, labels + [label_u], quiet=False)
-    if len(indexes) > 1:
-        # there should be one collision as set labels are checked, this error should not happen
-        res['collisions_error'] = _('ERROR more than one collision, please check %(labels_list)s') % {
-            'labels_list': debug_name}
-        return res
 
     if len(indexes) == 0:
         return res
 
-    collisions = indexes[list(indexes.keys())[0]]
+    index = lgr.generate_index_label(label_cplist)
+    try:
+        collisions = indexes[index]
+    except KeyError:
+        # label does not collide with the list of labels
+        return res
     collision = None
     collide_with = []
     # retrieve label in collision list
@@ -137,36 +137,30 @@ def _get_collisions(lgr, label_cplist, labels, idna_encoder, lgr_actions, is_set
             'labels_list': debug_name}
         return res
 
-    if len(collide_with) != 1:
-        res['collisions_error'] = _('ERROR collision with more than one label in %(labels_list)s, '
-                                    'please check it') % {'labels_list': debug_name}
-        return res
+    for col in collide_with:
+        variant_u = idna_encoder(col['label'])
+        variant_display_html = mark_safe(
+            u' '.join(u"U+{:04X} ({})".format(cp, cp_to_ulabel(cp)) for cp in col['cp']))
+        variant_display = u' '.join(u"U+{:04X}".format(cp) for cp in col['cp'])
+        try:
+            variant_a = idna_encoder(variant_u)
+        except UnicodeError as e:
+            variant_a = '!ERROR - {}!'.format(e)
 
-    collide_with = collide_with[0]
-    variant_u = idna_encoder(collide_with['label'])
-    variant_display_html = mark_safe(
-        u' '.join(u"U+{:04X} ({})".format(cp, cp_to_ulabel(cp)) for cp in collide_with['cp']))
-    variant_display = u' '.join(u"U+{:04X}".format(cp) for cp in collide_with['cp'])
-    try:
-        variant_a = idna_encoder(variant_u)
-    except UnicodeError as e:
-        variant_a = '!ERROR - {}!'.format(e)
-
-    # XXX Collided variants info may be retrieved in script LGR rather than in merged LGR
-    action_idx = collision['action_idx'][collide_with['label']]
-    collision_dct = {
-        'input': collide_with['label'],
-        'u_label': variant_u,
-        'a_label': variant_a,
-        'cp_display_html': variant_display_html,
-        'cp_display': variant_display,
-        'disposition': collision['disp'][collide_with['label']],
-        'action_idx': action_idx,
-        'action': lgr_actions[action_idx] if action_idx >= 0 else None,
-        'rules': collision['rules'][collide_with['label']]
-    }
-    # remove variants that are not in our labels set
-    res['collision'] = collision_dct
+        # XXX Collided variants info may be retrieved in script LGR rather than in merged LGR
+        action_idx = collision['action_idx'][col['label']]
+        collision_dct = {
+            'input': col['label'],
+            'u_label': variant_u,
+            'a_label': variant_a,
+            'cp_display_html': variant_display_html,
+            'cp_display': variant_display,
+            'disposition': collision['disp'][col['label']],
+            'action_idx': action_idx,
+            'action': lgr_actions[action_idx] if action_idx >= 0 else None,
+            'rules': collision['rules'][col['label']]
+        }
+        res.setdefault('collision', []).append(collision_dct)
 
     return res
 
