@@ -4,7 +4,10 @@
 {% block html_title %}{% trans 'LGR Process List' %}{% endblock %}
 
 {% block content-title %}
-  {{ title }}
+  {% trans 'Tasks' %}
+  <button type="button" class="btn btn-default" onClick="window.location.reload();">
+      <i class="glyphicon glyphicon-refresh"></i>
+    </button>
 {% endblock %}
 
 {% block html_head_more %}
@@ -21,13 +24,6 @@
 {% endblock %}
 
 {% block content %}
-  <h1>
-    {% trans 'Tasks' %}
-    <button type="button" class="btn btn-default" onClick="window.location.reload();">
-      <i class="glyphicon glyphicon-refresh"></i>
-    </button>
-  </h1>
-
   <table class="table table-responsive">
     {% for task in tasks %}
       <tr>
