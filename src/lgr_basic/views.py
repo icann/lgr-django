@@ -82,10 +82,13 @@ class BasicModeView(LoginRequiredMixin, FormView):
 
             for label_cplist in labels_cp:
                 try:
-                    results.append(evaluate_label_from_view(self.request.user,
-                                                            rz_lgr,
-                                                            label_cplist,
-                                                            check_collisions=check_collisions))
+                    result = evaluate_label_from_view(self.request.user,
+                                                      rz_lgr,
+                                                      label_cplist,
+                                                      check_collisions=check_collisions)
+                    if check_collisions:
+                        result['collision_with_tlds'] = True
+                    results.append(result)
                 except UnicodeError as ex:
                     messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
                 except NeedAsyncProcess:

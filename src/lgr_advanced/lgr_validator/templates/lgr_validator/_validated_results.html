@@ -57,7 +57,13 @@
         {% if result.collisions_checked and is_set and not lgr_set or result.collisions_checked and not is_set %}
 
             {% if result.collisions_error or result.collision %}
+              {% if result.collision_with_tlds %}
+                <h3 class="text-danger"><i class="glyphicon glyphicon-remove"></i>&nbsp;
+                  {% trans "The input label or its variant labels collide with an existing TLD or its variant TLDs." %}
+                </h3>
+              {% else %}
                 <h3 class="text-danger"><i class="glyphicon glyphicon-remove"></i> {% trans "Collision(s) found" %}</h3>
+              {% endif %}
             {% else %}
                 <h3 class="text-success"><i class="glyphicon glyphicon-ok"></i> {% trans "No collision" %}</h3>
             {% endif %}
