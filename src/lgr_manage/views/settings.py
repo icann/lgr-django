@@ -35,7 +35,7 @@ class LgrCalculateIndexes(BaseAdminViewMixin, RedirectView):
             task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
                                                name=TASK_NAME,
                                                user=self.request.user)
-            calculate_index_variant_labels_tlds.apply_async((), task_id=task.pk)
+            calculate_index_variant_labels_tlds.apply_async((self.request.user.pk,), task_id=task.pk)
         else:
             messages.warning(self.request, _('The index variant calculation has already been triggered, please wait'))
 

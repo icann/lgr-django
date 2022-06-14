@@ -13,14 +13,8 @@
   <data>
     <char cp="0061" ref="0">
         <var cp="00E0"/>
-        <var cp="0060 0061"/>
     </char>
     <char cp="00E0" ref="0">
-        <var cp="0061"/>
-        <var cp="0060 0061"/>
-    </char>
-    <char cp="0060 0061" ref="0">
-        <var cp="00E0"/>
         <var cp="0061"/>
     </char>
     <char cp="0062" ref="0"/>

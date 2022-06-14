@@ -16,6 +16,7 @@ class StorageType(Enum):
     TOOL = 'tool'
     IDN_REVIEW_USER_MODE = 'rev_usr'
     IDN_REVIEW_ICANN_MODE = 'rev_icann'
+    ADMIN = 'admin'
 
 
 class LGRSessionView(LoginRequiredMixin, UserPassesTestMixin, View):
