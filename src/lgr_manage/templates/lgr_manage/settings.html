@@ -12,16 +12,21 @@
     <button id="submit" type="submit" class="btn btn-primary">{% trans "Save" %}</button>
   </form>
 
-  <h3>{% trans 'More' %}</h3>
+  <h3>{% trans 'Index variant labels calculation' %}</h3>
   <form method="post" action="{% url "lgr_admin_calculate_indexes" %}">
     {% csrf_token %}
     <button type="submit" class="btn btn-default">
-      <span class="glyphicon glyphicon-refresh" data-toggle="tooltip" dfrom django.utils.translation import ugettext_lazy as _
-ata-placement="top"
-            title="{% trans 'Trigger the calculation of the index variant of the existing TLDs' %}">&nbsp;
-        {% trans 'Refresh index variant labels' %}
+      <span class="glyphicon glyphicon-refresh" data-toggle="tooltip" data-placement="top"
+            title="{% trans 'Trigger the calculation of the index variant of the existing TLDs' %}">
+        {% trans 'Refresh' %}
       </span>
     </button>
-    </span>
+    {% if index_report %}
+      <a href="{{ index_report.to_url }}?next={{ request.path }}"
+         class="btn btn-default">
+        <i class="glyphicon glyphicon-floppy-disk"></i>
+      {% trans 'Download' %}
+      </a>
+    {% endif %}
   </form>
 {% endblock content-pane %}
