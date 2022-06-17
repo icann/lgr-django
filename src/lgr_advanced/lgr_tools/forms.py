@@ -202,7 +202,7 @@ class LGRHarmonizeSelector(forms.Form):
                                                for lgr_obj in LgrModel.objects.filter(owner=user,
                                                                                       set_info__isnull=True))
         self.fields['rz_lgr'].choices = [('', ''), ] + list((lgr_obj.pk, lgr_obj.name)
-                                                            for lgr_obj in RzLgr.objects.all())
+                                                            for lgr_obj in RzLgr.objects.filter(active=True))
 
 
 class LGRComputeVariantsSelector(forms.Form):

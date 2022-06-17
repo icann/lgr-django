@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from dal_select2.views import Select2GroupListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import SuspiciousOperation
 from django.http import HttpResponse
@@ -16,7 +15,6 @@ from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
 from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
 from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
-from lgr_models.models.lgr import RzLgr, RefLgr, RzLgrMember
 from lgr_tasks.models import LgrTaskModel
 
 logger = logging.getLogger(__name__)
@@ -144,17 +142,3 @@ class IdnTableReviewDeleteReport(IdnTableReviewViewMixin, View):
     def post(self, request, *args, **kwargs):
         self.api.delete_report(self.kwargs.get('report_id'))
         return redirect(request.GET.get('next', '/'))
-
-
-class RefLgrAutocomplete(LoginRequiredMixin, Select2GroupListView):
-
-    @staticmethod
-    def get_list():
-        lgr_choices = []
-        for rz in RzLgr.objects.all():
-            rz_member_choices = ((str(rz.to_tuple()), rz.name),) + tuple(
-                (str(rz_member.to_tuple()), rz_member.name) for rz_member in RzLgrMember.objects.filter(rz_lgr=rz))
-            lgr_choices += [((rz.name, rz.name), rz_member_choices)]
-        lgr_choices += [(('Ref. LGR', 'Ref. LGR'), tuple(
-            ((str(ref_lgr.to_tuple()), ref_lgr.name) for ref_lgr in RefLgr.objects.all())))]
-        return lgr_choices

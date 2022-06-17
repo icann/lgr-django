@@ -21,6 +21,7 @@
             <div class="col-lg-8 col-lg-offset-2 validate-label-simple-form">
                 <h1>{% trans "Label Validation Tool" %}</h1>
                 <hr class="header-sep"/>
+                {{ form.media }}
                 <form class="form-horizontal validate-label" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
@@ -46,7 +47,7 @@
                             {% trans 'Validate label(s) against' %}
                         </label>
                         <div class="col-sm-8 col-lg-8">
-                            {% include "lgr_editor/_form_field.html" with field=form.rz_lgr %}
+                            {% include "lgr_editor/_form_field.html" with field=form.lgr %}
                             <span class="text-secondary">
                                     {% trans 'View LGR as' %}
                                     <a href="" id="xmlLink" target="_blank" rel="noopener noreferrer">XML</a> |
@@ -209,12 +210,12 @@
     <script>
         var isFormUploadActivated = false;
 
-        $("#id_rz_lgr").change(() => {
+        $("#id_lgr").change(() => {
             changeRzValue();
         });
 
         function changeRzValue() {
-            const val = $('#id_rz_lgr').val();
+            const val = $('#id_lgr').val();
 
             let renderLink = `{% url 'lgr_render' model=model lgr_pk=0 %}`;
             renderLink = renderLink.replace('0', val);
@@ -327,8 +328,8 @@
                 data.forEach((el) => {
                     if (el.name === 'labels' && !isFormUploadActivated) {
                         labelString += el.value + ';';
-                    } else if (el.name === 'rz_lgr') {
-                        sendData.push({name: 'rz_lgr', value: el.value})
+                    } else if (el.name === 'lgr') {
+                        sendData.push({name: 'lgr', value: el.value})
                     }
                 });
 
@@ -364,6 +365,7 @@
                 $('#timeout-error').css('display', 'none');
                 $('#general-error').css('display', 'none');
                 $('#process-error').css('display', 'none');
+                console.log(sendData)
 
                 $.ajax({
                     type: 'POST',

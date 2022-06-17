@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from dal import autocomplete
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -8,17 +9,27 @@ from lgr_advanced.lgr_editor.forms.fields import FILE_FIELD_ENCODING_HELP
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException
 from lgr_models.models.unicode import UnicodeVersion
+from lgr_utils.components import RefLgrAutocompleteField
 from lgr_utils.unidb import get_db_by_version
-from lgr_models.models.lgr import RzLgr
+from lgr_models.models.lgr import LgrBaseModel
+from lgr_utils.views import RefLgrAutocomplete
 
 
 class ValidateLabelSimpleForm(forms.Form):
-    rz_lgr = forms.ModelChoiceField(label='', queryset=RzLgr.objects.all(), empty_label=None)
+    # The order of fields is important, it is tied to the order of the "clean_data" execution. Since clean_label uses
+    # lgr, clean_lgr needs to execute before.
+    lgr = RefLgrAutocompleteField(label='',
+                                  required=True,
+                                  choices=RefLgrAutocomplete.get_list(),
+                                  widget=autocomplete.ListSelect2(
+                                      url='ref-lgr-autocomplete'))
+
     labels = forms.CharField(label='', required=False,
                              widget=forms.TextInput(attrs={'name': '',
                                                            'class': 'form-label form-control',
                                                            'onkeyup': 'buttonValidateEnabled()',
                                                            'placeholder': _('Label')}))
+
     labels_file = forms.FileField(label='', help_text=FILE_FIELD_ENCODING_HELP,
                                   required=False)
     collisions = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'id': 'check-for-collision'}),
@@ -37,10 +48,13 @@ class ValidateLabelSimpleForm(forms.Form):
 
         return cleaned_data
 
+    def clean_lgr(self):
+        return LgrBaseModel.from_tuple(self.cleaned_data['lgr'])
+
     def clean_labels(self):
-        rz_lgr_object: RzLgr = self.cleaned_data['rz_lgr']
+        lgr_object = self.cleaned_data['lgr']
         try:
-            udata = get_db_by_version(rz_lgr_object.to_lgr().metadata.unicode_version)
+            udata = get_db_by_version(lgr_object.to_lgr().metadata.unicode_version)
         except LGRUnsupportedUnicodeVersionException:
             # fallback to default version
             udata = get_db_by_version(UnicodeVersion.default().version)

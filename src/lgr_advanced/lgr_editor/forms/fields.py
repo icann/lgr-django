@@ -24,7 +24,7 @@ class ValidatingRepertoire:
 
     @classmethod
     def list(cls) -> List[LgrBaseModel]:
-        return sorted(list(chain(RzLgr.objects.all(), MSR.objects.all())), key=lambda l: l.name)
+        return sorted(list(chain(RzLgr.objects.filter(active=True), MSR.objects.filter(active=True))), key=lambda l: l.name)
 
     @classmethod
     def choices(cls):

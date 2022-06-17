@@ -30,7 +30,7 @@ class LGRIdnTableReviewForm(forms.Form):
 class IdnTableReviewSelectReferenceForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
-        from lgr_idn_table_review.idn_tool.views import RefLgrAutocomplete
+        from lgr_utils.views import RefLgrAutocomplete
 
         idn_tables = kwargs.pop('idn_tables', [])
         super().__init__(*args, **kwargs)

@@ -6,7 +6,6 @@ from io import StringIO
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
@@ -19,7 +18,7 @@ from lgr_advanced.api import LabelInfo, LGRToolStorage
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import NeedAsyncProcess, evaluate_label_from_view
-from lgr_models.models.lgr import RzLgr
+from lgr_models.models.lgr import RzLgr, LgrBaseModel
 from lgr_tasks.models import LgrTaskModel
 from .forms import ValidateLabelSimpleForm
 
@@ -38,8 +37,8 @@ class BasicModeView(LoginRequiredMixin, FormView):
 
         labels_cp = form.cleaned_data['labels']
         labels_file = form.cleaned_data.get('labels_file')
-        rz_lgr: RzLgr = form.cleaned_data['rz_lgr']
-        ctx['lgr_object'] = rz_lgr  # needed to download results as csv
+        lgr: LgrBaseModel = form.cleaned_data['lgr']
+        ctx['lgr_object'] = lgr  # needed to download results as csv
         collisions = form.cleaned_data['collisions']
 
         tlds = None
@@ -50,18 +49,18 @@ class BasicModeView(LoginRequiredMixin, FormView):
         if labels_file:
             labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
             ctx['validation_task'] = True
-            task_name = _('Annotate labels on LGR %s') % rz_lgr.pk
+            task_name = _('Annotate labels on LGR %s') % lgr.pk
             if collisions:
-                task_name = _('Compute collisions and annotate labels on LGR %s') % rz_lgr.pk
+                task_name = _('Compute collisions and annotate labels on LGR %s') % lgr.pk
             task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
                                                name=task_name,
                                                user=self.request.user)
             if collisions:
-                basic_collision_task.apply_async((self.request.user.pk, rz_lgr.pk, labels_json, tld_json,
+                basic_collision_task.apply_async((self.request.user.pk, lgr.pk, labels_json, tld_json,
                                                   True, RzLgr._meta.label), task_id=task.pk)
                 ctx['collision_task'] = True
             else:
-                annotate_task.apply_async((self.request.user.pk, rz_lgr.pk, labels_json, RzLgr._meta.label),
+                annotate_task.apply_async((self.request.user.pk, lgr.pk, labels_json, RzLgr._meta.label),
                                           task_id=task.pk)
 
         else:
@@ -74,16 +73,16 @@ class BasicModeView(LoginRequiredMixin, FormView):
                     check_collisions = [l[0] for l in read_labels(StringIO(data))]
                 else:
                     task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
-                                                       name=_('Compute collisions on LGR %s') % rz_lgr.pk,
+                                                       name=_('Compute collisions on LGR %s') % lgr.pk,
                                                        user=self.request.user)
-                    basic_collision_task.apply_async((self.request.user.pk, rz_lgr.pk, labels_json, tld_json,
+                    basic_collision_task.apply_async((self.request.user.pk, lgr.pk, labels_json, tld_json,
                                                       False, RzLgr._meta.label), task_id=task.pk)
                     ctx['collision_task'] = True
 
             for label_cplist in labels_cp:
                 try:
                     result = evaluate_label_from_view(self.request.user,
-                                                      rz_lgr,
+                                                      lgr,
                                                       label_cplist,
                                                       check_collisions=check_collisions)
                     if check_collisions:
