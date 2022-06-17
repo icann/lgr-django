@@ -13,6 +13,7 @@ from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_l
 from lgr_utils.unidb import get_db_by_version
 from lgr_auth.models import LgrUser
 from lgr_models.models.lgr import LgrBaseModel
+from lgr_web.config import lgr_settings
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
 from .forms import ValidateLabelForm
 from ..api import LabelInfo
@@ -30,7 +31,7 @@ def evaluate_label_from_view(user: LgrUser,
                              label_cplist,
                              script_lgr_pk=None,
                              set_labels_info: LabelInfo = None,
-                             threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE,
+                             threshold_include_vars=lgr_settings.variant_calculation_limit,
                              check_collisions=None,
                              is_collision_index=None):
     """
@@ -52,7 +53,8 @@ def evaluate_label_from_view(user: LgrUser,
     """
     ctx = {}
     lgr = lgr_object.to_lgr()
-    need_async = lgr.estimate_variant_number(label_cplist) > settings.LGR_VALIDATION_MAX_VARS_SYNCHRONOUS
+    est_var_nbr = lgr.estimate_variant_number(label_cplist)
+    need_async = est_var_nbr > lgr_settings.variant_calculation_max
     udata = get_db_by_version(lgr.metadata.unicode_version)
     if lgr_object.is_set():
         lgr_object: LgrModel
@@ -74,6 +76,7 @@ def evaluate_label_from_view(user: LgrUser,
             lgr_set_validate_label_task.delay(user.pk, lgr_object.pk, script_lgr_object.pk,
                                               label_cplist, set_labels_json)
             ctx['launched_as_task'] = True
+            ctx['nbr_variants'] = est_var_nbr
     else:
         if not need_async:
             ctx = evaluate_label(lgr,
@@ -85,6 +88,7 @@ def evaluate_label_from_view(user: LgrUser,
         else:
             validate_label_task.delay(user.pk, lgr_object.pk, label_cplist, lgr_model=lgr_object._meta.label)
             ctx['launched_as_task'] = True
+            ctx['nbr_variants'] = est_var_nbr
 
     return ctx
 
@@ -92,7 +96,7 @@ def evaluate_label_from_view(user: LgrUser,
 class ValidateLabelView(LGRHandlingBaseMixin, FormView):
     form_class = ValidateLabelForm
     template_name = 'lgr_validator/validator.html'
-    threshold_include_vars = settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE
+    threshold_include_vars = lgr_settings.variant_calculation_limit
     output_func: str = None
     noframe = False
 

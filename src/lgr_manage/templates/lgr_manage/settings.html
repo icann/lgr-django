@@ -8,7 +8,8 @@
 
   <form class="form-horizontal" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_limit control_width=8 %}
+    {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_limit control_width=4 %}
+    {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_max control_width=4 %}
     <button id="submit" type="submit" class="btn btn-primary">{% trans "Save" %}</button>
   </form>
 

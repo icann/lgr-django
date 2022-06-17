@@ -22,6 +22,7 @@
     <div class="clearfix"></div>
 
     {% if launched_as_task %}
+      <p>{% blocktrans %}Estimated number of variants: {{ nbr_variants }}{% endblocktrans %}</p>
        {% url 'list_process' as task_status_url %}
         <p>{% blocktrans trimmed  %}
           The computing may be very long, you can follow your task progression on the

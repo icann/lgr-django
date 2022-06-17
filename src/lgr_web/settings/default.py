@@ -334,13 +334,6 @@ UNICODE_DATABASES = {
 # default unicode version in dropdowns across the application
 DEFAULT_UNICODE_VERSION = '6.3.0'
 
-# Validator will display variants inline if there are no more than the specified number of variants
-# Otherwise, only a .csv download link is offered.
-LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE = 100
-
-# If estimated number of variants is greater, then switch to asynchronous mode
-LGR_VALIDATION_MAX_VARS_SYNCHRONOUS = 10000
-
 # A list of IDN tables to handle in ICANN IDN table review. None for all.
 ICANN_IDN_REVIEW_TABLES = []
 # ICANN_IDN_REVIEW_TABLES = ['aaa_zh_3.0.xml']

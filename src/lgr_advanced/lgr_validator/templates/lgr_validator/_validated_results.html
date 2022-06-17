@@ -180,13 +180,13 @@
                             </td>
                         </tr>
                     {% endfor %}
-
-                {% elif result.num_variants > result.threshold_include_vars %}
+                {% endif %}
+                {% if result.num_variants > result.threshold_include_vars %}
                     {% if not is_set or lgr_set %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
                         <tr>
                             <td colspan="4" class="bg-warning">
                                 {% blocktrans trimmed %}
-                                    Too many variant labels to be displayed in the browser. Please download the results in .csv instead.
+                                    Too many variant labels to be displayed in the browser. You can download the whole results in .csv.
                                 {% endblocktrans %}
                             </td>
                         </tr>

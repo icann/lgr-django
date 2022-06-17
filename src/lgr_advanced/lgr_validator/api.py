@@ -60,41 +60,45 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
     res['summary'] = ", ".join("{}: {}".format(k, v) for k, v in summary.items())
     res['num_variants'] = len(label_dispositions)
     res['threshold_include_vars'] = threshold_include_vars
+    include_blocked = False
     if threshold_include_vars < 0 or len(label_dispositions) <= threshold_include_vars:
-        for (variant_cp, var_disp, var_invalid_parts, action_idx, disp_set, logs) in label_dispositions:
+        include_blocked = True
+    for (variant_cp, var_disp, var_invalid_parts, action_idx, disp_set, logs) in label_dispositions:
+        if not include_blocked and var_disp not in ['valid', 'allocatable']:
+            continue
 
-            invalid_codepoints = set([c for c, _ in var_invalid_parts or []])
+        invalid_codepoints = set([c for c, _ in var_invalid_parts or []])
 
-            def format_cphex(c, want_html=True):
-                if want_html and c in invalid_codepoints:
-                    return u'<span class="text-danger not-in-rep">U+{:04X} (&#{};)</span>'.format(c, c)
-                else:
-                    return u"U+{:04X} (&#{};)".format(c, c)
+        def format_cphex(c, want_html=True):
+            if want_html and c in invalid_codepoints:
+                return u'<span class="text-danger not-in-rep">U+{:04X} (&#{};)</span>'.format(c, c)
+            else:
+                return u"U+{:04X} (&#{};)".format(c, c)
 
-            variant_u = cp_to_ulabel(variant_cp)
-            variant_display_html = mark_safe(u' '.join(map(format_cphex, variant_cp)))
-            variant_display = u' '.join(u"U+{:04X}".format(cp, cp_to_ulabel(cp)) for cp in variant_cp)
-            variant_input = u' '.join(u"U+{:04X}".format(cp) for cp in variant_cp)
-            try:
-                variant_a = idna_encoder(variant_u)
-            except UnicodeError as e:
-                variant_a = lgr_exception_to_text(e)
-                var_disp = 'invalid'
+        variant_u = cp_to_ulabel(variant_cp)
+        variant_display_html = mark_safe(u' '.join(map(format_cphex, variant_cp)))
+        variant_display = u' '.join(u"U+{:04X}".format(cp, cp_to_ulabel(cp)) for cp in variant_cp)
+        variant_input = u' '.join(u"U+{:04X}".format(cp) for cp in variant_cp)
+        try:
+            variant_a = idna_encoder(variant_u)
+        except UnicodeError as e:
+            variant_a = lgr_exception_to_text(e)
+            var_disp = 'invalid'
 
-            var_results.append({
-                'u_label': variant_u,
-                'a_label': variant_a,
-                'cp_display_html': variant_display_html,
-                'cp_display': variant_display,
-                'cp_input': variant_input,
-                'disposition': var_disp,
-                'label_invalid_parts': var_invalid_parts,
-                'action_idx': action_idx,
-                'action': lgr_actions[action_idx] if action_idx >= 0 else None,
-                'disp_set': list(disp_set),
-                'logs': logs,
-            })
-        res['variants'] = var_results
+        var_results.append({
+            'u_label': variant_u,
+            'a_label': variant_a,
+            'cp_display_html': variant_display_html,
+            'cp_display': variant_display,
+            'cp_input': variant_input,
+            'disposition': var_disp,
+            'label_invalid_parts': var_invalid_parts,
+            'action_idx': action_idx,
+            'action': lgr_actions[action_idx] if action_idx >= 0 else None,
+            'disp_set': list(disp_set),
+            'logs': logs,
+        })
+    res['variants'] = var_results
 
     return res
 

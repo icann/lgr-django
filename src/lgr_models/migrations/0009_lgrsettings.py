@@ -11,7 +11,7 @@ def init_settings(apps, schema_editor):
     OldSettings: LGRSettings = apps.get_model("lgr_models", "LGRSettings")
     db_alias = schema_editor.connection.alias
 
-    OldSettings.objects.using(db_alias).create(variant_calculation_limit=1000)
+    OldSettings.objects.using(db_alias).create(variant_calculation_limit=100, variant_calculation_max=10000)
 
 
 class Migration(migrations.Migration):
@@ -26,6 +26,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('variant_calculation_limit',
                  models.PositiveIntegerField(validators=[django.core.validators.MinValueValidator(2)])),
+                ('variant_calculation_max',
+                 models.PositiveIntegerField(validators=[django.core.validators.MinValueValidator(3)])),
             ],
         ),
         migrations.RunPython(init_settings)
