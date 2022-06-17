@@ -99,10 +99,26 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
     return res
 
 
-def _get_collisions(lgr, label_cplist, labels, idna_encoder, lgr_actions, is_set):
+def _get_collisions(lgr, label_cplist, labels_list, idna_encoder, lgr_actions, is_set, is_collision_index=False):
+    """
+
+    :param lgr: The LGR
+    :param label_cplist: The code points of the label to test against the label list
+    :param labels_list: The list of labels to use for collision checking if is_cache is False else the already
+                        generated index for the labels in the set
+    :param is_set: Whether the LGR is
+    :param is_collision_index: Whether check_collisions contains an index
+    :return:
+    """
     res = {'collisions_checked': True}
     label_u = cp_to_ulabel(label_cplist)
-    labels = [l.strip() for l in labels]
+    label_for_compute = []
+    if is_collision_index:
+        labels = labels_list.keys()
+    else:
+        labels = [l.strip() for l in labels_list]
+        label_for_compute = labels
+
     debug_name = _("the LGR set labels") if is_set else _("the TLDs list")
 
     # if label is in the LGR set labels skip
@@ -111,7 +127,7 @@ def _get_collisions(lgr, label_cplist, labels, idna_encoder, lgr_actions, is_set
         return res
 
     # check for collisions
-    indexes = get_collisions(lgr, labels + [label_u], quiet=False)
+    indexes = get_collisions(lgr, label_for_compute + [label_u], quiet=False, cached_indexes=labels_list)
 
     if len(indexes) == 0:
         return res
@@ -166,7 +182,7 @@ def _get_collisions(lgr, label_cplist, labels, idna_encoder, lgr_actions, is_set
 
 
 def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=lambda x: x.encode('idna'),
-                   check_collisions=None):
+                   check_collisions=None, is_collision_index=False):
     """
     Evaluate the given `label_cplist` against the given `lgr`, which includes:
     * checking eligibility of the input label
@@ -180,6 +196,7 @@ def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=la
                                    Set to negative to always return variants.
     :param idna_encoder: a function used to encode a string using IDNA
     :param check_collisions: Check for collision against the provided list of labels
+    :param is_collision_index: Whether check_collisions contains an index
     :return: a dict containing results of the evaluation.
     """
     res, lgr_actions = _get_validity(lgr, label_cplist, idna_encoder)
@@ -187,7 +204,8 @@ def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=la
     if res['eligible']:
         res.update(_get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions))
         if check_collisions is not None:
-            res.update(_get_collisions(lgr, label_cplist, check_collisions, idna_encoder, lgr_actions, False))
+            res.update(_get_collisions(lgr, label_cplist, check_collisions, idna_encoder, lgr_actions, False,
+                                       is_collision_index=is_collision_index))
 
     return res
 

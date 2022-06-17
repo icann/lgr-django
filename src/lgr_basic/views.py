@@ -6,6 +6,7 @@ from io import StringIO
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
@@ -20,6 +21,7 @@ from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import NeedAsyncProcess, evaluate_label_from_view
 from lgr_models.models.lgr import RzLgr, LgrBaseModel
 from lgr_tasks.models import LgrTaskModel
+from lgr_tasks.tasks import _index_cache_key
 from lgr_utils.views import RefLgrAutocomplete
 from .forms import ValidateLabelSimpleForm
 
@@ -47,11 +49,6 @@ class BasicModeView(LoginRequiredMixin, FormView):
         ctx['lgr_object'] = lgr  # needed to download results as csv
         collisions = form.cleaned_data['collisions']
 
-        tlds = None
-        tld_json = {}
-        if collisions:
-            tlds = download_file(settings.ICANN_TLDS)[1].read().lower()
-            tld_json = LabelInfo.from_form('TLDs', tlds).to_dict()
         if labels_file:
             labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
             ctx['validation_task'] = True
@@ -62,7 +59,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
                                                name=task_name,
                                                user=self.request.user)
             if collisions:
-                basic_collision_task.apply_async((self.request.user.pk, lgr.pk, labels_json, tld_json,
+                basic_collision_task.apply_async((self.request.user.pk, lgr.pk, labels_json,
                                                   True, RzLgr._meta.label), task_id=task.pk)
                 ctx['collision_task'] = True
             else:
@@ -71,28 +68,36 @@ class BasicModeView(LoginRequiredMixin, FormView):
 
         else:
             labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp]).to_dict()
+            result = {}
+            is_collision_index = False
             check_collisions = None
             if collisions:
                 if len(labels_cp) == 1:
                     # if only one label include collisions directly in result
-                    data = tlds.decode('utf-8')
-                    check_collisions = [l[0] for l in read_labels(StringIO(data))]
+                    tld_indexes = cache.get(_index_cache_key(lgr))
+                    result['collision_with_tlds'] = True
+                    if not tld_indexes:
+                        tlds = download_file(settings.ICANN_TLDS)[1].read().lower()
+                        data = tlds.decode('utf-8')
+                        check_collisions = [l[0] for l in read_labels(StringIO(data))]
+                    else:
+                        is_collision_index = True
+                        check_collisions = tld_indexes
                 else:
                     task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
                                                        name=_('Compute collisions on LGR %s') % lgr.pk,
                                                        user=self.request.user)
-                    basic_collision_task.apply_async((self.request.user.pk, lgr.pk, labels_json, tld_json,
+                    basic_collision_task.apply_async((self.request.user.pk, lgr.pk, labels_json,
                                                       False, RzLgr._meta.label), task_id=task.pk)
                     ctx['collision_task'] = True
 
             for label_cplist in labels_cp:
                 try:
-                    result = evaluate_label_from_view(self.request.user,
-                                                      lgr,
-                                                      label_cplist,
-                                                      check_collisions=check_collisions)
-                    if check_collisions:
-                        result['collision_with_tlds'] = True
+                    result.update(evaluate_label_from_view(self.request.user,
+                                                           lgr,
+                                                           label_cplist,
+                                                           check_collisions=check_collisions,
+                                                           is_collision_index=is_collision_index))
                     results.append(result)
                 except UnicodeError as ex:
                     messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))

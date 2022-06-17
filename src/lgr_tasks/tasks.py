@@ -43,19 +43,20 @@ def calculate_index_variant_labels_tlds(user_pk=None):
     for label, valid, error in read_labels(tlds, rz_lgr.unicode_database):
         if not valid:
             logger.warning(f'{label} is invalid: {error}')
+            indexes[label] = 'ERROR'
             writer.writerow([label, 'ERROR'])
             continue
         try:
             label_cp = tuple([ord(c) for c in label])
-            index, index_cp = rz_lgr.generate_index_label(label_cp, with_min_cp=True)
-            current_index = indexes.setdefault(index, {'cps': index_cp, 'labels': []})
-            current_index['labels'].append(label)
-            writer.writerow([label, ''.join(cp_to_ulabel(c) for c in index_cp)])
+            index = rz_lgr.generate_index_label(label_cp)
+            indexes[label] = index
+            writer.writerow([label, ''.join(cp_to_ulabel(c) for c in index)])
         except NotInLGR:
             logger.warning(f'{label} is not in LGR')
+            indexes[label] = 'NotInLGR'
             writer.writerow([label, 'NotInLGR'])
 
-    cache.set(_index_cache_key(), indexes, INDEX_CACHE_TIMEOUT)
+    cache.set(_index_cache_key(rz_lgr_object), indexes, INDEX_CACHE_TIMEOUT)
 
     return _save_report(user_pk, out)
 
@@ -80,9 +81,8 @@ def _save_report(user_pk, data):
     return filename
 
 
-def _index_cache_key():
-    # XXX: if indexes for multiple LGRs are computed for the same label may investigate if using
-    #      HGET/HSET (label lgr index) would be better or not
-    key = VARIANT_LABELS_INDEXES_CACHE_KEY
+def _index_cache_key(rz_lgr_object):
+    lgr_model, lgr_pk = rz_lgr_object.to_tuple()
+    key = f'{VARIANT_LABELS_INDEXES_CACHE_KEY}:{lgr_model}:{lgr_pk}'
     args = hashlib.md5(force_bytes(key))
     return "{}.{}".format(LGR_CACHE_KEY_PREFIX, args.hexdigest())

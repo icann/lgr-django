@@ -31,7 +31,8 @@ def evaluate_label_from_view(user: LgrUser,
                              script_lgr_pk=None,
                              set_labels_info: LabelInfo = None,
                              threshold_include_vars=settings.LGR_VALIDATOR_MAX_VARS_DISPLAY_INLINE,
-                             check_collisions=None):
+                             check_collisions=None,
+                             is_collision_index=None):
     """
     Evaluate a label in an LGR.
 
@@ -46,6 +47,7 @@ def evaluate_label_from_view(user: LgrUser,
     :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.
                                    Set to negative to always return variants.
     :param check_collisions: Check for collisions with the provided list of labels
+    :param is_collision_index: Whether check_collisions contains an index
     :return: a dict containing results of the evaluation, empty if process is asynchronous.
     """
     ctx = {}
@@ -78,7 +80,8 @@ def evaluate_label_from_view(user: LgrUser,
                                  label_cplist,
                                  threshold_include_vars=threshold_include_vars,
                                  idna_encoder=udata.idna_encode_label,
-                                 check_collisions=check_collisions)
+                                 check_collisions=check_collisions,
+                                 is_collision_index=is_collision_index)
         else:
             validate_label_task.delay(user.pk, lgr_object.pk, label_cplist, lgr_model=lgr_object._meta.label)
             ctx['launched_as_task'] = True

@@ -8,7 +8,9 @@ from gzip import GzipFile
 from io import BytesIO
 
 from celery import shared_task, current_task
+from django.conf import settings
 
+from lgr.tools.utils import download_file
 from lgr_advanced.api import LabelInfo, LGRToolStorage
 from lgr_advanced.lgr_tools.api import (lgr_diff_labels,
                                         lgr_collision_labels,
@@ -127,15 +129,15 @@ def collision_task(user_pk, lgr_pk, labels_json, tld_json, full_dump, with_rules
                           with_rules=with_rules)
 
 
+# FIXME: should be moved to basic app
 @shared_task
-def basic_collision_task(user_pk, lgr_pk, labels_json, tld_json, annotate=False, lgr_model=LgrModel):
+def basic_collision_task(user_pk, lgr_pk, labels_json, annotate=False, lgr_model=LgrModel):
     """
     Compute collision between labels in an LGR
 
     :param user_pk: The user primary key
     :param lgr_pk: The LGR primary key
     :param labels_json: The LabelInfo as a JSON object containing labels to check for coliision.
-    :param tld_json: The LabelInfo as a JSON object containing TLDs.
     :param annotate: Whether the labels should also be annotated
     :param lgr_model: The model of the LGR in database
     """
@@ -143,7 +145,8 @@ def basic_collision_task(user_pk, lgr_pk, labels_json, tld_json, annotate=False,
     lgr_model = get_model_from_name(lgr_model)
     lgr = lgr_model.get_object(user, lgr_pk).to_lgr()
     labels_info = LabelInfo.from_dict(labels_json)
-    tlds_info = LabelInfo.from_dict(tld_json) if tld_json else None
+    tlds = download_file(settings.ICANN_TLDS)[1].read().lower()
+    tlds_info = LabelInfo.from_form('TLDs', tlds)
     task_name = "collisions"
     if annotate:
         task_name += " and annotations"
@@ -156,7 +159,7 @@ def basic_collision_task(user_pk, lgr_pk, labels_json, tld_json, annotate=False,
                           cb=lgr_basic_collision_labels,
                           lgr=lgr,
                           labels_file=labels_info.labels,
-                          tlds_file=tlds_info.labels if tld_json else None,
+                          tlds_file=tlds_info.labels if tlds else None,
                           with_annotate=annotate)
 
 

@@ -35,16 +35,10 @@ class TasksTest(LgrWebClientTestBase):
         user_report = storage.storage_save_report_file('test-indexes.csv', StringIO())
 
         expected_indexes = {
-            # FIXME: keys are not the actual one used here as we do not use the minimum cp algorithm for now
-            (0x0061, 0x0062, 0x0063): {
-                'cps': (0x0061, 0x0062, 0x0063),
-                'labels': ['abc', 'àbc']
-            },
-            (0x0064, 0x0065, 0x0066): {
-                'cps': (0x0064, 0x0065, 0x0066),
-                'labels': ['def'],
-            }
-            # ghi is not in lgr therefore not in indexes
+            'abc': (0x0061, 0x0062, 0x0063),
+            'àbc': (0x0061, 0x0062, 0x0063),
+            'def': (0x0064, 0x0065, 0x0066),
+            'ghi': 'NotInLGR',
         }
         expected_report = [
             {'Label': 'abc', 'Index': 'abc'},
@@ -55,7 +49,7 @@ class TasksTest(LgrWebClientTestBase):
 
         calculate_index_variant_labels_tlds()
 
-        self.assertListEqual(list(expected_indexes.values()), list(cache.get(_index_cache_key()).values()))
+        self.assertDictEqual(expected_indexes, cache.get(_index_cache_key()))
         storage = LGRAdminStorage(None)
         with self.assertRaises(AdminReport.DoesNotExist):
             storage.storage_get_report_file(auto_report.pk)
