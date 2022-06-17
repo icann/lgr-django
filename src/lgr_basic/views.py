@@ -20,12 +20,18 @@ from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import NeedAsyncProcess, evaluate_label_from_view
 from lgr_models.models.lgr import RzLgr, LgrBaseModel
 from lgr_tasks.models import LgrTaskModel
+from lgr_utils.views import RefLgrAutocomplete
 from .forms import ValidateLabelSimpleForm
 
 
 class BasicModeView(LoginRequiredMixin, FormView):
     form_class = ValidateLabelSimpleForm
     template_name = 'lgr_basic/basic_mode.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['reflgr'] = RefLgrAutocomplete.get_list()
+        return kwargs
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
