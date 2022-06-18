@@ -11,6 +11,7 @@ from lgr_models.models.settings import LGRSettings
 from lgr_tasks.api import is_task_completed
 from lgr_tasks.models import LgrTaskModel
 from lgr_tasks.tasks import calculate_index_variant_labels_tlds
+from lgr_web.config import lgr_settings
 
 TASK_NAME = 'Calculate the index variant labels of the existing TLDs'
 
@@ -23,6 +24,12 @@ class LgrSettingsView(BaseAdminViewMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.model._default_manager.get(pk=1)
+
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        # reload LGR settings
+        lgr_settings.refresh_from_db()
+        return result
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

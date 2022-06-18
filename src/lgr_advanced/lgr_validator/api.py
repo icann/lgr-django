@@ -196,8 +196,8 @@ def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=la
 
     :param lgr: The LGR object
     :param label_cplist: The label to test, as an array of codepoints.
-    :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.
-                                   Set to negative to always return variants.
+    :param threshold_include_vars: Include blocked variants in results if the number of variant labels is less or
+                                   equal to this. Set to negative to always return variants.
     :param idna_encoder: a function used to encode a string using IDNA
     :param check_collisions: Check for collision against the provided list of labels
     :param is_collision_index: Whether check_collisions contains an index
@@ -228,8 +228,8 @@ def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
     :param script_lgr: The LGR for the script used to check label validity
     :param label_cplist: The label to test, as an array of codepoints.
     :param set_labels: The labels in the lgr set
-    :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.
-                                   Set to negative to always return variants.
+    :param threshold_include_vars: Include blocked variants in results if the number of variant labels is less or
+                                   equal to this. Set to negative to always return variants.
     :param idna_encoder: a function used to encode a string using IDNA
     :return: a dict containing results of the evaluation.
     """

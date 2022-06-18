@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
 from django.views.generic import FormView
+from django.utils.translation import ugettext_lazy as _
 
 from lgr.exceptions import LGRException
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
+from lgr_tasks.models import LgrTaskModel
 from lgr_utils.unidb import get_db_by_version
 from lgr_auth.models import LgrUser
 from lgr_models.models.lgr import LgrBaseModel
@@ -26,7 +27,7 @@ class NeedAsyncProcess(Exception):
     pass
 
 
-def evaluate_label_from_view(user: LgrUser,
+def evaluate_label_from_view(request,
                              lgr_object: LgrBaseModel,
                              label_cplist,
                              script_lgr_pk=None,
@@ -40,13 +41,13 @@ def evaluate_label_from_view(user: LgrUser,
     This function is responsible to determine whether or not the evaluation process should be blocking/synchronous,
     or launched as a celery task.
 
-    :param user: The current logged in user
+    :param request: The current request
     :param lgr_object: The LGR object
     :param label_cplist: The label to test, as an array of codepoints.
     :param script_lgr_pk: Primary key of the LGR to use as the script LGR.
     :param set_labels_info: The LabelInfo allocated in set
-    :param threshold_include_vars: Include variants in results if the number of variant labels is less or equal to this.
-                                   Set to negative to always return variants.
+    :param threshold_include_vars: Include blocked variants in results if the number of variant labels is less or
+                                   equal to this. Set to negative to always return variants.
     :param check_collisions: Check for collisions with the provided list of labels
     :param is_collision_index: Whether check_collisions contains an index
     :return: a dict containing results of the evaluation, empty if process is asynchronous.
@@ -58,7 +59,7 @@ def evaluate_label_from_view(user: LgrUser,
     udata = get_db_by_version(lgr.metadata.unicode_version)
     if lgr_object.is_set():
         lgr_object: LgrModel
-        script_lgr_object = lgr_object.set_info.lgr_set.get(owner=user, pk=script_lgr_pk)
+        script_lgr_object = lgr_object.set_info.lgr_set.get(owner=request.user, pk=script_lgr_pk)
         if not need_async:
             set_labels = [] if not set_labels_info else set_labels_info.labels
             ctx = lgr_set_evaluate_label(lgr,
@@ -73,8 +74,11 @@ def evaluate_label_from_view(user: LgrUser,
             else:
                 set_labels_json = LabelInfo(name='None', labels=[])
 
-            lgr_set_validate_label_task.delay(user.pk, lgr_object.pk, script_lgr_object.pk,
-                                              label_cplist, set_labels_json)
+            task = LgrTaskModel.objects.create(app=request.resolver_match.app_name,
+                                               name=_('Validate labels on LGR set %s') % lgr_object.name,
+                                               user=request.user)
+            lgr_set_validate_label_task.apply_async((request.user.pk, lgr_object.pk, script_lgr_object.pk,
+                                                     label_cplist, set_labels_json), task_id=task.pk)
             ctx['launched_as_task'] = True
             ctx['nbr_variants'] = est_var_nbr
     else:
@@ -86,7 +90,11 @@ def evaluate_label_from_view(user: LgrUser,
                                  check_collisions=check_collisions,
                                  is_collision_index=is_collision_index)
         else:
-            validate_label_task.delay(user.pk, lgr_object.pk, label_cplist, lgr_model=lgr_object._meta.label)
+            task = LgrTaskModel.objects.create(app=request.resolver_match.app_name,
+                                               name=_('Validate labels on %s') % lgr_object.name,
+                                               user=request.user)
+            validate_label_task.apply_async((request.user.pk, lgr_object.pk, label_cplist,
+                                             lgr_object._meta.label), task_id=task.pk)
             ctx['launched_as_task'] = True
             ctx['nbr_variants'] = est_var_nbr
 
@@ -144,7 +152,7 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
                 set_labels_info = LabelInfo.from_form(set_labels_file.name,
                                                       set_labels_file.read())
         try:
-            self.result = evaluate_label_from_view(self.request.user,
+            self.result = evaluate_label_from_view(self.request,
                                                    self.lgr_object,
                                                    label_cplist,
                                                    script_lgr_pk=script_lgr_pk,
