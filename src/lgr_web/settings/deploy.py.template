@@ -54,6 +54,14 @@ for mod in ['django.request', 'lgr_web', 'lgr_auth', 'lgr_advanced', 'lgr_advanc
 
 ##### LGR Toolset Project-specific settings #####
 SUPPORTED_UNICODE_VERSION = '6.3.0'
+METADATA_UNICODE_VERSIONS = (
+    '10.0.0',
+    '6.3.0',
+    '6.2.0',
+    '6.1.0',
+    '6.0.0',
+    '5.2.0'
+)
 
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'
@@ -65,31 +73,11 @@ SUPPORTED_UNICODE_VERSION = '6.3.0'
 # See picu.loader.KNOWN_ICU_VERSIONS
 
 UNICODE_DATABASES = {
-    '6.3.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.52',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.52',
-        'version_tag': 52,
-    },
-    '6.2.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.50',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.50',
-        'version_tag': 50,
-    },
-    '6.1.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.49',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.49',
-        'version_tag': 49,
-    },
-    '6.0.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.46',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.46',
-        'version_tag': 46,
-    },
-    '5.2.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.44',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.44',
-        'version_tag': 44,
-    },
+    '10.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.60',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.60',
+        'version_tag': 60,
+    }
 }
 ##### /LGR Toolset Project-specific settings #####
 
