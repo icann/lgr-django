@@ -1,10 +1,10 @@
 from django.urls import reverse
 
-from lgr_models.tests.test_unicode_version import TestUnicodeVersion
+from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
 from lgr_web.config import lgr_settings
 
 
-class TestUnicodeVersions(TestUnicodeVersion):
+class TestSettings(LgrWebClientTestBase):
 
     def test_settings_user_unauthorized(self):
         self.login_user()

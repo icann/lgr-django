@@ -126,7 +126,7 @@ A template for production configuration is provided:
 Please configure the `ALLOWED_HOSTS` array with the hostname serving the LGR
 application. For example, if your application is available at
 `lgr-editor.example.com`, then the configuration should be `ALLOWED_HOSTS = ['lgr-editor.example.com']`.
-Also configure `SUPPORTED_UNICODE_VERSIONS` as well as `UNICODE_DATABASES` according to your ICU installation.
+Also configure `SUPPORTED_UNICODE_VERSION` as well as `UNICODE_DATABASES` according to your ICU installation.
 
 The default database, used to store sessions, users and admin LGRs, is `sqlite`.
 It is possible to configure the use of another server using the `DATABASES` dictionary.

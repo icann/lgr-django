@@ -198,9 +198,8 @@ class LgrBaseModel(models.Model):
         # Do we need to validate against Unicode?
         if validate and with_unidb:
             # Retrieve Unicode version to set appropriate Unicode database
-            unicode_version = parser.unicode_version()
             try:
-                parser.unicode_database = unidb.manager.get_db_by_version(unicode_version)
+                parser.unicode_database = unidb.manager.get_db_by_version(settings.SUPPORTED_UNICODE_VERSION)
             except KeyError as e:
                 raise LGRUnsupportedUnicodeVersionException(e)
         # Actually parse document
@@ -209,9 +208,8 @@ class LgrBaseModel(models.Model):
         # If we did not set the actual Unicode database, do it now
         if not validate and with_unidb:
             # Retrieve Unicode version to set appropriate Unicode database
-            unicode_version = lgr.metadata.unicode_version
             try:
-                lgr.unicode_database = unidb.manager.get_db_by_version(unicode_version)
+                lgr.unicode_database = unidb.manager.get_db_by_version(settings.SUPPORTED_UNICODE_VERSION)
             except KeyError as e:
                 raise LGRUnsupportedUnicodeVersionException(e)
         return lgr
@@ -277,5 +275,3 @@ class MSR(LgrBaseModel):
     def display_url(self):
         # FIXME view should be in models app
         return reverse('lgr_admin_display_msr', kwargs={'lgr_pk': self.pk})
-
-

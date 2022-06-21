@@ -5,6 +5,7 @@ metadata -
 """
 import logging
 
+from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -32,6 +33,7 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
         initial = super().get_initial()
 
         metadata = self.lgr.metadata
+        metadata.set_unicode_version(settings.SUPPORTED_UNICODE_VERSION)
         language = metadata.languages[0] if len(metadata.languages) > 0 else ""
         scope = metadata.scopes[0] if len(metadata.scopes) > 0 else Scope('')
 
@@ -111,8 +113,6 @@ class MetadataView(LGRHandlingBaseMixin, FormView):
                     metadata.scopes[0] = scope
                 else:
                     metadata.scopes.append(scope)
-            if cd['unicode_version']:
-                metadata.set_unicode_version(cd['unicode_version'])
             if cd['validity_start']:
                 metadata.set_validity_start(cd['validity_start'].isoformat())
             if cd['validity_end']:

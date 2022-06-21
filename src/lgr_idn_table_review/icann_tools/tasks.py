@@ -21,7 +21,6 @@ from lgr_idn_table_review.icann_tools.api import (get_icann_idn_repository_table
                                                   get_reference_lgr,
                                                   NoRefLgrFound, LGRIcannStorage)
 from lgr_idn_table_review.icann_tools.models import IANAIdnTable
-from lgr_models.models.unicode import UnicodeVersion
 from lgr_tasks.models import LgrTaskModel
 from lgr_utils import unidb
 
@@ -100,7 +99,7 @@ def idn_table_review_task(user_pk, absolute_url):
 
 
 def process_idn_tables(user, absolute_url, report_id):
-    udata = unidb.manager.get_db_by_version(UnicodeVersion.default().version)
+    udata = unidb.manager.get_db_by_version(settings.SUPPORTED_UNICODE_VERSION)
     lgr_storage = LGRIcannStorage(user)
     count = 0
     processed = []

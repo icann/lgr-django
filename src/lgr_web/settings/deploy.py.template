@@ -53,13 +53,7 @@ for mod in ['django.request', 'lgr_web', 'lgr_auth', 'lgr_advanced', 'lgr_advanc
 ##### /e-mail settings #####
 
 ##### LGR Toolset Project-specific settings #####
-SUPPORTED_UNICODE_VERSIONS = (
-    '6.3.0',
-    '6.2.0',
-    '6.1.0',
-    '6.0.0',
-    '5.2.0',
-)
+SUPPORTED_UNICODE_VERSION = '6.3.0'
 
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'

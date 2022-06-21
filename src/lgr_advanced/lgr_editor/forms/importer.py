@@ -2,11 +2,11 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.conf import settings
 from django.core import validators
 from django.forms.utils import ErrorList
 from django.utils.translation import ugettext_lazy as _
 
-from lgr_models.models.unicode import UnicodeVersion
 from .fields import FILE_FIELD_ENCODING_HELP, ValidatingRepertoire
 
 
@@ -34,7 +34,7 @@ class CreateLGRForm(NewLGRForm):
                          use_required_attribute, renderer)
         self.fields['unicode_version'] = forms.CharField(
             widget=forms.HiddenInput(),
-            initial=(UnicodeVersion.default(), UnicodeVersion.default()))
+            initial=(settings.SUPPORTED_UNICODE_VERSION, settings.SUPPORTED_UNICODE_VERSION))
 
 
 class ImportLGRForm(NewLGRForm):

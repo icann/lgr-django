@@ -7,12 +7,5 @@
         specification.
     {% endblocktrans %}
 </p>
-<h4>{% trans 'Supported Unicode versions:' %}</h4>
-<ul>
-    {% for version in output.versions %}
-        <li>{{ version }}</li>
-    {% endfor %}
-</ul>
-
-<br/>
+<h4>{% trans 'Supported Unicode version:' %} {{output}}</h4>
 <p><i>{% trans 'This toolset was implemented by <a href="http://www.viagenie.ca/" target="_blank" rel="noopener noreferrer">Viagénie</a> and Wil Tan on an ICANN contract.' %}</i></p>

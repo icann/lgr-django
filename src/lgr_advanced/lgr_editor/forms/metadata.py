@@ -5,10 +5,10 @@ from datetime import date
 
 from dal import autocomplete
 from django import forms
+from django.conf import settings
 from django.forms.formsets import formset_factory
 from django.utils.translation import ugettext_lazy as _
 
-from lgr_models.models.unicode import UnicodeVersion
 from lgr_web.utils import IANA_LANG_REGISTRY
 from .fields import ValidatingRepertoire
 from .utils import BaseDisableableFormSet
@@ -51,7 +51,6 @@ class MetadataForm(forms.Form):
 
     description = forms.CharField(label=_("Description"), widget=forms.Textarea, required=False)
     description_type = forms.ChoiceField(label=_("Description type"), choices=DESCRIPTION_CONTENT_TYPES, required=False)
-    unicode_version = forms.ChoiceField(label=_("Unicode version"), required=False)
     validating_repertoire = forms.ChoiceField(label=_("Validating repertoire"),
                                               choices=(
                                                   ('', ''),
@@ -62,7 +61,6 @@ class MetadataForm(forms.Form):
         additional_repertoires = kwargs.pop('additional_repertoires', [])
         disabled = kwargs.pop('disabled')
         super(MetadataForm, self).__init__(*args, **kwargs)
-        self.fields['unicode_version'].choices = tuple((v.version, v.version) for v in UnicodeVersion.get_activated())
 
         self.fields['validating_repertoire'].choices = self.fields['validating_repertoire'].choices + [
             (_('Built-in'), ValidatingRepertoire.choices())

@@ -307,9 +307,7 @@ STORAGE_DURATION = 60*60*24*7  # 1 week
 # Default variant type when creating new variant
 DEFAULT_VARIANT_TYPE = "blocked"
 
-SUPPORTED_UNICODE_VERSIONS = (
-    '6.3.0',
-)
+SUPPORTED_UNICODE_VERSION = '6.3.0'
 
 # ICANN TLDs URL
 ICANN_TLDS = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'

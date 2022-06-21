@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from dal import autocomplete
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-
 from lgr.tools.utils import parse_label_input
+
 from lgr_advanced.lgr_editor.forms.fields import FILE_FIELD_ENCODING_HELP
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException
 from lgr_models.models.lgr import LgrBaseModel
-from lgr_models.models.unicode import UnicodeVersion
 from lgr_utils.unidb import get_db_by_version
 
 
@@ -64,12 +63,7 @@ class ValidateLabelSimpleForm(forms.Form):
 
     def clean_labels(self):
         lgr_object = self.cleaned_data['lgr']
-        try:
-            udata = get_db_by_version(lgr_object.to_lgr().metadata.unicode_version)
-        except LGRUnsupportedUnicodeVersionException:
-            # fallback to default version
-            udata = get_db_by_version(UnicodeVersion.default().version)
-
+        udata = get_db_by_version(settings.SUPPORTED_UNICODE_VERSION)
         value = self.cleaned_data['labels']
         labels = list()
         for label in set(value.split(';')):

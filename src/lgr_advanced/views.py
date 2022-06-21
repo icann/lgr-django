@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, FormView
@@ -10,7 +11,6 @@ from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel
 from lgr_advanced.utils import list_built_in_lgr
 from lgr_models.models.lgr import RzLgr
-from lgr_models.models.unicode import UnicodeVersion
 from lgr_utils import unidb
 
 
@@ -50,7 +50,6 @@ class LabelFormsView(LoginRequiredMixin, FormView):
 
     def get_initial(self):
         initial = super().get_initial()
-        initial['unicode_version'] = UnicodeVersion.default()
         return initial
 
     def __init__(self, *args, **kwargs):
@@ -72,7 +71,6 @@ class LabelFormsView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         self.label = form.cleaned_data['label']
-        unicode_version: UnicodeVersion = form.cleaned_data['unicode_version']
-        self.udata = unidb.manager.get_db_by_version(unicode_version.version)
+        self.udata = unidb.manager.get_db_by_version(settings.SUPPORTED_UNICODE_VERSION)
 
         return self.render_to_response(self.get_context_data(form=form))

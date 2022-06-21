@@ -6,7 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
 from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, MSR
-from lgr_models.models.unicode import UnicodeVersion
 from lgr_models.models.settings import LGRSettings
 from lgr_web.utils import IANA_LANG_REGISTRY
 
@@ -63,21 +62,6 @@ class MSRIsActiveForm(forms.Form):
 
 class RzLgrIsActiveForm(forms.Form):
     active = forms.ModelChoiceField(label='', queryset=RzLgr.objects.all(), empty_label=None)
-
-
-class UnicodeVersionUpdateForm(forms.ModelForm):
-    version = CharField(disabled=True)
-
-    class Meta:
-        model = UnicodeVersion
-        fields = '__all__'
-
-
-class UnicodeVersionCreateForm(forms.ModelForm):
-    class Meta:
-        model = UnicodeVersion
-        fields = '__all__'
-
 
 class LgrSettingsForm(forms.ModelForm):
     class Meta:
