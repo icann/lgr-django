@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('lgr_models', '0010_report_owner_nullable'),
+        ('lgr_models', '0008_report_owner_nullable'),
     ]
 
     operations = [

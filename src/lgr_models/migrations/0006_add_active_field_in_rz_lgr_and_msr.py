@@ -19,7 +19,7 @@ def set_default(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('lgr_models', '0007_populate_unicode_versions'),
+        ('lgr_models', '0005_populate_msrs'),
     ]
 
     operations = [

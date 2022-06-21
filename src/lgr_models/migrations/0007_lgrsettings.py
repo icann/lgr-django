@@ -16,7 +16,7 @@ def init_settings(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('lgr_models', '0008_add_active_field_in_rz_lgr_and_msr'),
+        ('lgr_models', '0006_add_active_field_in_rz_lgr_and_msr'),
     ]
 
     operations = [

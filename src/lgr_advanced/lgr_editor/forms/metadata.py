@@ -51,6 +51,11 @@ class MetadataForm(forms.Form):
 
     description = forms.CharField(label=_("Description"), widget=forms.Textarea, required=False)
     description_type = forms.ChoiceField(label=_("Description type"), choices=DESCRIPTION_CONTENT_TYPES, required=False)
+    unicode_version = forms.ChoiceField(label=_("Unicode version"),
+                                        initial=(
+                                        settings.SUPPORTED_UNICODE_VERSION, settings.SUPPORTED_UNICODE_VERSION),
+                                        choices=tuple((v, v) for v in settings.METADATA_UNICODE_VERSIONS),
+                                        required=False)
     validating_repertoire = forms.ChoiceField(label=_("Validating repertoire"),
                                               choices=(
                                                   ('', ''),
