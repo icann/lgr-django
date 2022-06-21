@@ -11,7 +11,6 @@ from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_models.models.unicode import UnicodeVersion
 from lgr_utils.unidb import get_db_by_version
-from lgr_utils.views import RefLgrAutocomplete
 
 
 class LgrGroupedListSelect2(autocomplete.ListSelect2):
@@ -31,15 +30,12 @@ class ValidateLabelSimpleForm(forms.Form):
     # lgr, clean_lgr needs to execute before.
     lgr = autocomplete.Select2ListChoiceField(label='',
                                               required=True,
-                                              choice_list=RefLgrAutocomplete.get_list(),
                                               widget=LgrGroupedListSelect2(url='ref-lgr-autocomplete'))
-
     labels = forms.CharField(label='', required=False,
                              widget=forms.TextInput(attrs={'name': '',
                                                            'class': 'form-label form-control',
                                                            'onkeyup': 'buttonValidateEnabled()',
                                                            'placeholder': _('Label')}))
-
     labels_file = forms.FileField(label='', help_text=FILE_FIELD_ENCODING_HELP,
                                   required=False)
     collisions = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'id': 'check-for-collision'}),

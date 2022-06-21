@@ -12,7 +12,6 @@ from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
 from lgr_tasks.models import LgrTaskModel
 from lgr_utils.unidb import get_db_by_version
-from lgr_auth.models import LgrUser
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_web.config import lgr_settings
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
