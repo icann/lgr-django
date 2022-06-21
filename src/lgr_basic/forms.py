@@ -8,20 +8,31 @@ from lgr.tools.utils import parse_label_input
 from lgr_advanced.lgr_editor.forms.fields import FILE_FIELD_ENCODING_HELP
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException
+from lgr_models.models.lgr import LgrBaseModel
 from lgr_models.models.unicode import UnicodeVersion
 from lgr_utils.unidb import get_db_by_version
-from lgr_models.models.lgr import LgrBaseModel
 from lgr_utils.views import RefLgrAutocomplete
+
+
+class LgrGroupedListSelect2(autocomplete.ListSelect2):
+
+    def filter_choices_to_render(self, selected_choices):
+        # dal.widget.WidgetMixin.filter_choices_to_render does not handle correctly grouped lists
+        # https://github.com/yourlabs/django-autocomplete-light/issues/1299
+        ch = []
+        for group in self.choices:
+            c = [c for c in group[1] if str(c[0]) in selected_choices]
+            ch.extend(c)
+        self.choices = ch
 
 
 class ValidateLabelSimpleForm(forms.Form):
     # The order of fields is important, it is tied to the order of the "clean_data" execution. Since clean_label uses
     # lgr, clean_lgr needs to execute before.
-    lgr = forms.ChoiceField(label='',
-                            required=True,
-                            choices=RefLgrAutocomplete.get_list(),
-                            widget=autocomplete.ListSelect2(
-                                url='ref-lgr-autocomplete'))
+    lgr = autocomplete.Select2ListChoiceField(label='',
+                                              required=True,
+                                              choice_list=RefLgrAutocomplete.get_list(),
+                                              widget=LgrGroupedListSelect2(url='ref-lgr-autocomplete'))
 
     labels = forms.CharField(label='', required=False,
                              widget=forms.TextInput(attrs={'name': '',

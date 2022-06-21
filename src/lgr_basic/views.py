@@ -35,6 +35,12 @@ class BasicModeView(LoginRequiredMixin, FormView):
         kwargs['reflgr'] = RefLgrAutocomplete.get_list()
         return kwargs
 
+    def get_initial(self):
+        init = super().get_initial()
+        rz = RzLgr.objects.filter(active=True).first()
+        init['lgr'] = str(rz.to_tuple())
+        return init
+
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         self.storage = LGRToolStorage(request.user)
