@@ -215,10 +215,17 @@ class ListCodePointsJsonView(LGRHandlingBaseMixin, View):
             # Generate repertoire
             repertoire = []
             for char in self.lgr.repertoire:
+                actions = []
+                prop = ''
+                for c in char.cp:
+                    prop = udata.get_idna_prop(c)
+                    if prop in ['UNASSIGNED', 'DISALLOWED']:
+                        break
                 cp_slug = cp_to_slug(char.cp)
-                kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug, 'model': self.lgr_object.model_name}
-                cp_view_url = reverse('codepoint_view', kwargs=kwargs)
-                actions = [cp_view_url]
+                if prop not in ['UNASSIGNED', 'DISALLOWED']:
+                    kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug, 'model': self.lgr_object.model_name}
+                    cp_view_url = reverse('codepoint_view', kwargs=kwargs)
+                    actions.append(cp_view_url)
                 is_range = isinstance(char, RangeChar)
                 if is_range:
                     expand_url = reverse('expand_range', kwargs={'lgr_pk': self.lgr_pk,
@@ -229,11 +236,12 @@ class ListCodePointsJsonView(LGRHandlingBaseMixin, View):
                     'codepoint_id': cp_slug,
                     'cp_disp': render_char(char),
                     'comment': char.comment or '',
-                    'name': render_name(char, udata),
+                    'name': render_name(char, udata) or prop,
                     'tags': char.tags,
                     'variant_number': len(list(char.get_variants())),
                     'is_range': is_range,
-                    'actions': actions
+                    'actions': actions,
+                    'idna_property': prop
                 })
             self.lgr_object.set_repertoire_cache(repertoire)
 

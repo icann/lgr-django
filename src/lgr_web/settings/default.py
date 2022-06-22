@@ -307,16 +307,20 @@ STORAGE_DURATION = 60*60*24*7  # 1 week
 # Default variant type when creating new variant
 DEFAULT_VARIANT_TYPE = "blocked"
 
-SUPPORTED_UNICODE_VERSION = '10.0.0'
+SUPPORTED_UNICODE_VERSION = '6.3.0'
 METADATA_UNICODE_VERSIONS = (
-'6.3.0',
-'6.0.0',
-'6.1.0',
-'6.2.0',
-'7.0.0',
-'8.0.0',
-'9.0.0',
-'10.0.0'
+    '6.3.0',
+    '6.0.0',
+    '6.1.0',
+    '6.2.0',
+    '7.0.0',
+    '8.0.0',
+    '9.0.0',
+    '10.0.0',
+    '11.0.0',
+    '12.0.0',
+    '12.0.0',
+    '14.0.0',
 )
 
 # ICANN TLDs URL

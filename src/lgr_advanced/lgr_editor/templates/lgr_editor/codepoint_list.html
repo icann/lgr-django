@@ -8,6 +8,13 @@
             margin-left: 10px;
             margin-top: 8px;
         }
+        tbody tr.invalid td {
+            background-color: #ff000033 !important;
+        }
+        tbody tr.invalid td.select-checkbox {
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 {% endblock %}
 
@@ -202,6 +209,9 @@
                 "fnCreatedRow": function (row, data, idx) {
                     // Add ids on rows to be able to select then on reload after post
                     $(row).attr('id', 'cp-' + data['codepoint_id'])
+                    if( ['UNASSIGNED', 'INVALID'].includes(data['idna_property'])) {
+                        $(row).addClass('invalid');
+                    }
                 },
                 "columns": [
                 {% if not is_set %}
@@ -232,11 +242,14 @@
                     "orderable": false,
                     "searchable": false,
                     "render": function(data, type, row) {
-                        {% trans "See code point" as see_cp_trans %}
-                        out = '<a href="' + row.actions[0] + '" class="btn btn-primary btn-block">{{ see_cp_trans|escapejs }}</a>'
-                        if (row.is_range) {
-                            {% trans "Expand range" as expand_range_trans %}
-                            out += '<a href="' + row.actions[1] + '" class="btn btn-primary btn-block">{{ expand_range_trans|escapejs }}</a>'
+                        out = ''
+                        if (row.actions.length > 0) {
+                          {% trans "See code point" as see_cp_trans %}
+                          out += '<a href="' + row.actions[0] + '" class="btn btn-primary btn-block">{{ see_cp_trans|escapejs }}</a>'
+                          if (row.is_range) {
+                              {% trans "Expand range" as expand_range_trans %}
+                              out += '<a href="' + row.actions[1] + '" class="btn btn-primary btn-block">{{ expand_range_trans|escapejs }}</a>'
+                          }
                         }
                         return out
                     }
@@ -257,7 +270,7 @@
                             var row = this.api().row('#cp-' + selected[row_id])
                             row.select()
                         }
-                }
+                    }
                 {% endif %}
             });
             $('#codepoints').addClass('table table-striped table-bordered')
@@ -303,6 +316,11 @@
                         select_all.get(0).checked = true
                     }
                 }
+                cp_table.on( 'user-select', function ( e, dt, type, cell, originalEvent ) {
+                    if (['UNASSIGNED', 'INVALID'].includes(cell.data()['name'])) {
+                        e.preventDefault()
+                    }
+                })
                 cp_table.on('select deselect', function () {
                     handleSelectAll()
                 })
