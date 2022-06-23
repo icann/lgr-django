@@ -29,26 +29,6 @@ lgr:
 repoPath: container-registry-dev.icann.org/icann
 repoVer: latest
 
-cronjobs:
-  - cleanup:
-    name: cleanup
-    image: lgr-django
-    uid: 30404
-    gid: 0
-    command:
-      - /var/www/lgr/manage.py
-    args:
-      - cleanstorage
-    schedule: "0 0 * * *"
-    volume: true
-    resources:
-      limits:
-        cpu: 500m
-        memory: 512Mi
-      requests:
-        cpu: 100m
-        memory: 128Mi
-
 microservices:
   gunicorn:
     name: gunicorn
