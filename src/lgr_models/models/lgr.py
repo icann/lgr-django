@@ -119,7 +119,6 @@ class LgrBaseModel(models.Model):
         return cache.get(self._cache_key(self.lgr_cache_key))
 
     def to_lgr(self, validate=False, with_unidb=True, expand_ranges=False) -> LGR:
-        # TODO move from advanced to models
         from lgr_utils import unidb
 
         lgr = self._from_cache()

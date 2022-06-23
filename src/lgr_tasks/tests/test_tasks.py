@@ -49,7 +49,7 @@ class TasksTest(LgrWebClientTestBase):
 
         calculate_index_variant_labels_tlds()
 
-        self.assertDictEqual(expected_indexes, cache.get(_index_cache_key()))
+        self.assertDictEqual(expected_indexes, cache.get(_index_cache_key(self.rz_lgr)))
         storage = LGRAdminStorage(None)
         with self.assertRaises(AdminReport.DoesNotExist):
             storage.storage_get_report_file(auto_report.pk)

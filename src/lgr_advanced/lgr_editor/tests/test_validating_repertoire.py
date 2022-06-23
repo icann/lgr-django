@@ -10,7 +10,7 @@ class TestValidatingRepertoire(LgrWebClientTestBase):
         form = ImportLGRForm()
         dropdown = form.fields['validating_repertoire']
         values = [v[1] for v in dropdown.choices]
-        self.assertListEqual(values, [''] + sorted(self.default_root_zones + self.default_msr))
+        self.assertListEqual(values, [''] + sorted(self.active_root_zones + self.active_msr))
 
     def test_validating_repertoire_import_full(self):
         self.login_admin()
@@ -18,7 +18,7 @@ class TestValidatingRepertoire(LgrWebClientTestBase):
         response = self.client.get('/a/editor/import/')
         dropdown = response.context['form'].fields['validating_repertoire']
         values = [v[1] for v in dropdown.choices]
-        self.assertListEqual(values, [''] + sorted(self.default_root_zones + self.default_msr))
+        self.assertListEqual(values, [''] + sorted(self.active_root_zones + self.active_msr))
         with open('src/lgr_web/resources/idn_ref/root-zone/lgr-4-common-05nov20-en.xml', 'rb') as fp:
             response = self.client.post('/a/editor/import/',
                                         {'validating_repertoire': values[1],
@@ -32,7 +32,7 @@ class TestValidatingRepertoire(LgrWebClientTestBase):
         response = self.client.get('/a/editor/new/')
         dropdown = response.context['form'].fields['validating_repertoire']
         values = [v[1] for v in dropdown.choices]
-        self.assertListEqual(values, [''] + sorted(self.default_root_zones + self.default_msr))
+        self.assertListEqual(values, [''] + sorted(self.active_root_zones + self.active_msr))
         response = self.client.post('/a/editor/new/',
                                     {'validating_repertoire': values[1],
                                      'unicode_version': '6.3.0',

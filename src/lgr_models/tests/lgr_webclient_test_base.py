@@ -4,6 +4,8 @@ from lgr_auth.models import LgrUser, LgrRole
 
 
 class LgrWebClientTestBase(TestCase):
+    active_root_zones = ['RZ-LGR 5']
+    active_msr = ['MSR 4']
     default_root_zones = ['RZ-LGR 1', 'RZ-LGR 2', 'RZ-LGR 3', 'RZ-LGR 4', 'RZ-LGR 5']
     default_msr = ['IDNA2008 10.0.0',
                    'IDNA2008 5.2.0',
