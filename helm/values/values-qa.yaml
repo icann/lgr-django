@@ -105,6 +105,21 @@ microservices:
         cpu: 200m
         memory: 1Gi
 
+  beat:
+    name: beat
+    image: lgr-celery
+    uid: 30404
+    gid: 0
+    volume: true
+    args: ["beat"]
+    resources:
+      limits:
+        cpu: 1
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 128Mi
+
 smtp:
   name: smtp
   image: container-registry.icann.org/base-images/postfix-container.icann.org

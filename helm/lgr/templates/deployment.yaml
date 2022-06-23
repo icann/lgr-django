@@ -32,6 +32,12 @@ spec:
       containers:
         - image: {{ $.Values.repoPath }}/{{ .image }}:{{ $.Values.repoVer }}
           name:  {{ .name }}
+          {{- if .args }}
+          args:
+          {{- end }}
+          {{- range .args }}
+            - {{ . | quote }}
+          {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ $.Release.Name }}-{{ template "lgr.region" $.Values }}{{ $.Values.env }}

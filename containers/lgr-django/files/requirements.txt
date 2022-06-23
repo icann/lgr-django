@@ -7,6 +7,8 @@ django-redis @ git+https://github.com/jazzband/django-redis.git@683ebcf16a5c342d
 django-autocomplete-light==3.5.1
 vine==5.0.0
 django-cleanup==5.1.0
+django-celery-results==2.0.0
+django-celery-beat==2.2.0
 
 # LGR/Unicode modules
 picu==1.2
