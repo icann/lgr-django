@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-11 13:27+0000\n"
-"PO-Revision-Date: 2021-02-26 16:15-0500\n"
+"POT-Creation-Date: 2022-06-23 16:07+0000\n"
+"PO-Revision-Date: 2022-06-23 12:02-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,52 +16,55 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:4
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:4
 msgid "IDN Table Review reports"
 msgstr "Rapports de vérification des Tables IDN"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:11
-msgid "Switch mode"
-msgstr "Changer de mode"
-
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:21
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:16
 msgid ""
-"The following files contains IDN review reports.<br/> <strong> <i class="
-"\"glyphicon glyphicon-alert\"></i> Note that these files could be cleaned up "
-"regularly. </strong>"
+"The following files contains IDN review reports.<br/> <strong> <i "
+"class=\"glyphicon glyphicon-alert\"></i> Note that these files could be "
+"cleaned up regularly. </strong>"
 msgstr ""
 "Les fichiers suivants contiennent vos rapports de vérification IDN.<br/> "
 "<strong><i class=\"glyphicon glyphicon-alert\"></i> Veuillez noter que ces "
 "fichiers pourraient être nettoyés régulièrement.</strong>"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:31
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:26
 msgid "File"
 msgstr "Fichier"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:32
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:27
 msgid "Action"
 msgstr "Action"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:52
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:46
 #, python-format
-msgid "Are you sure you want to delete report %(file)s?"
-msgstr "Êtes-vous sûr(e) de vouloir supprimer le rapport %(file)s ?"
+msgid "Are you sure you want to delete report %(report.filename)s?"
+msgstr "Êtes-vous sûr(e) de vouloir supprimer le rapport %(report.filename)s ?"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:61
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:55
 msgid "Back"
 msgstr "Précédent"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:67
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:60
 msgid "Wait until full report is completed for the file to be valid"
 msgstr ""
 "Veuillez attendre que le rapport soit complet pour que le fichier soit valide"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:69
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:62
 msgid "Get the zip file containing all generated reports"
 msgstr "Télécharger le fichier zip contenant tous les rapports générés"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_reports.html:74
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:67
 msgid "Download all"
 msgstr "Télécharger tout"
+
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:74
+msgid "Summary"
+msgstr "Résumé"
+
+#~ msgid "Switch mode"
+#~ msgstr "Changer de mode"

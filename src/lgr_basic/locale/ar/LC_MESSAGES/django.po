@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-11 13:27+0000\n"
+"POT-Creation-Date: 2022-06-23 16:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,29 +19,15 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_basic/forms.py:21
+#: src/lgr_basic/forms.py:37
 msgid "Label"
 msgstr ""
 
-#: src/lgr_basic/forms.py:26
-msgid "Email address for tasks results"
-msgstr ""
-
-#: src/lgr_basic/forms.py:27
-msgid ""
-"As the computing may be very long, we will warn by e-mail once the result "
-"can be downloaded."
-msgstr ""
-
-#: src/lgr_basic/forms.py:37
-msgid "E-mail is mandatory to get the tasks results"
-msgstr ""
-
-#: src/lgr_basic/forms.py:40 src/lgr_basic/forms.py:41
+#: src/lgr_basic/forms.py:51 src/lgr_basic/forms.py:52
 msgid "Required"
 msgstr ""
 
-#: src/lgr_basic/forms.py:45 src/lgr_basic/forms.py:46
+#: src/lgr_basic/forms.py:56 src/lgr_basic/forms.py:57
 msgid "Unknown error, please report"
 msgstr ""
 
@@ -49,39 +35,34 @@ msgstr ""
 msgid "LGR Label Validation Tool"
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:5
-msgid "Switch mode"
-msgstr ""
-
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:9
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:7
 msgid "Display all label forms"
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:10
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:8
 msgid "Label forms"
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:24
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:22
 msgid "Label Validation Tool"
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:30
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:29
 msgid ""
 "The server was unable to complete the request, most likely because too many "
 "resources were required to compute the query. If you check for collision, "
-"the result may be still processing and will be sent to your email. Please "
-"wait before submitting again."
+"the result may be still processing. Please wait before submitting again."
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:40
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:38
 msgid "A server error occurred."
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:40
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:38
 msgid "code:"
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:41
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:39
 msgid "Please contact the administrator before submitting again."
 msgstr ""
 
@@ -105,59 +86,73 @@ msgstr ""
 msgid "Check for collision with existing TLDs"
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:111
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:107
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision and validation tasks "
-"processing can take minutes, even hours.<br> The result will be sent to "
-"%(email)s. Do not resubmit until you receive the report."
+"processing can take minutes, even hours.<br> You can follow your task "
+"progression on the <a href=\"%(task_status_url)s\">task status page</a>."
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:125
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:121
 #, python-format
 msgid ""
 "Your request was sent successfully, the validation task processing can take "
-"minutes, even hours.<br> The result will be sent to %(email)s. Do not "
-"resubmit until you receive the report."
+"minutes, even hours.<br> You can follow your task progression on the <a "
+"href=\"%(task_status_url)s\">task status page</a>."
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:139
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:135
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision task processing can take "
-"minutes, even hours.<br> The result will be sent to %(email)s. Do not "
-"resubmit until you receive the report."
+"minutes, even hours.<br> You can follow your task progression on the <a "
+"href=\"%(task_status_url)s\">task status page</a>."
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:151
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:146
 msgid "Validate"
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:163
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:158
 msgid "Your saved results"
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:164
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:159
 msgid "The following files contains your tools computation results."
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:167
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:162
 msgid "Note that these files could be cleaned up regularly."
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:173
-#, python-format
-msgid "Download %(file)s"
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:168
+msgid "Download"
 msgstr ""
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:176
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:171
 #, python-format
-msgid "Are you sure you want to delete report %(file)s?"
+msgid "Are you sure you want to delete report %(report.filename)s?"
 msgstr ""
 
-#: src/lgr_basic/views.py:85
+#: src/lgr_basic/views.py:61
+#, python-format
+msgid "Annotate labels on LGR %s"
+msgstr ""
+
+#: src/lgr_basic/views.py:63
+#, python-format
+msgid "Compute collisions and annotate labels on %s"
+msgstr ""
+
+#: src/lgr_basic/views.py:83
+#, python-format
+msgid "Compute collisions on %s"
+msgstr ""
+
+#: src/lgr_basic/views.py:116
+#, python-format
 msgid ""
-"Input label generates too many variants to compute them all quickly. You "
-"need to enter your email address and will receive a notification once "
-"process is done"
+"Input label generates too many variants to compute them all quickly. You can "
+"follow your task progression on the %s."
 msgstr ""

@@ -251,7 +251,7 @@ class LGRCrossScriptVariantsView(LGRToolBaseView):
     async_method = cross_script_variants_task
 
     def get_task_name(self, lgr_object: LgrBaseModel):
-        return _(f'Cross-scrip variants computation on LGR %s') % lgr_object.name
+        return _(f'Cross-scripts variants computation on LGR %s') % lgr_object.name
 
     def form_valid(self, form):
         ctx = self.get_context_data()

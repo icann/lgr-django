@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-11 13:27+0000\n"
-"PO-Revision-Date: 2021-02-26 16:00-0500\n"
+"POT-Creation-Date: 2022-06-23 16:07+0000\n"
+"PO-Revision-Date: 2022-06-23 11:57-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,35 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
-#: src/lgr_basic/forms.py:21
+#: src/lgr_basic/forms.py:37
 msgid "Label"
 msgstr "Label"
 
-#: src/lgr_basic/forms.py:26
-msgid "Email address for tasks results"
-msgstr "Adresse e-mail utilisée pour recevoir le résultats des tâches"
-
-#: src/lgr_basic/forms.py:27
-msgid ""
-"As the computing may be very long, we will warn by e-mail once the result "
-"can be downloaded."
-msgstr ""
-"Le temps de calcul peut être très long, vous serez averti par e-mail lorsque "
-"le résultat pourra être téléchargé. Fournissez une adresse e-mail valide "
-"s'il vous plaît."
-
-#: src/lgr_basic/forms.py:37
-msgid "E-mail is mandatory to get the tasks results"
-msgstr ""
-"L'adresse e-mail est obligatoire pour recevoir les résultats des tâches"
-
-#: src/lgr_basic/forms.py:40 src/lgr_basic/forms.py:41
+#: src/lgr_basic/forms.py:51 src/lgr_basic/forms.py:52
 msgid "Required"
 msgstr "Requis"
 
-#: src/lgr_basic/forms.py:45 src/lgr_basic/forms.py:46
+#: src/lgr_basic/forms.py:56 src/lgr_basic/forms.py:57
 msgid "Unknown error, please report"
 msgstr "Erreur inconnue, reportez l'erreur s'il vous plait"
 
@@ -52,43 +34,38 @@ msgstr "Erreur inconnue, reportez l'erreur s'il vous plait"
 msgid "LGR Label Validation Tool"
 msgstr "Outil LGR pour la Validation de Label"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:5
-msgid "Switch mode"
-msgstr "Changer de mode"
-
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:9
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:7
 msgid "Display all label forms"
 msgstr "Afficher toutes les formes d'un label"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:10
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:8
 msgid "Label forms"
 msgstr "Formes"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:24
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:22
 msgid "Label Validation Tool"
 msgstr "Outil de validation de Label"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:30
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:29
 msgid ""
 "The server was unable to complete the request, most likely because too many "
 "resources were required to compute the query. If you check for collision, "
-"the result may be still processing and will be sent to your email. Please "
-"wait before submitting again."
+"the result may be still processing. Please wait before submitting again."
 msgstr ""
 "Le serveur n'a pas pu compléter la requête, probablement parce que trop de "
 "ressources sont nécessaires pour calculer la requête. Si vous vérifiez une "
-"collision, le résultat peut être toujours en cours de traitement et vous "
-"sera envoyé par mail. Merci de patienter avant de soumettre à nouveau."
+"collision, le résultat pourrait toujours être en cours de traitement. Merci "
+"de patienter avant de soumettre à nouveau."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:40
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:38
 msgid "A server error occurred."
 msgstr "Une erreur de serveur s'est produite."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:40
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:38
 msgid "code:"
 msgstr "code :"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:41
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:39
 msgid "Please contact the administrator before submitting again."
 msgstr ""
 "Veuillez contacter l'administrateur avant de soumettre votre requête à "
@@ -114,79 +91,110 @@ msgstr "Télécharger une liste de labels"
 msgid "Check for collision with existing TLDs"
 msgstr "Vérifier les collisions avec la liste de TLDs"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:111
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:107
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision and validation tasks "
-"processing can take minutes, even hours.<br> The result will be sent to "
-"%(email)s. Do not resubmit until you receive the report."
+"processing can take minutes, even hours.<br> You can follow your task "
+"progression on the <a href=\"%(task_status_url)s\">task status page</a>."
 msgstr ""
 "Votre requête a bien été envoyée, le calcul des collision et la tâche de "
-"validation peuvent prendre plusieurs minutes, voire plusieurs heures.<br> Le "
-"résultat sera envoyé à %(email)s. Ne renvoyez pas de requête tant que vous "
-"n'avez pas reçu le rapport."
+"validation peuvent prendre plusieurs minutes, voire plusieurs heures.<br> "
+"Vous pouvez suivre la progression de votre tâche sur la <a "
+"href=\"%(task_status_url)s\">page des statuts de tâches</a>."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:125
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:121
 #, python-format
 msgid ""
 "Your request was sent successfully, the validation task processing can take "
-"minutes, even hours.<br> The result will be sent to %(email)s. Do not "
-"resubmit until you receive the report."
+"minutes, even hours.<br> You can follow your task progression on the <a "
+"href=\"%(task_status_url)s\">task status page</a>."
 msgstr ""
 "Votre requête a bien été envoyée, la tâche de validation peut prendre "
-"plusieurs minutes, voire plusieurs heures.<br> Le résultat sera envoyé à "
-"%(email)s. Ne renvoyez pas de requête tant que vous n'avez pas reçu le "
-"rapport."
+"plusieurs minutes, voire plusieurs heures.<br> Vous pouvez suivre la "
+"progression de votre tâche sur la <a href=\"%(task_status_url)s\">page des "
+"statuts de tâches</a>."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:139
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:135
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision task processing can take "
-"minutes, even hours.<br> The result will be sent to %(email)s. Do not "
-"resubmit until you receive the report."
+"minutes, even hours.<br> You can follow your task progression on the <a "
+"href=\"%(task_status_url)s\">task status page</a>."
 msgstr ""
 "Votre requête a bien été envoyée, le calcul des collisions peut prendre "
-"plusieurs minutes, voire plusieurs heures.<br> Le résultat sera envoyé à "
-"%(email)s. Ne renvoyez pas de requête tant que vous n'avez pas reçu le "
-"rapport."
+"plusieurs minutes, voire plusieurs heures.<br> Vous pouvez suivre la "
+"progression de votre tâche sur la <a href=\"%(task_status_url)s\">page des "
+"statuts de tâches</a>."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:151
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:146
 msgid "Validate"
 msgstr "Valider"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:163
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:158
 msgid "Your saved results"
 msgstr "Vos résultats sauvegardés"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:164
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:159
 msgid "The following files contains your tools computation results."
 msgstr ""
 "Ces fichiers contiennent les résultats des calculs fournis par les outils."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:167
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:162
 msgid "Note that these files could be cleaned up regularly."
 msgstr ""
 "Veuillez noter que ces fichiers pourraient être régulièrement supprimés."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:173
-#, python-format
-msgid "Download %(file)s"
-msgstr "Télécharger %(file)s"
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:168
+msgid "Download"
+msgstr "Télécharger"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:176
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:171
 #, python-format
-msgid "Are you sure you want to delete report %(file)s?"
-msgstr "Êtes-vous sûr(e) de vouloir supprimer ce rapport %(file)s ?"
+msgid "Are you sure you want to delete report %(report.filename)s?"
+msgstr "Êtes-vous sûr(e) de vouloir supprimer le rapport %(report.filename)s??"
 
-#: src/lgr_basic/views.py:85
+#: src/lgr_basic/views.py:61
+#, python-format
+msgid "Annotate labels on LGR %s"
+msgstr "Annote les labels sur la LGR %s"
+
+#: src/lgr_basic/views.py:63
+#, python-format
+msgid "Compute collisions and annotate labels on %s"
+msgstr "Calcul des collisions et annotation des labels sur %s"
+
+#: src/lgr_basic/views.py:83
+#, python-format
+msgid "Compute collisions on %s"
+msgstr "Calcul des collisions sur %s"
+
+#: src/lgr_basic/views.py:116
+#, python-format
 msgid ""
-"Input label generates too many variants to compute them all quickly. You "
-"need to enter your email address and will receive a notification once "
-"process is done"
+"Input label generates too many variants to compute them all quickly. You can "
+"follow your task progression on the %s."
 msgstr ""
-"Le label entré peut générer trop de variantes pour rapidement toutes les "
-"calculer. Vous devez rentrer votre adresse e-mail et recevrez une "
-"notification une fois que le processus est terminé"
+"Le label entré génère trop de variantes pour les calculer toutes rapidement. "
+"Vous pouvez suivre la progression de votre tâche sur la %s."
+
+#~ msgid "Email address for tasks results"
+#~ msgstr "Adresse e-mail utilisée pour recevoir le résultats des tâches"
+
+#~ msgid ""
+#~ "As the computing may be very long, we will warn by e-mail once the result "
+#~ "can be downloaded."
+#~ msgstr ""
+#~ "Le temps de calcul peut être très long, vous serez averti par e-mail "
+#~ "lorsque le résultat pourra être téléchargé. Fournissez une adresse e-mail "
+#~ "valide s'il vous plaît."
+
+#~ msgid "E-mail is mandatory to get the tasks results"
+#~ msgstr ""
+#~ "L'adresse e-mail est obligatoire pour recevoir les résultats des tâches"
+
+#~ msgid "Switch mode"
+#~ msgstr "Changer de mode"
 
 #~ msgid "File must be encoded in UTF-8 and using UNIX line ending."
 #~ msgstr ""
@@ -478,8 +486,8 @@ msgstr ""
 #~ "        This application provides a convenient interface for browsing\n"
 #~ "        and editing <abbr title=\"Label Generation Ruleset\">LGR</abbr>’s "
 #~ "conforming to the\n"
-#~ "        <a href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" target="
-#~ "\"_blank\">Representing Label Generation Rulesets using XML</a>\n"
+#~ "        <a href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" "
+#~ "target=\"_blank\">Representing Label Generation Rulesets using XML</a>\n"
 #~ "        specification.\n"
 #~ "    "
 #~ msgstr ""
@@ -998,8 +1006,8 @@ msgstr ""
 #~ "Variant %(var_codepoint)s for code point %(codepoint)s with when=%(when)s "
 #~ "and not-when=%(not_when)s could not be found"
 #~ msgstr ""
-#~ "La variante %(var_codepoint)s du code point  %(codepoint)s avec when="
-#~ "%(when)s et not-when=%(not_when)s n'a pas été trouvée"
+#~ "La variante %(var_codepoint)s du code point  %(codepoint)s avec "
+#~ "when=%(when)s et not-when=%(not_when)s n'a pas été trouvée"
 
 #~ msgid "Code point %s has been deleted"
 #~ msgstr "Le code point  %s a été supprimé"

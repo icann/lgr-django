@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-11 13:27+0000\n"
-"PO-Revision-Date: 2021-02-26 16:06-0500\n"
+"POT-Creation-Date: 2022-06-23 16:07+0000\n"
+"PO-Revision-Date: 2022-06-23 11:59-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,46 +16,62 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:4
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:12
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:7
 msgid "ICANN IDN review tool"
 msgstr "Outil de vérification des tables IDN ICANN"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:7
-msgid "Switch mode"
-msgstr "Changer de mode"
-
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:19
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:14
 msgid "Generate report"
 msgstr "Générer le rapport"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:23
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:19
 msgid "Previously generated reports"
 msgstr "Rapport générés précédement"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:28
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:30
 #, python-format
-msgid "IDN table %(folder)s"
-msgstr "Table IDN %(folder)s"
+msgid "IDN table %(report_id)s"
+msgstr "Table IDN %(report_id)s"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:32
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:34
 #, python-format
-msgid "Are you sure you want to delete report %(folder)s?"
-msgstr "Êtes vous sur de vouloir supprimer le rapport %(folder)s ?"
+msgid "Are you sure you want to delete report %(report_id)s?"
+msgstr "Êtes vous sur de vouloir supprimer le rapport %(report_id)s ?"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:37
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:40
 msgid "No report"
 msgstr "Aucun rapport"
 
-#: src/lgr_idn_table_review/icann_tools/views.py:34
-msgid "Generating report. You will receive an email upon completion."
-msgstr ""
-"Le rapport est en cours de génération. Vous recevrez un e-mail quand ce sera "
-"fini."
+#: src/lgr_idn_table_review/icann_tools/views.py:40
+msgid "ICANN IDN Tables Review"
+msgstr "Outil de vérification des tables IDN ICANN"
 
-#: src/lgr_idn_table_review/icann_tools/views.py:57
+#: src/lgr_idn_table_review/icann_tools/views.py:47
 #, python-format
-msgid "ICANN Review Reports: %(folder)s"
-msgstr "Rapport de Vérification ICANN: %(folder)s"
+msgid "Generating report. You can follow your task progression in the %s."
+msgstr ""
+"Rapport en création. Vous pouvez suivre la progression de votre tâche sur la "
+"%s."
+
+#: src/lgr_idn_table_review/icann_tools/views.py:76
+msgid ""
+"Task is still being processed, please come back later for the full report."
+msgstr ""
+"La tâche est encore en cours, revenez plus tard pour un rapport complet s'il "
+"vous plait."
+
+#: src/lgr_idn_table_review/icann_tools/views.py:78
+#, python-format
+msgid "ICANN Review Reports: %(report)s"
+msgstr "Rapport de Vérification ICANN: %(report)s"
+
+#~ msgid "Switch mode"
+#~ msgstr "Changer de mode"
+
+#~ msgid "Generating report. You will receive an email upon completion."
+#~ msgstr ""
+#~ "Le rapport est en cours de génération. Vous recevrez un e-mail quand ce "
+#~ "sera fini."

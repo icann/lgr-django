@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-11 13:27+0000\n"
+"POT-Creation-Date: 2022-06-23 16:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,49 +19,142 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_web/settings/default.py:226
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:4
+msgid "LGR Process List"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:7
+#: src/lgr_web/templates/_base.html:70
+msgid "Tasks"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:35
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:38
+msgid "Download report"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:47
+msgid "Success"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:55
+msgid "In Progress"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:62
+msgid "Failed"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:69
+msgid "Pending"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:76
+msgid "Retry"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:83
+msgid "Canceled"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:90
+msgid "Expired"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:102
+msgid "Are you sure you want to cancel this task?"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:119
+msgid "Are you sure you want to clean tasks?"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:120
+msgid "Delete completed tasks"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:124
+msgid "No task registered"
+msgstr ""
+
+#: src/lgr_tasks/views.py:29
+msgid "Unable to retrieve the list of tasks."
+msgstr ""
+
+#: src/lgr_tasks/views.py:44
+#, python-format
+msgid "Failed to delete %s."
+msgstr ""
+
+#: src/lgr_tasks/views.py:51
+#, python-format
+msgid "Task %s has been revoked."
+msgstr ""
+
+#: src/lgr_tasks/views.py:54
+#, python-format
+msgid "Task %s has been removed."
+msgstr ""
+
+#: src/lgr_tasks/views.py:67
+msgid "Failed to retrieve completed tasks."
+msgstr ""
+
+#: src/lgr_tasks/views.py:76
+msgid "Completed tasks have been cleaned."
+msgstr ""
+
+#: src/lgr_web/settings/default.py:246
 msgid "Arabic"
 msgstr ""
 
-#: src/lgr_web/settings/default.py:227
+#: src/lgr_web/settings/default.py:247
 msgid "English"
 msgstr ""
 
-#: src/lgr_web/settings/default.py:228
+#: src/lgr_web/settings/default.py:248
 msgid "French"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:8 src/lgr_web/templates/_base.html:50
+#: src/lgr_web/templates/_base.html:8 src/lgr_web/templates/_base.html:61
 msgid "LGR Tools"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:45 src/lgr_web/templates/_base.html:48
+#: src/lgr_web/templates/_base.html:56 src/lgr_web/templates/_base.html:59
 msgid "Go to home screen"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:58
+#: src/lgr_web/templates/_base.html:67
+msgid "Switch mode"
+msgstr ""
+
+#: src/lgr_web/templates/_base.html:73
 msgid "About LGR Toolset"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:59 src/lgr_web/templates/_base.html:124
+#: src/lgr_web/templates/_base.html:74 src/lgr_web/templates/_base.html:145
 msgid "About"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:75
+#: src/lgr_web/templates/_base.html:90
+msgid "Edit"
+msgstr ""
+
+#: src/lgr_web/templates/_base.html:96
 msgid "Logout"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:83
+#: src/lgr_web/templates/_base.html:104
 msgid "Login"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:108
+#: src/lgr_web/templates/_base.html:129
 msgid ""
 "If you have questions, please contact <a href=\"mailto:globalsupport@icann."
 "org\">globalsupport@icann.org</a>"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:131
+#: src/lgr_web/templates/_base.html:152
 msgid "Close"
 msgstr ""
 
@@ -74,20 +167,20 @@ msgstr ""
 msgid ""
 "This application provides a convenient interface for browsing and editing "
 "<abbr title=\"Label Generation Ruleset\">LGR</abbr>’s conforming to the <a "
-"href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" target=\"_blank\" rel="
-"\"noopener noreferrer\">Representing Label Generation Rulesets using XML</a> "
-"specification."
+"href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">Representing Label Generation Rulesets using "
+"XML</a> specification."
 msgstr ""
 
 #: src/lgr_web/templates/about.html:10
-msgid "Supported Unicode versions:"
+msgid "Supported Unicode version:"
 msgstr ""
 
-#: src/lgr_web/templates/about.html:18
+#: src/lgr_web/templates/about.html:11
 msgid ""
-"This toolset was implemented by <a href=\"http://www.viagenie.ca/\" target="
-"\"_blank\" rel=\"noopener noreferrer\">Viagénie</a> and Wil Tan on an ICANN "
-"contract."
+"This toolset was implemented by <a href=\"http://www.viagenie.ca/\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">Viagénie</a> and Wil Tan on an "
+"ICANN contract."
 msgstr ""
 
 #: src/lgr_web/templates/lgr_modes.html:5

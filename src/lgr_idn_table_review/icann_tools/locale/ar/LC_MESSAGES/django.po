@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-11 13:27+0000\n"
+"POT-Creation-Date: 2022-06-23 16:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,41 +20,47 @@ msgstr ""
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:4
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:12
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:7
 msgid "ICANN IDN review tool"
 msgstr ""
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:7
-msgid "Switch mode"
-msgstr ""
-
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:19
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:14
 msgid "Generate report"
 msgstr ""
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:23
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:19
 msgid "Previously generated reports"
 msgstr ""
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:28
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:30
 #, python-format
-msgid "IDN table %(folder)s"
+msgid "IDN table %(report_id)s"
 msgstr ""
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:32
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:34
 #, python-format
-msgid "Are you sure you want to delete report %(folder)s?"
+msgid "Are you sure you want to delete report %(report_id)s?"
 msgstr ""
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:37
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:40
 msgid "No report"
 msgstr ""
 
-#: src/lgr_idn_table_review/icann_tools/views.py:34
-msgid "Generating report. You will receive an email upon completion."
+#: src/lgr_idn_table_review/icann_tools/views.py:40
+msgid "ICANN IDN Tables Review"
 msgstr ""
 
-#: src/lgr_idn_table_review/icann_tools/views.py:57
+#: src/lgr_idn_table_review/icann_tools/views.py:47
 #, python-format
-msgid "ICANN Review Reports: %(folder)s"
+msgid "Generating report. You can follow your task progression in the %s."
+msgstr ""
+
+#: src/lgr_idn_table_review/icann_tools/views.py:76
+msgid ""
+"Task is still being processed, please come back later for the full report."
+msgstr ""
+
+#: src/lgr_idn_table_review/icann_tools/views.py:78
+#, python-format
+msgid "ICANN Review Reports: %(report)s"
 msgstr ""

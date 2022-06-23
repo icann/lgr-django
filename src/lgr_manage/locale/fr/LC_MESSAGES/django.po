@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-30 15:00+0000\n"
-"PO-Revision-Date: 2021-02-26 16:05-0500\n"
+"POT-Creation-Date: 2022-06-23 16:07+0000\n"
+"PO-Revision-Date: 2022-06-23 12:12-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: src/lgr_manage/forms.py:14
 msgid "LGR file(s)"
@@ -27,13 +27,15 @@ msgid "Common LGR file"
 msgstr "Fichier pour la LGR commune"
 
 #: src/lgr_manage/forms.py:23 src/lgr_manage/forms.py:45
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:11
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:11
+#: src/lgr_manage/forms.py:55 src/lgr_manage/templates/lgr_manage/msr.html:11
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:11
+#: src/lgr_manage/templates/lgr_manage/rz_lgr.html:11
+#: src/lgr_manage/templates/lgr_manage/user_management.html:15
 msgid "Name"
 msgstr "Nom"
 
 #: src/lgr_manage/forms.py:34
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:12
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:12
 msgid "Language/script tag"
 msgstr "Tag de langage/script"
 
@@ -41,133 +43,241 @@ msgstr "Tag de langage/script"
 msgid "Reference LGR file"
 msgstr "Fichier pour la LGR de référence"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:4
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:12
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:4
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:12
-msgid "IDN review tool admin"
-msgstr "Admin de l'outil de vérification IDN"
+#: src/lgr_manage/forms.py:54
+msgid "MSR"
+msgstr "MSR"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:7
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_version_detail.html:7
-msgid "Switch mode"
-msgstr "Changer de mode"
+#: src/lgr_manage/forms.py:71
+msgid "Variant Calculation Limit"
+msgstr "Limite de calcul des variantes"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:18
+#: src/lgr_manage/forms.py:72
+msgid "Variant Calculation Max"
+msgstr "Limite maximale de calcul des variantes"
+
+#: src/lgr_manage/forms.py:75
+msgid ""
+"Above this limit, only allocatable labels will be displayed and result can "
+"be downloaded"
+msgstr ""
+"Au delà de cette limite, uniquement les labels de disposition allocatable "
+"seront affichés et le résultat pourra être téléchargé"
+
+#: src/lgr_manage/forms.py:77
+msgid "Above this limit, results would be computed in a background task"
+msgstr ""
+"Au delà de cette limite, les résultats seront calculés dans une tâche en "
+"arrière plan"
+
+#: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:4
+#: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:7
+msgid "LGR tool admin"
+msgstr "Administration de l'outil LGR"
+
+#: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:13
 msgid "Root Zone LGRs"
 msgstr "LGRs pour la Root Zone"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:21
+#: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:16
 msgid "Reference LGRs"
 msgstr "LGRs de référence"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:24
+#: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:19
+msgid "Validating Repertoires"
+msgstr "Répertoires de Validation"
+
+#: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:22
 msgid "User management"
 msgstr "Gestion des utilisateurs"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/_idn_table_review_admin_base.html:27
-msgid "Unicode Versions"
-msgstr "Versions d'Unicode"
+#: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:25
+msgid "Tool Setting"
+msgstr "Paramètrage de l'outil"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:7
-msgid "Existing Reference LGRs"
-msgstr "LGRs de référence existantes"
+#: src/lgr_manage/templates/lgr_manage/msr.html:7
+msgid "Existing MSRs"
+msgstr "MSRs existants"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:13
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:13
+#: src/lgr_manage/templates/lgr_manage/msr.html:12
+#: src/lgr_manage/templates/lgr_manage/rz_lgr.html:13
+msgid "Active"
+msgstr "Actif"
+
+#: src/lgr_manage/templates/lgr_manage/msr.html:13
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:13
+#: src/lgr_manage/templates/lgr_manage/rz_lgr.html:14
 msgid "Action"
 msgstr "Action"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:30
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:50
+#: src/lgr_manage/templates/lgr_manage/msr.html:36
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:30
+#: src/lgr_manage/templates/lgr_manage/rz_lgr.html:58
 #, python-format
 msgid "Are you sure you want to delete LGR %(lgr)s?"
 msgstr "Êtes vous sur de vouloir supprimer la LGR %(lgr)s ?"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:39
-msgid "No Reference LGR."
-msgstr "Aucune LGR de référence."
+#: src/lgr_manage/templates/lgr_manage/msr.html:45
+msgid "No MSR."
+msgstr "Aucun MSR."
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:43
-msgid "New Reference LGR"
-msgstr "Nouvelle LGR de référence"
+#: src/lgr_manage/templates/lgr_manage/msr.html:50
+msgid "New MSR"
+msgstr "Nouveau MSR"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/ref_lgr.html:50
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:69
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:57
+#: src/lgr_manage/templates/lgr_manage/msr.html:56
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:50
+#: src/lgr_manage/templates/lgr_manage/rz_lgr.html:79
+#: src/lgr_manage/templates/lgr_manage/user_management.html:96
 msgid "Add"
 msgstr "Ajouter"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:7
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:7
+msgid "Existing Reference LGRs"
+msgstr "LGRs de référence existantes"
+
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:39
+msgid "No Reference LGR."
+msgstr "Aucune LGR de référence."
+
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:43
+msgid "New Reference LGR"
+msgstr "Nouvelle LGR de référence"
+
+#: src/lgr_manage/templates/lgr_manage/rz_lgr.html:7
 msgid "Existing Root Zone LGRs"
 msgstr "LGRs existantes pour la Root Zone"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:12
+#: src/lgr_manage/templates/lgr_manage/rz_lgr.html:12
 msgid "Files"
 msgstr "Fichiers"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:38
+#: src/lgr_manage/templates/lgr_manage/rz_lgr.html:39
 #, python-format
 msgid "Display %(remain)s more files"
 msgstr "Afficher %(remain)s fichiers de plus"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:59
+#: src/lgr_manage/templates/lgr_manage/rz_lgr.html:67
 msgid "No Root Zone LGR."
 msgstr "Aucun LGR pour la Root Zone."
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/rz_lgr.html:63
+#: src/lgr_manage/templates/lgr_manage/rz_lgr.html:73
 msgid "New Root Zone LGR"
 msgstr "Nouvelle LGR pour la Root Zone"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:7
-msgid "Unicode Versions List"
-msgstr "Liste des versions d'Unicode"
+#: src/lgr_manage/templates/lgr_manage/settings.html:7
+msgid "Settings"
+msgstr "Paramètres"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:12
-msgid "Version"
-msgstr ""
+#: src/lgr_manage/templates/lgr_manage/settings.html:13
+msgid "Save"
+msgstr "Sauvegarder"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:13
-msgid "Activated"
-msgstr "Activée"
+#: src/lgr_manage/templates/lgr_manage/settings.html:16
+msgid "Index variant labels calculation"
+msgstr "Calcul de l'index des labels variants"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/unicode_versions.html:40
-msgid "No unicode version defined."
-msgstr "Pas de version d'unicode définie"
+#: src/lgr_manage/templates/lgr_manage/settings.html:21
+msgid "Trigger the calculation of the index variant of the existing TLDs"
+msgstr "Lance le calcule de l'index sur les variants des TLDs existants"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:7
-msgid "Admin user"
-msgstr "Utilisateur admin"
+#: src/lgr_manage/templates/lgr_manage/settings.html:22
+msgid "Refresh"
+msgstr "Rafrachir"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:12
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:32
-msgid "Send password reset link"
-msgstr "Envoyer un mot de passe de réinitialisation"
+#: src/lgr_manage/templates/lgr_manage/settings.html:29
+msgid "Download"
+msgstr "Télécharger"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:15
-msgid "ICANN users"
-msgstr "Utilisateurs ICANN"
+#: src/lgr_manage/templates/lgr_manage/user_management.html:11
+msgid "Existing Users"
+msgstr "Utilisateurs existants"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:19
+#: src/lgr_manage/templates/lgr_manage/user_management.html:16
 msgid "Email"
 msgstr "Email"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:20
+#: src/lgr_manage/templates/lgr_manage/user_management.html:17
+msgid "Enabled"
+msgstr "Activé"
+
+#: src/lgr_manage/templates/lgr_manage/user_management.html:18
+msgid "Role"
+msgstr "Rôle"
+
+#: src/lgr_manage/templates/lgr_manage/user_management.html:19
 msgid "Actions"
 msgstr "Actions"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:39
+#: src/lgr_manage/templates/lgr_manage/user_management.html:40
+msgid "Send password reset link"
+msgstr "Envoyer un mot de passe de réinitialisation"
+
+#: src/lgr_manage/templates/lgr_manage/user_management.html:48
+#: src/lgr_manage/templates/lgr_manage/user_management.html:81
+msgid "Edit"
+msgstr "Édition"
+
+#: src/lgr_manage/templates/lgr_manage/user_management.html:53
+msgid "Toggle Dropdown"
+msgstr "Active/Désactive le menu déroulant"
+
+#: src/lgr_manage/templates/lgr_manage/user_management.html:62
+#: src/lgr_manage/templates/lgr_manage/user_update.html:28
+msgid "Disable"
+msgstr "Désactiver"
+
+#: src/lgr_manage/templates/lgr_manage/user_management.html:62
+#: src/lgr_manage/templates/lgr_manage/user_update.html:13
+msgid "Enable"
+msgstr "Activer"
+
+#: src/lgr_manage/templates/lgr_manage/user_management.html:71
 #, python-format
 msgid "Are you sure you want to delete user %(user)s?"
 msgstr "Êtes vous sur de vouloir supprimer l'utilisateur %(user)s ?"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:48
-msgid "No ICANN user."
-msgstr "Aucun utilisateur ICANN."
+#: src/lgr_manage/templates/lgr_manage/user_management.html:73
+#: src/lgr_manage/templates/lgr_manage/user_update.html:34
+msgid "Delete"
+msgstr "Supprimer"
 
-#: src/lgr_manage/templates/lgr_idn_table_review_admin/user_management.html:52
+#: src/lgr_manage/templates/lgr_manage/user_management.html:89
 msgid "Create new ICANN user"
 msgstr "Créer un nouvel utilisateur ICANN"
+
+#: src/lgr_manage/templates/lgr_manage/user_update.html:7
+#, python-format
+msgid "Edit user %(email)s"
+msgstr "Édition de l'utilisateur %(email)s"
+
+#: src/lgr_manage/templates/lgr_manage/user_update.html:11
+msgid "User is disabled"
+msgstr "L'utilisateur est désactivé"
+
+#: src/lgr_manage/templates/lgr_manage/user_update.html:24
+msgid "Back"
+msgstr "Précédent"
+
+#: src/lgr_manage/templates/lgr_manage/user_update.html:25
+msgid "Update"
+msgstr "Mise à jour"
+
+#: src/lgr_manage/templates/lgr_manage/user_update.html:32
+#, python-format
+msgid "Are you sure you want to delete user %(object)s?"
+msgstr "Êtes vous certain de vouloir supprimer l'utilisateur %(object)s?"
+
+#: src/lgr_manage/views/ajax_mixin.py:27
+msgid "Error processing active indicator"
+msgstr "Error en traitant mettant à jour le choix actif"
+
+#: src/lgr_manage/views/msr.py:46
+msgid "New MSR created"
+msgstr "Nouveau MSR créé"
+
+#: src/lgr_manage/views/msr.py:50
+msgid "Failed to create MSR"
+msgstr "Échec lors de la création du MSR"
 
 #: src/lgr_manage/views/reference_lgr.py:36
 msgid "New Reference LGR created"
@@ -177,21 +287,57 @@ msgstr "Nouvelle LGR de référence créée"
 msgid "Failed to create Reference LGR"
 msgstr "Échec à la création de la LGR de référence"
 
-#: src/lgr_manage/views/rz_lgr.py:36
+#: src/lgr_manage/views/rz_lgr.py:47
 msgid "New RZ LGR created"
 msgstr "Nouvelle RZ LGR créée"
 
-#: src/lgr_manage/views/rz_lgr.py:40
+#: src/lgr_manage/views/rz_lgr.py:51
 msgid "Failed to create RZ LGR"
 msgstr "Échec à la création de la RZ LGR"
 
-#: src/lgr_manage/views/users.py:35
+#: src/lgr_manage/views/settings.py:48
+msgid ""
+"The calculation of the index variant of the existing TLDs has been triggered"
+msgstr "Le calcul de l'index des variant sur les TLDs existant a été déclenché"
+
+#: src/lgr_manage/views/settings.py:54
+msgid "The index variant calculation has already been triggered, please wait"
+msgstr ""
+"Le calcul des index de variants est déjà en cours, patientez s'il vous plait"
+
+#: src/lgr_manage/views/users.py:37
 msgid "New user created"
 msgstr "Nouvel utilisateur créé"
 
-#: src/lgr_manage/views/users.py:39
+#: src/lgr_manage/views/users.py:41
 msgid "Failed to create user"
 msgstr "Échec à la création de l'utilisateur"
+
+#~ msgid "Unicode Versions List"
+#~ msgstr "Liste des versions d'Unicode"
+
+#~ msgid "Activated"
+#~ msgstr "Activée"
+
+#~ msgid "No unicode version defined."
+#~ msgstr "Pas de version d'unicode définie"
+
+#, fuzzy
+#~| msgid "Unicode Versions"
+#~ msgid "New Unicode Version"
+#~ msgstr "Versions d'Unicode"
+
+#~ msgid "Switch mode"
+#~ msgstr "Changer de mode"
+
+#~ msgid "Admin user"
+#~ msgstr "Utilisateur admin"
+
+#~ msgid "ICANN users"
+#~ msgstr "Utilisateurs ICANN"
+
+#~ msgid "No ICANN user."
+#~ msgstr "Aucun utilisateur ICANN."
 
 #~ msgid "File(s) must be encoded in UTF-8 and using UNIX line ending."
 #~ msgstr ""
