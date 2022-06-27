@@ -33,3 +33,14 @@ class IdnTable(LgrBaseModel):
     @staticmethod
     def upload_path(instance, filename):
         return os.path.join(f'user_{instance.owner.id}', instance.report_id, filename)
+
+
+class IdnRefTable(LgrBaseModel):
+    report_id = models.CharField(max_length=256)
+
+    def display_url(self):
+        return reverse('lgr_review_display_idn_ref_table', kwargs={'lgr_pk': self.pk})
+
+    @staticmethod
+    def upload_path(instance, filename):
+        return os.path.join(f'user_{instance.owner.id}', instance.report_id, filename)

@@ -4,12 +4,13 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from lgr.tools.utils import parse_label_input
 
+from lgr.tools.utils import parse_label_input
 from lgr_advanced.lgr_editor.forms.fields import FILE_FIELD_ENCODING_HELP
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_utils.unidb import get_db_by_version
+from lgr_utils.views import RefLgrAutocomplete
 
 
 class LgrGroupedListSelect2(autocomplete.ListSelect2):
@@ -30,11 +31,13 @@ class ValidateLabelSimpleForm(forms.Form):
     lgr = autocomplete.Select2ListChoiceField(label='',
                                               required=True,
                                               widget=LgrGroupedListSelect2(url='ref-lgr-autocomplete'))
+
     labels = forms.CharField(label='', required=False,
                              widget=forms.TextInput(attrs={'name': '',
                                                            'class': 'form-label form-control',
                                                            'onkeyup': 'buttonValidateEnabled()',
                                                            'placeholder': _('Label')}))
+
     labels_file = forms.FileField(label='', help_text=FILE_FIELD_ENCODING_HELP,
                                   required=False)
     collisions = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'id': 'check-for-collision'}),

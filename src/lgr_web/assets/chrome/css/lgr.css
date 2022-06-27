@@ -420,3 +420,8 @@ a.panel {
 .oauth-login a {
     margin: 10px;
 }
+
+.idn-table-name {
+    width: 1%;
+    white-space: nowrap;
+}

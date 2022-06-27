@@ -3,6 +3,7 @@ import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import SuspiciousOperation
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
@@ -12,10 +13,12 @@ from django.views.generic import FormView, TemplateView
 from django.views.generic.detail import SingleObjectMixin
 
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
-from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
+from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi, LGRIdnRefReviewApi
 from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
+from lgr_idn_table_review.idn_tool.models import IdnRefTable
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_tasks.models import LgrTaskModel
+from django.core.files import File
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +35,13 @@ class IdnTableReviewViewMixin(LoginRequiredMixin):
             'home_url_name': 'lgr_review_mode'
         })
         return ctx
+
+
+class IdnRefTableReviewViewMixin(LoginRequiredMixin):
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.api = LGRIdnRefReviewApi(request.user)
 
 
 class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
@@ -77,7 +87,11 @@ class IdnTableReviewSelectReferenceView(IdnTableReviewViewMixin, FormView):
     def form_valid(self, form):
         idn_tables = []
         for idn_table_pk, lgr_info in form.cleaned_data.items():
-            idn_tables.append((idn_table_pk, lgr_info))
+            if isinstance(lgr_info, InMemoryUploadedFile):
+                lgr_info = self.api.create_reflgr(file=File(lgr_info),
+                                                  name=lgr_info.name.split(".")[0],
+                                                  report_id=self.report_id).to_tuple()
+            idn_tables.append((idn_table_pk, str(lgr_info)))
 
         task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
                                            name=ngettext('Review of %(count)d IDN table',
@@ -134,6 +148,20 @@ class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, SingleObjectMixin, 
             content_type = 'text/xml'
         resp = HttpResponse(idn_table.file.read(), content_type=content_type, charset='UTF-8')
         resp['Content-disposition'] = f'attachment; filename={idn_table.filename}'
+        return resp
+
+
+class IdnRefTableReviewDisplayIdnRefTable(IdnRefTableReviewViewMixin, SingleObjectMixin, View):
+    pk_url_kwarg = 'lgr_pk'
+    model = IdnRefTable
+
+    def get(self, request, *args, **kwargs):
+        idn_ref_table = self.get_object(queryset=self.api.lgr_queryset())
+        content_type = 'text/plain'
+        if idn_ref_table.filename.endswith('xml'):
+            content_type = 'text/xml'
+        resp = HttpResponse(idn_ref_table.file.read(), content_type=content_type, charset='UTF-8')
+        resp['Content-disposition'] = f'attachment; filename={idn_ref_table.filename}'
         return resp
 
 
