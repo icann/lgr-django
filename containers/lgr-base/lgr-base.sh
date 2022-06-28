@@ -95,15 +95,7 @@ printf "\tInstall lgr-django unicodes dependancies\n"
 git clone -q $unicodeURL $buildDir/icu
 
 # unicodeVersions define all unicode version use in LGR
-unicodeVersion="
-  6.3.0
-  6.0.0
-  6.1.0
-  6.2.0
-  7.0.0
-  8.0.0
-  9.0.0
-  10.0.0"
+unicodeVersion="14.0.0"
 
 # Compile every icu4c version from the local LGR git repo
 for i in $unicodeVersion
@@ -150,6 +142,11 @@ do
       icu4cBuildPath="$buildDir/icu/icu4c/build"
       unicodeTag=60
       unicodeRelease='release-60-2'
+      ;;
+    14.0.0)
+      icu4cBuildPath="$buildDir/icu/icu4c/build"
+      unicodeTag=71
+      unicodeRelease='release-71-1'
       ;;
     *)
       # Should never happend as no external input is used
