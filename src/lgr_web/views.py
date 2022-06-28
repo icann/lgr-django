@@ -32,6 +32,13 @@ class LGRAboutView(TemplateView):
         return ctx
 
 
+class LGRHelpView(TemplateView):
+    """
+    Help dialog
+    """
+    template_name = 'help.html'
+
+
 class LanguageAutocomplete(autocomplete.Select2ListView):
 
     def get_list(self):

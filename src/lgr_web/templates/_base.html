@@ -68,11 +68,29 @@
                         {% endif %}
                         {% if user.is_authenticated %}
                             <a href="{% url 'list_process' %}" class="btn btn-negative"><b>{% trans 'Tasks' %}</b></a>
-                            <a class="btn btn-default show-tooltip"
-                               data-toggle="modal" data-target="#about-modal"
-                               title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
-                              <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
+
+
+                          <div class="btn-group">
+                            <a class="btn btn-default dropdown-toggle" href="#" data-toggle="dropdown"
+                               role="button" aria-expanded="false">
+                              {% trans 'Help' %}
+                              <span class="caret"></span>
                             </a>
+                            <ul class="dropdown-menu">
+                              <li class="dropdown-item">
+                                <a class="btn show-tooltip" data-toggle="modal" data-target="#help-modal"
+                                   title="{% trans 'Help' %}" data-placement="bottom">
+                                  <i class="glyphicon glyphicon-info-sign"></i> {% trans "Instructions" %}
+                                </a>
+                              </li>
+                              <li class="dropdown-item">
+                                <a class="btn show-tooltip" data-toggle="modal" data-target="#about-modal"
+                                   title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
+                                  <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
+                                </a>
+                              </li>
+                            </ul>
+                            </div>
                         {% endif %}
                         {% block navbar-right %}
                         {% if user.is_authenticated %}
@@ -146,6 +164,26 @@
             </div>
             <div id="modal-body" class="modal-body">
                 <iframe id="about-iframe" data-url="{% url 'about' %}" src="{% url 'about' %}" frameborder="0"
+                        width="100%" height="100%"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- Help Modal -->
+<div class="modal fade" id="help-modal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{% trans "Help" %}</h4>
+            </div>
+            <div id="modal-body" class="modal-body">
+                <iframe id="about-iframe" data-url="{% url 'help' %}" src="{% url 'help' %}" frameborder="0"
                         width="100%" height="100%"></iframe>
             </div>
             <div class="modal-footer">

@@ -19,7 +19,7 @@ import lgr_renderer.urls
 import lgr_session.urls
 import lgr_tasks.urls
 import lgr_utils.urls
-from .views import LGRModesView, LGRAboutView, LanguageAutocomplete
+from .views import LGRModesView, LGRAboutView, LGRHelpView, LanguageAutocomplete
 
 urlpatterns = [
     path('a/', include(lgr_advanced.urls.urlpatterns)),
@@ -38,6 +38,7 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
 
     path('about/', LGRAboutView.as_view(), name='about'),
+    path('help/', LGRHelpView.as_view(), name='help'),
 
     path('social/', include('social_django.urls')),
     path('', LGRModesView.as_view(), name='lgr_home'),
