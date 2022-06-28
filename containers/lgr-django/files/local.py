@@ -79,16 +79,9 @@ DEFAULT_FROM_EMAIL = os.environ.get('lgrEmail')
 ##### /e-mail settings #####
 
 ##### LGR Toolset Project-specific settings #####
-SUPPORTED_UNICODE_VERSIONS = (
-    '6.3.0',
-    '6.0.0',
-    '6.1.0',
-    '6.2.0',
-    '7.0.0',
-    '8.0.0',
-    '9.0.0',
-    '10.0.0'
-)
+SUPPORTED_UNICODE_VERSIONS = '14.0.0'
+
+DEFAULT_UNICODE_VERSION = '14.0.0'
 
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'
@@ -100,45 +93,10 @@ SUPPORTED_UNICODE_VERSIONS = (
 # See picu.loader.KNOWN_ICU_VERSIONS
 
 UNICODE_DATABASES = {
-    '6.3.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.52',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.52',
-        'version_tag': 52,
-    },
-    '6.0.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.46',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.46',
-        'version_tag': 46,
-    },
-    '6.1.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.49',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.49',
-        'version_tag': 49,
-    },
-    '6.2.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.50',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.50',
-        'version_tag': 50,
-    },
-    '7.0.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.54',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.54',
-        'version_tag': 54,
-    },
-    '8.0.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.56',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.56',
-        'version_tag': 56,
-    },
-    '9.0.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.58',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.58',
-        'version_tag': 58,
-    },
-    '10.0.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.60',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.60',
-        'version_tag': 60,
+    '14.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.71',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.71',
+        'version_tag': 71,
     }
 }
 ##### /LGR Toolset Project-specific settings #####
