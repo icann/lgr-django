@@ -14,4 +14,4 @@ mkdir -p lgr_web/storage
 ../manage.py migrate
 
 # Start gunicorn
-gunicorn "$@"
+gunicorn --capture-output --enable-stdio-inheritance "$@"
