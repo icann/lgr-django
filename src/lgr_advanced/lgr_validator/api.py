@@ -117,8 +117,10 @@ def _get_collisions(lgr, label_cplist, labels_list, idna_encoder, lgr_actions, i
     res = {'collisions_checked': True}
     label_u = cp_to_ulabel(label_cplist)
     label_for_compute = []
+    cached = None
     if is_collision_index:
         labels = labels_list.keys()
+        cached = labels_list
     else:
         labels = [l.strip() for l in labels_list]
         label_for_compute = labels
@@ -131,7 +133,7 @@ def _get_collisions(lgr, label_cplist, labels_list, idna_encoder, lgr_actions, i
         return res
 
     # check for collisions
-    indexes = get_collisions(lgr, label_for_compute + [label_u], quiet=False, cached_indexes=labels_list)
+    indexes = get_collisions(lgr, label_for_compute + [label_u], quiet=False, cached_indexes=cached)
 
     if len(indexes) == 0:
         return res
