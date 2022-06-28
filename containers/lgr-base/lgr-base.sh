@@ -8,7 +8,7 @@ set -e
 
 # VARIABLE DECLARATION
 ## pythonMinor version set the python minor version (ex.: 3.7)
-pythonMinorVersion='3.7'
+pythonMinorVersion='3.10'
 ## unicodeURL set the repository git use for cloning
 unicodeURL='https://github.com/unicode-org/icu.git'
 lgrBaseDir='/var/www/lgr'
