@@ -57,6 +57,7 @@ printf "OK\n"
 printf "\tInstall the various lgr-django dependancies\t"
 # Install various dependancies for lg-django
 dnf -qy install \
+  procps-ng \
   libxml2 \
   libicu \
   tcl
