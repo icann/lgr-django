@@ -19,6 +19,19 @@ TOOLS_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'storage', 'output', 'too
 IDN_REVIEW_USER_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'storage', 'output', 'idn_review', 'user')
 IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'storage', 'output', 'idn_review', 'icann')
 
+LOGGING['loggers']['lgr_web']['level'] = 'INFO'
+LOGGING['loggers']['lgr_advanced']['level'] = 'INFO'
+LOGGING['loggers']['lgr_auth']['level'] = 'INFO'
+LOGGING['loggers']['lgr_basic']['level'] = 'INFO'
+LOGGING['loggers']['lgr_idn_table_review']['level'] = 'INFO'
+LOGGING['loggers']['lgr_manage']['level'] = 'INFO'
+LOGGING['loggers']['lgr_renderer']['level'] = 'INFO'
+LOGGING['loggers']['lgr_session']['level'] = 'INFO'
+LOGGING['loggers']['lgr']['level'] = 'INFO'
+LOGGING['loggers']['lgr-rule-logger']['level'] = 'INFO'
+LOGGING['loggers']['celery']['level'] = 'INFO'
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
