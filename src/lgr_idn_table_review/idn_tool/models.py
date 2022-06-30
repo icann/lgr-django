@@ -24,6 +24,7 @@ class IdnReviewReport(LGRReport):
 
 class IdnTable(LgrBaseModel):
     lgr_parser = HeuristicParser
+    force_parse = True
 
     report_id = models.CharField(max_length=256)
 

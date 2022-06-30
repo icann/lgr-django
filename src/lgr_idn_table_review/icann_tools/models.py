@@ -32,6 +32,7 @@ class IANAIdnTable(LgrBaseModel):
     """
 
     lgr_parser = HeuristicParser
+    force_parse = True
 
     url = models.URLField()
     date = models.DateField()

@@ -42,6 +42,7 @@ class LgrBaseModel(models.Model):
     lgr_parser = XMLParser
     lgr_cache_key = 'lgr-obj'
     cache_timeout = 3600
+    force_parse = False
 
     file = models.FileField(upload_to=get_upload_path)
     name = models.CharField(max_length=128)
@@ -202,7 +203,7 @@ class LgrBaseModel(models.Model):
             except KeyError as e:
                 raise LGRUnsupportedUnicodeVersionException(e)
         # Actually parse document
-        lgr = parser.parse_document()
+        lgr = parser.parse_document(force=cls.force_parse)
 
         # If we did not set the actual Unicode database, do it now
         if not validate and with_unidb:
