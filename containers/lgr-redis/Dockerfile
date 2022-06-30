@@ -6,4 +6,5 @@ COPY lgr-redis.sh .
 RUN ./lgr-redis.sh && rm lgr-redis.sh
 
 EXPOSE 6379
-CMD ["redis-server"]
+ENTRYPOINT ["redis-server"]
+CMD ["--protected-mode", "no"]
