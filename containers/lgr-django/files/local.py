@@ -89,7 +89,7 @@ DEFAULT_FROM_EMAIL = os.environ.get('lgrEmail')
 ##### /e-mail settings #####
 
 ##### LGR Toolset Project-specific settings #####
-SUPPORTED_UNICODE_VERSIONS = '14.0.0'
+SUPPORTED_UNICODE_VERSION = '14.0.0'
 
 DEFAULT_UNICODE_VERSION = '14.0.0'
 
