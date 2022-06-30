@@ -22,7 +22,7 @@ node('general') {
 
             if ("${env.BRANCH_NAME}" == 'master') {
                // utils.sendNotification(slackChannel: 'jenkinsjobs', sendSlackMessage: true, buildStatus: 'STARTED', customMessage: 'Building lgr docker image')
-                def microservices = ['lgr-base', 'lgr-django', 'lgr-celery', 'lgr-gunicorn', 'lgr-static']
+                def microservices = ['lgr-base', 'lgr-redis', 'lgr-django', 'lgr-celery', 'lgr-gunicorn', 'lgr-static']
                 microservices.each() {
                   sh label: "build image ${it}", script: "tar -czh -C containers/${it} . | docker build -t ${it} -"
                   utils.pushImageToRegistryTrunkBased(DTROrg: 'icann', DTRRepo: it, dockerImageName: it)

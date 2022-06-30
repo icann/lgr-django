@@ -9,15 +9,17 @@ metadata:
 data:
   lgrURL: {{ .Values.lgr.URL }}
   lgrEmail: {{ .Values.lgr.Email }}
-  lgrSentinel1: {{ .Values.lgr.Sentinel1 }}
-  lgrSentinel2: {{ .Values.lgr.Sentinel2 }}
-  lgrSentinel3: {{ .Values.lgr.Sentinel3 }}
+#  lgrSentinel1: {{ .Values.lgr.Sentinel1 }}
+#  lgrSentinel2: {{ .Values.lgr.Sentinel2 }}
+#  lgrSentinel3: {{ .Values.lgr.Sentinel3 }}
 
-  lgrSentinelPort: {{ .Values.lgr.sentinelPort | quote }}
+#  lgrSentinelPort: {{ .Values.lgr.sentinelPort | quote }}
 
-  lgrCeleryRedisDB: {{ .Values.lgr.CeleryRedisDB | quote }}
-  lgrDjangoRedisDB: {{ .Values.lgr.DjangoRedisDB | quote }}
-  lgrSentinelMaster: {{ .Values.lgr.SentinelMaster }}
+#  lgrCeleryRedisDB: {{ .Values.lgr.CeleryRedisDB | quote }}
+#  lgrDjangoRedisDB: {{ .Values.lgr.DjangoRedisDB | quote }}
+#  lgrSentinelMaster: {{ .Values.lgr.SentinelMaster }}
+  lgrRedisURL: {{ .Release.Name }}-{{ .Values.microservices.redis.name }}-{{ template "lgr.region" $.Values }}{{ $.Values.env }}
+  lgrRedisPort: {{ .Values.microservices.redis.web.port | quote }}
 
   lgrGunicornURL: {{ .Release.Name }}-{{ .Values.microservices.gunicorn.name }}-{{ template "lgr.region" $.Values }}{{ $.Values.env }}:{{ .Values.microservices.gunicorn.web.port }}
   lgrStaticPort: {{ .Values.microservices.static.web.port | quote }}

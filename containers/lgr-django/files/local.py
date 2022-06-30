@@ -39,35 +39,36 @@ DATABASES = {
     }
 }
 
-DJANGO_REDIS_CONNECTION_FACTORY = 'django_redis.pool.SentinelConnectionFactory'
-SENTINELS = [
-    ( os.environ.get('lgrSentinel1'), os.environ.get('lgrSentinelPort') ),
-    ( os.environ.get('lgrSentinel2'), os.environ.get('lgrSentinelPort') ),
-    ( os.environ.get('lgrSentinel3'), os.environ.get('lgrSentinelPort') )
-]
+#DJANGO_REDIS_CONNECTION_FACTORY = 'django_redis.pool.SentinelConnectionFactory'
+#SENTINELS = [
+#    ( os.environ.get('lgrSentinel1'), os.environ.get('lgrSentinelPort') ),
+#    ( os.environ.get('lgrSentinel2'), os.environ.get('lgrSentinelPort') ),
+#    ( os.environ.get('lgrSentinel3'), os.environ.get('lgrSentinelPort') )
+#]
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": 'redis://' + os.environ.get('lgrSentinelMaster') + '/' + os.environ.get('lgrDjangoRedisDB'),
+        "LOCATION": 'redis://' + os.environ.get('lgrRedisURL') + ':' + os.environ.get('lgrRedisPort')  + '/1',
         "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.SentinelClient",
-            "PASSWORD": os.environ.get('lgrRedisPwd'),
-            "SENTINELS": SENTINELS,
-            "SENTINEL_KWARGS": {
-                'password': os.environ.get('lgrRedisPwd')
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
             }
         }
     }
 }
 
-BROKER_URL = (
-        'sentinel://:' + os.environ.get('lgrRedisPwd') + '@' + os.environ.get('lgrSentinel1') + ':' + os.environ.get('lgrSentinelPort') + '/' + os.environ.get('lgrCeleryRedisDB') + ';' +
-        'sentinel://:' + os.environ.get('lgrRedisPwd') + '@' + os.environ.get('lgrSentinel2') + ':' + os.environ.get('lgrSentinelPort') + '/' + os.environ.get('lgrCeleryRedisDB') + ';' +
-        'sentinel://:' + os.environ.get('lgrRedisPwd') + '@' + os.environ.get('lgrSentinel3') + ':' + os.environ.get('lgrSentinelPort') + '/' + os.environ.get('lgrCeleryRedisDB') )
-BROKER_TRANSPORT_OPTIONS = {
-        'master_name': os.environ.get('lgrSentinelMaster'),
-        'sentinel_kwargs': { 'password': os.environ.get('lgrRedisPwd') }
-}
+BROKER_TRANSPORT = "redis"
+BROKER_HOST = os.environ.get('lgrRedisURL')
+BROKER_PORT = os.environ.get('lgrRedisPort')
+BROKER_VHOST = "2"
+
+#BROKER_URL = (
+#        'sentinel://:' + os.environ.get('lgrRedisPwd') + '@' + os.environ.get('lgrSentinel1') + ':' + os.environ.get('lgrSentinelPort') + '/' + os.environ.get('lgrCeleryRedisDB') + ';' +
+#        'sentinel://:' + os.environ.get('lgrRedisPwd') + '@' + os.environ.get('lgrSentinel2') + ':' + os.environ.get('lgrSentinelPort') + '/' + os.environ.get('lgrCeleryRedisDB') + ';' +
+#        'sentinel://:' + os.environ.get('lgrRedisPwd') + '@' + os.environ.get('lgrSentinel3') + ':' + os.environ.get('lgrSentinelPort') + '/' + os.environ.get('lgrCeleryRedisDB') )
+#BROKER_TRANSPORT_OPTIONS = {
+#        'master_name': os.environ.get('lgrSentinelMaster'),
+#        'sentinel_kwargs': { 'password': os.environ.get('lgrRedisPwd') }
+#}
 
 ##### e-mail settings #####
 # The host for the use of sending email (default: localhost)

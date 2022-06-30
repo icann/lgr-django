@@ -16,15 +16,15 @@ lgr:
   URL: lgr-qa.icann.org
   Email: idnprogram@icann.org
 
-  Sentinel1: redis1.dev.icann.org
-  Sentinel2: redis2.dev.icann.org
-  Sentinel3: redis3.dev.icann.org
+#  Sentinel1: redis1.dev.icann.org
+#  Sentinel2: redis2.dev.icann.org
+#  Sentinel3: redis3.dev.icann.org
 
-  sentinelPort: 26379
+#  sentinelPort: 26379
 
-  CeleryRedisDB: 5
-  DjangoRedisDB: 6
-  SentinelMaster: mymaster
+#  CeleryRedisDB: 5
+#  DjangoRedisDB: 6
+#  SentinelMaster: mymaster
 
 repoPath: container-registry-dev.icann.org/icann
 repoVer: latest
@@ -49,6 +49,22 @@ microservices:
       requests:
         cpu: 200m
         memory: 1Gi
+
+  redis:
+    name: static
+    image: lgr-static
+    uid: 0
+    gid: 0
+    web:
+      port: 6379
+      protocol: TCP
+    resources:
+      limits:
+        cpu: 1
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 128Mi
 
   static:
     name: static
