@@ -55,10 +55,7 @@ CACHES = {
     }
 }
 
-BROKER_TRANSPORT = "redis"
-BROKER_HOST = os.environ.get('lgrRedisURL')
-BROKER_PORT = os.environ.get('lgrRedisPort')
-BROKER_VHOST = "2"
+BROKER_URL = "redis://" + os.environ.get('lgrRedisURL') + ":" + os.environ.get('lgrRedisPort') + "/2"
 
 #BROKER_URL = (
 #        'sentinel://:' + os.environ.get('lgrRedisPwd') + '@' + os.environ.get('lgrSentinel1') + ':' + os.environ.get('lgrSentinelPort') + '/' + os.environ.get('lgrCeleryRedisDB') + ';' +
