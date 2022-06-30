@@ -51,8 +51,8 @@ microservices:
         memory: 1Gi
 
   redis:
-    name: static
-    image: lgr-static
+    name: redis
+    image: lgr-redis
     uid: 0
     gid: 0
     web:
