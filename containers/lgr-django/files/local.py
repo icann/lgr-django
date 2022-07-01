@@ -16,8 +16,6 @@ CSRF_COOKIE_SECURE = False
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'storage', 'media')
 TOOLS_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'storage', 'output', 'tools')
-IDN_REVIEW_USER_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'storage', 'output', 'idn_review', 'user')
-IDN_REVIEW_ICANN_OUTPUT_STORAGE_LOCATION = os.path.join(BASE_DIR, 'storage', 'output', 'idn_review', 'icann')
 
 LOGGING['loggers']['lgr_web']['level'] = 'INFO'
 LOGGING['loggers']['lgr_advanced']['level'] = 'INFO'
@@ -89,9 +87,9 @@ DEFAULT_FROM_EMAIL = os.environ.get('lgrEmail')
 ##### /e-mail settings #####
 
 ##### LGR Toolset Project-specific settings #####
-SUPPORTED_UNICODE_VERSION = '14.0.0'
+SUPPORTED_UNICODE_VERSION = '12.0.0'
 
-DEFAULT_UNICODE_VERSION = '14.0.0'
+DEFAULT_UNICODE_VERSION = '12.0.0'
 
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'
@@ -103,10 +101,10 @@ DEFAULT_UNICODE_VERSION = '14.0.0'
 # See picu.loader.KNOWN_ICU_VERSIONS
 
 UNICODE_DATABASES = {
-    '14.0.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.71',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.71',
-        'version_tag': 71,
+    '12.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.64',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.64',
+        'version_tag': 64,
     }
 }
 ##### /LGR Toolset Project-specific settings #####
