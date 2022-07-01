@@ -216,13 +216,16 @@
 
         function changeRzValue() {
             const val = $('#id_lgr').val();
+            // val is a tuple "('lgr_model', 'lgr_pk')"
+            match = val.match(/['"]\w+\.(\w+)['"], ?([0-9]+)/)
 
-            let renderLink = `{% url 'lgr_render' model=model lgr_pk=0 %}`;
-            renderLink = renderLink.replace('0', val);
+
+            let renderLink = `{% url 'lgr_render' model='tbd' lgr_pk=0 %}`;
+            renderLink = renderLink.replace('tbd', match[1]).replace('0', match[2]).toLowerCase().replace('model', '');
             $('#renderLink').attr('href', renderLink);
 
-            let xmlLink = `{% url 'lgr_admin_display_rz_lgr' lgr_pk=0 %}`;
-            xmlLink = xmlLink.replace('0', val);
+            let xmlLink = `{% url 'lgr_display' model='tbd' lgr_pk=0 %}`;
+            xmlLink = xmlLink.replace('tbd', match[1]).replace('0', match[2]).toLowerCase().replace('model', '');
             $('#xmlLink').attr('href', xmlLink);
         }
 

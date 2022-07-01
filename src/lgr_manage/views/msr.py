@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import views
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
@@ -73,12 +72,3 @@ class MSRIsActiveView(AjaxFormViewMixin, views.generic.edit.FormView):
     form_class = MSRIsActiveForm
     template_name = 'lgr_manage/msr.html'
     success_url = reverse_lazy('lgr_admin_msr')
-
-
-class DisplayMSRView(SingleObjectMixin, views.View):
-    pk_url_kwarg = 'lgr_pk'
-    model = MSR
-
-    def get(self, request, *args, **kwargs):
-        lgr = self.get_object()
-        return HttpResponse(lgr.file.read(), content_type='text/xml', charset='UTF-8')

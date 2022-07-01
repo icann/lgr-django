@@ -26,7 +26,6 @@ from .views.create import (DeleteLGRView,
                            ImportReferenceLGRView,
                            NewLGRView,
                            ImportLGRView)
-from .views.export import LGRRenderXMLView
 from .views.metadata import MetadataView
 from .views.reference import ReferenceView, ListReferenceJsonView, AddReferenceAjaxView, DeleteReferenceView
 from .views.rule import ListRuleView, RuleEditClassAjaxView, RuleEditRuleAjaxView, RuleEditActionAjaxView
@@ -44,16 +43,12 @@ register_converter(LgrModelConverter, 'lgr_model')
 
 urlpatterns = [
     # Import/Creation functions
-    path('import/ref/<filename:filename>/', ImportReferenceLGRFromFileView.as_view(), name='import_reference_lgr_from_file'),
+    path('import/ref/<filename:filename>/', ImportReferenceLGRFromFileView.as_view(),
+         name='import_reference_lgr_from_file'),
     path('import/ref/<lgr_model:model>/<int:lgr_pk>', ImportReferenceLGRView.as_view(), name='import_reference_lgr'),
     path('lgr/<int:lgr_pk>/d/', DeleteLGRView.as_view(), name='delete_lgr'),
     path('new/', NewLGRView.as_view(), name='new_lgr'),
     path('import/', ImportLGRView.as_view(), name='import_lgr'),
-
-    # View/Export functions
-    path('view/<lgr_model:model>/<int:lgr_pk>', LGRRenderXMLView.as_view(), name='view_lgr_xml'),
-    path('download/<lgr_model:model>/<int:lgr_pk>', LGRRenderXMLView.as_view(), name='download_lgr_xml',
-         kwargs={'force_download': True}),
 
     # Reference management functions
     path('lgr/<int:lgr_pk>/a/references/', AddReferenceAjaxView.as_view(), name='reference_add_ajax'),

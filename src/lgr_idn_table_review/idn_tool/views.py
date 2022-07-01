@@ -3,22 +3,19 @@ import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import SuspiciousOperation
+from django.core.files import File
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import ugettext_lazy as _, ngettext
 from django.views import View
 from django.views.generic import FormView, TemplateView
-from django.views.generic.detail import SingleObjectMixin
 
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
-from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi, LGRIdnRefReviewApi
+from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
 from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
-from lgr_idn_table_review.idn_tool.models import IdnRefTable
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_tasks.models import LgrTaskModel
-from django.core.files import File
 
 logger = logging.getLogger(__name__)
 
@@ -35,13 +32,6 @@ class IdnTableReviewViewMixin(LoginRequiredMixin):
             'home_url_name': 'lgr_review_mode'
         })
         return ctx
-
-
-class IdnRefTableReviewViewMixin(LoginRequiredMixin):
-
-    def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
-        self.api = LGRIdnRefReviewApi(request.user)
 
 
 class IdnTableReviewModeView(IdnTableReviewViewMixin, FormView):
@@ -135,34 +125,6 @@ class IdnTableReviewListReport(IdnTableReviewViewMixin, TemplateView):
         context['title'] = _("IDN Table Review Reports: %(report)s") % {'report': self.kwargs.get('report_id')}
         context['back_url'] = 'lgr_review_reports'
         return context
-
-
-class IdnTableReviewDisplayIdnTable(IdnTableReviewViewMixin, SingleObjectMixin, View):
-    pk_url_kwarg = 'lgr_pk'
-    model = LGRIdnReviewApi.lgr_model
-
-    def get(self, request, *args, **kwargs):
-        idn_table = self.get_object(queryset=self.api.lgr_queryset())
-        content_type = 'text/plain'
-        if idn_table.filename.endswith('xml'):
-            content_type = 'text/xml'
-        resp = HttpResponse(idn_table.file.read(), content_type=content_type, charset='UTF-8')
-        resp['Content-disposition'] = f'attachment; filename={idn_table.filename}'
-        return resp
-
-
-class IdnRefTableReviewDisplayIdnRefTable(IdnRefTableReviewViewMixin, SingleObjectMixin, View):
-    pk_url_kwarg = 'lgr_pk'
-    model = IdnRefTable
-
-    def get(self, request, *args, **kwargs):
-        idn_ref_table = self.get_object(queryset=self.api.lgr_queryset())
-        content_type = 'text/plain'
-        if idn_ref_table.filename.endswith('xml'):
-            content_type = 'text/xml'
-        resp = HttpResponse(idn_ref_table.file.read(), content_type=content_type, charset='UTF-8')
-        resp['Content-disposition'] = f'attachment; filename={idn_ref_table.filename}'
-        return resp
 
 
 class IdnTableReviewDeleteReport(IdnTableReviewViewMixin, View):

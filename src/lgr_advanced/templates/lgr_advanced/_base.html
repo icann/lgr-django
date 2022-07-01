@@ -172,7 +172,7 @@
                 </li>
                 <li class="btn btn-block show-tooltip">
                     <a title="{% trans 'HTML Output' %}" data-placement="bottom"
-                       href="{% url 'lgr_render' lgr_pk=lgr_object.pk model=lgr_object.model_name %}" target="_blank" rel="noopener noreferrer">
+                       href="{{ lgr_object.html_url }}" target="_blank" rel="noopener noreferrer">
                         <i class="glyphicon glyphicon-globe"></i>
                         {% trans "HTML Output" %}
                     </a>

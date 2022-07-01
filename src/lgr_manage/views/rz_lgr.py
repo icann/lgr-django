@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 from django import views
 from django.contrib import messages
-from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
 
-from lgr_manage.views.ajax_mixin import AjaxFormViewMixin
-from lgr_models.models.lgr import RzLgr, RzLgrMember
 from lgr_manage.forms import RzLgrCreateForm, RzLgrIsActiveForm
+from lgr_manage.views.ajax_mixin import AjaxFormViewMixin
 from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin
+from lgr_models.models.lgr import RzLgr
 
 
 class RzLgrListView(BaseListAdminView):
@@ -67,27 +66,6 @@ class RzLgrDeleteView(BaseAdminMixin, views.generic.DeleteView):
     model = RzLgr
     success_url = reverse_lazy('lgr_admin_rz_lgr')
     pk_url_kwarg = 'lgr_pk'
-
-
-class DisplayRzLgrView(SingleObjectMixin, views.View):
-    pk_url_kwarg = 'lgr_pk'
-    model = RzLgr
-
-    def get(self, request, *args, **kwargs):
-        lgr = self.get_object()
-        return HttpResponse(lgr.file.read(), content_type='text/xml', charset='UTF-8')
-
-
-class DisplayRzLgrMemberView(SingleObjectMixin, views.View):
-    pk_url_kwarg = 'lgr_pk'
-    model = RzLgrMember
-
-    def get(self, request, *args, **kwargs):
-        lgr = self.get_object()
-        return HttpResponse(lgr.file.read(), content_type='text/xml', charset='UTF-8')
-
-    def get_queryset(self):
-        return self.model.objects.filter(rz_lgr__pk=self.kwargs.get('rz_lgr_pk'))
 
 
 class RzLgrIsActiveView(AjaxFormViewMixin, views.generic.edit.FormView):

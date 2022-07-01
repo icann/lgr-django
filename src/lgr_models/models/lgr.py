@@ -71,11 +71,14 @@ class LgrBaseModel(models.Model):
     def model_name(self):
         return self.__class__.__name__
 
+    def html_url(self):
+        return reverse('lgr_render', kwargs={'model': self.model_name, 'lgr_pk': self.pk})
+
     def display_url(self):
-        raise NotImplementedError
+        return reverse('lgr_display', kwargs={'model': self.model_name, 'lgr_pk': self.pk})
 
     def download_url(self):
-        return self.display_url()
+        return reverse('lgr_download', kwargs={'model': self.model_name, 'lgr_pk': self.pk})
 
     @classmethod
     def from_tuple(cls, model_pk_tuple, user=None):
@@ -218,45 +221,34 @@ class LgrBaseModel(models.Model):
         return False
 
 
-class RzLgr(LgrBaseModel):
+class ManagedLgrBase(LgrBaseModel):
     # make name unique and owner nullable
     name = models.CharField(max_length=128, unique=True)
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
+
+    class Meta:
+        ordering = ['name']
+        abstract = True
+
+
+class RzLgr(ManagedLgrBase):
     active = models.BooleanField(default=False)
 
-    def display_url(self):
-        # FIXME view should be in models app
-        return reverse('lgr_admin_display_rz_lgr', kwargs={'lgr_pk': self.pk})
 
-
-class RefLgr(LgrBaseModel):
+class RefLgr(ManagedLgrBase):
     language_script = models.CharField(max_length=32, unique=True)
     language = models.CharField(max_length=8, blank=True)
     script = models.CharField(max_length=8, blank=True)
-    # make name unique and owner nullable
-    name = models.CharField(max_length=128, unique=True)
-    owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
-
-    def display_url(self):
-        # FIXME view should be in models app
-        return reverse('lgr_admin_display_ref_lgr', kwargs={'lgr_pk': self.pk})
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.language, self.script = tag_to_language_script(self.language_script)
         super().save(force_insert, force_update, using, update_fields)
 
 
-class RzLgrMember(LgrBaseModel):
+class RzLgrMember(ManagedLgrBase):
     rz_lgr = models.ForeignKey(to=RzLgr, on_delete=models.CASCADE, related_name='repository')
     language = models.CharField(max_length=8)
     script = models.CharField(max_length=8)
-    # make name unique and owner nullable
-    name = models.CharField(max_length=128, unique=True)
-    owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
-
-    def display_url(self):
-        # FIXME view should be in models app
-        return reverse('lgr_admin_display_rz_lgr_member', kwargs={'rz_lgr_pk': self.rz_lgr.pk, 'lgr_pk': self.pk})
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         lgr_parser = XMLParser(self.file)
@@ -266,12 +258,5 @@ class RzLgrMember(LgrBaseModel):
         super().save(force_insert, force_update, using, update_fields)
 
 
-class MSR(LgrBaseModel):
-    # make name unique and owner nullable
-    name = models.CharField(max_length=128, unique=True)
-    owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
+class MSR(ManagedLgrBase):
     active = models.BooleanField(default=False)
-
-    def display_url(self):
-        # FIXME view should be in models app
-        return reverse('lgr_admin_display_msr', kwargs={'lgr_pk': self.pk})

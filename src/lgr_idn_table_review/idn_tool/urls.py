@@ -7,9 +7,7 @@ from lgr_idn_table_review.idn_tool.views import (IdnTableReviewModeView,
                                                  IdnTableReviewSelectReferenceView,
                                                  IdnTableReviewListReports,
                                                  IdnTableReviewListReport,
-                                                 IdnTableReviewDisplayIdnTable,
-                                                 IdnTableReviewDeleteReport,
-                                                 IdnRefTableReviewDisplayIdnRefTable)
+                                                 IdnTableReviewDeleteReport)
 from lgr_web.converters import FileNameConverter
 
 register_converter(FileNameConverter, 'filename')
@@ -20,6 +18,4 @@ urlpatterns = [
     path('reports', IdnTableReviewListReports.as_view(), name='lgr_review_reports'),
     path('report/<filename:report_id>', IdnTableReviewListReport.as_view(), name='lgr_review_report'),
     path('report/<filename:report_id>/rm', IdnTableReviewDeleteReport.as_view(), name='lgr_review_delete_report'),
-    path('view/<int:lgr_pk>', IdnTableReviewDisplayIdnTable.as_view(), name='lgr_review_display_idn_table'),
-    path('idnref/<int:lgr_pk>', IdnRefTableReviewDisplayIdnRefTable.as_view(), name='lgr_review_display_idn_ref_table')
 ]

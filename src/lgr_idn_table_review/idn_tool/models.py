@@ -6,7 +6,6 @@ models.py -
 import os
 
 from django.db import models
-from django.urls import reverse
 
 from lgr.parser.heuristic_parser import HeuristicParser
 from lgr_models.models.lgr import LgrBaseModel
@@ -22,26 +21,22 @@ class IdnReviewReport(LGRReport):
         return os.path.join(instance.storage, f'user_{instance.owner.id}', instance.report_id, filename)
 
 
-class IdnTable(LgrBaseModel):
+class IdnTableBase(LgrBaseModel):
+    report_id = models.CharField(max_length=256)
+
+    class Meta:
+        ordering = ['name']
+        abstract = True
+
+    @staticmethod
+    def upload_path(instance, filename):
+        return os.path.join(f'user_{instance.owner.id}', instance.report_id, filename)
+
+
+class IdnTable(IdnTableBase):
     lgr_parser = HeuristicParser
     force_parse = True
 
-    report_id = models.CharField(max_length=256)
 
-    def display_url(self):
-        return reverse('lgr_review_display_idn_table', kwargs={'lgr_pk': self.pk})
-
-    @staticmethod
-    def upload_path(instance, filename):
-        return os.path.join(f'user_{instance.owner.id}', instance.report_id, filename)
-
-
-class IdnRefTable(LgrBaseModel):
-    report_id = models.CharField(max_length=256)
-
-    def display_url(self):
-        return reverse('lgr_review_display_idn_ref_table', kwargs={'lgr_pk': self.pk})
-
-    @staticmethod
-    def upload_path(instance, filename):
-        return os.path.join(f'user_{instance.owner.id}', instance.report_id, filename)
+class IdnRefTable(IdnTableBase):
+    pass

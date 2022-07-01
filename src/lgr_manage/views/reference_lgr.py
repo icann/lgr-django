@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from django import views
 from django.contrib import messages
-from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
 
-from lgr_models.models.lgr import RefLgr
 from lgr_manage.forms import RefLgrCreateForm
 from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin
+from lgr_models.models.lgr import RefLgr
 
 
 class RefLgrListView(BaseListAdminView):
@@ -56,12 +55,3 @@ class RefLgrDeleteView(BaseAdminMixin, views.generic.DeleteView):
     model = RefLgr
     success_url = reverse_lazy('lgr_admin_ref_lgr')
     pk_url_kwarg = 'lgr_pk'
-
-
-class DisplayRefLgrView(SingleObjectMixin, views.View):
-    pk_url_kwarg = 'lgr_pk'
-    model = RefLgr
-
-    def get(self, request, *args, **kwargs):
-        lgr = self.get_object()
-        return HttpResponse(lgr.file.read(), content_type='text/xml', charset='UTF-8')

@@ -347,8 +347,8 @@ UNICODE_DATABASES = {
 DEFAULT_UNICODE_VERSION = '6.3.0'
 
 # A list of IDN tables to handle in ICANN IDN table review. None for all.
-ICANN_IDN_REVIEW_TABLES = []
-# ICANN_IDN_REVIEW_TABLES = ['aaa_zh_3.0.xml']
+# ICANN_IDN_REVIEW_TABLES = []
+ICANN_IDN_REVIEW_TABLES = ['aaa_zh_3.0.xml']
 
 
 ##### Celery configuration parameters #####

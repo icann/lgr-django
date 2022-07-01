@@ -129,7 +129,6 @@ class BasicModeView(LoginRequiredMixin, FormView):
         ctx = super(BasicModeView, self).get_context_data(**kwargs)
         ctx.update({
             'reports': self.storage.list_storage(),
-            'model': RzLgr,
             'home_url_name': 'lgr_basic_mode'
         })
         ctx.update(kwargs)
