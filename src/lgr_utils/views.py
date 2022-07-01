@@ -10,7 +10,7 @@ class RefLgrAutocomplete(LoginRequiredMixin, Select2GroupListView):
     def get_list():
         lgr_choices = []
         for rz in RzLgr.objects.filter(active=True):
-            rz_member_choices = ((str(rz.to_tuple()), rz.name),) + tuple(
+            rz_member_choices = ((str(rz.to_tuple()), rz.filename),) + tuple(
                 (str(rz_member.to_tuple()), rz_member.name) for rz_member in RzLgrMember.objects.filter(rz_lgr=rz))
             lgr_choices += [((rz.name, rz.name), rz_member_choices)]
         lgr_choices += [(('Ref. LGR', 'Ref. LGR'), tuple(
