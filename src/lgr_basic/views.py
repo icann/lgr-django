@@ -73,6 +73,8 @@ class BasicModeView(LoginRequiredMixin, FormView):
                                           task_id=task.pk)
 
         else:
+            from lgr_web.config import lgr_settings
+
             labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp]).to_dict()
             result = {}
             is_collision_index = False
@@ -104,6 +106,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
                     result.update(evaluate_label_from_view(self.request,
                                                            lgr,
                                                            label_cplist,
+                                                           lgr_settings.variant_calculation_limit,
                                                            check_collisions=check_collisions,
                                                            is_collision_index=is_collision_index))
                     if result.get('launched_as_task') and collisions:

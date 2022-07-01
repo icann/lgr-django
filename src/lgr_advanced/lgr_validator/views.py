@@ -13,7 +13,6 @@ from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_l
 from lgr_tasks.models import LgrTaskModel
 from lgr_utils.unidb import get_db_by_version
 from lgr_models.models.lgr import LgrBaseModel
-from lgr_web.config import lgr_settings
 from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
 from .forms import ValidateLabelForm
 from ..api import LabelInfo
@@ -29,15 +28,15 @@ class NeedAsyncProcess(Exception):
 def evaluate_label_from_view(request,
                              lgr_object: LgrBaseModel,
                              label_cplist,
+                             threshold_include_vars,
                              script_lgr_pk=None,
                              set_labels_info: LabelInfo = None,
-                             threshold_include_vars=lgr_settings.variant_calculation_limit,
                              check_collisions=None,
                              is_collision_index=None):
     """
     Evaluate a label in an LGR.
 
-    This function is responsible to determine whether or not the evaluation process should be blocking/synchronous,
+    This function is responsible to determine whether the evaluation process should be blocking/synchronous,
     or launched as a celery task.
 
     :param request: The current request
@@ -51,6 +50,8 @@ def evaluate_label_from_view(request,
     :param is_collision_index: Whether check_collisions contains an index
     :return: a dict containing results of the evaluation, empty if process is asynchronous.
     """
+    from lgr_web.config import lgr_settings
+
     ctx = {}
     lgr = lgr_object.to_lgr()
     est_var_nbr = lgr.estimate_variant_number(label_cplist)
@@ -103,12 +104,14 @@ def evaluate_label_from_view(request,
 class ValidateLabelView(LGRHandlingBaseMixin, FormView):
     form_class = ValidateLabelForm
     template_name = 'lgr_validator/validator.html'
-    threshold_include_vars = lgr_settings.variant_calculation_limit
     output_func: str = None
     noframe = False
 
     def __init__(self):
+        from lgr_web.config import lgr_settings
+
         super().__init__()
+        self.threshold_include_vars = lgr_settings.variant_calculation_limit
         self.result = {}
 
     def get_form_kwargs(self):
@@ -154,9 +157,9 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
             self.result = evaluate_label_from_view(self.request,
                                                    self.lgr_object,
                                                    label_cplist,
+                                                   self.threshold_include_vars,
                                                    script_lgr_pk=script_lgr_pk,
-                                                   set_labels_info=set_labels_info,
-                                                   threshold_include_vars=self.threshold_include_vars)
+                                                   set_labels_info=set_labels_info)
         except UnicodeError as ex:
             if self.output_func:
                 return self._redirect_on_error(ex)
@@ -186,9 +189,12 @@ class ValidateLabelNoFrameView(ValidateLabelView):
 
 
 class ValidateLabelJsonView(ValidateLabelView):
-    threshold_include_vars = -1
     output_func = '_prepare_json_response'
     noframe = True
+
+    def __init__(self):
+        super().__init__()
+        self.threshold_include_vars = -1
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
@@ -199,9 +205,12 @@ class ValidateLabelJsonView(ValidateLabelView):
 
 
 class ValidateLabelCSVView(ValidateLabelView):
-    threshold_include_vars = -1
     output_func = '_prepare_csv_response'
     noframe = True
+
+    def __init__(self):
+        super().__init__()
+        self.threshold_include_vars = -1
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
