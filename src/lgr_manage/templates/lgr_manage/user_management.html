@@ -86,7 +86,7 @@
         {% endfor %}
         </tbody>
     </table>
-    <h2>{% trans 'Create new ICANN user' %}</h2>
+    <h2>{% trans 'Create a new user' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.first_name control_width=8 %}

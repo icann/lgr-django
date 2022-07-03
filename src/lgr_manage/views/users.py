@@ -18,7 +18,7 @@ class LgrUserListView(BaseListAdminView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = LgrUserCreateView.form_class()
+        context['form'] = LgrUserCreateView.form_class(can_edit_role=True)
         return context
 
 
@@ -27,6 +27,11 @@ class LgrUserCreateView(BaseAdminMixin, CreateView):
     form_class = UserForm
     template_name = 'lgr_manage/user_management.html'
     success_url = reverse_lazy('lgr_admin_user_management')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['can_edit_role'] = True
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

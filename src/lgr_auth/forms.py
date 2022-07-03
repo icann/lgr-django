@@ -16,6 +16,13 @@ class LgrPasswordResetForm(PasswordResetForm):
 
 
 class UserForm(ModelForm):
+
     class Meta:
         model = LgrUser
         fields = ['first_name', 'last_name', 'email', 'role']
+
+    def __init__(self, *args, **kwargs):
+        can_edit_role = kwargs.pop('can_edit_role', False)
+        super().__init__(*args, **kwargs)
+        if not can_edit_role:
+            self.fields['role'].disabled = True

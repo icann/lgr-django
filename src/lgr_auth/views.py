@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import UpdateView
 
 from lgr_auth.forms import UserForm
-from lgr_auth.models import LgrUser
+from lgr_auth.models import LgrUser, LgrRole
 
 logger = logging.getLogger(__name__)
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -23,6 +23,11 @@ class LgrUserUpdateView(LoginRequiredMixin, UpdateView):
     pk_url_kwarg = 'user_pk'
     template_name = 'lgr_auth/user_update.html'
     success_url_name = 'lgr_update_user'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['can_edit_role'] = self.request.user.is_admin()
+        return kwargs
 
     def get_queryset(self):
         return LgrUser.objects.filter(pk=self.request.user.pk)
