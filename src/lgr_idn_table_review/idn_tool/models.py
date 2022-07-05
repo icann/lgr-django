@@ -22,7 +22,9 @@ class IdnReviewReport(LGRReport):
 
 
 class IdnTableBase(LgrBaseModel):
+    lgr_parser = HeuristicParser
     report_id = models.CharField(max_length=256)
+    force_parse = True
 
     class Meta:
         ordering = ['name']
@@ -34,9 +36,9 @@ class IdnTableBase(LgrBaseModel):
 
 
 class IdnTable(IdnTableBase):
-    lgr_parser = HeuristicParser
-    force_parse = True
+    pass
 
 
 class IdnRefTable(IdnTableBase):
     pass
+
