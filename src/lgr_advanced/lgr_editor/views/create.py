@@ -9,6 +9,7 @@ import re
 from io import BytesIO
 
 from django.conf import settings
+from django.contrib import messages
 from django.core.exceptions import SuspiciousOperation
 from django.core.files import File
 from django.db import transaction
@@ -18,6 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views import View
 from django.views.generic import FormView
 
+from lgr.exceptions import LGRException
 from lgr_advanced.lgr_editor.forms import CreateLGRForm, ImportLGRForm
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
@@ -61,10 +63,16 @@ class NewLGRView(LGRViewMixin, FormView):
                                          "Please use a new name.")
                           })
 
-        self.lgr_object = LgrModel.new(self.request.user, lgr_name,
-                                       form.cleaned_data['unicode_version'],
-                                       LgrBaseModel.from_tuple(form.cleaned_data['validating_repertoire'],
-                                                               self.request.user))
+        try:
+            self.lgr_object = LgrModel.new(self.request.user, lgr_name,
+                                           settings.SUPPORTED_UNICODE_VERSION,
+                                           LgrBaseModel.from_tuple(form.cleaned_data['validating_repertoire'],
+                                                                   self.request.user))
+        except LGRException as ex:
+            messages.add_message(self.request, messages.ERROR,
+                                 lgr_exception_to_text(ex))
+            return super(NewLGRView, self).form_invalid(form)
+
         return super(NewLGRView, self).form_valid(form)
 
 
