@@ -17,13 +17,11 @@ from lgr.core import LGR
 from lgr.metadata import Metadata, Version
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.tools.merge_set import merge_lgr_set
+from lgr_advanced.api import copy_characters
 from lgr_utils import unidb
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_models.models.report import LGRReport
 
-
-# class MSR(LgrBaseModel):
-#     pass
 
 VALIDATING_REPERTOIRE_QUERYSET = (Q(app_label='lgr_advanced', model='LgrModel') |
                                   Q(app_label='lgr_models', model='RzLgr') |
@@ -55,6 +53,22 @@ class CommonLgrModel(LgrBaseModel):
 
     class Meta:
         abstract = True
+
+
+class TmpLgrModel(LgrBaseModel):
+
+    @classmethod
+    def new(cls, user, from_lgr):
+        name = from_lgr.name
+        if name.endswith('.txt'):
+            name = name.rsplit('.', 1)[0]
+        lgr = LGR(name)
+        copy_characters(lgr, from_lgr, force=True)
+        data = serialize_lgr_xml(lgr, pretty_print=True)
+        lgr_object = cls.objects.create(file=File(BytesIO(data), name=f'{name}.xml'),
+                                        name=name,
+                                        owner=user)
+        return lgr_object
 
 
 class LgrModel(CommonLgrModel, RepertoireCacheMixin):

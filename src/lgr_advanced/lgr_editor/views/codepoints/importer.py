@@ -13,21 +13,19 @@ from django.utils.html import format_html_join
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 
-from lgr.char import RangeChar
 from lgr.core import LGR
 from lgr.exceptions import LGRException
 from lgr.parser.line_parser import LineParser
 from lgr.parser.rfc3743_parser import RFC3743Parser
 from lgr.parser.rfc4290_parser import RFC4290Parser
-from lgr.utils import format_cp
+from lgr_advanced.api import copy_characters
 from lgr_advanced.lgr_editor.forms import (AddMultiCodepointsForm,
                                            AddRangeForm,
                                            ImportCodepointsFromFileForm,
                                            AddCodepointFromScriptForm)
 from lgr_advanced.lgr_editor.utils import slug_to_cp
 from lgr_advanced.lgr_editor.views.mixins import LGREditMixin
-from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_advanced.models import LgrModel
+from lgr_advanced.models import LgrModel, TmpLgrModel
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_utils import unidb
 from lgr_utils.cp import cp_to_slug
@@ -67,8 +65,9 @@ class MultiCodepointsView(LGREditMixin, FormView):
             tmp_lgr_pk = self.request.POST.get('tmp_lgr')
             if tmp_lgr_pk:
                 try:
-                    tmp_lgr_object = LgrModel.objects.get(owner=request.user,
-                                                          pk=tmp_lgr_pk)
+                    tmp_lgr_object = TmpLgrModel.objects.get(owner=request.user,
+                                                             pk=tmp_lgr_pk)
+                    tmp_lgr = tmp_lgr_object.to_lgr()
                 except LgrModel.DoesNotExist:
                     logger.warning("Unable to find temporary LGR, won't be able to get variants")
         if 'codepoint' in request.POST:
@@ -78,9 +77,9 @@ class MultiCodepointsView(LGREditMixin, FormView):
                 for cp in codepoints:
                     self.lgr.add_cp(cp)
                     # find variants in temporary LGR
-                    if tmp_lgr_object:
-                        for variant in tmp_lgr_object.to_lgr().get_variants(cp):
-                            self.lgr.add_variant(cp, variant.cp)
+                    if tmp_lgr:
+                        for variant in tmp_lgr.get_variants(cp):
+                            self.lgr.add_variant(cp, variant.cp, force=True)
             else:
                 # slug_to_cp returns a list of tuples, add codepoints need a
                 # list. There is not variant here so taking first element of the
@@ -158,21 +157,8 @@ class MultiCodepointsView(LGREditMixin, FormView):
                 return self.render_to_response(self.get_context_data())
 
             # Save LGR in sessions in order to retrieve variants in post
-            tmp_lgr_name = input_lgr.name
-            if tmp_lgr_name.endswith('.txt'):
-                tmp_lgr_name = tmp_lgr_name.rsplit('.', 1)[0]
-            tmp_lgr_name += '_tmp'
-            if LgrModel.objects.filter(owner=self.request.user, name=tmp_lgr_name).exists():
-                # The temporary LGR already exists... This should not happen
-                logger.warning("Temporary LGR already exists... delete it")
-                LgrModel.objects.filter(owner=self.request.user, name=tmp_lgr_name).delete()
-            tmp_lgr_object = LgrModel.new(self.request.user,
-                                          tmp_lgr_name,
-                                          lgr.metadata.unicode_version,
-                                          self.validating_repertoire)
-            tmp_lgr = tmp_lgr_object.to_lgr()
-            self._copy_characters(lgr, input_lgr, force=True)
-            tmp_lgr_object.update(tmp_lgr)
+            tmp_lgr_object = TmpLgrModel.new(self.request.user,
+                                             input_lgr)
 
             range_form.fields['codepoint'].choices = codepoint
             range_form.fields['disabled_codepoint'].choices = disabled_codepoint
@@ -181,55 +167,12 @@ class MultiCodepointsView(LGREditMixin, FormView):
 
         # Automatic import
         logger.debug("Import: Copy characters")
-        nb_codepoints = self._copy_characters(lgr, input_lgr)
+        nb_codepoints = copy_characters(lgr, input_lgr, validating_repertoire=self.validating_repertoire)
         self.update_lgr()
         messages.add_message(self.request,
                              messages.SUCCESS,
                              _("%d code points added") % nb_codepoints)
         return self.render_success_page()
-
-    def _copy_characters(self, lgr, input_lgr, force=False):
-        nb_codepoints = 0
-        for char in input_lgr.repertoire:
-            char_len = 1
-            add_fct = lambda c: lgr.add_cp(c.cp,
-                                           comment=c.comment,
-                                           ref=c.references,
-                                           validating_repertoire=self.validating_repertoire,
-                                           force=force)
-            if isinstance(char, RangeChar):
-                char_len = char.last_cp - char.first_cp + 1
-                add_fct = lambda c: lgr.add_range(c.first_cp, c.last_cp,
-                                                  comment=c.comment,
-                                                  ref=c.references,
-                                                  validating_repertoire=self.validating_repertoire,
-                                                  force=force)
-            try:
-                add_fct(char)
-                nb_codepoints += char_len
-            except LGRException as exc:
-                logger.warning("Cannot add code point '%s': %s",
-                               format_cp(char.cp),
-                               lgr_exception_to_text(exc))
-            else:
-                for variant in char.get_variants():
-                    try:
-                        lgr.add_variant(char.cp,
-                                        variant.cp,
-                                        variant_type=variant.type,
-                                        when=variant.when,
-                                        not_when=variant.not_when,
-                                        comment=variant.comment,
-                                        ref=variant.references,
-                                        validating_repertoire=self.validating_repertoire,
-                                        force=force)
-                    except LGRException as exc:
-                        logger.warning("Cannot add variant '%s' to "
-                                       "code point '%s': %s",
-                                       format_cp(variant.cp),
-                                       format_cp(char.cp),
-                                       lgr_exception_to_text(exc))
-        return nb_codepoints
 
 
 class AddRangeView(MultiCodepointsView):
@@ -290,7 +233,7 @@ class ImportCodepointsFromFileView(MultiCodepointsView):
             return self.render_to_response(self.get_context_data(form=form))
 
         parser = parser_cls(file, filename=cd['file'].name)
-        input_lgr = parser.parse_document()
+        input_lgr = parser.parse_document(force=True)
         return self._handle_discrete(self.lgr, input_lgr, cd['manual_import'])
 
 
