@@ -9,7 +9,8 @@
         <thead class="thead-light">
         <tr>
             <th scope="col">{% trans 'Name' %}</th>
-            <th scope="col">{% trans 'Language/script tag' %}</th>
+            <th scope="col">{% trans 'Files' %}</th>
+            <th scope="col">{% trans 'Active' %}</th>
             <th scope="col">{% trans 'Action' %}</th>
         </tr>
         </thead>
@@ -22,7 +23,38 @@
                         {{ ref_lgr.name }}
                     </a>
                 </td>
-                <td>{{ ref_lgr.language_script }}</td>
+                <td>
+                    <a href="{{ ref_lgr.display_url }}" target="_blank" rel="noopener noreferrer">
+                        {{ ref_lgr.filename }}
+                    </a>
+                    <br>
+                    {% for lgr in ref_lgr.repository.all %}
+                        {% if forloop.counter == 5 %}
+                            <div id="remain-{{ ref_lgr.pk }}" class="collapse lgr-collapsed" data-pk="{{ ref_lgr.pk }}">
+                        {% endif %}
+                        <a href="{{ lgr.display_url }}" target="_blank" rel="noopener noreferrer">
+                            {{ lgr.name }}
+                        </a>
+                        <br>
+                    {% endfor %}
+                    {% if ref_lgr.repository.all|length > 4 %}
+                        </div>
+                        <a href="#remain-{{ ref_lgr.pk }}" data-toggle="collapse">
+                            <div id="collapsed-text-{{ ref_lgr.pk }}"><b><u>
+                                {% blocktrans trimmed with remain=ref_lgr.repository.all|length|add:"-4" %}
+                                    Display {{ remain }} more files
+                                {% endblocktrans %}</u></b>
+                            </div>
+                            <span id="collapsed-icon-{{ ref_lgr.pk }}" class="glyphicon"></span>
+                        </a>
+                    {% endif %}
+                <td>
+                    {% if ref_lgr.active %}
+                        <span class="glyphicon glyphicon-ok-sign" id="status_{{ ref_lgr.pk }}"></span>
+                    {% else %}
+                        <span class="empty" id="status_{{ ref_lgr.pk }}"></span>
+                    {% endif %}
+                </td>
                 <td>
                     <form method="post" action="{% url "lgr_admin_delete_ref_lgr" lgr_pk=ref_lgr.pk %}">
                         {% csrf_token %}
@@ -40,13 +72,15 @@
             </tr>
         {% endfor %}
     </table>
+    {% include "lgr_editor/_form_active_choice.html" with url="lgr_admin_isactive_ref_lgr" title="Select Active Reference LGR" %}
+
     <h2>{% trans 'New Reference LGR' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.media }}
         {% include "lgr_editor/_form_field.html" with field=form.name control_width=8 %}
         {% include "lgr_editor/_form_field.html" with field=form.file control_width=8 %}
-        {% include "lgr_editor/_form_field.html" with field=form.language_script control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.repository control_width=8 %}
         <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>
     </form>
 {% endblock content-pane %}

@@ -1,18 +1,23 @@
 from dal_select2.views import Select2GroupListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr
+from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, RefLgrMember
 
 
 class RefLgrAutocomplete(LoginRequiredMixin, Select2GroupListView):
 
     @staticmethod
     def get_list():
+        lgr_choices = RefLgrAutocomplete.build_choices(RzLgr, RzLgrMember, 'rz_lgr')
+        lgr_choices += RefLgrAutocomplete.build_choices(RefLgr, RefLgrMember, 'ref_lgr')
+        return lgr_choices
+
+    @staticmethod
+    def build_choices(lgr, member, parameter):
         lgr_choices = []
-        for rz in RzLgr.objects.filter(active=True):
-            rz_member_choices = ((str(rz.to_tuple()), rz.filename),) + tuple(
-                (str(rz_member.to_tuple()), rz_member.name) for rz_member in RzLgrMember.objects.filter(rz_lgr=rz))
-            lgr_choices += [((rz.name, rz.name), rz_member_choices)]
-        lgr_choices += [(('Ref. LGR', 'Ref. LGR'), tuple(
-            ((str(ref_lgr.to_tuple()), ref_lgr.name) for ref_lgr in RefLgr.objects.all())))]
+        for lgr_obj in lgr.objects.filter(active=True):
+            lgr_member_choices = ((str(lgr_obj.to_tuple()), lgr_obj.filename),) + tuple(
+                (str(lgr_member.to_tuple()), lgr_member.name) for lgr_member in member.objects.filter
+                (**{parameter : lgr_obj}))
+            lgr_choices += [((lgr_obj.name, lgr_obj.name), lgr_member_choices)]
         return lgr_choices

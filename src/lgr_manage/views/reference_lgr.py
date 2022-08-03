@@ -5,7 +5,8 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import SingleObjectMixin
 
-from lgr_manage.forms import RefLgrCreateForm
+from lgr_manage.forms import RefLgrCreateForm, RefLgrIsActiveForm
+from lgr_manage.views.ajax_mixin import AjaxFormViewMixin
 from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin
 from lgr_models.models.lgr import RefLgr
 
@@ -17,7 +18,16 @@ class RefLgrListView(BaseListAdminView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = RefLgrCreateForm()
+        context['active_choice_form'] = RefLgrIsActiveForm(
+            initial={'active': self.initial_active()})
         return context
+
+    def initial_active(self):
+        active = RefLgr.objects.filter(active=True).first()
+        if active:
+            return active.pk
+
+        return 1
 
 
 class RefLgrCreateView(BaseAdminMixin, views.generic.CreateView):
@@ -55,3 +65,10 @@ class RefLgrDeleteView(BaseAdminMixin, views.generic.DeleteView):
     model = RefLgr
     success_url = reverse_lazy('lgr_admin_ref_lgr')
     pk_url_kwarg = 'lgr_pk'
+
+
+class RefLgrIsActiveView(AjaxFormViewMixin, views.generic.edit.FormView):
+    model = RefLgr
+    form_class = RefLgrIsActiveForm
+    template_name = 'lgr_manage/ref_lgr.html'
+    success_url = reverse_lazy('lgr_admin_ref_lgr')

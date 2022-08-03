@@ -31,6 +31,8 @@ def get_upload_path(instance, filename):
         return os.path.join(base_path, 'rz_lgr', filename)
     if instance._meta.object_name == 'RefLgr':
         return os.path.join(base_path, 'reference_lgr', filename)
+    if instance._meta.object_name == 'RefLgrMember':
+        return os.path.join(base_path, 'reference_lgr', instance.ref_lgr.name, filename)
     if instance._meta.object_name == 'RzLgrMember':
         return os.path.join(base_path, 'rz_lgr', instance.rz_lgr.name, filename)
     if instance._meta.object_name == 'MSR':
@@ -241,12 +243,20 @@ class RzLgr(ManagedLgrBase):
 
 
 class RefLgr(ManagedLgrBase):
-    language_script = models.CharField(max_length=32, unique=True)
+    active = models.BooleanField(default=False)
+
+
+class RefLgrMember(ManagedLgrBase):
+    ref_lgr = models.ForeignKey(to=RefLgr, on_delete=models.CASCADE, related_name='repository')
+    language_script = models.CharField(max_length=32)
     language = models.CharField(max_length=8, blank=True)
     script = models.CharField(max_length=8, blank=True)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.language, self.script = tag_to_language_script(self.language_script)
+        lgr_parser = XMLParser(self.file)
+        self.file.seek(0)
+        lgr = lgr_parser.parse_document()
+        self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
         super().save(force_insert, force_update, using, update_fields)
 
 
