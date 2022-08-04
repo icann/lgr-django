@@ -12,9 +12,11 @@ def reflgr_initial_data(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     reflgr = OldRefLgrMember.objects.using(db_alias).first()
     OldRefLgr.objects.using(db_alias).create(name='Ref LGR',
-                                               file=reflgr.file,
-                                               owner=reflgr.owner,
-                                               active=False)
+                                             file=reflgr.file,
+                                             owner=reflgr.owner,
+                                             active=False)
+
+
 def reflgrmember_link_to_reflgr(apps, schema_editor):
     OldRefLgr = apps.get_model("lgr_models", "RefLgr")
     OldRefLgrMember = apps.get_model("lgr_models", "RefLgrMember")

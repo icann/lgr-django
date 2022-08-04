@@ -13,11 +13,11 @@ class RefLgrAutocomplete(LoginRequiredMixin, Select2GroupListView):
         return lgr_choices
 
     @staticmethod
-    def build_choices(lgr, member, parameter):
+    def build_choices(lgr_model, member_model, common_field):
         lgr_choices = []
-        for lgr_obj in lgr.objects.filter(active=True):
+        for lgr_obj in lgr_model.objects.filter(active=True):
             lgr_member_choices = ((str(lgr_obj.to_tuple()), lgr_obj.filename),) + tuple(
-                (str(lgr_member.to_tuple()), lgr_member.name) for lgr_member in member.objects.filter
-                (**{parameter : lgr_obj}))
+                (str(lgr_member.to_tuple()), lgr_member.name) for lgr_member in member_model.objects.filter
+                (**{common_field : lgr_obj}))
             lgr_choices += [((lgr_obj.name, lgr_obj.name), lgr_member_choices)]
         return lgr_choices
