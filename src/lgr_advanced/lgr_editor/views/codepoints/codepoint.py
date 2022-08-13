@@ -51,7 +51,7 @@ class CodePointViewMixin(CodePointMixin):
                 'slug': var_to_slug(v),
                 'cp_disp': render_char(v),
                 'name': render_name(v, udata),
-                'age': render_age(v, udata),
+                'age': render_age(v, udata) if self.is_valid(v, udata) else 'invalid',
                 'when': v.when,
                 'not_when': v.not_when,
                 'type': v.type,
@@ -110,9 +110,16 @@ class CodePointViewMixin(CodePointMixin):
             'cp_references_json': json.dumps(cp_references),
             'cp_disp': render_char(char),
             'name': render_name(char, udata),
-            'age': render_age(char, udata),
+            'age': render_age(char, udata) if self.is_valid(char, udata) else 'invalid',
         })
         return ctx
+
+    def is_valid(self, char, udata):
+        for c in char.cp:
+            prop = udata.get_idna_prop(c)
+            if prop in ['UNASSIGNED', 'DISALLOWED']:
+                return False
+        return True
 
 
 class CodePointView(LGRHandlingBaseMixin, CodePointViewMixin, TemplateView):

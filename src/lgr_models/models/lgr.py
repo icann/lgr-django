@@ -21,6 +21,9 @@ from lgr_utils import unidb
 from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
 
 
+OLD_LGR_NS = 'http://www.iana.org/lgr/0.1'
+
+
 def get_upload_path(instance, filename):
     base_path = 'lgr'
     # need to test on object_name because instance may not be a real object instance if called in a migration
@@ -46,6 +49,7 @@ class LgrBaseModel(models.Model):
     lgr_cache_key = 'lgr-obj'
     cache_timeout = 3600
     force_parse = False
+    allow_invalid_property = False
 
     file = models.FileField(upload_to=get_upload_path)
     name = models.CharField(max_length=128)
@@ -172,13 +176,11 @@ class LgrBaseModel(models.Model):
 
     @classmethod
     def parse(cls, name, data, validate, with_unidb=False):
-        # TODO move from advanced to models
-        from lgr_advanced.api import OLD_LGR_NS
-
         data = data.decode('utf-8').replace(OLD_LGR_NS, LGR_NS)
 
         # Create parser - Assume content is unicode data
-        parser = cls.lgr_parser(BytesIO(data.encode('utf-8')), name)
+        parser = cls.lgr_parser(BytesIO(data.encode('utf-8')), name, force=cls.force_parse,
+                                allow_invalid_property=cls.allow_invalid_property)
 
         # Do we need to validate the schema?
         if validate:
@@ -209,7 +211,7 @@ class LgrBaseModel(models.Model):
             except KeyError as e:
                 raise LGRUnsupportedUnicodeVersionException(e)
         # Actually parse document
-        lgr = parser.parse_document(force=cls.force_parse)
+        lgr = parser.parse_document()
 
         # If we did not set the actual Unicode database, do it now
         if not validate and with_unidb:

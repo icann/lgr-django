@@ -232,8 +232,8 @@ class ImportCodepointsFromFileView(MultiCodepointsView):
             # Re-render the context data with the data-filled form and errors.
             return self.render_to_response(self.get_context_data(form=form))
 
-        parser = parser_cls(file, filename=cd['file'].name)
-        input_lgr = parser.parse_document(force=True)
+        parser = parser_cls(file, filename=cd['file'].name, force=True)
+        input_lgr = parser.parse_document()
         return self._handle_discrete(self.lgr, input_lgr, cd['manual_import'])
 
 

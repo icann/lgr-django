@@ -11,10 +11,6 @@
         tbody tr.invalid td {
             background-color: #ff000033 !important;
         }
-        tbody tr.invalid td.select-checkbox {
-            opacity: 0;
-            pointer-events: none;
-        }
     </style>
 {% endblock %}
 
@@ -207,7 +203,7 @@
                 "scrollX": false,
                 "lengthMenu": [[500, 1000, -1], [500, 1000, "All"]],
                 "fnCreatedRow": function (row, data, idx) {
-                    // Add ids on rows to be able to select then on reload after post
+                    // Add ids on rows to be able to select them on reload after post
                     $(row).attr('id', 'cp-' + data['codepoint_id'])
                     if( ['UNASSIGNED', 'INVALID'].includes(data['idna_property'])) {
                         $(row).addClass('invalid');
@@ -316,11 +312,6 @@
                         select_all.get(0).checked = true
                     }
                 }
-                cp_table.on( 'user-select', function ( e, dt, type, cell, originalEvent ) {
-                    if (['UNASSIGNED', 'INVALID'].includes(cell.data()['name'])) {
-                        e.preventDefault()
-                    }
-                })
                 cp_table.on('select deselect', function () {
                     handleSelectAll()
                 })

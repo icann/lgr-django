@@ -222,10 +222,9 @@ class ListCodePointsJsonView(LGRHandlingBaseMixin, View):
                     if prop in ['UNASSIGNED', 'DISALLOWED']:
                         break
                 cp_slug = cp_to_slug(char.cp)
-                if prop not in ['UNASSIGNED', 'DISALLOWED']:
-                    kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug, 'model': self.lgr_object.model_name}
-                    cp_view_url = reverse('codepoint_view', kwargs=kwargs)
-                    actions.append(cp_view_url)
+                kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug, 'model': self.lgr_object.model_name}
+                cp_view_url = reverse('codepoint_view', kwargs=kwargs)
+                actions.append(cp_view_url)
                 is_range = isinstance(char, RangeChar)
                 if is_range:
                     expand_url = reverse('expand_range', kwargs={'lgr_pk': self.lgr_pk,

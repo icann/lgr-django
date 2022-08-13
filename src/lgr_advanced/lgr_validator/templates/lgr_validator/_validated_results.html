@@ -5,7 +5,7 @@
 {% block content %}
     {% if result.launched_as_task %}
         <h3 class="text-warning">{% trans 'Too many variants' %}</h3>
-        <p>{% blocktrans with nbr=result.nbr_variants trimmed %}Estimated number of variants: {{ nbr }}{% endblocktrans %}</p>
+        <p>{% blocktrans with nbr=result.nbr_variants trimmed %}Number of variants in the variant set (including the original label): {{ nbr }}{% endblocktrans %}</p>
         {% url 'list_process' as task_status_url %}
         <p>{% blocktrans trimmed  %}
         The computing will be performed in background and may be very long, you can follow your task progression on the
