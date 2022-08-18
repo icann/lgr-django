@@ -29,6 +29,7 @@ spec:
           hostPath:
             path: {{ $.Values.volume.storage.remotePath }}
       {{- end }}
+      serviceAccountName: {{ $.Values.serviceAccount }}
       containers:
         - image: {{ $.Values.repoPath }}/{{ .image }}:{{ $.Values.repoVer }}
           name:  {{ .name }}
