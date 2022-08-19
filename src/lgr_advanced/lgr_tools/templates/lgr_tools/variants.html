@@ -2,10 +2,18 @@
 {% load i18n %}
 
 {% block content %}
-    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+    <form class="form-horizontal validate-label" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% include "lgr_editor/_form_field.html" with field=form.lgr %}
         {% include "lgr_editor/_form_field.html" with field=form.labels %}
+        <div class="col-sm-12 checkbox">
+            <label>
+                {% include "lgr_editor/_form_field.html" with field=form.hide_mixed_script_variants %}
+                <span>
+                    {% trans 'Hide mixed script variants' %}
+                </span>
+            </label>
+        </div>
         {% url 'list_process' as task_status_url %}
         <p>{% blocktrans trimmed  %}
           The computing may be very long, you can follow your task progression on the

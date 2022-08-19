@@ -43,6 +43,11 @@ class ValidateLabelSimpleForm(forms.Form):
     collisions = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'id': 'check-for-collision'}),
                                     required=False)
 
+    hide_mixed_script_variants = forms.BooleanField(label='',
+                                                    widget=forms.CheckboxInput(
+                                                        attrs={'id': 'hide-mixed-script-variants'}),
+                                                    required=False)
+
     def __init__(self, *args, **kwargs):
         reflgr = kwargs.pop('reflgr')
         super(ValidateLabelSimpleForm, self).__init__(*args, **kwargs)

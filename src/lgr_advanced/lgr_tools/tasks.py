@@ -299,7 +299,7 @@ def lgr_set_validate_label_task(user_pk, lgr_pk, script_lgr_pk, label, set_label
 
 
 @shared_task
-def validate_labels_task(user_pk, lgr_pk, labels_json):
+def validate_labels_task(user_pk, lgr_pk, labels_json, hide_mixed_script_variants):
     """
     Compute multiple labels validation variants of labels in a LGR.
 
@@ -320,4 +320,5 @@ def validate_labels_task(user_pk, lgr_pk, labels_json):
                           cb=lgr_validate_labels,
                           lgr=lgr,
                           labels_file=labels_info.labels,
-                          udata=udata)
+                          udata=udata,
+                          hide_mixed_script_variants=hide_mixed_script_variants)

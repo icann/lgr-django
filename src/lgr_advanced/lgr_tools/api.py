@@ -236,7 +236,7 @@ def lgr_set_validate_label(lgr: LGR, script_lgr: LGR, set_labels, label, udata):
                                                               -1, udata.idna_encode_label))
 
 
-def lgr_validate_labels(lgr: LGR, labels_file, udata):
+def lgr_validate_labels(lgr: LGR, labels_file, udata, hide_mixed_script_variants):
     """
     Validate labels for an LGR.
 
@@ -249,8 +249,9 @@ def lgr_validate_labels(lgr: LGR, labels_file, udata):
     for label, _, _ in read_labels(labels_file, lgr.unicode_database):
         label_cp = tuple([ord(c) for c in label])
         try:
-            yield _validate_label_task_helper(evaluate_label(lgr, label_cp, -1, udata.idna_encode_label),
-                                              with_header=not it)
+            yield _validate_label_task_helper(
+                evaluate_label(lgr, label_cp, -1, udata.idna_encode_label, hide_mixed_script_variants=hide_mixed_script_variants),
+                with_header=not it)
             it += 1
         except Exception as ex:
             logger.error("Failed to process label %s: %s", label, ex)

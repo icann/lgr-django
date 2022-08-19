@@ -54,6 +54,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
         lgr: LgrBaseModel = form.cleaned_data['lgr']
         ctx['lgr_object'] = lgr  # needed to download results as csv
         collisions = form.cleaned_data['collisions']
+        hide_mixed_script_variants = form.cleaned_data['hide_mixed_script_variants']
 
         if labels_file:
             labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()

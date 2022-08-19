@@ -328,12 +328,13 @@ class LGRComputeVariants(LGRToolBaseView):
     def form_valid(self, form):
         lgr_pk = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
+        hide_mixed_script_variants = form.cleaned_data['hide_mixed_script_variants']
 
         lgr_object = LgrModel.get_object(self.request.user, lgr_pk)
 
         # need to transmit json serializable data
         labels_json = LabelInfo.from_form(labels_file.name, labels_file.read()).to_dict()
-        self.call_async(lgr_object, labels_json)
+        self.call_async(lgr_object, labels_json, hide_mixed_script_variants)
 
         ctx = self.get_context_data()
         ctx.update({

@@ -213,6 +213,11 @@ class LGRComputeVariantsSelector(forms.Form):
     labels = forms.FileField(label=_("Labels"),
                              help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}")
 
+    hide_mixed_script_variants = forms.BooleanField(label='',
+                                                    widget=forms.CheckboxInput(
+                                                        attrs={'id': 'hide-mixed-script-variants'}),
+                                                    required=False)
+
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', [])
         super(LGRComputeVariantsSelector, self).__init__(*args, **kwargs)

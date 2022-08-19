@@ -98,6 +98,14 @@
                                 </span>
                             </label>
                         </div>
+                        <div class="col-sm-12 checkbox">
+                            <label>
+                                {% include "lgr_editor/_form_field.html" with field=form.hide_mixed_script_variants %}
+                                <span>
+                                    {% trans 'Hide mixed script variants' %}
+                                </span>
+                            </label>
+                        </div>
                     </div>
                     {% if validation_task and collision_task %}
                         <div class="row">
@@ -312,8 +320,9 @@
 
         buttonValidateEnabled();
 
-        function OnloadFunction(coll_enabled) {
+        function OnloadFunction(coll_enabled, hide_mixed_scr_enabled) {
             $('#check-for-collision').prop('checked', coll_enabled)
+            $('#hide-mixed-script-variants').prop('checked', hide_mixed_scr_enabled)
             $('.add-label').last().css('display', 'inline-block');
             parseLabelsStart($('#id_labels').val());
             changeRzValue();
@@ -343,6 +352,15 @@
                     sendData.push({name: 'collisions', value: false});
                     coll_enabled = false;
                 }
+
+                if (data.find((el) => el.name === 'hide_mixed_script_variants')) {
+                    sendData.push({name: 'hide_mixed_script_variants', value: true});
+                    hide_mixed_scr_enabled = true;
+                } else {
+                    sendData.push({name: 'hide_mixed_script_variants', value: false});
+                    hide_mixed_scr_enabled = false;
+                }
+
 
                 sendData.push({
                     name: 'csrfmiddlewaretoken',
@@ -385,7 +403,7 @@
                           $("#process-error").html($(response).filter('#messages').html());
                         }
                         $('.fade-blocking').css('display', 'none');
-                        OnloadFunction(coll_enabled);
+                        OnloadFunction(coll_enabled, hide_mixed_scr_enabled);
                     },
                     error: (error) => {
                         console.error(error);
@@ -401,7 +419,7 @@
                         $('.fade-blocking').css('display', 'none');
                         {# FIXME: replace the logic of the view to only return content for the result part here #}
                         sessionStorage.setItem('isFormUploadActivated', false);
-                        OnloadFunction(coll_enabled);
+                        OnloadFunction(coll_enabled, hide_mixed_scr_enabled);
                     }
                 })
             });
@@ -448,7 +466,7 @@
 
 
         jQuery(document).ready(function ($) {
-            OnloadFunction(false);
+            OnloadFunction(false, false);
         });
     </script>
 {% endblock %}

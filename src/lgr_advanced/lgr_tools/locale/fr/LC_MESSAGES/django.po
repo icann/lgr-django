@@ -386,6 +386,9 @@ msgstr "Calcul des variantes cross-scripts sur la LGR %s"
 msgid "Variant computation on LGR %s"
 msgstr "Calcul de variantes sur la LGR %s"
 
+msgid "Hide mixed script variants"
+msgstr "Cacher les variants issus de scripts différents"
+
 #~ msgid "E-mail"
 #~ msgstr "E-mail"
 

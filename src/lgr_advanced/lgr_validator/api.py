@@ -5,6 +5,8 @@ import sys
 
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from lgr.core import LGR
+from lgr.mixed_scripts_variant_filter import MixedScriptsVariantFilter
 
 from lgr.tools.diff_collisions import get_collisions
 from lgr.utils import cp_to_ulabel
@@ -53,7 +55,7 @@ def _get_validity(lgr, label_cplist, idna_encoder):
            }, lgr_actions
 
 
-def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions):
+def _get_variants(lgr: LGR, label_cplist, threshold_include_vars, idna_encoder, lgr_actions, hide_mixed_script_variants=False):
     res = {}
     var_results = []
     summary, label_dispositions = lgr.compute_label_disposition_summary(label_cplist, include_invalid=True)
@@ -63,8 +65,15 @@ def _get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_a
     include_blocked = False
     if threshold_include_vars < 0 or len(label_dispositions) <= threshold_include_vars:
         include_blocked = True
+
+    mixed_scr_filtr = MixedScriptsVariantFilter(unidb=lgr.unicode_database)
+    scripts = mixed_scr_filtr.get_base_scripts(label_cplist)
+
     for (variant_cp, var_disp, var_invalid_parts, action_idx, disp_set, logs) in label_dispositions:
         if not include_blocked and var_disp not in ['valid', 'allocatable']:
+            continue
+
+        if hide_mixed_script_variants and not mixed_scr_filtr.label_in_scripts(variant_cp, scripts):
             continue
 
         invalid_codepoints = set([c for c, _ in var_invalid_parts or []])
@@ -188,7 +197,7 @@ def _get_collisions(lgr, label_cplist, labels_list, idna_encoder, lgr_actions, i
 
 
 def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=lambda x: x.encode('idna'),
-                   check_collisions=None, is_collision_index=False):
+                   check_collisions=None, is_collision_index=False, hide_mixed_script_variants=False):
     """
     Evaluate the given `label_cplist` against the given `lgr`, which includes:
     * checking eligibility of the input label
@@ -203,12 +212,13 @@ def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=la
     :param idna_encoder: a function used to encode a string using IDNA
     :param check_collisions: Check for collision against the provided list of labels
     :param is_collision_index: Whether check_collisions contains an index
+    :param hide_mixed_script_variants: Whether we hide mixed scripts variants
     :return: a dict containing results of the evaluation.
     """
     res, lgr_actions = _get_validity(lgr, label_cplist, idna_encoder)
 
     if res['eligible']:
-        res.update(_get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions))
+        res.update(_get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions, hide_mixed_script_variants=hide_mixed_script_variants))
         if check_collisions is not None:
             res.update(_get_collisions(lgr, label_cplist, check_collisions, idna_encoder, lgr_actions, False,
                                        is_collision_index=is_collision_index))

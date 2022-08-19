@@ -348,3 +348,6 @@ msgstr ""
 #, python-format
 msgid "Variant computation on LGR %s"
 msgstr ""
+
+msgid "Hide mixed script variants"
+msgstr ""
