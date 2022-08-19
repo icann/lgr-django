@@ -8,15 +8,15 @@ import lgr_models.models.lgr
 
 def reflgr_initial_data(apps, schema_editor):
     OldRefLgr = apps.get_model("lgr_models", "RefLgr")
-    OldRefLgrMember = apps.get_model("lgr_models", "RefLgrMember")
+    #OldRefLgrMember = apps.get_model("lgr_models", "RefLgrMember")
     db_alias = schema_editor.connection.alias
-    reflgr = OldRefLgrMember.objects.using(db_alias).first()
+    #reflgr = OldRefLgrMember.objects.using(db_alias).first()
     OldRefLgr.objects.using(db_alias).create(name='Ref LGR',
-                                             file=reflgr.file,
-                                             owner=reflgr.owner,
-                                             language=reflgr.language,
-                                             script=reflgr.script,
-                                             language_script=reflgr.language_script,
+                                             #file=reflgr.file,
+                                             #owner=reflgr.owner,
+                                             #language=reflgr.language,
+                                             #script=reflgr.script,
+                                             #language_script=reflgr.language_script,
                                              active=False)
 
 
