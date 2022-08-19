@@ -439,3 +439,21 @@ a.panel {
 .reflgr-members-visible {
     visibility: visible;
 }
+
+.reflgr-member-show {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    border-bottom: 1px dashed lightgrey;
+}
+
+.ref-lgr-member-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.reflgr-member-show-header {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}

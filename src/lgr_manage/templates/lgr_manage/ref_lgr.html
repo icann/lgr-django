@@ -9,7 +9,14 @@
         <thead class="thead-light">
         <tr>
             <th scope="col">{% trans 'Name' %}</th>
-            <th scope="col">{% trans 'Files' %}</th>
+            <th scope="col">
+                <div class="reflgr-member-show-header">
+                    <div class="reflgr-member-show-name">{% trans 'Files' %}</div>
+                    <div class="reflgr-member-show-language-script">
+                        {% trans 'Language/script tag' %}
+                    </div>
+                </div>
+            </th>
             <th scope="col">{% trans 'Active' %}</th>
             <th scope="col">{% trans 'Action' %}</th>
         </tr>
@@ -23,19 +30,24 @@
                         {{ ref_lgr.name }}
                     </a>
                 </td>
-                <td>
+                <td class="ref-lgr-member-column">
                     <a href="{{ ref_lgr.display_url }}" target="_blank" rel="noopener noreferrer">
                         {{ ref_lgr.filename }}
                     </a>
-                    <br>
                     {% for lgr in ref_lgr.repository.all %}
                         {% if forloop.counter == 5 %}
                             <div id="remain-{{ ref_lgr.pk }}" class="collapse lgr-collapsed" data-pk="{{ ref_lgr.pk }}">
                         {% endif %}
-                        <a href="{{ lgr.display_url }}" target="_blank" rel="noopener noreferrer">
-                            {{ lgr.name }}
-                        </a>
-                        <br>
+                        <div class="reflgr-member-show">
+                            <div class="reflgr-member-show-name">
+                                <a href="{{ lgr.display_url }}" target="_blank" rel="noopener noreferrer">
+                                    {{ lgr.name }}
+                                </a>
+                            </div>
+                            <div class="reflgr-member-show-language-script">
+                                {{ lgr.language_script }}
+                            </div>
+                        </div>
                     {% endfor %}
                     {% if ref_lgr.repository.all|length > 4 %}
                         </div>
