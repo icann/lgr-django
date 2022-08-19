@@ -8,10 +8,6 @@ from django.db import migrations
 
 def msr_filename_to_name(msr):
     msr = os.path.splitext(msr)[0]
-    if msr.startswith('idna'):
-        return msr.replace('_', ' ').upper()
-    if msr.startswith('msr'):
-        return ' '.join(msr.split('-', 2)[:2]).upper()
     return msr
 
 

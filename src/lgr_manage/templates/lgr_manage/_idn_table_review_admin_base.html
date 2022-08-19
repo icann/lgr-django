@@ -16,7 +16,10 @@
             <a href="{% url 'lgr_admin_ref_lgr' %}">{% trans "Reference LGRs" %}</a>
         </li>
         <li role="presentation" class="{% block msr-active %}{% endblock %}">
-            <a href="{% url 'lgr_admin_msr' %}">{% trans "Validating Repertoires" %}</a>
+            <a href="{% url 'lgr_admin_msr' %}">{% trans "MSR" %}</a>
+        </li>
+        <li role="presentation" class="{% block idna-active %}{% endblock %}">
+            <a href="{% url 'lgr_admin_idna' %}">{% trans "IDNA Repertoires" %}</a>
         </li>
         <li role="presentation" class="{% block user-management-active %}{% endblock %}">
             <a href="{% url 'lgr_admin_user_management' %}">{% trans "User management" %}</a>

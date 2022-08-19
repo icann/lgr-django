@@ -10,7 +10,7 @@ from django.core.cache import cache
 from django.utils.encoding import force_bytes
 from django.utils.translation import ugettext_lazy as _
 
-from lgr_models.models.lgr import LgrBaseModel, RzLgr, MSR
+from lgr_models.models.lgr import LgrBaseModel, RzLgr, MSR, IDNARepertoire
 from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
 
 FILE_FIELD_ENCODING_HELP = _('File must be encoded in UTF-8 and using 0x0A line ending.')
@@ -25,7 +25,8 @@ class ValidatingRepertoire:
 
     @classmethod
     def list(cls) -> List[LgrBaseModel]:
-        return sorted(list(chain(RzLgr.objects.filter(active=True), MSR.objects.filter(active=True))), key=lambda l: l.name)
+        return sorted(list(chain(RzLgr.objects.filter(active=True), MSR.objects.filter(active=True),
+                                 IDNARepertoire.objects.filter(active=True))), key=lambda l: l.name)
 
     @classmethod
     def choices(cls):

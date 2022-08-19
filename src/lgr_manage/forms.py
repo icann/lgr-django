@@ -5,7 +5,7 @@ from django.forms import FileField, CharField
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
-from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, MSR
+from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, MSR, IDNARepertoire
 from lgr_models.models.settings import LGRSettings
 from lgr_web.utils import IANA_LANG_REGISTRY
 
@@ -60,8 +60,23 @@ class MSRIsActiveForm(forms.Form):
     active = forms.ModelChoiceField(label='', queryset=MSR.objects.all(), empty_label=None)
 
 
+class IDNACreateForm(forms.ModelForm):
+    class Meta:
+        model = IDNARepertoire
+        fields = '__all__'
+        labels = {
+            'file': _('IDNA Repertoire'),
+            'name': _('Name'),
+        }
+
+
+class IDNAIsActiveForm(forms.Form):
+    active = forms.ModelChoiceField(label='', queryset=IDNARepertoire.objects.all(), empty_label=None)
+
+
 class RzLgrIsActiveForm(forms.Form):
     active = forms.ModelChoiceField(label='', queryset=RzLgr.objects.all(), empty_label=None)
+
 
 class LgrSettingsForm(forms.ModelForm):
     class Meta:

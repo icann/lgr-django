@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.urls import path
 
+from lgr_manage.views.idna import IDNAView, IDNADeleteView, IDNAIsActiveView
 from lgr_manage.views.msr import MSRView, MSRDeleteView, MSRIsActiveView
 from lgr_manage.views.reference_lgr import RefLgrView, RefLgrDeleteView
 from lgr_manage.views.rz_lgr import (RzLgrView,
@@ -17,6 +18,9 @@ urlpatterns = [
     path('ref-lgr', RefLgrView.as_view(), name='lgr_admin_ref_lgr'),
     path('ref-lgr/<int:lgr_pk>/delete', RefLgrDeleteView.as_view(), name='lgr_admin_delete_ref_lgr'),
     path('msr', MSRView.as_view(), name='lgr_admin_msr'),
+    path('idna', IDNAView.as_view(), name='lgr_admin_idna'),
+    path('idna/<int:lgr_pk>/delete', IDNADeleteView.as_view(), name='lgr_admin_delete_idna'),
+    path('idna/isactive', IDNAIsActiveView.as_view(), name='lgr_admin_isactive_idna'),
     path('msr/<int:lgr_pk>/delete', MSRDeleteView.as_view(), name='lgr_admin_delete_msr'),
     path('msr/isactive', MSRIsActiveView.as_view(), name='lgr_admin_isactive_msr'),
     path('users', LgrUserView.as_view(), name='lgr_admin_user_management'),

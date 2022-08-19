@@ -1,0 +1,82 @@
+{% extends "lgr_manage/_idn_table_review_admin_base.html" %}
+{% load i18n static %}
+
+{% block idna-active %}active{% endblock %}
+
+{% block content-pane %}
+    <h2>{% trans 'Existing IDNA Repertoires' %}</h2>
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">{% trans 'Name' %}</th>
+            <th scope="col">{% trans 'Active' %}</th>
+            <th scope="col">{% trans 'Action' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for idna in object_list %}
+            <tr>
+                <td>
+                    <a href="{{ idna.display_url }}" target="_blank"
+                       rel="noopener noreferrer">
+                        {{ idna.name }}
+                    </a>
+                </td>
+                <td>
+                    {% if idna.active %}
+                        <span class="glyphicon glyphicon-ok-sign" id="status_{{ idna.pk }}"></span>
+                    {% else %}
+                        <span class="empty" id="status_{{ idna.pk }}"></span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="post" action="{% url "lgr_admin_delete_idna" lgr_pk=idna.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-default confirm-prompt"
+                                data-confirmation-prompt="{% blocktrans with lgr=dna.name %}Are you sure you want to delete LGR {{ idna }}?{% endblocktrans %}">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        {% empty %}
+            <tr>
+                <td colspan="3">{% trans 'No IDNA Repertoire.' %}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% include "lgr_editor/_form_active_choice.html" with url="lgr_admin_isactive_idna" title="Select Active IDNA Repertoire" %}
+    <h2>{% trans 'New IDNA Repertoire' %}</h2>
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {% include "lgr_editor/_form_field.html" with field=form.name control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.file control_width=8 %}
+        <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>
+    </form>
+{% endblock content-pane %}
+
+{% block html_body_more %}
+    {{ block.super }}
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            function enable_submit_button() {
+                if ($('#id_name').val() !== "" &&
+                    $('#id_file').prop('files').length > 0) {
+                    $('#submit').removeAttr('disabled')
+                } else {
+                    $('#submit').attr('disabled', 'disabled')
+                }
+            }
+
+            $('#id_name').change(function () {
+                enable_submit_button()
+            });
+            $('#id_file').change(function () {
+                enable_submit_button()
+            });
+            enable_submit_button();
+        });
+    </script>
+{% endblock html_body_more %}
