@@ -78,9 +78,29 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.media }}
+        {{ form.ref_lgr_members.media }}
         {% include "lgr_editor/_form_field.html" with field=form.name control_width=8 %}
         {% include "lgr_editor/_form_field.html" with field=form.file control_width=8 %}
-        {% include "lgr_editor/_form_field.html" with field=form.repository control_width=8 %}
+        {% include "lgr_editor/_form_field.html" with field=form.members control_width=8 %}
+        <h3>New Reference LGR Members</h3>
+        <div class="reflgr-members-list">
+            <div class="empty_form reflgr-members-invisible">
+                <div class="reflgr-members-create">
+                    <div class="form-group clearfix">
+                        <label class="col-sm-2 control-label" for="member_name">Reference LGR member file</label>
+                        <span class="col col-sm-8" name="member_name"></span>
+                    </div>
+                    {% include "lgr_editor/_form_field.html" with field=form.ref_lgr_members.empty_form.language_script control_width=8 %}
+                </div>
+            </div>
+            {{ form.ref_lgr_members.management_form }}
+            {% for member in form.ref_lgr_members %}
+                <div class="reflgr-members-create">
+                    {% include "lgr_editor/_form_field.html" with field=member.file control_width=8 %}
+                    {% include "lgr_editor/_form_field.html" with field=member.language_script control_width=8 %}
+                </div>
+            {% endfor %}
+        </div>
         <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>
     </form>
 {% endblock content-pane %}
@@ -109,6 +129,21 @@
                 enable_submit_button()
             });
             enable_submit_button();
+
+            $("#id_members").change(function (data, handler) {
+                // get parent fieldset
+                const fieldset_template = $('.empty_form');
+                for (var i = 0; i < data.target.files.length; i++) {
+                    let current_fieldset = fieldset_template;
+                    const file = data.target.files[i]
+                    current_fieldset = fieldset_template.clone(true);
+                    current_fieldset.find('span').text(file.name)
+                    current_fieldset = current_fieldset.html().replace(/__prefix__/g, i);
+                    $('.reflgr-members-list').append(current_fieldset);
+
+                }
+                $('#id_form-TOTAL_FORMS').val(data.target.files.length)
+            });
         });
     </script>
 {% endblock html_body_more %}

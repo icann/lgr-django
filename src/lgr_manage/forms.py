@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from dal import autocomplete
 from django import forms
-from django.forms import FileField, CharField
+from django.forms import FileField, modelform_factory, modelformset_factory
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
@@ -30,24 +30,69 @@ class RzLgrCreateForm(forms.ModelForm):
         return rz_lgr
 
 
+class RefLgrMemberCreateForm(forms.ModelForm):
+    file = FileField(label=_("Reference LGR member file"), required=True,
+                     help_text=FILE_FIELD_ENCODING_HELP)
+    language_script = autocomplete.Select2ListCreateChoiceField(label=_("Language/script tag"),
+                                                                choice_list=[''] + sorted(IANA_LANG_REGISTRY),
+                                                                widget=autocomplete.ListSelect2(
+                                                                    url='language-autocomplete'),
+                                                                initial='', required=True)
+
+    class Meta:
+        model = RefLgrMember
+        fields = '__all__'
+        labels = {
+            'file': _('Reference LGR member file'),
+        }
+
+    def save(self, ref_lgr, file):
+        RefLgrMember.objects.create(ref_lgr=ref_lgr, file=file, language_script=self.cleaned_data['language_script'],
+                                    name=file.name.split('.')[0])
+
+
 class RefLgrCreateForm(forms.ModelForm):
-    repository = FileField(label=_("Reference LGR file(s)"), required=True,
-                           help_text=FILE_FIELD_ENCODING_HELP,
-                           widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    members = FileField(label=_("Common Reference LGR member files"), required=True,
+                        help_text=FILE_FIELD_ENCODING_HELP,
+                        widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta:
         model = RefLgr
-        fields = '__all__'
+        fields = ['name', 'file', 'language_script']
         labels = {
-            'file': _('Common Reference LGR file'),
             'name': _('Name'),
+            'file': _('Common Reference LGR file'),
         }
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('instance', None)
+        super(RefLgrCreateForm, self).__init__(*args, **kwargs)
+        self.ref_lgr_members = modelformset_factory(RefLgrMember,
+                                                    form=RefLgrMemberCreateForm,
+                                                    fields=RefLgrMemberCreateForm._meta.fields, min_num=0, extra=0)(
+            *args, **kwargs, queryset=RefLgrMember.objects.none())
+
+    def _clean_fields(self):
+        if 'id' in self.fields:
+            self.fields['id'].required = False
+        super(RefLgrCreateForm, self)._clean_fields()
+
+    def clean(self):
+        super(RefLgrCreateForm, self).clean()
+        for member in self.ref_lgr_members:
+            # is_valid is never called before this point on formsets,
+            # need to call it if we want to have the data
+            member.is_valid()
+            member.clean()
+        return self.cleaned_data
 
     def save(self, commit=True):
         ref_lgr = super(RefLgrCreateForm, self).save(commit=commit)
-        for lgr in self.files.getlist('repository'):
-            RefLgrMember.objects.create(file=lgr, name=lgr.name, ref_lgr=ref_lgr)
-        return ref_lgr
+        i = 0
+        member_files = self.files.getlist('members')
+        for member in self.ref_lgr_members:
+            member.save(ref_lgr, member_files[i])
+            i += 1
 
 
 class MSRCreateForm(forms.ModelForm):

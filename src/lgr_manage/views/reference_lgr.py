@@ -36,10 +36,13 @@ class RefLgrCreateView(BaseAdminMixin, views.generic.CreateView):
     template_name = 'lgr_manage/ref_lgr.html'
     success_url = reverse_lazy('lgr_admin_ref_lgr')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['object_list'] = RefLgrListView.model._default_manager.all()
-        return context
+    def get_success_url(self):
+        return reverse_lazy('lgr_admin_ref_lgr')
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['object_list'] = RefLgrListView.model._default_manager.all()
+    #     return context
 
     def form_valid(self, form):
         messages.add_message(self.request, messages.SUCCESS, _('New Reference LGR created'))

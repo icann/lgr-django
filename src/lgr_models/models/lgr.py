@@ -243,7 +243,7 @@ class RzLgr(ManagedLgrBase):
 
 
 class RefLgr(ManagedLgrBase):
-    language_script = models.CharField(max_length=32)
+    language_script = models.CharField(max_length=32, blank=True)
     language = models.CharField(max_length=8, blank=True)
     script = models.CharField(max_length=8, blank=True)
     active = models.BooleanField(default=False)

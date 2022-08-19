@@ -425,3 +425,17 @@ a.panel {
     width: 1%;
     white-space: nowrap;
 }
+
+.reflgr-members-create {
+    padding: 1em;
+    margin: 1em;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+.reflgr-members-invisible {
+    display: none;
+}
+
+.reflgr-members-visible {
+    visibility: visible;
+}
