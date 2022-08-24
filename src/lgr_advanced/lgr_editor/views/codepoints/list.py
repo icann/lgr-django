@@ -162,31 +162,12 @@ class EditCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
                                              variant_type=variant.type,
                                              when=variant.when, not_when=variant.not_when,
                                              comment=variant.comment, ref=variant.references)
+                self.update_lgr()
             except (LGRFormatException, CharInvalidContextRule) as e:
                 logger.warning('Cannot update char tags/wle:', exc_info=e)
                 invalid.append(char)
                 # Need to revert the deletion
-                if isinstance(char, RangeChar):
-                    self.lgr.add_range(char.first_cp,
-                                       char.last_cp,
-                                       comment=char.comment,
-                                       when=char.when, not_when=char.not_when,
-                                       ref=char.references,
-                                       tag=char.tags)
-                else:
-                    self.lgr.add_cp(char.cp,
-                                    comment=char.comment,
-                                    ref=char.references,
-                                    tag=char.tags,
-                                    when=char.when, not_when=char.not_when)
-                    for variant in char.get_variants():
-                        self.lgr.add_variant(char.cp,
-                                             variant.cp,
-                                             variant_type=variant.type,
-                                             when=variant.when, not_when=variant.not_when,
-                                             comment=variant.comment, ref=variant.references)
 
-        self.update_lgr()
         operation = _('Rule') if 'add-rules' in self.request.POST else _('Tag(s)')
         operation_lowercase = _('rule') if 'add-rules' in self.request.POST else _('tag(s)')
         if len(edited) - len(invalid):

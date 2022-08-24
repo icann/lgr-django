@@ -23,8 +23,7 @@ from lgr_models.models.lgr import LgrBaseModel
 from lgr_models.models.report import LGRReport
 
 
-VALIDATING_REPERTOIRE_QUERYSET = (Q(app_label='lgr_advanced', model='LgrModel') |
-                                  Q(app_label='lgr_models', model='RzLgr') |
+VALIDATING_REPERTOIRE_QUERYSET = (Q(app_label='lgr_models', model='RzLgr') |
                                   Q(app_label='lgr_models', model='MSR'))
 
 
