@@ -37,7 +37,10 @@
                 {% endwith %}
             </li>
         {% empty %}
-            {% trans 'No report' %}
+            {% url 'list_process' as task_status_url %}
+            {% blocktrans trimmed  %}
+            No report yet, please check the <a href="{{ task_status_url }}">tasks</a> and refresh.
+            {% endblocktrans %}
         {% endfor %}
     </ul>
     <br>
