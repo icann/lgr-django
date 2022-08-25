@@ -46,6 +46,7 @@ class LgrRole(Enum):
 class UAEmailValidator(validators.EmailValidator):
     # same Email Validator class with unicode characters instead of a-z0-9
     user_regex = validators._lazy_re_compile(r".+", re.IGNORECASE)
+    # this is a lazy validation as we should check for IDNA 2008 compliance but email is only used as login
     domain_regex = validators._lazy_re_compile(r".+", re.IGNORECASE)
 
 
