@@ -243,7 +243,7 @@ def cross_script_variants_task(user_pk, lgr_pk, in_set, labels_json):
 
 
 @shared_task
-def validate_label_task(user_pk, lgr_pk, label, lgr_model=LgrModel):
+def validate_label_task(user_pk, lgr_pk, label, lgr_model, hide_mixed_script_variants):
     """
     Compute label validation variants of labels in a LGR.
 
@@ -251,6 +251,7 @@ def validate_label_task(user_pk, lgr_pk, label, lgr_model=LgrModel):
     :param lgr_pk: The LGR primary key
     :param label: The label to validate, as a list of code points.
     :param lgr_model: The model of the LGR in database
+    :param hide_mixed_script_variants: Whether we hide mixed scripts variants.
     """
     user = LgrUser.objects.get(pk=user_pk)
     lgr_model = get_model_from_name(lgr_model)
@@ -265,11 +266,12 @@ def validate_label_task(user_pk, lgr_pk, label, lgr_model=LgrModel):
                           cb=lgr_validate_label,
                           lgr=lgr,
                           label=label,
-                          udata=udata)
+                          udata=udata,
+                          hide_mixed_script_variants=hide_mixed_script_variants)
 
 
 @shared_task
-def lgr_set_validate_label_task(user_pk, lgr_pk, script_lgr_pk, label, set_labels_json):
+def lgr_set_validate_label_task(user_pk, lgr_pk, script_lgr_pk, label, set_labels_json, hide_mixed_script_variants):
     """
     Compute label validation variants of labels in a LGR.
 
@@ -278,6 +280,7 @@ def lgr_set_validate_label_task(user_pk, lgr_pk, script_lgr_pk, label, set_label
     :param script_lgr_pk: The LGR primary key for the script used to check label validity
     :param label: The label to validate, as a list of code points.
     :param set_labels_json: The LabelInfo allocated in set as a JSON object.
+    :param hide_mixed_script_variants: Whether we hide mixed scripts variants.
     """
     user = LgrUser.objects.get(pk=user_pk)
     lgr = LgrModel.get_object(user, lgr_pk).to_lgr()
@@ -295,7 +298,8 @@ def lgr_set_validate_label_task(user_pk, lgr_pk, script_lgr_pk, label, set_label
                           script_lgr=script_lgr,
                           set_labels=set_labels_info.labels,
                           label=label,
-                          udata=udata)
+                          udata=udata,
+                          hide_mixed_script_variants=hide_mixed_script_variants)
 
 
 @shared_task
@@ -306,6 +310,7 @@ def validate_labels_task(user_pk, lgr_pk, labels_json, hide_mixed_script_variant
     :param user_pk: The user primary key
     :param lgr_pk: The LGR primary key
     :param labels_json: The LabelInfo as a JSON object.
+    :param hide_mixed_script_variants: Whether we hide mixed scripts variants.
     """
     user = LgrUser.objects.get(pk=user_pk)
     lgr = LgrModel.get_object(user, lgr_pk).to_lgr()

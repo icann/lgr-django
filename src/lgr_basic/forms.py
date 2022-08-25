@@ -10,7 +10,6 @@ from lgr_advanced.lgr_editor.forms.fields import FILE_FIELD_ENCODING_HELP
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_utils.unidb import get_db_by_version
-from lgr_utils.views import RefLgrAutocomplete
 
 
 class LgrGroupedListSelect2(autocomplete.ListSelect2):

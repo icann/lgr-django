@@ -15,6 +15,7 @@
                 {% include "lgr_editor/_form_field.html" with field=form.set_labels %}
                 {% include "lgr_editor/_form_field.html" with field=form.script %}
             {% endif %}
+            {% include "lgr_editor/_form_field_checkbox.html" with field=form.hide_mixed_script_variants %}
         </div>
         <button class="col-sm-2 btn btn-primary" type="submit">{% trans "Validate" %}</button>
     </form>

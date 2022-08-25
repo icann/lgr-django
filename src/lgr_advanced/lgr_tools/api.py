@@ -209,40 +209,45 @@ def _validate_label_task_helper(value, with_header=True):
     return out_fn(out.getvalue())
 
 
-def lgr_validate_label(lgr: LGR, label, udata):
+def lgr_validate_label(lgr: LGR, label, udata, hide_mixed_script_variants=False):
     """
     Validate a label for an LGR.
 
     :param lgr: The LGR to use for variant generation.
     :param label: Label to validate.
     :param udata: The associated Unicode database.
+    :param hide_mixed_script_variants: Whether we hide mixed scripts variants.
     :return: CSV containing the label validation output.
     """
-    return _validate_label_task_helper(evaluate_label(lgr, label, -1, udata.idna_encode_label))
+    return _validate_label_task_helper(evaluate_label(lgr, label, -1, udata.idna_encode_label,
+                                                      hide_mixed_script_variants=hide_mixed_script_variants))
 
 
-def lgr_set_validate_label(lgr: LGR, script_lgr: LGR, set_labels, label, udata):
+def lgr_set_validate_label(lgr: LGR, script_lgr: LGR, set_labels, label, udata, hide_mixed_script_variants=False):
     """
-        Validate a label for an LGR set.
+    Validate a label for an LGR set.
 
-        :param lgr: The LGR to use for variant generation.
-        :param label: Label to validate.
-        :param script_lgr: The LGR fo the script used to check label validity
-        :param set_labels: The label of the LGR set
-        :param udata: The associated Unicode database.
-        :return: CSV containing the label validation output.
-        """
+    :param lgr: The LGR to use for variant generation.
+    :param label: Label to validate.
+    :param script_lgr: The LGR fo the script used to check label validity
+    :param set_labels: The label of the LGR set
+    :param udata: The associated Unicode database.
+    :param hide_mixed_script_variants: Whether we hide mixed scripts variants.
+    :return: CSV containing the label validation output.
+    """
     return _validate_label_task_helper(lgr_set_evaluate_label(lgr, script_lgr, label, set_labels,
-                                                              -1, udata.idna_encode_label))
+                                                              -1, udata.idna_encode_label,
+                                                              hide_mixed_script_variants=hide_mixed_script_variants))
 
 
-def lgr_validate_labels(lgr: LGR, labels_file, udata, hide_mixed_script_variants):
+def lgr_validate_labels(lgr: LGR, labels_file, udata, hide_mixed_script_variants=False):
     """
     Validate labels for an LGR.
 
     :param lgr: The LGR to use for variant generation.
     :param labels_file: The file containing the list of labels
     :param udata: The associated Unicode database.
+    :param hide_mixed_script_variants: Whether we hide mixed scripts variants.
     :return: CSV containing the labels validation output.
     """
     it = 0
@@ -250,7 +255,8 @@ def lgr_validate_labels(lgr: LGR, labels_file, udata, hide_mixed_script_variants
         label_cp = tuple([ord(c) for c in label])
         try:
             yield _validate_label_task_helper(
-                evaluate_label(lgr, label_cp, -1, udata.idna_encode_label, hide_mixed_script_variants=hide_mixed_script_variants),
+                evaluate_label(lgr, label_cp, -1, udata.idna_encode_label,
+                               hide_mixed_script_variants=hide_mixed_script_variants),
                 with_header=not it)
             it += 1
         except Exception as ex:

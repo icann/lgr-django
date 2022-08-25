@@ -32,7 +32,8 @@ def evaluate_label_from_view(request,
                              script_lgr_pk=None,
                              set_labels_info: LabelInfo = None,
                              check_collisions=None,
-                             is_collision_index=None):
+                             is_collision_index=None,
+                             hide_mixed_script_variants=False):
     """
     Evaluate a label in an LGR.
 
@@ -48,6 +49,7 @@ def evaluate_label_from_view(request,
                                    equal to this. Set to negative to always return variants.
     :param check_collisions: Check for collisions with the provided list of labels
     :param is_collision_index: Whether check_collisions contains an index
+    :param hide_mixed_script_variants: Whether we hide mixed scripts variants.
     :return: a dict containing results of the evaluation, empty if process is asynchronous.
     """
     from lgr_web.config import lgr_settings
@@ -67,7 +69,8 @@ def evaluate_label_from_view(request,
                                          label_cplist,
                                          set_labels,
                                          threshold_include_vars=threshold_include_vars,
-                                         idna_encoder=udata.idna_encode_label)
+                                         idna_encoder=udata.idna_encode_label,
+                                         hide_mixed_script_variants=hide_mixed_script_variants)
         else:
             if set_labels_info:
                 set_labels_json = set_labels_info.to_dict()
@@ -78,7 +81,8 @@ def evaluate_label_from_view(request,
                                                name=_('Validate labels on LGR set %s') % lgr_object.name,
                                                user=request.user)
             lgr_set_validate_label_task.apply_async((request.user.pk, lgr_object.pk, script_lgr_object.pk,
-                                                     label_cplist, set_labels_json), task_id=task.pk)
+                                                     label_cplist, set_labels_json, hide_mixed_script_variants),
+                                                    task_id=task.pk)
             ctx['launched_as_task'] = True
             ctx['nbr_variants'] = est_var_nbr
     else:
@@ -88,13 +92,15 @@ def evaluate_label_from_view(request,
                                  threshold_include_vars=threshold_include_vars,
                                  idna_encoder=udata.idna_encode_label,
                                  check_collisions=check_collisions,
-                                 is_collision_index=is_collision_index)
+                                 is_collision_index=is_collision_index,
+                                 hide_mixed_script_variants=hide_mixed_script_variants)
         else:
             task = LgrTaskModel.objects.create(app=request.resolver_match.app_name,
                                                name=_('Validate labels on %s') % lgr_object.name,
                                                user=request.user)
             validate_label_task.apply_async((request.user.pk, lgr_object.pk, label_cplist,
-                                             lgr_object._meta.label), task_id=task.pk)
+                                             lgr_object._meta.label, hide_mixed_script_variants),
+                                            task_id=task.pk)
             ctx['launched_as_task'] = True
             ctx['nbr_variants'] = est_var_nbr
 
@@ -147,6 +153,7 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
     def form_valid(self, form):
         label_cplist = form.cleaned_data['label']
         script_lgr_pk = form.cleaned_data.get('script', None)
+        hide_mixed_script_variants = form.cleaned_data['hide_mixed_script_variants']
         set_labels_info = None
         if self.lgr_object.is_set():
             set_labels_file = form.cleaned_data['set_labels']
@@ -159,7 +166,8 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
                                                    label_cplist,
                                                    self.threshold_include_vars,
                                                    script_lgr_pk=script_lgr_pk,
-                                                   set_labels_info=set_labels_info)
+                                                   set_labels_info=set_labels_info,
+                                                   hide_mixed_script_variants=hide_mixed_script_variants)
         except UnicodeError as ex:
             if self.output_func:
                 return self._redirect_on_error(ex)

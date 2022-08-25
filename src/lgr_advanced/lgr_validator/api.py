@@ -55,10 +55,12 @@ def _get_validity(lgr, label_cplist, idna_encoder):
            }, lgr_actions
 
 
-def _get_variants(lgr: LGR, label_cplist, threshold_include_vars, idna_encoder, lgr_actions, hide_mixed_script_variants=False):
+def _get_variants(lgr: LGR, label_cplist, threshold_include_vars, idna_encoder, lgr_actions,
+                  hide_mixed_script_variants=False):
     res = {}
     var_results = []
-    summary, label_dispositions = lgr.compute_label_disposition_summary(label_cplist, include_invalid=True)
+    summary, label_dispositions = lgr.compute_label_disposition_summary(label_cplist, include_invalid=True,
+                                                                        hide_mixed_script_variants=hide_mixed_script_variants)
     res['summary'] = ", ".join("{}: {}".format(k, v) for k, v in summary.items())
     res['num_variants'] = len(label_dispositions)
     res['threshold_include_vars'] = threshold_include_vars
@@ -66,14 +68,8 @@ def _get_variants(lgr: LGR, label_cplist, threshold_include_vars, idna_encoder, 
     if threshold_include_vars < 0 or len(label_dispositions) <= threshold_include_vars:
         include_blocked = True
 
-    mixed_scr_filtr = MixedScriptsVariantFilter(unidb=lgr.unicode_database)
-    scripts = mixed_scr_filtr.get_base_scripts(label_cplist)
-
     for (variant_cp, var_disp, var_invalid_parts, action_idx, disp_set, logs) in label_dispositions:
         if not include_blocked and var_disp not in ['valid', 'allocatable']:
-            continue
-
-        if hide_mixed_script_variants and not mixed_scr_filtr.label_in_scripts(variant_cp, scripts):
             continue
 
         invalid_codepoints = set([c for c, _ in var_invalid_parts or []])
@@ -218,7 +214,8 @@ def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=la
     res, lgr_actions = _get_validity(lgr, label_cplist, idna_encoder)
 
     if res['eligible']:
-        res.update(_get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions, hide_mixed_script_variants=hide_mixed_script_variants))
+        res.update(_get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions,
+                                 hide_mixed_script_variants=hide_mixed_script_variants))
         if check_collisions is not None:
             res.update(_get_collisions(lgr, label_cplist, check_collisions, idna_encoder, lgr_actions, False,
                                        is_collision_index=is_collision_index))
@@ -228,7 +225,8 @@ def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=la
 
 def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
                            threshold_include_vars=-1,
-                           idna_encoder=lambda x: x.encode('idna')):
+                           idna_encoder=lambda x: x.encode('idna'),
+                           hide_mixed_script_variants=False):
     """
     Evaluate the given `label_cplist` against the given `lgr`, which includes:
     * checking eligibility of the input label
@@ -243,6 +241,7 @@ def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
     :param threshold_include_vars: Include blocked variants in results if the number of variant labels is less or
                                    equal to this. Set to negative to always return variants.
     :param idna_encoder: a function used to encode a string using IDNA
+    :param hide_mixed_script_variants: Whether we hide mixed scripts variants
     :return: a dict containing results of the evaluation.
     """
     # First, verify that a proposed label is valid by processing it with the Element LGR corresponding to the script
@@ -261,7 +260,8 @@ def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
     # generate all allocatable variants.
     if res['eligible'] and 'collision' not in res and 'collisions_error' not in res:
         # XXX if collide => eligible = False remove collision condition
-        res.update(_get_variants(script_lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions))
+        res.update(_get_variants(script_lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions,
+                                 hide_mixed_script_variants=hide_mixed_script_variants))
 
     return res
 

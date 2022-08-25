@@ -109,7 +109,8 @@ class BasicModeView(LoginRequiredMixin, FormView):
                                                            label_cplist,
                                                            lgr_settings.variant_calculation_limit,
                                                            check_collisions=check_collisions,
-                                                           is_collision_index=is_collision_index))
+                                                           is_collision_index=is_collision_index,
+                                                           hide_mixed_script_variants=hide_mixed_script_variants))
                     if result.get('launched_as_task') and collisions:
                         launch_collision_task()
                     results.append(result)

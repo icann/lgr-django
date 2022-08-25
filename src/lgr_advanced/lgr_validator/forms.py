@@ -19,6 +19,9 @@ class ValidateLabelForm(forms.Form):
     script = forms.ChoiceField(label=_("Script"),
                                required=False,
                                help_text=_('The script used to validate the label'))
+    hide_mixed_script_variants = forms.BooleanField(label=_('Hide mixed script variants'),
+                                                    widget=forms.CheckboxInput(),
+                                                    required=False)
 
     def __init__(self, *args, **kwargs):
         self.idna_decoder = kwargs.pop('idna_decoder', None)
