@@ -605,11 +605,13 @@
                     {% endif %}
                 </td>
             </tr>
-
-
+            {% if wle.additional_general_rules.japanese_contextj.applicable %}
             <tr style="background-color:#F8F4EC;">
                 <td>5</td>
-                <td style="text-align:left">To Be Provided by ICANN
+                <td style="text-align:left">If the repertoire contains 30FB (KATAKANA MIDDLE DOT), it is required that one
+                  character in the label to be in one of Han, Hiragana, or Katakana scripts.
+                  See <a href="https://www.rfc-editor.org/rfc/rfc5892.txt" target="_blank" rel="noopener noreferrer">RFC5892</a>,
+                  Appendix A.7.
                 </td>
                 <td>{{ wle.additional_general_rules.japanese_contextj.applicable|render_bool }}</td>
                 <td>
@@ -618,17 +620,18 @@
                     {% endif %}
                 </td>
             </tr>
-            <tr style="background-color:#F8F4EC;">
-                <td>6</td>
-                <td style="text-align:left">To Be Provided by ICANN
-                </td>
-                <td>{{ wle.additional_general_rules.arabic_no_extended_end.applicable|render_bool }}</td>
-                <td>
-                    {% if wle.additional_general_rules.arabic_no_extended_end.applicable %}
-                        {{ wle.additional_general_rules.arabic_no_extended_end.exists|render_general_rule }}
-                    {% endif %}
-                </td>
-            </tr>
+            {% endif %}
+{#            <tr style="background-color:#F8F4EC;">#}
+{#                <td>6</td>#}
+{#                <td style="text-align:left">To Be Provided by ICANN#}
+{#                </td>#}
+{#                <td>{{ wle.additional_general_rules.arabic_no_extended_end.applicable|render_bool }}</td>#}
+{#                <td>#}
+{#                    {% if wle.additional_general_rules.arabic_no_extended_end.applicable %}#}
+{#                        {{ wle.additional_general_rules.arabic_no_extended_end.exists|render_general_rule }}#}
+{#                    {% endif %}#}
+{#                </td>#}
+{#            </tr>#}
         </table>
     </div>
 
