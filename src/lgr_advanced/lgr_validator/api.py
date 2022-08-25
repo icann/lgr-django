@@ -6,7 +6,6 @@ import sys
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from lgr.core import LGR
-from lgr.mixed_scripts_variant_filter import MixedScriptsVariantFilter
 
 from lgr.tools.diff_collisions import get_collisions
 from lgr.utils import cp_to_ulabel

@@ -56,7 +56,7 @@ def evaluate_label_from_view(request,
 
     ctx = {}
     lgr = lgr_object.to_lgr()
-    est_var_nbr = lgr.estimate_variant_number(label_cplist)
+    est_var_nbr = lgr.estimate_variant_number(label_cplist, hide_mixed_script_variants=hide_mixed_script_variants)
     need_async = est_var_nbr > lgr_settings.variant_calculation_max
     udata = get_db_by_version(lgr.metadata.unicode_version)
     if lgr_object.is_set():
