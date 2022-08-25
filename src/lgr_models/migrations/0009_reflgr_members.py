@@ -17,7 +17,7 @@ def reflgr_initial_data(apps, schema_editor):
                                              #language=reflgr.language,
                                              #script=reflgr.script,
                                              #language_script=reflgr.language_script,
-                                             active=False)
+                                             active=True)
 
 
 def reflgrmember_link_to_reflgr(apps, schema_editor):
@@ -42,13 +42,10 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('file', models.FileField(upload_to=lgr_models.models.lgr.get_upload_path)),
                 ('name', models.CharField(max_length=128, unique=True)),
-                ('language_script', models.CharField(max_length=32, blank=True)),
-                ('language', models.CharField(max_length=8, blank=True)),
-                ('script', models.CharField(max_length=8, blank=True)),
                 ('owner',
                  models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+',
                                    to=settings.AUTH_USER_MODEL)),
-                ('active', models.BooleanField(default=True))
+                ('active', models.BooleanField(default=False))
             ],
             options={
                 'ordering': ['name'],

@@ -108,7 +108,10 @@
             {{ form.ref_lgr_members.management_form }}
             {% for member in form.ref_lgr_members %}
                 <div class="reflgr-members-create">
-                    {% include "lgr_editor/_form_field.html" with field=member.file control_width=8 %}
+                    <div class="form-group clearfix">
+                        <label class="col-sm-2 control-label" for="member_name">Reference LGR member file</label>
+                        <span class="col col-sm-8" name="member_name">{{ form.file }}</span>
+                    </div>
                     {% include "lgr_editor/_form_field.html" with field=member.language_script control_width=8 %}
                 </div>
             {% endfor %}

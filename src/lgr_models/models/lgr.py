@@ -243,9 +243,6 @@ class RzLgr(ManagedLgrBase):
 
 
 class RefLgr(ManagedLgrBase):
-    language_script = models.CharField(max_length=32, blank=True)
-    language = models.CharField(max_length=8, blank=True)
-    script = models.CharField(max_length=8, blank=True)
     active = models.BooleanField(default=False)
 
 
@@ -256,10 +253,10 @@ class RefLgrMember(ManagedLgrBase):
     script = models.CharField(max_length=8, blank=True)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.language, self.script = tag_to_language_script(self.language_script)
         lgr_parser = XMLParser(self.file)
         self.file.seek(0)
         lgr = lgr_parser.parse_document()
-        self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
         super().save(force_insert, force_update, using, update_fields)
 
 

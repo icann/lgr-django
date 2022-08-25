@@ -79,11 +79,7 @@ class RefLgrCreateForm(forms.ModelForm):
 
     def clean(self):
         super(RefLgrCreateForm, self).clean()
-        for member in self.ref_lgr_members:
-            # is_valid is never called before this point on formsets,
-            # need to call it if we want to have the data
-            member.is_valid()
-            member.clean()
+        self.ref_lgr_members.is_valid();
         return self.cleaned_data
 
     def save(self, commit=True):
