@@ -149,7 +149,7 @@
                     <a href="{{ report.to_url }}?next={{ request.path }}">
                         {% trans 'Download' %} {{ report.filename }}
                     </a>
-                    <a href="{{ report.delete_url }}" class="delete_report confirm-prompt"
+                    <a href="{{ report.delete_url }}?next={{ request.path }}" class="delete_report confirm-prompt"
                        data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ report.filename }}?{% endblocktrans %}">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>
