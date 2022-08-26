@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from dal import autocomplete
 from django import forms
-from django.forms import FileField, modelform_factory, modelformset_factory, formset_factory
+from django.db import transaction
+from django.forms import FileField, modelformset_factory
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
@@ -31,7 +32,8 @@ class RzLgrCreateForm(forms.ModelForm):
 
 
 class RefLgrMemberCreateForm(forms.ModelForm):
-    file_name = forms.CharField()
+    file_name = forms.CharField(label=_("Reference LGR member file"),
+                                disabled=True)
     language_script = autocomplete.Select2ListCreateChoiceField(label=_("Language/script tag"),
                                                                 choice_list=[''] + sorted(IANA_LANG_REGISTRY),
                                                                 widget=autocomplete.ListSelect2(
@@ -40,15 +42,21 @@ class RefLgrMemberCreateForm(forms.ModelForm):
 
     class Meta:
         model = RefLgrMember
-        fields = ['file', 'language_script']
+        fields = ['language_script']
+
+    def full_clean(self):
+        self.fields['file_name'].disabled = False  # allow setting file_name
+        return super().full_clean()
 
     def clean(self):
         filename = self.cleaned_data['file_name']
         for file in self.files.getlist('members'):
             if filename == file.name:
                 self.cleaned_data['file'] = file
+                self.cleaned_data['name'] = self.cleaned_data['file_name'].split('.')[0]
                 break
-        self.cleaned_data['name'] = self.cleaned_data['file_name'].split('.')[0]
+        else:
+            self.add_error('file_name', 'Unable to retrieve file with this name')
         return self.cleaned_data
 
     def save(self, commit=True):
@@ -83,10 +91,12 @@ class RefLgrCreateForm(forms.ModelForm):
 
     def clean(self):
         super(RefLgrCreateForm, self).clean()
-        self.ref_lgr_members.is_valid()
+        if not self.ref_lgr_members.is_valid():
+            self.add_error('members', 'Invalid members data')
         self.ref_lgr_members.clean()
         return self.cleaned_data
 
+    @transaction.atomic
     def save(self, commit=True):
         ref_lgr = super(RefLgrCreateForm, self).save(commit=commit)
         for member in self.ref_lgr_members:

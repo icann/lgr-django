@@ -254,9 +254,6 @@ class RefLgrMember(ManagedLgrBase):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.language, self.script = tag_to_language_script(self.language_script)
-        lgr_parser = XMLParser(self.file)
-        self.file.seek(0)
-        lgr = lgr_parser.parse_document()
         super().save(force_insert, force_update, using, update_fields)
 
 

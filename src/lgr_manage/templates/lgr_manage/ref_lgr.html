@@ -41,7 +41,7 @@
                         <div class="reflgr-member-show">
                             <div class="reflgr-member-show-name">
                                 <a href="{{ lgr.display_url }}" target="_blank" rel="noopener noreferrer">
-                                    {{ lgr.name }}
+                                    {{ lgr.filename }}
                                 </a>
                             </div>
                             <div class="reflgr-member-show-language-script">
@@ -97,25 +97,12 @@
         <h3>New Reference LGR Members</h3>
         <div class="empty_form reflgr-members-invisible">
             <div class="reflgr-members-create">
-                <div class="form-group clearfix">
-                    <label class="col-sm-2 control-label" for="member_name">Reference LGR member file</label>
-                    <span class="col col-sm-8" name="member_name"></span>
-                </div>
-                {{ form.ref_lgr_members.empty_form.file_name.as_hidden }}
+                {% include "lgr_editor/_form_field.html" with field=form.ref_lgr_members.empty_form.file_name control_width=8 no_remove=True %}
                 {% include "lgr_editor/_form_field.html" with field=form.ref_lgr_members.empty_form.language_script control_width=8 %}
             </div>
         </div>
         <div class="reflgr-members-list">
             {{ form.ref_lgr_members.management_form }}
-            {% for member in form.ref_lgr_members %}
-                <div class="reflgr-members-create">
-                    <div class="form-group clearfix">
-                        <label class="col-sm-2 control-label" for="member_name">Reference LGR member file</label>
-                        <span class="col col-sm-8" name="member_name">{{ form.file }}</span>
-                    </div>
-                    {% include "lgr_editor/_form_field.html" with field=member.language_script control_width=8 %}
-                </div>
-            {% endfor %}
         </div>
         <button id="submit" type="submit" class="btn btn-primary">{% trans "Add" %}</button>
     </form>
@@ -126,7 +113,6 @@
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
             function enable_submit_button() {
-                console.log('truc!!!!!')
                 if ($('#id_name').val() !== "" &&
                     $('#id_file').prop('files').length > 0 &&
                     $('#id_members').prop('files').length > 0 &&
@@ -153,7 +139,6 @@
             });
 
             $("#id_form-0-language_script").change(function () {
-                console.log("truc")
                 enable_submit_button()
             });
             enable_submit_button();
@@ -165,10 +150,9 @@
                     let current_fieldset = fieldset_template;
                     const file = data.target.files[i]
                     current_fieldset = fieldset_template.clone(true);
-                    current_fieldset.find('span').text(file.name)
-                    current_fieldset.find('input[type=hidden]').val(file.name)
                     current_fieldset = current_fieldset.html().replace(/__prefix__/g, i);
                     $('.reflgr-members-list').append(current_fieldset);
+                    $('#id_form-'+i+'-file_name').val(file.name)
                     $('#id_form-'+i+'-language_script').change(function () {
                         enable_submit_button()
                     })

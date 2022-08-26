@@ -31,7 +31,7 @@ def reflgrmember_link_to_reflgr(apps, schema_editor):
 class Migration(migrations.Migration):
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('lgr_models', '0008_report_owner_nullable'),
+        ('lgr_models', '0010_populate_idna'),
     ]
 
     operations = [
@@ -57,6 +57,11 @@ class Migration(migrations.Migration):
             name='ref_lgr', model_name='reflgrmember',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='repository',
                                     to='lgr_models.reflgr', null=True)
+        ),
+        migrations.AlterField(
+            model_name='reflgrmember',
+            name='language_script',
+            field=models.CharField(max_length=32),
         ),
         migrations.RunPython(reflgrmember_link_to_reflgr),
         migrations.AlterField(
