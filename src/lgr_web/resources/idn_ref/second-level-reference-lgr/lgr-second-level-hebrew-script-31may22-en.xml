@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<lgr xmlns="urn:ietf:params:xml:ns:lgr-1.0">
+  <meta>
+    <version comment="Second Level Reference LGR">2</version>
+    <date>2022-05-31</date>
+    <language>und-Hebr</language>
+    <unicode-version>11.0.0</unicode-version>
+    <description type="text/html"><![CDATA[
+    
+    <h1>Reference Label Generation Rules for the Hebrew Script</h1>
+ 
+    <h2>Overview</h2>
+    <p>This document specifies a reference set of Label Generation Rules (LGR) for the Hebrew script for the second level. 
+    The starting point for the development of this LGR can be found in the related Root Zone LGR [RZ-LGR-Hebr]. 
+    The format of this file follows [RFC 7940].</p>    
+
+     <p>For details and additional background on the script, see “Proposal for Hebrew Script Root Zone LGR”, Version 1.2, February 2019 [Proposal-Hebrew].</p>
+
+<p class="notice">This document is a Review Draft and not final. Any version numbers shown are those of a possible future release. However, the draft may undergo significant revisions before any publication, or may be withdrawn.</p>
+
+<h2>Repertoire</h2>
+    <p>The repertoire contains 27 code points for letters, 5 of which are variants (final forms) of 5 others. 
+     The repertoire supports the Hebrew and Yiddish languages with restrictions appropriate for domain names. The repertoire is
+      a subset of [Unicode 11.0]. For details, see Section 5, “Repertoire” in [Proposal-Hebrew]. 
+    (The proposal cited has been adopted for the Hebrew script portion of the Root Zone LGR.)</p>
+      
+      <p>The Hebrew script is written from right to left. More details can be found in 
+      Section 3, “Background About the Script and Languages Using it” in [Proposal-Hebrew].</p>
+     
+     <p>For the second level, the repertoire has been augmented with the ASCII digits, U+0030 to U+0039, and U+002D HYPHEN-MINUS, 
+      for a total of 38 repertoire elements.</p>
+
+        <p>Code points outside the Hebrew script that are listed in this file are targets
+        for out-of-script variants and are identified by a reflexive (identity)
+        variant of type “out-of-repertoire-var”. They do not form part of the
+        repertoire.</p>
+
+      <p><b>Repertoire Listing:</b> Each code point or range is tagged with the script or scripts with which the code point is used,
+      and one or more references documenting       sufficient justification for inclusion in the repertoire, see “References” below. 
+      Comments provide additional information for some code points.</p>
+
+     <h2>Variants</h2>
+    <p>This reference LGR is designed for use in zones shared by more than one script.
+     Where appropriate, cross-script variants have been defined to mutually exclude labels
+     from different scripts that could otherwise be substituted by the users. Once a label
+     has been delegated for one script, any of its variant labels consisting entirely of cross-script variants would be
+     blocked. Any label containing at least one code point that is not a cross-script variant
+     would be considered distinct. Because of that, even large numbers of defined cross-script
+     variants generally do not lead to a high percentage of labels experiencing a collision.</p>
+
+    <p>According to Section 6, “Variants”, in “[Proposal-Hebrew]”, this LGR defines five in-script variants, which are final forms of five in-script letters. </p>
+
+     <p>Because a common use case would be for a zone to also support LDH labels, the reference LGR contains
+     definitions for “blocked” variants for letters that look indistinguishable from ASCII letters (homoglyphs).
+     None of these variants has any effect when using the LGR in a standalone fashion, but if the zone also
+     supports LDH labels, any label that consists entirely of Hebrew letters that have ASCII counterparts
+     could be “blocked” by a corresponding LDH variant label.</p> 
+
+ <h3>Additional variants</h3>
+    <p>When integrated to be used with another script LGR in the same zone, this LGR may inherit additional blocked cross-script variants by integration; they may not be listed here unless they result in
+    in-script variants.  
+    Always use an applicable merged, or Common LGR created by integration for determining cross-script collisions of labels.</p>
+   
+    <p><b>Variant Disposition:</b> All variants are of type “blocked”, making labels that 
+    differ only by these variants mutually exclusive: whichever label containing either of 
+    these variants is chosen earlier would be delegated, while any other equivalent labels should be blocked.</p>
+    
+   <p>This LGR does not define allocatable variants.</p>
+  
+   <p>The specification of variants in this reference LGR follows the guidelines in [RFC 8228].</p>
+    
+    <h2>Whole Label Evaluation (WLE) and Context Rules</h2>
+    <h3>Common Rules</h3>
+        <ul>
+          <li><b>Hyphen Restrictions</b> &mdash; restrictions on the allowable placement of hyphens (no leading/ending hyphen
+             and no hyphen in positions 3 and 4). These restrictions are described in Section 4.2.3.1 of RFC 5891 [150]. 
+             They are implemented here as context rule on U+002D (-) HYPHEN-MINUS.</li>
+          <li><b>Leading Combining Marks</b>   &mdash;  restrictions on the allowable placement of combining marks
+             (no leading combining mark). This rule is described in Section 4.2.3.2 of RFC 5891 [150].</li>
+    </ul>
+    <h3>Right-To-Left Rules</h3>
+    <ul>
+        <li><b>leading-digit</b> &mdash; RFC 5893 [160] restrictions on the allowable placement of digits (no leading digit), see section 2.1; 
+         implemented here as a context rule on each digit.</li>
+    </ul>
+    <h3>Default Actions</h3>
+    <p>This LGR includes the default actions for LGRs as well as the action needed to
+        invalidate labels with misplaced combining marks. They are marked with &#x235F;.
+        For a description see [RFC 7940].</p>
+        
+    <h3>Hebrew-specific Rules</h3>
+    <p>This LGR does not define rules specific to the Hebrew script.</p>
+
+    <h2>Methodology and Contributors</h2>
+    <p>This reference LGR for the Hebrew script for the second level has been developed by Michel Suignard and Asmus Freytag, based on the Root Zone LGR for the Hebrew 
+    script and information contained or referenced therein, see [RZ-LGR-Hebr]. 
+    Suitable extensions for the second level have been applied according to the [Guidelines] and with community input. 
+    The original proposal for a Root Zone LGR for the Hebrew script, that this reference LGR is based on, was developed by the Hebrew Generation Panel. 
+    For more information on methodology and contributors to the underlying Root Zone LGR, see Sections 4 and 8 in [Proposal-Hebrew], as well as [RZ-LGR-Overview].</p>
+    
+    <p>[IL-IDN] was consulted during the work on this LGR.</p>
+
+    <h3>Changes from Version 1</h3> <p>Unicode Version has been updated.</p>
+        <p>Blocked variants have been added for homoglyphs of ASCII letters. These have no effect unless the
+        LGR is used together with LDH labels in the same zone.</p>
+
+    <h2>References</h2> 
+    <p>The following general references are cited in this document:</p>
+    <dl class="references">
+    <dt>[Guidelines]</dt>
+    <dd>ICANN, “Guidelines for Developing Reference LGRs for the Second Level”, (Los Angeles, California: ICANN, 27 May 2020), https://www.icann.org/en/system/files/files/lgr-guidelines-second-level-27may20-en.pdf</dd>
+
+     <dt>[IL-IDN]</dt>
+     <dd>Hebrew IDN Table for .IL 
+     https://www.iana.org/domains/idn-tables/tables/il_he_1.0.html</dd>
+           
+    <dt>[Proposal-Hebrew]</dt> 
+     <dd>Hebrew Generation Panel, “Proposal for a Hebrew Script Root Zone Label Generation Ruleset (LGR)”, 24 April 2019, https://www.icann.org/en/system/files/files/proposal-hebrew-lgr-24apr19-en.pdf</dd>
+
+    <dt>[RFC 7940]</dt>
+     <dd>Davies, K. and A. Freytag, “Representing Label Generation Rulesets Using XML”, RFC 7940, August 2016, https://www.rfc-editor.org/info/rfc7940</dd> 
+     
+    <dt>[RFC 8228]</dt>
+    <dd>A. Freytag, “Guidance on Designing Label Generation Rulesets (LGRs) Supporting Variant Labels”, RFC 8228, August 2017,
+    https://www.rfc-editor.org/info/rfc8228</dd>
+      <dt>[RZ-LGR-Overview]</dt>
+       <dd>Integration Panel, “Root Zone Label Generation Rules - LGR-5: Overview and Summary”, 26 May 2022 (PDF), https://www.icann.org/sites/default/files/lgr/rz-lgr-5-overview-26may22-en.pdf</dd>
+
+     <dt>[RZ-LGR-Hebr]</dt>
+     <dd>ICANN, Root Zone Label Generation Rules for the Hebrew Script (und-Hebr), 26 May 2022 (XML)
+https://www.icann.org/sites/default/files/lgr/rz-lgr-5-hebrew-script-26may22-en.xml</dd>
+     <dt>[Unicode 11.0]</dt>
+     <dd>The Unicode Consortium. The Unicode Standard, Version 11.0.0, (Mountain View, CA: The Unicode Consortium, 2018. ISBN 978-1-936213-19-1) 
+     https://www.unicode.org/versions/Unicode11.0.0/</dd>
+     
+     </dl>
+     <p>For references consulted particularly in designing the repertoire for the Hebrew script for the second level 
+     please see details in the <a href="#table_of_references">Table of References</a> below. 
+     Reference [0] refers to the Unicode Standard version in which the
+     corresponding code points were initially encoded. Reference [101] corresponds to a source
+     justifying the inclusion of the corresponding code points. Entries in the table may have
+     multiple source reference values. References [150] and up indicate the source for common rules.</p>
+
+    ]]></description>
+    <references>
+      <reference id="0">The Unicode Standard 11.0.0, https://unicode.org/versions/Unicode11.0.0/</reference>
+      <reference id="101">Omniglot, Hebrew (עברית) https://omniglot.com/writing/hebrew.htm</reference>
+      <reference id="150">RFC 5891, Internationalized Domain Names in Applications (IDNA): Protocol https://tools.ietf.org/html/rfc5891</reference>
+      <reference id="160">RFC 5893, Right-to-Left Scripts for Internationalized Domain Names for Applications (IDNA) https://tools.ietf.org/html/rfc5893</reference>
+    </references>
+  </meta>
+  <data>
+    <char cp="002D" not-when="hyphen-minus-disallowed" tag="sc:Zyyy" ref="0" comment="HYPHEN-MINUS; &#x235F;" />
+    <char cp="0030" not-when="leading-digit" tag="Common-digit sc:Zyyy" ref="0" comment="DIGIT ZERO; &#x235F;" />
+    <char cp="0031" not-when="leading-digit" tag="Common-digit sc:Zyyy" ref="0" comment="DIGIT ONE; &#x235F;" />
+    <char cp="0032" not-when="leading-digit" tag="Common-digit sc:Zyyy" ref="0" comment="DIGIT TWO; &#x235F;" />
+    <char cp="0033" not-when="leading-digit" tag="Common-digit sc:Zyyy" ref="0" comment="DIGIT THREE; &#x235F;" />
+    <char cp="0034" not-when="leading-digit" tag="Common-digit sc:Zyyy" ref="0" comment="DIGIT FOUR; &#x235F;" />
+    <char cp="0035" not-when="leading-digit" tag="Common-digit sc:Zyyy" ref="0" comment="DIGIT FIVE; &#x235F;" />
+    <char cp="0036" not-when="leading-digit" tag="Common-digit sc:Zyyy" ref="0" comment="DIGIT SIX; &#x235F;" />
+    <char cp="0037" not-when="leading-digit" tag="Common-digit sc:Zyyy" ref="0" comment="DIGIT SEVEN; &#x235F;" />
+    <char cp="0038" not-when="leading-digit" tag="Common-digit sc:Zyyy" ref="0" comment="DIGIT EIGHT; &#x235F;" />
+    <char cp="0039" not-when="leading-digit" tag="Common-digit sc:Zyyy" ref="0" comment="DIGIT NINE; &#x235F;" />
+    <char cp="0069" tag="sc:Latn" ref="0" comment="Not part of repertoire">
+      <var cp="0069" type="out-of-repertoire-var" comment="Out-of-repertoire" />
+      <var cp="05D5" type="blocked" comment="Cross-script near homoglyph" />
+    </char>
+    <char cp="006F" tag="sc:Latn" ref="0" comment="Not part of repertoire">
+      <var cp="006F" type="out-of-repertoire-var" comment="Out-of-repertoire" />
+      <var cp="05E1" type="blocked" comment="Cross-script near homoglyph" />
+    </char>
+    <char cp="05D0" tag="sc:Hebr" ref="0 101" />
+    <char cp="05D1" tag="sc:Hebr" ref="0 101" />
+    <char cp="05D2" tag="sc:Hebr" ref="0 101" />
+    <char cp="05D3" tag="sc:Hebr" ref="0 101" />
+    <char cp="05D4" tag="sc:Hebr" ref="0 101" />
+    <char cp="05D5" tag="sc:Hebr" ref="0 101">
+      <var cp="0069" type="blocked" comment="Cross-script near homoglyph" />
+    </char>
+    <char cp="05D6" tag="sc:Hebr" ref="0 101" />
+    <char cp="05D7" tag="sc:Hebr" ref="0 101" />
+    <char cp="05D8" tag="sc:Hebr" ref="0 101" />
+    <char cp="05D9" tag="sc:Hebr" ref="0 101" />
+    <char cp="05DA" tag="sc:Hebr" ref="0 101" comment="Final form">
+      <var cp="05DB" type="blocked" comment="Nominal form variant" />
+    </char>
+    <char cp="05DB" tag="sc:Hebr" ref="0 101" comment="Nominal form">
+      <var cp="05DA" type="blocked" comment="Final form variant" />
+    </char>
+    <char cp="05DC" tag="sc:Hebr" ref="0 101" />
+    <char cp="05DD" tag="sc:Hebr" ref="0 101" comment="Final form">
+      <var cp="05DE" type="blocked" comment="Nominal form variant" />
+    </char>
+    <char cp="05DE" tag="sc:Hebr" ref="0 101" comment="Nominal form">
+      <var cp="05DD" type="blocked" comment="Final form variant" />
+    </char>
+    <char cp="05DF" tag="sc:Hebr" ref="0 101" comment="Final form">
+      <var cp="05E0" type="blocked" comment="Nominal form variant" />
+    </char>
+    <char cp="05E0" tag="sc:Hebr" ref="0 101" comment="Nominal form">
+      <var cp="05DF" type="blocked" comment="Final form variant" />
+    </char>
+    <char cp="05E1" tag="sc:Hebr" ref="0 101">
+      <var cp="006F" type="blocked" comment="Cross-script near homoglyph" />
+    </char>
+    <char cp="05E2" tag="sc:Hebr" ref="0 101" />
+    <char cp="05E3" tag="sc:Hebr" ref="0 101" comment="Final form">
+      <var cp="05E4" type="blocked" comment="Nominal form variant" />
+    </char>
+    <char cp="05E4" tag="sc:Hebr" ref="0 101" comment="Nominal form">
+      <var cp="05E3" type="blocked" comment="Final form variant" />
+    </char>
+    <char cp="05E5" tag="sc:Hebr" ref="0 101" comment="Final form">
+      <var cp="05E6" type="blocked" comment="Nominal form variant" />
+    </char>
+    <char cp="05E6" tag="sc:Hebr" ref="0 101" comment="Nominal form">
+      <var cp="05E5" type="blocked" comment="Final form variant" />
+    </char>
+    <char cp="05E7" tag="sc:Hebr" ref="0 101" />
+    <char cp="05E8" tag="sc:Hebr" ref="0 101" />
+    <char cp="05E9" tag="sc:Hebr" ref="0 101" />
+    <char cp="05EA" tag="sc:Hebr" ref="0 101" />
+  </data>
+  <!--Rules section goes here-->
+  <rules>
+    <!--Character class definitions go here-->
+    <!--Whole label evaluation and context rules go here-->
+    <rule name="leading-combining-mark" ref="150" comment="RFC 5891 restrictions on placement of combining marks &#x235F;">
+      <start />
+      <union>
+        <class property="gc:Mn" />
+        <class property="gc:Mc" />
+      </union>
+    </rule>
+    <rule name="hyphen-minus-disallowed" ref="150" comment="RFC 5891 restrictions on placement of U+002D &#x235F;">
+      <choice>
+        <rule comment="no leading hyphen">
+          <look-behind>
+            <start />
+          </look-behind>
+          <anchor />
+        </rule>
+        <rule comment="no trailing hyphen">
+          <anchor />
+          <look-ahead>
+            <end />
+          </look-ahead>
+        </rule>
+        <rule comment="no consecutive hyphens in third and fourth position in the label">
+          <look-behind>
+            <start />
+            <any />
+            <any />
+            <char cp="002D" comment="hyphen-minus" />
+          </look-behind>
+          <anchor />
+        </rule>
+      </choice>
+    </rule>
+    <rule name="leading-digit" ref="160" comment="RFC 5893 RTL labels cannot start with a digit &#x235F;">
+      <look-behind>
+        <start />
+      </look-behind>
+      <anchor />
+    </rule>
+    <!--Action elements go here - order defines precedence-->
+    <action disp="invalid" match="leading-combining-mark" ref="150" comment="labels with leading combining marks are invalid &#x235F;" />
+    <action disp="invalid" any-variant="out-of-repertoire-var" comment="any variant label with a code point out of repertoire is invalid &#x235F;" />
+    <action disp="blocked" any-variant="blocked" comment="any variant label containing blocked variants is blocked &#x235F;" />
+    <action disp="allocatable" all-variants="allocatable" comment="variant labels with all variants allocatable are allocatable &#x235F;" />
+    <action disp="valid" comment="catch all (default action) &#x235F;" />
+  </rules>
+</lgr>
