@@ -30,9 +30,7 @@ class IANAIdnTable(LgrBaseModel):
     """
     Model for a IANA IDN table, not meant to be saved in the database
     """
-
     lgr_parser = HeuristicParser
-    force_parse = True
 
     url = models.URLField()
     date = models.DateField()

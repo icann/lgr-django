@@ -50,7 +50,7 @@ class LgrBaseModel(models.Model):
     lgr_parser = XMLParser
     lgr_cache_key = 'lgr-obj'
     cache_timeout = 3600
-    force_parse = False
+    force_parse = True
     allow_invalid_property = False
 
     file = models.FileField(upload_to=get_upload_path)

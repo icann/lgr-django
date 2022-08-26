@@ -51,7 +51,6 @@ class CommonLgrModel(LgrBaseModel):
     object_id = models.PositiveIntegerField(blank=True, null=True)
     validating_repertoire = GenericForeignKey('content_type', 'object_id')
     allow_invalid_property = True
-    force_parse = True
 
     class Meta:
         abstract = True
