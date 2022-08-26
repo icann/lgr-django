@@ -16,7 +16,7 @@ from lgr.core import LGR
 from lgr.tools.utils import download_file
 from lgr.utils import tag_to_language_script
 from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport, IANAIdnTable
-from lgr_models.models.lgr import RefLgr, RzLgrMember, RzLgr
+from lgr_models.models.lgr import RefLgrMember, RzLgrMember, RzLgr, RefLgr
 from lgr_session.api import LGRStorage
 
 logger = logging.getLogger(__name__)
@@ -108,33 +108,52 @@ def get_reference_lgr(lgr: LGR):
         logger.warning("No language tag in IDN table %s", lgr)
         raise NoRefLgrFound("No language tag in IDN table")
 
+    try:
+        active_ref_lgr = RefLgr.objects.filter(active=True).first()
+    except RefLgr.DoesNotExist:
+        active_ref_lgr = RefLgr.objects.first()
+
     language, script = tag_to_language_script(tag, use_suppress_script=True)
     logger.info("Look for reference LGR with language '%s' and script '%s'", language, script)
     if language:
         if script:
-            ref_lgr = _make_lgr_query(RefLgr, {'language__iexact': language, 'script__iexact': script}, logs)
+            ref_lgr = _make_lgr_query(RefLgrMember,
+                                      {'language__iexact': language,
+                                       'script__iexact': script,
+                                       'ref_lgr': active_ref_lgr},
+                                      logs)
         else:
-            ref_lgr = _make_lgr_query(RefLgr, {'language__iexact': language, 'script__iexact': ''}, logs)
+            ref_lgr = _make_lgr_query(RefLgrMember,
+                                      {'language__iexact': language,
+                                       'script__iexact': '',
+                                       'ref_lgr': active_ref_lgr},
+                                      logs)
         if ref_lgr:
             return ref_lgr
 
-    # get the latest RZ LGR (XXX: we assume they are all named the same with an increasing ID)
-    last_rz_lgr = RzLgr.objects.order_by('-name').first()
+    try:
+        active_rz_lgr = RzLgr.objects.filter(active=True).first()
+    except RzLgr.DoesNotExist:
+        active_rz_lgr = RzLgr.objects.first()
 
     if script:
         logger.info("Look for Ref. LGR then RZ LGR for script '%s'", script)
-        ref_lgr = _make_lgr_query(RefLgr, {'script__iexact': script, 'language': ''}, logs)
+        ref_lgr = _make_lgr_query(RefLgrMember,
+                                  {'script__iexact': script,
+                                   'language': '',
+                                   'ref_lgr': active_ref_lgr},
+                                  logs)
         if ref_lgr:
             return ref_lgr
         rz_lgr = _make_lgr_query(RzLgrMember,
                                  {'script__iexact': script,
                                   'language': '',
-                                  'rz_lgr__name': last_rz_lgr.name},
+                                  'rz_lgr': active_rz_lgr},
                                  logs)
         if rz_lgr:
             return rz_lgr
 
-    if not last_rz_lgr:
+    if not active_rz_lgr:
         logger.info("No RZ LGR")
         raise NoRefLgrFound('\n'.join(logs))
 
@@ -144,13 +163,13 @@ def get_reference_lgr(lgr: LGR):
             rz_lgr = _make_lgr_query(RzLgrMember,
                                      {'language__iexact': language,
                                       'script__iexact': script,
-                                      'rz_lgr__name': last_rz_lgr.name},
+                                      'rz_lgr': active_rz_lgr},
                                      logs)
         else:
-            rz_lgr = _make_lgr_query(RzLgrMember, {'language__iexact': language, 'rz_lgr__name': last_rz_lgr.name},
+            rz_lgr = _make_lgr_query(RzLgrMember, {'language__iexact': language, 'rz_lgr': active_rz_lgr},
                                      logs, multiple_found_query={'language__iexact': language,
                                                                  'script__iexact': '',
-                                                                 'rz_lgr__name': last_rz_lgr.name})
+                                                                 'rz_lgr': active_rz_lgr})
         if rz_lgr:
             return rz_lgr
 

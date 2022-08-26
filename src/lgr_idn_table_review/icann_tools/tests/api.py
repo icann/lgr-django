@@ -15,7 +15,7 @@ from parameterized import parameterized
 from lgr.core import LGR
 from lgr.metadata import Metadata
 from lgr_idn_table_review.icann_tools.api import get_reference_lgr, NoRefLgrFound
-from lgr_models.models.lgr import RefLgr, RzLgrMember, RzLgr, LgrBaseModel
+from lgr_models.models.lgr import RefLgr, RzLgrMember, RzLgr, LgrBaseModel, RefLgrMember
 
 logger = logging.getLogger('api')
 
@@ -38,6 +38,7 @@ class TestApi(TestCase):
         RzLgr.objects.all().delete()
         RefLgr.objects.all().delete()
         RzLgrMember.objects.all().delete()
+        RefLgrMember.objects.all().delete()
         os.makedirs(self.test_path, exist_ok=True)
 
     @parameterized.expand([
@@ -298,7 +299,8 @@ class TestApi(TestCase):
     ], name_func=custom_name_func)
     def test_get_reference_lgr(self, idx, idn_table_language_tag, lgr_datas):
         logger.info("Launching test %s", idx)
-        rz_lgr = RzLgr.objects.create(file=os.path.join(self.test_path, 'RZ'), name='RZ LGR TEST')
+        rz_lgr = RzLgr.objects.create(file=os.path.join(self.test_path, 'RZ'), name='RZ LGR TEST', active=True)
+        ref_lgr = RefLgr.objects.create(file=os.path.join(self.test_path, 'Ref'), name='Ref LGR TEST', active=True)
         expected = None
         for lgr_data in lgr_datas:
             model = None
@@ -307,7 +309,8 @@ class TestApi(TestCase):
                 "name": f"{lgr_data['lgr-type']}-{lgr_data['language-tag']}",
             }
             if lgr_data['lgr-type'] == 'ref':
-                model = RefLgr
+                model = RefLgrMember
+                attrs['ref_lgr'] = ref_lgr
                 attrs['language_script'] = lgr_data['language-tag']
             elif lgr_data['lgr-type'] == 'rz':
                 model = RzLgrMember
