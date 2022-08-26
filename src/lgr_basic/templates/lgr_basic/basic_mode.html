@@ -219,21 +219,6 @@
         var isFormUploadActivated = false;
 
         // Fix the clear of select2
-        $.ajax.select2({
-            allowClear: false,
-            placeholder: {
-                id: "",
-                placeholder: "Leave blank to ..."
-            },
-            templateResult: function(item) {
-                if (item.placeholder) return item.placeholder;
-                return formatRepo(item);
-            },
-            templateSelection: function (item) {
-                if (item.placeholder) return item.placeholder;
-                return formatRepoSelection(item);
-            }
-        });
 
         $("#id_lgr").change(() => {
             changeRzValue();

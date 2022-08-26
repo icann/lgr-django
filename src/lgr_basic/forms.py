@@ -29,7 +29,8 @@ class ValidateLabelSimpleForm(forms.Form):
     # lgr, clean_lgr needs to execute before.
     lgr = autocomplete.Select2ListChoiceField(label='',
                                               required=True,
-                                              widget=LgrGroupedListSelect2(url='ref-lgr-autocomplete'))
+                                              widget=LgrGroupedListSelect2(url='ref-lgr-autocomplete',
+                                                                           attrs={'data-allow-clear': 'false'}))
 
     labels = forms.CharField(label='', required=False,
                              widget=forms.TextInput(attrs={'name': '',

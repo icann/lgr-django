@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from dal import autocomplete
 from django import forms
-from django.forms import FileField, modelform_factory, modelformset_factory
+from django.forms import FileField, modelform_factory, modelformset_factory, formset_factory
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
@@ -31,8 +31,7 @@ class RzLgrCreateForm(forms.ModelForm):
 
 
 class RefLgrMemberCreateForm(forms.ModelForm):
-    file = FileField(label=_("Reference LGR member file"), required=True,
-                     help_text=FILE_FIELD_ENCODING_HELP)
+    file_name = forms.CharField()
     language_script = autocomplete.Select2ListCreateChoiceField(label=_("Language/script tag"),
                                                                 choice_list=[''] + sorted(IANA_LANG_REGISTRY),
                                                                 widget=autocomplete.ListSelect2(
@@ -41,14 +40,21 @@ class RefLgrMemberCreateForm(forms.ModelForm):
 
     class Meta:
         model = RefLgrMember
-        fields = '__all__'
-        labels = {
-            'file': _('Reference LGR member file'),
-        }
+        fields = ['file', 'language_script']
 
-    def save(self, ref_lgr, file):
-        RefLgrMember.objects.create(ref_lgr=ref_lgr, file=file, language_script=self.cleaned_data['language_script'],
-                                    name=file.name.split('.')[0])
+    def clean(self):
+        filename = self.cleaned_data['file_name']
+        for file in self.files.getlist('members'):
+            if filename == file.name:
+                self.cleaned_data['file'] = file
+                break
+        self.cleaned_data['name'] = self.cleaned_data['file_name'].split('.')[0]
+        return self.cleaned_data
+
+    def save(self, commit=True):
+        RefLgrMember.objects.create(ref_lgr=self.ref_lgr, file=self.cleaned_data['file'],
+                                    name=self.cleaned_data['name'],
+                                    language_script=self.cleaned_data['language_script'])
 
 
 class RefLgrCreateForm(forms.ModelForm):
@@ -58,7 +64,7 @@ class RefLgrCreateForm(forms.ModelForm):
 
     class Meta:
         model = RefLgr
-        fields = ['name', 'file', 'language_script']
+        fields = ['name', 'file']
         labels = {
             'name': _('Name'),
             'file': _('Common Reference LGR file'),
@@ -67,10 +73,8 @@ class RefLgrCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         kwargs.pop('instance', None)
         super(RefLgrCreateForm, self).__init__(*args, **kwargs)
-        self.ref_lgr_members = modelformset_factory(RefLgrMember,
-                                                    form=RefLgrMemberCreateForm,
-                                                    fields=RefLgrMemberCreateForm._meta.fields, min_num=0, extra=0)(
-            *args, **kwargs, queryset=RefLgrMember.objects.none())
+        self.ref_lgr_members = modelformset_factory(RefLgrMember, form=RefLgrMemberCreateForm, min_num=0, extra=0)(
+            *args, **kwargs, queryset=RzLgrMember.objects.none())
 
     def _clean_fields(self):
         if 'id' in self.fields:
@@ -79,16 +83,15 @@ class RefLgrCreateForm(forms.ModelForm):
 
     def clean(self):
         super(RefLgrCreateForm, self).clean()
-        self.ref_lgr_members.is_valid();
+        self.ref_lgr_members.is_valid()
+        self.ref_lgr_members.clean()
         return self.cleaned_data
 
     def save(self, commit=True):
         ref_lgr = super(RefLgrCreateForm, self).save(commit=commit)
-        i = 0
-        member_files = self.files.getlist('members')
         for member in self.ref_lgr_members:
-            member.save(ref_lgr, member_files[i])
-            i += 1
+            member.ref_lgr = ref_lgr
+            member.save()
 
 
 class MSRCreateForm(forms.ModelForm):

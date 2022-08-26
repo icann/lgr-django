@@ -95,16 +95,17 @@
         {% include "lgr_editor/_form_field.html" with field=form.file control_width=8 %}
         {% include "lgr_editor/_form_field.html" with field=form.members control_width=8 %}
         <h3>New Reference LGR Members</h3>
-        <div class="reflgr-members-list">
-            <div class="empty_form reflgr-members-invisible">
-                <div class="reflgr-members-create">
-                    <div class="form-group clearfix">
-                        <label class="col-sm-2 control-label" for="member_name">Reference LGR member file</label>
-                        <span class="col col-sm-8" name="member_name"></span>
-                    </div>
-                    {% include "lgr_editor/_form_field.html" with field=form.ref_lgr_members.empty_form.language_script control_width=8 %}
+        <div class="empty_form reflgr-members-invisible">
+            <div class="reflgr-members-create">
+                <div class="form-group clearfix">
+                    <label class="col-sm-2 control-label" for="member_name">Reference LGR member file</label>
+                    <span class="col col-sm-8" name="member_name"></span>
                 </div>
+                {{ form.ref_lgr_members.empty_form.file_name.as_hidden }}
+                {% include "lgr_editor/_form_field.html" with field=form.ref_lgr_members.empty_form.language_script control_width=8 %}
             </div>
+        </div>
+        <div class="reflgr-members-list">
             {{ form.ref_lgr_members.management_form }}
             {% for member in form.ref_lgr_members %}
                 <div class="reflgr-members-create">
@@ -125,22 +126,34 @@
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
             function enable_submit_button() {
+                console.log('truc!!!!!')
                 if ($('#id_name').val() !== "" &&
                     $('#id_file').prop('files').length > 0 &&
-                    $('#id_language_script').val() !== "") {
+                    $('#id_members').prop('files').length > 0 &&
+                    validateLanguageScripts()) {
                     $('#submit').removeAttr('disabled')
                 } else {
                     $('#submit').attr('disabled', 'disabled')
                 }
             }
 
+            function validateLanguageScripts() {
+                let allFilled = $('.reflgr-members-list').find("[id$='language_script']").filter(function() {
+                    return $.trim($(this).val()).length == 0
+                }).length == 0
+                return allFilled
+            }
+
             $('#id_name').change(function () {
                 enable_submit_button()
             });
+
             $('#id_file').change(function () {
                 enable_submit_button()
             });
-            $('#id_language_script').change(function () {
+
+            $("#id_form-0-language_script").change(function () {
+                console.log("truc")
                 enable_submit_button()
             });
             enable_submit_button();
@@ -153,9 +166,12 @@
                     const file = data.target.files[i]
                     current_fieldset = fieldset_template.clone(true);
                     current_fieldset.find('span').text(file.name)
+                    current_fieldset.find('input[type=hidden]').val(file.name)
                     current_fieldset = current_fieldset.html().replace(/__prefix__/g, i);
                     $('.reflgr-members-list').append(current_fieldset);
-
+                    $('#id_form-'+i+'-language_script').change(function () {
+                        enable_submit_button()
+                    })
                 }
                 $('#id_form-TOTAL_FORMS').val(data.target.files.length)
             });

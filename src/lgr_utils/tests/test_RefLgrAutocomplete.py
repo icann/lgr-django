@@ -7,7 +7,11 @@ from lgr_utils.tests.ModelMocks import RefLgrMemberMock, RzLgrMock, RefLgrMock, 
 
 class test_RefLgrAutocomplete_building(SimpleTestCase):
 
-    # TODO :
+    # TODO : Improve the tests with fixtures
+    # https://docs.djangoproject.com/en/dev/topics/testing/tools/#fixture-loading
+    # https://docs.djangoproject.com/en/dev/topics/testing/tools/#provided-test-case-classes
+    # https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/unit-tests/#tips-for-writing-tests
+
     @patch("lgr_models.models.lgr.RefLgr.objects", RefLgrMock())
     @patch("lgr_models.models.lgr.RefLgrMember.objects", RefLgrMemberMock())
     @patch("lgr_models.models.lgr.RzLgr.objects", RzLgrMock())
