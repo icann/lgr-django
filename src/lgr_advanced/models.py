@@ -24,7 +24,8 @@ from lgr_models.models.report import LGRReport
 
 
 VALIDATING_REPERTOIRE_QUERYSET = (Q(app_label='lgr_models', model='RzLgr') |
-                                  Q(app_label='lgr_models', model='MSR'))
+                                  Q(app_label='lgr_models', model='MSR') |
+                                  Q(app_label='lgr_models', model='IDNARepertoire'))
 
 
 class RepertoireCacheMixin:

@@ -26,6 +26,9 @@ def initial_data(apps, schema_editor):
         with open(os.path.join(idna, lgr), 'r') as f:
             OldIDNA.objects.using(db_alias).create(name=idna_filename_to_name(lgr),
                                                    file=File(f, name=lgr))
+    first = OldIDNA.objects.first()
+    first.active = True
+    first.save(update_fields=['active'])
 
     idnas.delete()
 
