@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-23 16:07+0000\n"
+"POT-Creation-Date: 2022-08-26 06:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,20 +19,20 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_advanced/lgr_validator/api.py:126
+#: src/lgr_advanced/lgr_validator/api.py:132
 msgid "the LGR set labels"
 msgstr ""
 
-#: src/lgr_advanced/lgr_validator/api.py:126
+#: src/lgr_advanced/lgr_validator/api.py:132
 msgid "the TLDs list"
 msgstr ""
 
-#: src/lgr_advanced/lgr_validator/api.py:130
+#: src/lgr_advanced/lgr_validator/api.py:136
 #, python-format
 msgid "The label is in %(labels_list)s"
 msgstr ""
 
-#: src/lgr_advanced/lgr_validator/api.py:156
+#: src/lgr_advanced/lgr_validator/api.py:162
 #, python-format
 msgid "ERROR cannot retrieve label in collisions, please check %(labels_list)s"
 msgstr ""
@@ -63,13 +63,18 @@ msgstr ""
 msgid "The script used to validate the label"
 msgstr ""
 
+#: src/lgr_advanced/lgr_validator/forms.py:22
+msgid "Hide mixed script variants"
+msgstr ""
+
 #: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:7
 msgid "Too many variants"
 msgstr ""
 
 #: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:8
 #, python-format
-msgid "Estimated number of variants: %(nbr)s"
+msgid ""
+"Number of variants in the variant set (including the original label): %(nbr)s"
 msgstr ""
 
 #: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:10
@@ -158,16 +163,16 @@ msgstr ""
 msgid "Download results in CSV"
 msgstr ""
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/validator.html:19
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/validator.html:20
 msgid "Validate"
 msgstr ""
 
-#: src/lgr_advanced/lgr_validator/views.py:77
+#: src/lgr_advanced/lgr_validator/views.py:81
 #, python-format
 msgid "Validate labels on LGR set %s"
 msgstr ""
 
-#: src/lgr_advanced/lgr_validator/views.py:93
+#: src/lgr_advanced/lgr_validator/views.py:99
 #, python-format
 msgid "Validate labels on %s"
 msgstr ""

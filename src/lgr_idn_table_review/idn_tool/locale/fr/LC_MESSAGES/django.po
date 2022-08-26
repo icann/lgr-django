@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-23 16:07+0000\n"
-"PO-Revision-Date: 2022-06-23 12:02-0400\n"
+"POT-Creation-Date: 2022-08-26 06:15+0000\n"
+"PO-Revision-Date: 2022-08-25 21:11-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,21 +16,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:15
+#: src/lgr_idn_table_review/idn_tool/forms.py:16
 msgid "Select IDN table(s) to review"
 msgstr "Sélectionner la(les) table(s) IDN à vérifier"
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:18
+#: src/lgr_idn_table_review/idn_tool/forms.py:19
 #, python-format
 msgid "You can select up to %(max_files)s IDN tables."
 msgstr "Vous pouvez téléverser jusqu'à %(max_files)s tables IDN."
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:25
+#: src/lgr_idn_table_review/idn_tool/forms.py:26
 #, python-format
 msgid "You can upload up to %(max_files)s files"
 msgstr "Vous pouvez téléverser jusqu'à %(max_files)s fichiers"
+
+#: src/lgr_idn_table_review/idn_tool/forms.py:58
+#: src/lgr_idn_table_review/idn_tool/forms.py:59
+msgid "Required"
+msgstr "Requis"
 
 #: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:4
 msgid "IDN Table Review reports"
@@ -55,11 +60,16 @@ msgstr ""
 msgid "Are you sure you want to delete report %(report_id)s?"
 msgstr "Êtes vous sur de vouloir supprimer le rapport %(report_id)s ?"
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:40
-msgid "No report"
-msgstr "Aucun rapport"
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:41
+#, python-format
+msgid ""
+"No report yet, please check the <a href=\"%(task_status_url)s\">tasks</a> "
+"and refresh."
+msgstr ""
+"Aucun rapport pour l'instant, vérifiez la liste de <a "
+"href=\"%(task_status_url)s\">tâches</a> et rafraîchissez s'il vous plaît."
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:44
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:47
 msgid "New report"
 msgstr "Nouveau rapport"
 
@@ -86,7 +96,15 @@ msgstr "Table IDN"
 msgid "LGR to review against"
 msgstr "LGR avec laquelle effectuer la vérification"
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/select_reference.html:30
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/select_reference.html:31
+msgid "Select existing LGR"
+msgstr "Sélectionnez une LGR existante"
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/select_reference.html:33
+msgid "Review against xml"
+msgstr "Vérifier avec un fichier xml"
+
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/select_reference.html:44
 msgid "Review"
 msgstr "Vérifier"
 
@@ -95,17 +113,20 @@ msgstr "Vérifier"
 msgid "%(filename)s is an invalid IDN table"
 msgstr "%(filename)s est une table IDN invalide"
 
-#: src/lgr_idn_table_review/idn_tool/views.py:83
+#: src/lgr_idn_table_review/idn_tool/views.py:87
 #, python-format
 msgid "Review of %(count)d IDN table"
 msgid_plural "Review of %(count)d IDN tables"
 msgstr[0] "Revue de %(count)d table IDN"
 msgstr[1] "Revue de %(count)d tables IDN"
 
-#: src/lgr_idn_table_review/idn_tool/views.py:121
+#: src/lgr_idn_table_review/idn_tool/views.py:125
 #, python-format
 msgid "IDN Table Review Reports: %(report)s"
 msgstr "Rapport de Vérification de Table IDN: %(report)s"
+
+#~ msgid "No report"
+#~ msgstr "Aucun rapport"
 
 #~ msgid "E-mail"
 #~ msgstr "E-mail"

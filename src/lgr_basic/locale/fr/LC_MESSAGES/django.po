@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-23 16:07+0000\n"
-"PO-Revision-Date: 2022-06-23 11:57-0400\n"
+"POT-Creation-Date: 2022-08-26 06:15+0000\n"
+"PO-Revision-Date: 2022-08-25 21:09-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,17 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
-#: src/lgr_basic/forms.py:37
+#: src/lgr_basic/forms.py:39
 msgid "Label"
 msgstr "Label"
 
-#: src/lgr_basic/forms.py:51 src/lgr_basic/forms.py:52
+#: src/lgr_basic/forms.py:59 src/lgr_basic/forms.py:60
 msgid "Required"
 msgstr "Requis"
 
-#: src/lgr_basic/forms.py:56 src/lgr_basic/forms.py:57
+#: src/lgr_basic/forms.py:64 src/lgr_basic/forms.py:65
 msgid "Unknown error, please report"
 msgstr "Erreur inconnue, reportez l'erreur s'il vous plait"
 
@@ -91,7 +91,11 @@ msgstr "Télécharger une liste de labels"
 msgid "Check for collision with existing TLDs"
 msgstr "Vérifier les collisions avec la liste de TLDs"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:107
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:105
+msgid "Hide mixed script variants"
+msgstr "Cacher les variants issus de scripts différents"
+
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:115
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision and validation tasks "
@@ -103,7 +107,7 @@ msgstr ""
 "Vous pouvez suivre la progression de votre tâche sur la <a "
 "href=\"%(task_status_url)s\">page des statuts de tâches</a>."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:121
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:129
 #, python-format
 msgid ""
 "Your request was sent successfully, the validation task processing can take "
@@ -115,7 +119,7 @@ msgstr ""
 "progression de votre tâche sur la <a href=\"%(task_status_url)s\">page des "
 "statuts de tâches</a>."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:135
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:143
 #, python-format
 msgid ""
 "Your request was sent successfully, the collision task processing can take "
@@ -127,49 +131,49 @@ msgstr ""
 "progression de votre tâche sur la <a href=\"%(task_status_url)s\">page des "
 "statuts de tâches</a>."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:146
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:154
 msgid "Validate"
 msgstr "Valider"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:158
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:166
 msgid "Your saved results"
 msgstr "Vos résultats sauvegardés"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:159
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:167
 msgid "The following files contains your tools computation results."
 msgstr ""
 "Ces fichiers contiennent les résultats des calculs fournis par les outils."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:162
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:170
 msgid "Note that these files could be cleaned up regularly."
 msgstr ""
 "Veuillez noter que ces fichiers pourraient être régulièrement supprimés."
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:168
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:176
 msgid "Download"
 msgstr "Télécharger"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:171
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:179
 #, python-format
 msgid "Are you sure you want to delete report %(report.filename)s?"
 msgstr "Êtes-vous sûr(e) de vouloir supprimer le rapport %(report.filename)s??"
 
-#: src/lgr_basic/views.py:61
+#: src/lgr_basic/views.py:62
 #, python-format
 msgid "Annotate labels on LGR %s"
 msgstr "Annote les labels sur la LGR %s"
 
-#: src/lgr_basic/views.py:63
+#: src/lgr_basic/views.py:64
 #, python-format
 msgid "Compute collisions and annotate labels on %s"
 msgstr "Calcul des collisions et annotation des labels sur %s"
 
-#: src/lgr_basic/views.py:83
+#: src/lgr_basic/views.py:86
 #, python-format
 msgid "Compute collisions on %s"
 msgstr "Calcul des collisions sur %s"
 
-#: src/lgr_basic/views.py:116
+#: src/lgr_basic/views.py:121
 #, python-format
 msgid ""
 "Input label generates too many variants to compute them all quickly. You can "

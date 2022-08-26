@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-23 16:07+0000\n"
+"POT-Creation-Date: 2022-08-26 06:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -161,7 +161,7 @@ msgstr ""
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/collision.html:11
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/cross_script_variants.html:13
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/diff.html:11
-#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:10
+#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:18
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/wait_annotate.html:14
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/wait_coll.html:16
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/wait_cross_scripts.html:11
@@ -263,11 +263,15 @@ msgstr ""
 msgid "Harmonize"
 msgstr ""
 
-#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:18
+#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:13
+msgid "Hide mixed script variants"
+msgstr ""
+
+#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:26
 msgid "Compute variants"
 msgstr ""
 
-#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:22
+#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:30
 msgid ""
 "<strong class=\"text-danger\"><i class=\"glyphicon glyphicon-alert\"></i> "
 "Note that variants tool is not available for LGR sets.</strong>"
@@ -347,7 +351,4 @@ msgstr ""
 #: src/lgr_advanced/lgr_tools/views.py:326
 #, python-format
 msgid "Variant computation on LGR %s"
-msgstr ""
-
-msgid "Hide mixed script variants"
 msgstr ""

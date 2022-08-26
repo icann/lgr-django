@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-23 16:07+0000\n"
+"POT-Creation-Date: 2022-08-26 06:15+0000\n"
 "PO-Revision-Date: 2022-06-23 11:48-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -166,7 +166,7 @@ msgstr ""
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/collision.html:11
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/cross_script_variants.html:13
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/diff.html:11
-#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:10
+#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:18
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/wait_annotate.html:14
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/wait_coll.html:16
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/wait_cross_scripts.html:11
@@ -286,11 +286,15 @@ msgstr "Voir la version harmonisée de %(name)s"
 msgid "Harmonize"
 msgstr "Harmoniser"
 
-#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:18
+#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:13
+msgid "Hide mixed script variants"
+msgstr "Cacher les variants issus de scripts différents"
+
+#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:26
 msgid "Compute variants"
 msgstr "Calcul des variantes"
 
-#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:22
+#: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:30
 msgid ""
 "<strong class=\"text-danger\"><i class=\"glyphicon glyphicon-alert\"></i> "
 "Note that variants tool is not available for LGR sets.</strong>"
@@ -385,9 +389,6 @@ msgstr "Calcul des variantes cross-scripts sur la LGR %s"
 #, python-format
 msgid "Variant computation on LGR %s"
 msgstr "Calcul de variantes sur la LGR %s"
-
-msgid "Hide mixed script variants"
-msgstr "Cacher les variants issus de scripts différents"
 
 #~ msgid "E-mail"
 #~ msgstr "E-mail"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-23 16:07+0000\n"
+"POT-Creation-Date: 2022-08-26 06:15+0000\n"
 "PO-Revision-Date: 2022-06-23 11:53-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -22,35 +22,35 @@ msgstr ""
 msgid "Email is mandatory"
 msgstr "Le champ e-mail est obligatoire"
 
-#: src/lgr_auth/models.py:61
+#: src/lgr_auth/models.py:62
 msgid "Required. Valid email address"
 msgstr "Requis. Entrez une adresse e-mail valide"
 
-#: src/lgr_auth/models.py:63
+#: src/lgr_auth/models.py:64
 msgid "An user with that email already exists."
 msgstr "Un utilisateur avec cet e-mail existe déjà."
 
-#: src/lgr_auth/models.py:67
+#: src/lgr_auth/models.py:68
 msgid "first name"
 msgstr "prénom"
 
-#: src/lgr_auth/models.py:68
+#: src/lgr_auth/models.py:69
 msgid "last name"
 msgstr "nom"
 
-#: src/lgr_auth/models.py:69
+#: src/lgr_auth/models.py:70
 msgid "active"
 msgstr "actif"
 
-#: src/lgr_auth/models.py:70
+#: src/lgr_auth/models.py:71
 msgid "date joined"
 msgstr "date d'inscription"
 
-#: src/lgr_auth/models.py:73
+#: src/lgr_auth/models.py:74
 msgid "user"
 msgstr "utilisateur"
 
-#: src/lgr_auth/models.py:74
+#: src/lgr_auth/models.py:75
 msgid "users"
 msgstr "utilisateurs"
 
@@ -172,10 +172,10 @@ msgstr "Édition de l'utilisateur %(email)s"
 msgid "Update"
 msgstr "Mise à jour"
 
-#: src/lgr_auth/views.py:34
+#: src/lgr_auth/views.py:39
 msgid "User updated"
 msgstr "Utilisateur mis à jour"
 
-#: src/lgr_auth/views.py:38
+#: src/lgr_auth/views.py:43
 msgid "Failed to update user"
 msgstr "Échec de la mise à jour de l'utilisateur"

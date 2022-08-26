@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-23 16:07+0000\n"
+"POT-Creation-Date: 2022-08-26 06:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -128,33 +128,42 @@ msgstr ""
 msgid "Switch mode"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:73
+#: src/lgr_web/templates/_base.html:76 src/lgr_web/templates/_base.html:82
+#: src/lgr_web/templates/_base.html:183
+msgid "Help"
+msgstr ""
+
+#: src/lgr_web/templates/_base.html:83
+msgid "Instructions"
+msgstr ""
+
+#: src/lgr_web/templates/_base.html:88
 msgid "About LGR Toolset"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:74 src/lgr_web/templates/_base.html:145
+#: src/lgr_web/templates/_base.html:89 src/lgr_web/templates/_base.html:163
 msgid "About"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:90
+#: src/lgr_web/templates/_base.html:108
 msgid "Edit"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:96
+#: src/lgr_web/templates/_base.html:114
 msgid "Logout"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:104
+#: src/lgr_web/templates/_base.html:122
 msgid "Login"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:129
+#: src/lgr_web/templates/_base.html:147
 msgid ""
 "If you have questions, please contact <a href=\"mailto:globalsupport@icann."
 "org\">globalsupport@icann.org</a>"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:152
+#: src/lgr_web/templates/_base.html:170 src/lgr_web/templates/_base.html:190
 msgid "Close"
 msgstr ""
 
@@ -181,6 +190,12 @@ msgid ""
 "This toolset was implemented by <a href=\"http://www.viagenie.ca/\" "
 "target=\"_blank\" rel=\"noopener noreferrer\">Viagénie</a> and Wil Tan on an "
 "ICANN contract."
+msgstr ""
+
+#: src/lgr_web/templates/help.html:3
+msgid ""
+"TODO Guiding description instructions on the user interface to be provided "
+"by ICANN org."
 msgstr ""
 
 #: src/lgr_web/templates/lgr_modes.html:5

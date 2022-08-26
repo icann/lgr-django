@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-23 16:07+0000\n"
-"PO-Revision-Date: 2022-06-23 12:19-0400\n"
+"POT-Creation-Date: 2022-08-26 06:15+0000\n"
+"PO-Revision-Date: 2022-08-25 21:13-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: src/lgr_tasks/templates/lgr_tasks/process_list.html:4
 msgid "LGR Process List"
@@ -127,27 +127,36 @@ msgstr "Retourner à l'écran d'accueil"
 msgid "Switch mode"
 msgstr "Changer de mode"
 
-#: src/lgr_web/templates/_base.html:73
+#: src/lgr_web/templates/_base.html:76 src/lgr_web/templates/_base.html:82
+#: src/lgr_web/templates/_base.html:183
+msgid "Help"
+msgstr "Aide"
+
+#: src/lgr_web/templates/_base.html:83
+msgid "Instructions"
+msgstr "Instructions"
+
+#: src/lgr_web/templates/_base.html:88
 msgid "About LGR Toolset"
 msgstr "À propos de l'application LGR"
 
-#: src/lgr_web/templates/_base.html:74 src/lgr_web/templates/_base.html:145
+#: src/lgr_web/templates/_base.html:89 src/lgr_web/templates/_base.html:163
 msgid "About"
 msgstr "À propos"
 
-#: src/lgr_web/templates/_base.html:90
+#: src/lgr_web/templates/_base.html:108
 msgid "Edit"
 msgstr "Édition"
 
-#: src/lgr_web/templates/_base.html:96
+#: src/lgr_web/templates/_base.html:114
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: src/lgr_web/templates/_base.html:104
+#: src/lgr_web/templates/_base.html:122
 msgid "Login"
 msgstr "Connexion"
 
-#: src/lgr_web/templates/_base.html:129
+#: src/lgr_web/templates/_base.html:147
 msgid ""
 "If you have questions, please contact <a href=\"mailto:globalsupport@icann."
 "org\">globalsupport@icann.org</a>"
@@ -155,7 +164,7 @@ msgstr ""
 "Si vous avez des questions, contactez <a href=\"mailto:globalsupport@icann."
 "org\">globalsupport@icann.org</a> svp"
 
-#: src/lgr_web/templates/_base.html:152
+#: src/lgr_web/templates/_base.html:170 src/lgr_web/templates/_base.html:190
 msgid "Close"
 msgstr "Fermer"
 
@@ -191,6 +200,12 @@ msgstr ""
 "Cet outil a été implémenté par<a href=\"http://www.viagenie.ca/\" "
 "target=\"_blank\" rel=\"noopener noreferrer\">Viagénie</a> et Wil Tan sous "
 "contrat ICANN."
+
+#: src/lgr_web/templates/help.html:3
+msgid ""
+"TODO Guiding description instructions on the user interface to be provided "
+"by ICANN org."
+msgstr ""
 
 #: src/lgr_web/templates/lgr_modes.html:5
 msgid "Welcome to the LGR (Label Generation Ruleset) Tools"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-23 16:07+0000\n"
+"POT-Creation-Date: 2022-08-26 06:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,8 +42,11 @@ msgstr ""
 msgid "Are you sure you want to delete report %(report_id)s?"
 msgstr ""
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:40
-msgid "No report"
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:41
+#, python-format
+msgid ""
+"No report yet, please check the <a href=\"%(task_status_url)s\">tasks</a> "
+"and refresh."
 msgstr ""
 
 #: src/lgr_idn_table_review/icann_tools/views.py:40

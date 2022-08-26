@@ -68,7 +68,8 @@
             </tr>
         {% endfor %}
     </table>
-    {% include "lgr_editor/_form_active_choice.html" with url="lgr_admin_isactive_rz_lgr" title="Select Active Root Zone LGR" %}
+    {% trans "Select Active Root Zone LGR" as title %}
+    {% include "lgr_editor/_form_active_choice.html" with url="lgr_admin_isactive_rz_lgr" title=title %}
 
     <h2>{% trans 'New Root Zone LGR' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
