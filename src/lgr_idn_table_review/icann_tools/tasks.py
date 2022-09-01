@@ -113,26 +113,36 @@ def process_idn_tables(user, absolute_url, report_id):
                 html_report, ref_lgr_name, flag = _create_review_report(idn_table, absolute_url,
                                                                         lgr_storage, report_id)
                 for tld in tlds:
-                    lgr = idn_table.to_lgr()
-                    tld_a_label = udata.idna_encode_label(tld)
-                    # need to save a version per tld, processed and count will reflect that as well
-                    lang = lgr.metadata.languages[0]
-                    version = lgr.metadata.version.value
-                    filename = f"{tld_a_label.upper()}.{lang}.{version}.{today}.html"
-                    report = lgr_storage.storage_save_report_file(filename, StringIO(html_report), report_id=report_id)
-                    url = f'{absolute_url}{report.to_url()}?display=true'
-                    if flag is not None:
-                        processed.append({
-                            'name': f"{tld.upper()}.{lang}.{version}.{flag}.{idn_table.name}.{ref_lgr_name}",
-                            'url': url
-                        })
-                    else:
+                    try:
+                        lgr = idn_table.to_lgr()
+                        tld_a_label = udata.idna_encode_label(tld)
+                        # need to save a version per tld, processed and count will reflect that as well
+                        lang = lgr.metadata.languages[0]
+                        version = lgr.metadata.version.value
+                        filename = f"{tld_a_label.upper()}.{lang}.{version}.{today}.html"
+                        report = lgr_storage.storage_save_report_file(filename, StringIO(html_report), report_id=report_id)
+                        url = f'{absolute_url}{report.to_url()}?display=true'
+                        if flag is not None:
+                            processed.append({
+                                'name': f"{tld.upper()}.{lang}.{version}.{flag}.{idn_table.name}.{ref_lgr_name}",
+                                'url': url
+                            })
+                        else:
+                            unprocessed.append({
+                                'name': f"{tld.upper()}.{lang}.{version}.0.0",
+                                'url': url
+                            })
+                        zf.writestr(filename, html_report)
+                    except Exception as e:
                         unprocessed.append({
                             'name': f"{tld.upper()}.{lang}.{version}.0.0",
                             'url': url
                         })
-                    zf.writestr(filename, html_report)
-        report = lgr_storage.storage_save_report_file(f'{report_id}.zip', f, report_id=report_id)
+                        zf.writestr(filename, f'Failed to read IDN table {idn_table.name}')
+                        if settings.DEBUG:
+                            zf.writestr(filename, str(e))
+
+        final_report = lgr_storage.storage_save_report_file(f'{report_id}.zip', f, report_id=report_id)
 
     summary_report = render_to_string('lgr_idn_table_review_icann/summary_report.html', {
         'count': count,
@@ -142,4 +152,4 @@ def process_idn_tables(user, absolute_url, report_id):
     })
     lgr_storage.storage_save_report_file(f'{report_id}-summary.html', StringIO(summary_report),
                                          report_id=report_id)
-    return report
+    return final_report
