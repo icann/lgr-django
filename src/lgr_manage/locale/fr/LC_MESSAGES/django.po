@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-26 06:15+0000\n"
-"PO-Revision-Date: 2022-08-26 02:21-0400\n"
+"POT-Creation-Date: 2022-09-06 15:28+0000\n"
+"PO-Revision-Date: 2022-09-06 12:19-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -66,11 +66,11 @@ msgstr "Répertoire IDNA"
 msgid "Variant Calculation Limit"
 msgstr "Limite de calcul des variantes"
 
-#: src/lgr_manage/forms.py:149
+#: src/lgr_manage/forms.py:149 src/lgr_manage/forms.py:150
 msgid "Variant Calculation Max"
 msgstr "Limite maximale de calcul des variantes"
 
-#: src/lgr_manage/forms.py:152
+#: src/lgr_manage/forms.py:153
 msgid ""
 "Above this limit, only allocatable labels will be displayed and result can "
 "be downloaded"
@@ -78,11 +78,15 @@ msgstr ""
 "Au delà de cette limite, uniquement les labels de disposition allocatable "
 "seront affichés et le résultat pourra être téléchargé"
 
-#: src/lgr_manage/forms.py:154
+#: src/lgr_manage/forms.py:155
 msgid "Above this limit, results would be computed in a background task"
 msgstr ""
 "Au delà de cette limite, les résultats seront calculés dans une tâche en "
 "arrière plan"
+
+#: src/lgr_manage/forms.py:156
+msgid "Above this limit, no results would be computed"
+msgstr "Au delà de cette limite, aucun résultat ne sera calculé"
 
 #: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:4
 #: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:7
@@ -222,23 +226,23 @@ msgstr "Nouvelle LGR pour la Root Zone"
 msgid "Settings"
 msgstr "Paramètres"
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:13
+#: src/lgr_manage/templates/lgr_manage/settings.html:14
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:16
+#: src/lgr_manage/templates/lgr_manage/settings.html:17
 msgid "Index variant labels calculation"
 msgstr "Calcul de l'index des labels variants"
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:21
+#: src/lgr_manage/templates/lgr_manage/settings.html:22
 msgid "Trigger the calculation of the index variant of the existing TLDs"
 msgstr "Lance le calcule de l'index sur les variants des TLDs existants"
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:22
+#: src/lgr_manage/templates/lgr_manage/settings.html:23
 msgid "Refresh"
 msgstr "Rafrachir"
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:29
+#: src/lgr_manage/templates/lgr_manage/settings.html:30
 msgid "Download"
 msgstr "Télécharger"
 

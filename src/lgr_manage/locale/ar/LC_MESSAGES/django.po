@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-26 06:15+0000\n"
+"POT-Creation-Date: 2022-09-06 15:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,18 +67,22 @@ msgstr ""
 msgid "Variant Calculation Limit"
 msgstr ""
 
-#: src/lgr_manage/forms.py:149
+#: src/lgr_manage/forms.py:149 src/lgr_manage/forms.py:150
 msgid "Variant Calculation Max"
 msgstr ""
 
-#: src/lgr_manage/forms.py:152
+#: src/lgr_manage/forms.py:153
 msgid ""
 "Above this limit, only allocatable labels will be displayed and result can "
 "be downloaded"
 msgstr ""
 
-#: src/lgr_manage/forms.py:154
+#: src/lgr_manage/forms.py:155
 msgid "Above this limit, results would be computed in a background task"
+msgstr ""
+
+#: src/lgr_manage/forms.py:156
+msgid "Above this limit, no results would be computed"
 msgstr ""
 
 #: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:4
@@ -219,23 +223,23 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:13
+#: src/lgr_manage/templates/lgr_manage/settings.html:14
 msgid "Save"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:16
+#: src/lgr_manage/templates/lgr_manage/settings.html:17
 msgid "Index variant labels calculation"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:21
+#: src/lgr_manage/templates/lgr_manage/settings.html:22
 msgid "Trigger the calculation of the index variant of the existing TLDs"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:22
+#: src/lgr_manage/templates/lgr_manage/settings.html:23
 msgid "Refresh"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:29
+#: src/lgr_manage/templates/lgr_manage/settings.html:30
 msgid "Download"
 msgstr ""
 
