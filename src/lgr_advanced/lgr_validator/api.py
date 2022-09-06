@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import codecs
 import csv
 # Define some py2/3 compat stuff
 import sys
@@ -269,6 +270,11 @@ def validation_results_to_csv(ctx, fileobj, with_header=True):
     """
     Convert validation results to a CSV.
     """
+    if with_header:
+        # write BOM at the beginning to allow Excel decoding UTF-8
+        # fileobj.write(codecs.BOM_UTF8.decode('utf-8'))
+        fileobj.write(codecs.BOM_UTF8.decode('utf-8'))
+
     writer = csv.writer(fileobj)
     if with_header:
         # Need list(map) for python3.4 that does not like map object (needs sequence)

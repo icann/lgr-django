@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import logging
 import time
+from io import StringIO
 
 from lgr.core import LGR
 from lgr.parser.xml_serializer import serialize_lgr_xml
@@ -193,20 +194,9 @@ def _validate_label_task_helper(value, with_header=True):
     :param with_header: Whether CSV the output is returned with header or not
     :return: A CSV as a string.
     """
-    # Define some py2/3 compat stuff
-    import sys
-    if sys.version_info.major > 2:
-        from io import StringIO
-        outIO = StringIO
-        out_fn = lambda x: x
-    else:
-        from io import BytesIO
-        outIO = BytesIO
-        out_fn = lambda x: x.decode('utf-8')
-
-    out = outIO()
+    out = StringIO()
     validation_results_to_csv(value, out, with_header=with_header)
-    return out_fn(out.getvalue())
+    return out.getvalue()
 
 
 def lgr_validate_label(lgr: LGR, label, udata, hide_mixed_script_variants=False):
