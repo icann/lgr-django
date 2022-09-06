@@ -3,6 +3,13 @@
 {% load widget_tweaks %}
 
 {% block content %}
+    {% if not result.launched %}
+        <h3 class="text-danger">{% trans 'Too many variants' %}</h3>
+        <p>{% blocktrans with nbr=result.nbr_variants trimmed %}Number of variants in the variant set (including the original label): {{ nbr }}{% endblocktrans %}</p>
+        <p>{% blocktrans trimmed  %}
+        No computing will be performed as there are too many variants.
+        {% endblocktrans %}</p>
+    {% endif %}
     {% if result.launched_as_task %}
         <h3 class="text-warning">{% trans 'Too many variants' %}</h3>
         <p>{% blocktrans with nbr=result.nbr_variants trimmed %}Number of variants in the variant set (including the original label): {{ nbr }}{% endblocktrans %}</p>

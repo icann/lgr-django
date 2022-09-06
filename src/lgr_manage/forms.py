@@ -147,14 +147,17 @@ class LgrSettingsForm(forms.ModelForm):
         labels = {
             'variant_calculation_limit': _('Variant Calculation Limit'),
             'variant_calculation_max': _('Variant Calculation Max'),
+            'variant_calculation_abort': _('Variant Calculation Max'),
         }
         help_texts = {
             'variant_calculation_limit': _('Above this limit, only allocatable labels will be displayed and result '
                                            'can be downloaded'),
             'variant_calculation_max': _('Above this limit, results would be computed in a background task'),
+            'variant_calculation_abort': _('Above this limit, no results would be computed'),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['variant_calculation_limit'].widget.attrs['min'] = 2
         self.fields['variant_calculation_max'].widget.attrs['min'] = 3
+        self.fields['variant_calculation_abort'].widget.attrs['min'] = 4

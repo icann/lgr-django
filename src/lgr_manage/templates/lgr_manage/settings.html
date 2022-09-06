@@ -10,6 +10,7 @@
     {% csrf_token %}
     {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_limit control_width=4 %}
     {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_max control_width=4 %}
+    {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_abort control_width=4 %}
     <button id="submit" type="submit" class="btn btn-primary">{% trans "Save" %}</button>
   </form>
 

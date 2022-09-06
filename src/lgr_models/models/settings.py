@@ -7,6 +7,7 @@ from django.db import models
 class LGRSettings(models.Model):
     variant_calculation_limit = models.PositiveIntegerField(validators=[MinValueValidator(2)])
     variant_calculation_max = models.PositiveIntegerField(validators=[MinValueValidator(3)])
+    variant_calculation_abort = models.PositiveIntegerField(validators=[MinValueValidator(4)])
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         exists = LGRSettings.objects.all().exists()
