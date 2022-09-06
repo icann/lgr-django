@@ -70,13 +70,16 @@ class ValidateLabelSimpleForm(forms.Form):
         return LgrBaseModel.from_tuple(self.cleaned_data['lgr'])
 
     def clean_labels(self):
-        lgr_object = self.cleaned_data['lgr']
         udata = get_db_by_version(settings.SUPPORTED_UNICODE_VERSION)
         value = self.cleaned_data['labels']
         labels = list()
-        for label in set(value.split(';')):
+        processed = set()
+        for label in value.split(';'):
             if not label:
                 continue
+            if label in processed:
+                continue
+            processed.add(label)
             try:
                 labels.append(parse_label_input(label, idna_decoder=udata.idna_decode_label))
             except ValueError as e:

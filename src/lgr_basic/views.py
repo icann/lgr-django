@@ -76,11 +76,11 @@ class BasicModeView(LoginRequiredMixin, FormView):
         else:
             from lgr_web.config import lgr_settings
 
-            labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp]).to_dict()
             result = {}
             is_collision_index = False
             check_collisions = None
             if collisions:
+                labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp]).to_dict()
                 def launch_collision_task():
                     task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
                                                        name=_('Compute collisions on %s') % lgr.name,
@@ -104,16 +104,17 @@ class BasicModeView(LoginRequiredMixin, FormView):
                     launch_collision_task()
             for label_cplist in labels_cp:
                 try:
-                    result.update(evaluate_label_from_view(self.request,
+                    res = result.copy()
+                    res.update(evaluate_label_from_view(self.request,
                                                            lgr,
                                                            label_cplist,
                                                            lgr_settings.variant_calculation_limit,
                                                            check_collisions=check_collisions,
                                                            is_collision_index=is_collision_index,
                                                            hide_mixed_script_variants=hide_mixed_script_variants))
-                    if result.get('launched_as_task') and collisions:
+                    if res.get('launched_as_task') and collisions:
                         launch_collision_task()
-                    results.append(result)
+                    results.append(res)
                 except UnicodeError as ex:
                     messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
                 except NeedAsyncProcess:
