@@ -58,9 +58,9 @@ def evaluate_label_from_view(request,
     lgr = lgr_object.to_lgr()
     est_var_nbr = lgr.estimate_variant_number(label_cplist, hide_mixed_script_variants=hide_mixed_script_variants)
     ctx['nbr_variants'] = est_var_nbr
-    ctx['launched'] = True
+    ctx['launch_abort'] = False
     if est_var_nbr > lgr_settings.variant_calculation_abort:
-        ctx['launched'] = False
+        ctx['launch_abort'] = True
         return ctx
     need_async = est_var_nbr > lgr_settings.variant_calculation_max
     ctx['launched_as_task'] = need_async
