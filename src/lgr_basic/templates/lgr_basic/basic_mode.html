@@ -218,10 +218,6 @@
     <script>
         var isFormUploadActivated = false;
 
-        $("#id_lgr").change(() => {
-            changeRzValue();
-        });
-
         function changeRzValue() {
             const val = $('#id_lgr').val();
             // val is a tuple "('lgr_model', 'lgr_pk')"
@@ -328,6 +324,9 @@
             changeRzValue();
             $('.search-clear').click(() => {
                 buttonValidateEnabled();
+            });
+            $("#id_lgr").change(() => {
+                changeRzValue();
             });
 
             $('form.validate-label').submit((e) => {
