@@ -22,7 +22,9 @@
         {% include "lgr_editor/_form_field.html" with field=form.email control_width=8 %}
         {% include "lgr_editor/_form_field.html" with field=form.role control_width=8 %}
         <a type="button" class="btn btn-default" href="{% url 'lgr_admin_user_management' %}">{% trans 'Back' %}</a>
-        <button id="submit" type="submit" class="btn btn-primary">{% trans "Update" %}</button>
+        {% if can_edit %}
+          <button id="submit" type="submit" class="btn btn-primary">{% trans "Update" %}</button>
+        {% endif %}
         {% if object.enabled %}
             <a href="#" onclick="$('#form-enable').submit()" class="btn btn-warning">
                 {% trans 'Disable' %}

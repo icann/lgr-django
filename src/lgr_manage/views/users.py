@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib import messages
+from django.http import HttpResponseBadRequest
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, RedirectView, CreateView, DeleteView
@@ -19,6 +21,7 @@ class LgrUserListView(BaseListAdminView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = LgrUserCreateView.form_class(can_edit_role=True)
+        context['can_create'] = settings.AUTH_METHOD != 'ICANN'
         return context
 
 
@@ -28,6 +31,10 @@ class LgrUserCreateView(BaseAdminMixin, CreateView):
     template_name = 'lgr_manage/user_management.html'
     success_url = reverse_lazy('lgr_admin_user_management')
 
+    def post(self, request, *args, **kwargs):
+        if settings.AUTH_METHOD == 'ICANN':
+            return HttpResponseBadRequest(_('Cannot create users when auth is performed with ICANN'))
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['can_edit_role'] = True
@@ -36,6 +43,7 @@ class LgrUserCreateView(BaseAdminMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = LgrUserListView.queryset.all()
+        context['can_create'] = settings.AUTH_METHOD != 'ICANN'
         return context
 
     def form_valid(self, form):

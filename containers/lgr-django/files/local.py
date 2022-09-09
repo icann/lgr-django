@@ -122,3 +122,15 @@ UNICODE_DATABASES = {
 #    SECRET_KEY = secret_key
 # DELETE_TO_HERE_AFTER_GENERATION
 SECRET_KEY = os.environ.get('lgrSecretKey')
+
+# ICANN Authentication parameters
+AUTHENTICATION_BACKENDS = (
+    'lgr_auth.backend.JWTBackend',
+)
+
+AUTH_METHOD = 'ICANN'
+
+ICANN_AUTH_NONCE = os.environ.get('icannAuthNonce')
+ICANN_AUTH_CLIENT_ID = os.environ.get('icannAuthClientId')
+ICANN_AUTH_ISSUER = os.environ.get('icannAuthIssuer')
+ICANN_AUTH_APP_ID = os.environ.get('icannAuthAppId')

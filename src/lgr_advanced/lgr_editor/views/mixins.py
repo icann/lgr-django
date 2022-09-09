@@ -7,6 +7,7 @@ import logging
 import typing
 
 from django.http import HttpResponseBadRequest
+from django.utils.translation import ugettext_lazy as _
 
 from lgr.core import LGR
 from lgr_advanced.models import LgrModel, SetLgrModel
@@ -63,4 +64,4 @@ class LGREditMixin(LGRHandlingBaseMixin):
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
         if self.lgr_is_set_or_in_set():
-            return HttpResponseBadRequest('Cannot edit LGR set')
+            return HttpResponseBadRequest(_('Cannot edit LGR set'))

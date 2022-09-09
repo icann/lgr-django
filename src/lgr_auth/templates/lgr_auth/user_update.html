@@ -14,6 +14,11 @@
         {% include "lgr_editor/_form_field.html" with field=form.last_name control_width=8 %}
         {% include "lgr_editor/_form_field.html" with field=form.email control_width=8 %}
         {% include "lgr_editor/_form_field.html" with field=form.role control_width=8 %}
-        <button id="submit" type="submit" class="btn btn-primary">{% trans "Update" %}</button>
+        {% if can_edit %}
+          <button id="submit" type="submit" class="btn btn-primary">{% trans "Update" %}</button>
+        {% endif %}
     </form>
+  {% if can_edit_icann_profile %}
+    <a href="{% url 'icann_update_user' %}" class="btn btn-primary">{% trans "Edit ICANN profile" %}</a>
+  {% endif %}
 {% endblock content %}

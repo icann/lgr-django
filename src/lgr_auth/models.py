@@ -56,19 +56,21 @@ class UAEmailField(models.EmailField):
 
 class LgrUser(AbstractBaseUser):
     """
-    Model of an User.
+    Model of a User.
     """
     email = UAEmailField(unique=True,
                          help_text=_('Required. Valid email address'),
                          error_messages={
                              'unique': _("An user with that email already exists."),
-                         })
+                         },
+                         max_length=100)
     role = models.CharField(max_length=16, choices=((r.value, r.value) for r in LgrRole), null=False,
                             default=LgrRole.USER.value)
-    first_name = models.CharField(_('first name'), max_length=150, blank=True)
-    last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    first_name = models.CharField(_('first name'), max_length=50, blank=True)
+    last_name = models.CharField(_('last name'), max_length=50, blank=True)
     is_active = models.BooleanField(_('active'), default=True)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    icann_username = models.CharField(max_length=100, unique=True, null=True, blank=True)
 
     class Meta:
         verbose_name = _('user')

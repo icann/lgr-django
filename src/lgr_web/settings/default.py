@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_beat',
     'django_celery_results',
-    'social_django',
     'lgr_models',
     'lgr_session',
     'lgr_auth',
@@ -70,7 +69,6 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social_django.middleware.SocialAuthExceptionMiddleware',
     'lgr_advanced.lgr_tools.middleware.UnicodeDecodeErrorMiddleWare',
 ]
 
@@ -79,25 +77,14 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'  # for iframes containing popups
 # Custom auth user model
 AUTH_USER_MODEL = 'lgr_auth.LgrUser'
 
-# Social Authentication configuration
-SOCIAL_AUTH_JSONFIELD_ENABLED = True
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
-SOCIAL_AUTH_PIPELINE = (
-    # 'social_core.pipeline.debug.debug',
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.get_username',
-    # be very careful with that if some accounts allows non verified emails
-    # 'social_core.pipeline.social_auth.associate_by_email',
-    'social_core.pipeline.user.create_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
-)
-SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+
+# The authentication method among:
+#   - Django: Basic authentication with Django
+#   - ICANN: SSO with ICANN
+AUTH_METHOD = 'Django'
 
 
 # Redirect URL after auth
@@ -122,8 +109,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -259,7 +244,7 @@ CSRF_COOKIE_HTTPONLY = False  # CSRF cookie is used by some JS for reference edi
 CSRF_COOKIE_SECURE = True  # Secure setting for CSRF cookie - turn off for development
 
 # How long to set the Session cookie for
-SESSION_COOKIE_AGE = 60*60*24*14  # 2 weeks
+SESSION_COOKIE_AGE = 60*60*24*7  # 1 week
 
 # Where to store session data - use the cached database:
 # Read from memory, write to DB

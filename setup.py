@@ -37,7 +37,7 @@ setup(
         'django-celery-results',
         'django-celery-beat',
         'celery',
-        'social-auth-app-django',
+        'okta-jwt-verifier',
         # LGR/Unicode modules
         'lgr-core',
         'munidata',

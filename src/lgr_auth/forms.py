@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordResetForm
 from django.forms import ModelForm
@@ -26,3 +27,7 @@ class UserForm(ModelForm):
         super().__init__(*args, **kwargs)
         if not can_edit_role:
             self.fields['role'].disabled = True
+        if settings.AUTH_METHOD == 'ICANN':
+            for f in self.fields:
+                if f != 'role':
+                    self.fields[f].disabled = True

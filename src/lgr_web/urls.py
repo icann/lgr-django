@@ -40,6 +40,5 @@ urlpatterns = [
     path('about/', LGRAboutView.as_view(), name='about'),
     path('help/', LGRHelpView.as_view(), name='help'),
 
-    path('social/', include('social_django.urls')),
     path('', LGRModesView.as_view(), name='lgr_home'),
 ]

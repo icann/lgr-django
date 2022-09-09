@@ -17,6 +17,5 @@ lgr-core>=4.0.0
 # Natural sorting implementation
 natsort==7.1.1
 
-# OAuth support
-social-auth-app-django==5.0.0
-
+# ICANN login
+okta-jwt-verifier==0.2.3
