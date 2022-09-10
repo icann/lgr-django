@@ -8,9 +8,11 @@ from enum import Enum
 
 from django.contrib import messages
 from django.contrib.auth.views import LogoutView, LoginView
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import UpdateView
 
 from lgr_auth.forms import UserForm
@@ -37,10 +39,11 @@ class LgrLoginView(LoginView):
             return redirect(
                 f'https://accounts-qa.icann.org/authorize'
                 f'?client_id={settings.ICANN_AUTH_CLIENT_ID}'
-                f'&redirect_uri={self.request.build_absolute_uri(reverse("icann_tokens"))}'
+                # FIXME: replace is a quickfix to remove, set correct Django settings
+                f'&redirect_uri={self.request.build_absolute_uri(reverse("icann_tokens")).replace("http", "https")}'
                 f'&nonce={settings.ICANN_AUTH_NONCE}'
                 f'&state={LgrTokenAuthState.AUTHORIZE.value}'
-                # f'&response_mode=form_post'
+                f'&response_mode=form_post'
             )
         return ret
 
@@ -86,14 +89,15 @@ class LgrUserUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class TokenAuthenticateView(View):
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         user = authenticate(request)
         if not user:
             return redirect('icann_login_failure')
         login(request, user)
-        return resolve_url(settings.LOGIN_REDIRECT_URL)
+        return HttpResponseRedirect(resolve_url(settings.LOGIN_REDIRECT_URL))
 
 
 class TokenAuthenticationFailureView(TemplateView):
@@ -109,9 +113,10 @@ class EditIcannProfileView(View):
         return redirect(
             f'https://accounts-qa.icann.org/account/edit'
             f'?client_id={settings.ICANN_AUTH_CLIENT_ID}'
-            f'&redirect_uri={self.request.build_absolute_uri(reverse("icann_tokens"))}'
+            # FIXME: replace is a quickfix to remove, set correct Django settings
+            f'&redirect_uri={self.request.build_absolute_uri(reverse("icann_tokens")).replace("http", "https")}'
             f'&nonce={settings.ICANN_AUTH_NONCE}'
             f'&state={LgrTokenAuthState.EDIT.value}'
-            # f'&response_mode=form_post'
+            f'&response_mode=form_post'
             f'&app_id={settings.ICANN_AUTH_APP_ID}'
         )
