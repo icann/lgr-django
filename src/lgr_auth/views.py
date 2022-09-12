@@ -97,7 +97,12 @@ class TokenAuthenticateView(View):
         if not user:
             return redirect('icann_login_failure')
         login(request, user)
-        return HttpResponseRedirect(resolve_url(settings.LOGIN_REDIRECT_URL))
+        redirect_url = settings.LOGIN_REDIRECT_URL
+        params = {}
+        if user._lgr_state == LgrTokenAuthState.EDIT.value:
+            redirect_url = 'lgr_update_user'
+            params = {'user_pk': user.pk}
+        return HttpResponseRedirect(resolve_url(redirect_url, **params))
 
 
 class TokenAuthenticationFailureView(TemplateView):

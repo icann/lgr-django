@@ -24,9 +24,10 @@ async def get_user_info(jwt_verifier, access_token, id_token):
         'email': claims.get('email'),
         'first_name': claims.get('given_name'),
         'last_name': claims.get('family_name'),
+        'username': claims.get('sub')
     }
     headers, claims, signing_input, signature = jwt_verifier.parse_token(id_token)
-    data['username'] = claims['preferred_username']
+    data['username'] = claims.get('preferred_username')
 
     return data
 
@@ -52,6 +53,7 @@ class JWTBackend(ModelBackend):
         try:
             asyncio.run(check_id_token(jwt_verifier, id_token))
             claims = asyncio.run(get_user_info(jwt_verifier, access_token, id_token))
+            claims['state'] = params.get('state')
             return self._authenticate_from_claims(claims)
         except Exception as e:
             logger.exception('Failed to log-in', e)
@@ -62,6 +64,9 @@ class JWTBackend(ModelBackend):
         last_name = claims.get('last_name')
         email = claims.get('email')
         username = claims.get('username')
+        if not username:
+            logger.error('Missing username in tokens')
+            return
         try:
             user = UserModel._default_manager.get(icann_username__iexact=username)
         except UserModel.DoesNotExist:
@@ -72,12 +77,12 @@ class JWTBackend(ModelBackend):
                 # create the user in the database
                 user = UserModel.objects.create_user(email, first_name=first_name, last_name=last_name,
                                                      icann_username=username)
-        else:
-            if user.first_name != first_name or user.last_name != last_name or email != user.email:
-                user.first_name = first_name
-                user.last_name = last_name
-                user.email = email
-                user.save(update_fields=['first_name', 'last_name', 'email'])
+
+        if user.first_name != first_name or user.last_name != last_name or email != user.email:
+            user.first_name = first_name
+            user.last_name = last_name
+            user.email = email
+            user.save(update_fields=['first_name', 'last_name', 'email'])
 
         user._lgr_state = claims.get('state')  # keep state in user in case we want to do different processing
         if self.user_can_authenticate(user):

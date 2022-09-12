@@ -78,6 +78,7 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'  # for iframes containing popups
 AUTH_USER_MODEL = 'lgr_auth.LgrUser'
 
 AUTHENTICATION_BACKENDS = (
+    # 'lgr_auth.backend.JWTBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -88,11 +89,11 @@ AUTH_METHOD = 'Django'
 
 
 # Redirect URL after auth
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'lgr_home'
 # Default LOGIN URL (use named URLs)
-LOGIN_URL = '/auth/login'
+LOGIN_URL = 'login'
 # Redirect URL after logout
-LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'lgr_home'
 
 ROOT_URLCONF = 'lgr_web.urls'
 
