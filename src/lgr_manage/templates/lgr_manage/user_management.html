@@ -33,14 +33,16 @@
                 </td>
                 <td>{{ user.role }}</td>
                 <td style="display: flex">
-                    <form method="post" action="{% url "password_reset" %}">
-                        {% csrf_token %}
-                        <input type="hidden" name="email" value="{{ user.email }}">
-                        <button type="submit" class="btn btn-default">
-                            {% trans 'Send password reset link' %}
-                        </button>
-                    </form>
-                    &nbsp;
+                    {% if can_manage %}
+                      <form method="post" action="{% url "password_reset" %}">
+                          {% csrf_token %}
+                          <input type="hidden" name="email" value="{{ user.email }}">
+                          <button type="submit" class="btn btn-default">
+                              {% trans 'Send password reset link' %}
+                          </button>
+                      </form>
+                      &nbsp;
+                    {% endif %}
                     {% if not user.is_admin %}
                         <div class="btn-group">
                             <a type="button" class="btn btn-warning"
@@ -86,7 +88,7 @@
         {% endfor %}
         </tbody>
     </table>
-    {% if can_create %}
+    {% if can_manage %}
       <h2>{% trans 'Create a new user' %}</h2>
       <form class="form-horizontal" method="post" enctype="multipart/form-data">
           {% csrf_token %}

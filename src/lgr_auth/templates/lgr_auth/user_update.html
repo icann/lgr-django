@@ -17,8 +17,8 @@
         {% if can_edit %}
           <button id="submit" type="submit" class="btn btn-primary">{% trans "Update" %}</button>
         {% endif %}
+        {% if can_edit_icann_profile %}
+          <a href="{% url 'icann_update_user' %}" class="btn btn-primary">{% trans "Edit ICANN profile" %}</a>
+        {% endif %}
     </form>
-  {% if can_edit_icann_profile %}
-    <a href="{% url 'icann_update_user' %}" class="btn btn-primary">{% trans "Edit ICANN profile" %}</a>
-  {% endif %}
 {% endblock content %}

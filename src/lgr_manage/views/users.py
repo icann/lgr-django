@@ -21,7 +21,7 @@ class LgrUserListView(BaseListAdminView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = LgrUserCreateView.form_class(can_edit_role=True)
-        context['can_create'] = settings.AUTH_METHOD != 'ICANN'
+        context['can_manage'] = settings.AUTH_METHOD != 'ICANN'
         return context
 
 
@@ -43,7 +43,7 @@ class LgrUserCreateView(BaseAdminMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object_list'] = LgrUserListView.queryset.all()
-        context['can_create'] = settings.AUTH_METHOD != 'ICANN'
+        context['can_manage'] = settings.AUTH_METHOD != 'ICANN'
         return context
 
     def form_valid(self, form):
