@@ -9,9 +9,12 @@ DEBUG = True
 # See https://docs.djangoproject.com/en/1.8/ref/settings/#std:setting-ALLOWED_HOSTS
 ALLOWED_HOSTS = [ os.environ.get('lgrURL') ]
 
-# Uncomment if you are not using HTTPS
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'storage', 'media')

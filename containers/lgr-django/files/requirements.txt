@@ -18,5 +18,5 @@ lgr-core @ git+https://github.com/icann/lgr-core.git@qa
 # Natural sorting implementation
 natsort==7.1.1
 
-# OAuth support
-social-auth-app-django==5.0.0
+# ICANN login
+okta-jwt-verifier==0.2.3
