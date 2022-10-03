@@ -147,7 +147,7 @@ class LgrSettingsForm(forms.ModelForm):
         labels = {
             'variant_calculation_limit': _('Variant Calculation Limit'),
             'variant_calculation_max': _('Variant Calculation Max'),
-            'variant_calculation_abort': _('Variant Calculation Max'),
+            'variant_calculation_abort': _('Variant Calculation Skip'),
         }
         help_texts = {
             'variant_calculation_limit': _('Above this limit, only allocatable labels will be displayed and result '
