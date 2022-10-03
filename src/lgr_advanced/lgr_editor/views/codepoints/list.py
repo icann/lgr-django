@@ -97,7 +97,7 @@ class AddCodePointView(LGREditMixin, CodePointsViewMixin, FormView):
         override_repertoire = form.cleaned_data['override_repertoire']
         try:
             self.lgr.add_cp(cp_or_sequence,
-                            validating_repertoire=self.validating_repertoire,
+                            validating_repertoire=self.validating_repertoire.to_lgr(),
                             override_repertoire=override_repertoire)
             self.update_lgr()
             messages.success(self.request, _('New code point %s added') % format_cp(cp_or_sequence))

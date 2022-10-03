@@ -119,6 +119,7 @@ class MultiCodepointsView(LGREditMixin, FormView):
 
     def _handle_discrete(self, lgr, input_lgr, manual):
         logger.debug("Import: Copy references")
+        validating_repertoire_lgr = self.validating_repertoire.to_lgr() if self.validating_repertoire else None
         # No choice here, we have to import references
         for (ref_id, ref) in input_lgr.reference_manager.items():
             value = ref['value']
@@ -144,7 +145,7 @@ class MultiCodepointsView(LGREditMixin, FormView):
                     lgr.add_cp(char.cp,
                                comment=char.comment,
                                ref=char.references,
-                               validating_repertoire=self.validating_repertoire)
+                               validating_repertoire=validating_repertoire_lgr)
                 except LGRException:
                     disabled_codepoint.append(self.format_cp_choice(char.cp))
                 else:
@@ -167,7 +168,7 @@ class MultiCodepointsView(LGREditMixin, FormView):
 
         # Automatic import
         logger.debug("Import: Copy characters")
-        nb_codepoints = copy_characters(lgr, input_lgr, validating_repertoire=self.validating_repertoire)
+        nb_codepoints = copy_characters(lgr, input_lgr, validating_repertoire=validating_repertoire_lgr)
         self.update_lgr()
         messages.add_message(self.request,
                              messages.SUCCESS,
@@ -191,7 +192,7 @@ class AddRangeView(MultiCodepointsView):
         # populate the choices with code points of the view
         codepoint_status = self.lgr.check_range(cd['first_cp'],
                                                 cd['last_cp'],
-                                                validating_repertoire=self.validating_repertoire)
+                                                validating_repertoire=self.validating_repertoire.to_lgr())
 
         codepoint = []
         disabled_codepoint = []

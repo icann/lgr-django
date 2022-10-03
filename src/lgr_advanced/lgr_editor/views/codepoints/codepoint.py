@@ -163,7 +163,7 @@ class AddVariantView(LGREditMixin, CodePointViewMixin, FormView):
                 self.lgr.add_variant(self.codepoint,
                                      var_cp_sequence,
                                      variant_type=settings.DEFAULT_VARIANT_TYPE,
-                                     validating_repertoire=self.validating_repertoire,
+                                     validating_repertoire=self.validating_repertoire.to_lgr(),
                                      override_repertoire=override_repertoire)
                 if var_cp_sequence not in self.lgr.repertoire:
                     # Added variant code point not in repertoire
