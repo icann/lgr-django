@@ -22,10 +22,12 @@ else:
 
 def _get_validity(lgr, label_cplist, idna_encoder):
     label_u = cp_to_ulabel(label_cplist)
+    conversion_error = False
     try:
         label_a = idna_encoder(label_u)
     except UnicodeError as e:
         label_a = lgr_exception_to_text(e)
+        conversion_error = True
 
     (eligible, label_valid_parts, label_invalid_parts, disp, action_idx, logs) = lgr.test_label_eligible(label_cplist)
 
@@ -44,6 +46,7 @@ def _get_validity(lgr, label_cplist, idna_encoder):
     return {
                'u_label': label_u,
                'a_label': label_a,
+               'conversion_error': conversion_error,
                'cp_display_html': label_display_html,
                'cp_display': label_display_text,
                'eligible': eligible,
@@ -85,14 +88,17 @@ def _get_variants(lgr: LGR, label_cplist, threshold_include_vars, idna_encoder, 
         variant_display = u' '.join(u"U+{:04X}".format(cp, cp_to_ulabel(cp)) for cp in variant_cp)
         variant_input = u' '.join(u"U+{:04X}".format(cp) for cp in variant_cp)
         try:
+            conversion_error = False
             variant_a = idna_encoder(variant_u)
         except UnicodeError as e:
             variant_a = lgr_exception_to_text(e)
+            conversion_error = True
             var_disp = 'invalid'
 
         var_results.append({
             'u_label': variant_u,
             'a_label': variant_a,
+            'conversion_error': conversion_error,
             'cp_display_html': variant_display_html,
             'cp_display': variant_display,
             'cp_input': variant_input,

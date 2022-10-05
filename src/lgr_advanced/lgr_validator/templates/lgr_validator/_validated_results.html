@@ -36,7 +36,12 @@
             <tr>
                 <td>{{ result.u_label }}
                     <br>
-                    <small class="text-muted">{{ result.a_label }}</small>
+                    <small class="text-muted">
+                      {% if result.conversion_error %}
+                        <u>{% trans 'IDN validation while converting to A-Label failed:' %}</u><br>
+                      {% endif %}
+                      {{ result.a_label }}
+                    </small>
                 </td>
                 <td>{{ result.disposition }}</td>
                 <td>{{ result.cp_display_html }}</td>
@@ -164,7 +169,12 @@
                             <td>
                                 {{ v.u_label }}
                                 <br>
-                                <small class="text-muted">{{ v.a_label }}</small>
+                                <small class="text-muted">
+                                  {% if v.conversion_error %}
+                                    <u>{% trans 'IDN validation while converting to A-Label failed:' %}</u><br>
+                                  {% endif %}
+                                  {{ v.a_label }}
+                                </small>
                             </td>
                             <td>{{ v.disposition }}</td>
                             <td>
