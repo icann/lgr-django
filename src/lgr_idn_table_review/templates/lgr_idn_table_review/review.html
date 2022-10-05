@@ -546,6 +546,7 @@
                 <th>Is applicable for<br>the IDN Table?</th>
                 <th>Exists in<br>the IDN Table?</th>
             </tr>
+            {% if wle.additional_general_rules.combining_mark.display %}
             <tr style="background-color:white;">
                 <td>1</td>
                 <td style="text-align:left">The Unicode string MUST NOT begin with a combining mark or combining mark
@@ -560,6 +561,8 @@
                     {% endif %}
                 </td>
             </tr>
+            {% endif %}
+            {% if wle.additional_general_rules.consecutive_hyphens.display %}
             <tr style="background-color:#F8F4EC;">
                 <td>2</td>
                 <td style="text-align:left">The Unicode string MUST NOT contain "--" (two consecutive hyphens) in the
@@ -575,6 +578,8 @@
                     {% endif %}
                 </td>
             </tr>
+            {% endif %}
+            {% if wle.additional_general_rules.rtl.display %}
             <tr style="background-color:white;">
                 <td>3</td>
                 <td style="text-align:left">The RTL label MUST NOT start with a number.
@@ -588,9 +593,12 @@
                     {% endif %}
                 </td>
             </tr>
+            {% endif %}
+            {% if wle.additional_general_rules.digits_set.display %}
             <tr style="background-color:#F8F4EC;">
                 <td>4</td>
-                <td style="text-align:left">The RTL Label MUST NOT contain digits from different sets.
+                <td style="text-align:left">Digits in a label must be from a single digit set.
+                    The RTL Label MUST NOT contain digits from different sets.
                     See <a href="https://www.rfc-editor.org/rfc/rfc5893.txt" target="_blank" rel="noopener noreferrer">RFC5893</a>,
                     Section 2 Bidi Rule 4.<br>
                     In addition, the reference LGRs recommend that LTR labels also contain digits from a single set.
@@ -605,7 +613,8 @@
                     {% endif %}
                 </td>
             </tr>
-            {% if wle.additional_general_rules.japanese_contextj.applicable %}
+            {% endif %}
+            {% if wle.additional_general_rules.japanese_contextj.display %}
             <tr style="background-color:#F8F4EC;">
                 <td>5</td>
                 <td style="text-align:left">If the repertoire contains 30FB (KATAKANA MIDDLE DOT), it is required that one
