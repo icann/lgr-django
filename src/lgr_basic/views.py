@@ -39,6 +39,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
         init = super().get_initial()
         rz = RzLgr.objects.filter(active=True).first()
         init['lgr'] = str(rz.to_tuple())
+        init['labels'] = self.request.GET.get('label')
         return init
 
     def setup(self, request, *args, **kwargs):
