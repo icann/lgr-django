@@ -100,7 +100,7 @@ def lgr_diff_labels(lgr_1: LGR, lgr_2: LGR, labels_file,
                 show_collision, full_dump, not with_rules)
 
 
-def lgr_collision_labels(lgr: LGR, labels_file, tlds_file, full_dump, with_rules):
+def lgr_collision_labels(lgr: LGR, labels_file, tlds_file, full_dump):
     """
     Show difference between two LGR for a list of labels
 
@@ -108,10 +108,9 @@ def lgr_collision_labels(lgr: LGR, labels_file, tlds_file, full_dump, with_rules
     :param labels_file: The file containing the list of labels
     :param tlds_file: The file containing the TLDs
     :param full_dump: Whether we output a full dump
-    :param with_rules: Whether we also output rules
     :return: Text log to be displayed
     """
-    return collision(lgr, labels_file, tlds_file, full_dump, not with_rules)
+    return collision(lgr, labels_file, tlds_file, full_dump)
 
 
 def lgr_basic_collision_labels(lgr: LGR, labels_file, tlds_file, with_annotate):

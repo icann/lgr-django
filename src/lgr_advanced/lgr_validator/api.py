@@ -161,6 +161,7 @@ def _get_collisions(lgr, label_cplist, labels_list, idna_encoder, lgr_actions, i
     for col in collisions:
         if col['label'] == label_u:
             collision = col
+            continue
         if col['label'] in labels:
             collide_with.append(col)
 

@@ -100,7 +100,7 @@ def diff_task(user_pk, lgr_pk_1, lgr_pk_2, labels_json, collision, full_dump,
 
 
 @shared_task
-def collision_task(user_pk, lgr_pk, labels_json, tld_json, full_dump, with_rules):
+def collision_task(user_pk, lgr_pk, labels_json, tld_json, full_dump):
     """
     Compute collision between labels in an LGR
 
@@ -109,7 +109,6 @@ def collision_task(user_pk, lgr_pk, labels_json, tld_json, full_dump, with_rules
     :param labels_json: The LabelInfo as a JSON object containing labels to check for coliision.
     :param tld_json: The LabelInfo as a JSON object containing TLDs.
     :param full_dump: Whether we also output a full dump
-    :param with_rules: Whether we also output rules
     """
     user = LgrUser.objects.get(pk=user_pk)
     lgr = LgrModel.get_object(user, lgr_pk).to_lgr()
@@ -125,8 +124,7 @@ def collision_task(user_pk, lgr_pk, labels_json, tld_json, full_dump, with_rules
                           lgr=lgr,
                           labels_file=labels_info.labels,
                           tlds_file=tlds_info.labels if tld_json else None,
-                          full_dump=full_dump,
-                          with_rules=with_rules)
+                          full_dump=full_dump)
 
 
 # FIXME: should be moved to basic app

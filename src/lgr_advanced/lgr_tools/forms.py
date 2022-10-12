@@ -108,11 +108,6 @@ class LGRCollisionSelector(forms.Form):
                                    help_text=_('Print a full dump'),
                                    required=False)
 
-    with_rules = forms.BooleanField(label=_("Output rules"),
-                                    help_text=_('Show rules in output (this '
-                                                'can be very verbose)'),
-                                    required=False)
-
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', [])
         super(LGRCollisionSelector, self).__init__(*args, **kwargs)

@@ -171,7 +171,6 @@ class LGRCollisionView(LGRToolBaseView):
         lgr_pk = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
         full_dump = form.cleaned_data['full_dump']
-        with_rules = form.cleaned_data['with_rules']
         with_tlds = False
 
         lgr_object = LgrModel.get_object(self.request.user, lgr_pk)
@@ -182,7 +181,7 @@ class LGRCollisionView(LGRToolBaseView):
         if form.cleaned_data['download_tlds']:
             tlds_json = LabelInfo.from_form('TLDs', download_file(settings.ICANN_TLDS)[1].read().lower()).to_dict()
             with_tlds = True
-        self.call_async(lgr_object, labels_json, tlds_json, full_dump, with_rules)
+        self.call_async(lgr_object, labels_json, tlds_json, full_dump)
 
         ctx = self.get_context_data()
         ctx.update({
