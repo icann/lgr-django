@@ -68,10 +68,10 @@ class BasicModeView(LoginRequiredMixin, FormView):
                                                user=self.request.user)
             if collisions:
                 basic_collision_task.apply_async((self.request.user.pk, lgr.pk, labels_json,
-                                                  True, RzLgr._meta.label), task_id=task.pk)
+                                                  True, lgr._meta.label), task_id=task.pk)
                 ctx['collision_task'] = True
             else:
-                annotate_task.apply_async((self.request.user.pk, lgr.pk, labels_json, RzLgr._meta.label),
+                annotate_task.apply_async((self.request.user.pk, lgr.pk, labels_json, lgr._meta.label),
                                           task_id=task.pk)
 
         else:
@@ -81,13 +81,13 @@ class BasicModeView(LoginRequiredMixin, FormView):
             is_collision_index = False
             check_collisions = None
             if collisions:
-                labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp]).to_dict()
                 def launch_collision_task():
+                    labels_json = LabelInfo.from_list('labels', [cp_to_ulabel(l) for l in labels_cp]).to_dict()
                     task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
                                                        name=_('Compute collisions on %s') % lgr.name,
                                                        user=self.request.user)
                     basic_collision_task.apply_async((self.request.user.pk, lgr.pk, labels_json,
-                                                      False, RzLgr._meta.label), task_id=task.pk)
+                                                      False, lgr._meta.label), task_id=task.pk)
                     ctx['collision_task'] = True
 
                 if len(labels_cp) == 1:
@@ -103,17 +103,20 @@ class BasicModeView(LoginRequiredMixin, FormView):
                         check_collisions = tld_indexes
                 else:
                     launch_collision_task()
+
             for label_cplist in labels_cp:
                 try:
                     res = result.copy()
                     res.update(evaluate_label_from_view(self.request,
-                                                           lgr,
-                                                           label_cplist,
-                                                           lgr_settings.variant_calculation_limit,
-                                                           check_collisions=check_collisions,
-                                                           is_collision_index=is_collision_index,
-                                                           hide_mixed_script_variants=hide_mixed_script_variants))
-                    if res.get('launched_as_task') and collisions:
+                                                        lgr,
+                                                        label_cplist,
+                                                        lgr_settings.variant_calculation_limit,
+                                                        check_collisions=check_collisions,
+                                                        is_collision_index=is_collision_index,
+                                                        hide_mixed_script_variants=hide_mixed_script_variants))
+                    if res.get('launched_as_task') and collisions and len(labels_cp) == 1:
+                        # task has not been launched as there is only one label,
+                        # but it should finally be computed in background
                         launch_collision_task()
                     results.append(res)
                 except UnicodeError as ex:
