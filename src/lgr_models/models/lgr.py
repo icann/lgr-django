@@ -6,6 +6,7 @@ from io import BytesIO
 
 from django.conf import settings
 from django.core.cache import cache
+from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import models
 from django.urls import reverse
@@ -68,6 +69,8 @@ class LgrBaseModel(models.Model):
     def get_object(cls, user, pk):
         query_kwargs = {'pk': pk}
         if not cls._meta.get_field('owner').null:
+            if user.is_anonymous:
+                raise PermissionDenied
             # only include owner in model where it is mandatory, meaning objects are private
             query_kwargs['owner'] = user
         return cls.objects.get(**query_kwargs)
