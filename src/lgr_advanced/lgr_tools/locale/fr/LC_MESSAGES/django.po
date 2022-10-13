@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 15:28+0000\n"
-"PO-Revision-Date: 2022-06-23 11:48-0400\n"
+"POT-Creation-Date: 2022-10-13 15:56+0000\n"
+"PO-Revision-Date: 2022-10-13 11:58-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: src/lgr_advanced/lgr_tools/forms.py:13
 msgid "Union"
@@ -32,25 +32,25 @@ msgstr "Différence"
 
 #: src/lgr_advanced/lgr_tools/forms.py:19
 #: src/lgr_advanced/lgr_tools/forms.py:60
-#: src/lgr_advanced/lgr_tools/forms.py:184
+#: src/lgr_advanced/lgr_tools/forms.py:179
 msgid "First LGR"
 msgstr "Première LGR"
 
 #: src/lgr_advanced/lgr_tools/forms.py:20
 #: src/lgr_advanced/lgr_tools/forms.py:61
-#: src/lgr_advanced/lgr_tools/forms.py:185
+#: src/lgr_advanced/lgr_tools/forms.py:180
 msgid "First LGR to use in tool"
 msgstr "Première LGR à utiliser dans l'outil"
 
 #: src/lgr_advanced/lgr_tools/forms.py:24
 #: src/lgr_advanced/lgr_tools/forms.py:64
-#: src/lgr_advanced/lgr_tools/forms.py:188
+#: src/lgr_advanced/lgr_tools/forms.py:183
 msgid "Second LGR"
 msgstr "Seconde LGR"
 
 #: src/lgr_advanced/lgr_tools/forms.py:25
 #: src/lgr_advanced/lgr_tools/forms.py:65
-#: src/lgr_advanced/lgr_tools/forms.py:189
+#: src/lgr_advanced/lgr_tools/forms.py:184
 msgid "Second LGR to use in tool"
 msgstr "Seconde LGR à utiliser dans l'outil"
 
@@ -74,22 +74,22 @@ msgstr "Afficher la sortie complète (incluant les code points identiques)"
 
 #: src/lgr_advanced/lgr_tools/forms.py:49
 #: src/lgr_advanced/lgr_tools/forms.py:97
-#: src/lgr_advanced/lgr_tools/forms.py:126
-#: src/lgr_advanced/lgr_tools/forms.py:153
-#: src/lgr_advanced/lgr_tools/forms.py:209
+#: src/lgr_advanced/lgr_tools/forms.py:121
+#: src/lgr_advanced/lgr_tools/forms.py:148
+#: src/lgr_advanced/lgr_tools/forms.py:204
 msgid "LGR"
 msgstr "LGR"
 
 #: src/lgr_advanced/lgr_tools/forms.py:50
-#: src/lgr_advanced/lgr_tools/forms.py:154
+#: src/lgr_advanced/lgr_tools/forms.py:149
 msgid "LGR set"
 msgstr "Set LGR"
 
 #: src/lgr_advanced/lgr_tools/forms.py:68
 #: src/lgr_advanced/lgr_tools/forms.py:104
-#: src/lgr_advanced/lgr_tools/forms.py:172
-#: src/lgr_advanced/lgr_tools/forms.py:178
-#: src/lgr_advanced/lgr_tools/forms.py:213
+#: src/lgr_advanced/lgr_tools/forms.py:167
+#: src/lgr_advanced/lgr_tools/forms.py:173
+#: src/lgr_advanced/lgr_tools/forms.py:208
 msgid "Labels"
 msgstr "Labels"
 
@@ -107,19 +107,17 @@ msgid "Print a full dump"
 msgstr "Afficher un résumé complet"
 
 #: src/lgr_advanced/lgr_tools/forms.py:81
-#: src/lgr_advanced/lgr_tools/forms.py:111
 msgid "Output rules"
 msgstr "Afficher les règles"
 
 #: src/lgr_advanced/lgr_tools/forms.py:82
-#: src/lgr_advanced/lgr_tools/forms.py:112
 msgid "Show rules in output (this can be very verbose)"
 msgstr ""
 "Affiche les règles dans le fichier de sortie (cela peut être très verbeux)"
 
 #: src/lgr_advanced/lgr_tools/forms.py:98
-#: src/lgr_advanced/lgr_tools/forms.py:127
-#: src/lgr_advanced/lgr_tools/forms.py:210
+#: src/lgr_advanced/lgr_tools/forms.py:122
+#: src/lgr_advanced/lgr_tools/forms.py:205
 msgid "LGR to use in tool"
 msgstr "LGR à utiliser dans l'outil"
 
@@ -127,19 +125,19 @@ msgstr "LGR à utiliser dans l'outil"
 msgid "Also check for collision with existing TLDs"
 msgstr "Vérifier aussi les collisions avec les TLDs existants"
 
-#: src/lgr_advanced/lgr_tools/forms.py:131
+#: src/lgr_advanced/lgr_tools/forms.py:126
 msgid "Script"
 msgstr "Script"
 
-#: src/lgr_advanced/lgr_tools/forms.py:132
+#: src/lgr_advanced/lgr_tools/forms.py:127
 msgid "The script used to validate the label"
 msgstr "Script utilisé pour valider le label"
 
-#: src/lgr_advanced/lgr_tools/forms.py:165
+#: src/lgr_advanced/lgr_tools/forms.py:160
 msgid "Allocated Set labels"
 msgstr "Labels du set alloués"
 
-#: src/lgr_advanced/lgr_tools/forms.py:168
+#: src/lgr_advanced/lgr_tools/forms.py:163
 msgid ""
 "Optional list of labels already allocated in the LGR set, that will be used "
 "to check for collisions when evaluating labels using the merged LGR set."
@@ -148,11 +146,11 @@ msgstr ""
 "utilisés pour vérifier les collisions lors de l'évaluation de labels en "
 "utilisant le set LGR fusionné."
 
-#: src/lgr_advanced/lgr_tools/forms.py:192
+#: src/lgr_advanced/lgr_tools/forms.py:187
 msgid "Root Zone LGR"
 msgstr "LGR de la Root Zone"
 
-#: src/lgr_advanced/lgr_tools/forms.py:193
+#: src/lgr_advanced/lgr_tools/forms.py:188
 msgid "The (optional) RootZone LGR to infer new variant sets from"
 msgstr "La LGR Root Zone optionnelle pour inférer de nouvelles variantes"
 
@@ -287,8 +285,8 @@ msgid "Harmonize"
 msgstr "Harmoniser"
 
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:13
-msgid "Hide mixed script variants"
-msgstr "Cacher les variants issus de scripts différents"
+msgid "Include mixed script variants"
+msgstr "Inclure les variants issus de scripts différents"
 
 #: src/lgr_advanced/lgr_tools/templates/lgr_tools/variants.html:26
 msgid "Compute variants"
@@ -370,22 +368,22 @@ msgstr "Diff avec la LGR %s"
 msgid "Collision with LGR %s"
 msgstr "Collision avec la LGR %s"
 
-#: src/lgr_advanced/lgr_tools/views.py:208
+#: src/lgr_advanced/lgr_tools/views.py:207
 #, python-format
 msgid "Annotation on LGR set %s"
 msgstr "Annotation du set de LGR %s"
 
-#: src/lgr_advanced/lgr_tools/views.py:210
+#: src/lgr_advanced/lgr_tools/views.py:209
 #, python-format
 msgid "Annotation on LGR %s"
 msgstr "Annotation de la LGR %s"
 
-#: src/lgr_advanced/lgr_tools/views.py:254
+#: src/lgr_advanced/lgr_tools/views.py:253
 #, python-format
 msgid "Cross-scripts variants computation on LGR %s"
 msgstr "Calcul des variantes cross-scripts sur la LGR %s"
 
-#: src/lgr_advanced/lgr_tools/views.py:326
+#: src/lgr_advanced/lgr_tools/views.py:325
 #, python-format
 msgid "Variant computation on LGR %s"
 msgstr "Calcul de variantes sur la LGR %s"

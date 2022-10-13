@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 15:28+0000\n"
+"POT-Creation-Date: 2022-10-13 15:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,7 +78,7 @@ msgid ""
 msgstr ""
 
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:79
-#: src/lgr_advanced/lgr_editor/forms/importer.py:14
+#: src/lgr_advanced/lgr_editor/forms/importer.py:13
 #: src/lgr_advanced/lgr_editor/forms/metadata.py:59
 msgid "Validating repertoire"
 msgstr ""
@@ -115,29 +115,29 @@ msgstr ""
 msgid "File must be encoded in UTF-8 and using 0x0A line ending."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:15
+#: src/lgr_advanced/lgr_editor/forms/importer.py:14
 msgid "Code points will be limited to the selected repertoire"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:27
+#: src/lgr_advanced/lgr_editor/forms/importer.py:26
 msgid "Name"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:37
+#: src/lgr_advanced/lgr_editor/forms/importer.py:36
 msgid "Select file(s)"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:41
+#: src/lgr_advanced/lgr_editor/forms/importer.py:40
 msgid "LGR set name"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:46
+#: src/lgr_advanced/lgr_editor/forms/importer.py:45
 msgid ""
 "Enter a valid LGR set name. This value may contain only letters, numbers "
 "and ./-/_ characters."
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:50
+#: src/lgr_advanced/lgr_editor/forms/importer.py:49
 msgid "The name of the set"
 msgstr ""
 
@@ -844,12 +844,12 @@ msgid "%(var_msg_prefix)s could not be deleted because it was not found"
 msgstr ""
 
 #: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:93
-#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:174
+#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:175
 #, python-format
 msgid "%d code points added"
 msgstr ""
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:156
+#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:157
 msgid "No code point in input file"
 msgstr ""
 
@@ -912,6 +912,10 @@ msgstr ""
 
 #: src/lgr_advanced/lgr_editor/views/metadata.py:132
 msgid "Meta data saved"
+msgstr ""
+
+#: src/lgr_advanced/lgr_editor/views/mixins.py:67
+msgid "Cannot edit LGR set"
 msgstr ""
 
 #: src/lgr_advanced/lgr_editor/views/reference.py:95
@@ -1004,6 +1008,10 @@ msgstr ""
 
 #: src/lgr_advanced/lgr_editor/views/rule.py:279
 msgid "Action saved."
+msgstr ""
+
+#: src/lgr_advanced/lgr_editor/views/set.py:20
+msgid "LGR is not a set"
 msgstr ""
 
 #: src/lgr_advanced/lgr_editor/views/tag.py:104

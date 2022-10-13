@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 15:28+0000\n"
-"PO-Revision-Date: 2022-09-06 12:17-0400\n"
+"POT-Creation-Date: 2022-10-13 15:56+0000\n"
+"PO-Revision-Date: 2022-10-13 11:59-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,22 +16,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
-#: src/lgr_advanced/lgr_validator/api.py:133
+#: src/lgr_advanced/lgr_validator/api.py:139
 msgid "the LGR set labels"
 msgstr "la liste de labels du set LGR"
 
-#: src/lgr_advanced/lgr_validator/api.py:133
+#: src/lgr_advanced/lgr_validator/api.py:139
 msgid "the TLDs list"
 msgstr "la liste de TLDs"
 
-#: src/lgr_advanced/lgr_validator/api.py:137
+#: src/lgr_advanced/lgr_validator/api.py:143
 #, python-format
 msgid "The label is in %(labels_list)s"
 msgstr "Le label est dans %(labels_list)s"
 
-#: src/lgr_advanced/lgr_validator/api.py:163
+#: src/lgr_advanced/lgr_validator/api.py:170
 #, python-format
 msgid "ERROR cannot retrieve label in collisions, please check %(labels_list)s"
 msgstr ""
@@ -68,8 +68,8 @@ msgid "The script used to validate the label"
 msgstr "Le script utilisé pour valider le label"
 
 #: src/lgr_advanced/lgr_validator/forms.py:22
-msgid "Hide mixed script variants"
-msgstr "Cacher les variants issus de scripts différents"
+msgid "Include mixed-script variants"
+msgstr "Inclure les variants issus de scripts différents"
 
 #: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:7
 #: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:14
@@ -113,20 +113,25 @@ msgstr "Disposition"
 msgid "Code point sequence"
 msgstr "Séquence de code points"
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:47
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:115
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:179
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:41
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:174
+msgid "IDN validation while converting to A-Label failed:"
+msgstr "Échec de la validation IDN lors de la conversion en A-Label:"
+
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:52
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:120
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:189
 msgid "Show / hide log"
 msgstr "Montrer / Cacher les logs"
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:62
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:126
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:190
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:67
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:131
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:200
 #, python-format
 msgid "<b>[Action index: %(action_idx)s]</b> %(action)s"
 msgstr "<b>[Index de l'action : %(action_idx)s]</b> %(action)s"
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:78
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:83
 msgid ""
 "The input label or its variant labels collide with an existing TLD or its "
 "variant TLDs."
@@ -134,44 +139,44 @@ msgstr ""
 "Le label entré ou l'un de ses labels variant est en collision avec un TLD "
 "existant ou l'une de ses TLDs variant."
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:81
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:86
 msgid "Collision(s) found"
 msgstr "Collision(s) trouvée(s)"
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:84
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:89
 msgid "No collision"
 msgstr "Pas de collisions"
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:89
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:94
 msgid "Collision"
 msgstr "Collision"
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:137
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:142
 msgid "No collision."
 msgstr "Pas de collisions."
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:147
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:152
 msgid "Variant labels"
 msgstr "Labels variants"
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:147
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:152
 msgid " (including original as last)"
 msgstr " (incluant l'original en dernier)"
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:152
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:157
 #, python-format
 msgid "%(num_variants)s variant label(s) generated."
 msgstr "%(num_variants)s label(s) variant(s) généré(s)."
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:154
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:159
 msgid "By disposition: "
 msgstr "Par disposition : "
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:156
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:161
 msgid "No variant labels generated."
 msgstr "Aucun label variant généré."
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:204
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:214
 msgid ""
 "Too many variant labels to be displayed in the browser. You can download the "
 "whole results in .csv."
@@ -179,7 +184,7 @@ msgstr ""
 "Trop de labels variants pour être affichés dans le navigateur. Prière de "
 "télécharger le résultat au format CSV."
 
-#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:219
+#: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:229
 msgid "Download results in CSV"
 msgstr "Télécharger les résultats en CSV"
 

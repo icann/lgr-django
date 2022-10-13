@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 15:28+0000\n"
+"POT-Creation-Date: 2022-10-13 15:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -104,15 +104,15 @@ msgstr ""
 msgid "Completed tasks have been cleaned."
 msgstr ""
 
-#: src/lgr_web/settings/default.py:246
+#: src/lgr_web/settings/default.py:232
 msgid "Arabic"
 msgstr ""
 
-#: src/lgr_web/settings/default.py:247
+#: src/lgr_web/settings/default.py:233
 msgid "English"
 msgstr ""
 
-#: src/lgr_web/settings/default.py:248
+#: src/lgr_web/settings/default.py:234
 msgid "French"
 msgstr ""
 

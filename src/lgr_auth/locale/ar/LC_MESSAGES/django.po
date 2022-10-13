@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 15:28+0000\n"
+"POT-Creation-Date: 2022-10-13 15:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,27 +31,27 @@ msgstr ""
 msgid "An user with that email already exists."
 msgstr ""
 
-#: src/lgr_auth/models.py:68
+#: src/lgr_auth/models.py:69
 msgid "first name"
 msgstr ""
 
-#: src/lgr_auth/models.py:69
+#: src/lgr_auth/models.py:70
 msgid "last name"
 msgstr ""
 
-#: src/lgr_auth/models.py:70
+#: src/lgr_auth/models.py:71
 msgid "active"
 msgstr ""
 
-#: src/lgr_auth/models.py:71
+#: src/lgr_auth/models.py:72
 msgid "date joined"
 msgstr ""
 
-#: src/lgr_auth/models.py:74
+#: src/lgr_auth/models.py:76
 msgid "user"
 msgstr ""
 
-#: src/lgr_auth/models.py:75
+#: src/lgr_auth/models.py:77
 msgid "users"
 msgstr ""
 
@@ -76,10 +76,6 @@ msgstr ""
 
 #: src/lgr_auth/templates/lgr_auth/login.html:34
 msgid "Please login to see this page."
-msgstr ""
-
-#: src/lgr_auth/templates/lgr_auth/login.html:53
-msgid "Sign in with:"
 msgstr ""
 
 #: src/lgr_auth/templates/lgr_auth/password_reset_complete.html:4
@@ -150,6 +146,18 @@ msgstr ""
 msgid "Password reset on LGR Toolset"
 msgstr ""
 
+#: src/lgr_auth/templates/lgr_auth/token_failure.html:4
+msgid "LGR Tools ICANN operation failure"
+msgstr ""
+
+#: src/lgr_auth/templates/lgr_auth/token_failure.html:7
+msgid "ICANN operation failure"
+msgstr ""
+
+#: src/lgr_auth/templates/lgr_auth/token_failure.html:11
+msgid "Failed to process response from ICANN, please contact administrator"
+msgstr ""
+
 #: src/lgr_auth/templates/lgr_auth/user_update.html:4
 msgid "LGR Tools user edition"
 msgstr ""
@@ -159,14 +167,22 @@ msgstr ""
 msgid "Edit user %(email)s"
 msgstr ""
 
-#: src/lgr_auth/templates/lgr_auth/user_update.html:17
+#: src/lgr_auth/templates/lgr_auth/user_update.html:18
 msgid "Update"
 msgstr ""
 
-#: src/lgr_auth/views.py:39
+#: src/lgr_auth/templates/lgr_auth/user_update.html:21
+msgid "Edit ICANN profile"
+msgstr ""
+
+#: src/lgr_auth/views.py:83
 msgid "User updated"
 msgstr ""
 
-#: src/lgr_auth/views.py:43
+#: src/lgr_auth/views.py:87
 msgid "Failed to update user"
+msgstr ""
+
+#: src/lgr_auth/views.py:115
+msgid "User is not logged with ICANN"
 msgstr ""

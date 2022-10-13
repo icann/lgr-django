@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 15:28+0000\n"
+"POT-Creation-Date: 2022-10-13 15:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -67,8 +67,12 @@ msgstr ""
 msgid "Variant Calculation Limit"
 msgstr ""
 
-#: src/lgr_manage/forms.py:149 src/lgr_manage/forms.py:150
+#: src/lgr_manage/forms.py:149
 msgid "Variant Calculation Max"
+msgstr ""
+
+#: src/lgr_manage/forms.py:150
+msgid "Variant Calculation Skip"
 msgstr ""
 
 #: src/lgr_manage/forms.py:153
@@ -149,7 +153,7 @@ msgstr ""
 #: src/lgr_manage/templates/lgr_manage/msr.html:57
 #: src/lgr_manage/templates/lgr_manage/ref_lgr.html:108
 #: src/lgr_manage/templates/lgr_manage/rz_lgr.html:80
-#: src/lgr_manage/templates/lgr_manage/user_management.html:96
+#: src/lgr_manage/templates/lgr_manage/user_management.html:99
 msgid "Add"
 msgstr ""
 
@@ -263,40 +267,40 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/user_management.html:40
+#: src/lgr_manage/templates/lgr_manage/user_management.html:41
 msgid "Send password reset link"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/user_management.html:48
-#: src/lgr_manage/templates/lgr_manage/user_management.html:81
+#: src/lgr_manage/templates/lgr_manage/user_management.html:50
+#: src/lgr_manage/templates/lgr_manage/user_management.html:83
 msgid "Edit"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/user_management.html:53
+#: src/lgr_manage/templates/lgr_manage/user_management.html:55
 msgid "Toggle Dropdown"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/user_management.html:62
-#: src/lgr_manage/templates/lgr_manage/user_update.html:28
+#: src/lgr_manage/templates/lgr_manage/user_management.html:64
+#: src/lgr_manage/templates/lgr_manage/user_update.html:30
 msgid "Disable"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/user_management.html:62
+#: src/lgr_manage/templates/lgr_manage/user_management.html:64
 #: src/lgr_manage/templates/lgr_manage/user_update.html:13
 msgid "Enable"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/user_management.html:71
+#: src/lgr_manage/templates/lgr_manage/user_management.html:73
 #, python-format
 msgid "Are you sure you want to delete user %(user)s?"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/user_management.html:73
-#: src/lgr_manage/templates/lgr_manage/user_update.html:34
+#: src/lgr_manage/templates/lgr_manage/user_management.html:75
+#: src/lgr_manage/templates/lgr_manage/user_update.html:36
 msgid "Delete"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/user_management.html:89
+#: src/lgr_manage/templates/lgr_manage/user_management.html:92
 msgid "Create a new user"
 msgstr ""
 
@@ -313,11 +317,11 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/user_update.html:25
+#: src/lgr_manage/templates/lgr_manage/user_update.html:26
 msgid "Update"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/user_update.html:32
+#: src/lgr_manage/templates/lgr_manage/user_update.html:34
 #, python-format
 msgid "Are you sure you want to delete user %(object)s?"
 msgstr ""
@@ -367,10 +371,14 @@ msgstr ""
 msgid "The index variant calculation has already been triggered, please wait"
 msgstr ""
 
-#: src/lgr_manage/views/users.py:42
+#: src/lgr_manage/views/users.py:36
+msgid "Cannot create users when auth is performed with ICANN"
+msgstr ""
+
+#: src/lgr_manage/views/users.py:50
 msgid "New user created"
 msgstr ""
 
-#: src/lgr_manage/views/users.py:46
+#: src/lgr_manage/views/users.py:54
 msgid "Failed to create user"
 msgstr ""

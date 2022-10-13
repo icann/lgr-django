@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 15:28+0000\n"
+"POT-Creation-Date: 2022-10-13 15:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,7 +87,7 @@ msgid "Check for collision with existing TLDs"
 msgstr ""
 
 #: src/lgr_basic/templates/lgr_basic/basic_mode.html:105
-msgid "Hide mixed script variants"
+msgid "Include mixed script variants"
 msgstr ""
 
 #: src/lgr_basic/templates/lgr_basic/basic_mode.html:115
@@ -139,22 +139,22 @@ msgstr ""
 msgid "Are you sure you want to delete report %(report.filename)s?"
 msgstr ""
 
-#: src/lgr_basic/views.py:62
+#: src/lgr_basic/views.py:63
 #, python-format
 msgid "Annotate labels on LGR %s"
 msgstr ""
 
-#: src/lgr_basic/views.py:64
+#: src/lgr_basic/views.py:65
 #, python-format
 msgid "Compute collisions and annotate labels on %s"
 msgstr ""
 
-#: src/lgr_basic/views.py:86
+#: src/lgr_basic/views.py:87
 #, python-format
 msgid "Compute collisions on %s"
 msgstr ""
 
-#: src/lgr_basic/views.py:121
+#: src/lgr_basic/views.py:126
 #, python-format
 msgid ""
 "Input label generates too many variants to compute them all quickly. You can "

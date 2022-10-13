@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 15:28+0000\n"
-"PO-Revision-Date: 2021-03-01 09:57-0500\n"
+"POT-Creation-Date: 2022-10-13 15:56+0000\n"
+"PO-Revision-Date: 2022-10-13 11:58-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: src/lgr_advanced/lgr_editor/forms/codepoint.py:15
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:48
@@ -79,7 +79,7 @@ msgstr ""
 "code point (%(first_cp)s)"
 
 #: src/lgr_advanced/lgr_editor/forms/codepoints.py:79
-#: src/lgr_advanced/lgr_editor/forms/importer.py:14
+#: src/lgr_advanced/lgr_editor/forms/importer.py:13
 #: src/lgr_advanced/lgr_editor/forms/metadata.py:59
 msgid "Validating repertoire"
 msgstr "Répertoire de validation"
@@ -117,23 +117,23 @@ msgid "File must be encoded in UTF-8 and using 0x0A line ending."
 msgstr ""
 "Le fichier doit être encodé en UTF-8 et utiliser les retours à la ligne 0x0A."
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:15
+#: src/lgr_advanced/lgr_editor/forms/importer.py:14
 msgid "Code points will be limited to the selected repertoire"
 msgstr "Les code points seront limités au répertoire sélectionné"
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:27
+#: src/lgr_advanced/lgr_editor/forms/importer.py:26
 msgid "Name"
 msgstr "Nom"
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:37
+#: src/lgr_advanced/lgr_editor/forms/importer.py:36
 msgid "Select file(s)"
 msgstr "Sélectionner un/des fichier(s)"
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:41
+#: src/lgr_advanced/lgr_editor/forms/importer.py:40
 msgid "LGR set name"
 msgstr "Nom du set LGR"
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:46
+#: src/lgr_advanced/lgr_editor/forms/importer.py:45
 msgid ""
 "Enter a valid LGR set name. This value may contain only letters, numbers "
 "and ./-/_ characters."
@@ -141,7 +141,7 @@ msgstr ""
 "Entrer un nom de LGR valide. Cette valeur ne peut que contenir des lettres, "
 "nombres et les caractères ./-/_."
 
-#: src/lgr_advanced/lgr_editor/forms/importer.py:50
+#: src/lgr_advanced/lgr_editor/forms/importer.py:49
 msgid "The name of the set"
 msgstr "Nom du set"
 
@@ -878,12 +878,12 @@ msgstr ""
 "%(var_msg_prefix)s n'a pas pu être supprimée car elle n'a pas été trouvée"
 
 #: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:93
-#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:174
+#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:175
 #, python-format
 msgid "%d code points added"
 msgstr "%d code points ont été ajoutés"
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:156
+#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:157
 msgid "No code point in input file"
 msgstr "Le fichier d'entrée ne contient aucun code point"
 
@@ -955,6 +955,10 @@ msgstr ""
 #: src/lgr_advanced/lgr_editor/views/metadata.py:132
 msgid "Meta data saved"
 msgstr "Metadonnées sauvegardées"
+
+#: src/lgr_advanced/lgr_editor/views/mixins.py:67
+msgid "Cannot edit LGR set"
+msgstr "Impossible d'éditer le set LGR"
 
 #: src/lgr_advanced/lgr_editor/views/reference.py:95
 msgid "New reference created"
@@ -1049,6 +1053,10 @@ msgstr "Aucune action trouvée"
 #: src/lgr_advanced/lgr_editor/views/rule.py:279
 msgid "Action saved."
 msgstr "Action sauvée."
+
+#: src/lgr_advanced/lgr_editor/views/set.py:20
+msgid "LGR is not a set"
+msgstr "La LGR n'est pas un set LGR"
 
 #: src/lgr_advanced/lgr_editor/views/tag.py:104
 #, python-format
@@ -1195,10 +1203,6 @@ msgstr "Reconstruction de la LGR"
 
 #~ msgid "A general exception occurred in the LGR API"
 #~ msgstr "Une exception s'est produite dans l'API LGR"
-
-#, python-format
-#~ msgid "LGR is not valid (%(args)s)"
-#~ msgstr "La LGR n'est pas valide (%(args)s)"
 
 #, python-format
 #~ msgid "Label %(label)s is not valid in the LGR (%(message)s)"
