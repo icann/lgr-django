@@ -8,9 +8,9 @@
         {% include "lgr_editor/_form_field.html" with field=form.labels %}
         <div class="col-sm-12 checkbox">
             <label>
-                {% include "lgr_editor/_form_field.html" with field=form.hide_mixed_script_variants %}
+                {% include "lgr_editor/_form_field.html" with field=form.include_mixed_script_variants %}
                 <span>
-                    {% trans 'Hide mixed script variants' %}
+                    {% trans 'Include mixed script variants' %}
                 </span>
             </label>
         </div>

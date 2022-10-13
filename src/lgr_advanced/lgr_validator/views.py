@@ -155,7 +155,7 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
     def form_valid(self, form):
         label_cplist = form.cleaned_data['label']
         script_lgr_pk = form.cleaned_data.get('script', None)
-        hide_mixed_script_variants = form.cleaned_data['hide_mixed_script_variants']
+        hide_mixed_script_variants = not form.cleaned_data['include_mixed_script_variants']
         set_labels_info = None
         if self.lgr_object.is_set():
             set_labels_file = form.cleaned_data['set_labels']

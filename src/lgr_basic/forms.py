@@ -43,7 +43,7 @@ class ValidateLabelSimpleForm(forms.Form):
     collisions = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'id': 'check-for-collision'}),
                                     required=False)
 
-    hide_mixed_script_variants = forms.BooleanField(label='',
+    include_mixed_script_variants = forms.BooleanField(label='',
                                                     widget=forms.CheckboxInput(
                                                         attrs={'id': 'hide-mixed-script-variants'}),
                                                     required=False)

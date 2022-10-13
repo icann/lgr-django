@@ -327,7 +327,7 @@ class LGRComputeVariants(LGRToolBaseView):
     def form_valid(self, form):
         lgr_pk = form.cleaned_data['lgr']
         labels_file = form.cleaned_data['labels']
-        hide_mixed_script_variants = form.cleaned_data['hide_mixed_script_variants']
+        hide_mixed_script_variants = not form.cleaned_data['include_mixed_script_variants']
 
         lgr_object = LgrModel.get_object(self.request.user, lgr_pk)
 
