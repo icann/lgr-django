@@ -1,0 +1,104 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-24 18:36+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:4
+msgid "LGR Process List"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:7
+msgid "Tasks"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:35
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:38
+msgid "Download report"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:47
+msgid "Success"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:55
+msgid "In Progress"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:62
+msgid "Failed"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:69
+msgid "Pending"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:76
+msgid "Retry"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:83
+msgid "Canceled"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:90
+msgid "Expired"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:102
+msgid "Are you sure you want to cancel this task?"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:119
+msgid "Are you sure you want to clean tasks?"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:120
+msgid "Delete completed tasks"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:124
+msgid "No task registered"
+msgstr ""
+
+#: src/lgr_tasks/views.py:29
+msgid "Unable to retrieve the list of tasks."
+msgstr ""
+
+#: src/lgr_tasks/views.py:44
+#, python-format
+msgid "Failed to delete %s."
+msgstr ""
+
+#: src/lgr_tasks/views.py:51
+#, python-format
+msgid "Task %s has been revoked."
+msgstr ""
+
+#: src/lgr_tasks/views.py:54
+#, python-format
+msgid "Task %s has been removed."
+msgstr ""
+
+#: src/lgr_tasks/views.py:67
+msgid "Failed to retrieve completed tasks."
+msgstr ""
+
+#: src/lgr_tasks/views.py:76
+msgid "Completed tasks have been cleaned."
+msgstr ""
