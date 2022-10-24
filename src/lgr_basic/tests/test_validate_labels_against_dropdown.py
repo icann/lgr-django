@@ -4,7 +4,7 @@ from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
 class TestValidateLabelsAgainstDropDown(LgrWebClientTestBase):
     test_label = 'مكتب'  # arab character valid since the beginning (rz lgr version 1)
     dropdown_label = 'RZ-LGR 5'
-    dropdown_lgr_keys = LgrWebClientTestBase.active_root_zones + ['Ref. LGR']
+    dropdown_lgr_keys = LgrWebClientTestBase.active_root_zones + ['Reference LGR']
 
     def test_validate_labels_against_full(self):
         self.login_admin()
