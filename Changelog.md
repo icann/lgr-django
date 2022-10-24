@@ -1,4 +1,26 @@
 # Changelog for lgr-django
+## 5.0.0 (2022-10-26)
+### New features
+- Add account for all users
+- Add IDNA repertoires and MSRs management interfaces in admin
+- Set fixed Unicode version
+- Add a tasks information and management interface
+- Add settings for variants computation limits in admin
+- Allow unsupported code points to be displayed and edited in advanced tool
+- Allow uploading reference LGR in IDN table review
+- Add support for third-party authentication with JWT
+- Compute label indexes for RZ LGR periodically for collision computation
+### Improvements
+- Remove email fields from forms as all users are logged in
+- Improve user search and sorting in admin interface
+- Stop sending emails upon tasks completion
+- Make admin select default LGRs and only displays the default one in dropdowns
+- Update some LGR selection dropdowns to include more LGR types
+- Allow limiting the number of variants displayed in the validation tools
+  - hide blocked variants above a certain limit
+  - hide cross-scripts variants by default
+- Add new general rules report in IDN tables review
+
 
 ## 4.0.0 (2021-04-27)
 ### New features

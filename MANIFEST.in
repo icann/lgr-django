@@ -2,7 +2,7 @@ include manage.py README.md runtests.sh Makefile LICENSE
 include Installation_Guide.md Release_Notes.md
 include bin/bootstrap bin/gen_secret_key
 include etc/requirements.txt
-include etc/nginx/lgr-django.conf etc/systemd/lgr-django.service etc/systemd/lgr-django.conf etc/systemd/lgr-celery.service
+include etc/nginx/lgr-django.conf etc/systemd/lgr-django.service etc/systemd/lgr-django.conf etc/systemd/lgr-celery.service lgr-celery-beat.service
 include doc doc/conf.py doc/index.rst doc/Makefile
 recursive-include doc/_static *
 include src/lgr_web/resources/lgr.rng
@@ -20,8 +20,6 @@ recursive-include src/lgr_auth/templates *
 recursive-include src/lgr_auth/locale *
 recursive-include src/lgr_basic/templates *
 recursive-include src/lgr_basic/locale *
-recursive-include src/lgr_models/templates *
-recursive-include src/lgr_models/locale *
 recursive-include src/lgr_idn_table_review/locale *
 recursive-include src/lgr_idn_table_review/templates *
 recursive-include src/lgr_idn_table_review/icann_tools/locale *
