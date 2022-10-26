@@ -170,7 +170,8 @@ def lgr_harmonization(user: LgrUser, lgr_object_1: LgrModel, lgr_object_2: LgrMo
     :param lgr_object_2: Second LGR object.
     :param rz_lgr_object: Optional related Rootzone LGR object.
     """
-    h_lgr_1, h_lgr_2, cp_review = harmonize(lgr_object_1.to_lgr(), lgr_object_2.to_lgr(), rz_lgr_object.to_lgr())
+    h_lgr_1, h_lgr_2, cp_review = harmonize(lgr_object_1.to_lgr(), lgr_object_2.to_lgr(),
+                                            rz_lgr_object.to_lgr() if rz_lgr_object else None)
 
     def _save_resulting_lgr(l):
         # Generate new slug (LGR id)
