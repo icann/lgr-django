@@ -59,6 +59,7 @@ def evaluate_label_from_view(request,
     est_var_nbr = lgr.estimate_variant_number(label_cplist, hide_mixed_script_variants=hide_mixed_script_variants)
     ctx['nbr_variants'] = est_var_nbr
     ctx['launch_abort'] = False
+    ctx['hide_mixed_script_variants'] = hide_mixed_script_variants
     if est_var_nbr > lgr_settings.variant_calculation_abort:
         ctx['launch_abort'] = True
         return ctx
