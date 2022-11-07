@@ -192,7 +192,7 @@ class AddRangeView(MultiCodepointsView):
         # populate the choices with code points of the view
         codepoint_status = self.lgr.check_range(cd['first_cp'],
                                                 cd['last_cp'],
-                                                validating_repertoire=self.validating_repertoire.to_lgr())
+                                                validating_repertoire=self.validating_repertoire.to_lgr() if self.validating_repertoire else None)
 
         codepoint = []
         disabled_codepoint = []
