@@ -203,6 +203,10 @@ def _get_collisions(lgr, label_cplist, labels_list, idna_encoder, lgr_actions, i
 
 
 def _get_validity_check_limits(lgr, label_cplist, hide_mixed_script_variants, ignore_thresholds, idna_encoder):
+    # reload LGR settings
+    # FIXME: find a way to do this automatically, this is necessary in case of multiple instances running
+    lgr_settings.refresh_from_db()
+
     res, lgr_actions = _get_validity(lgr, label_cplist, idna_encoder)
     stop_computation = not ignore_thresholds
     if res['eligible'] and not ignore_thresholds:
