@@ -9,8 +9,7 @@
         <p>{% blocktrans trimmed  %}
         No computing will be performed as there are too many variants.
         {% endblocktrans %}</p>
-    {% endif %}
-    {% if result.launched_as_task %}
+    {% elif result.launched_as_task %}
         <h3 class="text-warning">{% trans 'Too many variants' %}</h3>
         <p>{% blocktrans with nbr=result.nbr_variants trimmed %}Number of variants in the variant set (including the original label): {{ nbr }}{% endblocktrans %}</p>
         {% url 'list_process' as task_status_url %}
@@ -19,7 +18,7 @@
         <a href="{{ task_status_url }}">task status page</a>.
         {% endblocktrans %}</p>
     {% endif %}
-    {% if result.u_label %}
+    {% if result.display_label_info %}
         {% if result.eligible %}
             <h3 class="text-success"><i class="glyphicon glyphicon-ok"></i> {{ result.disposition|upper }}</h3>
         {% else %}
@@ -207,7 +206,7 @@
                         </tr>
                     {% endfor %}
                 {% endif %}
-                {% if result.num_variants > result.threshold_include_vars %}
+                {% if result.csv_available %}
                     {% if not is_set or lgr_set %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
                         <tr>
                             <td colspan="4" class="bg-warning">
@@ -221,7 +220,7 @@
             </table>
         {% endif %}
 
-        {% if result.num_variants > result.threshold_include_vars %}
+        {% if result.csv_available %}
             {# TODO: Need to pass set_labels along #}
             {% if not is_set or lgr_set %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
                 <a class="btn btn-info" href="{% url 'lgr_validate_csv' lgr_pk=lgr_object.pk model=lgr_object.model_name  %}?label={{ result.u_label|urlencode }}{% if result.script %}&script={{ result.script|urlencode }}{% endif %}{% if not result.hide_mixed_script_variants %}&include_mixed_script_variants=true{% endif %}">

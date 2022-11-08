@@ -209,7 +209,9 @@ def lgr_validate_label(lgr: LGR, label, udata, hide_mixed_script_variants=False)
     :param hide_mixed_script_variants: Whether we hide mixed scripts variants.
     :return: CSV containing the label validation output.
     """
-    return _validate_label_task_helper(evaluate_label(lgr, label, -1, udata.idna_encode_label,
+    return _validate_label_task_helper(evaluate_label(lgr, label,
+                                                      ignore_thresholds=True,
+                                                      idna_encoder=udata.idna_encode_label,
                                                       hide_mixed_script_variants=hide_mixed_script_variants))
 
 
@@ -226,7 +228,8 @@ def lgr_set_validate_label(lgr: LGR, script_lgr: LGR, set_labels, label, udata, 
     :return: CSV containing the label validation output.
     """
     return _validate_label_task_helper(lgr_set_evaluate_label(lgr, script_lgr, label, set_labels,
-                                                              -1, udata.idna_encode_label,
+                                                              ignore_thresholds=True,
+                                                              idna_encoder=udata.idna_encode_label,
                                                               hide_mixed_script_variants=hide_mixed_script_variants))
 
 
@@ -245,7 +248,9 @@ def lgr_validate_labels(lgr: LGR, labels_file, udata, hide_mixed_script_variants
         label_cp = tuple([ord(c) for c in label])
         try:
             yield _validate_label_task_helper(
-                evaluate_label(lgr, label_cp, -1, udata.idna_encode_label,
+                evaluate_label(lgr, label_cp,
+                               ignore_thresholds=True,
+                               idna_encoder=udata.idna_encode_label,
                                hide_mixed_script_variants=hide_mixed_script_variants),
                 with_header=not it)
             it += 1

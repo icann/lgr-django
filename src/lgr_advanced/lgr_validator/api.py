@@ -6,11 +6,12 @@ import sys
 
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from lgr.core import LGR
 
+from lgr.core import LGR
 from lgr.tools.diff_collisions import get_collisions
 from lgr.utils import cp_to_ulabel
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
+from lgr_web.config import lgr_settings
 
 if sys.version_info.major > 2:
     to_row_format = str
@@ -58,7 +59,7 @@ def _get_validity(lgr, label_cplist, idna_encoder):
            }, lgr_actions
 
 
-def _get_variants(lgr: LGR, label_cplist, threshold_include_vars, idna_encoder, lgr_actions,
+def _get_variants(lgr: LGR, label_cplist, ignore_thresholds, idna_encoder, lgr_actions,
                   hide_mixed_script_variants=False):
     res = {}
     var_results = []
@@ -66,10 +67,12 @@ def _get_variants(lgr: LGR, label_cplist, threshold_include_vars, idna_encoder, 
                                                                         hide_mixed_script_variants=hide_mixed_script_variants)
     res['summary'] = ", ".join("{}: {}".format(k, v) for k, v in summary.items())
     res['num_variants'] = len(label_dispositions)
-    res['threshold_include_vars'] = threshold_include_vars
-    include_blocked = False
-    if threshold_include_vars < 0 or len(label_dispositions) <= threshold_include_vars:
-        include_blocked = True
+    res['threshold_include_vars'] = lgr_settings.variant_calculation_limit if not ignore_thresholds else -1
+    include_blocked = True
+    if res['num_variants'] > lgr_settings.variant_calculation_limit:
+        res['csv_available'] = True
+        if not ignore_thresholds:
+            include_blocked = False
 
     for (variant_cp, var_disp, var_invalid_parts, action_idx, disp_set, logs) in label_dispositions:
         if not include_blocked and var_disp not in ['valid', 'allocatable']:
@@ -199,7 +202,26 @@ def _get_collisions(lgr, label_cplist, labels_list, idna_encoder, lgr_actions, i
     return res
 
 
-def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=lambda x: x.encode('idna'),
+def _get_validity_check_limits(lgr, label_cplist, hide_mixed_script_variants, ignore_thresholds, idna_encoder):
+    res, lgr_actions = _get_validity(lgr, label_cplist, idna_encoder)
+    stop_computation = not ignore_thresholds
+    if res['eligible'] and not ignore_thresholds:
+        est_var_nbr = lgr.estimate_variant_number(label_cplist, hide_mixed_script_variants=hide_mixed_script_variants)
+        res['nbr_variants'] = est_var_nbr
+        res['launch_abort'] = False
+        if est_var_nbr > lgr_settings.variant_calculation_abort:
+            stop_computation = True
+            res['launch_abort'] = True
+        else:
+            need_async = est_var_nbr > lgr_settings.variant_calculation_max
+            stop_computation = need_async
+            res['launched_as_task'] = need_async
+
+    res['display_label_info'] = not res['eligible'] or not stop_computation
+    return res, lgr_actions, stop_computation
+
+
+def evaluate_label(lgr, label_cplist, ignore_thresholds=False, idna_encoder=lambda x: x.encode('idna'),
                    check_collisions=None, is_collision_index=False, hide_mixed_script_variants=False):
     """
     Evaluate the given `label_cplist` against the given `lgr`, which includes:
@@ -210,28 +232,32 @@ def evaluate_label(lgr, label_cplist, threshold_include_vars=-1, idna_encoder=la
 
     :param lgr: The LGR object
     :param label_cplist: The label to test, as an array of codepoints.
-    :param threshold_include_vars: Include blocked variants in results if the number of variant labels is less or
-                                   equal to this. Set to negative to always return variants.
+    :param ignore_thresholds: Whether thresholds should be ignored
     :param idna_encoder: a function used to encode a string using IDNA
     :param check_collisions: Check for collision against the provided list of labels
     :param is_collision_index: Whether check_collisions contains an index
     :param hide_mixed_script_variants: Whether we hide mixed scripts variants
     :return: a dict containing results of the evaluation.
     """
-    res, lgr_actions = _get_validity(lgr, label_cplist, idna_encoder)
+    res, lgr_actions, stop_computation = _get_validity_check_limits(lgr, label_cplist, hide_mixed_script_variants,
+                                                                    ignore_thresholds, idna_encoder)
+    if stop_computation:
+        return res
 
-    if res['eligible']:
-        res.update(_get_variants(lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions,
-                                 hide_mixed_script_variants=hide_mixed_script_variants))
-        if check_collisions is not None:
-            res.update(_get_collisions(lgr, label_cplist, check_collisions, idna_encoder, lgr_actions, False,
-                                       is_collision_index=is_collision_index))
+    res.update(_get_variants(lgr, label_cplist,
+                             ignore_thresholds,
+                             idna_encoder,
+                             lgr_actions,
+                             hide_mixed_script_variants=hide_mixed_script_variants))
+    if check_collisions is not None:
+        res.update(_get_collisions(lgr, label_cplist, check_collisions, idna_encoder, lgr_actions, False,
+                                   is_collision_index=is_collision_index))
 
     return res
 
 
 def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
-                           threshold_include_vars=-1,
+                           ignore_thresholds=False,
                            idna_encoder=lambda x: x.encode('idna'),
                            hide_mixed_script_variants=False):
     """
@@ -245,29 +271,30 @@ def lgr_set_evaluate_label(lgr, script_lgr, label_cplist, set_labels,
     :param script_lgr: The LGR for the script used to check label validity
     :param label_cplist: The label to test, as an array of codepoints.
     :param set_labels: The labels in the lgr set
-    :param threshold_include_vars: Include blocked variants in results if the number of variant labels is less or
-                                   equal to this. Set to negative to always return variants.
+    :param ignore_thresholds: Whether thresholds should be ignored
     :param idna_encoder: a function used to encode a string using IDNA
     :param hide_mixed_script_variants: Whether we hide mixed scripts variants
     :return: a dict containing results of the evaluation.
     """
     # First, verify that a proposed label is valid by processing it with the Element LGR corresponding to the script
     # that was selected for the label in the application.
-    res, script_lgr_actions = _get_validity(script_lgr, label_cplist, idna_encoder)
+    res, script_lgr_actions, stop_computation = _get_validity_check_limits(script_lgr, label_cplist, idna_encoder)
     res['script'] = script_lgr.name
     lgr_actions = lgr.effective_actions_xml
 
+    if stop_computation:
+        return res
+
     # Second, process the now validated label against the common LGR to verify it does not collide with any existing
     # delegated labels (and any of their variants, whether blocked or allocatable).
-    if res['eligible']:
-        # TODO may need lgr_script and script_lgr_actions for variants and rules
-        res.update(_get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions, True))
+    # TODO may need lgr_script and script_lgr_actions for variants and rules
+    res.update(_get_collisions(lgr, label_cplist, set_labels, idna_encoder, lgr_actions, True))
 
     # Third, now that the label is known to be valid, and not in collision, use the appropriate element LGR to
     # generate all allocatable variants.
-    if res['eligible'] and 'collision' not in res and 'collisions_error' not in res:
+    if 'collision' not in res and 'collisions_error' not in res:
         # XXX if collide => eligible = False remove collision condition
-        res.update(_get_variants(script_lgr, label_cplist, threshold_include_vars, idna_encoder, lgr_actions,
+        res.update(_get_variants(script_lgr, label_cplist, ignore_thresholds, idna_encoder, lgr_actions,
                                  hide_mixed_script_variants=hide_mixed_script_variants))
 
     return res

@@ -28,7 +28,7 @@ class NeedAsyncProcess(Exception):
 def evaluate_label_from_view(request,
                              lgr_object: LgrBaseModel,
                              label_cplist,
-                             threshold_include_vars,
+                             ignore_thresholds,
                              script_lgr_pk=None,
                              set_labels_info: LabelInfo = None,
                              check_collisions=None,
@@ -45,40 +45,27 @@ def evaluate_label_from_view(request,
     :param label_cplist: The label to test, as an array of codepoints.
     :param script_lgr_pk: Primary key of the LGR to use as the script LGR.
     :param set_labels_info: The LabelInfo allocated in set
-    :param threshold_include_vars: Include blocked variants in results if the number of variant labels is less or
-                                   equal to this. Set to negative to always return variants.
+    :param ignore_thresholds: Whether thresholds should be ignored
     :param check_collisions: Check for collisions with the provided list of labels
     :param is_collision_index: Whether check_collisions contains an index
     :param hide_mixed_script_variants: Whether we hide mixed scripts variants.
     :return: a dict containing results of the evaluation, empty if process is asynchronous.
     """
-    from lgr_web.config import lgr_settings
-
-    ctx = {}
     lgr = lgr_object.to_lgr()
-    est_var_nbr = lgr.estimate_variant_number(label_cplist, hide_mixed_script_variants=hide_mixed_script_variants)
-    ctx['nbr_variants'] = est_var_nbr
-    ctx['launch_abort'] = False
-    ctx['hide_mixed_script_variants'] = hide_mixed_script_variants
-    if est_var_nbr > lgr_settings.variant_calculation_abort:
-        ctx['launch_abort'] = True
-        return ctx
-    need_async = est_var_nbr > lgr_settings.variant_calculation_max
-    ctx['launched_as_task'] = need_async
+
     udata = get_db_by_version(lgr.metadata.unicode_version)
     if lgr_object.is_set():
         lgr_object: LgrModel
         script_lgr_object = lgr_object.set_info.lgr_set.get(owner=request.user, pk=script_lgr_pk)
-        if not need_async:
-            set_labels = [] if not set_labels_info else set_labels_info.labels
-            ctx = lgr_set_evaluate_label(lgr,
-                                         script_lgr_object.to_lgr(),
-                                         label_cplist,
-                                         set_labels,
-                                         threshold_include_vars=threshold_include_vars,
-                                         idna_encoder=udata.idna_encode_label,
-                                         hide_mixed_script_variants=hide_mixed_script_variants)
-        else:
+        set_labels = [] if not set_labels_info else set_labels_info.labels
+        ctx = lgr_set_evaluate_label(lgr,
+                                     script_lgr_object.to_lgr(),
+                                     label_cplist,
+                                     set_labels,
+                                     ignore_thresholds=ignore_thresholds,
+                                     idna_encoder=udata.idna_encode_label,
+                                     hide_mixed_script_variants=hide_mixed_script_variants)
+        if ctx.get('launched_as_task'):
             if set_labels_info:
                 set_labels_json = set_labels_info.to_dict()
             else:
@@ -91,15 +78,14 @@ def evaluate_label_from_view(request,
                                                      label_cplist, set_labels_json, hide_mixed_script_variants),
                                                     task_id=task.pk)
     else:
-        if not need_async:
-            ctx = evaluate_label(lgr,
-                                 label_cplist,
-                                 threshold_include_vars=threshold_include_vars,
-                                 idna_encoder=udata.idna_encode_label,
-                                 check_collisions=check_collisions,
-                                 is_collision_index=is_collision_index,
-                                 hide_mixed_script_variants=hide_mixed_script_variants)
-        else:
+        ctx = evaluate_label(lgr,
+                             label_cplist,
+                             ignore_thresholds=ignore_thresholds,
+                             idna_encoder=udata.idna_encode_label,
+                             check_collisions=check_collisions,
+                             is_collision_index=is_collision_index,
+                             hide_mixed_script_variants=hide_mixed_script_variants)
+        if ctx.get('launched_as_task'):
             task = LgrTaskModel.objects.create(app=request.resolver_match.app_name,
                                                name=_('Validate labels on %s') % lgr_object.name,
                                                user=request.user)
@@ -107,6 +93,7 @@ def evaluate_label_from_view(request,
                                              lgr_object._meta.label, hide_mixed_script_variants),
                                             task_id=task.pk)
 
+    ctx['hide_mixed_script_variants'] = hide_mixed_script_variants
     return ctx
 
 
@@ -115,12 +102,10 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
     template_name = 'lgr_validator/validator.html'
     output_func: str = None
     noframe = False
+    ignore_thresholds = True
 
     def __init__(self):
-        from lgr_web.config import lgr_settings
-
         super().__init__()
-        self.threshold_include_vars = lgr_settings.variant_calculation_limit
         self.result = {}
 
     def get_form_kwargs(self):
@@ -167,7 +152,7 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
             self.result = evaluate_label_from_view(self.request,
                                                    self.lgr_object,
                                                    label_cplist,
-                                                   self.threshold_include_vars,
+                                                   ignore_thresholds=self.ignore_thresholds,
                                                    script_lgr_pk=script_lgr_pk,
                                                    set_labels_info=set_labels_info,
                                                    hide_mixed_script_variants=hide_mixed_script_variants)
@@ -202,10 +187,7 @@ class ValidateLabelNoFrameView(ValidateLabelView):
 class ValidateLabelJsonView(ValidateLabelView):
     output_func = '_prepare_json_response'
     noframe = True
-
-    def __init__(self):
-        super().__init__()
-        self.threshold_include_vars = -1
+    ignore_thresholds = True
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
@@ -218,10 +200,7 @@ class ValidateLabelJsonView(ValidateLabelView):
 class ValidateLabelCSVView(ValidateLabelView):
     output_func = '_prepare_csv_response'
     noframe = True
-
-    def __init__(self):
-        super().__init__()
-        self.threshold_include_vars = -1
+    ignore_thresholds = True
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)

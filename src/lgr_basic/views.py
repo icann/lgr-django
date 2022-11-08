@@ -73,10 +73,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
             else:
                 annotate_task.apply_async((self.request.user.pk, lgr.pk, labels_json, lgr._meta.label),
                                           task_id=task.pk)
-
         else:
-            from lgr_web.config import lgr_settings
-
             result = {}
             is_collision_index = False
             check_collisions = None
@@ -110,7 +107,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
                     res.update(evaluate_label_from_view(self.request,
                                                         lgr,
                                                         label_cplist,
-                                                        lgr_settings.variant_calculation_limit,
+                                                        ignore_thresholds=False,
                                                         check_collisions=check_collisions,
                                                         is_collision_index=is_collision_index,
                                                         hide_mixed_script_variants=hide_mixed_script_variants))
