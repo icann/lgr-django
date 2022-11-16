@@ -37,7 +37,7 @@ class LgrLoginView(LoginView):
         ret = super().dispatch(request, *args, **kwargs)
         if settings.AUTH_METHOD == 'ICANN':
             return redirect(
-                f'https://accounts-qa.icann.org/authorize'
+                f'{settings.ICANN_AUTH_URL}/authorize'
                 f'?client_id={settings.ICANN_AUTH_CLIENT_ID}'
                 f'&redirect_uri={self.request.build_absolute_uri(reverse("icann_tokens"))}'
                 f'&nonce={settings.ICANN_AUTH_NONCE}'
@@ -51,7 +51,7 @@ class LgrLogoutView(LogoutView):
     def dispatch(self, request, *args, **kwargs):
         ret = super().dispatch(request, *args, **kwargs)
         if settings.AUTH_METHOD == 'ICANN':
-            return redirect('https://accounts-qa.icann.org')
+            return redirect({settings.ICANN_AUTH_URL})
         return ret
 
 
@@ -115,7 +115,7 @@ class EditIcannProfileView(View):
             return HttpResponseBadRequest(_('User is not logged with ICANN'))
 
         return redirect(
-            f'https://accounts-qa.icann.org/account/edit'
+            f'{settings.ICANN_AUTH_URL}/account/edit'
             f'?client_id={settings.ICANN_AUTH_CLIENT_ID}'
             f'&redirect_uri={self.request.build_absolute_uri(reverse("icann_tokens"))}'
             f'&nonce={settings.ICANN_AUTH_NONCE}'

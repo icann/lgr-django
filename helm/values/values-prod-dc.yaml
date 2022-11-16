@@ -29,6 +29,8 @@ lgr:
   DjangoRedisDB: 6
   SentinelMaster: mymaster
 
+  IcannAuthUrl: https://account.icann.org
+
 repoPath: container-registry.icann.org/icann
 repoVer: latest
 
