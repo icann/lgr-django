@@ -3,7 +3,7 @@ from .default import *
 # Template for deployment configuration
 # Contains sensible default for production use
 
-DEBUG = True
+DEBUG = False
 
 # TODO: Set this list to hosts/domains served by this app
 # See https://docs.djangoproject.com/en/1.8/ref/settings/#std:setting-ALLOWED_HOSTS
