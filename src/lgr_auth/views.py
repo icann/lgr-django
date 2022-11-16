@@ -51,7 +51,7 @@ class LgrLogoutView(LogoutView):
     def dispatch(self, request, *args, **kwargs):
         ret = super().dispatch(request, *args, **kwargs)
         if settings.AUTH_METHOD == 'ICANN':
-            return redirect({settings.ICANN_AUTH_URL})
+            return redirect(settings.ICANN_AUTH_URL)
         return ret
 
 
