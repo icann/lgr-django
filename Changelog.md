@@ -1,5 +1,5 @@
 # Changelog for lgr-django
-## 5.0.0 (2022-10-26)
+## 5.0.0 (2022-11-16)
 ### New features
 - Add account for all users
 - Add IDNA repertoires and MSRs management interfaces in admin
