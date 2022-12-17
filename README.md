@@ -191,7 +191,7 @@ And set the following settings:
 
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mariadb',
+            'ENGINE': 'django.db.backends.mysql',
             'NAME': 'lgr',
             'USER': 'lgr',
             'PASSWORD': '1234',
