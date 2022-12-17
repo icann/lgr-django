@@ -34,6 +34,7 @@ class LgrUserCreateView(BaseAdminMixin, CreateView):
     def post(self, request, *args, **kwargs):
         if settings.AUTH_METHOD == 'ICANN':
             return HttpResponseBadRequest(_('Cannot create users when auth is performed with ICANN'))
+        return super().post(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
