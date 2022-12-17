@@ -6,6 +6,7 @@ utils
 import logging
 
 from django.apps import apps
+from django.http import Http404
 
 from lgr_models.models.lgr import LgrBaseModel
 
@@ -29,4 +30,6 @@ def get_model_from_url_name(model_name):
             if issubclass(model, LgrBaseModel):
                 # XXX this may lead to conflicts if some different apps have the same model name
                 ALL_LGR_MODELS[model._meta.label.lower().replace('model', '').rsplit('.', 1)[-1]] = model
-    return ALL_LGR_MODELS[model_name.lower()]
+    if model_name.lower() in ALL_LGR_MODELS:
+        return ALL_LGR_MODELS[model_name.lower()]
+    raise Http404
