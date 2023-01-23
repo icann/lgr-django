@@ -22,19 +22,21 @@
         {% regroup reports by report_id as report_ids %}
         {% for reports_grouped in report_ids %}
             <li>
-                {% with report=reports_grouped.list|first %}
-                    <form id="form-delete-{{ report_id }}" method="post"
-                          action="{% url "lgr_review_delete_report" report_id=report.report_id %}?next={{ request.path }}">
-                        {% csrf_token %}
-                    </form>
-                    <a href="{% url 'lgr_review_report' report_id=report.report_id %}">{{ report.report_id }}</a>
-                    <a href="#"
-                       class="delete_report confirm-prompt"
-                       data-confirmation-prompt="{% blocktrans with report.report_id as report_id %}Are you sure you want to delete report {{ report_id }}?{% endblocktrans %}"
-                       data-confirmation-action="$('#form-delete-{{ report_id }}').submit()">
-                        <i class="glyphicon glyphicon-trash"></i>
-                    </a>
+              {% with report=reports_grouped.list|first %}
+                {% with report_id=report.report_id %}
+                  <form id="form-delete-{{ forloop.counter }}" method="post"
+                        action="{% url "lgr_review_delete_report" report_id=report_id %}?next={{ request.path }}">
+                    {% csrf_token %}
+                  </form>
+                  <a href="{% url 'lgr_review_report' report_id %}">{{ report_id }}</a>
+                  <a href="#"
+                     class="delete_report confirm-prompt"
+                     data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ report_id }}?{% endblocktrans %}"
+                     data-confirmation-action="$('#form-delete-{{ forloop.counter }}').submit()">
+                    <i class="glyphicon glyphicon-trash"></i>
+                  </a>
                 {% endwith %}
+              {% endwith %}
             </li>
         {% empty %}
             {% url 'list_process' as task_status_url %}
