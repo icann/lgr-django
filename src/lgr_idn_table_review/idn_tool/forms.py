@@ -51,11 +51,13 @@ class IdnTableReviewSelectReferenceForm(forms.Form):
         new_cleaned_data = {}
         for name, value in cleaned_data.items():
             if 'file_' not in name:
-                if value == '' and cleaned_data['file_' + name] is not None:
-                    new_cleaned_data[name] = cleaned_data['file_'+name]
-                elif value == '' and cleaned_data['file_'+name] is None:
-                    self.add_error(name, _("Required"))
-                    self.add_error('file_'+name, _("Required"))
+                filename = f'file_{name}'
+                if value == '':
+                    if cleaned_data[filename] is not None:
+                        new_cleaned_data[name] = cleaned_data[filename]
+                    else:
+                        self.add_error(name, _("Required"))
+                        self.add_error(filename, _("Required"))
                 else:
                     new_cleaned_data[name] = value
 

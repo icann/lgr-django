@@ -448,26 +448,7 @@
     {% endfor %}
     <div>
         <p><b>Additional code points which require additional variant review.</b></p>
-        <table class="simple">
-            <tr>
-                <th>Code<br>Point</th>
-                <th>Glyph</th>
-                <th>Name</th>
-                <th>Unicode General Category</th>
-            </tr>
-            {% for cp in variant_sets.additional %}
-                <tr>
-                    <td>{{ cp.cp|format_cp }}</td>
-                    <td>{{ cp.glyph }}</td>
-                    <td>{{ cp.name }}</td>
-                    <td>{{ cp.category }}</td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4">None</td>
-                </tr>
-            {% endfor %}
-        </table>
+        {% include 'lgr_idn_table_review/_review_cp_report.html' with codepoints=variant_sets.additional %}
     </div>
     {% endblock review_variant_sets %}
 
@@ -528,26 +509,7 @@
     </table>
     <div>
         <p><b>Additional code points which require additional WLE rules review.</b></p>
-        <table class="simple">
-            <tr>
-                <th>Code<br>Point</th>
-                <th>Glyph</th>
-                <th>Name</th>
-                <th>Unicode General Category</th>
-            </tr>
-            {% for cp in wle.additional_cp %}
-                <tr>
-                    <td>{{ cp.cp|format_cp }}</td>
-                    <td>{{ cp.glyph }}</td>
-                    <td style="text-align:left">{{ cp.name }}</td>
-                    <td>{{ cp.category }}</td>
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="4">None</td>
-                </tr>
-            {% endfor %}
-        </table>
+        {% include 'lgr_idn_table_review/_review_cp_report.html' with codepoints=wle.additional_cp %}
     </div>
 
     {% block review_wle_additional_general_rules %}

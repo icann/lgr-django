@@ -1,0 +1,24 @@
+{% load lgr_idn_table_review %}
+
+<table class="simple">
+    <tr>
+        <th>Code<br>Point</th>
+        <th>Glyph</th>
+        <th>Name</th>
+        <th>IDNA2008 Property</th>
+        <th>Unicode General Category</th>
+    </tr>
+    {% for cp in codepoints %}
+        <tr>
+            <td>{{ cp.cp|format_cp }}</td>
+            <td>{{ cp.glyph }}</td>
+                    <td style="text-align:left">{{ cp.name }}</td>
+            <td>{{ cp.idna_property }}</td>
+            <td>{{ cp.category }}</td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="5">None</td>
+        </tr>
+    {% endfor %}
+</table>
