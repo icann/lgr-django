@@ -9,7 +9,6 @@ from django.forms import FileField
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
-from lgr_models.models.lgr import LgrBaseModel
 
 
 class LGRIdnTableReviewForm(forms.Form):
@@ -31,7 +30,7 @@ class LGRIdnTableReviewForm(forms.Form):
 class IdnTableReviewSelectReferenceForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
-        from lgr_utils.views import RefLgrAutocomplete
+        from lgr_utils.views import RefLgrAutocompleteWithCore
 
         idn_tables = kwargs.pop('idn_tables', [])
         super().__init__(*args, **kwargs)
@@ -39,9 +38,9 @@ class IdnTableReviewSelectReferenceForm(forms.Form):
         for idn_table in idn_tables:
             self.fields[str(idn_table.pk)] = forms.ChoiceField(label=idn_table.name,
                                                                required=False,
-                                                               choices=RefLgrAutocomplete.get_list(),
+                                                               choices=RefLgrAutocompleteWithCore.get_list(),
                                                                widget=autocomplete.ListSelect2(
-                                                                   url='ref-lgr-autocomplete'))
+                                                                   url='ref-lgr-autocomplete-with-core'))
             self.fields['file_' + str(idn_table.pk)] = FileField(label=idn_table.name,
                                                                  required=False,
                                                                  widget=forms.ClearableFileInput(

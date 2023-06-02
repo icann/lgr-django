@@ -16,5 +16,5 @@ class test_RefLgrAutocomplete_building(SimpleTestCase):
     @patch("lgr_models.models.lgr.RefLgrMember.objects", RefLgrMemberMock())
     @patch("lgr_models.models.lgr.RzLgr.objects", RzLgrMock())
     def test_normalRefLgrAutocomplete(self):
-        response = RefLgrAutocomplete.get_list();
+        response = RefLgrAutocomplete.get_list()
         self.assertEqual(response, MockListExpected)

@@ -113,6 +113,7 @@
 <div id="lgr">
     <h1>IDN Table Review Report</h1>
     <div id="header">
+    {% block review_header %}
         <p>Date: {{ header.date }}</p>
         <p>{{ header.disclaimer|safe|escape }}</p>
         <p>This document presents the review report for IDN Table:<br>
@@ -130,10 +131,12 @@
             {% endif %}
             Version: {{ header.reference_lgr.version }}<br>
         </p>
+    {% endblock review_header %}
     </div>
 
     <div id="table_of_contents">
         <h1><a name="toc">Table of Contents</a></h1>
+        {% block review_toc %}
         <ol>
             <li><a href="#summary">Summary</a></li>
             <li><a href="#language_tag">Language Tag</a></li>
@@ -143,8 +146,10 @@
             <li><a href="#whole_label_evaluation_rules">Whole label evaluation rules</a></li>
             <li><a href="#actions">Actions</a></li>
         </ol>
+        {% endblock review_toc %}
     </div>
 
+    {% block review_summary %}
     <h1><a name="summary">Overall Summary</a></h1>
     <table class="simple">
         <tr>
@@ -270,8 +275,9 @@
                 {% endfor %}
             {% endwith %}
     </table>
+    {% endblock review_summary %}
 
-
+    {% block review_language_tag %}
     <h1><a name="language_tag"></a>Language Tag</h1>
     <table class="simple">
         <tr>
@@ -302,7 +308,9 @@
             </tr>
         {% endfor %}
     </table>
+    {% endblock review_language_tag %}
 
+    {% block review_repertoire %}
     <h1><a name="repertoire">Repertoire</a></h1>
     <table class="simple">
         <tr>
@@ -361,7 +369,9 @@
             {% endfor %}
         </table>
     </div>
+    {% endblock review_repertoire %}
 
+    {% block review_variant_sets %}
     <h1><a name="variant_sets">Variant Sets</a></h1>
     {% for variant_set in variant_sets.reports %}
         <div class="varset_description">
@@ -459,7 +469,9 @@
             {% endfor %}
         </table>
     </div>
+    {% endblock review_variant_sets %}
 
+    {% block review_classes %}
     <h1><a name="classes">Classes</a></h1>
     <div class="classheader">
         <p>The classes include classes formed by union, intersection and other operations on class.</p>
@@ -486,8 +498,9 @@
             </tr>
         {% endfor %}
     </table>
+    {% endblock review_classes %}
 
-
+    {% block review_wle_rules %}
     <h1><a name="whole_label_evaluation_rules">Whole Label Evaluation Rules</a></h1>
     <table class="simple">
         <tr>
@@ -537,6 +550,7 @@
         </table>
     </div>
 
+    {% block review_wle_additional_general_rules %}
     <div>
         <p><b>Additional General Rules.</b></p>
         <table class="simple">
@@ -633,9 +647,11 @@
 {#            </tr>#}
         </table>
     </div>
+    {% endblock review_wle_additional_general_rules %}
+    {% endblock review_wle_rules %}
 
+    {% block review_actions %}
     <h1><a name="actions">Actions</a></h1>
-
     <table class="simple">
         <tr>
             <th>#</th>
@@ -661,6 +677,8 @@
         {% endfor %}
     </table>
     <p><b>Actions Sequence Check:</b> {{ actions.sequence }}</p>
+    {% endblock review_actions %}
+
 </div>
 </body>
 </HTML>

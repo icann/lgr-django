@@ -11,11 +11,14 @@ from django.utils import timezone
 from lgr_idn_table_review.idn_tool.models import IdnReviewReport, IdnTable, IdnRefTable
 from lgr_session.api import LGRStorage
 from django.template.loader import render_to_string
-from lgr.tools.idn_review.review import review_lgr
+from lgr.tools.idn_review.review import review_lgr, review_with_core_requirements
 from typing import Dict
 from lgr_models.models.lgr import LgrBaseModel
 
 logger = logging.getLogger(__name__)
+
+
+RFC_CORE_REQUIREMENT = 'core'
 
 
 class LGRIdnReviewApi(LGRStorage):
@@ -53,15 +56,24 @@ class LGRIdnReviewApi(LGRStorage):
             'idn_table_url': absolute_url + idn_table.display_url()
         }
 
+        review_method = self.review_idn_table
+        review_args = [context, idn_table, lgr_info, absolute_url, self.user]
+        template = 'lgr_idn_table_review/review.html'
+        if lgr_info == RFC_CORE_REQUIREMENT:
+            # handle the case where 'RFC Core Requirements' is selected
+            review_method = self.review_idn_table_with_core_requirements
+            review_args = [context, idn_table]
+            template = 'lgr_idn_table_review/review_core.html'
+
         try:
-            self.review_idn_table(context, idn_table, lgr_info, absolute_url, self.user)
+            review_method(*review_args)
         except BaseException:
             logger.exception('Failed to review IDN table')
             html_report = render_to_string('lgr_idn_table_review/error.html', context)
         else:
-            html_report = render_to_string('lgr_idn_table_review/review.html', context)
+            html_report = render_to_string(template, context)
         finally:
-            return (idn_table.name, html_report)
+            return idn_table.name, html_report
 
     def review_idn_table(self, context: Dict, idn_table: IdnTable, lgr_info, absolute_url, user):
         ref_lgr = LgrBaseModel.from_tuple(lgr_info, user)
@@ -70,6 +82,13 @@ class LGRIdnReviewApi(LGRStorage):
             'ref_lgr_url': absolute_url + ref_lgr.display_url()
         })
         context.update(review_lgr(idn_table.to_lgr(), ref_lgr.to_lgr()))
+
+    def review_idn_table_with_core_requirements(self, context: Dict, idn_table: IdnTable):
+        context.update({
+            'ref_lgr': 'RFC Core Requirements',
+            'ref_lgr_url': None
+        })
+        context.update(review_with_core_requirements(idn_table.to_lgr()))
 
     def get_lgrs_in_report(self, report_id):
         return self.lgr_queryset().filter(report_id=report_id)

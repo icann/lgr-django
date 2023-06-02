@@ -1,0 +1,76 @@
+{% extends "lgr_idn_table_review/review.html" %}
+{% load lgr_idn_table_review %}
+
+{% block review_header %}
+    <p>Date: {{ header.date }}</p>
+    <p>{{ header.disclaimer|safe|escape }}</p>
+    <p>This document presents the review report for IDN Table:<br>
+        {% if idn_table_url %}
+            <a href="{{ idn_table_url }}">{{ header.idn_table.filename }}</a>
+        {% else %}
+            {{ header.idn_table.filename }}
+        {% endif %}
+        Version: {{ header.idn_table.version }}<br>
+        with the RFC Core Requirements.</p>
+{% endblock review_header %}
+
+{% block review_toc %}
+    <ol>
+        <li><a href="#repertoire">Repertoire</a></li>
+        <li><a href="#variant_sets">Variant Sets</a></li>
+        <li><a href="#whole_label_evaluation_rules">Whole label evaluation rules</a></li>
+    </ol>
+{% endblock review_toc %}
+
+
+{% block review_repertoire %}
+    <h1><a name="repertoire">Repertoire</a></h1>
+    <table class="simple">
+        <tr>
+            <th>#</th>
+            <th>Code<br>Point</th>
+            <th>Glyph</th>
+            <th>Name</th>
+            <th>IDNA2008 Property</th>
+            <th>Unicode General Category</th>
+        </tr>
+        {% for cp in repertoire.reports %}
+            <tr style="background-color:white;">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ cp.cp|format_cp }}</td>
+                <td>{{ cp.glyph }}</td>
+                <td style="text-align:left">{{ cp.name }}</td>
+                <td>{{ cp.idna_property }}</td>
+                <td>{{ cp.category }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="8">Repertoire is empty</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock review_repertoire %}
+
+{% block review_variant_sets %}
+    {% if variant_sets.report.multiple_digit_sets %}
+        <h1><a name="variant_sets">Variant Sets</a></h1>
+        <p>The repertoire contains more than one digit sets. The variant mapping between sets is expected.</p>
+    {% endif %}
+{% endblock review_variant_sets %}
+
+{% block review_wle_rules %}
+<h1><a name="whole_label_evaluation_rules">Whole Label Evaluation Rules</a></h1>
+{% block review_wle_additional_general_rules %}
+    {{ block.super }}
+{% endblock review_wle_additional_general_rules %}
+{% endblock review_wle_rules %}
+
+
+{% block review_summary %}
+{% endblock review_summary %}
+{% block review_language_tag %}
+{% endblock review_language_tag %}
+{% block review_classes %}
+{% endblock review_classes %}
+{% block review_actions %}
+{% endblock review_actions %}
