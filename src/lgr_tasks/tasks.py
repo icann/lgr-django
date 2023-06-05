@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import codecs
 import csv
 import hashlib
 import logging
@@ -37,6 +38,8 @@ def calculate_index_variant_labels_tlds(user_pk=None):
     rz_lgr = rz_lgr_object.to_lgr()
     indexes = {}
     out = StringIO()
+    # write BOM at the beginning to allow Excel decoding UTF-8
+    out.write(codecs.BOM_UTF8.decode('utf-8'))
     writer = csv.writer(out)
     writer.writerow(['Label', 'Index'])
 
