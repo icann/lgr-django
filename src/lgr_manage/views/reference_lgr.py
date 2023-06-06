@@ -11,12 +11,16 @@ from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin
 from lgr_models.models.lgr import RefLgr, RefLgrMember
 
 
-def initial_active():
+def initial_active(set_active=False):
     active = RefLgr.objects.filter(active=True).first()
     if active:
         return active.pk
 
-    return 1
+    first = RefLgr.objects.first()
+    if set_active:
+        first.active = True
+        first.save()
+    return first.pk
 
 
 class RefLgrListView(BaseListAdminView):
@@ -66,6 +70,14 @@ class RefLgrDeleteView(BaseAdminMixin, views.generic.DeleteView):
     model = RefLgr
     success_url = reverse_lazy('lgr_admin_ref_lgr')
     pk_url_kwarg = 'lgr_pk'
+
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
+        if self.object.active:
+            # the active one has been removed, set a new active
+            initial_active(set_active=True)
+        return response
+
 
 
 class RefLgrIsActiveView(AjaxFormViewMixin, views.generic.edit.FormView):
