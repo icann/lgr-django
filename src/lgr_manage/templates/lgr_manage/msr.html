@@ -47,7 +47,7 @@
         {% endfor %}
     </table>
     {% trans "Select Active MSR" as title %}
-    {% include "lgr_editor/_form_active_choice.html" with url="lgr_admin_isactive_msr" title=title %}
+    {% include "lgr_manage/_form_active_choice.html" with url="lgr_admin_isactive_msr" title=title %}
     <h2>{% trans 'New MSR' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}

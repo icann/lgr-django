@@ -91,7 +91,7 @@
         {% endfor %}
     </table>
     {% trans "Select Active Reference LGR" as title %}
-    {% include "lgr_editor/_form_active_choice.html" with url="lgr_admin_isactive_ref_lgr" title=title %}
+    {% include "lgr_manage/_form_active_choice.html" with url="lgr_admin_isactive_ref_lgr" title=title %}
 
     <h2>{% trans 'New Reference LGR' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">

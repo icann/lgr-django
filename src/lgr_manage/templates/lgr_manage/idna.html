@@ -47,7 +47,7 @@
         {% endfor %}
     </table>
     {% trans "Select Active IDNA Repertoire" as title %}
-    {% include "lgr_editor/_form_active_choice.html" with url="lgr_admin_isactive_idna" title=title %}
+    {% include "lgr_manage/_form_active_choice.html" with url="lgr_admin_isactive_idna" title=title %}
     <h2>{% trans 'New IDNA Repertoire' %}</h2>
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
