@@ -134,7 +134,7 @@ class ValidateLabelView(LGRHandlingBaseMixin, FormView):
         ctx['result'] = self.result
 
         if self.noframe:
-            ctx['base_template'] = 'lgr_advanced/_base_noframe.html'
+            ctx['base_template'] = '_base_noframe.html'
 
         return ctx
 

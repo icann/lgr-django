@@ -25,8 +25,7 @@
         {% for ref_lgr in object_list %}
             <tr>
                 <td>
-                    <a href="{{ ref_lgr.display_url }}" target="_blank"
-                       rel="noopener noreferrer">
+                    <a href="{{ ref_lgr.display_url }}" target="_blank" rel="noopener noreferrer">
                         {{ ref_lgr.name }}
                     </a>
                 </td>
@@ -42,6 +41,13 @@
                             <div class="reflgr-member-show-name">
                                 <a href="{{ lgr.display_url }}" target="_blank" rel="noopener noreferrer">
                                     {{ lgr.filename }}
+                                </a>
+                                <!-- Member update form Modal -->
+                                {% include 'lgr_manage/_ref_lgr_member_modal.html' with member_pk=lgr.pk %}
+                                <a class="btn show-tooltip"
+                                   data-toggle="modal" data-target="#reflgr-member-modal-{{ lgr.pk }}"
+                                   title="{% trans 'Edit Reference LGR member' %}" data-placement="top">
+                                    <i class="glyphicon glyphicon-pencil"></i>
                                 </a>
                             </div>
                             <div class="reflgr-member-show-language-script">
@@ -95,7 +101,7 @@
         {% include "lgr_editor/_form_field.html" with field=form.name control_width=8 %}
         {% include "lgr_editor/_form_field.html" with field=form.file control_width=8 %}
         {% include "lgr_editor/_form_field.html" with field=form.members control_width=8 %}
-        <h3>New Reference LGR Members</h3>
+        <h3 id="reflgr-members-title">New Reference LGR Members</h3>
         <div class="empty_form reflgr-members-invisible">
             <div class="reflgr-members-create">
                 {% include "lgr_editor/_form_field.html" with field=form.ref_lgr_members.empty_form.file_name control_width=8 no_remove=True %}
@@ -122,6 +128,11 @@
                 } else {
                     $('#submit').attr('disabled', 'disabled')
                 }
+                if ($('#id_members').prop('files').length > 0) {
+                    $('#reflgr-members-title').show()
+                } else {
+                    $('#reflgr-members-title').hide()
+                }
             }
 
             function validateLanguageScripts() {
@@ -136,6 +147,10 @@
             });
 
             $('#id_file').change(function () {
+                enable_submit_button()
+            });
+
+            $('#id_members').change(function () {
                 enable_submit_button()
             });
 
@@ -160,6 +175,10 @@
                 }
                 $('#id_form-TOTAL_FORMS').val(data.target.files.length)
             });
+
+           $("[id^='reflgr-member-modal-']").on('hidden.bs.modal', function () {
+               window.location.reload();
+           });
         });
     </script>
 {% endblock html_body_more %}

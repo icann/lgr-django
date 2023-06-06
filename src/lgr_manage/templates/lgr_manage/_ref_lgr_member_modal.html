@@ -1,0 +1,23 @@
+{% load i18n %}
+<div class="modal fade" id="reflgr-member-modal-{{ member_pk }}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{% trans "Update Reference LGR member" %}</h4>
+            </div>
+            <div id="label-forms-modal-body" class="modal-body" style="height: 85vh;">
+                <iframe id="label-forms-modal-iframe" data-url="{% url 'lgr_admin_update_ref_lgr' lgr_pk=member_pk %}"
+                        src="{% url 'lgr_admin_update_ref_lgr' lgr_pk=member_pk %}" frameborder="0" width="100%" height="98%"></iframe>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+    jQuery(document).ready(function ($) {
+        $('#label-forms-modal').on('hidden.bs.modal', function (e) {
+            $("#label-forms-modal iframe").attr("src", $("#label-forms-modal iframe").attr("src"));
+        });
+    });
+</script>
