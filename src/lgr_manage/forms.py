@@ -119,6 +119,7 @@ class RefLgrCreateForm(forms.ModelForm):
         for member in self.ref_lgr_members:
             member.ref_lgr = ref_lgr
             member.save()
+        return ref_lgr
 
 
 class MSRCreateForm(forms.ModelForm):
