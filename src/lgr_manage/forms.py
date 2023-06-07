@@ -62,7 +62,7 @@ class RefLgrMemberCreateForm(forms.ModelForm):
                 self.file = file
                 break
         else:
-            self.add_error('file_name', 'Unable to retrieve file with this name')
+            self.add_error('file_name', _('Unable to retrieve file with this name'))
         return self.cleaned_data
 
     def save(self, commit=True):
