@@ -160,6 +160,7 @@
             enable_submit_button();
 
             $("#id_members").change(function (data, handler) {
+                $('.reflgr-members-list .reflgr-members-create').remove()
                 // get parent fieldset
                 const fieldset_template = $('.empty_form');
                 for (var i = 0; i < data.target.files.length; i++) {
