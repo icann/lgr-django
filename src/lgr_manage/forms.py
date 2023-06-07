@@ -29,7 +29,7 @@ class RzLgrCreateForm(forms.ModelForm):
     def save(self, commit=True):
         rz_lgr = super(RzLgrCreateForm, self).save(commit=commit)
         for lgr in self.files.getlist('repository'):
-            RzLgrMember.objects.create(file=lgr, name=lgr.name, rz_lgr=rz_lgr)
+            RzLgrMember.objects.create(file=lgr, name=f'{rz_lgr.name}-{lgr.name}', rz_lgr=rz_lgr)
         return rz_lgr
 
 
@@ -46,6 +46,11 @@ class RefLgrMemberCreateForm(forms.ModelForm):
         model = RefLgrMember
         fields = ['language_script']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.file = None
+        self.ref_lgr = None
+
     def full_clean(self):
         self.fields['file_name'].disabled = False  # allow setting file_name
         return super().full_clean()
@@ -54,16 +59,15 @@ class RefLgrMemberCreateForm(forms.ModelForm):
         filename = self.cleaned_data['file_name']
         for file in self.files.getlist('members'):
             if filename == file.name:
-                self.cleaned_data['file'] = file
-                self.cleaned_data['name'] = self.cleaned_data['file_name'].split('.')[0]
+                self.file = file
                 break
         else:
             self.add_error('file_name', 'Unable to retrieve file with this name')
         return self.cleaned_data
 
     def save(self, commit=True):
-        RefLgrMember.objects.create(ref_lgr=self.ref_lgr, file=self.cleaned_data['file'],
-                                    name=self.cleaned_data['name'],
+        name = f"{self.ref_lgr.name}-{Path(self.file.name).stem}"
+        RefLgrMember.objects.create(ref_lgr=self.ref_lgr, file=self.file, name=name,
                                     language_script=self.cleaned_data['language_script'])
 
 
