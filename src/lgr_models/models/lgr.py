@@ -269,7 +269,10 @@ class RzLgrMember(ManagedLgrBase):
         lgr_parser = XMLParser(self.file)
         self.file.seek(0)
         lgr = lgr_parser.parse_document()
-        self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
+        try:
+            self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
+        except:
+            pass
         super().save(force_insert, force_update, using, update_fields)
 
 
