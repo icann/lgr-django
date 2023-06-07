@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load report %}
+{% if reports %}
+    {% include 'lgr_models/_report_warning.html' %}
+    <ul>
+        {% for report in reports %}
+            <li>
+                <a href="{{ report.to_url }}?next={{ request.path }}">
+                    {% trans 'Download' %} {{ report.filename }}
+                </a>
+                <a href="{{ report.delete_url }}?next={{ request.path }}"
+                   data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ report.filename }}?{% endblocktrans %}"
+                   class="delete_report confirm-prompt">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </a>
+                <br/>
+                <small>{{ report|display_expiration }}</small>
+            </li>
+        {% endfor %}
+    </ul>
+    <br>
+{% endif %}

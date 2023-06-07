@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% load i18n widget_tweaks %}
+{% load report %}
 
 {% block html_title %}{% trans 'IDN Table Review reports' %}{% endblock %}
 
@@ -12,14 +13,8 @@
 {% endblock %}
 
 {% block content %}
-    <p>
-        {% blocktrans trimmed %}
-            The following files contains IDN review reports.<br/>
-            <strong>
-                <i class="glyphicon glyphicon-alert"></i> Note that these files could be cleaned up regularly.
-            </strong>
-        {% endblocktrans %}
-    </p>
+    <p>{% trans 'The following files contains your IDN review reports.' %}<br/></p>
+    {% include 'lgr_models/_report_warning.html' %}
     <table id="files" class="display table table-striped table-bordered">
         <thead>
         <tr>
@@ -35,6 +30,7 @@
                        target="_blank" rel="noopener noreferrer">
                         {{ report.filename }}
                     </a>
+                    <p style="float: right;">{{ report|display_expiration }}</p>
                 </td>
                 <td>
                     <a href="{{ report.to_url }}?next={{ request.path }}"

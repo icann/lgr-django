@@ -177,25 +177,7 @@
                     <hr>
                     <b>{% trans 'Your saved results' %}</b>
                     <p>{% trans 'The following files contains your tools computation results.' %}</p>
-                    <b>
-                        <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-                        {% trans 'Note that these files could be cleaned up regularly.' %}
-                    </b>
-                    <ul>
-                        {% for report in reports %}
-                            <li>
-                                <a href="{{ report.to_url }}?next={{ request.path }}">
-                                    {% trans 'Download' %} {{ report.filename }}
-                                </a>
-                                <a href="{{ report.delete_url }}?next={{ request.path }}"
-                                   data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ report.filename }}?{% endblocktrans %}"
-                                   class="delete_report confirm-prompt">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <br>
+                    {% include 'lgr_models/_report_list.html' %}
                 {% endif %}
             </div>
         </div>

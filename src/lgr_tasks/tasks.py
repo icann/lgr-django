@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import codecs
 import csv
+import datetime
 import hashlib
 import logging
 from io import StringIO
@@ -18,20 +19,35 @@ from lgr_advanced.api import LabelInfo
 from lgr_auth.models import LgrUser
 from lgr_manage.api import LGRAdminStorage
 from lgr_models.models.lgr import RzLgr
+from lgr_models.models.report import LGRReport
 from lgr_tasks.models import LgrTaskModel
 from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
+from lgr_web.config import lgr_settings
 
 logger = logging.getLogger(__name__)
 
 VARIANT_LABELS_INDEXES_CACHE_KEY = 'indexes'
-INDEX_CACHE_TIMEOUT = settings.INDEX_REFRESH_FREQUENCY + 3600
+INDEX_CACHE_TIMEOUT = settings.TASK_REFRESH_FREQUENCY + 3600
+
+
+@shared_task
+def clean_reports():
+    """
+    Clean user reports after a certain amount of time
+    """
+    logger.info('Cleaning reports older than %d days' % lgr_settings.report_expiration_delay)
+    nbr, __ = LGRReport.objects.filter(
+        created_at__lt=datetime.datetime.now() - datetime.timedelta(days=lgr_settings.report_expiration_delay)
+    ).delete()
+    logger.info('%d reports removed' % nbr)
 
 
 @shared_task
 def calculate_index_variant_labels_tlds(user_pk=None):
     """
-    Calcul the index variant labels of the existing TLDs against the selected RZ LGR
+    Calculate the index variant labels of the existing TLDs against the selected RZ LGR
     """
+    logger.info('Calculate the index variant labels of the existing TLDs against the default RZ LGR')
     tlds_raw = download_file(settings.ICANN_TLDS)[1].read().lower()
     tlds = LabelInfo.from_form('TLDs', tlds_raw).labels
     rz_lgr_object: RzLgr = RzLgr.objects.filter(active=True).first()  # there should be only one

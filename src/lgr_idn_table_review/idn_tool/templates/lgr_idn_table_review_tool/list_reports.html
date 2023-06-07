@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% load i18n widget_tweaks %}
+{% load report %}
 
 {% block html_title %}{% trans 'IDN Table Review reports' %}{% endblock %}
 
@@ -11,13 +12,9 @@
 {% endblock %}
 
 {% block content %}
-    <p>
-        {% blocktrans trimmed %}
-            The following folders contains your IDN review reports.<br/>
-            <strong><i class="glyphicon glyphicon-alert"></i> Note that these files could be cleaned up
-                regularly.</strong>
-        {% endblocktrans %}
-    </p>
+
+    <p>{% trans 'The following folders contains your IDN review reports.' %}<br/></p>
+    {% include 'lgr_models/_report_warning.html' %}
     <ul>
         {% regroup reports by report_id as report_ids %}
         {% for reports_grouped in report_ids %}
@@ -35,6 +32,8 @@
                      data-confirmation-action="$('#form-delete-{{ forloop.counter }}').submit()">
                     <i class="glyphicon glyphicon-trash"></i>
                   </a>
+                  <br/>
+                  <small>{{ report|display_expiration }}</small>
                 {% endwith %}
               {% endwith %}
             </li>
@@ -45,6 +44,5 @@
             {% endblocktrans %}
         {% endfor %}
     </ul>
-    <br>
     <a class="btn btn-primary" href="{% url 'lgr_review_mode' %}">{% trans "New report" %}</a>
 {% endblock content %}

@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% load i18n widget_tweaks %}
+{% load report %}
 
 {% block html_title %}{% trans 'LGR Process List' %}{% endblock %}
 
@@ -108,6 +109,9 @@
               </button>
             </form>
           {% endif %}
+        </td>
+        <td>
+            <p>{% trans 'The report' %} {{ task.report|display_expiration|lower }}</p>
         </td>
       </tr>
     {% endfor %}

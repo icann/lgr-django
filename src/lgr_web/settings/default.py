@@ -361,14 +361,21 @@ CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
 
 # Periodic tasks
-INDEX_REFRESH_FREQUENCY = 3600 * 24
+TASK_REFRESH_FREQUENCY = 3600 * 24
 CELERYBEAT_SCHEDULE = {
     "calculate_index_variant_labels_tlds": {
         "task": "lgr_tasks.tasks.calculate_index_variant_labels_tlds",
-        "schedule": INDEX_REFRESH_FREQUENCY,
+        "schedule": TASK_REFRESH_FREQUENCY,
         'options': {
             'expires': 3600 * 10,
-        },
+        }
+    },
+    "clean_reports": {
+        "task": "lgr_tasks.tasks.clean_reports",
+        "schedule": TASK_REFRESH_FREQUENCY,
+        'options': {
+            'expires': 3600 * 10,
+        }
     },
 }
 CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'

@@ -8,10 +8,13 @@
 
   <form class="form-horizontal" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_limit control_width=4 %}
-    {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_max control_width=4 %}
-    {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_abort control_width=4 %}
-    <button id="submit" type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+      <h3>Variant Computation</h3>
+      {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_limit control_width=4 %}
+      {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_max control_width=4 %}
+      {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_abort control_width=4 %}
+      <h3>Reports</h3>
+      {% include "lgr_editor/_form_field.html" with field=form.report_expiration_delay control_width=4 %}
+      <button id="submit" type="submit" class="btn btn-primary">{% trans "Save" %}</button>
   </form>
 
   <h3>{% trans 'Index variant labels calculation' %}</h3>

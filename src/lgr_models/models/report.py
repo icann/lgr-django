@@ -19,6 +19,7 @@ class LGRReport(models.Model):
     file = models.FileField(upload_to=get_upload_path)
     report_id = models.CharField(max_length=256)
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     storage_type = None
 
