@@ -4,7 +4,7 @@ views.py - Views for the LGR renderer.
 """
 from django import views
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.views.generic import TemplateView
 
 from lgr_renderer.api import generate_context
@@ -17,7 +17,10 @@ class LGRRendererView(LoginRequiredMixin, TemplateView):
         super().setup(request, *args, **kwargs)
         lgr_pk = self.kwargs['lgr_pk']
         lgr_model = self.kwargs['model']
-        lgr_object = lgr_model.get_object(request.user, lgr_pk)
+        try:
+            lgr_object = lgr_model.get_object(request.user, lgr_pk)
+        except lgr_model.DoesNotExist:
+            raise Http404
         self.lgr = lgr_object.to_lgr()
 
     def get_context_data(self, **kwargs):
@@ -42,7 +45,10 @@ class LGRDisplayView(LoginRequiredMixin, views.View):
         lgr_pk = self.kwargs['lgr_pk']
         lgr_model = self.kwargs['model']
         self.force_download = self.kwargs.get('force_download', False)
-        self.lgr_object = lgr_model.get_object(request.user, lgr_pk)
+        try:
+            self.lgr_object = lgr_model.get_object(request.user, lgr_pk)
+        except lgr_model.DoesNotExist:
+            raise Http404
 
     def get(self, request, *args, **kwargs):
         content_type = 'text/plain'
