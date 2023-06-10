@@ -1,14 +1,6 @@
 {% extends "_base.html" %}
 {% load i18n static %}
 {% block html_title %}{% trans 'LGR Label Validation Tool' %}{% endblock %}
-{% block navbar-right %}
-    <a class="btn btn-default show-tooltip"
-       data-toggle="modal" data-target="#label-forms-modal"
-       title="{% trans 'Display all label forms' %}" data-placement="bottom">
-        <i class="glyphicon glyphicon-text-size"></i> {% trans "Label forms" %}
-    </a>
-    {{ block.super }}
-{% endblock %}
 
 {% block html_head_more %}
     {{ block.super }}
@@ -190,9 +182,6 @@
 {% endblock container %}
 
 {% block html_body_more %}
-    <!-- Label forms Modal -->
-    {% include 'lgr_advanced/_label_forms_modal.html' %}
-
     <div class="fade-blocking">
         <div class="lds-spinner">
             <div></div>

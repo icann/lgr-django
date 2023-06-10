@@ -19,7 +19,7 @@ import lgr_renderer.urls
 import lgr_session.urls
 import lgr_tasks.urls
 import lgr_utils.urls
-from .views import LGRModesView, LGRAboutView, LGRHelpView, LanguageAutocomplete
+from .views import LGRModesView, LGRAboutView, LGRHelpView, LanguageAutocomplete, LabelFormsView, LabelFileFormsView
 
 urlpatterns = [
     path('a/', include(lgr_advanced.urls.urlpatterns)),
@@ -39,6 +39,8 @@ urlpatterns = [
 
     path('about/', LGRAboutView.as_view(), name='about'),
     path('help/', LGRHelpView.as_view(), name='help'),
+    path('label_forms/', LabelFormsView.as_view(), name='lgr_label_forms'),
+    path('label_file_forms/', LabelFileFormsView.as_view(), name='lgr_label_files_forms'),
 
     path('', LGRModesView.as_view(), name='lgr_home'),
 ]

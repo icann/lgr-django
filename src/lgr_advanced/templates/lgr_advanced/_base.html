@@ -180,11 +180,6 @@
             </ul>
         </div>
     {% endif %}
-    <a class="btn btn-default show-tooltip"
-       data-toggle="modal" data-target="#label-forms-modal"
-       title="{% trans 'Display all label forms' %}" data-placement="bottom">
-        <i class="glyphicon glyphicon-text-size"></i> {% trans "Label forms" %}
-    </a>
     {{ block.super }}
 {% endblock navbar-right %}
 
@@ -234,9 +229,6 @@
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
     {% endif %}
-
-    <!-- Label forms Modal -->
-    {% include 'lgr_advanced/_label_forms_modal.html' %}
 
     <script src="//cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.js"></script>
     <script>
