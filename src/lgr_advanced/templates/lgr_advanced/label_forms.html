@@ -2,9 +2,36 @@
 {% load i18n widget_tweaks %}
 
 {% block content %}
-    <form method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% include "lgr_editor/_form_field.html" with field=form.labels %}
-        <button class="col-sm-2 btn btn-primary" type="submit">{% trans "Download forms" %}</button>
-    </form>
+    <div class="input-group">
+        <form method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include "lgr_editor/_form_field.html" with field=form.label %}
+            {% include "lgr_editor/_form_field.html" with field=form.unicode_version %}
+            <button class="col-sm-6 btn btn-primary" type="submit">{% trans "Display forms" %}</button>
+        </form>
+    </div>
+    {% if u_label %}
+        <table class="table table-responsive" style="margin-top: 5px;">
+            <tr>
+                <th>{% trans "Code point sequence" %}</th>
+                <th>{% trans "U-label" %}</th>
+                <th>{% trans "A-label" %}</th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr>
+                <td>{{ cp_list }}</td>
+                <td>{{ u_label }}</td>
+                <td>{{ a_label }}</td>
+            </tr>
+        </table>
+    {% endif %}
+    <hr>
+    <h3>{% trans 'Get label forms on a list of labels' %}</h3>
+    <div class="input-group">
+        <form method="POST" class="form-horizontal" action="{% url 'lgr_label_files_forms' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include "lgr_editor/_form_field.html" with field=file_form.labels %}
+            <button class="col-sm-4 btn btn-primary" type="submit" name="labels-form">{% trans "Download forms" %}</button>
+        </form>
+    </div>
 {% endblock content %}

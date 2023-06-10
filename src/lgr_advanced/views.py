@@ -4,6 +4,7 @@ import csv
 import pathlib
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views.generic import TemplateView, FormView
@@ -11,7 +12,7 @@ from django.views.generic import TemplateView, FormView
 from lgr.tools.utils import parse_label_input, parse_codepoint_input
 from lgr.utils import cp_to_ulabel, format_cp
 from lgr_advanced.api import LGRToolStorage, LabelInfo
-from lgr_advanced.forms import LabelFormsForm
+from lgr_advanced.forms import LabelFormsForm, LabelFileFormsForm
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel
 from lgr_advanced.utils import list_built_in_lgr
@@ -53,9 +54,36 @@ class LabelFormsView(LoginRequiredMixin, FormView):
     form_class = LabelFormsForm
     template_name = 'lgr_advanced/label_forms.html'
 
-    def get_initial(self):
-        initial = super().get_initial()
-        return initial
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.label = ''
+        self.udata = None
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['file_form'] = LabelFileFormsForm(prefix='labels-form')
+        if self.label:
+            try:
+                ctx['cp_list'] = format_cp(self.label)
+                ctx['u_label'] = cp_to_ulabel(self.label)
+                ctx['a_label'] = self.udata.idna_encode_label(ctx['u_label'])
+            except UnicodeError as ex:
+                messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
+
+        return ctx
+
+    def form_valid(self, form):
+        self.label = form.cleaned_data['label']
+        self.udata = unidb.manager.get_db_by_version(settings.SUPPORTED_UNICODE_VERSION)
+        return self.render_to_response(self.get_context_data(form=form))
+
+
+class LabelFileFormsView(LoginRequiredMixin, FormView):
+    form_class = LabelFileFormsForm
+    template_name = 'lgr_advanced/label_forms.html'
+
+    def get_prefix(self):
+        return 'labels-form'
 
     def form_valid(self, form):
         labels_file = form.cleaned_data['labels']
@@ -96,3 +124,9 @@ class LabelFormsView(LoginRequiredMixin, FormView):
                 writer.writerow(row)
 
         return response
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['file_form'] = ctx['form']
+        ctx['form'] = LabelFormsForm()
+        return ctx
