@@ -94,7 +94,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
                     if not tld_indexes:
                         tlds = download_file(settings.ICANN_TLDS)[1].read().lower()
                         data = tlds.decode('utf-8')
-                        check_collisions = [l[0] for l in read_labels(StringIO(data))]
+                        check_collisions = [l[1] for l in read_labels(StringIO(data))]
                     else:
                         is_collision_index = True
                         check_collisions = tld_indexes

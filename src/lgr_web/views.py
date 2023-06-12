@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views.generic import TemplateView, FormView
 
-from lgr.tools.utils import parse_label_input, parse_codepoint_input
+from lgr.tools.utils import parse_label_input, parse_codepoint_input, read_labels
 from lgr.utils import format_cp, cp_to_ulabel
 from lgr_advanced.api import LabelInfo
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
@@ -99,15 +99,19 @@ class LabelFileFormsView(LoginRequiredMixin, FormView):
         response.write(codecs.BOM_UTF8.decode('utf-8'))
         writer = csv.writer(response)
         writer.writerow(['Code point sequence', 'U-label', 'A-label', 'Note'])
-        for label in label_info.labels:
-            try:
-                parsed_label = parse_label_input(label.strip(), idna_decoder=udata.idna_decode_label)
-                ulabel = cp_to_ulabel(parsed_label)
-                writer.writerow([format_cp(parsed_label),
-                                 ulabel,
-                                 udata.idna_encode_label(ulabel),
-                                 '-'])
-            except Exception as e:
+        for label, parsed_label, valid, error in read_labels(label_info.labels, unidb=udata, as_cp=True):
+            if valid:
+                try:
+                    ulabel = cp_to_ulabel(parsed_label)
+                    writer.writerow([format_cp(parsed_label),
+                                     ulabel,
+                                     udata.idna_encode_label(ulabel),
+                                     '-'])
+                except Exception as e:
+                    valid = False
+                    error = e
+
+            if not valid:
                 if label.lower().startswith('xn--'):
                     row = ['-', '-', label]
                 elif ' ' in label:
@@ -121,7 +125,7 @@ class LabelFileFormsView(LoginRequiredMixin, FormView):
                 else:
                     row = [label, '-', '-']
 
-                row.append(lgr_exception_to_text(e))
+                row.append(lgr_exception_to_text(error))
                 writer.writerow(row)
 
         return response

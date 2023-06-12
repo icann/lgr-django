@@ -59,7 +59,7 @@ def calculate_index_variant_labels_tlds(user_pk=None):
     writer = csv.writer(out)
     writer.writerow(['Label', 'Index'])
 
-    for label, valid, error in read_labels(tlds, rz_lgr.unicode_database):
+    for __, label, valid, error in read_labels(tlds, rz_lgr.unicode_database):
         if not valid:
             logger.warning(f'{label} is invalid: {error}')
             indexes[label] = 'ERROR'

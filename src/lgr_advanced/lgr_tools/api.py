@@ -244,7 +244,7 @@ def lgr_validate_labels(lgr: LGR, labels_file, udata, hide_mixed_script_variants
     :return: CSV containing the labels validation output.
     """
     it = 0
-    for label, _, _ in read_labels(labels_file, lgr.unicode_database):
+    for __, label, __, __ in read_labels(labels_file, lgr.unicode_database):
         label_cp = tuple([ord(c) for c in label])
         try:
             yield _validate_label_task_helper(
