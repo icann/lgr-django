@@ -5,7 +5,6 @@ from .views import (LGRCompareView,
                     LGRDiffView,
                     LGRCollisionView,
                     LGRAnnotateView,
-                    LGRCrossScriptVariantsView,
                     LGRHarmonizeView,
                     LGRComputeVariants)
 
@@ -20,8 +19,6 @@ urlpatterns = [
     path('annotate/<int:lgr_pk>', LGRAnnotateView.as_view(), name='lgr_tools_annotate'),
     path('variants/', LGRComputeVariants.as_view(), name='lgr_tools_variants'),
     path('variants/<int:lgr_pk>', LGRComputeVariants.as_view(), name='lgr_tools_variants'),
-    path('cross-script/', LGRCrossScriptVariantsView.as_view(), name='lgr_tools_cross_script'),
-    path('cross-script/<int:lgr_pk>', LGRCrossScriptVariantsView.as_view(), name='lgr_tools_cross_script'),
     path('harmonization/', LGRHarmonizeView.as_view(), name='lgr_tools_harmonize'),
     path('harmonization/<int:lgr_pk>', LGRHarmonizeView.as_view(), name='lgr_tools_harmonize'),
 ]

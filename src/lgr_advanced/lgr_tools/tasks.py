@@ -16,7 +16,6 @@ from lgr_advanced.lgr_tools.api import (lgr_diff_labels,
                                         lgr_collision_labels,
                                         lgr_annotate_labels,
                                         lgr_set_annotate_labels,
-                                        lgr_cross_script_variants,
                                         lgr_validate_label,
                                         lgr_set_validate_label,
                                         lgr_validate_labels,
@@ -212,31 +211,6 @@ def lgr_set_annotate_task(user_pk, lgr_pk, labels_json, set_labels_json, script_
                           lgr=lgr,
                           script_lgr=script_lgr,
                           set_labels=set_labels_info.labels,
-                          labels_file=labels_info.labels)
-
-
-@shared_task
-def cross_script_variants_task(user_pk, lgr_pk, in_set, labels_json):
-    """
-    Compute cross-script variants of labels in a LGR.
-
-    :param user_pk: The user primary key
-    :param lgr_pk: The LGR primary key
-    :param in_set: Whether the LGR is embedded in a LGR set
-    :param labels_json: The LabelInfo as a JSON object.
-    """
-    user = LgrUser.objects.get(pk=user_pk)
-    lgr_model = SetLgrModel if in_set else LgrModel
-    lgr = lgr_model.get_object(user, lgr_pk).to_lgr()
-    labels_info = LabelInfo.from_dict(labels_json)
-
-    logger.info("Starting task 'cross-script variants' for %s, for file %s",
-                lgr.name, labels_info.name)
-
-    return _lgr_tool_task(user=user,
-                          base_filename='cross_script_variants_{0}'.format(lgr.name),
-                          cb=lgr_cross_script_variants,
-                          lgr=lgr,
                           labels_file=labels_info.labels)
 
 

@@ -169,12 +169,6 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
                              required=True)
 
 
-class LGRCrossScriptVariantsSelector(LGRSetCompatibleForm):
-    labels = forms.FileField(label=_("Labels"),
-                             help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}",
-                             required=True)
-
-
 class LGRHarmonizeSelector(forms.Form):
     lgr_1 = forms.ChoiceField(label=_('First LGR'),
                               help_text=_('First LGR to use in tool'),

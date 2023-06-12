@@ -9,7 +9,6 @@ from lgr.core import LGR
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.tools.annotate import annotate, lgr_set_annotate
 from lgr.tools.compare import union_lgrs, intersect_lgrs, diff_lgrs, diff_lgr_sets
-from lgr.tools.cross_script_variants import cross_script_variants
 from lgr.tools.diff_collisions import diff, collision, basic_collision
 from lgr.tools.harmonize import harmonize
 from lgr.tools.utils import read_labels
@@ -148,17 +147,6 @@ def lgr_set_annotate_labels(lgr: LGR, script_lgr, set_labels, labels_file):
     :return: Text log to be displayed
     """
     return lgr_set_annotate(lgr, script_lgr, set_labels, labels_file)
-
-
-def lgr_cross_script_variants(lgr: LGR, labels_file):
-    """
-    Compute cross-script variants of a list of labels in a LGR.
-
-    :param lgr: The LGR to use for variant generation.
-    :param labels_file: The file containing the list of labels
-    :return: Text log to be displayed
-    """
-    return cross_script_variants(lgr, labels_file)
 
 
 def lgr_harmonization(user: LgrUser, lgr_object_1: LgrModel, lgr_object_2: LgrModel, rz_lgr_object: RzLgr):

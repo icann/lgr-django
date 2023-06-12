@@ -15,7 +15,6 @@ from lgr_advanced.lgr_tools.forms import (LGRCompareSelector,
                                           LGRDiffSelector,
                                           LGRCollisionSelector,
                                           LGRAnnotateSelector,
-                                          LGRCrossScriptVariantsSelector,
                                           LGRHarmonizeSelector,
                                           LGRComputeVariantsSelector)
 from lgr_models.models.lgr import LgrBaseModel, RzLgr
@@ -25,7 +24,6 @@ from .tasks import (diff_task,
                     collision_task,
                     annotate_task,
                     lgr_set_annotate_task,
-                    cross_script_variants_task,
                     validate_labels_task)
 from ..api import LabelInfo
 from ..models import LgrModel, SetLgrModel
@@ -242,42 +240,6 @@ class LGRAnnotateView(LGRToolBaseView):
             'labels_file': labels_file.name,
         })
         return render(self.request, 'lgr_tools/wait_annotate.html', context=ctx)
-
-
-class LGRCrossScriptVariantsView(LGRToolBaseView):
-    form_class = LGRCrossScriptVariantsSelector
-    template_name = 'lgr_tools/cross_script_variants.html'
-    async_method = cross_script_variants_task
-
-    def get_task_name(self, lgr_object: LgrBaseModel):
-        return _(f'Cross-scripts variants computation on LGR %s') % lgr_object.name
-
-    def form_valid(self, form):
-        ctx = self.get_context_data()
-        lgr_pk = form.cleaned_data['lgr']
-        labels_file = form.cleaned_data['labels']
-        in_set = False
-
-        lgr_object = LgrModel.get_object(self.request.user, lgr_pk)
-
-        # need to transmit json serializable data
-        labels_json = LabelInfo.from_form(labels_file.name,
-                                          labels_file.read()).to_dict()
-
-        if lgr_object.is_set():
-            in_set = True
-            script_lgr_pk = form.cleaned_data['script']
-            script_lgr_object = SetLgrModel.get_object(self.request.user, script_lgr_pk)
-            lgr_object = script_lgr_object
-
-        self.call_async(lgr_object, in_set, labels_json)
-
-        ctx.update({
-            'lgr_object': lgr_object,
-            'in_set': in_set,
-            'labels_file': labels_file.name,
-        })
-        return render(self.request, 'lgr_tools/wait_cross_scripts.html', context=ctx)
 
 
 class LGRHarmonizeView(LGRToolBaseView):

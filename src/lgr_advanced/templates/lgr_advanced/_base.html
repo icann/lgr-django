@@ -52,14 +52,12 @@
                 {% url 'lgr_tools_collisions_set' lgr_pk=lgr_set_object.pk as lgr_tools_collisions_url %}
                 {% url 'lgr_tools_annotate_set' lgr_pk=lgr_set_object.pk as lgr_tools_annotate_url %}
                 {% url 'lgr_tools_variants_set' lgr_pk=lgr_set_object.pk as lgr_tools_variants_url %}
-                {% url 'lgr_tools_cross_script_set' lgr_pk=lgr_set_object.pk as lgr_tools_cross_script_url %}
             {% else %}
                 {% url 'lgr_tools_compare' lgr_pk=lgr_pk as lgr_tools_compare_url %}
                 {% url 'lgr_tools_diff' lgr_pk=lgr_pk as lgr_tools_diff_url %}
                 {% url 'lgr_tools_collisions' lgr_pk=lgr_pk as lgr_tools_collisions_url %}
                 {% url 'lgr_tools_annotate' lgr_pk=lgr_pk as lgr_tools_annotate_url %}
                 {% url 'lgr_tools_variants' lgr_pk=lgr_pk as lgr_tools_variants_url %}
-                {% url 'lgr_tools_cross_script' lgr_pk=lgr_pk as lgr_tools_cross_script_url %}
                 {% url 'lgr_tools_harmonize' lgr_pk=lgr_pk as lgr_tools_harmonize_url %}
             {% endif %}
         {% else %}
@@ -68,7 +66,6 @@
             {% url 'lgr_tools_collisions' as lgr_tools_collisions_url %}
             {% url 'lgr_tools_annotate' as lgr_tools_annotate_url %}
             {% url 'lgr_tools_variants' as lgr_tools_variants_url %}
-            {% url 'lgr_tools_cross_script' as lgr_tools_cross_script_url %}
             {% url 'lgr_tools_harmonize' as lgr_tools_harmonize_url %}
         {% endif %}
         <ul class="dropdown-menu">
@@ -113,14 +110,6 @@
                     </a>
                 </li>
             {% endif %}
-            <li class="btn btn-block show-tooltip">
-                <a href="{{ lgr_tools_cross_script_url }}"
-                   title="{% trans 'Compute cross-script variants' %}"
-                   data-placement="bottom">
-                    <i class="glyphicon glyphicon-transfer"></i>
-                    {% trans "Cross-script variants" %}
-                </a>
-            </li>
             <li class="btn btn-block show-tooltip">
                 <a href="{{ lgr_tools_annotate_url }}"
                    title="{% trans 'Annotate list of labels with their disposition' %}"
