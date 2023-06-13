@@ -11,12 +11,6 @@ from lgr_advanced.lgr_editor.forms.fields import (ValidatingRepertoire,
 from lgr_advanced.widgets import DataSelectWidget
 from .utils import MultipleChoiceFieldNoValidation
 
-SUPPORTED_CODEPOINT_INPUT_FILES = [
-    ('rfc3743', 'RFC3743'),
-    ('rfc4290', 'RFC4290'),
-    ('one_per_line', 'One code point per line')
-]
-
 
 class CodepointField(forms.CharField):
     def __init__(self, *args, **kwargs):
@@ -100,8 +94,6 @@ class AddCodepointFromScriptForm(forms.Form):
 class ImportCodepointsFromFileForm(forms.Form):
     file = forms.FileField(label=_("Select a file"),
                            help_text=f"{_('File containing data to be imported.')} {FILE_FIELD_ENCODING_HELP}")
-    type = forms.ChoiceField(label=_("File type"),
-                             choices=SUPPORTED_CODEPOINT_INPUT_FILES)
     manual_import = forms.BooleanField(label=_("Manual import"),
                                        required=False)
 

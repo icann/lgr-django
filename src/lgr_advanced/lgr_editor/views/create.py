@@ -7,6 +7,7 @@ import logging
 import os
 import re
 from io import BytesIO
+from pathlib import Path
 
 from django.conf import settings
 from django.contrib import messages
@@ -146,8 +147,7 @@ class ImportLGRView(LGRViewMixin, FormView):
         lgr_name = lgr_file.name
         if not RE_SAFE_FILENAME.match(lgr_name):
             raise SuspiciousOperation()
-        if lgr_name.endswith('.xml'):
-            lgr_name = lgr_name.rsplit('.', 1)[0]
+        lgr_name = Path(lgr_name).stem
 
         if not lgr_set_info and LgrModel.objects.filter(owner=self.request.user,
                                                         name=lgr_name).exists():

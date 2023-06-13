@@ -15,6 +15,7 @@ from django.views.generic import FormView
 
 from lgr.core import LGR
 from lgr.exceptions import LGRException
+from lgr.parser.heuristic_parser import HeuristicParser
 from lgr.parser.line_parser import LineParser
 from lgr.parser.rfc3743_parser import RFC3743Parser
 from lgr.parser.rfc4290_parser import RFC4290Parser
@@ -31,12 +32,6 @@ from lgr_utils import unidb
 from lgr_utils.cp import cp_to_slug
 
 logger = logging.getLogger(__name__)
-
-INPUT_FILE_PARSER = {
-    'rfc3743': RFC3743Parser,
-    'rfc4290': RFC4290Parser,
-    'one_per_line': LineParser
-}
 
 
 class MultiCodepointsView(LGREditMixin, FormView):
@@ -225,15 +220,8 @@ class ImportCodepointsFromFileView(MultiCodepointsView):
         # Get the type of input file and send it to LGR Core
         # Assume encoded in UTF-8
         file = StringIO(cd['file'].read().decode('utf-8'))
-        type = cd['type']
 
-        parser_cls = INPUT_FILE_PARSER.get(type, None)
-        if parser_cls is None:
-            logger.error("Unknown type '%s'", type)
-            # Re-render the context data with the data-filled form and errors.
-            return self.render_to_response(self.get_context_data(form=form))
-
-        parser = parser_cls(file, filename=cd['file'].name, force=True)
+        parser = HeuristicParser(file, filename=cd['file'].name, force=True)
         input_lgr = parser.parse_document()
         return self._handle_discrete(self.lgr, input_lgr, cd['manual_import'])
 

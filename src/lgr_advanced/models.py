@@ -15,6 +15,7 @@ from django.db.models import Q
 
 from lgr.core import LGR
 from lgr.metadata import Metadata, Version
+from lgr.parser.heuristic_parser import HeuristicParser
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.tools.merge_set import merge_lgr_set
 from lgr_advanced.api import copy_characters
@@ -46,6 +47,7 @@ class RepertoireCacheMixin:
 
 
 class CommonLgrModel(LgrBaseModel):
+    lgr_parser = HeuristicParser
     content_type = models.ForeignKey(ContentType, blank=True, null=True, on_delete=models.SET_NULL,
                                      limit_choices_to=VALIDATING_REPERTOIRE_QUERYSET)
     object_id = models.PositiveIntegerField(blank=True, null=True)
