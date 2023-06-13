@@ -31,10 +31,8 @@
         <td class="min-cell">{{ task.name }} - {{ task.creation_date }}</td>
         <td class="min-cell">
           {% if task.report %}
-            <a href="{{ task.report.to_url }}?next={{ request.path }}"
-               class="btn btn-default show-tooltip"
-               title="{% trans 'Download report' %}"
-               data-placement="bottom">
+            <a href="{{ task.report.to_url }}" class="btn btn-default show-tooltip"
+               title="{% trans 'Download report' %}" data-placement="bottom">
               <i class="glyphicon glyphicon-save"></i>
               {% trans "Download report" %}
             </a>

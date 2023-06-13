@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseBadRequest
 from django.urls import reverse_lazy
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, RedirectView, CreateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
@@ -11,6 +12,7 @@ from lgr_auth.forms import UserForm
 from lgr_auth.models import LgrUser, LgrRole
 from lgr_auth.views import LgrUserUpdateView
 from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin
+from lgr_utils.views import safe_next_redirect_url
 
 
 class LgrUserListView(BaseListAdminView):
@@ -82,7 +84,8 @@ class LgrUserChangeStatusView(BaseAdminMixin, SingleObjectMixin, RedirectView):
     enable = None
 
     def get_redirect_url(self, *args, **kwargs):
-        return self.request.GET.get('next', super(LgrUserChangeStatusView, self).get_redirect_url(*args, **kwargs))
+        default = super(LgrUserChangeStatusView, self).get_redirect_url(*args, **kwargs)
+        return safe_next_redirect_url(self.request, default)
 
     def post(self, request, *args, **kwargs):
         user = self.get_object()

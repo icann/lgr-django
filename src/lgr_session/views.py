@@ -10,6 +10,7 @@ from django.views.generic.base import View
 
 from lgr_session.api import LGRStorage
 from lgr_utils.utils import get_all_subclasses_recursively
+from lgr_utils.views import safe_next_redirect_url
 
 
 class StorageType(Enum):
@@ -25,7 +26,6 @@ class LGRSessionView(LoginRequiredMixin, UserPassesTestMixin, View):
         super().setup(request, *args, **kwargs)
         self.report_id = self.kwargs.get('report_id')
         self.pk = self.kwargs.get('pk', None)
-        self.next = request.GET.get('next', '/')
         storage_type = self.kwargs.get('storage')
         for subclass in get_all_subclasses_recursively(LGRStorage):
             if not subclass.storage_model:
@@ -47,7 +47,7 @@ class DownloadReportFileView(LGRSessionView):
         except self.session.storage_model.DoesNotExist:
             messages.error(request, _('Unable to download file from report %(pk)s') %
                            {'pk': self.pk})
-            return redirect(self.next)
+            return redirect('/')
         response = FileResponse(report.file)
         if 'display' not in self.request.GET:
             response['Content-Disposition'] = 'attachment; filename={}'.format(report.filename)
@@ -62,4 +62,4 @@ class DeleteReportFileView(LGRSessionView):
             self.session.storage_delete_report_file(self.pk)
         if self.report_id:
             self.session.storage_delete_report(self.report_id)
-        return redirect(self.next)
+        return redirect(safe_next_redirect_url(request, '/'))

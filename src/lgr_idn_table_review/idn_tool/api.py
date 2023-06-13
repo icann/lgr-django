@@ -14,11 +14,9 @@ from django.template.loader import render_to_string
 from lgr.tools.idn_review.review import review_lgr, review_with_core_requirements
 from typing import Dict
 from lgr_models.models.lgr import LgrBaseModel
+from lgr_utils.views import RFC_CORE_REQUIREMENT
 
 logger = logging.getLogger(__name__)
-
-
-RFC_CORE_REQUIREMENT = 'core'
 
 
 class LGRIdnReviewApi(LGRStorage):

@@ -13,6 +13,7 @@ from django.views.generic.list import MultipleObjectMixin
 
 from lgr_tasks.api import get_task_info
 from lgr_tasks.models import LgrTaskModel
+from lgr_utils.views import safe_next_redirect_url
 from lgr_web.celery_app import app
 
 logger = logging.getLogger(__name__)
@@ -42,7 +43,7 @@ class DeleteProcessView(LoginRequiredMixin, SingleObjectMixin, View):
                 raise BaseException
         except:
             messages.error(self.request, _('Failed to delete %s.') % task.name)
-            return redirect(request.GET.get('next', '/'))
+            return redirect(safe_next_redirect_url(request, '/'))
 
         if task_info and task_info['status'] in [PENDING, RETRY]:
             # never set terminate=True as this will kill the worker.
@@ -53,7 +54,7 @@ class DeleteProcessView(LoginRequiredMixin, SingleObjectMixin, View):
             LgrTaskModel.objects.filter(pk=task.pk).delete()
             messages.info(self.request, _('Task %s has been removed.') % task.name)
 
-        return redirect(request.GET.get('next', '/'))
+        return redirect(safe_next_redirect_url(request, '/'))
 
 
 class DeleteAllFinishedProcessView(LoginRequiredMixin, MultipleObjectMixin, View):
@@ -75,4 +76,4 @@ class DeleteAllFinishedProcessView(LoginRequiredMixin, MultipleObjectMixin, View
         if queryset.exists():
             messages.info(self.request, _('Completed tasks have been cleaned.'))
             queryset.delete()
-        return redirect(request.GET.get('next', '/'))
+        return redirect(safe_next_redirect_url(request, '/'))

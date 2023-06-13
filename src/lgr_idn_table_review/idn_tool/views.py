@@ -16,6 +16,7 @@ from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
 from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_tasks.models import LgrTaskModel
+from lgr_utils.views import safe_next_redirect_url
 
 logger = logging.getLogger(__name__)
 
@@ -131,4 +132,4 @@ class IdnTableReviewDeleteReport(IdnTableReviewViewMixin, View):
 
     def post(self, request, *args, **kwargs):
         self.api.delete_report(self.kwargs.get('report_id'))
-        return redirect(request.GET.get('next', '/'))
+        return redirect(safe_next_redirect_url(request, '/'))

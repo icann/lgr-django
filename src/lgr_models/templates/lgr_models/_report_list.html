@@ -5,7 +5,7 @@
     <ul>
         {% for report in reports %}
             <li>
-                <a href="{{ report.to_url }}?next={{ request.path }}">
+                <a href="{{ report.to_url }}">
                     {% trans 'Download' %} {{ report.filename }}
                 </a>
                 <a href="{{ report.delete_url }}?next={{ request.path }}"
