@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import codecs
 import csv
 import os
 from io import StringIO
@@ -55,6 +56,8 @@ class TasksTest(LgrWebClientTestBase):
             storage.storage_get_report_file(auto_report.pk)
         self.assertEquals(user_report, storage.storage_get_report_file(user_report.pk))
         last_report: AdminReport = storage.list_storage().first()
-        with last_report.file.open('r') as f:
-            reader: csv.DictReader = csv.DictReader(f)
+        with last_report.file.open('rb') as f:
+            # remove BOM
+            data = f.read().decode('utf-8-sig')
+            reader: csv.DictReader = csv.DictReader(StringIO(data))
             self.assertListEqual(expected_report, [row for row in reader])
