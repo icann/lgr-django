@@ -30,7 +30,9 @@ class LgrWebClientTestBase(TestCase):
         return user
 
     def login_admin(self):
-        user = LgrUser.objects.create_superuser('test-admin@lgr.example', '1234')
-        is_logged_in = self.client.login(username=user.email, password='1234')
-        self.assertTrue(is_logged_in)
+        try:
+            user = LgrUser.objects.get(email='test-admin@lgr.example')
+        except LgrUser.DoesNotExist:
+            user = LgrUser.objects.create_superuser('test-admin@lgr.example', '1234')
+        self.assertTrue(self.client.login(username=user.email, password='1234'))
         return user
