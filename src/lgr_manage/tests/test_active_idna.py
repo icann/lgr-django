@@ -1,4 +1,3 @@
-import unittest
 from http import HTTPStatus
 
 from lgr_models.models.lgr import IDNARepertoire

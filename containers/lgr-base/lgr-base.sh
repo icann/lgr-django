@@ -5,6 +5,7 @@
 
 # Criticaly exit script if one command in error
 set -e
+set -x
 
 # VARIABLE DECLARATION
 ## pythonMinor version set the python minor version (ex.: 3.7)
@@ -54,8 +55,8 @@ dnf -qy install --enablerepo powertools \
 printf "OK\n"
 
 
-printf "\tInstall the various lgr-django dependancies\t"
-# Install various dependancies for lg-django
+printf "\tInstall the various lgr-django dependencies\t"
+# Install various dependencies for lg-django
 dnf -qy install \
   procps-ng \
   libxml2 \
@@ -65,7 +66,7 @@ dnf -qy install \
 printf "OK\n"
 
 
-printf "\tInstall lgr-django python dependancy\t"
+printf "\tInstall lgr-django python dependency\t"
 # Download latest path for the define minor version of python
 wget $pythonURL -qO $buildDir/python.tar.xz
 
@@ -78,7 +79,7 @@ cd $buildDir/Python-$pythonPatchVersion
 make -s altinstall &>/dev/null
 cd ~
 
-# Create genericly named link to execute python
+# Create generic named link to execute python
 ln -s /usr/local/bin/python$pythonMinorVersion /usr/local/bin/python
 
 # Validate python installation
@@ -91,7 +92,7 @@ printf "\tFix xlocale.h library\t"
 ln -sf /usr/include/locale.h /usr/include/xlocale.h
 printf "OK\n"
 
-printf "\tInstall lgr-django unicodes dependancies\n"
+printf "\tInstall lgr-django unicodes dependencies\n"
 # Clone unicode repository
 git clone -q $unicodeURL $buildDir/icu
 
@@ -183,7 +184,7 @@ echo '/usr/local/lib' > /etc/ld.so.conf.d/lgr.conf
 printf "OK\n"
 
 printf "\nPhase2: Cleanup files and unused production application\n"
-# Clean up unuse file and application to lower the docker size
+# Clean up unused file and application to lower the docker size
 printf "\tRemove Build Directory\t"
 rm -fr $buildDir
 printf "OK\n"

@@ -105,7 +105,7 @@ def collision_task(user_pk, lgr_pk, labels_json, tld_json, full_dump):
 
     :param user_pk: The user primary key
     :param lgr_pk: The LGR primary key
-    :param labels_json: The LabelInfo as a JSON object containing labels to check for coliision.
+    :param labels_json: The LabelInfo as a JSON object containing labels to check for collision.
     :param tld_json: The LabelInfo as a JSON object containing TLDs.
     :param full_dump: Whether we also output a full dump
     """
@@ -134,7 +134,7 @@ def basic_collision_task(user_pk, lgr_pk, labels_json, annotate=False, lgr_model
 
     :param user_pk: The user primary key
     :param lgr_pk: The LGR primary key
-    :param labels_json: The LabelInfo as a JSON object containing labels to check for coliision.
+    :param labels_json: The LabelInfo as a JSON object containing labels to check for collision.
     :param annotate: Whether the labels should also be annotated
     :param lgr_model: The model of the LGR in database
     """
