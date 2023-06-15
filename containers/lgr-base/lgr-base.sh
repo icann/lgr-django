@@ -70,7 +70,7 @@ printf "OK\n"
 
 printf "\tInstall lgr-django python dependency\t"
 # Download latest path for the define minor version of python
-wget $pythonURL -qO $buildDir/python.tar.xz
+curl $pythonURL -s --output $buildDir/python.tar.xz
 
 # Unpack the tar file
 tar -xf $buildDir/python.tar.xz -C $buildDir
