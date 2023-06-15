@@ -2,18 +2,23 @@
 # -*- coding: utf-8 -*-
 import codecs
 import csv
+import datetime
 import os
 from io import StringIO
+from time import sleep
 
 from django.core.cache import cache
 from django.core.files import File
 from django.test import override_settings
 
+from lgr_advanced.api import LGRToolStorage
 from lgr_manage.api import LGRAdminStorage
 from lgr_manage.models import AdminReport
 from lgr_models.models.lgr import RzLgr
+from lgr_models.models.report import LGRReport
 from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
-from lgr_tasks.tasks import calculate_index_variant_labels_tlds, _index_cache_key
+from lgr_tasks.tasks import calculate_index_variant_labels_tlds, _index_cache_key, clean_reports
+from lgr_web.config import lgr_settings
 
 
 class TasksTest(LgrWebClientTestBase):
@@ -61,3 +66,23 @@ class TasksTest(LgrWebClientTestBase):
             data = f.read().decode('utf-8-sig')
             reader: csv.DictReader = csv.DictReader(StringIO(data))
             self.assertListEqual(expected_report, [row for row in reader])
+
+    def test_clean_reports(self):
+        # save fake user generated report
+        last_month = datetime.datetime.now() - datetime.timedelta(days=31)
+        lgr_settings.report_expiration_delay = 30
+        storage = LGRAdminStorage(self.login_admin())
+        report1 = storage.storage_save_report_file('test1.csv', StringIO())
+        storage = LGRToolStorage(self.login_user())
+        report2 = storage.storage_save_report_file('test2.csv', StringIO())
+        report3 = storage.storage_save_report_file('test3.csv', StringIO())
+        report1.created_at = last_month
+        report1.save()
+        report2.created_at = last_month
+        report2.save()
+        # sanity check
+        self.assertListEqual(list(LGRReport.objects.values_list('pk', flat=True)), [report1.pk, report2.pk, report3.pk])
+
+        clean_reports()
+
+        self.assertListEqual(list(LGRReport.objects.values_list('pk', flat=True)), [report3.pk])
