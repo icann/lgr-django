@@ -28,7 +28,7 @@
     <hr>
     <h3>{% trans 'Get label forms on a list of labels' %}</h3>
     <div class="input-group">
-        <form method="POST" class="form-horizontal" action="{% url 'lgr_label_files_forms' %}" enctype="multipart/form-data">
+        <form method="POST" class="form-horizontal" action="{% url 'lgr_label_file_forms' %}" enctype="multipart/form-data">
             {% csrf_token %}
             {% include "lgr_editor/_form_field.html" with field=file_form.labels %}
             <button class="col-sm-4 btn btn-primary" type="submit" name="labels-form">{% trans "Download forms" %}</button>

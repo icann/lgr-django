@@ -11,7 +11,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.views.generic import TemplateView, FormView
 
-from lgr.tools.utils import parse_label_input, parse_codepoint_input, read_labels
+from lgr.tools.utils import parse_codepoint_input, read_labels
 from lgr.utils import format_cp, cp_to_ulabel
 from lgr_advanced.api import LabelInfo
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
