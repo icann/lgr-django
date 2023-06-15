@@ -16,12 +16,14 @@ lgrBaseDir='/var/www/lgr'
 lgrPersistantDir='storage'
 
 ## Get the last patch version for the specify python version
-pythonPatchVersion=$( curl -s https://www.python.org/ftp/python/ | \
-                    cut -d \" -f 2 | \
-                    sed 's|/||g' | \
-                    grep $pythonMinorVersion. | \
-                    sort -V | \
-                    tail -1 )
+#pythonPatchVersion=$( curl -s https://www.python.org/ftp/python/ | \
+#                    cut -d \" -f 2 | \
+#                    sed 's|/||g' | \
+#                    grep $pythonMinorVersion. | \
+#                    sort -V | \
+#                    tail -1 )
+# hard-code patch version as above command does not work on target
+pythonPatchVersion='3.10.12'
 
 ## pythonURL is the URL where the python source file are located
 pythonURL="https://www.python.org/ftp/python/$pythonPatchVersion/Python-$pythonPatchVersion.tar.xz"
