@@ -3,9 +3,9 @@
 # As lgr-django is a complex installation process. A shell script is more easy
 # to read and modify
 
-# Criticaly exit script if one command in error
+# Critically exit script if one command in error
 set -e
-set -x
+#set -x
 
 # VARIABLE DECLARATION
 ## pythonMinor version set the python minor version (ex.: 3.7)
@@ -70,10 +70,12 @@ printf "OK\n"
 
 printf "\tInstall lgr-django python dependency\t"
 # Download latest path for the define minor version of python
-curl $pythonURL --output $buildDir/python.tar.xz
+#curl $pythonURL -s --output $buildDir/python.tar.xz
+
 
 # Unpack the tar file
-tar -xf $buildDir/python.tar.xz -C $buildDir
+#tar -xf $buildDir/python.tar.xz -C $buildDir
+tar -xf Python-$pythonPatchVersion.tar.xz -C $buildDir
 
 # Compile & install python
 cd $buildDir/Python-$pythonPatchVersion
