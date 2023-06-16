@@ -5,7 +5,7 @@
 
 # Critically exit script if one command in error
 set -e
-#set -x
+set -x
 
 # VARIABLE DECLARATION
 ## pythonMinor version set the python minor version (ex.: 3.7)
@@ -210,6 +210,6 @@ dnf -qy remove --enablerepo powertools \
   libffi-devel
 printf "OK\n"
 printf "\tClean up dnf cache files\t"
-dnf -qy clean all
-rm -fr /var/cache/dnf
+dnf -qy clean all || true
+rm -fr /var/cache/dnf || true
 printf "OK\n"
