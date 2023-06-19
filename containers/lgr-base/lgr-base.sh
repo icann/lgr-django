@@ -8,25 +8,10 @@ set -e
 set -x
 
 # VARIABLE DECLARATION
-## pythonMinor version set the python minor version (ex.: 3.7)
-pythonMinorVersion='3.10'
 ## unicodeURL set the repository git use for cloning
 unicodeURL='https://github.com/unicode-org/icu.git'
 lgrBaseDir='/var/www/lgr'
 lgrPersistantDir='storage'
-
-## Get the last patch version for the specify python version
-#pythonPatchVersion=$( curl -s https://www.python.org/ftp/python/ | \
-#                    cut -d \" -f 2 | \
-#                    sed 's|/||g' | \
-#                    grep $pythonMinorVersion. | \
-#                    sort -V | \
-#                    tail -1 )
-# hard-code patch version as above command does not work on target
-pythonPatchVersion='3.10.12'
-
-## pythonURL is the URL where the python source file are located
-pythonURL="https://www.python.org/ftp/python/$pythonPatchVersion/Python-$pythonPatchVersion.tar.xz"
 
 ## buildDir will contain all file needed to compile application
 buildDir=$(mktemp -d)
@@ -66,28 +51,6 @@ dnf -qy install \
   tcl
 
 printf "OK\n"
-
-
-printf "\tInstall lgr-django python dependency\t"
-# Download latest path for the define minor version of python
-#curl $pythonURL -s --output $buildDir/python.tar.xz
-
-
-# Unpack the tar file
-#tar -xf $buildDir/python.tar.xz -C $buildDir
-tar -xf Python-$pythonPatchVersion.tar.xz -C $buildDir
-
-# Compile & install python
-cd $buildDir/Python-$pythonPatchVersion
-./configure -q --enable-optimizations
-make -s altinstall &>/dev/null
-cd ~
-
-# Create generic named link to execute python
-ln -s /usr/local/bin/python$pythonMinorVersion /usr/local/bin/python
-
-# Validate python installation
-/usr/local/bin/python -V | grep -q $pythonPatchVersion
 
 printf "OK\n"
 
