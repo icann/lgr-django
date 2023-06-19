@@ -2,7 +2,9 @@ FROM container-registry-dev.icann.org/icann/lgr-django:latest
 LABEL MAINTAINER marc.blanchet@viagenie.ca
 
 # Install gunicorn
-RUN pip install gunicorn
+RUN pip install \
+  --proxy artifactory.icann.org/artifactory/pypi \
+  gunicorn
 
 # Set gunicorn configuration
 ENV GUNICORN_CMD_ARGS="--bind=0.0.0.0"

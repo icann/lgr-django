@@ -23,12 +23,16 @@ WORKDIR $BASE_DIR
 RUN mv 'local.py' 'src/lgr_web/settings'
 
 # Prepare python virtual environement
-RUN /usr/local/bin/python -m venv venv
+RUN python3 -m venv venv
 ENV PATH="$BASE_DIR/venv/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/local/lib"
 
 # Install/upgrade pip
-RUN python -m pip install --upgrade pip
+RUN python -m pip install \
+  --proxy artifactory.icann.org/artifactory/pypi \
+  --upgrade pip
 
 # Install lgr-django requirements
-RUN pip install -r requirements.txt && rm requirements.txt
+RUN pip install \
+  --proxy artifactory.icann.org/artifactory/pypi \
+  -r requirements.txt && rm requirements.txt

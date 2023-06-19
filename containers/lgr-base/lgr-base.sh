@@ -16,15 +16,18 @@ lgrPersistantDir='storage'
 ## buildDir will contain all file needed to compile application
 buildDir=$(mktemp -d)
 
-
 # INTALLATION & CONFIGURATION
 printf "Phase1: Install required applications\n"
 
+printf "\tInstall powertools repo\t"
+#yum install -qy dnf-plugins-core
+#dnf config-manager --set-enabled powertools
 
 printf "\tInstall compilation tools\t"
 # Install compilation tools for django and icu4c
-dnf -qy install --enablerepo powertools \
+dnf -qy install \
   "@development tools" \
+  gcc-c++ \
   bzip2-devel \
   ncurses-devel \
   sqlite-devel \
@@ -156,8 +159,9 @@ printf "\tRemove Build Directory\t"
 rm -fr $buildDir
 printf "OK\n"
 printf "\tRemove compilation tools\t"
-dnf -qy remove --enablerepo powertools \
+dnf -qy remove \
   "@development tools" \
+  gcc-c++ \
   bzip2-devel \
   ncurses-devel \
   sqlite-devel \
