@@ -1,5 +1,5 @@
 FROM container-registry-dev.icann.org/icann/lgr-django:latest
-LABEL MAINTAINER marc.blanchet@viagenie.ca
+LABEL MAINTAINER int-eng@cofomo.com
 
 USER root
 # Install nginx

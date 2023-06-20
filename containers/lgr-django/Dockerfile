@@ -1,5 +1,5 @@
 FROM container-registry-dev.icann.org/icann/lgr-base:latest
-LABEL MAINTAINER marc.blanchet@viagenie.ca
+LABEL MAINTAINER int-eng@cofomo.com
 
 # Set used variables
 ENV BASE_DIR=/var/www/lgr
@@ -29,10 +29,10 @@ ENV LD_LIBRARY_PATH="/usr/local/lib"
 
 # Install/upgrade pip
 RUN python -m pip install \
-  --proxy artifactory.icann.org/artifactory/pypi \
+  -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple \
   --upgrade pip
 
 # Install lgr-django requirements
 RUN pip install \
-  --proxy artifactory.icann.org/artifactory/pypi \
+  -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple \
   -r requirements.txt && rm requirements.txt
