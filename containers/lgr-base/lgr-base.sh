@@ -5,7 +5,7 @@
 
 # Critically exit script if one command in error
 set -e
-set -x
+#set -x
 
 # VARIABLE DECLARATION
 ## unicodeURL set the repository git use for cloning
@@ -16,12 +16,8 @@ lgrPersistantDir='storage'
 ## buildDir will contain all file needed to compile application
 buildDir=$(mktemp -d)
 
-# INTALLATION & CONFIGURATION
+# INSTALLATION & CONFIGURATION
 printf "Phase1: Install required applications\n"
-
-printf "\tInstall powertools repo\t"
-#yum install -qy dnf-plugins-core
-#dnf config-manager --set-enabled powertools
 
 printf "\tInstall compilation tools\t"
 # Install compilation tools for django and icu4c
@@ -46,7 +42,7 @@ printf "OK\n"
 
 
 printf "\tInstall the various lgr-django dependencies\t"
-# Install various dependencies for lg-django
+# Install various dependencies for lgr-django
 dnf -qy install \
   procps-ng \
   libxml2 \
@@ -178,5 +174,5 @@ dnf -qy remove \
 printf "OK\n"
 printf "\tClean up dnf cache files\t"
 dnf -qy clean all || true
-rm -fr /var/cache/dnf || true
+rm -fr /var/cache/dnf
 printf "OK\n"
