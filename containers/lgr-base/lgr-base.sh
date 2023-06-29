@@ -174,5 +174,5 @@ dnf -qy remove \
 printf "OK\n"
 printf "\tClean up dnf cache files\t"
 dnf -qy clean all || true
-rm -fr /var/cache/dnf
+rm -fr /var/cache/dnf || true
 printf "OK\n"
