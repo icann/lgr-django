@@ -3,7 +3,6 @@ from pathlib import Path
 
 from dal import autocomplete
 from django import forms
-from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils.translation import ugettext_lazy as _
 
@@ -29,7 +28,7 @@ class RzLgrCreateForm(forms.ModelForm):
     def save(self, commit=True):
         rz_lgr = super(RzLgrCreateForm, self).save(commit=commit)
         for lgr in self.files.getlist('repository'):
-            RzLgrMember.objects.create(file=lgr, name=f'{rz_lgr.name}-{lgr.name}', rz_lgr=rz_lgr)
+            RzLgrMember.objects.create(file=lgr, name=lgr.name, common=rz_lgr)
         return rz_lgr
 
 
@@ -66,8 +65,7 @@ class RefLgrMemberCreateForm(forms.ModelForm):
         return self.cleaned_data
 
     def save(self, commit=True):
-        name = f"{self.ref_lgr.name}-{Path(self.file.name).stem}"
-        RefLgrMember.objects.create(ref_lgr=self.ref_lgr, file=self.file, name=name,
+        RefLgrMember.objects.create(common=self.ref_lgr, file=self.file, name=Path(self.file.name).stem,
                                     language_script=self.cleaned_data['language_script'])
 
 
@@ -84,6 +82,17 @@ class RefLgrMemberUpdateForm(forms.ModelForm):
     class Meta:
         model = RefLgrMember
         fields = ['file', 'language_script']
+
+    def clean(self):
+        old_name = self.instance.name
+        cleaned_data = super().clean()
+        if 'file' not in self.changed_data:
+            return cleaned_data
+        self.instance.name = Path(self.cleaned_data['file'].name).stem
+        if self.instance.name != old_name and RefLgrMember.objects.filter(common=self.instance.common,
+                                                                          name=self.instance.name).exists():
+            self.add_error('file', _('This reference LGR member already exists'))
+        return cleaned_data
 
 
 class RefLgrCreateForm(forms.ModelForm):
@@ -102,7 +111,8 @@ class RefLgrCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         kwargs.pop('instance', None)
         super(RefLgrCreateForm, self).__init__(*args, **kwargs)
-        self.ref_lgr_members = forms.modelformset_factory(RefLgrMember, form=RefLgrMemberCreateForm, min_num=0, extra=0)(
+        self.ref_lgr_members = forms.modelformset_factory(RefLgrMember, form=RefLgrMemberCreateForm,
+                                                          min_num=0, extra=0)(
             *args, **kwargs, queryset=RefLgrMember.objects.none())
 
     def _clean_fields(self):

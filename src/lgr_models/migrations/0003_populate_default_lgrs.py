@@ -11,12 +11,21 @@ from lgr.utils import tag_to_language_script
 from lgr_models.models.lgr import RzLgr
 
 
+def upload_to(instance, filename):
+    base_path = 'lgr'
+    if instance._meta.object_name != 'RzLgrMember':
+        raise RuntimeError
+
+    return os.path.join(base_path, 'rz_lgr', instance.rz_lgr.name, filename)
+
+
 def initial_data(apps, schema_editor):
     OldRzLgr: RzLgr = apps.get_model("lgr_models", "RzLgr")
     OldRzLgrMember = apps.get_model("lgr_models", "RzLgrMember")
     resouces_path = os.path.join(settings.BASE_DIR, 'resources')
     default_root_zones = os.path.join(resouces_path, 'idn_ref', 'root-zone')
     db_alias = schema_editor.connection.alias
+    OldRzLgrMember.file.field.upload_to = upload_to
 
     for lgr in os.listdir(default_root_zones):
         if os.path.isfile(os.path.join(default_root_zones, lgr)):

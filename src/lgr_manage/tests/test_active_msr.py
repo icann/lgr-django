@@ -1,31 +1,17 @@
-from http import HTTPStatus
+from django.core.files.uploadedfile import SimpleUploadedFile
 
-from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
+from lgr_manage.tests.test_views_common import AdminLgrTestCase, MIN_LGR
 from lgr_models.models.lgr import MSR
 
 
-class MSRActiveTestCase(LgrWebClientTestBase):
-    def test_access_active_when_logged_in(self):
-        self.login_admin()
+class MSRTestCase(AdminLgrTestCase):
+    model = MSR
+    base_view_name = 'lgr_admin_msr'
+    active_view_name = 'lgr_admin_isactive_msr'
+    delete_view_name = 'lgr_admin_delete_msr'
 
-        response = self.client.get('/m/msr')
-        self.assertContains(response,
-                            '<form class="form-horizontal" id="active-choice-form" url-data="/m/msr/isactive">',
-                            status_code=HTTPStatus.OK)
-
-    def test_access_active_when_not_logged_in(self):
-        response = self.client.get('/m/msr')
-        self.assertEquals(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, '/auth/login?next=/m/msr')
-
-    def test_update_active_when_logged_in(self):
-        self.login_admin()
-        self.client.post('/m/msr/isactive', data={'active': 2})
-        response = self.client.post('/m/msr/isactive', data={'active': 4})
-        self.assertContains(response, '"old_active": 2', status_code=HTTPStatus.OK)
-        self.assertEquals(MSR.objects.filter(active=True).first().pk, 4)
-
-    def test_update_active_when_not_logged_in(self):
-        response = self.client.post('/m/msr/isactive', data={'active': 2})
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, '/auth/login?next=/m/msr/isactive')
+    def get_create_body(self):
+        return {
+            'name': 'Test MSR',
+            'file': SimpleUploadedFile('msr.xml', MIN_LGR, content_type='text/xml')
+        }

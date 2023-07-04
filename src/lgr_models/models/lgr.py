@@ -33,9 +33,9 @@ def get_upload_path(instance, filename):
     if instance._meta.object_name == 'RefLgr':
         return os.path.join(base_path, 'reference_lgr', filename)
     if instance._meta.object_name == 'RefLgrMember':
-        return os.path.join(base_path, 'reference_lgr', instance.ref_lgr.name, filename)
+        return os.path.join(base_path, 'reference_lgr', instance.common.name, filename)
     if instance._meta.object_name == 'RzLgrMember':
-        return os.path.join(base_path, 'rz_lgr', instance.rz_lgr.name, filename)
+        return os.path.join(base_path, 'rz_lgr', instance.common.name, filename)
     if instance._meta.object_name == 'MSR':
         return os.path.join(base_path, 'msr', filename)
     if instance._meta.object_name == 'IDNARepertoire':
@@ -241,6 +241,16 @@ class ManagedLgrBase(LgrBaseModel):
         abstract = True
 
 
+class ManagedLgrBaseMember(LgrBaseModel):
+    # make owner nullable
+    owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
+
+    class Meta:
+        ordering = ['name']
+        abstract = True
+        unique_together = ('name', 'common',)
+
+
 class RzLgr(ManagedLgrBase):
     active = models.BooleanField(default=False)
 
@@ -249,8 +259,8 @@ class RefLgr(ManagedLgrBase):
     active = models.BooleanField(default=False)
 
 
-class RefLgrMember(ManagedLgrBase):
-    ref_lgr = models.ForeignKey(to=RefLgr, on_delete=models.CASCADE, related_name='repository')
+class RefLgrMember(ManagedLgrBaseMember):
+    common = models.ForeignKey(to=RefLgr, on_delete=models.CASCADE, related_name='repository')
     language_script = models.CharField(max_length=32)
     language = models.CharField(max_length=8, blank=True)
     script = models.CharField(max_length=8, blank=True)
@@ -260,8 +270,8 @@ class RefLgrMember(ManagedLgrBase):
         super().save(force_insert, force_update, using, update_fields)
 
 
-class RzLgrMember(ManagedLgrBase):
-    rz_lgr = models.ForeignKey(to=RzLgr, on_delete=models.CASCADE, related_name='repository')
+class RzLgrMember(ManagedLgrBaseMember):
+    common = models.ForeignKey(to=RzLgr, on_delete=models.CASCADE, related_name='repository')
     language = models.CharField(max_length=8)
     script = models.CharField(max_length=8)
 

@@ -310,11 +310,11 @@ class TestApi(TestCase):
             }
             if lgr_data['lgr-type'] == 'ref':
                 model = RefLgrMember
-                attrs['ref_lgr'] = ref_lgr
+                attrs['common'] = ref_lgr
                 attrs['language_script'] = lgr_data['language-tag']
             elif lgr_data['lgr-type'] == 'rz':
                 model = RzLgrMember
-                attrs['rz_lgr'] = rz_lgr
+                attrs['common'] = rz_lgr
                 metadata = Metadata()
                 metadata.add_language(lgr_data['language-tag'], force=True)
                 lgr = LGR(metadata=metadata)

@@ -120,13 +120,13 @@ def get_reference_lgr(lgr: LGR):
             ref_lgr = _make_lgr_query(RefLgrMember,
                                       {'language__iexact': language,
                                        'script__iexact': script,
-                                       'ref_lgr': active_ref_lgr},
+                                       'common': active_ref_lgr},
                                       logs)
         else:
             ref_lgr = _make_lgr_query(RefLgrMember,
                                       {'language__iexact': language,
                                        'script__iexact': '',
-                                       'ref_lgr': active_ref_lgr},
+                                       'common': active_ref_lgr},
                                       logs)
         if ref_lgr:
             return ref_lgr
@@ -141,14 +141,14 @@ def get_reference_lgr(lgr: LGR):
         ref_lgr = _make_lgr_query(RefLgrMember,
                                   {'script__iexact': script,
                                    'language': '',
-                                   'ref_lgr': active_ref_lgr},
+                                   'common': active_ref_lgr},
                                   logs)
         if ref_lgr:
             return ref_lgr
         rz_lgr = _make_lgr_query(RzLgrMember,
                                  {'script__iexact': script,
                                   'language': '',
-                                  'rz_lgr': active_rz_lgr},
+                                  'common': active_rz_lgr},
                                  logs)
         if rz_lgr:
             return rz_lgr
@@ -163,13 +163,13 @@ def get_reference_lgr(lgr: LGR):
             rz_lgr = _make_lgr_query(RzLgrMember,
                                      {'language__iexact': language,
                                       'script__iexact': script,
-                                      'rz_lgr': active_rz_lgr},
+                                      'common': active_rz_lgr},
                                      logs)
         else:
-            rz_lgr = _make_lgr_query(RzLgrMember, {'language__iexact': language, 'rz_lgr': active_rz_lgr},
+            rz_lgr = _make_lgr_query(RzLgrMember, {'language__iexact': language, 'common': active_rz_lgr},
                                      logs, multiple_found_query={'language__iexact': language,
                                                                  'script__iexact': '',
-                                                                 'rz_lgr': active_rz_lgr})
+                                                                 'common': active_rz_lgr})
         if rz_lgr:
             return rz_lgr
 

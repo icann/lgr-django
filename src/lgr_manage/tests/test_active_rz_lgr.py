@@ -1,31 +1,35 @@
-from http import HTTPStatus
+from io import BytesIO
 
-from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
-from lgr_models.models.lgr import RzLgr
+from django.core.files import File
+from django.core.files.uploadedfile import SimpleUploadedFile
+
+from lgr_manage.tests.test_views_common import AdminLgrTestCase, MIN_LGR
+from lgr_models.models.lgr import RzLgr, RzLgrMember
 
 
-class RzLgrActiveTestCase(LgrWebClientTestBase):
-    def test_access_active_when_logged_in(self):
-        self.login_admin()
+class RzLgrTestCase(AdminLgrTestCase):
+    model = RzLgr
+    base_view_name = 'lgr_admin_rz_lgr'
+    active_view_name = 'lgr_admin_isactive_rz_lgr'
+    delete_view_name = 'lgr_admin_delete_rz_lgr'
 
-        response = self.client.get('/m/rz-lgr')
-        self.assertContains(response,
-                            '<form class="form-horizontal" id="active-choice-form" url-data="/m/rz-lgr/isactive">',
-                            status_code=HTTPStatus.OK)
+    def setUp(self):
+        super().setUp()
+        RzLgrMember.objects.create(name='rz_lgr_member1',
+                                   file=File(BytesIO(MIN_LGR), name='rz_lgr_member1'),
+                                   common=self.other)
+        RzLgrMember.objects.create(name='rz_lgr_member2',
+                                   file=File(BytesIO(MIN_LGR), name='rz_lgr_member2'),
+                                   common=self.other)
 
-    def test_access_active_when_not_logged_in(self):
-        response = self.client.get('/m/rz-lgr')
-        self.assertEquals(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, '/auth/login?next=/m/rz-lgr')
+    def get_create_body(self):
+        return {
+            'name': 'Test RZ LGR',
+            'file': SimpleUploadedFile('rz-lgr.xml', MIN_LGR, content_type='text/xml'),
+            'repository': [SimpleUploadedFile('rz-lgr-1.xml', MIN_LGR, content_type='text/xml'),
+                           SimpleUploadedFile('rz-lgr-2.xml', MIN_LGR, content_type='text/xml')],
+        }
 
-    def test_update_active_when_logged_in(self):
-        self.login_admin()
-        self.client.post('/m/rz-lgr/isactive', data={'active': 2})
-        response = self.client.post('/m/rz-lgr/isactive', data={'active': 4})
-        self.assertContains(response, '"old_active": 2', status_code=HTTPStatus.OK)
-        self.assertEquals(RzLgr.objects.filter(active=True).first().pk, 4)
-
-    def test_update_active_when_not_logged_in(self):
-        response = self.client.post('/m/rz-lgr/isactive', data={'active': 2})
-        self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, '/auth/login?next=/m/rz-lgr/isactive')
+    def test_delete_when_logged_in(self):
+        super().test_delete_when_logged_in()
+        self.assertFalse(RzLgrMember.objects.filter(common=self.other.pk).exists())
