@@ -12,7 +12,7 @@ from lgr.exceptions import LGRException
 from lgr.utils import format_cp
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.models import LGRToolReport
-from lgr_session.api import LGRStorage
+from lgr_session.api import LGRReportStorage
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ class LabelInfo(object):
         }
 
 
-class LGRToolStorage(LGRStorage):
+class LGRToolReportStorage(LGRReportStorage):
     storage_model = LGRToolReport
 
 

@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import UpdateView, RedirectView
 
-from lgr_manage.api import LGRAdminStorage
+from lgr_manage.api import LGRAdminReportStorage
 from lgr_manage.forms import LgrSettingsForm
 from lgr_manage.views.common import BaseAdminViewMixin
 from lgr_models.models.settings import LGRSettings
@@ -34,7 +34,7 @@ class LgrSettingsView(BaseAdminViewMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        storage = LGRAdminStorage(self.request.user)
+        storage = LGRAdminReportStorage(self.request.user)
         ctx['index_report'] = storage.list_storage().first()
         return ctx
 

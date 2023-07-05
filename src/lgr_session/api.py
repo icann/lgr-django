@@ -14,7 +14,7 @@ from lgr_models.models.report import LGRReport
 logger = logging.getLogger(__name__)
 
 
-class LGRStorage:
+class LGRReportStorage:
     storage_model: Type[LGRReport] = None
 
     def __init__(self, user, filter_on_user=True):

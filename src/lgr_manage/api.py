@@ -4,10 +4,10 @@
 api - 
 """
 from lgr_manage.models import AdminReport
-from lgr_session.api import LGRStorage
+from lgr_session.api import LGRReportStorage
 
 
-class LGRAdminStorage(LGRStorage):
+class LGRAdminReportStorage(LGRReportStorage):
     storage_model = AdminReport
 
     def __init__(self, user=None):

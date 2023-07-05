@@ -8,7 +8,7 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import View
 
-from lgr_session.api import LGRStorage
+from lgr_session.api import LGRReportStorage
 from lgr_utils.utils import get_all_subclasses_recursively
 from lgr_utils.views import safe_next_redirect_url
 
@@ -27,7 +27,7 @@ class LGRSessionView(LoginRequiredMixin, UserPassesTestMixin, View):
         self.report_id = self.kwargs.get('report_id')
         self.pk = self.kwargs.get('pk', None)
         storage_type = self.kwargs.get('storage')
-        for subclass in get_all_subclasses_recursively(LGRStorage):
+        for subclass in get_all_subclasses_recursively(LGRReportStorage):
             if not subclass.storage_model:
                 continue
             if subclass.storage_model.storage_type == StorageType(storage_type):

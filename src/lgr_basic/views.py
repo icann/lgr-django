@@ -15,7 +15,7 @@ from django.views.generic import FormView
 from lgr.exceptions import LGRException
 from lgr.tools.utils import download_file, read_labels
 from lgr.utils import cp_to_ulabel
-from lgr_advanced.api import LabelInfo, LGRToolStorage
+from lgr_advanced.api import LabelInfo, LGRToolReportStorage
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import NeedAsyncProcess, evaluate_label_from_view
@@ -44,7 +44,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.storage = LGRToolStorage(request.user)
+        self.storage = LGRToolReportStorage(request.user)
 
     def form_valid(self, form):
         ctx = {}

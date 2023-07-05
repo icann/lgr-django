@@ -17,7 +17,7 @@ from lgr.tools.utils import download_file
 from lgr.utils import tag_to_language_script
 from lgr_idn_table_review.icann_tools.models import IdnReviewIcannReport, IANAIdnTable
 from lgr_models.models.lgr import RefLgrMember, RzLgrMember, RzLgr, RefLgr
-from lgr_session.api import LGRStorage
+from lgr_session.api import LGRReportStorage
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class NoRefLgrFound(BaseException):
         self.message = msg
 
 
-class LGRIcannStorage(LGRStorage):
+class LGRIcannReportStorage(LGRReportStorage):
     storage_model = IdnReviewIcannReport
 
     def __init__(self, user):

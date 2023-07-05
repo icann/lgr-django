@@ -17,7 +17,7 @@ from lgr.tools.utils import download_file, read_labels
 from lgr.utils import cp_to_ulabel
 from lgr_advanced.api import LabelInfo
 from lgr_auth.models import LgrUser
-from lgr_manage.api import LGRAdminStorage
+from lgr_manage.api import LGRAdminReportStorage
 from lgr_models.models.lgr import RzLgr
 from lgr_models.models.report import LGRReport
 from lgr_tasks.models import LgrTaskModel
@@ -85,7 +85,7 @@ def _save_report(user_pk, data):
     user = None
     if user_pk:
         user = LgrUser.objects.get(pk=user_pk)
-    storage = LGRAdminStorage(user)
+    storage = LGRAdminReportStorage(user)
     if not user:
         # remove old reports automatically launched
         storage.list_storage(exclude={'owner__isnull': False}).delete()

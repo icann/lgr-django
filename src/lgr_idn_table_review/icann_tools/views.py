@@ -10,7 +10,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 
-from lgr_idn_table_review.icann_tools.api import LGRIcannStorage
+from lgr_idn_table_review.icann_tools.api import LGRIcannReportStorage
 from lgr_tasks.models import LgrTaskModel
 from .tasks import idn_table_review_task
 
@@ -19,7 +19,7 @@ class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.storage = LGRIcannStorage(request.user)
+        self.storage = LGRIcannReportStorage(request.user)
 
     def test_func(self):
         return self.request.user.is_icann()

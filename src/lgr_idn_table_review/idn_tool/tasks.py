@@ -8,7 +8,7 @@ from celery import shared_task, current_task
 
 
 from lgr_auth.models import LgrUser
-from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
+from lgr_idn_table_review.idn_tool.api import LGRIdnReviewReportApi
 from lgr_tasks.models import LgrTaskModel
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ def idn_table_review_task(user_pk, idn_tables, report_id, absolute_url):
     :return:
     """
     user = LgrUser.objects.get(pk=user_pk)
-    api = LGRIdnReviewApi(user)
+    api = LGRIdnReviewReportApi(user)
 
     # ensure report_id is unique
     while api.storage_model.objects.filter(report_id=report_id).exists():

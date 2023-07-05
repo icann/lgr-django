@@ -9,7 +9,7 @@ from django.core.files import File
 from django.utils import timezone
 
 from lgr_idn_table_review.idn_tool.models import IdnReviewReport, IdnTable, IdnRefTable
-from lgr_session.api import LGRStorage
+from lgr_session.api import LGRReportStorage
 from django.template.loader import render_to_string
 from lgr.tools.idn_review.review import review_lgr, review_with_core_requirements
 from typing import Dict
@@ -19,7 +19,7 @@ from lgr_utils.views import RFC_CORE_REQUIREMENT
 logger = logging.getLogger(__name__)
 
 
-class LGRIdnReviewApi(LGRStorage):
+class LGRIdnReviewReportApi(LGRReportStorage):
     storage_model = IdnReviewReport
     lgr_model = IdnTable
 
@@ -96,7 +96,7 @@ class LGRIdnReviewApi(LGRStorage):
         self.get_lgrs_in_report(report_id).delete()
 
 
-class LGRIdnRefReviewApi(LGRStorage):
+class LGRIdnRefReviewReportApi(LGRReportStorage):
     lgr_model = IdnRefTable
 
     def lgr_queryset(self):

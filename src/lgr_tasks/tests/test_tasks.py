@@ -11,8 +11,8 @@ from django.core.cache import cache
 from django.core.files import File
 from django.test import override_settings
 
-from lgr_advanced.api import LGRToolStorage
-from lgr_manage.api import LGRAdminStorage
+from lgr_advanced.api import LGRToolReportStorage
+from lgr_manage.api import LGRAdminReportStorage
 from lgr_manage.models import AdminReport
 from lgr_models.models.lgr import RzLgr
 from lgr_models.models.report import LGRReport
@@ -34,10 +34,10 @@ class TasksTest(LgrWebClientTestBase):
     @override_settings(ICANN_TLDS=f"file://{os.path.join(fixtures_path, 'tlds.txt')}")
     def test_calculate_index_variant_labels_tlds(self):
         # save fake periodic report to check it would be correctly erased
-        storage = LGRAdminStorage(None)
+        storage = LGRAdminReportStorage(None)
         auto_report = storage.storage_save_report_file('test-indexes.csv', StringIO())
         # save fake user generated report to check it would not be erased
-        storage = LGRAdminStorage(self.login_admin())
+        storage = LGRAdminReportStorage(self.login_admin())
         user_report = storage.storage_save_report_file('test-indexes.csv', StringIO())
 
         expected_indexes = {
@@ -56,7 +56,7 @@ class TasksTest(LgrWebClientTestBase):
         calculate_index_variant_labels_tlds()
 
         self.assertDictEqual(expected_indexes, cache.get(_index_cache_key(self.rz_lgr)))
-        storage = LGRAdminStorage(None)
+        storage = LGRAdminReportStorage(None)
         with self.assertRaises(AdminReport.DoesNotExist):
             storage.storage_get_report_file(auto_report.pk)
         self.assertEquals(user_report, storage.storage_get_report_file(user_report.pk))
@@ -71,9 +71,9 @@ class TasksTest(LgrWebClientTestBase):
         # save fake user generated report
         last_month = datetime.datetime.now() - datetime.timedelta(days=31)
         lgr_settings.report_expiration_delay = 30
-        storage = LGRAdminStorage(self.login_admin())
+        storage = LGRAdminReportStorage(self.login_admin())
         report1 = storage.storage_save_report_file('test1.csv', StringIO())
-        storage = LGRToolStorage(self.login_user())
+        storage = LGRToolReportStorage(self.login_user())
         report2 = storage.storage_save_report_file('test2.csv', StringIO())
         report3 = storage.storage_save_report_file('test3.csv', StringIO())
         report1.created_at = last_month

@@ -11,7 +11,7 @@ from celery import shared_task, current_task
 from django.conf import settings
 
 from lgr.tools.utils import download_file
-from lgr_advanced.api import LabelInfo, LGRToolStorage
+from lgr_advanced.api import LabelInfo, LGRToolReportStorage
 from lgr_advanced.lgr_tools.api import (lgr_diff_labels,
                                         lgr_collision_labels,
                                         lgr_annotate_labels,
@@ -51,7 +51,7 @@ def _lgr_tool_task(user, base_filename, cb, **cb_kwargs):
             for line in cb(**cb_kwargs):
                 gzf.write(line.encode('utf-8'))
 
-        lgr_storage = LGRToolStorage(user)
+        lgr_storage = LGRToolReportStorage(user)
 
         report = lgr_storage.storage_save_report_file(filename, sio)
     except Exception:

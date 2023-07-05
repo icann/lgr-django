@@ -12,7 +12,7 @@ from django.views import View
 from django.views.generic import FormView, TemplateView
 
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
-from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
+from lgr_idn_table_review.idn_tool.api import LGRIdnReviewReportApi
 from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_tasks.models import LgrTaskModel
@@ -25,7 +25,7 @@ class IdnTableReviewViewMixin(LoginRequiredMixin):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.api = LGRIdnReviewApi(request.user)
+        self.api = LGRIdnReviewReportApi(request.user)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
