@@ -4,7 +4,6 @@
 models.py - 
 """
 import os
-from django.db import models
 
 from lgr_auth.models import LgrUser
 from lgr_models.models.lgr import LgrBaseModel

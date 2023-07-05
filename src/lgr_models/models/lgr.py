@@ -18,6 +18,7 @@ from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.utils import tag_to_language_script
 from lgr_auth.models import LgrUser
 from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException, LGRValidationException
+from lgr_models.storage import LGROverrideStorage
 from lgr_utils import unidb
 from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
 
@@ -242,6 +243,8 @@ class ManagedLgrBase(LgrBaseModel):
 
 
 class ManagedLgrBaseMember(LgrBaseModel):
+    # override existing files
+    file = models.FileField(upload_to=get_upload_path, storage=LGROverrideStorage)
     # make owner nullable
     owner = models.ForeignKey(to=LgrUser, blank=True, null=True, on_delete=models.CASCADE, related_name='+')
 
