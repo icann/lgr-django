@@ -44,7 +44,7 @@
                                 </a>
                                 <!-- Member update form Modal -->
                                 {% include 'lgr_manage/_ref_lgr_member_modal.html' with member_pk=lgr.pk %}
-                                <a class="btn show-tooltip"
+                                <a class="btn show-tooltip show-iframe-button"
                                    data-toggle="modal" data-target="#reflgr-member-modal-{{ lgr.pk }}"
                                    title="{% trans 'Edit Reference LGR member' %}" data-placement="top">
                                     <i class="glyphicon glyphicon-pencil"></i>

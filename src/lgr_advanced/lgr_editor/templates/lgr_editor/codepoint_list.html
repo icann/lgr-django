@@ -27,7 +27,7 @@
                 {% url 'expand_ranges' lgr_pk=lgr_pk as expand_ranges_url %}
                 <a href="{{ expand_ranges_url }}" class="btn btn-primary" title="Expand all ranges" >{% trans "Expand range(s)" %}</a>
             {% endif %}
-            <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#add-codepoint-modal">{% trans "Add code point(s)" %}</a>
+            <a href="#" class="btn btn-primary show-iframe-button" data-toggle="modal" data-target="#add-codepoint-modal">{% trans "Add code point(s)" %}</a>
         </div>
     {% endif %}
 
@@ -138,13 +138,13 @@
                             </form>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="addrange">
-                            <iframe id="range-iframe" data-url="{% url 'add_range' lgr_pk %}" src="{% url 'add_range' lgr_pk %}" frameborder="0" width="100%"></iframe>
+                            <iframe id="range-iframe" data-url="{% url 'add_range' lgr_pk %}" width="100%" style="border: none;"></iframe>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="addfromscript">
-                            <iframe id="from-script-iframe" data-url="{% url 'add_from_script' lgr_pk %}" src="{% url 'add_from_script' lgr_pk %}" frameborder="0" width="100%" style="height: 400px;"></iframe>
+                            <iframe id="from-script-iframe" data-url="{% url 'add_from_script' lgr_pk %}" width="100%" style="height: 400px; border: none;"></iframe>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="import">
-                            <iframe id="import-file-iframe" data-url="{% url 'import_from_file' lgr_pk %}" src="{% url 'import_from_file' lgr_pk %}" frameborder="0" width="100%"></iframe>
+                            <iframe id="import-file-iframe" data-url="{% url 'import_from_file' lgr_pk %}" width="100%" style="border: none;"></iframe>
                         </div>
                     </div>
 

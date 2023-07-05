@@ -78,13 +78,13 @@
                             </a>
                             <ul class="dropdown-menu">
                               <li class="dropdown-item">
-                                <a class="btn show-tooltip" data-toggle="modal" data-target="#help-modal"
+                                <a class="btn show-tooltip show-iframe-button" data-toggle="modal" data-target="#help-modal"
                                    title="{% trans 'Help' %}" data-placement="bottom">
                                   <i class="glyphicon glyphicon-info-sign"></i> {% trans "Instructions" %}
                                 </a>
                               </li>
                               <li class="dropdown-item">
-                                <a class="btn show-tooltip" data-toggle="modal" data-target="#about-modal"
+                                <a class="btn show-tooltip show-iframe-button" data-toggle="modal" data-target="#about-modal"
                                    title="{% trans 'About LGR Toolset' %}" data-placement="bottom">
                                   <i class="glyphicon glyphicon-star"></i> {% trans "About" %}
                                 </a>
@@ -93,7 +93,7 @@
                             </div>
                         {% endif %}
                         {% block navbar-right %}
-                        <a class="btn btn-default show-tooltip"
+                        <a class="btn btn-default show-tooltip show-iframe-button"
                            data-toggle="modal" data-target="#label-forms-modal"
                            title="{% trans 'Display all label forms' %}" data-placement="bottom">
                             <i class="glyphicon glyphicon-text-size"></i> {% trans "Label forms" %}
@@ -168,8 +168,8 @@
                 <h4 class="modal-title">{% trans "About" %}</h4>
             </div>
             <div id="modal-body" class="modal-body">
-                <iframe id="about-iframe" data-url="{% url 'about' %}" src="{% url 'about' %}" frameborder="0"
-                        width="100%" height="100%"></iframe>
+                <iframe id="about-iframe" data-url="{% url 'about' %}"
+                        width="100%" height="100%" style="border: none;"></iframe>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
@@ -188,8 +188,8 @@
                 <h4 class="modal-title">{% trans "Help" %}</h4>
             </div>
             <div id="modal-body" class="modal-body">
-                <iframe id="about-iframe" data-url="{% url 'help' %}" src="{% url 'help' %}" frameborder="0"
-                        width="100%" height="100%"></iframe>
+                <iframe id="help-iframe" data-url="{% url 'help' %}"
+                        width="100%" height="100%" style="border: none;"></iframe>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
@@ -225,6 +225,13 @@
     function cleanInput (input) {
         input.closest('.col').find('input').val('');
     }
+
+    // Set iframe src once the displaying button is clicked.
+    // This avoids loading the css and js on page load
+    $('.show-iframe-button').on("click", function() {
+        iframe = $($(this).data('target') + ' iframe');
+        iframe.attr('src', iframe.data('url'));
+    });
 </script>
 {% block html_body_more %}{% endblock %}
 </body>

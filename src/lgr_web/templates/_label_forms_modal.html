@@ -9,15 +9,8 @@
             </div>
             <div id="label-forms-modal-body" class="modal-body" style="height: 85vh;">
                 <iframe id="label-forms-modal-iframe" data-url="{% url 'lgr_label_forms' %}"
-                        src="{% url 'lgr_label_forms' %}" frameborder="0" width="100%" height="98%"></iframe>
+                        width="100%" height="98%" style="border: none;"></iframe>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-<script>
-    jQuery(document).ready(function ($) {
-        $('#label-forms-modal').on('hidden.bs.modal', function (e) {
-            $("#label-forms-modal iframe").attr("src", $("#label-forms-modal iframe").attr("src"));
-        });
-    });
-</script>
