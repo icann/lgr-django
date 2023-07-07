@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
+
+from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -36,6 +39,11 @@ class LgrSettingsView(BaseAdminViewMixin, UpdateView):
         ctx = super().get_context_data(**kwargs)
         storage = LGRAdminReportStorage(self.request.user)
         ctx['index_report'] = storage.list_storage().first()
+        try:
+            ctx['cleaning_schedule'] = timedelta(
+                seconds=settings.CELERYBEAT_SCHEDULE['clean_reports']['schedule'])
+        except:
+            pass
         return ctx
 
 

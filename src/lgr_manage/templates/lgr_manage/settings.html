@@ -13,6 +13,12 @@
       {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_max control_width=4 %}
       {% include "lgr_editor/_form_field.html" with field=form.variant_calculation_abort control_width=4 %}
       <h3>Reports</h3>
+      <p>
+          The last report cleaning was on {{ object.report_expiration_last_run }}<br>
+          {% if cleaning_schedule %}
+          Cleaning task is scheduled to run every {{ cleaning_schedule }} s.
+          {% endif %}
+      </p>
       {% include "lgr_editor/_form_field.html" with field=form.report_expiration_delay control_width=4 %}
       <button id="submit" type="submit" class="btn btn-primary">{% trans "Save" %}</button>
   </form>

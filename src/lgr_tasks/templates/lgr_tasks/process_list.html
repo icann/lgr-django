@@ -109,7 +109,7 @@
           {% endif %}
         </td>
         <td>
-            <p>{% trans 'The report' %} {{ task.report|display_expiration|lower }}</p>
+            <p>{% if task.status == 'SUCCESS' %}{% trans 'The report' %} {{ task.report|display_expiration|lower }} {% endif %}</p>
         </td>
       </tr>
     {% endfor %}

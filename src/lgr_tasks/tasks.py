@@ -36,11 +36,13 @@ def clean_reports():
     Clean user reports after a certain amount of time
     """
     logger.info('Cleaning reports older than %d days' % lgr_settings.report_expiration_delay)
+    # set the last run in the settings data
+    lgr_settings.report_expiration_last_run = timezone.now()
+    lgr_settings.save()
     nbr, __ = LGRReport.objects.filter(
         created_at__lt=datetime.datetime.now() - datetime.timedelta(days=lgr_settings.report_expiration_delay)
     ).delete()
     logger.info('%d reports removed' % nbr)
-
 
 @shared_task
 def calculate_index_variant_labels_tlds(user_pk=None):
