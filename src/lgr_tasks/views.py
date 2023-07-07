@@ -54,7 +54,7 @@ class DeleteProcessView(LoginRequiredMixin, SingleObjectMixin, View):
             LgrTaskModel.objects.filter(pk=task.pk).delete()
             messages.info(self.request, _('Task %s has been removed.') % task.name)
 
-        return redirect(safe_next_redirect_url(request, '/'))
+        return redirect('list_process')
 
 
 class DeleteAllFinishedProcessView(LoginRequiredMixin, MultipleObjectMixin, View):
@@ -76,4 +76,5 @@ class DeleteAllFinishedProcessView(LoginRequiredMixin, MultipleObjectMixin, View
         if queryset.exists():
             messages.info(self.request, _('Completed tasks have been cleaned.'))
             queryset.delete()
-        return redirect(safe_next_redirect_url(request, '/'))
+
+        return redirect('list_process')

@@ -94,7 +94,7 @@
         <td>
           {% if task.status != 'STARTED' %}
             <form method="post"
-                  action="{% url "delete_process" task_id=task.id %}?next={{ request.path }}">
+                  action="{% url "delete_process" task_id=task.id %}">
               {% csrf_token %}
               {% if task.status == 'PENDING' or task.status == 'RETRY' %}
                 <button type="submit" class="btn btn-default confirm-prompt"
@@ -115,7 +115,7 @@
     {% endfor %}
   </table>
   {% if tasks %}
-    <form method="post" action="{% url "delete_finished" %}?next={{ request.path }}">
+    <form method="post" action="{% url "delete_finished" %}">
       {% csrf_token %}
       <button type="submit" class="btn btn-danger confirm-prompt"
               data-confirmation-prompt="{% trans 'Are you sure you want to clean tasks?' %}">
