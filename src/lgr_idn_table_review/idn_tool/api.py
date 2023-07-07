@@ -19,7 +19,7 @@ from lgr_utils.views import RFC_CORE_REQUIREMENT
 logger = logging.getLogger(__name__)
 
 
-class LGRIdnReviewReportApi(LGRReportStorage):
+class LGRIdnReviewApi(LGRReportStorage):
     storage_model = IdnReviewReport
     lgr_model = IdnTable
 
@@ -96,7 +96,7 @@ class LGRIdnReviewReportApi(LGRReportStorage):
         self.get_lgrs_in_report(report_id).delete()
 
 
-class LGRIdnRefReviewReportApi(LGRReportStorage):
+class LGRIdnRefReviewApi(LGRReportStorage):
     lgr_model = IdnRefTable
 
     def lgr_queryset(self):
