@@ -18,9 +18,8 @@ class LGROverrideStorage(FileSystemStorage):
             raise RuntimeError('Default storage has changed, please change LGROverrideStorage inheritance')
         super().__init__(*args, **kwargs)
 
-    def get_alternative_name(self, file_root, file_ext):
-        name = f'{file_root}{file_ext}'
-        # as we want an alternative name, this likely means that the file exists, so remove it
-        self.delete(name)
-        return name
+    def get_available_name(self, name, max_length=None):
+        if self.exists(name):
+            self.delete(name)
+        return super().get_available_name(name, max_length)
 
