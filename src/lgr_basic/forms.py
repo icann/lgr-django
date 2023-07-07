@@ -3,10 +3,11 @@ from dal import autocomplete
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.utils import parse_label_input
-from lgr_advanced.lgr_editor.forms.fields import FILE_FIELD_ENCODING_HELP
+from lgr_advanced.lgr_editor.forms.fields import LABEL_FILE_HELP, LABEL_INPUT_HELP
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_utils.unidb import get_db_by_version
@@ -36,17 +37,21 @@ class ValidateLabelSimpleForm(forms.Form):
                              widget=forms.TextInput(attrs={'name': '',
                                                            'class': 'form-label form-control',
                                                            'onkeyup': 'buttonValidateEnabled()',
-                                                           'placeholder': _('Label')}))
+                                                           'placeholder': _('Label')}),
+                             help_text=LABEL_INPUT_HELP)
 
-    labels_file = forms.FileField(label='', help_text=FILE_FIELD_ENCODING_HELP,
-                                  required=False)
+    labels_file = forms.FileField(label='',
+                                  help_text=LABEL_FILE_HELP,
+                                  required=False,
+                                  validators=[FileExtensionValidator(allowed_extensions=('', 'txt',))],
+                                  widget=forms.FileInput(attrs={'accept': 'text/plain'}))
     collisions = forms.BooleanField(label='', widget=forms.CheckboxInput(attrs={'id': 'check-for-collision'}),
                                     required=False)
 
     include_mixed_script_variants = forms.BooleanField(label='',
-                                                    widget=forms.CheckboxInput(
-                                                        attrs={'id': 'hide-mixed-script-variants'}),
-                                                    required=False)
+                                                       widget=forms.CheckboxInput(
+                                                           attrs={'id': 'hide-mixed-script-variants'}),
+                                                       required=False)
 
     def __init__(self, *args, **kwargs):
         reflgr = kwargs.pop('reflgr')

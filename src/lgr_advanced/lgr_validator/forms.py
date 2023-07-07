@@ -4,12 +4,13 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.utils import parse_label_input
+from lgr_advanced.lgr_editor.forms.fields import LABEL_INPUT_HELP
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 
 
 class ValidateLabelForm(forms.Form):
     label = forms.CharField(label=_("Label"),
-                            help_text=_("Maximum length: 63 code points"))
+                            help_text=f'{LABEL_INPUT_HELP} {_("Maximum length: 63 code points")}')
     set_labels = forms.FileField(label=_("Allocated Set labels"),
                                  required=False,
                                  help_text=_('Optional list of labels already allocated '

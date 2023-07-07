@@ -2,11 +2,12 @@
 from __future__ import unicode_literals
 
 from django import forms
+from django.core.validators import FileExtensionValidator
 from django.utils.translation import ugettext_lazy as _
 
-from lgr_advanced.widgets import DataSelectWidget
-from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
+from lgr_advanced.lgr_editor.forms.fields import LABEL_FILE_HELP
 from lgr_advanced.models import LgrModel
+from lgr_advanced.widgets import DataSelectWidget
 from lgr_models.models.lgr import RzLgr
 
 LGR_COMPARE_ACTIONS = (
@@ -66,8 +67,10 @@ class LGRDiffSelector(forms.Form):
                               required=True)
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}",
-                             required=True)
+                             help_text=LABEL_FILE_HELP,
+                             required=True,
+                             validators=[FileExtensionValidator(allowed_extensions=('', 'txt',))],
+                             widget=forms.FileInput(attrs={'accept': 'text/plain'}))
 
     collision = forms.BooleanField(label=_("Check collisions"),
                                    help_text=_('Also check for collision of '
@@ -102,7 +105,9 @@ class LGRCollisionSelector(forms.Form):
                                        required=False)
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}")
+                             help_text=LABEL_FILE_HELP,
+                             validators=[FileExtensionValidator(allowed_extensions=('', 'txt',))],
+                             widget=forms.FileInput(attrs={'accept': 'text/plain'}))
 
     full_dump = forms.BooleanField(label=_("Full dump"),
                                    help_text=_('Print a full dump'),
@@ -162,11 +167,13 @@ class LGRAnnotateSelector(LGRSetCompatibleForm):
                                  help_text="%s %s" % (
                                      _('Optional list of labels already allocated in the LGR set, that will be used to '
                                        'check for collisions when evaluating labels using the merged LGR set.'),
-                                     FILE_FIELD_ENCODING_HELP))
+                                     LABEL_FILE_HELP))
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}",
-                             required=True)
+                             help_text=LABEL_FILE_HELP,
+                             required=True,
+                             validators=[FileExtensionValidator(allowed_extensions=('', 'txt',))],
+                             widget=forms.FileInput(attrs={'accept': 'text/plain'}))
 
 
 class LGRHarmonizeSelector(forms.Form):
@@ -200,7 +207,9 @@ class LGRComputeVariantsSelector(forms.Form):
                             required=True)
 
     labels = forms.FileField(label=_("Labels"),
-                             help_text=f"{_('List of labels to use in tool.')} {FILE_FIELD_ENCODING_HELP}")
+                             help_text=LABEL_FILE_HELP,
+                             validators=[FileExtensionValidator(allowed_extensions=('', 'txt',))],
+                             widget=forms.FileInput(attrs={'accept': 'text/plain'}))
 
     include_mixed_script_variants = forms.BooleanField(label='',
                                                        widget=forms.CheckboxInput(),

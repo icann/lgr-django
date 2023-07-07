@@ -14,6 +14,10 @@ from lgr_models.models.lgr import LgrBaseModel, RzLgr, MSR, IDNARepertoire
 from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
 
 FILE_FIELD_ENCODING_HELP = _('File must be encoded in UTF-8 and using 0x0A line ending.')
+LABEL_FILE_HELP = _("File should be a text file encoded in UTF-8 and using 0x0A line ending. "
+                    "It must contain one label per line in U-Label or A-Label form or as a list of code points. "
+                    "Comments begin with '#'")
+LABEL_INPUT_HELP = _("Label can be in U-Label or A-Label form or a list of code points.")
 
 logger = logging.getLogger(__name__)
 
