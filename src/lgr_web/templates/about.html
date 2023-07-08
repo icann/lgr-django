@@ -8,4 +8,7 @@
     {% endblocktrans %}
 </p>
 <h4>{% trans 'Supported Unicode version:' %} {{output}}</h4>
-<p><i>{% trans 'This toolset was implemented by <a href="http://www.viagenie.ca/" target="_blank" rel="noopener noreferrer">Viagénie</a> and Wil Tan on an ICANN contract.' %}</i></p>
+<p><i>{% blocktrans trimmed %}
+    This toolset was implemented by <a href="https://www.cofomo.com" target="_blank" rel="noopener noreferrer">Cofomo</a>,
+    <a href="http://www.viagenie.ca/" target="_blank" rel="noopener noreferrer">Viagénie</a> and Wil Tan on an ICANN contract.
+{% endblocktrans %}</i></p>
