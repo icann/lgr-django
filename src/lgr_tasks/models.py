@@ -13,7 +13,7 @@ class LgrTaskModel(models.Model):
     report = models.ForeignKey(to=LGRReport, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
 
     class Meta:
-        ordering = ['creation_date']
+        ordering = ['-creation_date']
 
     def __str__(self):
         return self.name

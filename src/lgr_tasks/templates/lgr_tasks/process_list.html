@@ -25,10 +25,12 @@
 {% endblock %}
 
 {% block content %}
+  <p>{% trans 'Tasks are ordered from newest to latest' %}</p>
   <table class="table table-responsive">
     {% for task in tasks %}
       <tr>
-        <td class="min-cell">{{ task.name }} - {{ task.creation_date }}</td>
+        <td class="min-cell">{{ task.name }}</td>
+        <td class="min-cell">{{ task.creation_date }}</td>
         <td class="min-cell">
           {% if task.report %}
             <a href="{{ task.report.to_url }}" class="btn btn-default show-tooltip"
@@ -115,6 +117,7 @@
     {% endfor %}
   </table>
   {% if tasks %}
+    <small>{% trans 'When you delete a task, the corresponding report is not deleted' %}</small>
     <form method="post" action="{% url "delete_finished" %}">
       {% csrf_token %}
       <button type="submit" class="btn btn-danger confirm-prompt"

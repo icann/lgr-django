@@ -23,6 +23,9 @@ class LGRReport(models.Model):
 
     storage_type = None
 
+    class Meta:
+        ordering = ['file']
+
     @property
     def filename(self):
         return os.path.basename(self.file.name)
