@@ -176,6 +176,7 @@ class LgrSettingsForm(forms.ModelForm):
     class Meta:
         model = LGRSettings
         fields = '__all__'
+        exclude = ['report_expiration_last_run']
         labels = {
             'variant_calculation_limit': _('Variant Calculation Limit'),
             'variant_calculation_max': _('Variant Calculation Max'),
