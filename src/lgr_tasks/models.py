@@ -12,8 +12,5 @@ class LgrTaskModel(models.Model):
     user = models.ForeignKey(to=LgrUser, on_delete=models.CASCADE, related_name='+')
     report = models.ForeignKey(to=LGRReport, on_delete=models.CASCADE, related_name='+', blank=True, null=True)
 
-    class Meta:
-        ordering = ['-creation_date']
-
     def __str__(self):
         return self.name

@@ -25,7 +25,7 @@ class ProcessListView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         try:
-            ctx['tasks'] = get_task_info(self.request.user)
+            ctx['tasks'] = reversed(get_task_info(self.request.user))
         except:
             messages.error(self.request, _('Unable to retrieve the list of tasks.'))
         return ctx
