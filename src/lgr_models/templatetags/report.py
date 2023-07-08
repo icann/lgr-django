@@ -23,12 +23,17 @@ def display_expiration(report: LGRReport):
         label = 'warning'
     if expiration_in < 2:
         label = 'danger'
-    expiration = f"{_('Expires in')} <i class=\"label label-{label}\">{expiration_in} " \
-                 f"{_('day')}{pluralize(expiration_in)}</i>"
+    expiration = '%s <i class=\"label label-%s\">%s %s%s</i>' % (_('Expires in'),
+                                                                 label,
+                                                                 expiration_in,
+                                                                 _('day'),
+                                                                 pluralize(expiration_in))
     return mark_safe(expiration)
 
 
 @register.simple_tag
 def expiration_warning():
-    return f"{_('These files would be cleaned up after')} {lgr_settings.report_expiration_delay} " \
-           f"{_('day')}{pluralize(lgr_settings.report_expiration_delay)}"
+    return '%s %s %s%s' % (_('These files would be cleaned up after'),
+                           lgr_settings.report_expiration_delay,
+                           _('day'),
+                           pluralize(lgr_settings.report_expiration_delay))

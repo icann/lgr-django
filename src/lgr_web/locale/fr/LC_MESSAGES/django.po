@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 18:36+0000\n"
-"PO-Revision-Date: 2022-08-25 21:13-0400\n"
+"POT-Creation-Date: 2023-07-08 02:59+0000\n"
+"PO-Revision-Date: 2023-07-07 22:30-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.3.1\n"
+
+#: src/lgr_web/forms.py:16
+msgid "Label"
+msgstr "Label"
+
+#: src/lgr_web/forms.py:33
+msgid "Labels"
+msgstr "Labels"
 
 #: src/lgr_web/settings/default.py:232
 msgid "Arabic"
@@ -47,7 +55,7 @@ msgid "Tasks"
 msgstr "Tâches"
 
 #: src/lgr_web/templates/_base.html:76 src/lgr_web/templates/_base.html:82
-#: src/lgr_web/templates/_base.html:183
+#: src/lgr_web/templates/_base.html:188
 msgid "Help"
 msgstr "Aide"
 
@@ -59,23 +67,32 @@ msgstr "Instructions"
 msgid "About LGR Toolset"
 msgstr "À propos de l'application LGR"
 
-#: src/lgr_web/templates/_base.html:89 src/lgr_web/templates/_base.html:163
+#: src/lgr_web/templates/_base.html:89 src/lgr_web/templates/_base.html:168
 msgid "About"
 msgstr "À propos"
 
-#: src/lgr_web/templates/_base.html:108
+#: src/lgr_web/templates/_base.html:98
+#: src/lgr_web/templates/_label_forms_modal.html:8
+msgid "Display all label forms"
+msgstr "Afficher toutes les formes d'un label"
+
+#: src/lgr_web/templates/_base.html:99
+msgid "Label forms"
+msgstr "Formes"
+
+#: src/lgr_web/templates/_base.html:113
 msgid "Edit"
 msgstr "Édition"
 
-#: src/lgr_web/templates/_base.html:114
+#: src/lgr_web/templates/_base.html:119
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: src/lgr_web/templates/_base.html:122
+#: src/lgr_web/templates/_base.html:127
 msgid "Login"
 msgstr "Connexion"
 
-#: src/lgr_web/templates/_base.html:147
+#: src/lgr_web/templates/_base.html:152
 msgid ""
 "If you have questions, please contact <a href=\"mailto:globalsupport@icann."
 "org\">globalsupport@icann.org</a>"
@@ -83,7 +100,7 @@ msgstr ""
 "Si vous avez des questions, contactez <a href=\"mailto:globalsupport@icann."
 "org\">globalsupport@icann.org</a> svp"
 
-#: src/lgr_web/templates/_base.html:170 src/lgr_web/templates/_base.html:190
+#: src/lgr_web/templates/_base.html:175 src/lgr_web/templates/_base.html:195
 msgid "Close"
 msgstr "Fermer"
 
@@ -112,19 +129,49 @@ msgstr "Versions d'Unicode supportée:"
 
 #: src/lgr_web/templates/about.html:11
 msgid ""
-"This toolset was implemented by <a href=\"http://www.viagenie.ca/\" "
-"target=\"_blank\" rel=\"noopener noreferrer\">Viagénie</a> and Wil Tan on an "
-"ICANN contract."
+"This toolset was implemented by <a href=\"https://www.cofomo.com\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">Cofomo</a>, <a href=\"http://"
+"www.viagenie.ca/\" target=\"_blank\" rel=\"noopener noreferrer\">Viagénie</"
+"a> and Wil Tan on an ICANN contract."
 msgstr ""
-"Cet outil a été implémenté par<a href=\"http://www.viagenie.ca/\" "
-"target=\"_blank\" rel=\"noopener noreferrer\">Viagénie</a> et Wil Tan sous "
-"contrat ICANN."
+"Cet outil a été implémenté par  <a href=\"https://www.cofomo.com\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">Cofomo</a>,  <a href=\"http://"
+"www.viagenie.ca/\" target=\"_blank\" rel=\"noopener noreferrer\">Viagénie</"
+"a> et Wil Tan sous contrat ICANN."
 
 #: src/lgr_web/templates/help.html:3
 msgid ""
-"TODO Guiding description instructions on the user interface to be provided "
-"by ICANN org."
+"For more information about the LGR Toolset, please consult <a href=\"https://"
+"www.icann.org/resources/pages/lgr-toolset-2015-06-21-en\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">ICANN resources</a>."
 msgstr ""
+"Pour plus d'informations à propos de l'outil LGR, vous pouvez consulter <a "
+"href=\"https://www.icann.org/resources/pages/lgr-toolset-2015-06-21-en\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">les resources ICANN</a>."
+
+#: src/lgr_web/templates/label_forms.html:10
+msgid "Display forms"
+msgstr "Afficher les formes"
+
+#: src/lgr_web/templates/label_forms.html:16
+msgid "Code point sequence"
+msgstr "Suite de code points"
+
+#: src/lgr_web/templates/label_forms.html:17
+msgid "U-label"
+msgstr "U-label"
+
+#: src/lgr_web/templates/label_forms.html:18
+msgid "A-label"
+msgstr "A-label"
+
+#: src/lgr_web/templates/label_forms.html:29
+msgid "Get label forms on a list of labels"
+msgstr "Obtenir les formes des labels provenant d'une liste"
+
+#: src/lgr_web/templates/label_forms.html:34
+msgid "Download forms"
+msgstr "Télécharger les formes"
 
 #: src/lgr_web/templates/lgr_modes.html:5
 msgid "Welcome to the LGR (Label Generation Ruleset) Tools"
@@ -181,11 +228,15 @@ msgstr ""
 "<a href=\"%(login_url)s\">Connectez vous</a> pour accéder aux outils LGR "
 "s'il vous plait."
 
+#~ msgid "Download"
+#~ msgstr "Telécharger"
+
+#, python-format
+#~ msgid "Are you sure you want to delete report %(report.filename)s?"
+#~ msgstr "Êtes vous sur de vouloir supprimer le rapport %(report.filename)s?"
+
 #~ msgid "LGR Process List"
 #~ msgstr "Liste de processus LGR"
-
-#~ msgid "Download report"
-#~ msgstr "Télécharger le rapport"
 
 #~ msgid "Success"
 #~ msgstr "Réussi"
@@ -207,9 +258,6 @@ msgstr ""
 
 #~ msgid "Expired"
 #~ msgstr "Expiré"
-
-#~ msgid "Are you sure you want to cancel this task?"
-#~ msgstr "Êtes vous sur de vouloir supprimer cette tâche ?"
 
 #~ msgid "Are you sure you want to clean tasks?"
 #~ msgstr "Êtes vous sur de vouloir nettoyer les tâches?"
@@ -354,9 +402,6 @@ msgstr ""
 #~ msgid "Diff labels of two LGRs"
 #~ msgstr "Diff labels entre deux LGR"
 
-#~ msgid "Get collisions in a list of labels"
-#~ msgstr "Calculer les collisions sur une liste de labels"
-
 #~ msgid "Compute cross-script variants"
 #~ msgstr "Calculer les variantes cross-script"
 
@@ -398,12 +443,6 @@ msgstr ""
 
 #~ msgid "HTML Output"
 #~ msgstr "Sortie HTML"
-
-#~ msgid "Display all label forms"
-#~ msgstr "Afficher toutes les formes d'un label"
-
-#~ msgid "Label forms"
-#~ msgstr "Formes"
 
 #~ msgid "Save results"
 #~ msgstr "Sauvegarde le résultat"

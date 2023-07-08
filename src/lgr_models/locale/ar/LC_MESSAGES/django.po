@@ -3,53 +3,56 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-08 02:59+0000\n"
-"PO-Revision-Date: 2023-07-07 22:16-0400\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: fr\n"
+"POT-Creation-Date: 2022-10-24 18:36+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: src/lgr_advanced/forms.py:14
+msgid "Label"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:28
 #, python-format
 msgid "Input code point %(codepoint)s is not in the LGR"
-msgstr "Le code point %(codepoint)s n'est pas dans la LGR"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:32
 #, python-format
 msgid "Input code point %(codepoint)s is not in the reference repertoire"
-msgstr "Le code point %(codepoint)s n'est pas dans le répertoire de référence"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:37
 #, python-format
 msgid ""
 "Variant %(variant_codepoint)s already exists for code point %(codepoint)s"
 msgstr ""
-"La variante %(variant_codepoint)s existe déjà pour le code point "
-"%(codepoint)s"
 
 #: src/lgr_advanced/lgr_exceptions.py:43
 #, python-format
 msgid "Range %(first_cp)s - %(last_cp)s already exists in the LGR"
-msgstr "L'ensemble %(first_cp)s - %(last_cp)s existe déjà dans la LGR"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:48
 #, python-format
 msgid "Input code point %(codepoint)s already exists in the LGR"
-msgstr "Le code point %(codepoint)s existe déjà dans la LGR"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:53
 #, python-format
 msgid "Input code point %(codepoint)s is not in LGR script"
-msgstr "Le code point %(codepoint)s n'est pas dans le script de la LGR"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:57
 #, python-format
@@ -57,19 +60,16 @@ msgid ""
 "Input code point %(codepoint)s is not a PVALID/CONTEXTO/CONTEXTJ code point "
 "per IDNA2008"
 msgstr ""
-"Le code point %(codepoint)s n'est pas un code point PVALID/CONTEXTO/CONTEXTJ "
-"d'après IDNA2008"
 
 #: src/lgr_advanced/lgr_exceptions.py:62
 #, python-format
 msgid "Code point %(codepoint)s has invalid context rule %(rule)s"
-msgstr "Le code point %(codepoint)s a une règle contextuelle invalide %(rule)s"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:67
 #, python-format
 msgid "Range %(first_cp)s - %(last_cp)s has invalid context rule"
 msgstr ""
-"L'ensemble %(first_cp)s - %(last_cp)s a une règle contextuelle invalide"
 
 #: src/lgr_advanced/lgr_exceptions.py:72
 #, python-format
@@ -77,115 +77,110 @@ msgid ""
 "Variant %(variant_codepoint)s of code point %(codepoint)shas invalid context "
 "rule"
 msgstr ""
-"La variante %(variant_codepoint)s du code point %(codepoint)s a une règle "
-"contextuelle invalide"
 
 #: src/lgr_advanced/lgr_exceptions.py:78
 #, python-format
 msgid "Duplicate reference for code point %(codepoint)s"
-msgstr "Référence dupliquée pour le code point %(codepoint)s"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:82
 #, python-format
 msgid "Unspecified exception for input code point %(codepoint)s"
-msgstr "Exception non-spécifiée pour le code point d'entrée %(codepoint)s"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:89
 msgid "Sequence cannot have a tag"
-msgstr "Les séquences ne peuvent pas avoir de tag"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:91
 msgid "Invalid language"
-msgstr "Langage invalide"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:93
 msgid "Invalid date value"
-msgstr "Date invalide"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:95
 msgid "Invalid Unicode version"
-msgstr "Version d'unicode invalide"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:97
 msgid "Invalid LGR XML file"
-msgstr "Fichier XML de LGR invalide"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:99
 #, python-format
 msgid "Reference %(ref_id)s is not defined"
-msgstr "La référence %(ref_id)s n'est pas définie"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:103
 #, python-format
 msgid "Reference %(ref_id)s already exists"
-msgstr "La référence %(ref_id)s existe déjà"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:107
 #, python-format
 msgid "Invalid reference id %(ref_id)s "
-msgstr "Identifiant de référence invalide %(ref_id)s "
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:111
 #, python-format
 msgid "Rule \"%(rule_name)s\" cannot be processed (%(message)s)"
-msgstr "La règle \"%(rule_name)s\" ne peut pas être traitée (%(message)s)"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:116
 msgid "Input parameter has invalid format"
-msgstr "Le paramètre d'entrée a un format invalide"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:118
 msgid "A general exception occurred in the LGR API"
-msgstr "Une exception s'est produite dans l'API LGR"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:120
 #, python-format
 msgid "LGR is not valid (%(args)s)"
-msgstr "La LGR n'est pas valide (%(args)s)"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:122
 #, python-format
 msgid "Unicode version (%(args)s) is not supported by the system"
-msgstr "La version d'Unicode  (%(args)s) n'est pas supportée par le système"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:124
 #, python-format
 msgid "Label %(label)s is not valid in the LGR (%(message)s)"
-msgstr "Label %(label)s n'est pas valide dans la LGR (%(message)s)"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:129
 msgid "Input label file contains collision(s)"
-msgstr "Le fichier d'entrée des labels contient une/des collision(s)"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:131
 msgid "The LGR contains a variant that do not have symmetric relations"
-msgstr "La LGR contient des variantes ne respectant pas la symmétrie"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:134
 #, python-format
 msgid "The LGR does not contain a valid language (%(message)s)"
-msgstr "La LGR ne contient pas de langues valides (%(message)s)"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:136
 #, python-format
 msgid "Cannot generate cross-script variant for LGR without (%(message)s)"
 msgstr ""
-"Impossible de générer les variantes cross-script pour la LGR sans "
-"(%(message)s)"
 
 #: src/lgr_advanced/lgr_exceptions.py:140
 msgid "An unknown exception occurred in the LGR API"
-msgstr "Une exception inconnue s'est produite dans l'API LGR"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:145
 msgid "Label is empty"
-msgstr "Le label est vide"
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:147
 #, python-format
 msgid "%(label)s is invalid due to its length being longer than 63 bytes."
 msgstr ""
-"le label %(label)s est invalide car sa longueur est supérieure à 63 octets."
 
 #: src/lgr_advanced/lgr_exceptions.py:152
 #, python-format
@@ -193,8 +188,6 @@ msgid ""
 "%(label)s is invalid due to hypen restrictions in the RFC5891 as it starts "
 "with a hyphen-minus."
 msgstr ""
-"le label %(label)s est invalide en raison des restrictions sur les traits "
-"d'union dans la RFC5891 car il débute par le signe moins."
 
 #: src/lgr_advanced/lgr_exceptions.py:157
 #, python-format
@@ -202,8 +195,6 @@ msgid ""
 "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it ends "
 "with a hyphen-minus."
 msgstr ""
-"le label %(label)s est invalide en raison des restrictions sur les traits "
-"d'union dans la RFC5891 car il termine par le signe moins."
 
 #: src/lgr_advanced/lgr_exceptions.py:162
 #, python-format
@@ -211,9 +202,6 @@ msgid ""
 "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it "
 "contains hyphen-minus in the third and fourth positions."
 msgstr ""
-"le label %(label)s est invalide en raison des restrictions sur les traits "
-"d'union dans la RFC5891 car contient le signe moins à la troisième et "
-"quatrième position."
 
 #: src/lgr_advanced/lgr_exceptions.py:167
 #, python-format
@@ -221,14 +209,11 @@ msgid ""
 "%(label)s is invalid due to leading combining marks restriction in the "
 "RFC5891."
 msgstr ""
-"le label %(label)s est invalide en raison des restrictions sur signes "
-"combinatoires de tête dans la RFC5891."
 
 #: src/lgr_advanced/lgr_exceptions.py:172
 #, python-format
 msgid "%(label)s is invalid as it contains disallowed characters."
 msgstr ""
-"le label %(label)s est invalide car il contient des caractères interdits."
 
 #: src/lgr_advanced/lgr_exceptions.py:176
 #, python-format
@@ -236,32 +221,27 @@ msgid ""
 "%(label)s is invalid as it starts with ‘xn--’ but does not contain valid "
 "Punycode."
 msgstr ""
-"le label %(label)s est invalide car ils débute par 'xn--' et ne contient pas "
-"de Punycode valide."
 
 #: src/lgr_advanced/lgr_exceptions.py:181
 #, python-format
 msgid "%(label)s is invalid as it contains full stop (dot)."
-msgstr "le label %(label)s est invalide car il contient un point final."
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:185
 #, python-format
 msgid "%(label)s is invalid due to invalid Punycode."
-msgstr "le label %(label)s est invalide en raison de Punycode invalide."
+msgstr ""
 
 #: src/lgr_advanced/lgr_exceptions.py:187
 #, python-format
 msgid "%(label)s is invalid due to  the Bidi rule in the RFC5893."
 msgstr ""
-"le label %(label)s est invalide en raison de la règle Bidi dans la RFC5893."
 
 #: src/lgr_advanced/lgr_exceptions.py:191
 #, python-format
 msgid ""
 "%(label)s is invalid due to the IDNA contextual rule for Zero Width Joiner."
 msgstr ""
-"le label %(label)s est invalide en raison de la règle IDNA contextuelle pour "
-"les liant sans chasse (Zero Width Joiner)."
 
 #: src/lgr_advanced/lgr_exceptions.py:196
 #, python-format
@@ -269,8 +249,6 @@ msgid ""
 "%(label)s is invalid due to the IDNA contextual rule for punctuation in the "
 "RFC5892."
 msgstr ""
-"le label %(label)s est invalide en raison de la règle IDNA contextuelle pour "
-"la ponctuation ans la RFC5892."
 
 #: src/lgr_advanced/lgr_exceptions.py:201
 #, python-format
@@ -278,144 +256,159 @@ msgid ""
 "%(label)s is invalid due to the IDNA contextual rule for digits in the "
 "RFC5892."
 msgstr ""
-"le label %(label)s est invalide en raison de la règle IDNA contextuelle pour "
-"les chiffres ans la RFC5892."
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:3
 msgid "Advanced LGR Tools"
-msgstr "Outils LGR avancés"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:9
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:11
 msgid "Go to home screen"
-msgstr "Retourner à l'écran d'accueil"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:12
 msgid "LGR Tools"
-msgstr "Outils LGR"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:32
 msgid "Import an existing LGR file or set"
-msgstr "Importer une LGR depuis un fichier XML existant"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:34
 msgid "Import"
-msgstr "Importer"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:37
 msgid "Create a new LGR file"
-msgstr "Créer un nouveau fichier LGR"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:39
 msgid "New"
-msgstr "Nouvelle"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:43
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:45
 msgid "Tools"
-msgstr "Outils"
-
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:74
-msgid "Compare two LGR"
-msgstr "Comparer deux LGR"
-
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:76
-msgid "Compare two LGRs"
-msgstr "Comparer deux LGR"
-
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:83
-msgid "Get differences for a list of labels for two LGRs versions"
 msgstr ""
-"Calculer les différences sur une liste de labels entre deux versions de LGR"
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:77
+msgid "Compare two LGR"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:79
+msgid "Compare two LGRs"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:86
+msgid "Get differences for a list of labels for two LGRs versions"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:89
 msgid "Diff labels of two LGRs"
-msgstr "Diff labels entre deux LGR"
+msgstr ""
 
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:91
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:94
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:97
 msgid "Get collisions in a list of labels"
-msgstr "Calculer les collisions sur une liste de labels"
-
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:98
-msgid "Compute variants of labels"
-msgstr "Calculer les variantes de labels"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:101
-msgid "Compute variants"
-msgstr "Calculer les variantes"
+msgid "Compute variants of labels"
+msgstr ""
 
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:106
-msgid "Perform harmonization on LGRs"
-msgstr "Harmoniser les LGR"
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:104
+msgid "Compute variants"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:109
-msgid "Harmonization"
-msgstr "Harmonisation"
+msgid "Perform harmonization on LGRs"
+msgstr ""
 
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:115
-msgid "Annotate list of labels with their disposition"
-msgstr "Annote une liste de labels avec leur disposition"
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:112
+msgid "Harmonization"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:118
-msgid "Generate disp. annotations"
-msgstr "Génére les annotations de disposition"
+msgid "Compute cross-script variants"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:121
+msgid "Cross-script variants"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:126
+msgid "Annotate list of labels with their disposition"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:129
+msgid "Generate disp. annotations"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:140
 msgid "Validate label against LGR"
-msgstr "Valider un label avec une LGR"
-
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:131
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:210
-msgid "Validate label"
-msgstr "Valider un label"
-
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:135
-msgid "Analyze current file for errors and statistics"
-msgstr "Analyser le fichier courant pour les erreurs et les statistiques"
-
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:138
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:186
-msgid "Validate LGR"
-msgstr "Valider la LGR"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:142
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:144
-msgid "Output"
-msgstr "Sorties"
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:226
+msgid "Validate label"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:146
+msgid "Analyze current file for errors and statistics"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:149
-msgid "Preview LGR file"
-msgstr "Prévisualiser le fichier LGR"
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:202
+msgid "Validate LGR"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/_base.html:153
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:155
+msgid "Output"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:160
+msgid "Preview LGR file"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:164
 msgid "View XML"
-msgstr "Voir le XML"
+msgstr ""
 
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:157
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:168
 msgid "Download LGR file"
-msgstr "Télécharger le fichier LGR"
+msgstr ""
 
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:159
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:170
+#: src/lgr_advanced/templates/lgr_advanced/index.html:150
 msgid "Download"
-msgstr "Télécharger"
+msgstr ""
 
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:163
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:166
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:174
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:177
 msgid "HTML Output"
-msgstr "Sortie HTML"
+msgstr ""
 
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:194
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:185
+#: src/lgr_advanced/templates/lgr_advanced/_label_forms_modal.html:8
+msgid "Display all label forms"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:186
+msgid "Label forms"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:210
 msgid "Save results"
-msgstr "Sauvegarde le résultat"
+msgstr ""
 
-#: src/lgr_advanced/templates/lgr_advanced/_base.html:196
+#: src/lgr_advanced/templates/lgr_advanced/_base.html:212
 msgid "Close"
-msgstr "Fermer"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:5
 msgid "Advanced LGR (Label Generation Ruleset) Tools"
-msgstr "Outils LGR (Label Generation Ruleset) avancés"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:10
 msgid ""
@@ -425,76 +418,67 @@ msgid ""
 "rel=\"noopener noreferrer\">Representing Label Generation Rulesets using "
 "XML</a> specification."
 msgstr ""
-"Cette application fournit une interface adaptée à la navigation et la "
-"modification de <abbr title=\"Label Generation Ruleset\">LGR</abbr> "
-"conformes à la spécification <a href=\"https://www.rfc-editor.org/rfc/"
-"rfc7940.txt\" target=\"_blank\" rel=\"noopener noreferrer\">Representing "
-"Label Generation Rulesets using XML</a>."
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:22
 msgid "Previously loaded LGR file(s)"
-msgstr "Fichier(s) LGR précédemment chargé(s)"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:26
 msgid ""
 "Previously, you edited the following LGR file(s). Click on its title to "
 "resume your editing session."
 msgstr ""
-"Précédemment, vous avez édité les fichiers LGR suivants. Cliquez sur un "
-"titre pour reprendre votre session de modification."
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:33
 msgid "LGRs"
-msgstr "Vos LGR"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:38
 #: src/lgr_advanced/templates/lgr_advanced/index.html:53
 #: src/lgr_advanced/templates/lgr_advanced/index.html:70
 #, python-format
 msgid "View %(lgr_name)s"
-msgstr "Voir %(lgr_name)s"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:41
 #: src/lgr_advanced/templates/lgr_advanced/index.html:57
 #, python-format
 msgid "Are you sure you want to delete LGR %(lgr_name)s?"
-msgstr "Êtes vous certain de vouloir supprimer la LGR %(lgr_name)s?"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:48
 msgid "LGR sets"
-msgstr "Vos set LGR"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:55
 msgid "View embedded LGRs"
-msgstr "Voir les LGR embarquées"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:86
 msgid "No LGR has been previously loaded."
-msgstr "Aucune LGR n'a été précédemment chargée."
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:95
 msgid "Create a new LGR file or import an existing one"
-msgstr "Commencer une nouvelle LGR ou importer une existante"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:98
 msgid "Import an existing XML file"
-msgstr "Importer un fichier XML existant"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:100
 msgid ""
 "Note that importing large LGR files may take significant time to load on "
 "your browser."
 msgstr ""
-"L’importation de gros fichiers LGR peut être lente à charger dans le "
-"navigateur."
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:105
 msgid "Start with a New blank XML file"
-msgstr "Commencer avec un nouveau fichier XML vide"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:109
 msgid "Start from a built-in LGR"
-msgstr "LGR fournies"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:110
 msgid ""
@@ -502,120 +486,57 @@ msgid ""
 "starting point for your own LGR. To do so, just click on it to make a copy "
 "that you can then edit."
 msgstr ""
-"Les LGR suivantes sont pré-installées dans le système. Vous pouvez les "
-"utiliser comme point de départ pour vos propres LGR. Pour ce faire, il "
-"suffit de cliquer dessus pour en faire une copie que vous pourrez modifier."
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:119
 #, python-format
 msgid "Open %(lgr_file)s"
-msgstr "Ouvrir %(lgr_file)s"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:124
 #, python-format
 msgid "Open %(lgr_obj)s"
-msgstr "Ouvrir %(lgr_obj)s"
+msgstr ""
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:130
 msgid ""
 "<strong class=\"text-danger\">Remember to save your work regularly by "
 "downloading a copy of the XML file.</strong>"
 msgstr ""
-"<strong class=\"text-danger\">Souvenez-vous de sauvegarder régulièrement "
-"votre travail en téléchargeant une copie du fichier XML.</strong>"
 
 #: src/lgr_advanced/templates/lgr_advanced/index.html:139
 msgid "Your saved results"
-msgstr "Vos résultats sauvegardés"
+msgstr ""
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:140
-msgid "The following files contains your tools computation results."
-msgstr "Le fichier suivant contient les résultats de calculs des outils."
+#: src/lgr_advanced/templates/lgr_advanced/index.html:141
+msgid ""
+"The following files contains your tools computation results.<br/> <strong><i "
+"class=\"glyphicon glyphicon-alert\"></i> Note that these files could be "
+"cleaned up regularly.</strong>"
+msgstr ""
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:148
+#: src/lgr_advanced/templates/lgr_advanced/index.html:153
+#, python-format
+msgid "Are you sure you want to delete report %(report.filename)s?"
+msgstr ""
+
+#: src/lgr_advanced/templates/lgr_advanced/index.html:166
 msgid ""
 "Please send any feedback to <a href=\"mailto:support@viagenie."
 "ca\">support@viagenie.ca</a>."
 msgstr ""
-"Merci d'envoyer vos commentaires à <a href=\"mailto:support@viagenie."
-"ca\">support@viagenie.ca</a>."
 
-#~ msgid "Label"
-#~ msgstr "Label"
+#: src/lgr_advanced/templates/lgr_advanced/label_forms.html:9
+msgid "Display forms"
+msgstr ""
 
-#~ msgid "Compute cross-script variants"
-#~ msgstr "Calculer les variantes cross-script"
+#: src/lgr_advanced/templates/lgr_advanced/label_forms.html:15
+msgid "Code point sequence"
+msgstr ""
 
-#~ msgid "Cross-script variants"
-#~ msgstr "Variantes cross-script"
+#: src/lgr_advanced/templates/lgr_advanced/label_forms.html:16
+msgid "U-label"
+msgstr ""
 
-#~ msgid "Display all label forms"
-#~ msgstr "Afficher toutes les formes d'un label"
-
-#~ msgid "Label forms"
-#~ msgstr "Formes"
-
-#~ msgid ""
-#~ "The following files contains your tools computation results.<br/> "
-#~ "<strong><i class=\"glyphicon glyphicon-alert\"></i> Note that these files "
-#~ "could be cleaned up regularly.</strong>"
-#~ msgstr ""
-#~ "Ces fichiers contiennent les résultats des calculs fournis par les outils."
-#~ "<br/> <strong><i class=\"glyphicon glyphicon-alert\"></i> Veuillez noter "
-#~ "que ces fichiers pourraient être régulièrement supprimés.</strong>"
-
-#, python-format
-#~ msgid "Are you sure you want to delete report %(report.filename)s?"
-#~ msgstr "Êtes vous sur de vouloir supprimer le rapport %(report.filename)s?"
-
-#~ msgid "Display forms"
-#~ msgstr "Afficher les formes"
-
-#~ msgid "Code point sequence"
-#~ msgstr "Séquence de code points"
-
-#~ msgid "U-label"
-#~ msgstr "U-Label"
-
-#~ msgid "A-label"
-#~ msgstr "A-Label"
-
-#~ msgid "Unicode version"
-#~ msgstr "Version d'Unicode"
-
-#~ msgid "The unicode version used"
-#~ msgstr "Version d'Unicode"
-
-#~ msgid "Switch mode"
-#~ msgstr "Changer de mode"
-
-#~ msgid "About LGR Toolset"
-#~ msgstr "À propos de l'application LGR"
-
-#~ msgid "About"
-#~ msgstr "À propos"
-
-#, python-format
-#~ msgid "Download %(file)s"
-#~ msgstr "Télécharger %(file)s"
-
-#~ msgid "LGR Version"
-#~ msgstr "Version de la LGR"
-
-#~ msgid "Date"
-#~ msgstr "Date"
-
-#~ msgid "Language(s)"
-#~ msgstr "Langue(s)"
-
-#~ msgid "Scope(s)"
-#~ msgstr "Cadre(s)"
-
-#~ msgid "Validity Start"
-#~ msgstr "Début de validité"
-
-#~ msgid "Validity End"
-#~ msgstr "Fin de validité"
-
-#~ msgid "Unicode Version"
-#~ msgstr "Version d'Unicode"
+#: src/lgr_advanced/templates/lgr_advanced/label_forms.html:17
+msgid "A-label"
+msgstr ""

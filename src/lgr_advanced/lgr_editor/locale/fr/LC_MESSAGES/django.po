@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 18:36+0000\n"
-"PO-Revision-Date: 2022-10-13 11:58-0400\n"
+"POT-Creation-Date: 2023-07-08 02:59+0000\n"
+"PO-Revision-Date: 2023-07-07 22:15-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #: src/lgr_advanced/lgr_editor/forms/codepoint.py:15
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:48
@@ -38,38 +38,38 @@ msgstr "Tags"
 msgid "space-separated tags"
 msgstr "liste de tags séparés par des espaces"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:49
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:110
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:43
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:102
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:41
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:115
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:45
 msgid "Code point"
 msgstr "Code point"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:50
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:111
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:44
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:103
 msgid "Override repertoire"
 msgstr "Ignorer le répertoire"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:55
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:49
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/_editor_base.html:9
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_view.html:18
 msgid "Code points"
 msgstr "Code points"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:59
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:53
 msgid "Disabled code points"
 msgstr "Code points indisponibles"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:66
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:60
 msgid "First code point"
 msgstr "Premier code point"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:67
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:61
 msgid "Last code point"
 msgstr "Dernier code point"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:73
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:67
 #, python-format
 msgid ""
 "Last code point (%(last_cp)s) must not be smaller than the first code point "
@@ -78,37 +78,33 @@ msgstr ""
 "Le dernier code point (%(last_cp)s) ne peut être plus petit que le premier "
 "code point (%(first_cp)s)"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:79
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:73
 #: src/lgr_advanced/lgr_editor/forms/importer.py:13
 #: src/lgr_advanced/lgr_editor/forms/metadata.py:59
 msgid "Validating repertoire"
 msgstr "Répertoire de validation"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:83
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:77
 msgid "Script"
 msgstr "Script"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:85
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:105
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:79
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:97
 msgid "Manual import"
 msgstr "Importation manuelle"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:101
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:95
 msgid "Select a file"
 msgstr "Sélectionner un fichier"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:103
-msgid "File type"
-msgstr "Type de fichier"
-
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:134
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:135
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:126
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:127
 msgid "Cannot add when and not-when rules simultaneously"
 msgstr "Impossible d'ajouter when et not-when simultanément"
 
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:137
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:138
-#: src/lgr_advanced/lgr_editor/forms/codepoints.py:141
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:129
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:130
+#: src/lgr_advanced/lgr_editor/forms/codepoints.py:133
 msgid "Please provide at least one value"
 msgstr "Fournissez au moins une valeur s'il vous plait"
 
@@ -116,6 +112,23 @@ msgstr "Fournissez au moins une valeur s'il vous plait"
 msgid "File must be encoded in UTF-8 and using 0x0A line ending."
 msgstr ""
 "Le fichier doit être encodé en UTF-8 et utiliser les retours à la ligne 0x0A."
+
+#: src/lgr_advanced/lgr_editor/forms/fields.py:17
+msgid ""
+"File should be a text file encoded in UTF-8 and using 0x0A line ending. It "
+"must contain one label per line in U-Label or A-Label form or as a list of "
+"code points. Comments begin with '#'"
+msgstr ""
+"Le fichier doit être au format texte, encodé en UTF-8 et utiliser les "
+"retours à la ligne 0x0A. Il doit contenir un label par ligne, au format U-"
+"Label ou A-Label ou sous la forme d'une liste de code points. Les "
+"commentaires commencent par '#'"
+
+#: src/lgr_advanced/lgr_editor/forms/fields.py:20
+msgid "Label can be in U-Label or A-Label form or a list of code points."
+msgstr ""
+"Le label peut être au format U-Label ou A-Label ou sous la forme d'une liste "
+"de code points."
 
 #: src/lgr_advanced/lgr_editor/forms/importer.py:14
 msgid "Code points will be limited to the selected repertoire"
@@ -259,7 +272,7 @@ msgstr "Modifier"
 
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/add_list.html:8
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/add_list_from_script.html:11
-#: src/lgr_advanced/lgr_editor/templates/lgr_editor/add_list_import.html:11
+#: src/lgr_advanced/lgr_editor/templates/lgr_editor/add_list_import.html:10
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/add_list_range.html:11
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:72
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/codepoint_list.html:93
@@ -489,11 +502,11 @@ msgstr "Importer une LGR existante"
 
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/import_form.html:7
 msgid ""
-"To import LGR set, select the XML files composing the LGR set. The set will "
+"To import LGR set, select the files composing the LGR set. The set will "
 "automatically be created."
 msgstr ""
-"Pour importer un set LGR, sélectionner les fichiers XML  le set LGR. Le set "
-"sera créé automatiquement."
+"Pour importer un set LGR, sélectionner les fichiers composants le set LGR. "
+"Le set sera créé automatiquement."
 
 #: src/lgr_advanced/lgr_editor/templates/lgr_editor/import_form.html:12
 msgid ""
@@ -877,13 +890,13 @@ msgid "%(var_msg_prefix)s could not be deleted because it was not found"
 msgstr ""
 "%(var_msg_prefix)s n'a pas pu être supprimée car elle n'a pas été trouvée"
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:93
-#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:175
+#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:88
+#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:170
 #, python-format
 msgid "%d code points added"
 msgstr "%d code points ont été ajoutés"
 
-#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:157
+#: src/lgr_advanced/lgr_editor/views/codepoints/importer.py:152
 msgid "No code point in input file"
 msgstr "Le fichier d'entrée ne contient aucun code point"
 
@@ -924,7 +937,7 @@ msgstr ""
 msgid "Variants populated"
 msgstr "Les variantes ont été peuplées"
 
-#: src/lgr_advanced/lgr_editor/views/create.py:62
+#: src/lgr_advanced/lgr_editor/views/create.py:63
 msgid ""
 "The LGR you have tried to create already exists in your working session. "
 "Please use a new name."
@@ -932,7 +945,7 @@ msgstr ""
 "La LGR que vous essayez de créer existe déjà dans votre session de travail. "
 "Merci d'utiliser un nouveau nom."
 
-#: src/lgr_advanced/lgr_editor/views/create.py:126
+#: src/lgr_advanced/lgr_editor/views/create.py:127
 msgid "The LGR set name already exists. Please use another name."
 msgstr "Ce nom de set LGR existe déjà. Merci d'utiliser un autre nom."
 
@@ -1090,6 +1103,9 @@ msgstr "Génération des statistiques"
 #: src/lgr_advanced/lgr_editor/views/validate.py:50
 msgid "Rebuilding LGR"
 msgstr "Reconstruction de la LGR"
+
+#~ msgid "File type"
+#~ msgstr "Type de fichier"
 
 #~ msgid ""
 #~ "If you select more than one file, this will create a LGR set. File(s) "
