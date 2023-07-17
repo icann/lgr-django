@@ -216,10 +216,6 @@
             $('#xmlLink').attr('href', xmlLink);
         }
 
-        function cleanInput(input) {
-            input.closest('.col').find('input').val('');
-        }
-
         function buttonValidateEnabled() {
             const isCheckForCollision = isFormUploadActivated === true || ($('#check-for-collision').is(':checked') && $('.label-text').length > 1);
             let emptyLabel = false;

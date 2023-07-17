@@ -31,6 +31,11 @@
         <script src="{% static 'chrome/js/vendor/jquery.min.js' %}"></script>
         <script src="{% static 'chrome/js/vendor/jquery-ui.min.js' %}"></script>
         <script src="{% static 'chrome/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script>
+            function cleanInput (input) {
+                input.closest('.col').find('input').val('');
+            }
+        </script>
         {% block html_body_more %}{% endblock %}
     </body>
 </html>
