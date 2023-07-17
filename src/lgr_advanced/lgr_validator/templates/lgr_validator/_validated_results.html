@@ -107,7 +107,7 @@
                         <td>{{ col.disposition }}</td>
 
                         <td>
-                            <a href="?label={{ col.input|urlencode }}{% if result.script %}&script={{ result.script }}{% endif %}">
+                            <a href="?label={{ col.input|urlencode }}{% if result.script %}&script={{ result.script }}{% endif %}{% if lgr_object %}&lgr={{ lgr_object.to_tuple }}{% endif %}">
                                 {{ col.cp_display_html }}
                             </a>
                         </td>
@@ -177,7 +177,7 @@
                             </td>
                             <td>{{ v.disposition }}</td>
                             <td>
-                                <a href="?label={{ v.cp_input|urlencode }}{% if result.script %}&script={{ result.script }}{% endif %}">
+                                <a href="?label={{ v.cp_input|urlencode }}{% if result.script %}&script={{ result.script }}{% endif %}{% if lgr_object %}&lgr={{ lgr_object.to_tuple }}{% endif %}">
                                     {{ v.cp_display_html }}
                                 </a>
                             </td>

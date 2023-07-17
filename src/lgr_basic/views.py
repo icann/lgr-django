@@ -37,8 +37,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
 
     def get_initial(self):
         init = super().get_initial()
-        rz = RzLgr.objects.filter(active=True).first()
-        init['lgr'] = str(rz.to_tuple())
+        init['lgr'] = self.request.GET.get('lgr', str(RzLgr.objects.filter(active=True).first().to_tuple()))
         init['labels'] = self.request.GET.get('label')
         return init
 
