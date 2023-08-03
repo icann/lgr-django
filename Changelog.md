@@ -1,4 +1,30 @@
 # Changelog for lgr-django
+
+## 6.0.0 (2023-08-04)
+### New features
+- Enable IDN review with RFC Core Requirements
+- Allow processing a list of labels in the label form tool
+- Allow editing of the reference LGR members
+- Make reports expire
+### Improvements
+- Add IDN property in codepoint reports from IDN table reviews
+- Remove cross-script tool
+- Support any RFC format when importing an LGR
+- Improve performances with iframes
+- Add a better help text for label inputs
+- Limit the file type choices for label files input
+- Order reports and tasks with newest first
+- Update help and about texts
+- In validation mode, clicking a generated variant label will keep the same LGR selected
+### Fixes
+- Fix user create view
+- Raise 404 on unexisting LGR
+- Fix IDN table review LGR deletion
+- Fix admin LGR automatic active selection
+- Allow rz and ref LGR to have members with the same name under different common LGR
+- Prevent open redirects
+
+
 ## 5.0.0 (2022-11-16)
 ### New features
 - Add account for all users

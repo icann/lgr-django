@@ -5,12 +5,12 @@ from io import open
 
 setup(
     name='lgr-django',
-    version='5.0.0',
-    author='Viagenie and Wil Tan',
-    author_email='support@viagenie.ca',
+    version='6.0.0',
+    author='Cofomo, Viagenie and Wil Tan',
+    author_email='int-eng@cofomo.com',
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    license='TODO',
+    license='BSD',
     description='Web-application for LGR editing',
     long_description=open('README.md', encoding='utf-8').read(),
     include_package_data=True,

@@ -10,9 +10,9 @@ django-celery-results==2.4.0
 django-celery-beat==2.2.0
 
 # LGR/Unicode modules
-picu==1.3
-munidata==2.2.0
-lgr-core>=5.0.0
+picu==1.4
+munidata==2.4.0
+lgr-core>=6.0.0
 
 # Natural sorting implementation
 natsort==7.1.1
