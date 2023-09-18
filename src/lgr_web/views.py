@@ -98,13 +98,14 @@ class LabelFileFormsView(LoginRequiredMixin, FormView):
 
         response.write(codecs.BOM_UTF8.decode('utf-8'))
         writer = csv.writer(response)
-        writer.writerow(['Code point sequence', 'U-label', 'A-label', 'Note'])
+        writer.writerow(['Input', 'Code point sequence', 'U-label', 'A-label', 'Note'])
         for label, parsed_label, valid, error in read_labels(label_info.labels, unidb=udata, as_cp=True,
                                                              return_exceptions=True):
             if valid:
                 try:
                     ulabel = cp_to_ulabel(parsed_label)
-                    writer.writerow([format_cp(parsed_label),
+                    writer.writerow([label,
+                                     format_cp(parsed_label),
                                      ulabel,
                                      udata.idna_encode_label(ulabel),
                                      '-'])
@@ -113,22 +114,7 @@ class LabelFileFormsView(LoginRequiredMixin, FormView):
                     error = e
 
             if not valid:
-                cp_list = format_cp(parsed_label) if parsed_label else '-'
-                if label.lower().startswith('xn--'):
-                    row = [cp_list, '-', label]
-                elif ' ' in label:
-                    try:
-                        parse_codepoint_input(label)
-                        row = [label, '-', '-']
-                    except:
-                        row = [cp_list, label, '-']
-                elif 'U+' in label.upper():
-                    row = ['-', label, '-']
-                else:
-                    row = [cp_list, label, '-']
-
-                row.append(lgr_exception_to_text(error))
-                writer.writerow(row)
+                writer.writerow([label, '-', '-', '-', lgr_exception_to_text(error)])
 
         return response
 

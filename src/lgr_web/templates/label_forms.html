@@ -3,7 +3,7 @@
 
 {% block content %}
     <div class="input-group">
-        <form method="POST" class="form-horizontal" role="form" enctype="multipart/form-data">
+        <form method="POST" class="form-horizontal" action="{% url 'lgr_label_forms' %}" role="form" enctype="multipart/form-data">
             {% csrf_token %}
             {% include "lgr_editor/_form_field.html" with field=form.label %}
             {% include "lgr_editor/_form_field.html" with field=form.unicode_version %}
