@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-08 02:59+0000\n"
+"POT-Creation-Date: 2023-09-19 19:42+0000\n"
 "PO-Revision-Date: 2023-07-07 22:17-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -55,7 +55,7 @@ msgstr ""
 msgid "Are you sure you want to delete report %(report_id)s?"
 msgstr "Êtes vous sur de vouloir supprimer le rapport %(report_id)s ?"
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:42
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:41
 #, python-format
 msgid ""
 "No report yet, please check the <a href=\"%(task_status_url)s\">tasks</a> "
@@ -64,7 +64,7 @@ msgstr ""
 "Aucun rapport pour l'instant, vérifiez la liste de <a "
 "href=\"%(task_status_url)s\">tâches</a> et rafraîchissez s'il vous plaît."
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:47
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:46
 msgid "New report"
 msgstr "Nouveau rapport"
 

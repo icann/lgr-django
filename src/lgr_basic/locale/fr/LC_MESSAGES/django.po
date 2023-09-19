@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-08 02:59+0000\n"
+"POT-Creation-Date: 2023-09-19 19:42+0000\n"
 "PO-Revision-Date: 2022-10-13 11:59-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -136,22 +136,22 @@ msgid "The following files contains your tools computation results."
 msgstr ""
 "Ces fichiers contiennent les résultats des calculs fournis par les outils."
 
-#: src/lgr_basic/views.py:63
+#: src/lgr_basic/views.py:62
 #, python-format
 msgid "Annotate labels on LGR %s"
 msgstr "Annote les labels sur la LGR %s"
 
-#: src/lgr_basic/views.py:65
+#: src/lgr_basic/views.py:64
 #, python-format
 msgid "Compute collisions and annotate labels on %s"
 msgstr "Calcul des collisions et annotation des labels sur %s"
 
-#: src/lgr_basic/views.py:84
+#: src/lgr_basic/views.py:83
 #, python-format
 msgid "Compute collisions on %s"
 msgstr "Calcul des collisions sur %s"
 
-#: src/lgr_basic/views.py:123
+#: src/lgr_basic/views.py:122
 #, python-format
 msgid ""
 "Input label generates too many variants to compute them all quickly. You can "

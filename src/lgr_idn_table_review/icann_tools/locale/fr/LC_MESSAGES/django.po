@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-08 02:59+0000\n"
-"PO-Revision-Date: 2022-08-25 21:10-0400\n"
+"POT-Creation-Date: 2023-09-19 19:42+0000\n"
+"PO-Revision-Date: 2023-09-19 15:44-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:4
 #: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:7
@@ -24,24 +24,28 @@ msgid "ICANN IDN review tool"
 msgstr "Outil de vérification des tables IDN ICANN"
 
 #: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:14
-msgid "Generate report"
-msgstr "Générer le rapport"
+msgid "IDN Table Report"
+msgstr "Rapport sur les tables IDN"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:19
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:21
+msgid "IDNA 2008 non-compliance Report"
+msgstr "Rapport de non conformité IDNA 2008"
+
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:26
 msgid "Previously generated reports"
 msgstr "Rapport générés précédement"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:30
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:37
 #, python-format
-msgid "IDN table %(report_id)s"
-msgstr "Table IDN %(report_id)s"
+msgid "%(report_id)s"
+msgstr "%(report_id)s"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:34
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:41
 #, python-format
 msgid "Are you sure you want to delete report %(report_id)s?"
 msgstr "Êtes vous sur de vouloir supprimer le rapport %(report_id)s ?"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:41
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:48
 #, python-format
 msgid ""
 "No report yet, please check the <a href=\"%(task_status_url)s\">tasks</a> "
@@ -50,28 +54,36 @@ msgstr ""
 "Aucun rapport pour l'instant, vérifiez la liste de <a "
 "href=\"%(task_status_url)s\">tâches</a> et rafraîchissez s'il vous plaît."
 
-#: src/lgr_idn_table_review/icann_tools/views.py:40
+#: src/lgr_idn_table_review/icann_tools/views.py:42
 msgid "ICANN IDN Tables Review"
 msgstr "Outil de vérification des tables IDN ICANN"
 
-#: src/lgr_idn_table_review/icann_tools/views.py:47
+#: src/lgr_idn_table_review/icann_tools/views.py:49
+#: src/lgr_idn_table_review/icann_tools/views.py:70
 #, python-format
 msgid "Generating report. You can follow your task progression in the %s."
 msgstr ""
 "Rapport en création. Vous pouvez suivre la progression de votre tâche sur la "
 "%s."
 
-#: src/lgr_idn_table_review/icann_tools/views.py:76
+#: src/lgr_idn_table_review/icann_tools/views.py:63
+msgid "ICANN IDN Tables IDNA 2008 compliance"
+msgstr "Outil de vérification de la conformité IDNA 2008 des tables IDN ICANN"
+
+#: src/lgr_idn_table_review/icann_tools/views.py:98
 msgid ""
 "Task is still being processed, please come back later for the full report."
 msgstr ""
 "La tâche est encore en cours, revenez plus tard pour un rapport complet s'il "
 "vous plait."
 
-#: src/lgr_idn_table_review/icann_tools/views.py:78
+#: src/lgr_idn_table_review/icann_tools/views.py:100
 #, python-format
 msgid "ICANN Review Reports: %(report)s"
 msgstr "Rapport de Vérification ICANN: %(report)s"
+
+#~ msgid "Generate report"
+#~ msgstr "Générer le rapport"
 
 #~ msgid "No report"
 #~ msgstr "Aucun rapport"
