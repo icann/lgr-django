@@ -5,6 +5,7 @@ api -
 """
 import logging
 import os
+import traceback
 from collections import defaultdict
 from urllib.request import urlopen
 
@@ -64,7 +65,13 @@ def get_icann_idn_repository_tables():
             continue
         __, lang_script, version = basename.rsplit('.', 1)[0].split('_', 3)
         date = dates.get(url)
-        name, data = download_file(IANA_URL + url)
+        error = None
+        try:
+            name, data = download_file(IANA_URL + url)
+        except Exception:
+            error = f'Failed to download IDN table: {IANA_URL + url}'
+            if settings.DEBUG:
+                error += f'\n{traceback.format_exc()}'
         idn_table = IANAIdnTable(file=File(data, name=name),
                                  name=os.path.splitext(name)[0],
                                  owner=None,
@@ -72,7 +79,7 @@ def get_icann_idn_repository_tables():
                                  date=date,
                                  lang_script=lang_script,
                                  version=version)
-        yield tlds, idn_table
+        yield tlds, idn_table, error
 
 
 def _make_lgr_query(obj, q, logs, multiple_found_query=None):

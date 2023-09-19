@@ -8,11 +8,13 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+from django.views import View
 from django.views.generic import TemplateView
 
 from lgr_idn_table_review.icann_tools.api import LGRIcannReportStorage
 from lgr_tasks.models import LgrTaskModel
-from .tasks import idn_table_review_task
+from lgr_idn_table_review.icann_tools.tasks.review import idn_table_review_task
+from lgr_idn_table_review.icann_tools.tasks.compliance import idn_table_compliance_task
 
 
 class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):
@@ -53,6 +55,26 @@ class IdnTableIcannModeView(BaseIcannView, TemplateView):
         context['reports'] = self.storage.list_storage()
         return context
 
+
+class IdnTableIcannModeComplianceView(BaseIcannView, View):
+
+    def post(self, request, *args, **kwargs):
+        task = LgrTaskModel.objects.create(app=self.request.resolver_match.app_name,
+                                           name=_('ICANN IDN Tables IDNA 2008 compliance'),
+                                           user=self.request.user)
+        idn_table_compliance_task.apply_async((self.request.user.pk,
+                                               self.request.build_absolute_uri('/').rstrip('/')),
+                                              task_id=task.pk)
+
+        messages.info(request,
+                      mark_safe(_('Generating report. You can follow your task progression in the %s.') % (
+                          f"<a href='{reverse('list_process')}'>{_('task status page')}</a>")))
+        return redirect('lgr_idn_icann_mode')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reports'] = self.storage.list_storage()
+        return context
 
 class IdnTableIcannListReports(BaseIcannView, TemplateView):
     template_name = 'lgr_idn_table_review/list_report_files.html'

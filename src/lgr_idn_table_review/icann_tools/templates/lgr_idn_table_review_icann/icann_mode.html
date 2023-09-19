@@ -8,10 +8,17 @@
 {% endblock %}
 
 {% block content %}
-    <form id="report-form" class="form-horizontal" method="post">
+    <form id="report-form" class="form-horizontal" action="{% url 'lgr_idn_icann_mode' %}"  method="post">
         {% csrf_token %}
         <button id="submit" type="submit" class="btn btn-primary btn-block" {% if messages %}disabled{% endif %}>
-            {% trans "Generate report" %}
+            {% trans "IDN Table Report" %}
+        </button>
+    </form>
+    <br>
+    <form id="report-form" class="form-horizontal" action="{% url 'lgr_idn_icann_compliance' %}"  method="post">
+        {% csrf_token %}
+        <button id="submit" type="submit" class="btn btn-primary btn-block" {% if messages %}disabled{% endif %}>
+            {% trans "IDNA 2008 non-compliance Report" %}
         </button>
     </form>
     <hr>
@@ -27,7 +34,7 @@
             {% with report=reports_grouped.list|first %}
                 <li>
                     <a href="{% url 'lgr_idn_icann_reports' report_id=report.report_id %}">
-                        {% blocktrans with report.report_id as report_id %}IDN table {{ report_id }}{% endblocktrans %}
+                        {% blocktrans with report.report_id as report_id %}{{ report_id }}{% endblocktrans %}
                     </a>
                     <a href="{% url 'delete_report_file' storage=report.storage report_id=report.report_id %}?next={{ request.path }}"
                        class="delete_report confirm-prompt"

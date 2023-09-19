@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xHTML1/DTD/xHTML1-strict.dtd">
+<HTML xmlns="http://www.w3.org/1999/xHTML">
+{% load lgr_idn_table_review %}
+<head>
+    <meta http-equiv="Content-Type" content="text/HTML; charset=utf-8"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"/>
+    <title>ICANN IDN Table IDNA 2008 compliance report</title>
+    <style type="text/css">
+        #lgr {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: .3em 1em;
+        }
+
+        div#lgr h1 {
+            font-size: 185%;;
+        }
+
+        body {
+            padding: 0 0 1em 0;
+            margin: 0;
+            background-color: #EEE;
+            font-family: sans-serif;
+        }
+
+        table.simple, table.simple td, table.simple th {
+            border-width: 1px;
+            border-style: solid;
+            border-color: #A0A0A0;
+            border-collapse: collapse;
+            border-spacing: 1px;
+        }
+
+        table.simple td, table.simple th {
+            font-family: sans-serif;
+            padding: .2em;
+        }
+
+        table.simple th {
+            font-weight: bold;
+            background-color: #D0D0D0;
+            color: #808080;
+        }
+
+        h1 {
+            font-size: 175%;;
+        }
+
+        h1 {
+            font-weight: bold;
+            font-family: sans-serif;
+            color: #8888FF;
+        }
+
+        body h1:first-child {
+            font-size: 120%;
+        }
+
+        td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="lgr">
+    <h1>ICANN IDN Table IDNA 2008 compliance Report</h1>
+    <p>IDN table: <a href="{{ idn_table_url }}">{{ idn_table }}</a></p>
+
+    <table class="simple">
+        <thead>
+        <tr>
+            <th>Code Point</th>
+            <th>IDNA property</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data in uncompliant_cps %}
+            <tr>
+                <td>{{ data.char.cp|format_cp }}</td>
+                <td>{{ data.idna_property }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</HTML>

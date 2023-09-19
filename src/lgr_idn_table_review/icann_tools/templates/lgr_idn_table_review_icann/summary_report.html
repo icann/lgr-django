@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/HTML; charset=utf-8"/>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"/>
-    <title>ICANN IDN Table Review summary</title>
+    <title>{{ title }}</title>
     <style type="text/css">
         #lgr {
             max-width: 1200px;
@@ -40,10 +40,13 @@
 </head>
 <body>
 <div id="lgr">
-    <h1>ICANN IDN Table Review Report</h1>
+    <h1>ICANN IDN Table Report</h1>
     <p>Total IDN table in IANA repository: {{ count }}</p>
+    {% if idna_compliance_valid %}
+        <p>Number of IDN tables fully IDNA 2008 compliant: {{ idna_compliance_valid }}</p>
+    {% endif %}
     <p>Date of review: {{ date }}</p>
-    <h2>IDN table processed:</h2>
+    <h2>IDN table reports:</h2>
     <table id="processed" class="display">
         <thead>
         <tr>
