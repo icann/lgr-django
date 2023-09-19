@@ -67,8 +67,10 @@ class LabelFormsView(LoginRequiredMixin, FormView):
             try:
                 ctx['cp_list'] = format_cp(self.label)
                 ctx['u_label'] = cp_to_ulabel(self.label)
+                ctx['u_label'].encode('utf-8')  # ensure encode won't fail
                 ctx['a_label'] = self.udata.idna_encode_label(ctx['u_label'])
             except UnicodeError as ex:
+                ctx.pop('u_label', None)
                 messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
 
         return ctx
