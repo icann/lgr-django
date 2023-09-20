@@ -24,6 +24,7 @@ class IdnReviewReport(LGRReport):
 class IdnTableBase(LgrBaseModel):
     lgr_parser = HeuristicParser
     report_id = models.CharField(max_length=256)
+    allow_invalid_property = True
 
     class Meta:
         ordering = ['name']
