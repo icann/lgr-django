@@ -83,7 +83,7 @@ class IDNTableReviewTask(ICANNTask):
             logger.exception('Failed to get a reference LGR')
             context['reason'] = f'No Reference LGR was found to compare with IDN table:\n{exc.message}'
             html_report = render_to_string('lgr_idn_table_review/error.html', context)
-        except BaseException:
+        except Exception:
             logger.exception('Failed to review IDN table')
             context['reason'] = 'Invalid IDN table.'
             invalid_table = True

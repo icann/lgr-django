@@ -50,8 +50,8 @@ class IDNTableIDNA2008ComplianceTask(ICANNTask):
             html_report = render_to_string('lgr_idn_table_review_icann/idna2008_compliance.html', context)
             generate_report = len(context['uncompliant_cps']) > 0
             if not generate_report:
-                self.summary_context['idna_compliance_valid'] += 1
-        except BaseException:
+                self.summary_context['idna_compliance_valid'] += len(tlds)
+        except Exception:
             logger.exception('Failed to review IDN table')
             context['reason'] = 'Invalid IDN table.'
             if settings.DEBUG:
