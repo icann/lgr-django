@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import codecs
 import csv
 import datetime
 import os
 from io import StringIO
-from time import sleep
 
 from django.core.cache import cache
 from django.core.files import File
 from django.test import override_settings
 
 from lgr_advanced.api import LGRToolReportStorage
+from lgr_idn_table_review.icann_tools.api import LGRIcannReportStorage
+from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
 from lgr_manage.api import LGRAdminReportStorage
 from lgr_manage.models import AdminReport
 from lgr_models.models.lgr import RzLgr
@@ -69,20 +69,31 @@ class TasksTest(LgrWebClientTestBase):
 
     def test_clean_reports(self):
         # save fake user generated report
+        user = self.login_user()
         last_month = datetime.datetime.now() - datetime.timedelta(days=31)
         lgr_settings.report_expiration_delay = 30
         storage = LGRAdminReportStorage(self.login_admin())
         report1 = storage.storage_save_report_file('test1.csv', StringIO())
-        storage = LGRToolReportStorage(self.login_user())
+        storage = LGRToolReportStorage(user)
         report2 = storage.storage_save_report_file('test2.csv', StringIO())
         report3 = storage.storage_save_report_file('test3.csv', StringIO())
+        storage = LGRIdnReviewApi(user)
+        report4 = storage.storage_save_report_file('test4.csv', StringIO())
+        storage = LGRIcannReportStorage(self.login_icann())
+        report5 = storage.storage_save_report_file('test5.csv', StringIO())
         report1.created_at = last_month
         report1.save()
         report2.created_at = last_month
         report2.save()
+        report4.created_at = last_month
+        report4.save()
+        report5.created_at = last_month
+        report5.save()
         # sanity check
-        self.assertListEqual(list(LGRReport.objects.values_list('pk', flat=True)), [report1.pk, report2.pk, report3.pk])
+        self.assertListEqual(sorted(list(LGRReport.objects.values_list('pk', flat=True))),
+                             [report1.pk, report2.pk, report3.pk, report4.pk, report5.pk])
 
         clean_reports()
 
-        self.assertListEqual(list(LGRReport.objects.values_list('pk', flat=True)), [report3.pk])
+        # unexpired reports should still be there along with ICANN reports
+        self.assertListEqual(sorted(list(LGRReport.objects.values_list('pk', flat=True))), [report3.pk, report5.pk])

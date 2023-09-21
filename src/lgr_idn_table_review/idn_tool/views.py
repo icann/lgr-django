@@ -115,6 +115,7 @@ class IdnTableReviewListReport(IdnTableReviewViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['display_exp'] = True
         zipname = f"{self.kwargs.get('report_id')}.zip"
         context['reports'] = self.api.list_storage(report_id=self.kwargs.get('report_id'),
                                                    exclude={'file__endswith': zipname})

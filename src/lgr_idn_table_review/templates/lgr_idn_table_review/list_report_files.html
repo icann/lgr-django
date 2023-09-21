@@ -14,7 +14,9 @@
 
 {% block content %}
     <p>{% trans 'The following files contains your IDN review reports.' %}<br/></p>
-    {% include 'lgr_models/_report_warning.html' %}
+    {% if display_exp %}
+        {% include 'lgr_models/_report_warning.html' %}
+    {% endif %}
     <table id="files" class="display table table-striped table-bordered">
         <thead>
         <tr>
@@ -30,7 +32,9 @@
                        target="_blank" rel="noopener noreferrer">
                         {{ report.filename }}
                     </a>
-                    <p style="float: right;">{{ report|display_expiration }}</p>
+                    {% if display_exp %}
+                        <p style="float: right;">{{ report|display_expiration }}</p>
+                    {% endif %}
                 </td>
                 <td>
                     <a href="{{ report.to_url }}" class="btn btn-default">

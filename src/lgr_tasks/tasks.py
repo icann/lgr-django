@@ -40,8 +40,9 @@ def clean_reports():
     lgr_settings.report_expiration_last_run = timezone.now()
     lgr_settings.save()
     nbr, __ = LGRReport.objects.filter(
-        created_at__lt=datetime.datetime.now() - datetime.timedelta(days=lgr_settings.report_expiration_delay)
-    ).delete()
+        created_at__lt=datetime.datetime.now() - datetime.timedelta(days=lgr_settings.report_expiration_delay)).filter(
+        # do not clean ICANN reports
+        idnreviewicannreport__isnull=True).delete()
     logger.info('%d reports removed' % nbr)
 
 
