@@ -2,6 +2,7 @@
 
 <table class="simple">
     <tr>
+        <th>#</th>
         <th>Code<br>Point</th>
         <th>Glyph</th>
         <th>Name</th>
@@ -10,6 +11,7 @@
     </tr>
     {% for cp in codepoints %}
         <tr>
+            <td>{{ forloop.counter }}</td>
             <td>{{ cp.cp|format_cp }}</td>
             <td>{{ cp.glyph }}</td>
                     <td style="text-align:left">{{ cp.name }}</td>

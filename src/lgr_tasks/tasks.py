@@ -44,6 +44,7 @@ def clean_reports():
     ).delete()
     logger.info('%d reports removed' % nbr)
 
+
 @shared_task
 def calculate_index_variant_labels_tlds(user_pk=None):
     """
