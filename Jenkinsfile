@@ -3,7 +3,7 @@ utils = new icann.Utilities()
 
 properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '14', artifactNumToKeepStr: '10', daysToKeepStr: '14', numToKeepStr: '10']]])
 
-node('docker') {
+node('okd-jenkins-build-lax-docker') {
 
     gitscm = null
 
@@ -14,7 +14,7 @@ node('docker') {
         }
 
         stage('Build and Push HTTPD Proxy') {
-           //TODO: Remove once deployement script are tested
+           //TODO: Remove once deployment script are tested
            // if (!utils.hasFolderChanged("src")) {
            //     echo "No changes. No new httpd image to publish"
            //     return;

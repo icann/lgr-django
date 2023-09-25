@@ -84,10 +84,10 @@ microservices:
     resources:
       limits:
         cpu: 2
-        memory: 1Gi
+        memory: 2Gi
       requests:
         cpu: 200m
-        memory: 1Gi
+        memory: 2Gi
 
   beat:
     name: beat
