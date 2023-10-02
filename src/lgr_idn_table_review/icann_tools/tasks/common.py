@@ -33,6 +33,7 @@ class ICANNTask:
         self.udata = unidb.manager.get_db_by_version(settings.SUPPORTED_UNICODE_VERSION)
         self.count = 0
         self.summary_context = {
+            'dl_errors_count': 0,
             'date': self.today,
             'count': 0,
             'unprocessed': [],
@@ -54,10 +55,11 @@ class ICANNTask:
 
     def process_idn_tables(self):
         with TemporaryFile() as f:
+            errors = []
             with ZipFile(f, mode='w', compression=ZIP_DEFLATED) as zf:
                 for tlds, idn_table, err in get_icann_idn_repository_tables():
                     if err:
-                        zf.writestr('errors.txt', err)
+                        errors.append(err)
                         continue
                     logger.info('Process IDN table %s', idn_table.filename)
                     for filename, data in self.task_cb(idn_table, tlds):
@@ -65,6 +67,9 @@ class ICANNTask:
 
             final_report = self.lgr_storage.storage_save_report_file(f'{self.report_id}.zip', f,
                                                                      report_id=self.report_id)
+            if errors:
+                zf.writestr('errors.txt', '\n'.join(errors))
+                self.summary_context['dl_errors_count'] = len(errors)
 
         summary_report = render_to_string('lgr_idn_table_review_icann/summary_report.html', self.summary_context)
         self.lgr_storage.storage_save_report_file(f'{self.report_id}-summary.html', StringIO(summary_report),
