@@ -8,6 +8,8 @@
         <th>Name</th>
         <th>IDNA2008 Property</th>
         <th>Unicode General Category</th>
+        {% block additional_header %}
+        {% endblock %}
     </tr>
     {% for cp in codepoints %}
         <tr>
@@ -17,6 +19,8 @@
                     <td style="text-align:left">{{ cp.name }}</td>
             <td>{{ cp.idna_property }}</td>
             <td>{{ cp.category }}</td>
+            {% block additional_column %}
+            {% endblock %}
         </tr>
     {% empty %}
         <tr>

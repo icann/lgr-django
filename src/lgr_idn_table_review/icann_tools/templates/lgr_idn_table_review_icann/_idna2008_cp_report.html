@@ -1,0 +1,7 @@
+{% extends "lgr_idn_table_review/_review_cp_report.html" %}
+{% block additional_header %}
+    <th>IDNA 2003 compliant</th>
+{% endblock %}
+{% block additional_column %}
+    <td>{% if cp.idna2003_compliant %}✓{% else %}❌{% endif %}</td>
+{% endblock %}

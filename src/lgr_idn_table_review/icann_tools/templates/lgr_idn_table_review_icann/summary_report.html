@@ -41,9 +41,12 @@
 <body>
 <div id="lgr">
     <h1>ICANN IDN Table Report</h1>
-    <p>Total IDN table in IANA repository: {{ count }}</p>
+    <p>Total IDN table processed in IANA repository: {{ count }}</p>
     {% if idna_compliance_valid %}
         <p>Number of IDN tables fully IDNA 2008 compliant: {{ idna_compliance_valid }}</p>
+    {% endif %}
+    {% if dl_errors_count > 0 %}
+        Failed to download {{ dl_error_count }} IDN table{{ dl_error_count|pluralize }}
     {% endif %}
     <p>Date of review: {{ date }}</p>
     <h2>IDN table reports:</h2>

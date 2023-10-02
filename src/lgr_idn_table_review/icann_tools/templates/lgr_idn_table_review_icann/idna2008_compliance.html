@@ -67,7 +67,7 @@
     <h1>ICANN IDN Table IDNA 2008 compliance Report</h1>
     <p>IDN table: <a href="{{ idn_table_url }}">{{ idn_table }}</a>, date {{ idn_table_date }}</p>
     <p>{{ uncompliant_cps|length }} code points are not IDNA 2008 compliant.</p>
-    {% include 'lgr_idn_table_review/_review_cp_report.html' with codepoints=uncompliant_cps %}
+    {% include 'lgr_idn_table_review_icann/_idna2008_cp_report.html' with codepoints=uncompliant_cps %}
 </div>
 </body>
 </HTML>
