@@ -12,9 +12,9 @@ django-celery-beat==2.2.0
 
 # LGR/Unicode modules
 picu==1.4
-munidata==2.3.0
+#munidata==2.3.1
 #picu @ git+https://github.com/icann/picu.git@master
-#munidata @ git+https://github.com/icann/munidata.git@master
+munidata @ git+https://github.com/icann/munidata.git@master
 lgr-core @ git+https://github.com/icann/lgr-core.git@v6.0.1
 
 # Natural sorting implementation
