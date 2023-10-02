@@ -65,13 +65,7 @@ def get_icann_idn_repository_tables():
             continue
         __, lang_script, version = basename.rsplit('.', 1)[0].split('_', 3)
         date = dates.get(url)
-        error = None
-        try:
-            name, data = download_file(IANA_URL + url)
-        except Exception:
-            error = f'Failed to download IDN table: {IANA_URL + url}'
-            if settings.DEBUG:
-                error += f'\n{traceback.format_exc()}'
+        name, data, error = download_idn_table(url)
         idn_table = IANAIdnTable(file=File(data, name=name),
                                  name=os.path.splitext(name)[0],
                                  owner=None,
@@ -80,6 +74,21 @@ def get_icann_idn_repository_tables():
                                  lang_script=lang_script,
                                  version=version)
         yield tlds, idn_table, error
+
+
+def download_idn_table(url):
+    # sometimes download fails so we try it multiple times
+    error = None
+    for _ in range(3):
+        try:
+            error = None
+            name, data = download_file(IANA_URL + url)
+            return name, data, error
+        except Exception:
+            error = f'Failed to download IDN table: {IANA_URL + url}'
+            if settings.DEBUG:
+                error += f'\n{traceback.format_exc()}'
+    return None, None, error
 
 
 def _make_lgr_query(obj, q, logs, multiple_found_query=None):
