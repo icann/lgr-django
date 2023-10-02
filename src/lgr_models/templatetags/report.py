@@ -16,6 +16,9 @@ register = template.Library()
 def display_expiration(report: LGRReport):
     if not report:
         return ''
+    if hasattr(report, 'idnreviewicannreport'):
+        # ICANN reports won't expire
+        return ''
     created_since = datetime.now() - report.created_at.replace(tzinfo=None)
     expiration_in = lgr_settings.report_expiration_delay - created_since.days
     label = 'info'
