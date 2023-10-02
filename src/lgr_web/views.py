@@ -117,7 +117,7 @@ class LabelFileFormsView(LoginRequiredMixin, FormView):
                     error = e
 
             if not valid:
-                writer.writerow([label, format_cp(parsed_label), '-', '-', lgr_exception_to_text(error)])
+                writer.writerow([label, format_cp(parsed_label) or '-', '-', '-', lgr_exception_to_text(error)])
 
         return response
 
