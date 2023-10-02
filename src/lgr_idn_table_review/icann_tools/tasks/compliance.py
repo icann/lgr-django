@@ -43,6 +43,7 @@ class IDNTableIDNA2008ComplianceTask(ICANNTask):
         try:
             context.update({
                 'idn_table': idn_table.name,
+                'idn_table_date': idn_table.date,
                 'idn_table_url': idn_table.download_url()
             })
             idn_table_lgr = idn_table.to_lgr()
