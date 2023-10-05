@@ -28,20 +28,14 @@
         <table class="table table-responsive">
             <tr>
                 <th>{% trans "U-label" %}</th>
+                <th>{% trans "A-label" %}</th>
                 <th>{% trans "Disposition" %}</th>
                 <th>{% trans "Code point sequence" %}</th>
                 <th>&nbsp;</th>
             </tr>
             <tr>
-                <td>{{ result.u_label }}
-                    <br>
-                    <small class="text-muted">
-                      {% if result.conversion_error %}
-                        <u>{% trans 'IDN validation while converting to A-Label failed:' %}</u><br>
-                      {% endif %}
-                      {{ result.a_label }}
-                    </small>
-                </td>
+                <td>{% if result.conversion_error %}-{% else %}{{ result.u_label }}{% endif %}</td>
+                <td>{% if result.conversion_error %}-{% else %}{{ result.a_label }}{% endif %}</td>
                 <td>{{ result.disposition }}</td>
                 <td>{{ result.cp_display_html }}</td>
                 <td>
@@ -56,7 +50,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="4" class="rule-detail-cell">
+                <td colspan="5" class="rule-detail-cell">
                     {% if result.action_idx >= 0 %}
                         {% if result.eligible %}
                             <div class="alert alert-info" role="alert">
@@ -71,51 +65,111 @@
                     </div>
                 </td>
             </tr>
-        </table>
 
         {# collision if this is a LGR set but not an LGR in a set #}
         {% if result.collisions_checked and is_set and not lgr_set or result.collisions_checked and not is_set %}
-
-            {% if result.collisions_error or result.collision %}
-              {% if result.collision_with_tlds %}
-                <h3 class="text-danger"><i class="glyphicon glyphicon-remove"></i>&nbsp;
-                  {% trans "The input label or its variant labels collide with an existing TLD or its variant TLDs." %}
-                </h3>
-              {% else %}
-                <h3 class="text-danger"><i class="glyphicon glyphicon-remove"></i> {% trans "Collision(s) found" %}</h3>
-              {% endif %}
-            {% else %}
-                <h3 class="text-success"><i class="glyphicon glyphicon-ok"></i> {% trans "No collision" %}</h3>
-            {% endif %}
-
-            <table class="table table-responsive">
+            <tr>
+                <td colspan="5" class="rule-detail-cell">
+                    {% if result.collisions_error or result.collision %}
+                      {% if result.collision_with_tlds %}
+                        <h3 class="text-danger"><i class="glyphicon glyphicon-remove"></i>&nbsp;
+                          {% trans "The input label or its variant labels collide with an existing TLD or its variant TLDs." %}
+                        </h3>
+                      {% else %}
+                        <h3 class="text-danger"><i class="glyphicon glyphicon-remove"></i> {% trans "Collision(s) found" %}</h3>
+                      {% endif %}
+                    {% else %}
+                        <h3 class="text-success"><i class="glyphicon glyphicon-ok"></i> {% trans "No collision" %}</h3>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th colspan="5">{% trans "Collision" %}</th>
+            </tr>
+            {% if result.collisions_error %}
                 <tr>
-                    <th colspan="4">{% trans "Collision" %}</th>
+                    <td colspan="5" class="text-danger">{{ result.collisions_error }}</td>
                 </tr>
-                {% if result.collisions_error %}
-                    <tr>
-                        <td colspan="4" class="text-danger">{{ result.collisions_error }}</td>
-                    </tr>
-                {% elif result.collision %}
-                  {% for col in result.collision %}
-                    <tr>
-                        <td>
-                            {{ col.u_label }}
-                            <br>
-                            <small class="text-muted">{{ col.variant_a }}</small>
-                        </td>
-                        <td>{{ col.disposition }}</td>
+            {% elif result.collision %}
+              {% for col in result.collision %}
+                <tr>
+                    <td>{{ col.u_label }}</td>
+                    <td>{{ col.a_label }}</td>
+                    <td>{{ col.disposition }}</td>
+                    <td>
+                        <a href="?label={{ col.input|urlencode }}{% if result.script %}&script={{ result.script }}{% endif %}{% if lgr_object %}&lgr={{ lgr_object.to_tuple }}{% endif %}">
+                            {{ col.cp_display_html }}
+                        </a>
+                    </td>
+                    <td>
+                        {% if col.rules|length %}
+                            <a class="btn btn-xs btn-default" role="button" data-toggle="collapse"
+                               href="#rule-detail-collision-{{ forloop.counter }}"
+                               aria-expanded="false" aria-controls="rule-detail-collision-{{ forloop.counter }}">
+                                {% blocktrans trimmed %}
+                                    Show / hide log
+                                {% endblocktrans %}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="rule-detail-cell">
+                        {% if col.action_idx >= 0 %}
+                        <div class="alert alert-warning" role="alert">
+                            {% blocktrans trimmed with action_idx=col.action_idx action=col.action %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
+                        </div>
+                        {% endif %}
+                        <div class="collapse rule-detail" id="rule-detail-collision-{{ forloop.counter }}">
+                            <textarea style="width: 100%" rows="10" disabled="disabled">{{ col.rules }}</textarea>
+                        </div>
+                    </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5">{% blocktrans %}No collision.{% endblocktrans %}</td>
+                </tr>
+            {% endif %}
+        {% endif %}
 
+        {# Only display variants if label is eligible and no collision for sets #}
+        {% if result.eligible and not result.collisions_error and not result.collision or result.eligible and not is_set %}
+            <tr>
+                <th colspan="5">{% trans "Variant labels" %}{% if result.num_variants %}{% trans " (including original as last)" %}{% endif %}</th>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    {% if result.num_variants %}
+                        {% blocktrans with num_variants=result.num_variants %}{{ num_variants }} variant label(s) generated.{% endblocktrans %}
+                        <br>
+                        {% trans "By disposition: " %} {{ result.summary }}
+                    {% else %}
+                        {% blocktrans %}No variant labels generated.{% endblocktrans %}
+                    {% endif %}
+                </td>
+            </tr>
+
+            {% if result.variants %}
+                {% for v in result.variants %}
+                    <tr>
+                        <td>{{ v.u_label }}</td>
                         <td>
-                            <a href="?label={{ col.input|urlencode }}{% if result.script %}&script={{ result.script }}{% endif %}{% if lgr_object %}&lgr={{ lgr_object.to_tuple }}{% endif %}">
-                                {{ col.cp_display_html }}
+                              {% if v.conversion_error %}
+                                <u>{% trans 'IDN validation while converting to A-Label failed:' %}</u><br>
+                              {% endif %}
+                              {{ v.a_label }}
+                        </td>
+                        <td>{{ v.disposition }}</td>
+                        <td>
+                            <a href="?label={{ v.cp_input|urlencode }}{% if result.script %}&script={{ result.script }}{% endif %}{% if lgr_object %}&lgr={{ lgr_object.to_tuple }}{% endif %}">
+                                {{ v.cp_display_html }}
                             </a>
                         </td>
                         <td>
-                            {% if col.rules|length %}
-                                <a class="btn btn-xs btn-default" role="button" data-toggle="collapse"
-                                   href="#rule-detail-collision-{{ forloop.counter }}"
-                                   aria-expanded="false" aria-controls="rule-detail-collision-{{ forloop.counter }}">
+                            {% if v.logs|length %}
+                                <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-v-{{ forloop.counter }}"
+                                aria-expanded="false" aria-controls="rule-detail-v-{{ forloop.counter }}">
                                     {% blocktrans trimmed %}
                                         Show / hide log
                                     {% endblocktrans %}
@@ -124,101 +178,32 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="4" class="rule-detail-cell">
-                            {% if col.action_idx >= 0 %}
-                            <div class="alert alert-warning" role="alert">
-                                {% blocktrans trimmed with action_idx=col.action_idx action=col.action %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
+                        <td colspan="5" class="rule-detail-cell">
+                            {% if v.action_idx >= 0 %}
+                            <div class="alert alert-info" role="alert">
+                                {% blocktrans trimmed with action_idx=v.action_idx action=v.action %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
                             </div>
                             {% endif %}
-                            <div class="collapse rule-detail" id="rule-detail-collision-{{ forloop.counter }}">
-                                <textarea style="width: 100%" rows="10" disabled="disabled">{{ col.rules }}</textarea>
+                            <div class="collapse rule-detail" id="rule-detail-v-{{ forloop.counter }}">
+                                <textarea style="width: 100%" rows="10" disabled="disabled">{{ v.logs }}</textarea>
                             </div>
                         </td>
                     </tr>
-                  {% endfor %}
-                {% else %}
+                {% endfor %}
+            {% endif %}
+            {% if result.csv_available %}
+                {% if not is_set or lgr_set %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
                     <tr>
-                        <td colspan="4">{% blocktrans %}No collision.{% endblocktrans %}</td>
+                        <td colspan="5" class="bg-warning">
+                            {% blocktrans trimmed %}
+                                Too many variant labels to be displayed in the browser. You can download the whole results in .csv.
+                            {% endblocktrans %}
+                        </td>
                     </tr>
                 {% endif %}
-            </table>
+            {% endif %}
         {% endif %}
-
-        {# Only display variants if label is eligible and no collision for sets #}
-        {% if result.eligible and not result.collisions_error and not result.collision or result.eligible and not is_set %}
-            <table class="table table-responsive">
-                <tr>
-                    <th colspan="4">{% trans "Variant labels" %}{% if result.num_variants %}{% trans " (including original as last)" %}{% endif %}</th>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        {% if result.num_variants %}
-                            {% blocktrans with num_variants=result.num_variants %}{{ num_variants }} variant label(s) generated.{% endblocktrans %}
-                            <br>
-                            {% trans "By disposition: " %} {{ result.summary }}
-                        {% else %}
-                            {% blocktrans %}No variant labels generated.{% endblocktrans %}
-                        {% endif %}
-                    </td>
-                </tr>
-
-                {% if result.variants %}
-                    {% for v in result.variants %}
-                        <tr>
-                            <td>
-                                {{ v.u_label }}
-                                <br>
-                                <small class="text-muted">
-                                  {% if v.conversion_error %}
-                                    <u>{% trans 'IDN validation while converting to A-Label failed:' %}</u><br>
-                                  {% endif %}
-                                  {{ v.a_label }}
-                                </small>
-                            </td>
-                            <td>{{ v.disposition }}</td>
-                            <td>
-                                <a href="?label={{ v.cp_input|urlencode }}{% if result.script %}&script={{ result.script }}{% endif %}{% if lgr_object %}&lgr={{ lgr_object.to_tuple }}{% endif %}">
-                                    {{ v.cp_display_html }}
-                                </a>
-                            </td>
-                            <td>
-                                {% if v.logs|length %}
-                                    <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#rule-detail-v-{{ forloop.counter }}"
-                                    aria-expanded="false" aria-controls="rule-detail-v-{{ forloop.counter }}">
-                                        {% blocktrans trimmed %}
-                                            Show / hide log
-                                        {% endblocktrans %}
-                                    </a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="4" class="rule-detail-cell">
-                                {% if v.action_idx >= 0 %}
-                                <div class="alert alert-info" role="alert">
-                                    {% blocktrans trimmed with action_idx=v.action_idx action=v.action %}<b>[Action index: {{ action_idx }}]</b> {{ action }}{% endblocktrans %}
-                                </div>
-                                {% endif %}
-                                <div class="collapse rule-detail" id="rule-detail-v-{{ forloop.counter }}">
-                                    <textarea style="width: 100%" rows="10" disabled="disabled">{{ v.logs }}</textarea>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% endif %}
-                {% if result.csv_available %}
-                    {% if not is_set or lgr_set %} {# TODO Remove download at the moment as we cannot retrieve label file here #}
-                        <tr>
-                            <td colspan="4" class="bg-warning">
-                                {% blocktrans trimmed %}
-                                    Too many variant labels to be displayed in the browser. You can download the whole results in .csv.
-                                {% endblocktrans %}
-                            </td>
-                        </tr>
-                    {% endif %}
-                {% endif %}
-            </table>
-        {% endif %}
+        </table>
 
         {% if result.csv_available %}
             {# TODO: Need to pass set_labels along #}

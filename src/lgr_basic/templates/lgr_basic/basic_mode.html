@@ -149,19 +149,22 @@
 
                 <div id="results">
                     {% for result in results %}
-                        {% if results|length > 0 %}
-                            {% if forloop.first %}
-                                <br>
+                        {% if forloop.first %}
+                            <br>
+                        {% endif %}
+                        <div class="panel panel-{% if not result.eligible or result.launch_abort %}danger{% elif result.launched_as_task %}warning{% else %}success{% endif %}">
+                          <div class="panel-heading">
+                             {% if result.conversion_error %}
+                                {% trans 'IDN validation while converting to A-Label failed:' %}<br>
+                                <small class="text-muted">{{ result.a_label }}</small>
+                            {% else %}
+                                {{ result.u_label }}
                             {% endif %}
-                            <div class="panel panel-{% if not result.eligible or result.launch_abort %}danger{% elif result.launched_as_task %}warning{% else %}success{% endif %}">
-                              <div class="panel-heading">{{ result.u_label }}</div>
-                              <div class="panel-body">
-                        {% endif %}
-                        {% include "lgr_validator/_validated_results.html" with result=result lgr_object=lgr_object index=forloop.counter only %}
-                        {% if results|length > 0 %}
-                              </div>
                           </div>
-                        {% endif %}
+                          <div class="panel-body">
+                            {% include "lgr_validator/_validated_results.html" with result=result lgr_object=lgr_object index=forloop.counter only %}
+                          </div>
+                      </div>
                     {% endfor %}
                 </div>
 
@@ -217,7 +220,6 @@
         }
 
         function buttonValidateEnabled() {
-            const isCheckForCollision = isFormUploadActivated === true || ($('#check-for-collision').is(':checked') && $('.label-text').length > 1);
             let emptyLabel = false;
 
             if (isFormUploadActivated === false) {
