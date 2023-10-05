@@ -114,10 +114,7 @@ class BasicModeView(LoginRequiredMixin, FormView):
                         # task has not been launched as there is only one label,
                         # but it should finally be computed in background
                         launch_collision_task()
-                    if res['conversion_error']:
-                        messages.add_message(self.request, messages.ERROR, res['a_label'])
-                    else:
-                        results.append(res)
+                    results.append(res)
                 except UnicodeError as ex:
                     messages.add_message(self.request, messages.ERROR, lgr_exception_to_text(ex))
                 except NeedAsyncProcess:

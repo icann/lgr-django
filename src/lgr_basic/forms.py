@@ -33,7 +33,7 @@ class ValidateLabelSimpleForm(forms.Form):
                                               widget=LgrGroupedListSelect2(url='ref-lgr-autocomplete',
                                                                            attrs={'data-allow-clear': 'false'}))
 
-    labels = forms.CharField(label='', required=False,
+    labels = forms.CharField(label='', required=False, strip=False,
                              widget=forms.TextInput(attrs={'name': '',
                                                            'class': 'form-label form-control',
                                                            'onkeyup': 'buttonValidateEnabled()',
@@ -78,15 +78,8 @@ class ValidateLabelSimpleForm(forms.Form):
         udata = get_db_by_version(settings.SUPPORTED_UNICODE_VERSION)
         value = self.cleaned_data['labels']
         labels = list()
-        processed = set()
-        for label in value.split(';'):
+        for label in {v: '' for v in value.split(';')}.keys():  # dict to remove duplicates but keep order
             if not label:
                 continue
-            if label in processed:
-                continue
-            processed.add(label)
-            try:
-                labels.append(parse_label_input(label, idna_decoder=udata.idna_decode_label))
-            except ValueError as e:
-                raise ValidationError(lgr_exception_to_text(e))
+            labels.append(parse_label_input(label, idna_decoder=udata.idna_decode_label, keep_spaces=True))
         return labels
