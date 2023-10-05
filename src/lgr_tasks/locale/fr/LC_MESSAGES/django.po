@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-19 19:42+0000\n"
+"POT-Creation-Date: 2023-10-05 15:01+0000\n"
 "PO-Revision-Date: 2023-07-07 22:27-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -67,10 +67,6 @@ msgstr "Expiré"
 msgid "Are you sure you want to cancel this task?"
 msgstr "Êtes vous sur de vouloir supprimer cette tâche ?"
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:114
-msgid "The report"
-msgstr "Le rapport"
-
 #: src/lgr_tasks/templates/lgr_tasks/process_list.html:120
 msgid "When you delete a task, the corresponding report is not deleted"
 msgstr ""
@@ -114,6 +110,9 @@ msgstr "Échec lors de la récupération de la liste de tâches terminées."
 #: src/lgr_tasks/views.py:77
 msgid "Completed tasks have been cleaned."
 msgstr "La liste de tâches terminées a été nettoyée."
+
+#~ msgid "The report"
+#~ msgstr "Le rapport"
 
 #, python-format
 #~ msgid "Unable to download file from report %(pk)s"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-19 19:42+0000\n"
+"POT-Creation-Date: 2023-10-05 15:01+0000\n"
 "PO-Revision-Date: 2023-07-07 22:18-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -27,37 +27,37 @@ msgid "The following files contains your IDN review reports."
 msgstr ""
 "Les fichiers suivants contiennent les rapport de vérification des Tables IDN."
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:21
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:23
 msgid "File"
 msgstr "Fichier"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:22
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:24
 msgid "Action"
 msgstr "Action"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:41
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:45
 #, python-format
 msgid "Are you sure you want to delete report %(report.filename)s?"
 msgstr "Êtes-vous sûr(e) de vouloir supprimer le rapport %(report.filename)s ?"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:50
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:54
 msgid "Back"
 msgstr "Précédent"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:55
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:59
 msgid "Wait until full report is completed for the file to be valid"
 msgstr ""
 "Veuillez attendre que le rapport soit complet pour que le fichier soit valide"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:57
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:61
 msgid "Get the zip file containing all generated reports"
 msgstr "Télécharger le fichier zip contenant tous les rapports générés"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:62
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:66
 msgid "Download all"
 msgstr "Télécharger tout"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:69
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:73
 msgid "Summary"
 msgstr "Résumé"
 

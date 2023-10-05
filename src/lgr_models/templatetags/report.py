@@ -34,6 +34,14 @@ def display_expiration(report: LGRReport):
     return mark_safe(expiration)
 
 
+@register.filter
+def display_expiration_with_prefix(report: LGRReport):
+    exp_text = display_expiration(report)
+    if not exp_text:
+        return ''
+    return mark_safe(_('The report ') + exp_text.lower())
+
+
 @register.simple_tag
 def expiration_warning():
     return '%s %s %s%s' % (_('These files would be cleaned up after'),
