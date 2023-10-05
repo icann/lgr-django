@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 15:01+0000\n"
-"PO-Revision-Date: 2022-10-13 11:59-0400\n"
+"POT-Creation-Date: 2023-10-05 20:22+0000\n"
+"PO-Revision-Date: 2023-10-05 16:23-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,17 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
-#: src/lgr_basic/forms.py:40
+#: src/lgr_basic/forms.py:38
 msgid "Label"
 msgstr "Label"
 
-#: src/lgr_basic/forms.py:64 src/lgr_basic/forms.py:65
+#: src/lgr_basic/forms.py:62 src/lgr_basic/forms.py:63
 msgid "Required"
 msgstr "Requis"
 
-#: src/lgr_basic/forms.py:69 src/lgr_basic/forms.py:70
+#: src/lgr_basic/forms.py:67 src/lgr_basic/forms.py:68
 msgid "Unknown error, please report"
 msgstr "Erreur inconnue, reportez l'erreur s'il vous plait"
 
@@ -127,11 +127,15 @@ msgstr ""
 msgid "Validate"
 msgstr "Valider"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:170
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:158
+msgid "IDN validation while converting to A-Label failed:"
+msgstr "Échec de la validation IDN lors de la conversion en A-Label:"
+
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:173
 msgid "Your saved results"
 msgstr "Vos résultats sauvegardés"
 
-#: src/lgr_basic/templates/lgr_basic/basic_mode.html:171
+#: src/lgr_basic/templates/lgr_basic/basic_mode.html:174
 msgid "The following files contains your tools computation results."
 msgstr ""
 "Ces fichiers contiennent les résultats des calculs fournis par les outils."
