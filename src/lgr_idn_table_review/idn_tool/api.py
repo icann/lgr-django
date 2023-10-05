@@ -94,10 +94,3 @@ class LGRIdnReviewApi(LGRReportStorage):
     def delete_report(self, report_id):
         self.storage_delete_report(report_id)
         self.get_lgrs_in_report(report_id).delete()
-
-
-class LGRIdnRefReviewApi(LGRReportStorage):
-    lgr_model = IdnRefTable
-
-    def lgr_queryset(self):
-        return self.lgr_model.objects.filter(owner=self.user)
