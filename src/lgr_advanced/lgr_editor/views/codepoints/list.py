@@ -16,7 +16,7 @@ from django.views.generic.base import View
 
 from lgr.char import RangeChar
 from lgr.exceptions import LGRException, LGRFormatException, CharInvalidContextRule
-from lgr.utils import format_cp
+from lgr.utils import format_cp, is_idna_valid_cp_or_sequence
 from lgr.validate import check_symmetry, check_transitivity
 from lgr_advanced.lgr_editor.forms import (AddCodepointForm,
                                            EditCodepointsForm)
@@ -197,11 +197,7 @@ class ListCodePointsJsonView(LGRHandlingBaseMixin, View):
             repertoire = []
             for char in self.lgr.repertoire:
                 actions = []
-                prop = ''
-                for c in char.cp:
-                    prop = udata.get_idna_prop(c)
-                    if prop in ['UNASSIGNED', 'DISALLOWED']:
-                        break
+                is_idna_valid, prop = is_idna_valid_cp_or_sequence(char.cp, udata)
                 cp_slug = cp_to_slug(char.cp)
                 kwargs = {'lgr_pk': self.lgr_pk, 'codepoint_id': cp_slug, 'model': self.lgr_object.model_name}
                 cp_view_url = reverse('codepoint_view', kwargs=kwargs)
@@ -216,12 +212,12 @@ class ListCodePointsJsonView(LGRHandlingBaseMixin, View):
                     'codepoint_id': cp_slug,
                     'cp_disp': render_char(char),
                     'comment': char.comment or '',
-                    'name': render_name(char, udata) or prop,
+                    'name': render_name(char, udata) or ' '.join(prop.values()),
                     'tags': char.tags,
                     'variant_number': len(list(char.get_variants())),
                     'is_range': is_range,
                     'actions': actions,
-                    'idna_property': prop
+                    'idna_valid': is_idna_valid
                 })
             self.lgr_object.set_repertoire_cache(repertoire)
 

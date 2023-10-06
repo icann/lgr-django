@@ -18,7 +18,7 @@ from django.views.generic.base import TemplateView, View
 
 from lgr.char import RangeChar
 from lgr.exceptions import LGRException, NotInLGR
-from lgr.utils import format_cp
+from lgr.utils import format_cp, is_idna_valid_cp_or_sequence
 from lgr_advanced.lgr_editor.forms import (AddVariantForm,
                                            CodepointForm,
                                            CodepointVariantFormSet)
@@ -110,16 +110,9 @@ class CodePointViewMixin(CodePointMixin):
             'cp_references_json': json.dumps(cp_references),
             'cp_disp': render_char(char),
             'name': render_name(char, udata),
-            'age': render_age(char, udata) if self.is_valid(char, udata) else 'invalid',
+            'age': render_age(char, udata) if is_idna_valid_cp_or_sequence(char.cp, udata)[0] else 'invalid',
         })
         return ctx
-
-    def is_valid(self, char, udata):
-        for c in char.cp:
-            prop = udata.get_idna_prop(c)
-            if prop in ['UNASSIGNED', 'DISALLOWED']:
-                return False
-        return True
 
 
 class CodePointView(LGRHandlingBaseMixin, CodePointViewMixin, TemplateView):

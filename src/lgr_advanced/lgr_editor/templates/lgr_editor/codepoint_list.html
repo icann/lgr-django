@@ -205,7 +205,7 @@
                 "fnCreatedRow": function (row, data, idx) {
                     // Add ids on rows to be able to select them on reload after post
                     $(row).attr('id', 'cp-' + data['codepoint_id'])
-                    if( ['UNASSIGNED', 'INVALID'].includes(data['idna_property'])) {
+                    if(!data['idna_valid']) {
                         $(row).addClass('invalid');
                     }
                 },
