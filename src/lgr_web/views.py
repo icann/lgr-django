@@ -9,10 +9,11 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, FormView
 
-from lgr.tools.utils import parse_codepoint_input, read_labels
-from lgr.utils import format_cp, cp_to_ulabel
+from lgr.tools.utils import read_labels
+from lgr.utils import format_cp, cp_to_ulabel, is_idna_valid_cp_or_sequence
 from lgr_advanced.api import LabelInfo
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_utils import unidb
@@ -65,9 +66,19 @@ class LabelFormsView(LoginRequiredMixin, FormView):
         ctx['file_form'] = LabelFileFormsForm(prefix='labels-form')
         if self.label:
             try:
+                ulabel = cp_to_ulabel(self.label)
+                ulabel.encode('utf-8')  # ensure encode won't fail
+                if not is_idna_valid_cp_or_sequence(self.label, self.udata)[0]:
+                    # FIXME: labels are parsed with ICU that implements UTS#46, so we may miss some invalid cp
+                    ctx['u_label'] = '-'
+                    ctx['a_label'] = '-'
+                    messages.add_message(self.request, messages.ERROR,
+                                         _('%(label)s is invalid as it contains disallowed characters.' % {
+                                             'label': ulabel
+                                         }))
+                    return ctx
                 ctx['cp_list'] = format_cp(self.label)
-                ctx['u_label'] = cp_to_ulabel(self.label)
-                ctx['u_label'].encode('utf-8')  # ensure encode won't fail
+                ctx['u_label'] = ulabel
                 ctx['a_label'] = self.udata.idna_encode_label(ctx['u_label'])
             except UnicodeError as ex:
                 ctx['u_label'] = '-'
@@ -104,6 +115,12 @@ class LabelFileFormsView(LoginRequiredMixin, FormView):
         writer.writerow(['Input', 'Code point sequence', 'U-label', 'A-label', 'Note'])
         for label, parsed_label, valid, error in read_labels(label_info.labels, unidb=udata, as_cp=True,
                                                              return_exceptions=True):
+            # FIXME: read_labels parse labels with ICU that implements UTS#46, so we may miss some invalid cp
+            if not is_idna_valid_cp_or_sequence(parsed_label, udata)[0]:
+                valid = False
+                error = _('%(label)s is invalid as it contains disallowed characters.' % {
+                    'label': label
+                })
             if valid:
                 try:
                     ulabel = cp_to_ulabel(parsed_label)
