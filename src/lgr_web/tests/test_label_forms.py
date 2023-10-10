@@ -49,4 +49,4 @@ class TestLabelForms(LgrWebClientTestBase):
         self.assertEqual(response.content.decode('utf-8-sig'), 'Input,Code point sequence,U-label,A-label,Note\r\n'
                                                                '-invalid,U+002D U+0069 U+006E U+0076 U+0061 U+006C U+0069 U+0064,-,-,-invalid is invalid due to hypen restrictions in the RFC5891 as it starts with a hyphen-minus.\r\n'
                                                                'xn--abcd,U+0078 U+006E U+002D U+002D U+0061 U+0062 U+0063 U+0064,-,-,xn--abcd is invalid due to invalid Punycode.\r\n'
-                                                               'ét é,U+00E9 U+0074 U+0020 U+00E9,-,-,Label \'ét é\' contains spaces that are not PVALID for IDNA2008\r\n')
+                                                               'ét é,U+00E9 U+0074 U+0020 U+00E9,-,-,ét é is invalid as it contains disallowed characters.\r\n')
