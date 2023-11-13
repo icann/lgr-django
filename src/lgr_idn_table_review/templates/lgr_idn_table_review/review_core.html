@@ -25,7 +25,11 @@
 
 {% block review_repertoire %}
     <h1><a name="repertoire">Repertoire</a></h1>
-    {% include 'lgr_idn_table_review/_review_cp_report.html' with codepoints=repertoire %}
+    <p>{{ repertoire.pvalid_cp_nbr }} code point{{ repertoire.pvalid_cp_nbr|pluralize:" is,s are" }} PVALID.</p>
+    {% if repertoire.invalid_cp_nbr > 0 %}
+        <p>{{ repertoire.invalid_cp_nbr }} code point{{ repertoire.invalid_cp_nbr|pluralize:" is,s are" }} <b>not</b> PVALID.</p>
+    {% endif %}
+    {% include 'lgr_idn_table_review/_review_cp_report.html' with codepoints=repertoire.report %}
 {% endblock review_repertoire %}
 
 {% block review_variant_sets %}

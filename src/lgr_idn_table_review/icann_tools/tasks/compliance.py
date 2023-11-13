@@ -47,9 +47,9 @@ class IDNTableIDNA2008ComplianceTask(ICANNTask):
                 'idn_table_url': idn_table.download_url()
             })
             idn_table_lgr = idn_table.to_lgr()
-            context['uncompliant_cps'] = check_idna2008_compliance(idn_table_lgr)
+            context['compliance_report'] = check_idna2008_compliance(idn_table_lgr)
             html_report = render_to_string('lgr_idn_table_review_icann/idna2008_compliance.html', context)
-            generate_report = len(context['uncompliant_cps']) > 0
+            generate_report = context['compliance_report']['contains_non_compliant']
             if not generate_report:
                 self.summary_context['idna_compliance_valid'] += len(tlds)
         except Exception:
