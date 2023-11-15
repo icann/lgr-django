@@ -1,5 +1,24 @@
 # Changelog for lgr-django
 
+## 6.1.0 (2023-11-15)
+### New features
+- Add new IDNA 2008 compliance report tool
+
+### Improvements
+- Change label form output format
+- Display reports expiration beside the reports
+- Retry on IDN table download failure
+- Label review:
+  - only display an error on IDNA 2008 non-compliance
+  - display A-label in another column
+
+### Fixes
+- Enable review for all IDN tables instead of a restricted set
+- Stop failing for some exceptions in IDN table reviews
+- Keep invalid code points in IDN table reviews
+- Do not clean ICANN reports
+- Correctly check IDNA 2008 compliance in label forms tool
+
 ## 6.0.0 (2023-08-04)
 ### New features
 - Enable IDN review with RFC Core Requirements
