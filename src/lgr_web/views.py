@@ -66,6 +66,7 @@ class LabelFormsView(LoginRequiredMixin, FormView):
         ctx['file_form'] = LabelFileFormsForm(prefix='labels-form')
         if self.label:
             try:
+                ctx['cp_list'] = format_cp(self.label)
                 ulabel = cp_to_ulabel(self.label)
                 ulabel.encode('utf-8')  # ensure encode won't fail
                 if not is_idna_valid_cp_or_sequence(self.label, self.udata)[0]:
@@ -77,7 +78,6 @@ class LabelFormsView(LoginRequiredMixin, FormView):
                                              'label': ulabel
                                          }))
                     return ctx
-                ctx['cp_list'] = format_cp(self.label)
                 ctx['u_label'] = ulabel
                 ctx['a_label'] = self.udata.idna_encode_label(ctx['u_label'])
             except UnicodeError as ex:
