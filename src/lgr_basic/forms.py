@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from lgr.tools.utils import parse_label_input
 from lgr_advanced.lgr_editor.forms.fields import LABEL_FILE_HELP, LABEL_INPUT_HELP
+from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_utils.unidb import get_db_by_version
 
@@ -79,5 +80,6 @@ class ValidateLabelSimpleForm(forms.Form):
         for label in {v: '' for v in value.split(';')}.keys():  # dict to remove duplicates but keep order
             if not label:
                 continue
-            labels.append(parse_label_input(label, idna_decoder=udata.idna_decode_label, keep_spaces=True))
+            parsed_label, _, _ = parse_label_input(label, idna_decoder=udata.idna_decode_label, keep_spaces=True)
+            labels.append(parsed_label)
         return labels

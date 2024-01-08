@@ -37,8 +37,10 @@ class ValidateLabelForm(forms.Form):
         kwargs = {}
         if self.idna_decoder:
             kwargs['idna_decoder'] = self.idna_decoder
-        try:
-            value = parse_label_input(value, **kwargs)
-        except ValueError as e:
-            raise ValidationError(lgr_exception_to_text(e))
-        return value
+        parsed_label, valid, ex = parse_label_input(value, **kwargs)
+        if not valid:
+            error = _('Invalid label')
+            if ex:
+                error = lgr_exception_to_text(ex)
+            raise ValidationError(error)
+        return parsed_label

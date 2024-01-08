@@ -18,7 +18,8 @@ class LabelFormsForm(forms.Form):
     def clean(self):
         label = self.cleaned_data['label']
         udata = unidb.manager.get_db_by_version(settings.SUPPORTED_UNICODE_VERSION)
-        self.cleaned_data['label'] = parse_label_input(label, idna_decoder=udata.idna_decode_label, keep_spaces=True)
+        self.cleaned_data['label'], _, _ = parse_label_input(label, idna_decoder=udata.idna_decode_label,
+                                                             keep_spaces=True)
 
         return self.cleaned_data
 
