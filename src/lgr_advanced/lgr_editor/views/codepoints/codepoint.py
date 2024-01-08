@@ -51,7 +51,7 @@ class CodePointViewMixin(CodePointMixin):
                 'slug': var_to_slug(v),
                 'cp_disp': render_char(v),
                 'name': render_name(v, udata),
-                'age': render_age(v, udata) if self.is_valid(v, udata) else 'invalid',
+                'age': render_age(v, udata) if is_idna_valid_cp_or_sequence(v.cp, udata)[0] else 'invalid',
                 'when': v.when,
                 'not_when': v.not_when,
                 'type': v.type,
