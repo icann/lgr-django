@@ -1,5 +1,14 @@
 # Changelog for lgr-django
 
+## 6.1.1 (2024-02-15)
+
+### Improvements
+- Always display codepoints list in label form
+- Avoid exception when parsing IDNA invalid labels
+
+### Fixes
+- Fix codepoint view when the codepoint has variants
+
 ## 6.1.0 (2023-11-15)
 ### New features
 - Add new IDNA 2008 compliance report tool
