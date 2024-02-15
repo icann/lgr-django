@@ -1,5 +1,5 @@
 # Core stuff
-Django==3.1.14
+Django==3.2.24
 django-widget-tweaks==1.4.8
 celery[redis]==5.2.3
 django-redis-cache==3.0.0
