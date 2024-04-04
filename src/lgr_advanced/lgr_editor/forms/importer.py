@@ -6,6 +6,7 @@ from django.core import validators
 from django.forms.utils import ErrorList
 from django.utils.translation import ugettext_lazy as _
 
+from lgr_utils.forms import MultipleFileField
 from .fields import FILE_FIELD_ENCODING_HELP, ValidatingRepertoire
 
 
@@ -33,10 +34,9 @@ class CreateLGRForm(NewLGRForm):
 
 
 class ImportLGRForm(NewLGRForm):
-    file = forms.FileField(label=_("Select file(s)"), required=True,
-                           help_text=f"{_('If you select more than one file, this will create a LGR set.')} "
-                                     f"{FILE_FIELD_ENCODING_HELP}",
-                           widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    file = MultipleFileField(label=_("Select file(s)"), required=True,
+                             help_text=f"{_('If you select more than one file, this will create a LGR set.')} "
+                                       f"{FILE_FIELD_ENCODING_HELP}")
     set_name = forms.CharField(label=_("LGR set name"),
                                required=False,
                                # TODO should catch that to get a valid LGR name

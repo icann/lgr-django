@@ -274,6 +274,9 @@ STATICFILES_DIRS = (
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
 ##### LGR Toolset Project-specific settings #####
 # Where the XML files are stored on the filesystem
 # For the repertoires
