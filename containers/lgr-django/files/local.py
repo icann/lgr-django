@@ -93,9 +93,9 @@ DEFAULT_FROM_EMAIL = os.environ.get('lgrEmail')
 ##### /e-mail settings #####
 
 ##### LGR Toolset Project-specific settings #####
-SUPPORTED_UNICODE_VERSION = '12.0.0'
+SUPPORTED_UNICODE_VERSION = '15.1.0'
 
-DEFAULT_UNICODE_VERSION = '12.0.0'
+DEFAULT_UNICODE_VERSION = '15.1.0'
 
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'
@@ -107,10 +107,10 @@ DEFAULT_UNICODE_VERSION = '12.0.0'
 # See picu.loader.KNOWN_ICU_VERSIONS
 
 UNICODE_DATABASES = {
-    '12.0.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.64',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.64',
-        'version_tag': 64,
+    '15.1.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.74',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.74',
+        'version_tag': 74,
     }
 }
 ##### /LGR Toolset Project-specific settings #####
