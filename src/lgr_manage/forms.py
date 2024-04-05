@@ -9,13 +9,13 @@ from django.utils.translation import ugettext_lazy as _
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
 from lgr_models.models.lgr import RzLgr, RzLgrMember, RefLgr, MSR, IDNARepertoire, RefLgrMember
 from lgr_models.models.settings import LGRSettings
-from lgr_utils.forms import MultipleFileField
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 
 class RzLgrCreateForm(forms.ModelForm):
-    repository = MultipleFileField(label=_("LGR file(s)"), required=True,
-                                   help_text=FILE_FIELD_ENCODING_HELP)
+    repository = forms.FileField(label=_("LGR file(s)"), required=True,
+                                 help_text=FILE_FIELD_ENCODING_HELP,
+                                 widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta:
         model = RzLgr
@@ -96,8 +96,9 @@ class RefLgrMemberUpdateForm(forms.ModelForm):
 
 
 class RefLgrCreateForm(forms.ModelForm):
-    members = MultipleFileField(label=_("Common Reference LGR member files"), required=True,
-                                help_text=FILE_FIELD_ENCODING_HELP)
+    members = forms.FileField(label=_("Common Reference LGR member files"), required=True,
+                              help_text=FILE_FIELD_ENCODING_HELP,
+                              widget=forms.ClearableFileInput(attrs={'multiple': True}))
 
     class Meta:
         model = RefLgr
