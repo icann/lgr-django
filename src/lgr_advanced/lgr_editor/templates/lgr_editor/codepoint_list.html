@@ -185,7 +185,7 @@
                             if (tmp_lgr) {
                                 let url = '{% url "delete_lgr" lgr_pk=42 %}'.replace('42', tmp_lgr);
                                 $.ajax({
-                                    type: "GET",
+                                    type: "POST",
                                     url: url
                                 });
                             }

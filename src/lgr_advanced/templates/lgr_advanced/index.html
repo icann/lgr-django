@@ -34,13 +34,18 @@
                     <ul>
                         {% for lgr in local_lgrs.list %}
                             <li>
-                                <a href="{% url 'codepoint_list' lgr_pk=lgr.pk model=lgr.model_name %}">
-                                    {% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}
-                                </a>
-                                <a href="{% url 'delete_lgr' lgr.pk %}" class="delete_lgr confirm-prompt"
-                                   data-confirmation-prompt="{% blocktrans with lgr_name=lgr.name %}Are you sure you want to delete LGR {{ lgr_name }}?{% endblocktrans %}">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </a>
+                                <form method="post"
+                                      action="{% url 'delete_lgr' lgr.pk %}">
+                                    {% csrf_token %}
+                                    <a href="{% url 'codepoint_list' lgr_pk=lgr.pk model=lgr.model_name %}">
+                                        {% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}
+                                    </a>
+                                    <button type="submit"
+                                            class="delete_lgr confirm-prompt btn-link"
+                                            data-confirmation-prompt="{% blocktrans with lgr_name=lgr.name %}Are you sure you want to delete LGR {{ lgr_name }}?{% endblocktrans %}">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                </form>
                             </li>
                         {% endfor %}
                     </ul>
@@ -49,14 +54,19 @@
                     <ul>
                         {% for lgr in local_lgrs.list %}
                             <li>
-                                <a href="{% url 'codepoint_list' lgr_pk=lgr.pk model=lgr.model_name %}">
-                                    {% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}
-                                </a>
-                                <a href="#{{lgr.name}}" data-toggle="collapse" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-th-list"></i>&nbsp;{% blocktrans %}View embedded LGRs{% endblocktrans %}</a>
-                                <a href="{% url 'delete_lgr' lgr.pk %}" class="delete_lgr confirm-prompt"
-                                   data-confirmation-prompt="{% blocktrans with lgr_name=lgr.name %}Are you sure you want to delete LGR {{ lgr_name }}?{% endblocktrans %}">
-                                    <i class="glyphicon glyphicon-trash"></i>
-                                </a>
+                                <form method="post"
+                                      action="{% url 'delete_lgr' lgr.pk %}">
+                                    {% csrf_token %}
+                                    <a href="{% url 'codepoint_list' lgr_pk=lgr.pk model=lgr.model_name %}">
+                                        {% blocktrans with lgr_name=lgr.name %}View {{ lgr_name }}{% endblocktrans %}
+                                    </a>
+                                    <a href="#{{lgr.name}}" data-toggle="collapse" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-th-list"></i>&nbsp;{% blocktrans %}View embedded LGRs{% endblocktrans %}</a>
+                                    <button type="submit"
+                                            class="delete_lgr confirm-prompt btn-link"
+                                            data-confirmation-prompt="{% blocktrans with lgr_name=lgr.name %}Are you sure you want to delete LGR {{ lgr_name }}?{% endblocktrans %}">
+                                        <i class="glyphicon glyphicon-trash"></i>
+                                    </button>
+                                </form>
                             </li>
 
                             <div class="panel-group">

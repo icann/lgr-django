@@ -185,7 +185,7 @@ class DeleteReferenceView(LGREditMixin, View):
     Delete a reference from an LGR.
     """
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         ref_id = self.kwargs['ref_id']
         logger.debug("Delete reference %s'", ref_id)
 

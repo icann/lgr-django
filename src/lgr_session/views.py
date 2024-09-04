@@ -56,8 +56,7 @@ class DownloadReportFileView(LGRSessionView):
 
 class DeleteReportFileView(LGRSessionView):
 
-    # TODO make that a post
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         if self.pk:
             self.session.storage_delete_report_file(self.pk)
         if self.report_id:

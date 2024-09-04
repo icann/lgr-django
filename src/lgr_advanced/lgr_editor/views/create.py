@@ -223,7 +223,6 @@ class DeleteLGRView(LGRViewMixin, View):
         super().setup(request, *args, **kwargs)
         self.lgr_pk = self.kwargs['lgr_pk']
 
-    # TODO make that a post
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         LgrModel.get_object(request.user, self.lgr_pk).delete()
         return redirect('lgr_advanced_mode')

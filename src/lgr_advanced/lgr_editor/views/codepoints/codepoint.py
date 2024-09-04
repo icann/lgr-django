@@ -380,8 +380,7 @@ class CodePointDeleteView(LGREditMixin, CodePointMixin, View):
     Delete a codepoint from an LGR.
     """
 
-    # TODO - only accept POST request
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         char = self.lgr.get_char(self.codepoint)
 
         try:
@@ -403,8 +402,7 @@ class VariantDeleteView(LGREditMixin, CodePointMixin, View):
     Delete a variant of a codepoint from an LGR.
     """
 
-    # TODO - only accept POST request
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         var_slug = self.kwargs['var_slug']
         var_cp, var_when, var_not_when = slug_to_var(var_slug)
 

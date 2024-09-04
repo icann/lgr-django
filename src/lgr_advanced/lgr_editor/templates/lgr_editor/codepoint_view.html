@@ -8,6 +8,10 @@
     .tag-field .control-label {
         width: 100%;
     }
+    .btn-link:hover {
+        text-decoration: none;
+        color: #333;
+    }
 
     </style>
 {% endblock %}
@@ -94,7 +98,17 @@
                         {% if not is_set %}
                         <td>
                             <ul class="list-unstyled">
-                                <li><a class="btn btn-xs confirm-prompt" data-confirmation-prompt="{% trans 'Are you sure you want to delete this variant?' %}" href="{% url 'variant_delete' lgr_pk=lgr_pk codepoint_id=cp var_slug=char.to_slug %}">{% trans 'Delete variant' %}</a></li>
+                                <li>
+                                    <form method="post"
+                                          action="{% url 'variant_delete' lgr_pk=lgr_pk codepoint_id=cp var_slug=char.to_slug %}">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                                class="btn btn-xs btn-link confirm-prompt"
+                                                data-confirmation-prompt="{% trans 'Are you sure you want to delete this variant?' %}">
+                                            {% trans 'Delete variant' %}
+                                        </button>
+                                    </form>
+                                </li>
                                 <li><a class="btn btn-xs btn-edit-var-refs" href="#" data-var-update-ref-url="{% url 'var_update_refs' lgr_pk=lgr_pk codepoint_id=cp var_slug=char.to_slug %}">{% trans 'Edit references' %}</a></li>
                             </ul>
                         </td>
@@ -156,10 +170,15 @@
 
     {% if not is_set %}
     <hr/>
-
-    <a class="btn btn-danger confirm-prompt" data-confirmation-prompt="{% trans 'Are you sure you want to delete this code point?' %}"
-       href="{% url 'codepoint_delete' lgr_pk=lgr_pk codepoint_id=cp %}">
-        <i class="glyphicon glyphicon-trash"></i> {% trans 'Delete code point' %}</a>
+        <form method="post"
+              action="{% url 'codepoint_delete' lgr_pk=lgr_pk codepoint_id=cp %}">
+            {% csrf_token %}
+            <button type="submit"
+                    class="btn btn-danger confirm-prompt"
+                    data-confirmation-prompt="{% trans 'Are you sure you want to delete this code point?' %}">
+                <i class="glyphicon glyphicon-trash"></i> {% trans 'Delete code point' %}
+            </button>
+        </form>
     {% endif %}
 
     <div class="modal" id="reference-editor">

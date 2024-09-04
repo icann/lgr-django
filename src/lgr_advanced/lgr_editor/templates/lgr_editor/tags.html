@@ -44,12 +44,15 @@
                     </td>
                     {% if not is_set %}
                     <td class="text-right">
-                        <a class="btn btn-default confirm-prompt"
-                           title="{% trans 'Delete Tag' %}"
-                           data-confirmation-prompt="{% blocktrans with tag=tag.name %}Are you sure you want to delete tag {{ tag }}?{% endblocktrans %}"
-                           href="{% url 'tag_delete' lgr_pk=lgr_pk tag_id=tag.name %}">
-                            <i class="glyphicon glyphicon-trash"></i>
-                        </a>
+                        <form method="post"
+                              action="{% url 'tag_delete' lgr_pk=lgr_pk tag_id=tag.name %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="btn btn-default confirm-prompt"
+                           data-confirmation-prompt="{% blocktrans with tag=tag.name %}Are you sure you want to delete tag {{ tag }}?{% endblocktrans %}">
+                                <i class="glyphicon glyphicon-trash"></i>
+                            </button>
+                        </form>
                     </td>
                     {% endif %}
                 </tr>

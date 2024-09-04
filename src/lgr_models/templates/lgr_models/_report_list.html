@@ -5,14 +5,18 @@
     <ul>
         {% for report in reports %}
             <li>
-                <a href="{{ report.to_url }}">
-                    {% trans 'Download' %} {{ report.filename }}
-                </a>
-                <a href="{{ report.delete_url }}?next={{ request.path }}"
-                   data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ report.filename }}?{% endblocktrans %}"
-                   class="delete_report confirm-prompt">
-                    <i class="glyphicon glyphicon-trash"></i>
-                </a>
+                <form method="post"
+                      action="{{ report.delete_url }}?next={{ request.path }}">
+                    {% csrf_token %}
+                    <a href="{{ report.to_url }}">
+                        {% trans 'Download' %} {{ report.filename }}
+                    </a>
+                    <button type="submit"
+                            class="delete_report confirm-prompt btn-link"
+                            data-confirmation-prompt="{% blocktrans %}Are you sure you want to delete report {{ report.filename }}?{% endblocktrans %}">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                </form>
                 <small>{{ report|display_expiration }}</small>
             </li>
         {% endfor %}

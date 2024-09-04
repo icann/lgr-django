@@ -90,7 +90,7 @@ class DeleteTagView(LGREditMixin, View):
     Delete a tag from an LGR.
     """
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         tag_id = self.kwargs['tag_id']
         logger.debug("Delete tag %s'", tag_id)
 
