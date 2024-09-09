@@ -1,5 +1,12 @@
 # Changelog for lgr-django
 
+## 6.1.2 (2024-09-08)
+### New features
+- Use Unicode version 15.1.0 by default
+
+### Fixes
+- Vulnerability fix: use POST for delete endpoints that were still GET
+
 ## 6.1.1 (2024-02-15)
 
 ### Improvements
