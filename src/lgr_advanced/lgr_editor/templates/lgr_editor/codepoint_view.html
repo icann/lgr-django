@@ -99,15 +99,12 @@
                         <td>
                             <ul class="list-unstyled">
                                 <li>
-                                    <form method="post"
-                                          action="{% url 'variant_delete' lgr_pk=lgr_pk codepoint_id=cp var_slug=char.to_slug %}">
-                                        {% csrf_token %}
                                         <button type="submit"
                                                 class="btn btn-xs btn-link confirm-prompt"
+                                                form="{{ char.to_slug }}"
                                                 data-confirmation-prompt="{% trans 'Are you sure you want to delete this variant?' %}">
                                             {% trans 'Delete variant' %}
                                         </button>
-                                    </form>
                                 </li>
                                 <li><a class="btn btn-xs btn-edit-var-refs" href="#" data-var-update-ref-url="{% url 'var_update_refs' lgr_pk=lgr_pk codepoint_id=cp var_slug=char.to_slug %}">{% trans 'Edit references' %}</a></li>
                             </ul>
@@ -144,6 +141,13 @@
             <p><button type="submit" class="btn btn-primary" name="edit_cp" id="edit_cp_button">{% trans "Save variants, tags, context rules and comment" %}</button></p>
             {% endif %}
         </form>
+        {# variant delete forms #}
+        {% for char in variants_form %}
+            <form id="{{ char.to_slug }}"  method="post"
+                  action="{% url 'variant_delete' lgr_pk=lgr_pk codepoint_id=cp var_slug=char.to_slug %}">
+                {% csrf_token %}
+            </form>
+        {% endfor %}
     </div>
 
     <hr/>
