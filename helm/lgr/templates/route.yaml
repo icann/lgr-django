@@ -1,0 +1,19 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ $.Values.app }}-{{ $.Values.env }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    app: {{ $.Values.app }}
+    env: {{ $.Values.env }}
+spec:
+  host: {{ $.Values.lgr.URL }}
+  to:
+    kind: Service
+    name: lgr-gunicorn-qa
+  port:
+    targetPort: gunicorn
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+  wildcardPolicy: None

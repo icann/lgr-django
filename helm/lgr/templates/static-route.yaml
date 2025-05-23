@@ -1,0 +1,20 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: {{ $.Values.app }}-static-{{ $.Values.env }}
+  namespace: {{ $.Values.namespace }}
+  labels:
+    app: {{ $.Values.app }}
+    env: {{ $.Values.env }}
+spec:
+  host: {{ $.Values.lgr.URL }}
+  path: /static/
+  to:
+    kind: Service
+    name: lgr-static-qa
+  port:
+    targetPort: static
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+  wildcardPolicy: None
