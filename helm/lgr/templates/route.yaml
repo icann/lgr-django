@@ -7,10 +7,9 @@ metadata:
     app: {{ $.Values.app }}
     env: {{ $.Values.env }}
 spec:
-  host: {{ $.Values.lgr.URL }}
   to:
     kind: Service
-    name: lgr-gunicorn-qa
+    name: {{ $.Values.app }}-{{ $.Values.env }}
   port:
     targetPort: gunicorn
   tls:
