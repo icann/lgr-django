@@ -1,7 +1,7 @@
-cluster: okd
+cluster: ocp
 env: qa
 namespace: contracted-parties
-app:  lgr
+app: lgr
 
 replicaCount: 1
 historyLimit: 3

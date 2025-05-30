@@ -1,4 +1,4 @@
-cluster: okd
+cluster: ocp
 env: prod
 region: dc
 namespace: contracted-parties
