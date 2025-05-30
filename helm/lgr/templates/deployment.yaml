@@ -43,7 +43,7 @@ spec:
             - configMapRef:
                 name: {{ $.Release.Name }}-{{ template "lgr.region" $.Values }}{{ $.Values.env }}
             - secretRef:
-                name: lgr-secrets
+                name: lgrsecrets-sealed-{{ $.Values.env }}
           imagePullPolicy: Always
           {{- if .web }}
           ports:

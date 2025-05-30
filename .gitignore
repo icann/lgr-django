@@ -43,8 +43,5 @@ src/lgr_web/media
 src/lgr_web/static/
 !src/lgr_web/assets/chrome/select2/dist
 
-# Helm secret directory
-helm/secrets
-
 # SQLite dev db
 src/lgr_web/dev.db
