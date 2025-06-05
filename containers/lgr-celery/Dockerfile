@@ -1,5 +1,5 @@
 FROM container-registry-dev.icann.org/icann/lgr-django:latest
-LABEL MAINTAINER int-eng@cofomo.com
+LABEL org.opencontainers.image.authors="int-eng@cofomo.com"
 
 # Set gunicorn configuration
 ENV APP="lgr_web"
