@@ -5,22 +5,24 @@
 
 # Critically exit script if one command in error
 set -e
-#set -x
 
 # VARIABLE DECLARATION
 ## unicodeURL set the repository git use for cloning
 unicodeURL='https://github.com/unicode-org/icu.git'
-lgrBaseDir='/var/www/lgr'
-lgrPersistantDir='storage'
 
-## buildDir will contain all file needed to compile application
+## buildDir will contain all files needed to compile application
 buildDir=$(mktemp -d)
 
 # INSTALLATION & CONFIGURATION
 printf "Phase1: Install required applications\n"
 
+printf "\tInstall Python 3.11\t"
+dnf install -y python3.11
+alternatives --install /usr/bin/python python /usr/bin/python3.12 1
+alternatives --install /usr/bin/python python /usr/bin/python3.11 2
+
 printf "\tInstall compilation tools\t"
-# Install compilation tools for django and icu4c
+# Install compilation tools for Django and icu4c
 dnf -qy install \
   "@development tools" \
   gcc-c++ \
@@ -40,7 +42,6 @@ dnf -qy install \
 
 printf "OK\n"
 
-
 printf "\tInstall the various lgr-django dependencies\t"
 # Install various dependencies for lgr-django
 dnf -qy install \
@@ -48,8 +49,6 @@ dnf -qy install \
   libxml2 \
   libicu \
   tcl
-
-printf "OK\n"
 
 printf "OK\n"
 
@@ -127,7 +126,7 @@ do
       unicodeRelease='release-74-2'
       ;;
     *)
-      # Should never happend as no external input is used
+      # Should never happen as no external input is used
       exit 1
       ;;
   esac
@@ -141,9 +140,7 @@ do
   ../source/runConfigureICU Linux &>/dev/null
   make &>/dev/null
   make install &>/dev/null
-  #../source/runConfigureICU Linux
-  #make
-  #make install
+
   # Return to the home directory
   cd ~
   printf "OK\n"

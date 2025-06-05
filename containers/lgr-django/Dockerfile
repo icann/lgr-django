@@ -1,5 +1,5 @@
 FROM container-registry-dev.icann.org/icann/lgr-base:latest
-LABEL MAINTAINER int-eng@cofomo.com
+LABEL org.opencontainers.image.authors="int-eng@cofomo.com"
 
 # Set used variables
 ENV BASE_DIR=/var/www/lgr
@@ -22,7 +22,7 @@ WORKDIR $BASE_DIR
 # Copy local setting
 RUN mv 'local.py' 'src/lgr_web/settings'
 
-# Prepare python virtual environement
+# Prepare Python virtual environement
 RUN python3 -m venv venv
 ENV PATH="$BASE_DIR/venv/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/local/lib"

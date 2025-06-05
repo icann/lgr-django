@@ -1,7 +1,8 @@
 # Core stuff
-Django==3.2.25
+Django==3.1.14
 django-widget-tweaks==1.4.8
 celery[redis]==5.2.3
+django-redis==5.2.0
 django-redis-cache==3.0.0
 django-autocomplete-light==3.9.4
 vine==5.0.0
@@ -12,7 +13,7 @@ django-celery-beat==2.2.0
 # LGR/Unicode modules
 picu==1.5
 munidata==2.4.0
-lgr-core>=6.1.2
+lgr-core @ git+https://github.com/icann/lgr-core.git@v6.1.3
 
 # Natural sorting implementation
 natsort==7.1.1
