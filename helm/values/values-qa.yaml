@@ -30,7 +30,7 @@ lgr:
 
   IcannAuthUrl: https://accounts-qa.icann.org
 
-repoPath: container-registry-dev.icann.org/icann
+repoPath: artifactory.icann.org/docker/icann
 repoVer: latest
 
 microservices:

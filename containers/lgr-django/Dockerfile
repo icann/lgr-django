@@ -1,4 +1,4 @@
-FROM container-registry-dev.icann.org/icann/lgr-base:latest
+FROM lgr-base:latest
 LABEL org.opencontainers.image.authors="int-eng@cofomo.com"
 
 # Set used variables
