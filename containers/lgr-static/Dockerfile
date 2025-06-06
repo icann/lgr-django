@@ -1,4 +1,4 @@
-FROM container-registry-dev.icann.org/icann/lgr-django:latest
+FROM lgr-django:latest
 LABEL org.opencontainers.image.authors="int-eng@cofomo.com"
 
 USER root
