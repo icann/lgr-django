@@ -23,7 +23,7 @@ WORKDIR $BASE_DIR
 RUN mv 'local.py' 'src/lgr_web/settings'
 
 # Prepare Python virtual environement
-RUN python3 -m venv venv
+RUN python -m venv venv
 ENV PATH="$BASE_DIR/venv/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/local/lib"
 
