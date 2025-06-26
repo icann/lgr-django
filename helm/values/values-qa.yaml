@@ -36,7 +36,7 @@ microservices:
   gunicorn:
     name: gunicorn
     image: lgr-gunicorn
-    replicaCount: 2
+    replicaCount: 1
     volume: true
     smtp: true
     uid: 30404
@@ -78,7 +78,7 @@ microservices:
   celery:
     name: celery
     image: lgr-celery
-    replicaCount: 2
+    replicaCount: 1
     uid: 30404
     gid: 0
     volume: true
