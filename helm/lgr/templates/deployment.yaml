@@ -9,7 +9,7 @@ metadata:
     app: {{ $.Values.app }}
     env: {{ $.Values.env }}
 spec:
-  replicas: {{ $.Values.replicaCount }}
+  replicas: {{ .replicaCount }}
   revisionHistoryLimit: {{ $.Values.historyLimit }}
   selector:
     matchLabels:

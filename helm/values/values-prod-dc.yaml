@@ -4,7 +4,6 @@ region: dc
 namespace: contracted-parties
 app: lgr
 
-replicaCount: 1
 historyLimit: 3
 
 serviceAccount: sa-icannhostpathroot
@@ -38,6 +37,7 @@ microservices:
   gunicorn:
     name: gunicorn
     image: lgr-gunicorn
+    replicaCount: 2
     volume: true
     smtp: true
     uid: 30404
@@ -58,6 +58,7 @@ microservices:
   static:
     name: static
     image: lgr-static
+    replicaCount: 1
     uid: 0
     gid: 0
     web:
@@ -77,6 +78,7 @@ microservices:
   celery:
     name: celery
     image: lgr-celery
+    replicaCount: 2
     uid: 30404
     gid: 0
     volume: true
@@ -92,6 +94,7 @@ microservices:
   beat:
     name: beat
     image: lgr-celery
+    replicaCount: 1
     uid: 30404
     gid: 0
     volume: true
