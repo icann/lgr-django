@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lgr-django"
+version = "6.1.2"
+description = "Web-application for LGR editing"
+readme = "README.md"
+authors = [{name = "Cofomo, Viagenie and Wil Tan", email = "int-eng@cofomo.com"}]
+license = {file = "LICENSE"}
+dependencies = [
+    "celery[redis]",
+    "django",
+    "django-autocomplete-light",
+    "django-celery-beat",
+    "django-celery-results",
+    "django-cleanup",
+    "django-redis",
+    "django-redis-cache",
+    "django-widget-tweaks",
+    "lgr-core",
+    "munidata",
+    "natsort",
+    "okta-jwt-verifier",
+    "picu",
+    "vine"
+]
+requires-python = ">=3.9"
+classifiers=[
+    "Environment :: Web Environment",
+    "Framework :: Django :: 3.1",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
