@@ -27,72 +27,75 @@ in another project would require some work:
 ## Acknowledgment
 
 This toolset was implemented by Cofomo (formerly Viagenie) (Audric Schiltknecht, Julien Bernard, Guillaume Blanchet,
-Michel Bernier, David Drouin, Vincent Gonzalez and Marc Blanchet) and Wil Tan on an ICANN contract.
+Michel Bernier, David Drouin, Vincent Gonzalez, Marc Blanchet and Alexandre Taillon-Desrochers) 
+and Wil Tan on an ICANN contract.
 
 ## License
 
-Copyright (c) 2015-2016 Internet Corporation for Assigned Names and
-Numbers (“ICANN”). All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-    * Redistributions of source code must retain the above copyright
-      notice, this list of conditions and the following disclaimer.
-
-    * Redistributions in binary form must reproduce the above copyright
-      notice, this list of conditions and the following disclaimer in the
-      documentation and/or other materials provided with the distribution.
-
-    * Neither the name of the ICANN nor the names of its contributors
-      may be used to endorse or promote products derived from this
-      software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY ICANN AND CONTRIBUTORS ``AS IS'' AND ANY
-EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL ICANN OR CONTRIBUTORS BE
-LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
-THE POSSIBILITY OF SUCH DAMAGE.
+The license can be found [here](LICENSE).
 
 ## Setting up your environment for development
 
 ### Pre-requisites
 
 * Operating system: Tested on Linux and Mac OS X 
-* Python >=3.6
+* Python >=3.9
 * [LibXML2](http://www.xmlsoft.org/) [MIT License] used by the lxml Python bindings
 * [ICU4C](http://site.icu-project.org/) [ICU License]
-* Python modules (listed in `etc/requirements.txt`, or dependencies thereof)
-  * [Django](https://www.djangoproject.com/) version 1.8.x [BSD License]
-  * [django-widget-tweaks](https://github.com/kmike/django-widget-tweaks) [MIT License]
-  * [Celery](http://www.celeryproject.org/) [BSD License]
-  * [lxml](http://lxml.de/) [BSD License]
-  * [lgr-core](https://github.com/icann/lgr-core) [BSD License]
-  * [picu](https://pypi.python.org/pypi/picu) [MIT/X License]
-  * [munidata](https://github.com/icann/munidata) [BSD License]
-  * [natsort](https://pypi.python.org/pypi/natsort) [MIT License]
-  * [django-redis-cache](https://github.com/sebleier/django-redis-cache) [BSD License]
-  * [django-autocomplete-light](https://github.com/yourlabs/django-autocomplete-light/) [MIT License]
-  * [django-cleanup](https://github.com/un1t/django-cleanup) [MIT License]
-  * [django-celery-results](https://github.com/celery/django-celery-results) [BSD License]
-  * [django-celery-beat](https://github.com/celery/django-celery-beat) [BSD License]
-  * [social-auth-app-django](https://github.com/python-social-auth/social-app-django) [BSD License]
-* A [redis](https://redis.io/) server for cache and asynchronous computations
+* [Redis](https://redis.io/) server for cache and asynchronous computations
 
- For documentation generation:
+### Python Dependencies
 
-* [Sphinx](http://www.sphinx-doc.org/en/stable/)
-* [Graphviz](http://www.graphviz.org/)
+#### Main Dependencies
 
-For testing
+The main dependencies are defined in the [requirements.in](etc/requirements.in) file.
 
-* [parameterized](https://github.com/wolever/parameterized)
+* [Celery](http://www.celeryproject.org/) [BSD License]
+* [Django](https://www.djangoproject.com/) version 3.1.x [BSD License]
+* [django-autocomplete-light](https://github.com/yourlabs/django-autocomplete-light/) [MIT License]
+* [django-celery-beat](https://github.com/celery/django-celery-beat) [BSD License]
+* [django-celery-results](https://github.com/celery/django-celery-results) [BSD License]
+* [django-cleanup](https://github.com/un1t/django-cleanup) [MIT License]
+* [django-redis](https://github.com/jazzband/django-redis) [BSD License]
+* [django-redis-cache](https://github.com/sebleier/django-redis-cache) [BSD License]
+* [django-widget-tweaks](https://github.com/kmike/django-widget-tweaks) [MIT License]
+* [lgr-core](https://github.com/icann/lgr-core) [BSD License]
+* [munidata](https://github.com/icann/munidata) [BSD License]
+* [natsort](https://pypi.python.org/pypi/natsort) [MIT License]
+* [okta-jwt-verifier](https://pypi.org/project/okta-jwt-verifier/) [Apache Software License]
+* [picu](https://pypi.python.org/pypi/picu) [MIT/X License]
+* [vine](https://pypi.org/project/vine/) [BSD License]
+
+
+#### Testing Dependencies
+
+The following dependencies are needed to run the test suite.
+
+* [parameterized](https://github.com/wolever/parameterized) [BSD License]
+
+#### Documentation Dependencies
+
+The following dependencies are needed to build the documentation.
+
+* [Graphviz](http://www.graphviz.org/) [Eclipse Public License]
+* [Sphinx](https://www.sphinx-doc.org/en/master/) [BSD License]
+
+### Dependency Maintenance
+
+Uses [pip-tools](https://pip-tools.readthedocs.io/en/latest/) to pin the dependencies. Install it with the following
+command:
+
+      $ source venv/bin/activate
+      $ (venv) pip install pip-tools
+
+Use the following command to generate the [requirements.txt](etc/requirements.txt)
+from the [requirements.in](etc/requirements.in) file:
+
+      $ (venv) pip-compile --output-file=requirements.txt requirements.in
+
+To update a dependency, use the following command:
+
+      $ (venv) pip-compile --upgrade-package <dependency>
 
 
 ### Installing ICU4C
