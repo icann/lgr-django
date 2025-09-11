@@ -2,8 +2,6 @@
 """
 utils.py - utility functions for LGR Editor.
 """
-from __future__ import unicode_literals
-
 import logging
 from urllib.parse import quote_plus
 

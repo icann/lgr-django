@@ -3,8 +3,6 @@
 """
 middleware - Implement some middlewares used by the whole app.
 """
-from __future__ import unicode_literals
-
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import redirect

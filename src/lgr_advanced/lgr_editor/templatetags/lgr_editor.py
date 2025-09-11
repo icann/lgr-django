@@ -2,8 +2,6 @@
 """
 lgr_editor.py - Template tags for LGR editor
 """
-from __future__ import unicode_literals
-
 from django import template
 
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text

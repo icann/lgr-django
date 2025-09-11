@@ -4,8 +4,6 @@ api.py - API of the LGR renderer.
 
 Responsible for creating the proper context to render the HTML view of an LGR document.
 """
-from __future__ import unicode_literals
-
 import logging
 import re
 from itertools import islice

@@ -1,24 +1,14 @@
 # -*- coding: utf-8 -*-
 import codecs
 import csv
-# Define some py2/3 compat stuff
-import sys
 
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from lgr.core import LGR
 from lgr.tools.diff_collisions import get_collisions
 from lgr.utils import cp_to_ulabel
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_web.config import lgr_settings
-
-if sys.version_info.major > 2:
-    to_row_format = str
-else:
-    from django.utils.encoding import force_bytes
-
-    to_row_format = force_bytes
 
 
 def _get_validity(lgr, label_cplist, idna_encoder):
@@ -316,7 +306,7 @@ def validation_results_to_csv(ctx, fileobj, with_header=True):
     writer = csv.writer(fileobj)
     if with_header:
         # Need list(map) for python3.4 that does not like map object (needs sequence)
-        writer.writerow(list(map(to_row_format, ['Type', 'U-label', 'A-label', 'Disposition',
+        writer.writerow(list(map(str, ['Type', 'U-label', 'A-label', 'Disposition',
                                                  'Code point sequence', 'Invalid code points',
                                                  'Action index', 'Action XML'])))
 
@@ -326,12 +316,12 @@ def validation_results_to_csv(ctx, fileobj, with_header=True):
         invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
     invalid_formatted = '-'.join(invalid_formatted) or '-'
 
-    writer.writerow(list(map(to_row_format, ['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
+    writer.writerow(list(map(str, ['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
                                              ctx['cp_display'], invalid_formatted,
                                              ctx['action_idx'], ctx['action']])))
     col = ctx.get('collision', None)
     if col:
-        writer.writerow(list(map(to_row_format, ['collision', col['u_label'], col['a_label'], col['disposition'],
+        writer.writerow(list(map(str, ['collision', col['u_label'], col['a_label'], col['disposition'],
                                                  col['cp_display'], col['action_idx'], col['action']])))
     for var in ctx.get('variants', []):
         invalid_formatted = []
@@ -339,7 +329,7 @@ def validation_results_to_csv(ctx, fileobj, with_header=True):
             reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
             invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
         invalid_formatted = '-'.join(invalid_formatted) or '-'
-        writer.writerow(list(map(to_row_format, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
+        writer.writerow(list(map(str, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
                                                  var['cp_display'], invalid_formatted,
                                                  var['action_idx'], var['action']])))
     # add empty row

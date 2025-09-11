@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.urls import path, register_converter
 
 from lgr_utils.converters import LgrModelConverter

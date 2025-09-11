@@ -3,8 +3,6 @@
 """
 lgr_renderer.py - Template tags for LGR renderer
 """
-from __future__ import unicode_literals
-
 from django import template
 
 register = template.Library()

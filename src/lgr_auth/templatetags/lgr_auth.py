@@ -2,8 +2,6 @@
 """
 lgr_auth.py - Template tags for LGR auth
 """
-from __future__ import unicode_literals
-
 from django import template
 from django.template.defaultfilters import stringfilter
 
