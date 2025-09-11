@@ -1,4 +1,3 @@
-from __future__ import print_function
 from .local import *
 
 if SECRET_KEY == 'PLEASE GENERATE ONE':

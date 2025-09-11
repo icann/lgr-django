@@ -2,8 +2,6 @@
 """
 lgr_exceptions.py - Map LGR exception to user terms.
 """
-from __future__ import unicode_literals
-
 from django.utils.translation import ugettext
 from django.utils.translation import ugettext_lazy as _
 

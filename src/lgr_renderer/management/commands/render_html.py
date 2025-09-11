@@ -2,8 +2,6 @@
 """
 render_html - Django management command to render an LGR document into a HTML page.
 """
-from __future__ import unicode_literals
-
 import os
 import sys
 import io
