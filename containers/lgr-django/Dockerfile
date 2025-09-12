@@ -29,9 +29,9 @@ RUN python3.11 -m venv venv
 ENV PATH="$BASE_DIR/venv/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/local/lib"
 
-# Install/upgrade pip
+# Install lgr-django Python requirements
 RUN source $BASE_DIR/venv/bin/activate \
-    && python -m pip install -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple --upgrade pip
-
-# Install lgr-django requirements
-RUN source $BASE_DIR/venv/bin/activate && pip install -r requirements.txt && rm requirements.txt
+    && python -m pip install -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple --upgrade pip \
+    && pip install -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple --upgrade setuptools \
+    && pip install -r requirements.txt  \
+    && rm requirements.txt
