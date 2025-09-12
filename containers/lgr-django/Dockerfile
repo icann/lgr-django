@@ -21,6 +21,7 @@ WORKDIR $BASE_DIR
 
 # Copy local settings file
 RUN mv 'local.py' 'src/lgr_web/settings'
+RUN mv 'test.py' 'src/lgr_web/settings'
 ENV DJANGO_SETTINGS_MODULE=lgr_web.settings.local
 
 # Prepare Python virtual environement

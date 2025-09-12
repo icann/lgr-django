@@ -38,7 +38,6 @@ pipeline {
                 script {
                     echo "Change Branch ${env.CHANGE_BRANCH}"
                     echo "Target Branch ${env.CHANGE_TARGET}"
-                    //utils.notifyBuild('STARTED', 'jenkinsjobs')
                 }
             }
         }
@@ -49,22 +48,21 @@ pipeline {
             }
         }
 
-// TODO: Update the dev containers
-//         stage('Run Test Suite') {
-//             steps {
-//                 script {
-//                     echo "Building image for tests"
-//                     sh label: "build image lgr-base", script: "tar -czh -C dev/lgr-base . | docker build -t lgr-base -"
-//                     sh label: "build image lgr-django", script: "tar -czh -C dev/lgr-django . | docker build -t lgr-django -"
-//                     sh label: "run test suite", script: """
-//                         docker run --rm lgr-django /bin/bash -c "
-//                         source /var/www/lgr/venv/bin/activate &&
-//                         pip install -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple parameterized &&
-//                         python manage.py test src --settings lgr_web.settings.local"
-//                     """
-//                 }
-//             }
-//         }
+        stage('Run Test Suite') {
+            steps {
+                script {
+                    echo "Building image for tests"
+                    sh label: "build image lgr-base", script: "tar -czh -C containers/lgr-base . | docker build -t lgr-base -"
+                    sh label: "build image lgr-django", script: "tar -czh -C containers/lgr-django . | docker build -t lgr-django -"
+                    sh label: "run test suite", script: """
+                        docker run --rm lgr-django /bin/bash -c "
+                        source /var/www/lgr/venv/bin/activate &&
+                        pip install -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple parameterized &&
+                        python manage.py test src --settings lgr_web.settings.test"
+                    """
+                }
+            }
+        }
 
         stage('Build and Push Images to Docker Registry') {
             when {
@@ -159,13 +157,11 @@ pipeline {
         success {
             script {
                 jiraSendBuildInfo()
-                //utils.notifyBuild('SUCCESSFUL', 'jenkinsjobs')
             }
         }
         failure {
             script {
                 jiraSendBuildInfo()
-                //utils.notifyBuild('FAILED', 'jenkinsjobs')
             }
         }
         cleanup {
