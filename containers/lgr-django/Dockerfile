@@ -19,20 +19,18 @@ RUN chown -R lgr:0 $BASE_DIR
 USER lgr
 WORKDIR $BASE_DIR
 
-# Copy local setting
+# Copy local settings file
 RUN mv 'local.py' 'src/lgr_web/settings'
+ENV DJANGO_SETTINGS_MODULE=lgr_web.settings.local
 
 # Prepare Python virtual environement
-RUN python -m venv venv
+RUN python3.11 -m venv venv
 ENV PATH="$BASE_DIR/venv/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/local/lib"
 
 # Install/upgrade pip
-RUN python -m pip install \
-  -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple \
-  --upgrade pip
+RUN source $BASE_DIR/venv/bin/activate \
+    && python -m pip install -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple --upgrade pip
 
 # Install lgr-django requirements
-RUN pip install \
-  -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple \
-  -r requirements.txt && rm requirements.txt
+RUN source $BASE_DIR/venv/bin/activate && pip install -r requirements.txt && rm requirements.txt

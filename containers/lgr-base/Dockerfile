@@ -1,4 +1,4 @@
-FROM container-registry.icann.org/base-images/openshift-icann:202503
+FROM registry.access.redhat.com/ubi9/ubi
 LABEL org.opencontainers.image.authors="int-eng@cofomo.com"
 
 USER root
