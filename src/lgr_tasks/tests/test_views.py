@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from unittest.mock import patch
 
 import lgr_web.celery_app
@@ -7,7 +6,7 @@ from lgr_tasks.models import LgrTaskModel
 from lgr_tasks.tests.common import TasksTestBase, MockCeleryControl
 
 
-@patch.object(lgr_web.celery_app.Celery, 'control', MockCeleryControl())
+@patch.object(lgr_web.celery_app.app, 'control', MockCeleryControl())
 class TestView(TasksTestBase):
 
     def test_delete_process(self):

@@ -6,8 +6,8 @@ from lgr_tasks.api import get_task_info, is_task_completed
 from lgr_tasks.tests.common import TasksTestBase, MockCeleryControl, MockCeleryAsyncResult
 
 
-@patch.object(lgr_web.celery_app.Celery, 'control', MockCeleryControl())
-@patch.object(lgr_web.celery_app.Celery, 'AsyncResult', MockCeleryAsyncResult)
+@patch.object(lgr_web.celery_app.app, 'control', MockCeleryControl())
+@patch.object(lgr_web.celery_app.app, 'AsyncResult', MockCeleryAsyncResult)
 class TestTasksApi(TasksTestBase):
 
     def setUp(self) -> None:
