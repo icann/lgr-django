@@ -6,50 +6,16 @@
 # Critically exit script if one command in error
 set -e
 
-# VARIABLE DECLARATION
-## unicodeURL set the repository git use for cloning
-unicodeURL='https://github.com/unicode-org/icu.git'
-
-## buildDir will contain all files needed to compile application
-buildDir=$(mktemp -d)
-
 # INSTALLATION & CONFIGURATION
-printf "Phase1: Install required applications\n"
-
-printf "\tInstall Python 3.11\t"
-dnf install -y python3.11
-alternatives --install /usr/bin/python python /usr/bin/python3.12 1
-alternatives --install /usr/bin/python python /usr/bin/python3.11 2
-
-printf "\tInstall compilation tools\t"
-# Install compilation tools for Django and icu4c
-dnf -qy install \
-  "@development tools" \
-  gcc-c++ \
-  bzip2-devel \
-  ncurses-devel \
-  sqlite-devel \
-  readline-devel \
-  tk-devel \
-  gdbm-devel \
-  libdb-devel \
-  libpcap-devel \
-  xz-devel \
-  expat-devel \
-  zlib-devel \
-  openssl-devel \
-  libffi-devel
-
-printf "OK\n"
-
 printf "\tInstall the various lgr-django dependencies\t"
-# Install various dependencies for lgr-django
 dnf -qy install \
-  procps-ng \
-  libxml2 \
+  git \
   libicu \
+  libxml2 \
+  procps-ng \
+  python3.11 \
+  python3.11-devel \
   tcl
-
 printf "OK\n"
 
 printf "\tFix xlocale.h library\t"
@@ -57,7 +23,21 @@ printf "\tFix xlocale.h library\t"
 ln -sf /usr/include/locale.h /usr/include/xlocale.h
 printf "OK\n"
 
+printf "\tInstall compilation tools\t"
+dnf -qy install \
+  gcc-c++ \
+  expat-devel \
+  libffi-devel \
+  zlib-devel
+printf "OK\n"
+
 printf "\tInstall lgr-django unicodes dependencies\n"
+## buildDir will contain all files needed to compile application
+buildDir=$(mktemp -d)
+
+## unicodeURL set the repository git use for cloning
+unicodeURL='https://github.com/unicode-org/icu.git'
+
 # Clone unicode repository
 git clone -q $unicodeURL $buildDir/icu
 
@@ -156,24 +136,15 @@ printf "\nPhase2: Cleanup files and unused production application\n"
 printf "\tRemove Build Directory\t"
 rm -fr $buildDir
 printf "OK\n"
+
 printf "\tRemove compilation tools\t"
 dnf -qy remove \
-  "@development tools" \
   gcc-c++ \
-  bzip2-devel \
-  ncurses-devel \
-  sqlite-devel \
-  readline-devel \
-  tk-devel \
-  gdbm-devel \
-  libdb-devel \
-  libpcap-devel \
-  xz-devel \
   expat-devel \
-  zlib-devel \
-  openssl-devel \
-  libffi-devel
+  libffi-devel \
+  zlib-devel
 printf "OK\n"
+
 printf "\tClean up dnf cache files\t"
 dnf -qy clean all || true
 rm -fr /var/cache/dnf || true
