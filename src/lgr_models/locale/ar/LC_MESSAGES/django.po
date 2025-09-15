@@ -185,7 +185,7 @@ msgstr ""
 #: src/lgr_advanced/lgr_exceptions.py:152
 #, python-format
 msgid ""
-"%(label)s is invalid due to hypen restrictions in the RFC5891 as it starts "
+"%(label)s is invalid due to hyphen restrictions in the RFC5891 as it starts "
 "with a hyphen-minus."
 msgstr ""
 
