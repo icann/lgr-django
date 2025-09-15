@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 from datetime import timedelta
 from io import BytesIO
@@ -14,7 +12,6 @@ from lgr_tasks.models import LgrTaskModel
 
 
 class MockCeleryInspect:
-
     def active(self):
         return {'test': [{'id': 3}]}
 
@@ -29,7 +26,6 @@ class MockCeleryInspect:
 
 
 class MockCeleryControl:
-
     def inspect(self):
         return MockCeleryInspect()
 
@@ -38,7 +34,6 @@ class MockCeleryControl:
 
 
 class MockCeleryAsyncResult:
-
     def __init__(self, task_id) -> None:
         self.task_id = task_id
         super().__init__()
@@ -50,10 +45,11 @@ class MockCeleryAsyncResult:
         return 'PENDING'
 
 
-class TasksTestBase(LgrWebClientTestBase):
-
+class LGRTasksClientTestBase(LgrWebClientTestBase):
     def setUp(self) -> None:
         super().setUp()
+        self.maxDiff = None
+
         self.user = self.login_admin()
 
         self.t1 = LgrTaskModel.objects.create(
@@ -110,10 +106,12 @@ class TasksTestBase(LgrWebClientTestBase):
         LGRReport.storage_type = StorageType.TOOL
         LGRReport.upload_path = test_upload_path
 
-        report = LGRReport.objects.create(file=File(BytesIO(b'Testing test_get_task_info_task_with_report'),
-                                                    name=f'test_get_task_info_task_with_report.txt'),
-                                          owner=self.user,
-                                          report_id='test_get_task_info_task_with_report')
+        report = LGRReport.objects.create(
+            file=File(
+                BytesIO(b'Testing test_get_task_info_task_with_report'),
+                name=f'test_get_task_info_task_with_report.txt'),
+            owner=self.user,
+            report_id='test_get_task_info_task_with_report')
         task.report = report
         task.save()
         return report

@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 import logging
 
-from celery.states import PENDING, RETRY, REVOKED, FAILURE, SUCCESS
+from celery.states import FAILURE, PENDING, RETRY, REVOKED, SUCCESS
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
@@ -57,7 +56,7 @@ class DeleteProcessView(LoginRequiredMixin, SingleObjectMixin, View):
         return redirect('list_process')
 
 
-class DeleteAllFinishedProcessView(LoginRequiredMixin, MultipleObjectMixin, View):
+class DeleteAllFinishedProcessesView(LoginRequiredMixin, MultipleObjectMixin, View):
     model = LgrTaskModel
 
     def get_queryset(self):
@@ -68,8 +67,8 @@ class DeleteAllFinishedProcessView(LoginRequiredMixin, MultipleObjectMixin, View
             messages.error(self.request, _('Failed to retrieve completed tasks.'))
             return queryset.none()
 
-        return queryset.filter(pk__in=[t['id'] for t in tasks_info if t['status'] in [SUCCESS, FAILURE, REVOKED,
-                                                                                      'EXPIRED']])
+        return queryset.filter(
+            pk__in=[t['id'] for t in tasks_info if t['status'] in [SUCCESS, FAILURE, REVOKED, 'EXPIRED']])
 
     def post(self, request, *args, **kwargs):
         queryset = self.get_queryset()
