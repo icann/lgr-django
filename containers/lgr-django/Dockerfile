@@ -33,5 +33,5 @@ ENV LD_LIBRARY_PATH="/usr/local/lib"
 RUN source $BASE_DIR/venv/bin/activate \
     && python -m pip install -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple --upgrade pip \
     && pip install -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple --upgrade setuptools \
-    && pip install -r requirements.txt  \
+    && pip install -i https://artifactory.icann.org/artifactory/api/pypi/pypi/simple -r requirements.txt  \
     && rm requirements.txt
