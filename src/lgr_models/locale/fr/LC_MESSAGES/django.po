@@ -185,7 +185,7 @@ msgstr "Ces fichiers seront supprimés après"
 
 #, python-format
 #~ msgid ""
-#~ "%(label)s is invalid due to hypen restrictions in the RFC5891 as it "
+#~ "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it "
 #~ "starts with a hyphen-minus."
 #~ msgstr ""
 #~ "le label %(label)s est invalide en raison des restrictions sur les traits "

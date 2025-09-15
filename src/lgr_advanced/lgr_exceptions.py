@@ -147,7 +147,7 @@ def lgr_exception_to_text(exception):
                 })
             # elif error == 'UIDNA_ERROR_DOMAIN_NAME_TOO_LONG':
             elif error == 'UIDNA_ERROR_LEADING_HYPHEN':
-                messages.append(ugettext('%(label)s is invalid due to hypen restrictions in the RFC5891 as it starts '
+                messages.append(ugettext('%(label)s is invalid due to hyphen restrictions in the RFC5891 as it starts '
                                          'with a hyphen-minus.' % {
                                              'label': exception.obj
                                          }))
