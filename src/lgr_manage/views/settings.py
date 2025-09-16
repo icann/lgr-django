@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import UpdateView, RedirectView
+from django.views.generic import RedirectView, UpdateView
 
 from lgr_manage.api import LGRAdminReportStorage
 from lgr_manage.forms import LgrSettingsForm
@@ -28,11 +28,11 @@ class LgrSettingsView(BaseAdminViewMixin, UpdateView):
         return self.model._default_manager.get(pk=1)
 
     def form_valid(self, form):
-        from lgr_web.config import lgr_settings
+        from lgr_web.config import get_lgr_settings
 
         result = super().form_valid(form)
         # reload LGR settings
-        lgr_settings.refresh_from_db()
+        get_lgr_settings().refresh_from_db()
         return result
 
     def get_context_data(self, **kwargs):

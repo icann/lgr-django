@@ -3,14 +3,15 @@ from http import HTTPStatus
 from django.urls import reverse
 
 from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
-from lgr_web.config import lgr_settings
+from lgr_web.config import get_lgr_settings
 
 
 class TestSettings(LgrWebClientTestBase):
 
     def setUp(self):
         super().setUp()
-        lgr_settings.refresh_from_db()
+        self.lgr_settings = get_lgr_settings()
+        self.lgr_settings.refresh_from_db()
 
     def test_settings_user_unauthorized(self):
         self.login_user()
@@ -43,7 +44,7 @@ class TestSettings(LgrWebClientTestBase):
     def test_settings_update(self):
         self.login_admin()
 
-        self.assertEqual(100, lgr_settings.variant_calculation_limit)
+        self.assertEqual(100, self.lgr_settings.variant_calculation_limit)
         response = self.client.post(reverse('lgr_admin_settings'), data={
             'variant_calculation_limit': 500,
             'variant_calculation_max': 5000,
@@ -51,8 +52,8 @@ class TestSettings(LgrWebClientTestBase):
             'report_expiration_delay': 50,
         })
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        lgr_settings.refresh_from_db()
-        self.assertEqual(500, lgr_settings.variant_calculation_limit)
-        self.assertEqual(5000, lgr_settings.variant_calculation_max)
-        self.assertEqual(50000, lgr_settings.variant_calculation_abort)
-        self.assertEqual(50, lgr_settings.report_expiration_delay)
+        self.lgr_settings.refresh_from_db()
+        self.assertEqual(500, self.lgr_settings.variant_calculation_limit)
+        self.assertEqual(5000, self.lgr_settings.variant_calculation_max)
+        self.assertEqual(50000, self.lgr_settings.variant_calculation_abort)
+        self.assertEqual(50, self.lgr_settings.report_expiration_delay)
