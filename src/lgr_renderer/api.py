@@ -1,25 +1,30 @@
-# -*- coding: utf-8 -*-
 """
 api.py - API of the LGR renderer.
 
 Responsible for creating the proper context to render the HTML view of an LGR document.
 """
+import io
 import logging
+import os
 import re
+import sys
 from itertools import islice
 
-from django.utils.html import format_html_join, format_html, mark_safe
+from django.core.files import File
+from django.template.loader import render_to_string
+from django.utils.html import format_html, format_html_join, mark_safe
 from django.utils.translation import ugettext_lazy as _
-from natsort import natsorted
-
 from lgr.classes import TAG_CLASSNAME_PREFIX
 from lgr.exceptions import NotInLGR
 from lgr.matcher import AnchorMatcher
 from lgr.utils import cp_to_str
 from lgr.validate.lgr_stats import generate_stats
+from natsort import natsorted
+
+from lgr_models.models.lgr import LgrBaseModel
 from lgr_renderer.utils import render_glyph
 from lgr_utils import unidb
-from lgr_utils.cp import render_cp, render_name, cp_to_slug
+from lgr_utils.cp import cp_to_slug, render_cp, render_name
 
 logger = logging.getLogger(__name__)
 
@@ -399,3 +404,19 @@ def generate_context(lgr):
     context['references'] = _generate_context_references(lgr.reference_manager)
 
     return context
+
+
+def render_html(xml_file, validate=False, output=None):
+    with open(xml_file, 'rb') as lgr_xml:
+        filename = os.path.basename(xml_file)
+        name = os.path.splitext(filename)[0]
+        lgr_object = LgrBaseModel(file=File(lgr_xml, name=filename), name=name)
+
+        lgr = lgr_object.to_lgr(validate=validate)
+        context = generate_context(lgr)
+        html = render_to_string('lgr_renderer.html', context)
+        if not output:
+            sys.stdout.write(html)
+        else:
+            with io.open(output, 'w', encoding='utf-8') as output_file:
+                output_file.write(html)
