@@ -44,7 +44,7 @@ class LGRDisplayView(LoginRequiredMixin, views.View):
         super().setup(request, *args, **kwargs)
         lgr_pk = self.kwargs['lgr_pk']
         lgr_model = self.kwargs['model']
-        self.force_download = self.kwargs.get('force_download', False)
+        self.force_download = request.GET.get('force_download', 'false').lower() == 'true'
         try:
             self.lgr_object = lgr_model.get_object(request.user, lgr_pk)
         except lgr_model.DoesNotExist:
