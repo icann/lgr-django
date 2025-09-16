@@ -36,18 +36,18 @@ def _get_validity(lgr, label_cplist, idna_encoder):
 
     lgr_actions = lgr.effective_actions_xml  # save it once (since `lgr.effective_actions` is dynamically computed)
     return {
-               'u_label': label_u,
-               'a_label': label_a,
-               'conversion_error': conversion_error,
-               'cp_display_html': label_display_html,
-               'cp_display': label_display_text,
-               'eligible': eligible,
-               'disposition': disp,
-               'label_invalid_parts': label_invalid_parts,
-               'action_idx': action_idx,
-               'action': lgr_actions[action_idx] if action_idx >= 0 else None,
-               'logs': logs
-           }, lgr_actions
+        'u_label': label_u,
+        'a_label': label_a,
+        'conversion_error': conversion_error,
+        'cp_display_html': label_display_html,
+        'cp_display': label_display_text,
+        'eligible': eligible,
+        'disposition': disp,
+        'label_invalid_parts': label_invalid_parts,
+        'action_idx': action_idx,
+        'action': lgr_actions[action_idx] if action_idx >= 0 else None,
+        'logs': logs
+    }, lgr_actions
 
 
 def _get_variants(lgr: LGR, label_cplist, ignore_thresholds, idna_encoder, lgr_actions,
@@ -308,10 +308,9 @@ def validation_results_to_csv(ctx, fileobj, with_header=True):
 
     writer = csv.writer(fileobj)
     if with_header:
-        # Need list(map) for python3.4 that does not like map object (needs sequence)
-        writer.writerow(list(map(str, ['Type', 'U-label', 'A-label', 'Disposition',
-                                                 'Code point sequence', 'Invalid code points',
-                                                 'Action index', 'Action XML'])))
+        writer.writerow([
+            'Type', 'U-label', 'A-label', 'Disposition', 'Code point sequence',
+            'Invalid code points', 'Action index', 'Action XML'])
 
     invalid_formatted = []
     for cp, rules in ctx['label_invalid_parts']:
@@ -319,21 +318,22 @@ def validation_results_to_csv(ctx, fileobj, with_header=True):
         invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
     invalid_formatted = '-'.join(invalid_formatted) or '-'
 
-    writer.writerow(list(map(str, ['original', ctx['u_label'], ctx['a_label'], ctx['disposition'],
-                                             ctx['cp_display'], invalid_formatted,
-                                             ctx['action_idx'], ctx['action']])))
+    writer.writerow([
+        'original', ctx['u_label'], ctx['a_label'], ctx['disposition'], ctx['cp_display'],
+        invalid_formatted, ctx['action_idx'], ctx['action']])
     col = ctx.get('collision', None)
     if col:
-        writer.writerow(list(map(str, ['collision', col['u_label'], col['a_label'], col['disposition'],
-                                                 col['cp_display'], col['action_idx'], col['action']])))
+        writer.writerow([
+            'collision', col['u_label'], col['a_label'], col['disposition'], col['cp_display'],
+            col['action_idx'], col['action']])
     for var in ctx.get('variants', []):
         invalid_formatted = []
         for cp, rules in var['label_invalid_parts'] or []:
             reason = "not in repertoire" if rules is None else "does not comply with rules '{}'".format('|'.join(rules))
             invalid_formatted.append("{cp} {reason}".format(cp="U+{:04X}".format(cp), reason=reason))
         invalid_formatted = '-'.join(invalid_formatted) or '-'
-        writer.writerow(list(map(str, ['varlabel', var['u_label'], var['a_label'], var['disposition'],
-                                                 var['cp_display'], invalid_formatted,
-                                                 var['action_idx'], var['action']])))
+        writer.writerow([
+            'varlabel', var['u_label'], var['a_label'], var['disposition'], var['cp_display'],
+            invalid_formatted, var['action_idx'], var['action']])
     # add empty row
     writer.writerow([])
