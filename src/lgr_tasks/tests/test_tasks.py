@@ -18,7 +18,7 @@ from lgr_models.models.lgr import RzLgr
 from lgr_models.models.report import LGRReport
 from lgr_models.tests.lgr_webclient_test_base import LgrWebClientTestBase
 from lgr_tasks.tasks import calculate_index_variant_labels_tlds, _index_cache_key, clean_reports
-from lgr_web.config import lgr_settings
+from lgr_web.config import get_lgr_settings
 
 
 class TasksTest(LgrWebClientTestBase):
@@ -71,7 +71,7 @@ class TasksTest(LgrWebClientTestBase):
         # save fake user generated report
         user = self.login_user()
         last_month = datetime.datetime.now() - datetime.timedelta(days=31)
-        lgr_settings.report_expiration_delay = 30
+        get_lgr_settings().report_expiration_delay = 30
         storage = LGRAdminReportStorage(self.login_admin())
         report1 = storage.storage_save_report_file('test1.csv', StringIO())
         storage = LGRToolReportStorage(user)

@@ -6,15 +6,15 @@ import hashlib
 import logging
 from io import StringIO
 
-from celery import shared_task, current_task
+from celery import current_task, shared_task
 from django.conf import settings
 from django.core.cache import cache
 from django.utils import timezone
 from django.utils.encoding import force_bytes
-
 from lgr.exceptions import NotInLGR
 from lgr.tools.utils import download_file, read_labels
 from lgr.utils import cp_to_ulabel
+
 from lgr_advanced.api import LabelInfo
 from lgr_auth.models import LgrUser
 from lgr_manage.api import LGRAdminReportStorage
@@ -22,7 +22,7 @@ from lgr_models.models.lgr import RzLgr
 from lgr_models.models.report import LGRReport
 from lgr_tasks.models import LgrTaskModel
 from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
-from lgr_web.config import lgr_settings
+from lgr_web.config import get_lgr_settings
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +35,7 @@ def clean_reports():
     """
     Clean user reports after a certain amount of time
     """
+    lgr_settings = get_lgr_settings()
     logger.info('Cleaning reports older than %d days' % lgr_settings.report_expiration_delay)
     # set the last run in the settings data
     lgr_settings.report_expiration_last_run = timezone.now()

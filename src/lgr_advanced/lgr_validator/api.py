@@ -7,8 +7,9 @@ from django.utils.translation import ugettext_lazy as _
 from lgr.core import LGR
 from lgr.tools.diff_collisions import get_collisions
 from lgr.utils import cp_to_ulabel
+
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_web.config import lgr_settings
+from lgr_web.config import get_lgr_settings
 
 
 def _get_validity(lgr, label_cplist, idna_encoder):
@@ -51,10 +52,11 @@ def _get_validity(lgr, label_cplist, idna_encoder):
 
 def _get_variants(lgr: LGR, label_cplist, ignore_thresholds, idna_encoder, lgr_actions,
                   hide_mixed_script_variants=False):
+    lgr_settings = get_lgr_settings()
     res = {}
     var_results = []
-    summary, label_dispositions = lgr.compute_label_disposition_summary(label_cplist, include_invalid=True,
-                                                                        hide_mixed_script_variants=hide_mixed_script_variants)
+    summary, label_dispositions = lgr.compute_label_disposition_summary(
+        label_cplist, include_invalid=True, hide_mixed_script_variants=hide_mixed_script_variants)
     res['summary'] = ", ".join("{}: {}".format(k, v) for k, v in summary.items())
     res['num_variants'] = len(label_dispositions)
     res['threshold_include_vars'] = lgr_settings.variant_calculation_limit if not ignore_thresholds else -1
@@ -195,6 +197,7 @@ def _get_collisions(lgr, label_cplist, labels_list, idna_encoder, lgr_actions, i
 def _get_validity_check_limits(lgr, label_cplist, hide_mixed_script_variants, ignore_thresholds, idna_encoder):
     # reload LGR settings
     # FIXME: find a way to do this automatically, this is necessary in case of multiple instances running
+    lgr_settings = get_lgr_settings()
     lgr_settings.refresh_from_db()
 
     res, lgr_actions = _get_validity(lgr, label_cplist, idna_encoder)
