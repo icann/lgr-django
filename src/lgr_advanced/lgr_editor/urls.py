@@ -1,35 +1,49 @@
-# -*- coding: utf-8 -*-
 from django.urls import path, register_converter
 
+from lgr_advanced.lgr_editor.views.codepoints.codepoint import (
+    CodePointDeleteView,
+    CodePointUpdateReferencesView,
+    CodePointView,
+    VariantDeleteView,
+    VariantUpdateReferencesView)
+from lgr_advanced.lgr_editor.views.codepoints.importer import (
+    AddCodepointFromScriptView,
+    AddRangeView,
+    ImportCodepointsFromFileView)
+from lgr_advanced.lgr_editor.views.codepoints.list import (
+    ExpandRangeView,
+    ExpandRangesView,
+    ListCodePointsJsonView,
+    ListCodePointsView,
+    PopulateVariantsView)
+from lgr_advanced.lgr_editor.views.create import (
+    DeleteLGRView,
+    ImportLGRView,
+    ImportReferenceLGRFromFileView,
+    ImportReferenceLGRView,
+    NewLGRView)
+from lgr_advanced.lgr_editor.views.metadata import MetadataView
+from lgr_advanced.lgr_editor.views.reference import (
+    AddReferenceAjaxView,
+    DeleteReferenceView,
+    ListReferenceJsonView,
+    ReferenceView)
+from lgr_advanced.lgr_editor.views.rule import (
+    ListRuleView,
+    RuleEditActionAjaxView,
+    RuleEditClassAjaxView,
+    RuleEditRuleAjaxView)
+from lgr_advanced.lgr_editor.views.set import EmbeddedLGRsView
+from lgr_advanced.lgr_editor.views.tag import DeleteTagView, ListTagJsonView, ListTagView
+from lgr_advanced.lgr_editor.views.validate import ValidateLGRView, prepare_validation_html_file_response
 from lgr_utils.converters import LgrModelConverter
-from lgr_web.converters import (CodePointSlugConverter,
-                                VarSlugConverter,
-                                TagSlugConverter,
-                                FileNameConverter,
-                                ReferenceIdConverter,
-                                ActionIndexConverter)
-from .api import _prepare_validation_html_file_response
-from .views.codepoints.codepoint import (CodePointUpdateReferencesView,
-                                         CodePointDeleteView,
-                                         VariantUpdateReferencesView,
-                                         VariantDeleteView, CodePointView)
-from .views.codepoints.importer import AddRangeView, AddCodepointFromScriptView, ImportCodepointsFromFileView
-from .views.codepoints.list import (ExpandRangeView,
-                                    ExpandRangesView,
-                                    PopulateVariantsView,
-                                    ListCodePointsJsonView,
-                                    ListCodePointsView)
-from .views.create import (DeleteLGRView,
-                           ImportReferenceLGRFromFileView,
-                           ImportReferenceLGRView,
-                           NewLGRView,
-                           ImportLGRView)
-from .views.metadata import MetadataView
-from .views.reference import ReferenceView, ListReferenceJsonView, AddReferenceAjaxView, DeleteReferenceView
-from .views.rule import ListRuleView, RuleEditClassAjaxView, RuleEditRuleAjaxView, RuleEditActionAjaxView
-from .views.set import EmbeddedLGRsView
-from .views.tag import ListTagView, ListTagJsonView, DeleteTagView
-from .views.validate import ValidateLGRView
+from lgr_web.converters import (
+    ActionIndexConverter,
+    CodePointSlugConverter,
+    FileNameConverter,
+    ReferenceIdConverter,
+    TagSlugConverter,
+    VarSlugConverter)
 
 register_converter(FileNameConverter, 'filename')
 register_converter(CodePointSlugConverter, 'cp')
@@ -76,7 +90,7 @@ urlpatterns = [
     # Validation function
     path('<lgr_model:model>/<int:lgr_pk>/validate_lgr/', ValidateLGRView.as_view(), name='validate_lgr'),
     path('<lgr_model:model>/<int:lgr_pk>/validate_lgr/s/', ValidateLGRView.as_view(), name='validate_lgr_save',
-         kwargs={'output_func': _prepare_validation_html_file_response}),
+         kwargs={'output_func': prepare_validation_html_file_response}),
 
     # Codepoint functions
     path('<lgr_model:model>/<int:lgr_pk>/v/<cp:codepoint_id>/', CodePointView.as_view(), name='codepoint_view'),
