@@ -1,9 +1,3 @@
-#! /bin/env python
-# -*- coding: utf-8 -*-
-# Author: Viagénie
-"""
-test_api - 
-"""
 import logging
 import os
 import shutil
