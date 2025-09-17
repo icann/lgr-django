@@ -1,11 +1,7 @@
-#! /bin/env python
-# -*- coding: utf-8 -*-
-"""
-validate - 
-"""
 import logging
 
 from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
@@ -34,8 +30,8 @@ class ValidateLGRView(LGRHandlingBaseMixin, View):
         except KeyError:
             pass
         if self.lgr_object.validating_repertoire:
-            options['validating_repertoire'] = self.lgr_object.validating_repertoire.to_lgr(with_unidb=False,
-                                                                                            expand_ranges=True)
+            options['validating_repertoire'] = self.lgr_object.validating_repertoire.to_lgr(
+                with_unidb=False, expand_ranges=True)
         options['rng_filepath'] = settings.LGR_RNG_FILE
 
         results = self.lgr.validate(options)
@@ -60,3 +56,10 @@ class ValidateLGRView(LGRHandlingBaseMixin, View):
             return self.output_func(self.lgr_object.name, render_to_string(tpl_name, context))
         else:
             return render(request, tpl_name, context)
+
+
+def prepare_validation_html_file_response(name, out):
+    response = HttpResponse(content_type='text/html')
+    response['Content-Disposition'] = f'attachment; filename="{name}-validation-results.html"'
+    response.write(out)
+    return response
