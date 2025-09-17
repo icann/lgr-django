@@ -6,7 +6,7 @@ class TestBasicModeView(LgrWebClientTestBase):
     def setUp(self):
         self.test_label = 'مكتب'  # Arab character valid since the beginning (rz lgr version 1)
         self.dropdown_label = 'RZ-LGR 5'
-        self.dropdown_lgr_keys = LgrWebClientTestBase.active_root_zones + ['Reference LGR']
+        self.dropdown_lgr_keys = self.active_root_zones + ['Reference LGR']
         self.login_admin()
 
     def test_validates_labels_against_dropdown(self):
