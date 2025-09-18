@@ -237,6 +237,9 @@ LANGUAGES = (
 TIME_ZONE = 'UTC'
 USE_TZ = True
 
+# Database
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 # Session
 # https://docs.djangoproject.com/en/1.8/topics/http/sessions/
 SESSION_COOKIE_HTTPONLY = True
