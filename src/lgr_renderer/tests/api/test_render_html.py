@@ -15,8 +15,7 @@ class TestRenderHTML(LgrWebClientTestBase):
 
     def test_returns_lgr_context_in_html_file(self):
         xml_file = 'src/lgr_web/resources/idn_ref/root-zone/lgr-5-common-26may22-en.xml'
-        output_file = './test_result.html'
 
-        render_html(xml_file, validate=False, output=output_file)
+        render_html(xml_file, validate=False, output=self.output_file)
 
         self.assertTrue(os.path.exists(self.output_file))
