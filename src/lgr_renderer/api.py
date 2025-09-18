@@ -21,7 +21,7 @@ from lgr.utils import cp_to_str
 from lgr.validate.lgr_stats import generate_stats
 from natsort import natsorted
 
-from lgr_models.models.lgr import LgrBaseModel
+from lgr_models.models.lgr import TemporaryLgrBase
 from lgr_renderer.utils import render_glyph
 from lgr_utils import unidb
 from lgr_utils.cp import cp_to_slug, render_cp, render_name
@@ -410,7 +410,7 @@ def render_html(xml_file, validate=False, output=None):
     with open(xml_file, 'rb') as lgr_xml:
         filename = os.path.basename(xml_file)
         name = os.path.splitext(filename)[0]
-        lgr_object = LgrBaseModel(file=File(lgr_xml, name=filename), name=name)
+        lgr_object = TemporaryLgrBase(file=File(lgr_xml, name=filename), name=name)
 
         lgr = lgr_object.to_lgr(validate=validate)
         context = generate_context(lgr)

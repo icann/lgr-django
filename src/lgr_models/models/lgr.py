@@ -11,17 +11,16 @@ from django.core.files import File
 from django.db import models
 from django.urls import reverse
 from django.utils.encoding import force_bytes
-
 from lgr.core import LGR
-from lgr.parser.xml_parser import XMLParser, LGR_NS
+from lgr.parser.xml_parser import LGR_NS, XMLParser
 from lgr.parser.xml_serializer import serialize_lgr_xml
 from lgr.utils import tag_to_language_script
+
 from lgr_auth.models import LgrUser
 from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException, LGRValidationException
 from lgr_models.storage import LGROverrideStorage
 from lgr_utils import unidb
 from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
-
 
 OLD_LGR_NS = 'http://www.iana.org/lgr/0.1'
 
@@ -230,6 +229,12 @@ class LgrBaseModel(models.Model):
 
     def is_set(self):
         return False
+
+
+class TemporaryLgrBase(LgrBaseModel):
+    """Allow to use the parsing methods of LgrBaseModel"""
+    class Meta:
+        managed = False
 
 
 class ManagedLgrBase(LgrBaseModel):
