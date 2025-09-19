@@ -93,7 +93,7 @@ def _save_report(user_pk, data):
     storage = LGRAdminReportStorage(user)
     if not user:
         # remove old reports automatically launched
-        storage.list_storage(exclude={'owner__isnull': False}).delete()
+        storage.list_storage(exclude={'owner__isnull': False}, distinct=False).delete()
     filename = f"tlds-indexes-{timezone.now().strftime('%Y-%m-%d-%H%M%S.%f')}.csv"
     report = storage.storage_save_report_file(filename, data)
     if isinstance(current_task.request.id, int):
