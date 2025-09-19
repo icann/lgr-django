@@ -7,16 +7,17 @@ from django.forms import FileField
 from django.utils.translation import ugettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
+from lgr_utils.forms import MultipleFileField
 
 
 class LGRIdnTableReviewForm(forms.Form):
-    idn_tables = FileField(label=_('Select IDN table(s) to review'),
-                           help_text="%s %s" % (
-                               FILE_FIELD_ENCODING_HELP,
-                               _('You can select up to %(max_files)s IDN tables.') % {
-                                   'max_files': settings.MAX_USER_IDN_REVIEW_INPUT}),
-                           required=True,
-                           widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    idn_tables = MultipleFileField(
+        label=_('Select IDN table(s) to review'),
+        help_text="%s %s" % (
+            FILE_FIELD_ENCODING_HELP,
+            _('You can select up to %(max_files)s IDN tables.') % {
+                'max_files': settings.MAX_USER_IDN_REVIEW_INPUT}),
+        required=True)
 
     def clean_idn_tables(self):
         if len(self.files.getlist('idn_tables')) > settings.MAX_USER_IDN_REVIEW_INPUT:
@@ -39,10 +40,10 @@ class IdnTableReviewSelectReferenceForm(forms.Form):
                                                                choices=RefLgrAutocompleteWithCore.get_list(),
                                                                widget=autocomplete.ListSelect2(
                                                                    url='ref-lgr-autocomplete-with-core'))
-            self.fields['file_' + str(idn_table.pk)] = FileField(label=idn_table.name,
-                                                                 required=False,
-                                                                 widget=forms.ClearableFileInput(
-                                                                     attrs={'multiple': False}))
+            self.fields['file_' + str(idn_table.pk)] = FileField(
+                label=idn_table.name,
+                required=False,
+                widget=forms.ClearableFileInput())
 
     def clean(self):
         cleaned_data = super(IdnTableReviewSelectReferenceForm, self).clean()
