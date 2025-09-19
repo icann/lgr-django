@@ -21,7 +21,7 @@ class LGRReportStorage:
         self.user = user
         self.filter_on_user = filter_on_user
 
-    def _get_queryset(self, report_id=None, filename=None, pk=None):
+    def _get_queryset(self, report_id=None, filename=None, pk=None, distinct=True):
         query_kwargs = {}
         if self.filter_on_user:
             query_kwargs['owner'] = self.user
@@ -34,15 +34,21 @@ class LGRReportStorage:
             # would get an error instead of removing both files with no intention
             # For now this should never append the way report naming is
             query_kwargs['file__endswith'] = filename
-        return self.storage_model.objects.filter(**query_kwargs).distinct()
 
-    def list_storage(self, report_id=None, reverse=True, exclude=None):
+        queryset = self.storage_model.objects.filter(**query_kwargs)
+        if distinct:
+            # TODO: Try to determine the reason to use distinct, and covert it with tests
+            #      `distinct` must be set to False when using the queryset for delete
+            queryset = queryset.distinct()
+        return queryset
+
+    def list_storage(self, report_id=None, reverse=True, exclude=None, distinct=True):
         """
         List files in the storage
 
         :return: the list of files in storage
         """
-        queryset = self._get_queryset(report_id=report_id)
+        queryset = self._get_queryset(report_id=report_id, distinct=distinct)
         if reverse:
             queryset = queryset.reverse()
         if exclude:
@@ -93,7 +99,7 @@ class LGRReportStorage:
 
         :param report_id: The ID of the report containing the file
         """
-        self._get_queryset(report_id=report_id).delete()
+        self._get_queryset(report_id=report_id, distinct=False).delete()
 
     def storage_delete_report_file(self, report_pk):
         """
@@ -101,7 +107,7 @@ class LGRReportStorage:
 
         :param report_pk: The report pk
         """
-        self._get_queryset(pk=report_pk).delete()
+        self._get_queryset(pk=report_pk, distinct=False).delete()
 
     def storage_can_read(self):
         """
