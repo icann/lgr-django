@@ -37,29 +37,30 @@ click-plugins==1.1.1.2
     # via celery
 click-repl==0.3.0
     # via celery
+cron-descriptor==2.0.6
+    # via django-celery-beat
 decorator==5.2.1
     # via retry2
-django==3.2.25
+django==4.0.10
     # via
     #   -r requirements.in
+    #   django-autocomplete-light
     #   django-celery-beat
     #   django-redis
     #   django-timezone-field
-django-autocomplete-light==3.9.4
+django-autocomplete-light==3.12.1
     # via -r requirements.in
-django-celery-beat==2.2.1
+django-celery-beat==2.5.0
     # via -r requirements.in
 django-celery-results==2.4.0
     # via -r requirements.in
-django-cleanup==5.2.0
+django-cleanup==6.0.0
     # via -r requirements.in
 django-redis==5.2.0
     # via -r requirements.in
-django-redis-cache==3.0.1
-    # via -r requirements.in
-django-timezone-field==4.2.3
+django-timezone-field==7.1
     # via django-celery-beat
-django-widget-tweaks==1.4.9
+django-widget-tweaks==1.4.12
     # via -r requirements.in
 frozenlist==1.7.0
     # via
@@ -107,25 +108,23 @@ pyjwt==2.10.1
 python-crontab==3.3.0
     # via django-celery-beat
 pytz==2025.2
-    # via
-    #   celery
-    #   django
-    #   django-timezone-field
+    # via celery
 redis==3.5.3
     # via
     #   celery
     #   django-redis
-    #   django-redis-cache
 retry2==0.9.5
     # via okta-jwt-verifier
-six==1.17.0
-    # via django-autocomplete-light
 sqlparse==0.5.3
     # via django
 typing-extensions==4.15.0
-    # via aiosignal
+    # via
+    #   aiosignal
+    #   cron-descriptor
 tzdata==2025.2
-    # via kombu
+    # via
+    #   django-celery-beat
+    #   kombu
 vine==5.1.0
     # via
     #   -r requirements.in

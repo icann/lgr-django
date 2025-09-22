@@ -1,13 +1,12 @@
 # Core stuff
 celery[redis]==5.2.3
-django<4.0
+django<4.1
 django-autocomplete-light
-django-celery-beat<2.3.0 # Drops Django 3.1
+django-celery-beat<2.6.0
 django-celery-results
-django-cleanup<6.0.0 # Drops Django 3.1
+django-cleanup<7.0.0
 django-redis
-django-redis-cache
-django-widget-tweaks<1.4.11 # Drops Django 3.1
+django-widget-tweaks<1.5.0
 vine
 
 
@@ -29,7 +28,3 @@ okta-jwt-verifier
 
 # django-celery-beat / django-cleanup / django-widget-tweaks doesn't pin correctly the requirements
 # for Django in their projects, so we have to pin them here to keep a compatible version for each.
-
-# Dependencies issues with django-redis-cache. It is not maintained anymore, and clashed with
-# celery, as it pinned redis<4. Also not supporting Django 4. It would be required to replace
-# this dependency to properly update the dependency for Django beyond 3.2.
