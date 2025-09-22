@@ -258,7 +258,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 # https://docs.djangoproject.com/fr/1.8/topics/cache/
 CACHES = {
     'default': {
-        'BACKEND': 'redis_cache.RedisCache',
+        'BACKEND': 'django_redis.cache.RedisCache',
         # DB 0 is used for Celery broker
         'LOCATION': 'redis://localhost:6379/1',
     }

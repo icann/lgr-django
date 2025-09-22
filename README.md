@@ -57,7 +57,6 @@ The main dependencies are defined in the [requirements.in](etc/requirements.in) 
 * [django-celery-results](https://github.com/celery/django-celery-results) [BSD License]
 * [django-cleanup](https://github.com/un1t/django-cleanup) [MIT License]
 * [django-redis](https://github.com/jazzband/django-redis) [BSD License]
-* [django-redis-cache](https://github.com/sebleier/django-redis-cache) [BSD License]
 * [django-widget-tweaks](https://github.com/kmike/django-widget-tweaks) [MIT License]
 * [lgr-core](https://github.com/icann/lgr-core) [BSD License]
 * [munidata](https://github.com/icann/munidata) [BSD License]

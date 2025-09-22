@@ -17,7 +17,6 @@ dependencies = [
     "django-celery-results",
     "django-cleanup",
     "django-redis",
-    "django-redis-cache",
     "django-widget-tweaks",
     "lgr-core",
     "munidata",
