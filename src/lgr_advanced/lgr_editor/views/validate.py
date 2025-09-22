@@ -20,7 +20,7 @@ class ValidateLGRView(LGRHandlingBaseMixin, View):
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
-        self.output_func = self.kwargs.get('output_func')
+        self.output = self.kwargs.get('output', False)
 
     def get(self, request, *args, **kwargs):
         # Construct options dictionary for checks/validations
@@ -52,14 +52,11 @@ class ValidateLGRView(LGRHandlingBaseMixin, View):
             'results': results,
             'name': self.lgr_object.name
         }
-        if self.output_func:
-            return self.output_func(self.lgr_object.name, render_to_string(tpl_name, context))
+
+        if self.output:
+            response = HttpResponse(content_type='text/html')
+            response['Content-Disposition'] = f'attachment; filename="{self.lgr_object.name}-validation-results.html"'
+            response.write(render_to_string(tpl_name, context))
+            return response
         else:
             return render(request, tpl_name, context)
-
-
-def prepare_validation_html_file_response(name, out):
-    response = HttpResponse(content_type='text/html')
-    response['Content-Disposition'] = f'attachment; filename="{name}-validation-results.html"'
-    response.write(out)
-    return response
