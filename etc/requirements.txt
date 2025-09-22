@@ -39,7 +39,7 @@ click-repl==0.3.0
     # via celery
 decorator==5.2.1
     # via retry2
-django==3.1.14
+django==3.2.25
     # via
     #   -r requirements.in
     #   django-celery-beat
