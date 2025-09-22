@@ -58,9 +58,8 @@ class BaseCreateInitActiveMixin(BaseAdminMixin):
 
 
 class BaseDeleteModelInitActiveMixin(BaseAdminMixin, DeleteView):
-
-    def delete(self, request, *args, **kwargs):
-        response = super().delete(request, *args, **kwargs)
+    def form_valid(self, form):
+        response = super().form_valid(form)
         if self.object.active:
             initial_active(self.model, set_active=True)
         return response
