@@ -9,6 +9,7 @@ set -e
 # INSTALLATION & CONFIGURATION
 printf "\tInstall the various lgr-django dependencies\t"
 dnf -qy install \
+  gettext \
   git \
   libicu \
   libxml2 \
