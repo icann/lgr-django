@@ -1,18 +1,13 @@
-#! /bin/env python
-# -*- coding: utf-8 -*-
-"""
-metadata - 
-"""
 import logging
 
 from django.contrib import messages
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
-
 from lgr.exceptions import LGRException
-from lgr.metadata import Scope, Metadata, Version, Description
-from lgr_advanced.lgr_editor.forms import MetadataForm, LanguageFormSet
+from lgr.metadata import Description, Metadata, Scope, Version
+
+from lgr_advanced.lgr_editor.forms import LanguageFormSet, MetadataForm
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel

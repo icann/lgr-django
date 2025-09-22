@@ -1,29 +1,30 @@
-# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
-
 from lgr.tools.utils import download_file
-from lgr_advanced.lgr_tools.api import lgr_intersect_union, lgr_comp_diff, lgr_harmonization, LGRCompInvalidException
-from lgr_advanced.lgr_tools.forms import (LGRCompareSelector,
-                                          LGRDiffSelector,
-                                          LGRCollisionSelector,
-                                          LGRAnnotateSelector,
-                                          LGRHarmonizeSelector,
-                                          LGRComputeVariantsSelector)
+
+from lgr_advanced.api import LabelInfo
+from lgr_advanced.lgr_tools.api import LGRCompInvalidException, lgr_comp_diff, lgr_harmonization, lgr_intersect_union
+from lgr_advanced.lgr_tools.forms import (
+    LGRAnnotateSelector,
+    LGRCollisionSelector,
+    LGRCompareSelector,
+    LGRComputeVariantsSelector,
+    LGRDiffSelector,
+    LGRHarmonizeSelector)
+from lgr_advanced.lgr_tools.tasks import (
+    annotate_task,
+    collision_task,
+    diff_task,
+    lgr_set_annotate_task,
+    validate_labels_task)
+from lgr_advanced.models import LgrModel
+from lgr_advanced.views import LGRViewMixin
 from lgr_models.models.lgr import LgrBaseModel, RzLgr
 from lgr_tasks.models import LgrTaskModel
 from lgr_utils.cp import cp_to_slug
-from .tasks import (diff_task,
-                    collision_task,
-                    annotate_task,
-                    lgr_set_annotate_task,
-                    validate_labels_task)
-from ..api import LabelInfo
-from ..models import LgrModel, SetLgrModel
-from ..views import LGRViewMixin
 
 
 class LGRToolBaseView(LGRViewMixin, FormView):

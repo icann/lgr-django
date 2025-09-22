@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,14 +5,14 @@ from django.core.exceptions import SuspiciousOperation
 from django.core.files import File
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.shortcuts import redirect
-from django.urls import reverse_lazy, reverse
-from django.utils.translation import ugettext_lazy as _, ngettext
+from django.urls import reverse, reverse_lazy
+from django.utils.translation import gettext_lazy as _, ngettext
 from django.views import View
 from django.views.generic import FormView, TemplateView
 
 from lgr_advanced.lgr_editor.views.create import RE_SAFE_FILENAME
 from lgr_idn_table_review.idn_tool.api import LGRIdnReviewApi
-from lgr_idn_table_review.idn_tool.forms import LGRIdnTableReviewForm, IdnTableReviewSelectReferenceForm
+from lgr_idn_table_review.idn_tool.forms import IdnTableReviewSelectReferenceForm, LGRIdnTableReviewForm
 from lgr_idn_table_review.idn_tool.tasks import idn_table_review_task
 from lgr_tasks.models import LgrTaskModel
 from lgr_utils.views import safe_next_redirect_url

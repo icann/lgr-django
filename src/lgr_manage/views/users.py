@@ -1,17 +1,15 @@
-# -*- coding: utf-8 -*-
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseBadRequest
 from django.urls import reverse_lazy
-from django.utils.http import url_has_allowed_host_and_scheme
-from django.utils.translation import ugettext_lazy as _
-from django.views.generic import View, RedirectView, CreateView, DeleteView
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import CreateView, DeleteView, RedirectView, View
 from django.views.generic.detail import SingleObjectMixin
 
 from lgr_auth.forms import UserForm
-from lgr_auth.models import LgrUser, LgrRole
+from lgr_auth.models import LgrRole, LgrUser
 from lgr_auth.views import LgrUserUpdateView
-from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin
+from lgr_manage.views.common import BaseAdminMixin, BaseListAdminView
 from lgr_utils.views import safe_next_redirect_url
 
 

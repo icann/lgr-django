@@ -1,8 +1,3 @@
-#! /bin/env python
-# -*- coding: utf-8 -*-
-"""
-tag - 
-"""
 import logging
 from itertools import islice
 
@@ -10,13 +5,13 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
-
 from lgr.exceptions import LGRException
+
 from lgr_advanced.lgr_editor.utils import render_cp_or_sequence
-from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
+from lgr_advanced.lgr_editor.views.mixins import LGREditMixin, LGRHandlingBaseMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_utils.cp import cp_to_slug
 

@@ -1,8 +1,3 @@
-#! /bin/env python
-# -*- coding: utf-8 -*-
-"""
-create - 
-"""
 import logging
 import os
 import re
@@ -14,17 +9,17 @@ from django.contrib import messages
 from django.core.exceptions import SuspiciousOperation
 from django.core.files import File
 from django.db import transaction
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import FormView
-
 from lgr.exceptions import LGRException
+
 from lgr_advanced.lgr_editor.forms import CreateLGRForm, ImportLGRForm
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_advanced.models import LgrModel, SetLgrModel, LgrSetInfo
+from lgr_advanced.models import LgrModel, LgrSetInfo, SetLgrModel
 from lgr_advanced.views import LGRViewMixin
 from lgr_models.models.lgr import LgrBaseModel
 

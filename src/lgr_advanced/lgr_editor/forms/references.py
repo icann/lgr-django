@@ -1,12 +1,11 @@
-# -*- coding: utf-8 -*-
 import re
 
 from django import forms
 from django.forms.formsets import formset_factory
-from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import gettext_lazy as _
 from lgr.metadata import ReferenceManager
-from .utils import BaseDisableableFormSet, ReadOnlyTextInput
+
+from lgr_advanced.lgr_editor.forms.utils import BaseDisableableFormSet, ReadOnlyTextInput
 
 
 class ReferenceForm(forms.Form):

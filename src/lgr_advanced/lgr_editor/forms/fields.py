@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import hashlib
 import logging
 from itertools import chain
@@ -6,9 +5,9 @@ from typing import List
 
 from django.core.cache import cache
 from django.utils.encoding import force_bytes
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-from lgr_models.models.lgr import LgrBaseModel, RzLgr, MSR, IDNARepertoire
+from lgr_models.models.lgr import IDNARepertoire, LgrBaseModel, MSR, RzLgr
 from lgr_utils.utils import LGR_CACHE_KEY_PREFIX
 
 FILE_FIELD_ENCODING_HELP = _('File must be encoded in UTF-8 and using 0x0A line ending.')

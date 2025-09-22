@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 import codecs
 import csv
 
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from lgr.core import LGR
 from lgr.tools.diff_collisions import get_collisions
 from lgr.utils import cp_to_ulabel

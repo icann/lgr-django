@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-# Author: Viagénie
 """
 middleware - Implement some middlewares used by the whole app.
 """
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
 
 
 class UnicodeDecodeErrorMiddleWare:

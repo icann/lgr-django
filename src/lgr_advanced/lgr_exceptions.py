@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
 """
 lgr_exceptions.py - Map LGR exception to user terms.
 """
-from django.utils.translation import ugettext
-from django.utils.translation import ugettext_lazy as _
-
 import lgr.exceptions
+from django.utils.translation import gettext, gettext_lazy as _
 from lgr.utils import format_cp
 from picu.exceptions import IDNAException
-from lgr_models.exceptions import LGRValidationException, LGRUnsupportedUnicodeVersionException
+
+from lgr_models.exceptions import LGRUnsupportedUnicodeVersionException, LGRValidationException
 
 
 def lgr_exception_to_text(exception):
@@ -140,66 +138,71 @@ def lgr_exception_to_text(exception):
         messages = []
         for error in exception.error_labels:
             if error == 'UIDNA_ERROR_EMPTY_LABEL':
-                messages.append(ugettext('Label is empty'))
+                messages.append(gettext('Label is empty'))
             elif error == 'UIDNA_ERROR_LABEL_TOO_LONG':
-                messages.append(ugettext('%(label)s is invalid due to its length being longer than 63 bytes.') % {
-                    'label': exception.obj
-                })
-            # elif error == 'UIDNA_ERROR_DOMAIN_NAME_TOO_LONG':
+                messages.append(gettext(
+                    '%(label)s is invalid due to its length being longer than 63 bytes.' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_LEADING_HYPHEN':
-                messages.append(ugettext('%(label)s is invalid due to hyphen restrictions in the RFC5891 as it starts '
-                                         'with a hyphen-minus.' % {
-                                             'label': exception.obj
-                                         }))
+                messages.append(gettext(
+                    '%(label)s is invalid due to hyphen restrictions in the RFC5891 as it starts with a '
+                    'hyphen-minus.' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_TRAILING_HYPHEN':
-                messages.append(ugettext('%(label)s is invalid due to hyphen restrictions in the RFC5891 as it ends '
-                                         'with a hyphen-minus.' % {
-                                             'label': exception.obj
-                                         }))
+                messages.append(gettext(
+                    '%(label)s is invalid due to hyphen restrictions in the RFC5891 as it ends with a hyphen-minus.' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_HYPHEN_3_4':
-                messages.append(ugettext('%(label)s is invalid due to hyphen restrictions in the RFC5891 as it '
-                                         'contains hyphen-minus in the third and fourth positions.' % {
-                                             'label': exception.obj
-                                         }))
+                messages.append(gettext(
+                    '%(label)s is invalid due to hyphen restrictions in the RFC5891 as it contains hyphen-minus in '
+                    'the third and fourth positions.' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_LEADING_COMBINING_MARK':
-                messages.append(ugettext('%(label)s is invalid due to leading combining marks restriction in the '
-                                         'RFC5891.' % {
-                                             'label': exception.obj
-                                         }))
+                messages.append(gettext(
+                    '%(label)s is invalid due to leading combining marks restriction in the RFC5891.' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_DISALLOWED':
-                messages.append(ugettext('%(label)s is invalid as it contains disallowed characters.' % {
-                    'label': exception.obj
-                }))
+                messages.append(gettext(
+                    '%(label)s is invalid as it contains disallowed characters.' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_PUNYCODE':
-                messages.append(ugettext('%(label)s is invalid as it starts with ‘xn--’ but does not contain valid '
-                                         'Punycode.' % {
-                                             'label': exception.obj
-                                         }))
+                messages.append(gettext(
+                    '%(label)s is invalid as it starts with ‘xn--’ but does not contain valid Punycode.' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_LABEL_HAS_DOT':
-                messages.append(ugettext('%(label)s is invalid as it contains full stop (dot).' % {
-                    'label': exception.obj
-                }))
+                messages.append(gettext(
+                    '%(label)s is invalid as it contains full stop (dot).' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_INVALID_ACE_LABEL':
-                messages.append(ugettext('%(label)s is invalid due to invalid Punycode.' % {'label': exception.obj}))
+                messages.append(gettext('%(label)s is invalid due to invalid Punycode.' % {'label': exception.obj}))
             elif error == 'UIDNA_ERROR_BIDI':
-                messages.append(ugettext('%(label)s is invalid due to  the Bidi rule in the RFC5893.' % {
-                    'label': exception.obj
-                }))
+                messages.append(gettext(
+                    '%(label)s is invalid due to  the Bidi rule in the RFC5893.' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_CONTEXTJ':
-                messages.append(ugettext('%(label)s is invalid due to the IDNA contextual rule for Zero Width '
-                                         'Joiner.' % {
-                                             'label': exception.obj
-                                         }))
+                messages.append(gettext(
+                    '%(label)s is invalid due to the IDNA contextual rule for Zero Width Joiner.' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_CONTEXTO_PUNCTUATION':
-                messages.append(ugettext('%(label)s is invalid due to the IDNA contextual rule for punctuation in '
-                                         'the RFC5892.' % {
-                                             'label': exception.obj
-                                         }))
+                messages.append(gettext(
+                    '%(label)s is invalid due to the IDNA contextual rule for punctuation in the RFC5892.' % {
+                        'label': exception.obj
+                    }))
             elif error == 'UIDNA_ERROR_CONTEXTO_DIGITS':
-                messages.append(ugettext('%(label)s is invalid due to the IDNA contextual rule for digits in the '
-                                         'RFC5892.' % {
-                                             'label': exception.obj
-                                         }))
+                messages.append(gettext(
+                    '%(label)s is invalid due to the IDNA contextual rule for digits in the RFC5892.' % {
+                        'label': exception.obj
+                    }))
             else:
                 messages.append(exception)
             message = '\n'.join(messages)

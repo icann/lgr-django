@@ -1,8 +1,3 @@
-#! /bin/env python
-# -*- coding: utf-8 -*-
-"""
-importer.py -
-"""
 import logging
 from io import StringIO
 
@@ -10,20 +5,18 @@ from django.contrib import messages
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.html import format_html_join
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
-
 from lgr.core import LGR
 from lgr.exceptions import LGRException
 from lgr.parser.heuristic_parser import HeuristicParser
-from lgr.parser.line_parser import LineParser
-from lgr.parser.rfc3743_parser import RFC3743Parser
-from lgr.parser.rfc4290_parser import RFC4290Parser
+
 from lgr_advanced.api import copy_characters
-from lgr_advanced.lgr_editor.forms import (AddMultiCodepointsForm,
-                                           AddRangeForm,
-                                           ImportCodepointsFromFileForm,
-                                           AddCodepointFromScriptForm)
+from lgr_advanced.lgr_editor.forms import (
+    AddCodepointFromScriptForm,
+    AddMultiCodepointsForm,
+    AddRangeForm,
+    ImportCodepointsFromFileForm)
 from lgr_advanced.lgr_editor.utils import slug_to_cp
 from lgr_advanced.lgr_editor.views.mixins import LGREditMixin
 from lgr_advanced.models import LgrModel, TmpLgrModel

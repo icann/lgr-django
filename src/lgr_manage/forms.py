@@ -1,10 +1,9 @@
-# -*- coding: utf-8 -*-
 from pathlib import Path
 
 from dal import autocomplete
 from django import forms
 from django.db import transaction
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms import FILE_FIELD_ENCODING_HELP
 from lgr_models.models.lgr import IDNARepertoire, MSR, RefLgr, RefLgrMember, RzLgr, RzLgrMember
