@@ -37,7 +37,10 @@ class AjaxFormViewMixin(BaseAdminMixin):
 
     def form_invalid(self, form):
         response = super(AjaxFormViewMixin, self).form_invalid(form)
-        if self.request.is_ajax():
+        if self._is_ajax(self.request):
             return JsonResponse(form.errors, status=400)
         else:
             return response
+
+    def _is_ajax(self, request):
+        return request.META.get('HTTP_X_REQUESTED_WITH', '') == 'XMLHttpRequest'
