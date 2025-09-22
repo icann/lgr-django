@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import codecs
 import csv
 import pathlib
@@ -9,15 +8,15 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.utils.translation import ugettext_lazy as _
-from django.views.generic import TemplateView, FormView
-
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import FormView, TemplateView
 from lgr.tools.utils import read_labels
-from lgr.utils import format_cp, cp_to_ulabel, is_idna_valid_cp_or_sequence
+from lgr.utils import cp_to_ulabel, format_cp, is_idna_valid_cp_or_sequence
+
 from lgr_advanced.api import LabelInfo
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_utils import unidb
-from lgr_web.forms import LabelFormsForm, LabelFileFormsForm
+from lgr_web.forms import LabelFileFormsForm, LabelFormsForm
 from lgr_web.utils import IANA_LANG_REGISTRY
 
 

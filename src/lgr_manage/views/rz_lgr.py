@@ -1,13 +1,16 @@
-# -*- coding: utf-8 -*-
 from django import views
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from lgr_manage.forms import RzLgrCreateForm, RzLgrIsActiveForm
 from lgr_manage.views.ajax_mixin import AjaxFormViewMixin
-from lgr_manage.views.common import BaseListAdminView, BaseAdminMixin, BaseCreateInitActiveMixin, \
-    BaseDeleteModelInitActiveMixin, initial_active
+from lgr_manage.views.common import (
+    BaseAdminMixin,
+    BaseCreateInitActiveMixin,
+    BaseDeleteModelInitActiveMixin,
+    BaseListAdminView,
+    initial_active)
 from lgr_models.models.lgr import RzLgr
 
 

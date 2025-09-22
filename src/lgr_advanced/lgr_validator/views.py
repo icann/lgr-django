@@ -1,21 +1,20 @@
-# -*- coding: utf-8 -*-
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
-from django.utils.translation import ugettext_lazy as _
-
 from lgr.exceptions import LGRException
+
+from lgr_advanced.api import LabelInfo
+from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
-from lgr_advanced.lgr_tools.tasks import validate_label_task, lgr_set_validate_label_task
+from lgr_advanced.lgr_tools.tasks import lgr_set_validate_label_task, validate_label_task
+from lgr_advanced.lgr_validator.api import evaluate_label, lgr_set_evaluate_label, validation_results_to_csv
+from lgr_advanced.lgr_validator.forms import ValidateLabelForm
+from lgr_advanced.models import LgrModel
+from lgr_models.models.lgr import LgrBaseModel
 from lgr_tasks.models import LgrTaskModel
 from lgr_utils.unidb import get_db_by_version
-from lgr_models.models.lgr import LgrBaseModel
-from .api import validation_results_to_csv, lgr_set_evaluate_label, evaluate_label
-from .forms import ValidateLabelForm
-from ..api import LabelInfo
-from ..lgr_editor.views.mixins import LGRHandlingBaseMixin
-from ..models import LgrModel
 
 
 class NeedAsyncProcess(Exception):

@@ -1,15 +1,10 @@
-#! /bin/env python
-# -*- coding: utf-8 -*-
-"""
-mixins - 
-"""
 import logging
 import typing
 
 from django.http import HttpResponseBadRequest
-from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import gettext_lazy as _
 from lgr.core import LGR
+
 from lgr_advanced.models import LgrModel, SetLgrModel
 from lgr_advanced.views import LGRViewMixin
 from lgr_models.models.lgr import LgrBaseModel

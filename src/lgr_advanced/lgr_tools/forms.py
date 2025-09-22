@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 from django import forms
 from django.core.validators import FileExtensionValidator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from lgr_advanced.lgr_editor.forms.fields import LABEL_FILE_HELP
 from lgr_advanced.models import LgrModel

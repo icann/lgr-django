@@ -1,8 +1,3 @@
-#! /bin/env python
-# -*- coding: utf-8 -*-
-"""
-views.py
-"""
 import logging
 from enum import Enum
 
@@ -10,15 +5,14 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LogoutView, LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import redirect, resolve_url
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import UpdateView
-from django.views.generic import View, TemplateView
+from django.views.generic import TemplateView, UpdateView, View
 
 from lgr_auth.forms import UserForm
 from lgr_auth.models import LgrUser

@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
 from datetime import date
 
 from dal import autocomplete
 from django import forms
 from django.conf import settings
 from django.forms.formsets import formset_factory
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
+from lgr_advanced.lgr_editor.forms.fields import ValidatingRepertoire
+from lgr_advanced.lgr_editor.forms.utils import BaseDisableableFormSet
 from lgr_web.utils import IANA_LANG_REGISTRY
-from .fields import ValidatingRepertoire
-from .utils import BaseDisableableFormSet
 
 
 def DateInputPlaceHolder(placeholder=''):

@@ -1,20 +1,15 @@
-#! /bin/env python
-# -*- coding: utf-8 -*-
-"""
-rule -
-"""
 import logging
 
 from django.http import JsonResponse
-from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
-from lxml.etree import XMLSyntaxError
-
 from lgr.exceptions import LGRException
 from lgr.parser.xml_parser import LGR_NS
-from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
+from lxml.etree import XMLSyntaxError
+
+from lgr_advanced.lgr_editor.views.mixins import LGREditMixin, LGRHandlingBaseMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.models import LgrModel
 
@@ -111,7 +106,7 @@ class ListRuleView(LGRHandlingBaseMixin, TemplateView):
 def _json_response(success, error_msg=None):
     rv = {'success': success}
     if error_msg:
-        rv['message'] = force_text(error_msg)
+        rv['message'] = force_str(error_msg)
     return JsonResponse(rv, charset='UTF-8')
 
 

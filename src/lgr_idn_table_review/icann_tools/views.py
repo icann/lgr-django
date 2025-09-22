@@ -1,20 +1,17 @@
-# -*- coding: utf-8 -*-
-import uuid
-
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
 
 from lgr_idn_table_review.icann_tools.api import LGRIcannReportStorage
-from lgr_tasks.models import LgrTaskModel
-from lgr_idn_table_review.icann_tools.tasks.review import idn_table_review_task
 from lgr_idn_table_review.icann_tools.tasks.compliance import idn_table_compliance_task
+from lgr_idn_table_review.icann_tools.tasks.review import idn_table_review_task
+from lgr_tasks.models import LgrTaskModel
 
 
 class BaseIcannView(LoginRequiredMixin, UserPassesTestMixin):

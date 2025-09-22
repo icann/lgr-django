@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
+from lgr.tools.utils import parse_codepoint_input, parse_single_cp_input
 
-from lgr.tools.utils import parse_single_cp_input, parse_codepoint_input
-from lgr_advanced.lgr_editor.forms.fields import (ValidatingRepertoire,
-                                                  FILE_FIELD_ENCODING_HELP)
+from lgr_advanced.lgr_editor.forms.fields import FILE_FIELD_ENCODING_HELP, ValidatingRepertoire
+from lgr_advanced.lgr_editor.forms.utils import MultipleChoiceFieldNoValidation
 from lgr_advanced.widgets import DataSelectWidget
-from .utils import MultipleChoiceFieldNoValidation
 
 
 class CodepointField(forms.CharField):

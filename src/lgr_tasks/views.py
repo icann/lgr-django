@@ -4,7 +4,7 @@ from celery.states import FAILURE, PENDING, RETRY, REVOKED, SUCCESS
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.detail import SingleObjectMixin

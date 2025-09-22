@@ -1,12 +1,14 @@
-# -*- coding: utf-8 -*-
 from urllib.parse import quote_plus
 
 from django import forms
 from django.forms import HiddenInput
 from django.forms.formsets import formset_factory
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-from .utils import BaseDisableableFormSet, ReadOnlyTextInput, MultipleChoiceFieldNoValidation
+from lgr_advanced.lgr_editor.forms.utils import (
+    BaseDisableableFormSet,
+    MultipleChoiceFieldNoValidation,
+    ReadOnlyTextInput)
 
 
 class CodepointForm(forms.Form):

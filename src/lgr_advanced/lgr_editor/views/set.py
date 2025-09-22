@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 import logging
 
-from django.http import (HttpResponseBadRequest)
-from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponseBadRequest
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 
 from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin

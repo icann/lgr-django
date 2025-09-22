@@ -1,8 +1,3 @@
-#! /bin/env python
-# -*- coding: utf-8 -*-
-"""
-codepoint - 
-"""
 import json
 import logging
 from ast import literal_eval
@@ -12,22 +7,20 @@ from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView
 from django.views.generic.base import TemplateView, View
-
 from lgr.char import RangeChar
 from lgr.exceptions import LGRException, NotInLGR
 from lgr.utils import format_cp, is_idna_valid_cp_or_sequence
-from lgr_advanced.lgr_editor.forms import (AddVariantForm,
-                                           CodepointForm,
-                                           CodepointVariantFormSet)
-from lgr_advanced.lgr_editor.utils import slug_to_cp, render_char, var_to_slug, render_age, slug_to_var
+
+from lgr_advanced.lgr_editor.forms import AddVariantForm, CodepointForm, CodepointVariantFormSet
+from lgr_advanced.lgr_editor.utils import render_age, render_char, slug_to_cp, slug_to_var, var_to_slug
 from lgr_advanced.lgr_editor.views.codepoints.mixins import CodePointMixin
-from lgr_advanced.lgr_editor.views.mixins import LGRHandlingBaseMixin, LGREditMixin
+from lgr_advanced.lgr_editor.views.mixins import LGREditMixin, LGRHandlingBaseMixin
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_utils import unidb
-from lgr_utils.cp import render_name, cp_to_slug
+from lgr_utils.cp import cp_to_slug, render_name
 
 logger = logging.getLogger(__name__)
 

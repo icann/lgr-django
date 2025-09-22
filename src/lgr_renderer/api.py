@@ -13,7 +13,7 @@ from itertools import islice
 from django.core.files import File
 from django.template.loader import render_to_string
 from django.utils.html import format_html, format_html_join, mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from lgr.classes import TAG_CLASSNAME_PREFIX
 from lgr.exceptions import NotInLGR
 from lgr.matcher import AnchorMatcher

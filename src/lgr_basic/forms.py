@@ -1,13 +1,11 @@
-# -*- coding: utf-8 -*-
 from dal import autocomplete
 from django import forms
 from django.conf import settings
 from django.core.validators import FileExtensionValidator
-from django.utils.translation import ugettext_lazy as _
-
+from django.utils.translation import gettext_lazy as _
 from lgr.tools.utils import parse_label_input
+
 from lgr_advanced.lgr_editor.forms.fields import LABEL_FILE_HELP, LABEL_INPUT_HELP
-from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_models.models.lgr import LgrBaseModel
 from lgr_utils.unidb import get_db_by_version
 

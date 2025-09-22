@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from io import StringIO
 
 from django.conf import settings
@@ -7,21 +6,21 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.urls import reverse
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django.views.generic import FormView
-
 from lgr.exceptions import LGRException
 from lgr.tools.utils import download_file, read_labels
 from lgr.utils import cp_to_ulabel
-from lgr_advanced.api import LabelInfo, LGRToolReportStorage
+
+from lgr_advanced.api import LGRToolReportStorage, LabelInfo
 from lgr_advanced.lgr_exceptions import lgr_exception_to_text
 from lgr_advanced.lgr_tools.tasks import annotate_task, basic_collision_task
 from lgr_advanced.lgr_validator.views import NeedAsyncProcess, evaluate_label_from_view
-from lgr_models.models.lgr import RzLgr, LgrBaseModel
+from lgr_basic.forms import ValidateLabelSimpleForm
+from lgr_models.models.lgr import LgrBaseModel, RzLgr
 from lgr_tasks.models import LgrTaskModel
 from lgr_tasks.tasks import _index_cache_key
 from lgr_utils.views import RefLgrAutocomplete
-from .forms import ValidateLabelSimpleForm
 
 
 class BasicModeView(LoginRequiredMixin, FormView):
