@@ -35,7 +35,7 @@ from lgr_advanced.lgr_editor.views.rule import (
     RuleEditRuleAjaxView)
 from lgr_advanced.lgr_editor.views.set import EmbeddedLGRsView
 from lgr_advanced.lgr_editor.views.tag import DeleteTagView, ListTagJsonView, ListTagView
-from lgr_advanced.lgr_editor.views.validate import ValidateLGRView, prepare_validation_html_file_response
+from lgr_advanced.lgr_editor.views.validate import ValidateLGRView
 from lgr_utils.converters import LgrModelConverter
 from lgr_web.converters import (
     ActionIndexConverter,
@@ -89,8 +89,8 @@ urlpatterns = [
 
     # Validation function
     path('<lgr_model:model>/<int:lgr_pk>/validate_lgr/', ValidateLGRView.as_view(), name='validate_lgr'),
-    path('<lgr_model:model>/<int:lgr_pk>/validate_lgr/s/', ValidateLGRView.as_view(), name='validate_lgr_save',
-         kwargs={'output_func': prepare_validation_html_file_response}),
+    path('<lgr_model:model>/<int:lgr_pk>/validate_lgr/s/', ValidateLGRView.as_view(),
+         name='validate_lgr_save', kwargs={'output': True}),
 
     # Codepoint functions
     path('<lgr_model:model>/<int:lgr_pk>/v/<cp:codepoint_id>/', CodePointView.as_view(), name='codepoint_view'),
