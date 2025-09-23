@@ -1,13 +1,15 @@
-# Core stuff
-celery[redis]==5.2.3
-django<4.1
+# Django
+django<4.2
 django-autocomplete-light
-django-celery-beat<2.6.0
-django-celery-results
 django-cleanup<7.0.0
 django-redis
-django-widget-tweaks<1.5.0
-vine
+django-widget-tweaks
+
+
+# Celery
+celery[redis]
+django-celery-beat<2.6.0
+django-celery-results
 
 
 # LGR/Unicode modules
@@ -22,9 +24,3 @@ natsort
 
 # ICANN Login
 okta-jwt-verifier
-
-
-# Notes
-
-# django-celery-beat / django-cleanup / django-widget-tweaks doesn't pin correctly the requirements
-# for Django in their projects, so we have to pin them here to keep a compatible version for each.
