@@ -41,7 +41,7 @@ cron-descriptor==2.0.6
     # via django-celery-beat
 decorator==5.2.1
     # via retry2
-django==4.1.13
+django==4.2.24
     # via
     #   -r requirements.in
     #   django-autocomplete-light
@@ -51,13 +51,13 @@ django==4.1.13
     #   django-timezone-field
 django-autocomplete-light==3.12.1
     # via -r requirements.in
-django-celery-beat==2.5.0
+django-celery-beat==2.8.1
     # via -r requirements.in
 django-celery-results==2.6.0
     # via -r requirements.in
-django-cleanup==6.0.0
+django-cleanup==9.0.0
     # via -r requirements.in
-django-redis==5.4.0
+django-redis==6.0.0
     # via -r requirements.in
 django-timezone-field==7.1
     # via django-celery-beat
