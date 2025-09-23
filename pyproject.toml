@@ -25,16 +25,17 @@ dependencies = [
     "picu",
     "vine"
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers=[
     "Environment :: Web Environment",
-    "Framework :: Django :: 3.1",
+    "Framework :: Django :: 4.2",
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    #"Programming Language :: Python :: 3.12", #TODO: Test
+    #"Programming Language :: Python :: 3.13", #TODO: Test
 ]
 
 [tool.setuptools]

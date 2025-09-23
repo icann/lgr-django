@@ -1,14 +1,14 @@
 # Django
-django<4.2
+django<5
 django-autocomplete-light
-django-cleanup<7.0.0
+django-cleanup
 django-redis
 django-widget-tweaks
 
 
 # Celery
 celery[redis]
-django-celery-beat<2.6.0
+django-celery-beat
 django-celery-results
 
 
