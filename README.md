@@ -63,7 +63,6 @@ The main dependencies are defined in the [requirements.in](etc/requirements.in) 
 * [natsort](https://pypi.python.org/pypi/natsort) [MIT License]
 * [okta-jwt-verifier](https://pypi.org/project/okta-jwt-verifier/) [Apache Software License]
 * [picu](https://pypi.python.org/pypi/picu) [MIT/X License]
-* [vine](https://pypi.org/project/vine/) [BSD License]
 
 
 #### Testing Dependencies
