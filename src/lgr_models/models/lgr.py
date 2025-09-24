@@ -42,7 +42,7 @@ def get_upload_path(instance, filename):
         return os.path.join(base_path, 'idna', filename)
 
     # if you need to use other LgrBaseModel in migration, this won't work as historical models don't include method.
-    # See https://docs.djangoproject.com/en/3.1/topics/migrations/#historical-models
+    # See https://docs.djangoproject.com/en/5.2/topics/migrations/#historical-models
     # If you need this in a migration, define the method in the migration and set it to the historical model.
     return os.path.join('lgr', instance.upload_path(instance, filename))
 

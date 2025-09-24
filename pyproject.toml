@@ -22,13 +22,12 @@ dependencies = [
     "munidata",
     "natsort",
     "okta-jwt-verifier",
-    "picu",
-    "vine"
+    "picu"
 ]
 requires-python = ">=3.10"
 classifiers=[
     "Environment :: Web Environment",
-    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.2",
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
