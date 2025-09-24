@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 """
 lgr_web URL Configuration
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.1/topics/http/urls/
+The `urlpatterns` list routes URLs to views. For more information, please see:
+    https://docs.djangoproject.com/en/5.2/topics/http/urls/
 """
 from django.conf.urls import include
 from django.urls import path
@@ -17,7 +16,13 @@ import lgr_renderer.urls
 import lgr_session.urls
 import lgr_tasks.urls
 import lgr_utils.urls
-from .views import LGRModesView, LGRAboutView, LGRHelpView, LanguageAutocomplete, LabelFormsView, LabelFileFormsView
+from lgr_web.views import (
+    LGRAboutView,
+    LGRHelpView,
+    LGRModesView,
+    LabelFileFormsView,
+    LabelFormsView,
+    LanguageAutocomplete)
 
 urlpatterns = [
     path('a/', include(lgr_advanced.urls.urlpatterns)),
