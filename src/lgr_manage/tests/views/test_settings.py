@@ -38,7 +38,7 @@ class TestToolSettings(LgrWebClientTestBase):
         response = self.client.get(self.settings_url)
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, f'/auth/login/?next={self.settings_url}')
+        self.assertEqual(response.url, f'/auth/login/?next={self.settings_url}')
 
     def test_update_settings_as_admin(self):
         self.login_admin()

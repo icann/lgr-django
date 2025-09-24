@@ -68,7 +68,7 @@ class TestRzLgrCreateView(LgrWebClientTestBase):
         response = self.client.post(self.base_url, data={})
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, f'/auth/login/?next={self.base_url}')
+        self.assertEqual(response.url, f'/auth/login/?next={self.base_url}')
 
 
 class TestRzLgrDeleteView(LgrWebClientTestBase):
@@ -122,7 +122,7 @@ class TestRzLgrDeleteView(LgrWebClientTestBase):
         response = self.client.post(self.delete_url)
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, f'/auth/login/?next={self.delete_url}')
+        self.assertEqual(response.url, f'/auth/login/?next={self.delete_url}')
         self.assertTrue(self.model.objects.filter(pk=self.other_instance.pk).exists())
 
     def test_delete_active_reference(self):
@@ -168,7 +168,7 @@ class TestRzLgrUpdateView(LgrWebClientTestBase):
         response = self.client.post(self.active_url, data={'active': self.other_instance.pk})
 
         self.assertContains(response, f'"old_active": {self.default_active.pk}', status_code=HTTPStatus.OK)
-        self.assertEquals(self.model.objects.get(active=True).pk, self.other_instance.pk)
+        self.assertEqual(self.model.objects.get(active=True).pk, self.other_instance.pk)
 
     def test_cannot_update_as_icann_user(self):
         self.login_icann()
@@ -188,7 +188,7 @@ class TestRzLgrUpdateView(LgrWebClientTestBase):
         response = self.client.post(self.active_url, data={'active': self.other_instance.pk})
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, f'/auth/login/?next={self.active_url}')
+        self.assertEqual(response.url, f'/auth/login/?next={self.active_url}')
 
 
 class TestRzLgrAccessView(LgrWebClientTestBase):
@@ -220,17 +220,17 @@ class TestRzLgrAccessView(LgrWebClientTestBase):
 
         response = self.client.get(self.active_url)
 
-        self.assertEquals(response.status_code, HTTPStatus.FORBIDDEN)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
     def test_cannot_access_as_regular_user(self):
         self.login_user()
 
         response = self.client.get(self.active_url)
 
-        self.assertEquals(response.status_code, HTTPStatus.FORBIDDEN)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
     def test_cannot_access_when_not_logged_in(self):
         response = self.client.get(self.active_url)
 
-        self.assertEquals(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, f'/auth/login/?next={self.active_url}')
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(response.url, f'/auth/login/?next={self.active_url}')

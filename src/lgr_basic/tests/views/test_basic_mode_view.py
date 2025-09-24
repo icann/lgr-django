@@ -20,6 +20,6 @@ class TestBasicModeView(LgrWebClientTestBase):
             '/b/',
             {'lgr': dropdown_dict[self.dropdown_label], 'collisions': False, 'labels': self.test_label})
 
-        self.assertEquals('lgr', dropdown['name'])
+        self.assertEqual(dropdown['name'], 'lgr')
         self.assertListEqual(list(dropdown_dict.keys()), self.dropdown_lgr_keys)
         self.assertNotContains(response, 'INVALID', status_code=200)
