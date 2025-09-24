@@ -1,11 +1,6 @@
-# -*- coding: utf-8 -*-
-from django.urls import path, register_converter
+from django.urls import path
 
-from . import views
-from lgr_utils.converters import LgrModelConverter
-
-register_converter(LgrModelConverter, 'lgr_model')
-
+from lgr_renderer import views
 
 urlpatterns = [
     path('html/<lgr_model:model>/<int:lgr_pk>', views.LGRRendererView.as_view(), name='lgr_render'),

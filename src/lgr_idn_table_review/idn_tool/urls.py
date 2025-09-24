@@ -1,14 +1,11 @@
-# -*- coding: utf-8 -*-
-from django.urls import path, register_converter
+from django.urls import path
 
-from lgr_idn_table_review.idn_tool.views import (IdnTableReviewModeView,
-                                                 IdnTableReviewSelectReferenceView,
-                                                 IdnTableReviewListReports,
-                                                 IdnTableReviewListReport,
-                                                 IdnTableReviewDeleteReport)
-from lgr_web.converters import FileNameConverter
-
-register_converter(FileNameConverter, 'filename')
+from lgr_idn_table_review.idn_tool.views import (
+    IdnTableReviewDeleteReport,
+    IdnTableReviewListReport,
+    IdnTableReviewListReports,
+    IdnTableReviewModeView,
+    IdnTableReviewSelectReferenceView)
 
 urlpatterns = [
     path('', IdnTableReviewModeView.as_view(), name='lgr_review_mode'),

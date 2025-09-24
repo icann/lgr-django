@@ -1,4 +1,4 @@
-from django.urls import path, register_converter
+from django.urls import path
 
 from lgr_advanced.lgr_editor.views.codepoints.codepoint import (
     CodePointDeleteView,
@@ -36,22 +36,6 @@ from lgr_advanced.lgr_editor.views.rule import (
 from lgr_advanced.lgr_editor.views.set import EmbeddedLGRsView
 from lgr_advanced.lgr_editor.views.tag import DeleteTagView, ListTagJsonView, ListTagView
 from lgr_advanced.lgr_editor.views.validate import ValidateLGRView
-from lgr_utils.converters import LgrModelConverter
-from lgr_web.converters import (
-    ActionIndexConverter,
-    CodePointSlugConverter,
-    FileNameConverter,
-    ReferenceIdConverter,
-    TagSlugConverter,
-    VarSlugConverter)
-
-register_converter(FileNameConverter, 'filename')
-register_converter(CodePointSlugConverter, 'cp')
-register_converter(VarSlugConverter, 'var')
-register_converter(TagSlugConverter, 'tag')
-register_converter(ReferenceIdConverter, 'ref')
-register_converter(ActionIndexConverter, 'action')
-register_converter(LgrModelConverter, 'lgr_model')
 
 urlpatterns = [
     # Import/Creation functions

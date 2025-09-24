@@ -1,10 +1,6 @@
-# -*- coding: utf-8 -*-
-from django.urls import path, include
-
-import lgr_idn_table_review.icann_tools.urls
-import lgr_idn_table_review.idn_tool.urls
+from django.urls import include, path
 
 urlpatterns = [
-    path('icann/', include(lgr_idn_table_review.icann_tools.urls.urlpatterns)),
-    path('tool/', include(lgr_idn_table_review.idn_tool.urls.urlpatterns)),
+    path('icann/', include('lgr_idn_table_review.icann_tools.urls')),
+    path('tool/', include('lgr_idn_table_review.idn_tool.urls')),
 ]
