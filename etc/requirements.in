@@ -1,6 +1,6 @@
 # Core stuff
 celery[redis]==5.2.3
-django<4.1
+django<4.3
 django-autocomplete-light
 django-celery-beat<2.6.0
 django-celery-results
