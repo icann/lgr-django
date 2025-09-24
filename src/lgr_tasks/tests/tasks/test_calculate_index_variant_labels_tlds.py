@@ -51,7 +51,7 @@ class TestCalculateIndexVariantLabelsTLDs(LgrWebClientTestBase):
         storage = LGRAdminReportStorage(None)
         with self.assertRaises(AdminReport.DoesNotExist):
             storage.storage_get_report_file(auto_report.pk)
-        self.assertEquals(user_report, storage.storage_get_report_file(user_report.pk))
+        self.assertEqual(storage.storage_get_report_file(user_report.pk), user_report)
         last_report: AdminReport = storage.list_storage().first()
         with last_report.file.open('rb') as f:
             # Remove BOM

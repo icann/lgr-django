@@ -84,7 +84,7 @@ class TestRefLgrCreateView(LgrWebClientTestBase):
         response = self.client.post(self.base_url, data={})
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, f'/auth/login/?next={self.base_url}')
+        self.assertEqual(response.url, f'/auth/login/?next={self.base_url}')
 
 
 class TestRefLgrDeleteView(LgrWebClientTestBase):
@@ -144,7 +144,7 @@ class TestRefLgrDeleteView(LgrWebClientTestBase):
         response = self.client.post(self.delete_url)
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, f'/auth/login/?next={self.delete_url}')
+        self.assertEqual(response.url, f'/auth/login/?next={self.delete_url}')
         self.assertTrue(self.model.objects.filter(pk=self.other_instance.pk).exists())
 
     def test_delete_active_reference(self):
@@ -195,7 +195,7 @@ class TestRefLgrUpdateView(LgrWebClientTestBase):
         self.client.post(self.update_url, data={'language_script': 'ar-Arab'})
 
         self.ref_member1.refresh_from_db()
-        self.assertEquals(self.ref_member1.language_script, 'ar-Arab')
+        self.assertEqual(self.ref_member1.language_script, 'ar-Arab')
 
     def test_update_duplicate_member(self):
         self.login_admin()
@@ -208,7 +208,7 @@ class TestRefLgrUpdateView(LgrWebClientTestBase):
         self.assertContains(response, "Failed to update Reference LGR member", status_code=HTTPStatus.OK)
         self.assertContains(response, "This reference LGR member already exists", status_code=HTTPStatus.OK)
         self.ref_member1.refresh_from_db()
-        self.assertEquals(self.ref_member1.language_script, 'und-Latn')
+        self.assertEqual(self.ref_member1.language_script, 'und-Latn')
 
     def test_update_overwrite_member(self):
         """
@@ -224,8 +224,8 @@ class TestRefLgrUpdateView(LgrWebClientTestBase):
                 'language_script': 'jp'})
 
         self.ref_member1.refresh_from_db()
-        self.assertEquals(self.ref_member1.name, 'ref_lgr_member1')
-        self.assertEquals(self.ref_member1.language_script, 'jp')
+        self.assertEqual(self.ref_member1.name, 'ref_lgr_member1')
+        self.assertEqual(self.ref_member1.language_script, 'jp')
 
     def test_cannot_update_as_icann_user(self):
         self.login_icann()
@@ -245,7 +245,7 @@ class TestRefLgrUpdateView(LgrWebClientTestBase):
         response = self.client.post(self.update_url, data={'language_script': 'ar-Arab'})
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, f'/auth/login/?next={self.update_url}')
+        self.assertEqual(response.url, f'/auth/login/?next={self.update_url}')
 
 
 class TestRefLgrAccessView(LgrWebClientTestBase):
@@ -277,17 +277,17 @@ class TestRefLgrAccessView(LgrWebClientTestBase):
 
         response = self.client.get(self.active_url)
 
-        self.assertEquals(response.status_code, HTTPStatus.FORBIDDEN)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
     def test_cannot_access_as_regular_user(self):
         self.login_user()
 
         response = self.client.get(self.active_url)
 
-        self.assertEquals(response.status_code, HTTPStatus.FORBIDDEN)
+        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
 
     def test_cannot_access_when_not_logged_in(self):
         response = self.client.get(self.active_url)
 
-        self.assertEquals(response.status_code, HTTPStatus.FOUND)
-        self.assertEquals(response.url, f'/auth/login/?next={self.active_url}')
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+        self.assertEqual(response.url, f'/auth/login/?next={self.active_url}')

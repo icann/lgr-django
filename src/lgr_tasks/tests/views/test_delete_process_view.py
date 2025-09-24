@@ -22,4 +22,4 @@ class TestDeleteProcessView(LGRTasksClientTestBase):
 
         self.assertTrue(LgrTaskModel.objects.filter(pk=4).exists())
         self.t4.refresh_from_db()
-        self.assertEquals('REVOKED', self.t4.name)
+        self.assertEqual(self.t4.name, 'REVOKED')
