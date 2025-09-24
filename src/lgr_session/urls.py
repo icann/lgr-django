@@ -1,11 +1,6 @@
-# -*- coding: utf-8 -*-
-from django.urls import path, register_converter
+from django.urls import path
 
-from lgr_web.converters import StorageTypeConverter, FileNameConverter
-from .views import DownloadReportFileView, DeleteReportFileView
-
-register_converter(StorageTypeConverter, 'storage')
-register_converter(FileNameConverter, 'filename')
+from lgr_session.views import DeleteReportFileView, DownloadReportFileView
 
 urlpatterns = [
     path('<storage:storage>/file/<int:pk>/dl/', DownloadReportFileView.as_view(), name='download_report_file'),

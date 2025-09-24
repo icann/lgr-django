@@ -1,10 +1,10 @@
-# -*- coding: utf-8 -*-
-from django.urls import path, register_converter
+from django.urls import path
 
-from lgr_utils.converters import LgrModelConverter
-from .views import ValidateLabelView, ValidateLabelNoFrameView, ValidateLabelJsonView, ValidateLabelCSVView
-
-register_converter(LgrModelConverter, 'lgr_model')
+from lgr_advanced.lgr_validator.views import (
+    ValidateLabelCSVView,
+    ValidateLabelJsonView,
+    ValidateLabelNoFrameView,
+    ValidateLabelView)
 
 urlpatterns = [
     path('eval/<lgr_model:model>/<int:lgr_pk>/json/', ValidateLabelJsonView.as_view(), name='lgr_validate_json'),
