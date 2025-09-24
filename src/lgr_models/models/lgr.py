@@ -275,7 +275,7 @@ class RefLgrMember(ManagedLgrBaseMember):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.language, self.script = tag_to_language_script(self.language_script)
-        super().save(force_insert, force_update, using, update_fields)
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 
 class RzLgrMember(ManagedLgrBaseMember):
@@ -291,7 +291,7 @@ class RzLgrMember(ManagedLgrBaseMember):
             self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
         except:
             pass
-        super().save(force_insert, force_update, using, update_fields)
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 
 class MSR(ManagedLgrBase):
