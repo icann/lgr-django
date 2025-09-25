@@ -1,5 +1,37 @@
 # Changelog for lgr-django
 
+## 7.0.0 (2025-09-25)
+
+### Fixes
+- Fix an issue in the codepoint view when deleting variants
+- Fix a typo in the error message for leading hyphen in label validation
+- Fix LGRDisplayView not being able to use the force_download parameter
+
+### Improvements
+- Add more test coverage to the codebase
+- Fix some tests that were failing
+- Add stage to run the test suite in the Jenkinsfile pipeline
+- Update Helm configuration
+- Replace setup.py with pyproject.toml
+- Upgrade Django to version 5.2
+- Manage Python dependencies with pip-tools
+- Remove Python 2 leftover code
+- Remove Python support for versions 3.9 and older
+- Update the base image used in containers/lgr-base with Red Hat UBI9 with Python 3.12
+- Adjust ReadMe and License
+- Make some changes to the codebase for Django compatibility
+  - Add a new unmanaged class TemporaryLGRBase to replace a direct instance of the abstract class LGRBaseModel
+  - Add new default Django setting DEFAULT_AUTO_FIELD
+  - Prevent querysets from combining .distinct() and .delete()
+  - Replace FileField using the widget ClearableFileInput with MultipleFileField for multi file uploads
+  - Remove unused dependency django-redis-cache
+  - Create a method is_ajax() in AjaxFormViewMixin to address the deprecation of request.is_ajax()
+  - Replace the delete() method with form_valid() in BaseDeleteModelInitActiveMixin
+  - Replace usage of the deprecated setting DEFAULT_FILE_STORAGE
+  - Remove the deprecated setting USE_L10N
+  - Replace positional arguments by keywords in save() calls
+  - Move register_converter() calls into one place and remove registration duplication
+
 ## 6.1.2 (2024-09-08)
 ### New features
 - Use Unicode version 15.1.0 by default
