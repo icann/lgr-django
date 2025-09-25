@@ -41,7 +41,7 @@ unicodeURL='https://github.com/unicode-org/icu.git'
 git clone -q $unicodeURL $buildDir/icu
 
 # unicodeVersions define all unicode version use in LGR
-unicodeVersion="15.1.0"
+unicodeVersion="16.0.0"
 
 # Compile every icu4c version from the local LGR git repo
 for i in $unicodeVersion
@@ -103,6 +103,11 @@ do
       icu4cBuildPath="$buildDir/icu/icu4c/build"
       unicodeTag=74
       unicodeRelease='release-74-2'
+      ;;
+    16.0.0)
+      icu4cBuildPath="$buildDir/icu/icu4c/build"
+      unicodeTag=76
+      unicodeRelease='release-76-1'
       ;;
     *)
       # Should never happen as no external input is used

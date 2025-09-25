@@ -20,6 +20,9 @@
 - Remove Python support for versions 3.9 and older
 - Update the base image used in containers/lgr-base with Red Hat UBI9 with Python 3.12
 - Adjust ReadMe and License
+- Update French translations
+- Update frontend dependencies (jquery / jquery-ui / codemirror / bootstrap)
+- Add Unicode 16 support
 - Make some changes to the codebase for Django compatibility
   - Add a new unmanaged class TemporaryLGRBase to replace a direct instance of the abstract class LGRBaseModel
   - Add new default Django setting DEFAULT_AUTO_FIELD
