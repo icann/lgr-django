@@ -30,6 +30,15 @@ if DEBUG:
     LOGGING['loggers']['lgr-rule-logger']['level'] = 'WARNING'  # 'DEBUG'
     LOGGING['loggers']['celery']['level'] = 'WARNING'  # 'DEBUG'
 
+SUPPORTED_UNICODE_VERSION = '16.0.0'
+DEFAULT_UNICODE_VERSION = '16.0.0'
+METADATA_UNICODE_VERSIONS = (
+    '6.3.0',
+    '10.0.0',
+    '11.0.0',
+    '16.0.0',
+)
+
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'
 # Values are a dict of the kwargs to pass to the munidata.manager.register function along with the version.
@@ -54,7 +63,11 @@ UNICODE_DATABASES = {
         'icu_uc_lib': '/usr/lib/libicuuc.so.63.2',
         'icu_i18n_lib': '/usr/lib/libicui18n.so.63.2',
         'version_tag': 63,
-    },
+    '16.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.76',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.76',
+        'version_tag': 76,
+    }
 }
 
 # Database

@@ -27,16 +27,16 @@ LOGGING['loggers']['lgr-rule-logger']['level'] = 'DEBUG'
 LOGGING['loggers']['celery']['level'] = 'DEBUG'
 
 METADATA_UNICODE_VERSIONS = (
-    '15.1.0',
+    '16.0.0',
 )
-SUPPORTED_UNICODE_VERSION = '15.1.0'
-DEFAULT_UNICODE_VERSION = '15.1.0'
+SUPPORTED_UNICODE_VERSION = '16.0.0'
+DEFAULT_UNICODE_VERSION = '16.0.0'
 
 UNICODE_DATABASES = {
-    '15.1.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.74',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.74',
-        'version_tag': 74,
+    '16.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.76',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.76',
+        'version_tag': 76,
     }
 }
 

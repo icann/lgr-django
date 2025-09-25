@@ -295,7 +295,8 @@ STORAGE_DURATION = 60*60*24*7  # 1 week
 # Default variant type when creating new variant
 DEFAULT_VARIANT_TYPE = "blocked"
 
-SUPPORTED_UNICODE_VERSION = '6.3.0'
+SUPPORTED_UNICODE_VERSION = '16.0.0'
+DEFAULT_UNICODE_VERSION = '16.0.0'
 METADATA_UNICODE_VERSIONS = (
     '6.3.0',
     '6.0.0',
@@ -309,30 +310,29 @@ METADATA_UNICODE_VERSIONS = (
     '12.0.0',
     '12.0.0',
     '14.0.0',
+    '15.1.0',
+    '16.0.0',
 )
-
-# ICANN TLDs URL
-ICANN_TLDS = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
 
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'
 # Values are a dict of the kwargs to pass to the munidata.manager.register function along with the version.
 # Currently, we assume that the underlying implementation is "picu", so the value should have the following keys:
 # - icu_uc_lib: full path to the libicuuc.so file
-# - icu_i18n_lib': full path to the libicui18n.so file
+# - icu_i18n_lib: full path to the libicui18n.so file
 # - version_tag: version tag used in the function symbols in the above libraries (usually the ICU major version)
 # See picu.loader.KNOWN_ICU_VERSIONS
 
 UNICODE_DATABASES = {
-    '6.3.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.52.1',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.52.1',
-        'version_tag': 52,
-    },
+    '16.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.76',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.76',
+        'version_tag': 76,
+    }
 }
 
-# default unicode version in dropdowns across the application
-DEFAULT_UNICODE_VERSION = '6.3.0'
+# ICANN TLDs URL
+ICANN_TLDS = 'http://data.iana.org/TLD/tlds-alpha-by-domain.txt'
 
 # A list of IDN tables to handle in ICANN IDN table review. None for all.
 ICANN_IDN_REVIEW_TABLES = []

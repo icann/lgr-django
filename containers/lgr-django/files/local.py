@@ -93,26 +93,29 @@ DEFAULT_FROM_EMAIL = os.environ.get('lgrEmail')
 ##### /e-mail settings #####
 
 ##### LGR Toolset Project-specific settings #####
-SUPPORTED_UNICODE_VERSION = '15.1.0'
-
-DEFAULT_UNICODE_VERSION = '15.1.0'
+METADATA_UNICODE_VERSIONS = (
+    '16.0.0',
+)
+SUPPORTED_UNICODE_VERSION = '16.0.0'
+DEFAULT_UNICODE_VERSION = '16.0.0'
 
 # UNICODE_DATABASES tells munidata how to instantiate the implementation of each Unicode version that we support.
 # Keys are the Unicode version, like '6.3.0'
 # Values are a dict of the kwargs to pass to the munidata.manager.register function along with the version.
 # Currently, we assume that the underlying implementation is "picu", so the value should have the following keys:
 # - icu_uc_lib: full path to the libicuuc.so file
-# - icu_i18n_lib': full path to the libicui18n.so file
+# - icu_i18n_lib: full path to the libicui18n.so file
 # - version_tag: version tag used in the function symbols in the above libraries (usually the ICU major version)
 # See picu.loader.KNOWN_ICU_VERSIONS
 
 UNICODE_DATABASES = {
-    '15.1.0': {
-        'icu_uc_lib': '/usr/local/lib/libicuuc.so.74',
-        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.74',
-        'version_tag': 74,
+    '16.0.0': {
+        'icu_uc_lib': '/usr/local/lib/libicuuc.so.76',
+        'icu_i18n_lib': '/usr/local/lib/libicui18n.so.76',
+        'version_tag': 76,
     }
 }
+
 ##### /LGR Toolset Project-specific settings #####
 
 # DELETE_FROM_HERE_AFTER_GENERATION
