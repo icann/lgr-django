@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 20:22+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: 2023-10-05 11:01-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,29 +18,29 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: src/lgr_models/templates/lgr_models/_report_list.html:9
+#: src/lgr_models/templates/lgr_models/_report_list.html:12
 msgid "Download"
 msgstr "Télécharger"
 
-#: src/lgr_models/templates/lgr_models/_report_list.html:12
+#: src/lgr_models/templates/lgr_models/_report_list.html:16
 #, python-format
 msgid "Are you sure you want to delete report %(report.filename)s?"
 msgstr "Êtes vous sur de vouloir supprimer le rapport %(report.filename)s?"
 
-#: src/lgr_models/templatetags/report.py:29
+#: src/lgr_models/templatetags/report.py:28
 msgid "Expires in"
 msgstr "Expire dans"
 
-#: src/lgr_models/templatetags/report.py:32
-#: src/lgr_models/templatetags/report.py:49
+#: src/lgr_models/templatetags/report.py:31
+#: src/lgr_models/templatetags/report.py:48
 msgid "day"
 msgstr "jour"
 
-#: src/lgr_models/templatetags/report.py:42
+#: src/lgr_models/templatetags/report.py:41
 msgid "The report "
 msgstr "Le rapport "
 
-#: src/lgr_models/templatetags/report.py:47
+#: src/lgr_models/templatetags/report.py:46
 msgid "These files would be cleaned up after"
 msgstr "Ces fichiers seront supprimés après"
 

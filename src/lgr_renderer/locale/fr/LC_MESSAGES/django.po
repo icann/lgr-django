@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 20:22+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: 2021-02-26 14:05-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,30 +18,30 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 2.4.1\n"
 
-#: src/lgr_renderer/api.py:60
+#: src/lgr_renderer/api.py:63
 msgid "LGR Version"
 msgstr "Version de la LGR"
 
-#: src/lgr_renderer/api.py:62
+#: src/lgr_renderer/api.py:65
 msgid "Date"
 msgstr "Date"
 
-#: src/lgr_renderer/api.py:64
+#: src/lgr_renderer/api.py:67
 msgid "Language(s)"
 msgstr "Langue(s)"
 
-#: src/lgr_renderer/api.py:66
+#: src/lgr_renderer/api.py:69
 msgid "Scope(s)"
 msgstr "Cadre(s)"
 
-#: src/lgr_renderer/api.py:68
+#: src/lgr_renderer/api.py:71
 msgid "Validity Start"
 msgstr "Début de validité"
 
-#: src/lgr_renderer/api.py:70
+#: src/lgr_renderer/api.py:73
 msgid "Validity End"
 msgstr "Fin de validité"
 
-#: src/lgr_renderer/api.py:72
+#: src/lgr_renderer/api.py:75
 msgid "Unicode Version"
 msgstr "Version d'Unicode"

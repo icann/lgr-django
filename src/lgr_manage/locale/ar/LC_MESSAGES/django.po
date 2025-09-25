@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 18:36+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,16 +19,16 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_manage/forms.py:15
+#: src/lgr_manage/forms.py:16
 msgid "LGR file(s)"
 msgstr ""
 
-#: src/lgr_manage/forms.py:23
+#: src/lgr_manage/forms.py:22
 msgid "Common LGR file"
 msgstr ""
 
-#: src/lgr_manage/forms.py:24 src/lgr_manage/forms.py:77
-#: src/lgr_manage/forms.py:113 src/lgr_manage/forms.py:127
+#: src/lgr_manage/forms.py:23 src/lgr_manage/forms.py:108
+#: src/lgr_manage/forms.py:146 src/lgr_manage/forms.py:160
 #: src/lgr_manage/templates/lgr_manage/idna.html:11
 #: src/lgr_manage/templates/lgr_manage/msr.html:11
 #: src/lgr_manage/templates/lgr_manage/ref_lgr.html:11
@@ -37,56 +37,72 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: src/lgr_manage/forms.py:35
+#: src/lgr_manage/forms.py:34 src/lgr_manage/forms.py:72
 msgid "Reference LGR member file"
 msgstr ""
 
-#: src/lgr_manage/forms.py:37
+#: src/lgr_manage/forms.py:36 src/lgr_manage/forms.py:77
 #: src/lgr_manage/templates/lgr_manage/ref_lgr.html:16
 msgid "Language/script tag"
 msgstr ""
 
-#: src/lgr_manage/forms.py:69
+#: src/lgr_manage/forms.py:62
+msgid "Unable to retrieve file with this name"
+msgstr ""
+
+#: src/lgr_manage/forms.py:94
+msgid "This reference LGR member already exists"
+msgstr ""
+
+#: src/lgr_manage/forms.py:100
 msgid "Common Reference LGR member files"
 msgstr ""
 
-#: src/lgr_manage/forms.py:78
+#: src/lgr_manage/forms.py:109
 msgid "Common Reference LGR file"
 msgstr ""
 
-#: src/lgr_manage/forms.py:112
+#: src/lgr_manage/forms.py:145
 #: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:19
 msgid "MSR"
 msgstr ""
 
-#: src/lgr_manage/forms.py:126
+#: src/lgr_manage/forms.py:159
 msgid "IDNA Repertoire"
 msgstr ""
 
-#: src/lgr_manage/forms.py:148
+#: src/lgr_manage/forms.py:182
 msgid "Variant Calculation Limit"
 msgstr ""
 
-#: src/lgr_manage/forms.py:149
+#: src/lgr_manage/forms.py:183
 msgid "Variant Calculation Max"
 msgstr ""
 
-#: src/lgr_manage/forms.py:150
+#: src/lgr_manage/forms.py:184
 msgid "Variant Calculation Skip"
 msgstr ""
 
-#: src/lgr_manage/forms.py:153
+#: src/lgr_manage/forms.py:185
+msgid "Report expiration delay"
+msgstr ""
+
+#: src/lgr_manage/forms.py:188
 msgid ""
 "Above this limit, only allocatable labels will be displayed and result can "
 "be downloaded"
 msgstr ""
 
-#: src/lgr_manage/forms.py:155
+#: src/lgr_manage/forms.py:190
 msgid "Above this limit, results would be computed in a background task"
 msgstr ""
 
-#: src/lgr_manage/forms.py:156
+#: src/lgr_manage/forms.py:191
 msgid "Above this limit, no results would be computed"
+msgstr ""
+
+#: src/lgr_manage/forms.py:192
+msgid "The delay after which a report is automatically deleted, in days"
 msgstr ""
 
 #: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:4
@@ -112,6 +128,10 @@ msgstr ""
 
 #: src/lgr_manage/templates/lgr_manage/_idn_table_review_admin_base.html:28
 msgid "Tool Setting"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_manage/_ref_lgr_member_modal.html:8
+msgid "Update Reference LGR member"
 msgstr ""
 
 #: src/lgr_manage/templates/lgr_manage/idna.html:7
@@ -151,7 +171,7 @@ msgstr ""
 
 #: src/lgr_manage/templates/lgr_manage/idna.html:57
 #: src/lgr_manage/templates/lgr_manage/msr.html:57
-#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:108
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:114
 #: src/lgr_manage/templates/lgr_manage/rz_lgr.html:80
 #: src/lgr_manage/templates/lgr_manage/user_management.html:99
 msgid "Add"
@@ -162,7 +182,7 @@ msgid "Existing MSRs"
 msgstr ""
 
 #: src/lgr_manage/templates/lgr_manage/msr.html:36
-#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:74
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:80
 #: src/lgr_manage/templates/lgr_manage/rz_lgr.html:58
 #, python-format
 msgid "Are you sure you want to delete LGR %(lgr)s?"
@@ -189,22 +209,31 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:56
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:49
+msgid "Edit Reference LGR member"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:62
 #: src/lgr_manage/templates/lgr_manage/rz_lgr.html:39
 #, python-format
 msgid "Display %(remain)s more files"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:83
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:89
 msgid "No Reference LGR."
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:87
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:93
 msgid "Select Active Reference LGR"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:90
+#: src/lgr_manage/templates/lgr_manage/ref_lgr.html:96
 msgid "New Reference LGR"
+msgstr ""
+
+#: src/lgr_manage/templates/lgr_manage/ref_lgr_member.html:10
+#: src/lgr_manage/templates/lgr_manage/settings.html:23
+msgid "Save"
 msgstr ""
 
 #: src/lgr_manage/templates/lgr_manage/rz_lgr.html:7
@@ -227,23 +256,19 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:14
-msgid "Save"
-msgstr ""
-
-#: src/lgr_manage/templates/lgr_manage/settings.html:17
+#: src/lgr_manage/templates/lgr_manage/settings.html:26
 msgid "Index variant labels calculation"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:22
+#: src/lgr_manage/templates/lgr_manage/settings.html:31
 msgid "Trigger the calculation of the index variant of the existing TLDs"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:23
+#: src/lgr_manage/templates/lgr_manage/settings.html:32
 msgid "Refresh"
 msgstr ""
 
-#: src/lgr_manage/templates/lgr_manage/settings.html:30
+#: src/lgr_manage/templates/lgr_manage/settings.html:39
 msgid "Download"
 msgstr ""
 
@@ -330,44 +355,52 @@ msgstr ""
 msgid "Error processing active indicator"
 msgstr ""
 
-#: src/lgr_manage/views/idna.py:45
-msgid "New IDNA Reportoire created"
+#: src/lgr_manage/views/idna.py:36
+msgid "New IDNA Repertoire created"
 msgstr ""
 
-#: src/lgr_manage/views/idna.py:49
+#: src/lgr_manage/views/idna.py:43
 msgid "Failed to create IDNA Repertoire"
 msgstr ""
 
-#: src/lgr_manage/views/msr.py:45
+#: src/lgr_manage/views/msr.py:36
 msgid "New MSR created"
 msgstr ""
 
-#: src/lgr_manage/views/msr.py:49
+#: src/lgr_manage/views/msr.py:42
 msgid "Failed to create MSR"
 msgstr ""
 
-#: src/lgr_manage/views/reference_lgr.py:48
+#: src/lgr_manage/views/reference_lgr.py:36
 msgid "New Reference LGR created"
 msgstr ""
 
-#: src/lgr_manage/views/reference_lgr.py:52
+#: src/lgr_manage/views/reference_lgr.py:42
 msgid "Failed to create Reference LGR"
 msgstr ""
 
-#: src/lgr_manage/views/rz_lgr.py:46
+#: src/lgr_manage/views/reference_lgr.py:86
+msgid "Reference LGR member updated"
+msgstr ""
+
+#: src/lgr_manage/views/reference_lgr.py:90
+msgid "Failed to update Reference LGR member"
+msgstr ""
+
+#: src/lgr_manage/views/rz_lgr.py:36
 msgid "New RZ LGR created"
 msgstr ""
 
-#: src/lgr_manage/views/rz_lgr.py:50
+#: src/lgr_manage/views/rz_lgr.py:42
 msgid "Failed to create RZ LGR"
 msgstr ""
 
-#: src/lgr_manage/views/settings.py:49
+#: src/lgr_manage/views/settings.py:56
 msgid ""
 "The calculation of the index variant of the existing TLDs has been triggered"
 msgstr ""
 
-#: src/lgr_manage/views/settings.py:55
+#: src/lgr_manage/views/settings.py:62
 msgid "The index variant calculation has already been triggered, please wait"
 msgstr ""
 
@@ -375,10 +408,10 @@ msgstr ""
 msgid "Cannot create users when auth is performed with ICANN"
 msgstr ""
 
-#: src/lgr_manage/views/users.py:50
+#: src/lgr_manage/views/users.py:51
 msgid "New user created"
 msgstr ""
 
-#: src/lgr_manage/views/users.py:54
+#: src/lgr_manage/views/users.py:55
 msgid "Failed to create user"
 msgstr ""

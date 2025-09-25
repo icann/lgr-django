@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 20:22+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: 2023-09-19 15:44-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -35,17 +35,17 @@ msgstr "Rapport de non conformité IDNA 2008"
 msgid "Previously generated reports"
 msgstr "Rapport générés précédement"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:37
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:40
 #, python-format
 msgid "%(report_id)s"
 msgstr "%(report_id)s"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:41
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:44
 #, python-format
 msgid "Are you sure you want to delete report %(report_id)s?"
 msgstr "Êtes vous sur de vouloir supprimer le rapport %(report_id)s ?"
 
-#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:48
+#: src/lgr_idn_table_review/icann_tools/templates/lgr_idn_table_review_icann/icann_mode.html:52
 #, python-format
 msgid ""
 "No report yet, please check the <a href=\"%(task_status_url)s\">tasks</a> "
@@ -54,30 +54,30 @@ msgstr ""
 "Aucun rapport pour l'instant, vérifiez la liste de <a "
 "href=\"%(task_status_url)s\">tâches</a> et rafraîchissez s'il vous plaît."
 
-#: src/lgr_idn_table_review/icann_tools/views.py:42
+#: src/lgr_idn_table_review/icann_tools/views.py:39
 msgid "ICANN IDN Tables Review"
 msgstr "Outil de vérification des tables IDN ICANN"
 
-#: src/lgr_idn_table_review/icann_tools/views.py:49
-#: src/lgr_idn_table_review/icann_tools/views.py:70
+#: src/lgr_idn_table_review/icann_tools/views.py:46
+#: src/lgr_idn_table_review/icann_tools/views.py:67
 #, python-format
 msgid "Generating report. You can follow your task progression in the %s."
 msgstr ""
 "Rapport en création. Vous pouvez suivre la progression de votre tâche sur la "
 "%s."
 
-#: src/lgr_idn_table_review/icann_tools/views.py:63
+#: src/lgr_idn_table_review/icann_tools/views.py:60
 msgid "ICANN IDN Tables IDNA 2008 compliance"
 msgstr "Outil de vérification de la conformité IDNA 2008 des tables IDN ICANN"
 
-#: src/lgr_idn_table_review/icann_tools/views.py:98
+#: src/lgr_idn_table_review/icann_tools/views.py:95
 msgid ""
 "Task is still being processed, please come back later for the full report."
 msgstr ""
 "La tâche est encore en cours, revenez plus tard pour un rapport complet s'il "
 "vous plait."
 
-#: src/lgr_idn_table_review/icann_tools/views.py:100
+#: src/lgr_idn_table_review/icann_tools/views.py:97
 #, python-format
 msgid "ICANN Review Reports: %(report)s"
 msgstr "Rapport de Vérification ICANN: %(report)s"

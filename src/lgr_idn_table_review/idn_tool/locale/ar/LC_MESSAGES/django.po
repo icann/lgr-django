@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 18:36+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,53 +19,50 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:16
+#: src/lgr_idn_table_review/idn_tool/forms.py:14
 msgid "Select IDN table(s) to review"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:19
+#: src/lgr_idn_table_review/idn_tool/forms.py:17
 #, python-format
 msgid "You can select up to %(max_files)s IDN tables."
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_tool/forms.py:26
+#: src/lgr_idn_table_review/idn_tool/forms.py:23
 #, python-format
 msgid "You can upload up to %(max_files)s files"
 msgstr ""
 
+#: src/lgr_idn_table_review/idn_tool/forms.py:57
 #: src/lgr_idn_table_review/idn_tool/forms.py:58
-#: src/lgr_idn_table_review/idn_tool/forms.py:59
 msgid "Required"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:4
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:5
 msgid "IDN Table Review reports"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:7
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:8
 msgid "IDN Table Review Reports"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:15
-msgid ""
-"The following folders contains your IDN review reports.<br/> <strong><i "
-"class=\"glyphicon glyphicon-alert\"></i> Note that these files could be "
-"cleaned up regularly.</strong>"
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:16
+msgid "The following folders contains your IDN review reports."
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:33
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:29
 #, python-format
 msgid "Are you sure you want to delete report %(report_id)s?"
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:41
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:39
 #, python-format
 msgid ""
 "No report yet, please check the <a href=\"%(task_status_url)s\">tasks</a> "
 "and refresh."
 msgstr ""
 
-#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:47
+#: src/lgr_idn_table_review/idn_tool/templates/lgr_idn_table_review_tool/list_reports.html:44
 msgid "New report"
 msgstr ""
 
@@ -120,7 +117,7 @@ msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
 
-#: src/lgr_idn_table_review/idn_tool/views.py:125
+#: src/lgr_idn_table_review/idn_tool/views.py:126
 #, python-format
 msgid "IDN Table Review Reports: %(report)s"
 msgstr ""

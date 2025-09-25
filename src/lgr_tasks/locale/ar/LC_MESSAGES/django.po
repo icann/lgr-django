@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 18:36+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,60 +19,68 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:4
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:5
 msgid "LGR Process List"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:7
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:8
 msgid "Tasks"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:35
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:38
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:28
+msgid "Tasks are ordered from newest to latest"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:37
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:39
 msgid "Download report"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:47
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:48
 msgid "Success"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:55
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:56
 msgid "In Progress"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:62
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:63
 msgid "Failed"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:69
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:70
 msgid "Pending"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:76
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:77
 msgid "Retry"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:83
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:84
 msgid "Canceled"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:90
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:91
 msgid "Expired"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:102
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:103
 msgid "Are you sure you want to cancel this task?"
 msgstr ""
 
-#: src/lgr_tasks/templates/lgr_tasks/process_list.html:119
-msgid "Are you sure you want to clean tasks?"
-msgstr ""
-
 #: src/lgr_tasks/templates/lgr_tasks/process_list.html:120
-msgid "Delete completed tasks"
+msgid "When you delete a task, the corresponding report is not deleted"
 msgstr ""
 
 #: src/lgr_tasks/templates/lgr_tasks/process_list.html:124
+msgid "Are you sure you want to clean tasks?"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:125
+msgid "Delete completed tasks"
+msgstr ""
+
+#: src/lgr_tasks/templates/lgr_tasks/process_list.html:129
 msgid "No task registered"
 msgstr ""
 

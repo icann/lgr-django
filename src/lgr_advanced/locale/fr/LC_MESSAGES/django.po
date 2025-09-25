@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 20:22+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: 2023-07-07 22:16-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,17 +18,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.3.1\n"
 
-#: src/lgr_advanced/lgr_exceptions.py:28
+#: src/lgr_advanced/lgr_exceptions.py:24
 #, python-format
 msgid "Input code point %(codepoint)s is not in the LGR"
 msgstr "Le code point %(codepoint)s n'est pas dans la LGR"
 
-#: src/lgr_advanced/lgr_exceptions.py:32
+#: src/lgr_advanced/lgr_exceptions.py:28
 #, python-format
 msgid "Input code point %(codepoint)s is not in the reference repertoire"
 msgstr "Le code point %(codepoint)s n'est pas dans le répertoire de référence"
 
-#: src/lgr_advanced/lgr_exceptions.py:37
+#: src/lgr_advanced/lgr_exceptions.py:33
 #, python-format
 msgid ""
 "Variant %(variant_codepoint)s already exists for code point %(codepoint)s"
@@ -36,22 +36,22 @@ msgstr ""
 "La variante %(variant_codepoint)s existe déjà pour le code point "
 "%(codepoint)s"
 
-#: src/lgr_advanced/lgr_exceptions.py:43
+#: src/lgr_advanced/lgr_exceptions.py:39
 #, python-format
 msgid "Range %(first_cp)s - %(last_cp)s already exists in the LGR"
 msgstr "L'ensemble %(first_cp)s - %(last_cp)s existe déjà dans la LGR"
 
-#: src/lgr_advanced/lgr_exceptions.py:48
+#: src/lgr_advanced/lgr_exceptions.py:44
 #, python-format
 msgid "Input code point %(codepoint)s already exists in the LGR"
 msgstr "Le code point %(codepoint)s existe déjà dans la LGR"
 
-#: src/lgr_advanced/lgr_exceptions.py:53
+#: src/lgr_advanced/lgr_exceptions.py:49
 #, python-format
 msgid "Input code point %(codepoint)s is not in LGR script"
 msgstr "Le code point %(codepoint)s n'est pas dans le script de la LGR"
 
-#: src/lgr_advanced/lgr_exceptions.py:57
+#: src/lgr_advanced/lgr_exceptions.py:53
 #, python-format
 msgid ""
 "Input code point %(codepoint)s is not a PVALID/CONTEXTO/CONTEXTJ code point "
@@ -60,18 +60,18 @@ msgstr ""
 "Le code point %(codepoint)s n'est pas un code point PVALID/CONTEXTO/CONTEXTJ "
 "d'après IDNA2008"
 
-#: src/lgr_advanced/lgr_exceptions.py:62
+#: src/lgr_advanced/lgr_exceptions.py:58
 #, python-format
 msgid "Code point %(codepoint)s has invalid context rule %(rule)s"
 msgstr "Le code point %(codepoint)s a une règle contextuelle invalide %(rule)s"
 
-#: src/lgr_advanced/lgr_exceptions.py:67
+#: src/lgr_advanced/lgr_exceptions.py:63
 #, python-format
 msgid "Range %(first_cp)s - %(last_cp)s has invalid context rule"
 msgstr ""
 "L'ensemble %(first_cp)s - %(last_cp)s a une règle contextuelle invalide"
 
-#: src/lgr_advanced/lgr_exceptions.py:72
+#: src/lgr_advanced/lgr_exceptions.py:68
 #, python-format
 msgid ""
 "Variant %(variant_codepoint)s of code point %(codepoint)shas invalid context "
@@ -80,114 +80,114 @@ msgstr ""
 "La variante %(variant_codepoint)s du code point %(codepoint)s a une règle "
 "contextuelle invalide"
 
-#: src/lgr_advanced/lgr_exceptions.py:78
+#: src/lgr_advanced/lgr_exceptions.py:74
 #, python-format
 msgid "Duplicate reference for code point %(codepoint)s"
 msgstr "Référence dupliquée pour le code point %(codepoint)s"
 
-#: src/lgr_advanced/lgr_exceptions.py:82
+#: src/lgr_advanced/lgr_exceptions.py:78
 #, python-format
 msgid "Unspecified exception for input code point %(codepoint)s"
 msgstr "Exception non-spécifiée pour le code point d'entrée %(codepoint)s"
 
-#: src/lgr_advanced/lgr_exceptions.py:89
+#: src/lgr_advanced/lgr_exceptions.py:85
 msgid "Sequence cannot have a tag"
 msgstr "Les séquences ne peuvent pas avoir de tag"
 
-#: src/lgr_advanced/lgr_exceptions.py:91
+#: src/lgr_advanced/lgr_exceptions.py:87
 msgid "Invalid language"
 msgstr "Langage invalide"
 
-#: src/lgr_advanced/lgr_exceptions.py:93
+#: src/lgr_advanced/lgr_exceptions.py:89
 msgid "Invalid date value"
 msgstr "Date invalide"
 
-#: src/lgr_advanced/lgr_exceptions.py:95
+#: src/lgr_advanced/lgr_exceptions.py:91
 msgid "Invalid Unicode version"
 msgstr "Version d'unicode invalide"
 
-#: src/lgr_advanced/lgr_exceptions.py:97
+#: src/lgr_advanced/lgr_exceptions.py:93
 msgid "Invalid LGR XML file"
 msgstr "Fichier XML de LGR invalide"
 
-#: src/lgr_advanced/lgr_exceptions.py:99
+#: src/lgr_advanced/lgr_exceptions.py:95
 #, python-format
 msgid "Reference %(ref_id)s is not defined"
 msgstr "La référence %(ref_id)s n'est pas définie"
 
-#: src/lgr_advanced/lgr_exceptions.py:103
+#: src/lgr_advanced/lgr_exceptions.py:99
 #, python-format
 msgid "Reference %(ref_id)s already exists"
 msgstr "La référence %(ref_id)s existe déjà"
 
-#: src/lgr_advanced/lgr_exceptions.py:107
+#: src/lgr_advanced/lgr_exceptions.py:103
 #, python-format
 msgid "Invalid reference id %(ref_id)s "
 msgstr "Identifiant de référence invalide %(ref_id)s "
 
-#: src/lgr_advanced/lgr_exceptions.py:111
+#: src/lgr_advanced/lgr_exceptions.py:107
 #, python-format
 msgid "Rule \"%(rule_name)s\" cannot be processed (%(message)s)"
 msgstr "La règle \"%(rule_name)s\" ne peut pas être traitée (%(message)s)"
 
-#: src/lgr_advanced/lgr_exceptions.py:116
+#: src/lgr_advanced/lgr_exceptions.py:112
 msgid "Input parameter has invalid format"
 msgstr "Le paramètre d'entrée a un format invalide"
 
-#: src/lgr_advanced/lgr_exceptions.py:118
+#: src/lgr_advanced/lgr_exceptions.py:114
 msgid "A general exception occurred in the LGR API"
 msgstr "Une exception s'est produite dans l'API LGR"
 
-#: src/lgr_advanced/lgr_exceptions.py:120
+#: src/lgr_advanced/lgr_exceptions.py:116
 #, python-format
 msgid "LGR is not valid (%(args)s)"
 msgstr "La LGR n'est pas valide (%(args)s)"
 
-#: src/lgr_advanced/lgr_exceptions.py:122
+#: src/lgr_advanced/lgr_exceptions.py:118
 #, python-format
 msgid "Unicode version (%(args)s) is not supported by the system"
 msgstr "La version d'Unicode  (%(args)s) n'est pas supportée par le système"
 
-#: src/lgr_advanced/lgr_exceptions.py:124
+#: src/lgr_advanced/lgr_exceptions.py:120
 #, python-format
 msgid "Label %(label)s is not valid in the LGR (%(message)s)"
 msgstr "Label %(label)s n'est pas valide dans la LGR (%(message)s)"
 
-#: src/lgr_advanced/lgr_exceptions.py:129
+#: src/lgr_advanced/lgr_exceptions.py:125
 msgid "Input label file contains collision(s)"
 msgstr "Le fichier d'entrée des labels contient une/des collision(s)"
 
-#: src/lgr_advanced/lgr_exceptions.py:131
+#: src/lgr_advanced/lgr_exceptions.py:127
 msgid "The LGR contains a variant that do not have symmetric relations"
 msgstr "La LGR contient des variantes ne respectant pas la symmétrie"
 
-#: src/lgr_advanced/lgr_exceptions.py:134
+#: src/lgr_advanced/lgr_exceptions.py:130
 #, python-format
 msgid "The LGR does not contain a valid language (%(message)s)"
 msgstr "La LGR ne contient pas de langues valides (%(message)s)"
 
-#: src/lgr_advanced/lgr_exceptions.py:136
+#: src/lgr_advanced/lgr_exceptions.py:132
 #, python-format
 msgid "Cannot generate cross-script variant for LGR without (%(message)s)"
 msgstr ""
 "Impossible de générer les variantes cross-script pour la LGR sans "
 "(%(message)s)"
 
-#: src/lgr_advanced/lgr_exceptions.py:140
+#: src/lgr_advanced/lgr_exceptions.py:136
 msgid "An unknown exception occurred in the LGR API"
 msgstr "Une exception inconnue s'est produite dans l'API LGR"
 
-#: src/lgr_advanced/lgr_exceptions.py:145
+#: src/lgr_advanced/lgr_exceptions.py:141
 msgid "Label is empty"
 msgstr "Le label est vide"
 
-#: src/lgr_advanced/lgr_exceptions.py:147
+#: src/lgr_advanced/lgr_exceptions.py:144
 #, python-format
 msgid "%(label)s is invalid due to its length being longer than 63 bytes."
 msgstr ""
 "le label %(label)s est invalide car sa longueur est supérieure à 63 octets."
 
-#: src/lgr_advanced/lgr_exceptions.py:152
+#: src/lgr_advanced/lgr_exceptions.py:149
 #, python-format
 msgid ""
 "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it starts "
@@ -196,7 +196,7 @@ msgstr ""
 "le label %(label)s est invalide en raison des restrictions sur les traits "
 "d'union dans la RFC5891 car il débute par le signe moins."
 
-#: src/lgr_advanced/lgr_exceptions.py:157
+#: src/lgr_advanced/lgr_exceptions.py:155
 #, python-format
 msgid ""
 "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it ends "
@@ -205,7 +205,7 @@ msgstr ""
 "le label %(label)s est invalide en raison des restrictions sur les traits "
 "d'union dans la RFC5891 car il termine par le signe moins."
 
-#: src/lgr_advanced/lgr_exceptions.py:162
+#: src/lgr_advanced/lgr_exceptions.py:160
 #, python-format
 msgid ""
 "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it "
@@ -215,7 +215,7 @@ msgstr ""
 "d'union dans la RFC5891 car contient le signe moins à la troisième et "
 "quatrième position."
 
-#: src/lgr_advanced/lgr_exceptions.py:167
+#: src/lgr_advanced/lgr_exceptions.py:166
 #, python-format
 msgid ""
 "%(label)s is invalid due to leading combining marks restriction in the "
@@ -224,7 +224,7 @@ msgstr ""
 "le label %(label)s est invalide en raison des restrictions sur signes "
 "combinatoires de tête dans la RFC5891."
 
-#: src/lgr_advanced/lgr_exceptions.py:172
+#: src/lgr_advanced/lgr_exceptions.py:171
 #, python-format
 msgid "%(label)s is invalid as it contains disallowed characters."
 msgstr ""
@@ -249,13 +249,13 @@ msgstr "le label %(label)s est invalide car il contient un point final."
 msgid "%(label)s is invalid due to invalid Punycode."
 msgstr "le label %(label)s est invalide en raison de Punycode invalide."
 
-#: src/lgr_advanced/lgr_exceptions.py:187
+#: src/lgr_advanced/lgr_exceptions.py:188
 #, python-format
 msgid "%(label)s is invalid due to  the Bidi rule in the RFC5893."
 msgstr ""
 "le label %(label)s est invalide en raison de la règle Bidi dans la RFC5893."
 
-#: src/lgr_advanced/lgr_exceptions.py:191
+#: src/lgr_advanced/lgr_exceptions.py:193
 #, python-format
 msgid ""
 "%(label)s is invalid due to the IDNA contextual rule for Zero Width Joiner."
@@ -263,7 +263,7 @@ msgstr ""
 "le label %(label)s est invalide en raison de la règle IDNA contextuelle pour "
 "les liant sans chasse (Zero Width Joiner)."
 
-#: src/lgr_advanced/lgr_exceptions.py:196
+#: src/lgr_advanced/lgr_exceptions.py:198
 #, python-format
 msgid ""
 "%(label)s is invalid due to the IDNA contextual rule for punctuation in the "
@@ -272,7 +272,7 @@ msgstr ""
 "le label %(label)s est invalide en raison de la règle IDNA contextuelle pour "
 "la ponctuation ans la RFC5892."
 
-#: src/lgr_advanced/lgr_exceptions.py:201
+#: src/lgr_advanced/lgr_exceptions.py:203
 #, python-format
 msgid ""
 "%(label)s is invalid due to the IDNA contextual rule for digits in the "
@@ -447,40 +447,40 @@ msgstr ""
 msgid "LGRs"
 msgstr "Vos LGR"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:38
-#: src/lgr_advanced/templates/lgr_advanced/index.html:53
-#: src/lgr_advanced/templates/lgr_advanced/index.html:70
+#: src/lgr_advanced/templates/lgr_advanced/index.html:41
+#: src/lgr_advanced/templates/lgr_advanced/index.html:61
+#: src/lgr_advanced/templates/lgr_advanced/index.html:80
 #, python-format
 msgid "View %(lgr_name)s"
 msgstr "Voir %(lgr_name)s"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:41
-#: src/lgr_advanced/templates/lgr_advanced/index.html:57
+#: src/lgr_advanced/templates/lgr_advanced/index.html:45
+#: src/lgr_advanced/templates/lgr_advanced/index.html:66
 #, python-format
 msgid "Are you sure you want to delete LGR %(lgr_name)s?"
 msgstr "Êtes vous certain de vouloir supprimer la LGR %(lgr_name)s?"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:48
+#: src/lgr_advanced/templates/lgr_advanced/index.html:53
 msgid "LGR sets"
 msgstr "Vos set LGR"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:55
+#: src/lgr_advanced/templates/lgr_advanced/index.html:63
 msgid "View embedded LGRs"
 msgstr "Voir les LGR embarquées"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:86
+#: src/lgr_advanced/templates/lgr_advanced/index.html:96
 msgid "No LGR has been previously loaded."
 msgstr "Aucune LGR n'a été précédemment chargée."
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:95
+#: src/lgr_advanced/templates/lgr_advanced/index.html:105
 msgid "Create a new LGR file or import an existing one"
 msgstr "Commencer une nouvelle LGR ou importer une existante"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:98
+#: src/lgr_advanced/templates/lgr_advanced/index.html:108
 msgid "Import an existing XML file"
 msgstr "Importer un fichier XML existant"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:100
+#: src/lgr_advanced/templates/lgr_advanced/index.html:110
 msgid ""
 "Note that importing large LGR files may take significant time to load on "
 "your browser."
@@ -488,15 +488,15 @@ msgstr ""
 "L’importation de gros fichiers LGR peut être lente à charger dans le "
 "navigateur."
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:105
+#: src/lgr_advanced/templates/lgr_advanced/index.html:115
 msgid "Start with a New blank XML file"
 msgstr "Commencer avec un nouveau fichier XML vide"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:109
+#: src/lgr_advanced/templates/lgr_advanced/index.html:119
 msgid "Start from a built-in LGR"
 msgstr "LGR fournies"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:110
+#: src/lgr_advanced/templates/lgr_advanced/index.html:120
 msgid ""
 "The following LGRs are pre-installed in the system. You may use them as a "
 "starting point for your own LGR. To do so, just click on it to make a copy "
@@ -506,17 +506,17 @@ msgstr ""
 "utiliser comme point de départ pour vos propres LGR. Pour ce faire, il "
 "suffit de cliquer dessus pour en faire une copie que vous pourrez modifier."
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:119
+#: src/lgr_advanced/templates/lgr_advanced/index.html:129
 #, python-format
 msgid "Open %(lgr_file)s"
 msgstr "Ouvrir %(lgr_file)s"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:124
+#: src/lgr_advanced/templates/lgr_advanced/index.html:134
 #, python-format
 msgid "Open %(lgr_obj)s"
 msgstr "Ouvrir %(lgr_obj)s"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:130
+#: src/lgr_advanced/templates/lgr_advanced/index.html:140
 msgid ""
 "<strong class=\"text-danger\">Remember to save your work regularly by "
 "downloading a copy of the XML file.</strong>"
@@ -524,15 +524,15 @@ msgstr ""
 "<strong class=\"text-danger\">Souvenez-vous de sauvegarder régulièrement "
 "votre travail en téléchargeant une copie du fichier XML.</strong>"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:139
+#: src/lgr_advanced/templates/lgr_advanced/index.html:149
 msgid "Your saved results"
 msgstr "Vos résultats sauvegardés"
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:140
+#: src/lgr_advanced/templates/lgr_advanced/index.html:150
 msgid "The following files contains your tools computation results."
 msgstr "Le fichier suivant contient les résultats de calculs des outils."
 
-#: src/lgr_advanced/templates/lgr_advanced/index.html:148
+#: src/lgr_advanced/templates/lgr_advanced/index.html:158
 msgid ""
 "Please send any feedback to <a href=\"mailto:support@viagenie."
 "ca\">support@viagenie.ca</a>."

@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 20:22+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: 2023-07-07 22:30-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,23 +18,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.3.1\n"
 
-#: src/lgr_web/forms.py:16
+#: src/lgr_web/forms.py:12
 msgid "Label"
 msgstr "Label"
 
-#: src/lgr_web/forms.py:33
+#: src/lgr_web/forms.py:25
 msgid "Labels"
 msgstr "Labels"
 
-#: src/lgr_web/settings/default.py:232
+#: src/lgr_web/settings/default.py:231
 msgid "Arabic"
 msgstr "Arabe"
 
-#: src/lgr_web/settings/default.py:233
+#: src/lgr_web/settings/default.py:232
 msgid "English"
 msgstr "Anglais"
 
-#: src/lgr_web/settings/default.py:234
+#: src/lgr_web/settings/default.py:233
 msgid "French"
 msgstr "Français"
 
@@ -227,6 +227,11 @@ msgid "Please <a href=\"%(login_url)s\">login</a> to access the LGR tools."
 msgstr ""
 "<a href=\"%(login_url)s\">Connectez vous</a> pour accéder aux outils LGR "
 "s'il vous plait."
+
+#: src/lgr_web/views.py:76 src/lgr_web/views.py:120
+#, python-format
+msgid "%(label)s is invalid as it contains disallowed characters."
+msgstr ""
 
 #~ msgid "Download"
 #~ msgstr "Telécharger"
