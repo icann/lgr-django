@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 20:22+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: 2023-10-05 16:24-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -18,35 +18,35 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.3.2\n"
 
-#: src/lgr_advanced/lgr_validator/api.py:142
+#: src/lgr_advanced/lgr_validator/api.py:133
 msgid "the LGR set labels"
 msgstr "la liste de labels du set LGR"
 
-#: src/lgr_advanced/lgr_validator/api.py:142
+#: src/lgr_advanced/lgr_validator/api.py:133
 msgid "the TLDs list"
 msgstr "la liste de TLDs"
 
-#: src/lgr_advanced/lgr_validator/api.py:146
+#: src/lgr_advanced/lgr_validator/api.py:137
 #, python-format
 msgid "The label is in %(labels_list)s"
 msgstr "Le label est dans %(labels_list)s"
 
-#: src/lgr_advanced/lgr_validator/api.py:173
+#: src/lgr_advanced/lgr_validator/api.py:164
 #, python-format
 msgid "ERROR cannot retrieve label in collisions, please check %(labels_list)s"
 msgstr ""
 "ERREUR impossible de retrouver le label dans les collisions, vérifier "
 "%(labels_list)s"
 
-#: src/lgr_advanced/lgr_validator/forms.py:12
+#: src/lgr_advanced/lgr_validator/forms.py:11
 msgid "Label"
 msgstr "Label"
 
-#: src/lgr_advanced/lgr_validator/forms.py:14
+#: src/lgr_advanced/lgr_validator/forms.py:13
 msgid "Allocated Set labels"
 msgstr "Labels du set alloués"
 
-#: src/lgr_advanced/lgr_validator/forms.py:16
+#: src/lgr_advanced/lgr_validator/forms.py:15
 msgid ""
 "Optional list of labels already allocated in the LGR set, that will be used "
 "to check for collisions when evaluating labels using the merged LGR set"
@@ -55,17 +55,21 @@ msgstr ""
 "pour vérifier les collisions lors de l'évaluation des labels utilisant le "
 "set LGR mergé"
 
-#: src/lgr_advanced/lgr_validator/forms.py:20
+#: src/lgr_advanced/lgr_validator/forms.py:19
 msgid "Script"
 msgstr "Script"
 
-#: src/lgr_advanced/lgr_validator/forms.py:22
+#: src/lgr_advanced/lgr_validator/forms.py:21
 msgid "The script used to validate the label"
 msgstr "Le script utilisé pour valider le label"
 
-#: src/lgr_advanced/lgr_validator/forms.py:23
+#: src/lgr_advanced/lgr_validator/forms.py:22
 msgid "Include mixed-script variants"
 msgstr "Inclure les variants issus de scripts différents"
+
+#: src/lgr_advanced/lgr_validator/forms.py:41
+msgid "Invalid label"
+msgstr ""
 
 #: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:7
 #: src/lgr_advanced/lgr_validator/templates/lgr_validator/_validated_results.html:13
@@ -191,12 +195,12 @@ msgstr "Télécharger les résultats en CSV"
 msgid "Validate"
 msgstr "Valider"
 
-#: src/lgr_advanced/lgr_validator/views.py:75
+#: src/lgr_advanced/lgr_validator/views.py:72
 #, python-format
 msgid "Validate labels on LGR set %s"
 msgstr "Validation des labels sur set de LGR %s"
 
-#: src/lgr_advanced/lgr_validator/views.py:90
+#: src/lgr_advanced/lgr_validator/views.py:87
 #, python-format
 msgid "Validate labels on %s"
 msgstr "Valide les labels sur %s"

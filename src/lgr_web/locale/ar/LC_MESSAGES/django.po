@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 18:36+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,23 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_web/settings/default.py:232
+#: src/lgr_web/forms.py:12
+msgid "Label"
+msgstr ""
+
+#: src/lgr_web/forms.py:25
+msgid "Labels"
+msgstr ""
+
+#: src/lgr_web/settings/default.py:231
 msgid "Arabic"
 msgstr ""
 
-#: src/lgr_web/settings/default.py:233
+#: src/lgr_web/settings/default.py:232
 msgid "English"
 msgstr ""
 
-#: src/lgr_web/settings/default.py:234
+#: src/lgr_web/settings/default.py:233
 msgid "French"
 msgstr ""
 
@@ -48,7 +56,7 @@ msgid "Tasks"
 msgstr ""
 
 #: src/lgr_web/templates/_base.html:76 src/lgr_web/templates/_base.html:82
-#: src/lgr_web/templates/_base.html:183
+#: src/lgr_web/templates/_base.html:188
 msgid "Help"
 msgstr ""
 
@@ -60,29 +68,38 @@ msgstr ""
 msgid "About LGR Toolset"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:89 src/lgr_web/templates/_base.html:163
+#: src/lgr_web/templates/_base.html:89 src/lgr_web/templates/_base.html:168
 msgid "About"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:108
+#: src/lgr_web/templates/_base.html:98
+#: src/lgr_web/templates/_label_forms_modal.html:8
+msgid "Display all label forms"
+msgstr ""
+
+#: src/lgr_web/templates/_base.html:99
+msgid "Label forms"
+msgstr ""
+
+#: src/lgr_web/templates/_base.html:113
 msgid "Edit"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:114
+#: src/lgr_web/templates/_base.html:119
 msgid "Logout"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:122
+#: src/lgr_web/templates/_base.html:127
 msgid "Login"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:147
+#: src/lgr_web/templates/_base.html:152
 msgid ""
 "If you have questions, please contact <a href=\"mailto:globalsupport@icann."
 "org\">globalsupport@icann.org</a>"
 msgstr ""
 
-#: src/lgr_web/templates/_base.html:170 src/lgr_web/templates/_base.html:190
+#: src/lgr_web/templates/_base.html:175 src/lgr_web/templates/_base.html:195
 msgid "Close"
 msgstr ""
 
@@ -106,15 +123,41 @@ msgstr ""
 
 #: src/lgr_web/templates/about.html:11
 msgid ""
-"This toolset was implemented by <a href=\"http://www.viagenie.ca/\" "
-"target=\"_blank\" rel=\"noopener noreferrer\">Viagénie</a> and Wil Tan on an "
-"ICANN contract."
+"This toolset was implemented by <a href=\"https://www.cofomo.com\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">Cofomo</a>, <a href=\"http://"
+"www.viagenie.ca/\" target=\"_blank\" rel=\"noopener noreferrer\">Viagénie</"
+"a> and Wil Tan on an ICANN contract."
 msgstr ""
 
 #: src/lgr_web/templates/help.html:3
 msgid ""
-"TODO Guiding description instructions on the user interface to be provided "
-"by ICANN org."
+"For more information about the LGR Toolset, please consult <a href=\"https://"
+"www.icann.org/resources/pages/lgr-toolset-2015-06-21-en\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">ICANN resources</a>."
+msgstr ""
+
+#: src/lgr_web/templates/label_forms.html:10
+msgid "Display forms"
+msgstr ""
+
+#: src/lgr_web/templates/label_forms.html:16
+msgid "Code point sequence"
+msgstr ""
+
+#: src/lgr_web/templates/label_forms.html:17
+msgid "U-label"
+msgstr ""
+
+#: src/lgr_web/templates/label_forms.html:18
+msgid "A-label"
+msgstr ""
+
+#: src/lgr_web/templates/label_forms.html:29
+msgid "Get label forms on a list of labels"
+msgstr ""
+
+#: src/lgr_web/templates/label_forms.html:34
+msgid "Download forms"
 msgstr ""
 
 #: src/lgr_web/templates/lgr_modes.html:5
@@ -168,4 +211,9 @@ msgstr ""
 #: src/lgr_web/templates/lgr_modes.html:51
 #, python-format
 msgid "Please <a href=\"%(login_url)s\">login</a> to access the LGR tools."
+msgstr ""
+
+#: src/lgr_web/views.py:76 src/lgr_web/views.py:120
+#, python-format
+msgid "%(label)s is invalid as it contains disallowed characters."
 msgstr ""

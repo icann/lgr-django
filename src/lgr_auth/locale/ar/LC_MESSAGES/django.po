@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-24 18:36+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: src/lgr_auth/models.py:22
+#: src/lgr_auth/models.py:21
 msgid "Email is mandatory"
 msgstr ""
 
@@ -175,14 +175,14 @@ msgstr ""
 msgid "Edit ICANN profile"
 msgstr ""
 
-#: src/lgr_auth/views.py:83
+#: src/lgr_auth/views.py:77
 msgid "User updated"
 msgstr ""
 
-#: src/lgr_auth/views.py:87
+#: src/lgr_auth/views.py:81
 msgid "Failed to update user"
 msgstr ""
 
-#: src/lgr_auth/views.py:115
+#: src/lgr_auth/views.py:109
 msgid "User is not logged with ICANN"
 msgstr ""

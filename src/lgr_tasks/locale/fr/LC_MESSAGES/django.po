@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 20:22+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: 2023-07-07 22:27-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -84,30 +84,30 @@ msgstr "Supprimer les tâches terminées"
 msgid "No task registered"
 msgstr "Aucune tâche enregistrée"
 
-#: src/lgr_tasks/views.py:30
+#: src/lgr_tasks/views.py:29
 msgid "Unable to retrieve the list of tasks."
 msgstr "Impossible de retrouver la liste de tâches."
 
-#: src/lgr_tasks/views.py:45
+#: src/lgr_tasks/views.py:44
 #, python-format
 msgid "Failed to delete %s."
 msgstr "Échec lors de la suppression de %s."
 
-#: src/lgr_tasks/views.py:52
+#: src/lgr_tasks/views.py:51
 #, python-format
 msgid "Task %s has been revoked."
 msgstr "La tâche %s a été annulée."
 
-#: src/lgr_tasks/views.py:55
+#: src/lgr_tasks/views.py:54
 #, python-format
 msgid "Task %s has been removed."
 msgstr "La tâche %s a été supprimée."
 
-#: src/lgr_tasks/views.py:68
+#: src/lgr_tasks/views.py:67
 msgid "Failed to retrieve completed tasks."
 msgstr "Échec lors de la récupération de la liste de tâches terminées."
 
-#: src/lgr_tasks/views.py:77
+#: src/lgr_tasks/views.py:76
 msgid "Completed tasks have been cleaned."
 msgstr "La liste de tâches terminées a été nettoyée."
 

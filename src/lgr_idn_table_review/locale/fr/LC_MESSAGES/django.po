@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-05 20:22+0000\n"
+"POT-Creation-Date: 2025-09-25 15:45+0000\n"
 "PO-Revision-Date: 2023-07-07 22:18-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -35,29 +35,29 @@ msgstr "Fichier"
 msgid "Action"
 msgstr "Action"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:45
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:48
 #, python-format
 msgid "Are you sure you want to delete report %(report.filename)s?"
 msgstr "Êtes-vous sûr(e) de vouloir supprimer le rapport %(report.filename)s ?"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:54
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:58
 msgid "Back"
 msgstr "Précédent"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:59
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:63
 msgid "Wait until full report is completed for the file to be valid"
 msgstr ""
 "Veuillez attendre que le rapport soit complet pour que le fichier soit valide"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:61
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:65
 msgid "Get the zip file containing all generated reports"
 msgstr "Télécharger le fichier zip contenant tous les rapports générés"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:66
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:70
 msgid "Download all"
 msgstr "Télécharger tout"
 
-#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:73
+#: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:77
 msgid "Summary"
 msgstr "Résumé"
 
