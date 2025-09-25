@@ -14,8 +14,8 @@ dnf -qy install \
   libicu \
   libxml2 \
   procps-ng \
-  python3.11 \
-  python3.11-devel \
+  python3.12 \
+  python3.12-devel \
   tcl
 printf "OK\n"
 
