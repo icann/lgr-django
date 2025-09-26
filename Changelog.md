@@ -6,6 +6,7 @@
 - Fix an issue in the codepoint view when deleting variants
 - Fix a typo in the error message for leading hyphen in label validation
 - Fix LGRDisplayView not being able to use the force_download parameter
+- Fix the parent folder not being deleted when the last file in it is deleted
 
 ### Improvements
 - Add more test coverage to the codebase
