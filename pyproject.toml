@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lgr-django"
-version = "6.1.2"
+version = "7.0.0"
 description = "Web-application for LGR editing"
 readme = "README.md"
 authors = [{name = "Cofomo, Viagenie and Wil Tan", email = "int-eng@cofomo.com"}]
@@ -22,20 +22,19 @@ dependencies = [
     "munidata",
     "natsort",
     "okta-jwt-verifier",
-    "picu",
-    "vine"
+    "picu"
 ]
 requires-python = ">=3.10"
 classifiers=[
     "Environment :: Web Environment",
-    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.2",
     "License :: OSI Approved :: BSD License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    #"Programming Language :: Python :: 3.12", #TODO: Test
-    #"Programming Language :: Python :: 3.13", #TODO: Test
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 
 [tool.setuptools]

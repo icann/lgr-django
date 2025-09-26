@@ -39,10 +39,10 @@ The license can be found [here](LICENSE).
 ### Pre-requisites
 
 * Operating system: Tested on Linux and Mac OS X 
-* Python >=3.9
-* [LibXML2](http://www.xmlsoft.org/) [MIT License] used by the lxml Python bindings
-* [ICU4C](http://site.icu-project.org/) [ICU License]
-* [Redis](https://redis.io/) server for cache and asynchronous computations
+* Python >=3.10
+* [LibXML2](https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home) [MIT License] used by the lxml Python bindings
+* [ICU4C](https://icu.unicode.org/) [ICU License]
+* [Redis](https://redis.io/) [BSD License] Server for cache and asynchronous computations
 
 ### Python Dependencies
 
@@ -50,8 +50,8 @@ The license can be found [here](LICENSE).
 
 The main dependencies are defined in the [requirements.in](etc/requirements.in) file.
 
-* [Celery](http://www.celeryproject.org/) [BSD License]
-* [Django](https://www.djangoproject.com/) version 3.1.x [BSD License]
+* [Celery](https://docs.celeryq.dev/en/stable/) [BSD License]
+* [Django](https://www.djangoproject.com/) [BSD License]
 * [django-autocomplete-light](https://github.com/yourlabs/django-autocomplete-light/) [MIT License]
 * [django-celery-beat](https://github.com/celery/django-celery-beat) [BSD License]
 * [django-celery-results](https://github.com/celery/django-celery-results) [BSD License]

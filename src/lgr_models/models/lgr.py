@@ -42,7 +42,7 @@ def get_upload_path(instance, filename):
         return os.path.join(base_path, 'idna', filename)
 
     # if you need to use other LgrBaseModel in migration, this won't work as historical models don't include method.
-    # See https://docs.djangoproject.com/en/3.1/topics/migrations/#historical-models
+    # See https://docs.djangoproject.com/en/5.2/topics/migrations/#historical-models
     # If you need this in a migration, define the method in the migration and set it to the historical model.
     return os.path.join('lgr', instance.upload_path(instance, filename))
 
@@ -275,7 +275,7 @@ class RefLgrMember(ManagedLgrBaseMember):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.language, self.script = tag_to_language_script(self.language_script)
-        super().save(force_insert, force_update, using, update_fields)
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 
 class RzLgrMember(ManagedLgrBaseMember):
@@ -291,7 +291,7 @@ class RzLgrMember(ManagedLgrBaseMember):
             self.language, self.script = tag_to_language_script(lgr.metadata.languages[0])
         except:
             pass
-        super().save(force_insert, force_update, using, update_fields)
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 
 class MSR(ManagedLgrBase):

@@ -1,9 +1,9 @@
 # Django
-django<5
-django-autocomplete-light
-django-cleanup
+django<6
+django-autocomplete-light   # Does not support officially Django 5.2 yet
+django-cleanup              # Does not support officially Django 5.2 yet
 django-redis
-django-widget-tweaks
+django-widget-tweaks        # Does not support officially Django 5.2 yet
 
 
 # Celery

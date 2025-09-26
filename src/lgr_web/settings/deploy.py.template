@@ -6,7 +6,7 @@ from .default import *
 DEBUG = False
 
 # TODO: Set this list to hosts/domains served by this app
-# See https://docs.djangoproject.com/en/1.8/ref/settings/#std:setting-ALLOWED_HOSTS
+# See https://docs.djangoproject.com/en/5.2/ref/settings/#std:setting-ALLOWED_HOSTS
 ALLOWED_HOSTS = []
 
 # Uncomment if you are not using HTTPS

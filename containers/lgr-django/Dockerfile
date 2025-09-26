@@ -25,7 +25,7 @@ RUN mv 'test.py' 'src/lgr_web/settings'
 ENV DJANGO_SETTINGS_MODULE=lgr_web.settings.local
 
 # Prepare Python virtual environement
-RUN python3.11 -m venv venv
+RUN python3.12 -m venv venv
 ENV PATH="$BASE_DIR/venv/bin:$PATH"
 ENV LD_LIBRARY_PATH="/usr/local/lib"
 

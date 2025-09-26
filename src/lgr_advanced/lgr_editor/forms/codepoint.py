@@ -51,9 +51,9 @@ class CodepointVariantForm(forms.Form):
     comment = forms.CharField(label='', required=False, widget=forms.Textarea(attrs={'rows': '2',
                                                                                      'cols': '30',
                                                                                      'class': 'form-control'}))
-    # whether the variant codepoint is in LGR or not
+    # Whether the variant codepoint is in LGR or not
     # Need required=False as we expect False values
-    # See https://docs.djangoproject.com/en/1.8/ref/forms/fields/#booleanfield
+    # See https://docs.djangoproject.com/en/5.2/ref/forms/fields/#booleanfield
     # for explanation on stupid behaviour...
     in_lgr = forms.BooleanField(widget=forms.HiddenInput, required=False)
 

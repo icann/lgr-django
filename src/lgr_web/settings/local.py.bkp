@@ -58,7 +58,7 @@ UNICODE_DATABASES = {
 }
 
 # Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Either 'django.db.backends.postgresql_psycopg2', 'django.db.backends.mysql' or 'django.db.backends.sqlite3'.

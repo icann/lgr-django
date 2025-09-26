@@ -16,4 +16,4 @@ class LGRSettings(models.Model):
         if exists and self.pk is None or self.pk != 1:
             # only save one instance of settings
             raise BaseException('You can only use one instance of settings')
-        super().save(force_insert, force_update, using, update_fields)
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
