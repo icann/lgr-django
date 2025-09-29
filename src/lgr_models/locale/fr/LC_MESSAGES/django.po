@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-25 15:45+0000\n"
-"PO-Revision-Date: 2023-10-05 11:01-0400\n"
+"PO-Revision-Date: 2025-09-29 11:04-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.7\n"
 
 #: src/lgr_models/templates/lgr_models/_report_list.html:12
 msgid "Download"
@@ -50,15 +50,11 @@ msgstr "Ces fichiers seront supprimés après"
 
 #, python-format
 #~ msgid "Input code point %(codepoint)s is not in the reference repertoire"
-#~ msgstr ""
-#~ "Le code point %(codepoint)s n'est pas dans le répertoire de référence"
+#~ msgstr "Le code point %(codepoint)s n'est pas dans le répertoire de référence"
 
 #, python-format
-#~ msgid ""
-#~ "Variant %(variant_codepoint)s already exists for code point %(codepoint)s"
-#~ msgstr ""
-#~ "La variante %(variant_codepoint)s existe déjà pour le code point "
-#~ "%(codepoint)s"
+#~ msgid "Variant %(variant_codepoint)s already exists for code point %(codepoint)s"
+#~ msgstr "La variante %(variant_codepoint)s existe déjà pour le code point %(codepoint)s"
 
 #, python-format
 #~ msgid "Range %(first_cp)s - %(last_cp)s already exists in the LGR"
@@ -73,30 +69,20 @@ msgstr "Ces fichiers seront supprimés après"
 #~ msgstr "Le code point %(codepoint)s n'est pas dans le script de la LGR"
 
 #, python-format
-#~ msgid ""
-#~ "Input code point %(codepoint)s is not a PVALID/CONTEXTO/CONTEXTJ code "
-#~ "point per IDNA2008"
-#~ msgstr ""
-#~ "Le code point %(codepoint)s n'est pas un code point PVALID/CONTEXTO/"
-#~ "CONTEXTJ d'après IDNA2008"
+#~ msgid "Input code point %(codepoint)s is not a PVALID/CONTEXTO/CONTEXTJ code point per IDNA2008"
+#~ msgstr "Le code point %(codepoint)s n'est pas un code point PVALID/CONTEXTO/CONTEXTJ d'après IDNA2008"
 
 #, python-format
 #~ msgid "Code point %(codepoint)s has invalid context rule %(rule)s"
-#~ msgstr ""
-#~ "Le code point %(codepoint)s a une règle contextuelle invalide %(rule)s"
+#~ msgstr "Le code point %(codepoint)s a une règle contextuelle invalide %(rule)s"
 
 #, python-format
 #~ msgid "Range %(first_cp)s - %(last_cp)s has invalid context rule"
-#~ msgstr ""
-#~ "L'ensemble %(first_cp)s - %(last_cp)s a une règle contextuelle invalide"
+#~ msgstr "L'ensemble %(first_cp)s - %(last_cp)s a une règle contextuelle invalide"
 
 #, python-format
-#~ msgid ""
-#~ "Variant %(variant_codepoint)s of code point %(codepoint)shas invalid "
-#~ "context rule"
-#~ msgstr ""
-#~ "La variante %(variant_codepoint)s du code point %(codepoint)s a une règle "
-#~ "contextuelle invalide"
+#~ msgid "Variant %(variant_codepoint)s of code point %(codepoint)shas invalid context rule"
+#~ msgstr "La variante %(variant_codepoint)s du code point %(codepoint)s a une règle contextuelle invalide"
 
 #, python-format
 #~ msgid "Duplicate reference for code point %(codepoint)s"
@@ -167,9 +153,7 @@ msgstr "Ces fichiers seront supprimés après"
 
 #, python-format
 #~ msgid "Cannot generate cross-script variant for LGR without (%(message)s)"
-#~ msgstr ""
-#~ "Impossible de générer les variantes cross-script pour la LGR sans "
-#~ "(%(message)s)"
+#~ msgstr "Impossible de générer les variantes cross-script pour la LGR sans (%(message)s)"
 
 #~ msgid "An unknown exception occurred in the LGR API"
 #~ msgstr "Une exception inconnue s'est produite dans l'API LGR"
@@ -179,55 +163,31 @@ msgstr "Ces fichiers seront supprimés après"
 
 #, python-format
 #~ msgid "%(label)s is invalid due to its length being longer than 63 bytes."
-#~ msgstr ""
-#~ "le label %(label)s est invalide car sa longueur est supérieure à 63 "
-#~ "octets."
+#~ msgstr "le label %(label)s est invalide car sa longueur est supérieure à 63 octets."
 
 #, python-format
-#~ msgid ""
-#~ "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it "
-#~ "starts with a hyphen-minus."
-#~ msgstr ""
-#~ "le label %(label)s est invalide en raison des restrictions sur les traits "
-#~ "d'union dans la RFC5891 car il débute par le signe moins."
+#~ msgid "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it starts with a hyphen-minus."
+#~ msgstr "le label %(label)s est invalide en raison des restrictions sur les traits d'union dans la RFC5891 car il débute par le signe moins."
 
 #, python-format
-#~ msgid ""
-#~ "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it ends "
-#~ "with a hyphen-minus."
-#~ msgstr ""
-#~ "le label %(label)s est invalide en raison des restrictions sur les traits "
-#~ "d'union dans la RFC5891 car il termine par le signe moins."
+#~ msgid "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it ends with a hyphen-minus."
+#~ msgstr "le label %(label)s est invalide en raison des restrictions sur les traits d'union dans la RFC5891 car il termine par le signe moins."
 
 #, python-format
-#~ msgid ""
-#~ "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it "
-#~ "contains hyphen-minus in the third and fourth positions."
-#~ msgstr ""
-#~ "le label %(label)s est invalide en raison des restrictions sur les traits "
-#~ "d'union dans la RFC5891 car contient le signe moins à la troisième et "
-#~ "quatrième position."
+#~ msgid "%(label)s is invalid due to hyphen restrictions in the RFC5891 as it contains hyphen-minus in the third and fourth positions."
+#~ msgstr "le label %(label)s est invalide en raison des restrictions sur les traits d'union dans la RFC5891 car contient le signe moins à la troisième et quatrième position."
 
 #, python-format
-#~ msgid ""
-#~ "%(label)s is invalid due to leading combining marks restriction in the "
-#~ "RFC5891."
-#~ msgstr ""
-#~ "le label %(label)s est invalide en raison des restrictions sur signes "
-#~ "combinatoires de tête dans la RFC5891."
+#~ msgid "%(label)s is invalid due to leading combining marks restriction in the RFC5891."
+#~ msgstr "le label %(label)s est invalide en raison des restrictions sur signes combinatoires de tête dans la RFC5891."
 
 #, python-format
 #~ msgid "%(label)s is invalid as it contains disallowed characters."
-#~ msgstr ""
-#~ "le label %(label)s est invalide car il contient des caractères interdits."
+#~ msgstr "le label %(label)s est invalide car il contient des caractères interdits."
 
 #, python-format
-#~ msgid ""
-#~ "%(label)s is invalid as it starts with ‘xn--’ but does not contain valid "
-#~ "Punycode."
-#~ msgstr ""
-#~ "le label %(label)s est invalide car ils débute par 'xn--' et ne contient "
-#~ "pas de Punycode valide."
+#~ msgid "%(label)s is invalid as it starts with ‘xn--’ but does not contain valid Punycode."
+#~ msgstr "le label %(label)s est invalide car ils débute par 'xn--' et ne contient pas de Punycode valide."
 
 #, python-format
 #~ msgid "%(label)s is invalid as it contains full stop (dot)."
@@ -239,33 +199,19 @@ msgstr "Ces fichiers seront supprimés après"
 
 #, python-format
 #~ msgid "%(label)s is invalid due to  the Bidi rule in the RFC5893."
-#~ msgstr ""
-#~ "le label %(label)s est invalide en raison de la règle Bidi dans la "
-#~ "RFC5893."
+#~ msgstr "le label %(label)s est invalide en raison de la règle Bidi dans la RFC5893."
 
 #, python-format
-#~ msgid ""
-#~ "%(label)s is invalid due to the IDNA contextual rule for Zero Width "
-#~ "Joiner."
-#~ msgstr ""
-#~ "le label %(label)s est invalide en raison de la règle IDNA contextuelle "
-#~ "pour les liant sans chasse (Zero Width Joiner)."
+#~ msgid "%(label)s is invalid due to the IDNA contextual rule for Zero Width Joiner."
+#~ msgstr "le label %(label)s est invalide en raison de la règle IDNA contextuelle pour les liant sans chasse (Zero Width Joiner)."
 
 #, python-format
-#~ msgid ""
-#~ "%(label)s is invalid due to the IDNA contextual rule for punctuation in "
-#~ "the RFC5892."
-#~ msgstr ""
-#~ "le label %(label)s est invalide en raison de la règle IDNA contextuelle "
-#~ "pour la ponctuation ans la RFC5892."
+#~ msgid "%(label)s is invalid due to the IDNA contextual rule for punctuation in the RFC5892."
+#~ msgstr "le label %(label)s est invalide en raison de la règle IDNA contextuelle pour la ponctuation ans la RFC5892."
 
 #, python-format
-#~ msgid ""
-#~ "%(label)s is invalid due to the IDNA contextual rule for digits in the "
-#~ "RFC5892."
-#~ msgstr ""
-#~ "le label %(label)s est invalide en raison de la règle IDNA contextuelle "
-#~ "pour les chiffres ans la RFC5892."
+#~ msgid "%(label)s is invalid due to the IDNA contextual rule for digits in the RFC5892."
+#~ msgstr "le label %(label)s est invalide en raison de la règle IDNA contextuelle pour les chiffres ans la RFC5892."
 
 #~ msgid "Advanced LGR Tools"
 #~ msgstr "Outils LGR avancés"
@@ -298,9 +244,7 @@ msgstr "Ces fichiers seront supprimés après"
 #~ msgstr "Comparer deux LGR"
 
 #~ msgid "Get differences for a list of labels for two LGRs versions"
-#~ msgstr ""
-#~ "Calculer les différences sur une liste de labels entre deux versions de "
-#~ "LGR"
+#~ msgstr "Calculer les différences sur une liste de labels entre deux versions de LGR"
 
 #~ msgid "Diff labels of two LGRs"
 #~ msgstr "Diff labels entre deux LGR"
@@ -362,28 +306,14 @@ msgstr "Ces fichiers seront supprimés après"
 #~ msgid "Advanced LGR (Label Generation Ruleset) Tools"
 #~ msgstr "Outils LGR (Label Generation Ruleset) avancés"
 
-#~ msgid ""
-#~ "This application provides a convenient interface for browsing and editing "
-#~ "<abbr title=\"Label Generation Ruleset\">LGR</abbr>s conforming to the <a "
-#~ "href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" target=\"_blank\" "
-#~ "rel=\"noopener noreferrer\">Representing Label Generation Rulesets using "
-#~ "XML</a> specification."
-#~ msgstr ""
-#~ "Cette application fournit une interface adaptée à la navigation et la "
-#~ "modification de <abbr title=\"Label Generation Ruleset\">LGR</abbr> "
-#~ "conformes à la spécification <a href=\"https://www.rfc-editor.org/rfc/"
-#~ "rfc7940.txt\" target=\"_blank\" rel=\"noopener noreferrer\">Representing "
-#~ "Label Generation Rulesets using XML</a>."
+#~ msgid "This application provides a convenient interface for browsing and editing <abbr title=\"Label Generation Ruleset\">LGR</abbr>s conforming to the <a href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" target=\"_blank\" rel=\"noopener noreferrer\">Representing Label Generation Rulesets using XML</a> specification."
+#~ msgstr "Cette application fournit une interface adaptée à la navigation et la modification de <abbr title=\"Label Generation Ruleset\">LGR</abbr> conformes à la spécification <a href=\"https://www.rfc-editor.org/rfc/rfc7940.txt\" target=\"_blank\" rel=\"noopener noreferrer\">Representing Label Generation Rulesets using XML</a>."
 
 #~ msgid "Previously loaded LGR file(s)"
 #~ msgstr "Fichier(s) LGR précédemment chargé(s)"
 
-#~ msgid ""
-#~ "Previously, you edited the following LGR file(s). Click on its title to "
-#~ "resume your editing session."
-#~ msgstr ""
-#~ "Précédemment, vous avez édité les fichiers LGR suivants. Cliquez sur un "
-#~ "titre pour reprendre votre session de modification."
+#~ msgid "Previously, you edited the following LGR file(s). Click on its title to resume your editing session."
+#~ msgstr "Précédemment, vous avez édité les fichiers LGR suivants. Cliquez sur un titre pour reprendre votre session de modification."
 
 #~ msgid "LGRs"
 #~ msgstr "Vos LGR"
@@ -411,12 +341,8 @@ msgstr "Ces fichiers seront supprimés après"
 #~ msgid "Import an existing XML file"
 #~ msgstr "Importer un fichier XML existant"
 
-#~ msgid ""
-#~ "Note that importing large LGR files may take significant time to load on "
-#~ "your browser."
-#~ msgstr ""
-#~ "L’importation de gros fichiers LGR peut être lente à charger dans le "
-#~ "navigateur."
+#~ msgid "Note that importing large LGR files may take significant time to load on your browser."
+#~ msgstr "L’importation de gros fichiers LGR peut être lente à charger dans le navigateur."
 
 #~ msgid "Start with a New blank XML file"
 #~ msgstr "Commencer avec un nouveau fichier XML vide"
@@ -424,15 +350,8 @@ msgstr "Ces fichiers seront supprimés après"
 #~ msgid "Start from a built-in LGR"
 #~ msgstr "LGR fournies"
 
-#~ msgid ""
-#~ "The following LGRs are pre-installed in the system. You may use them as a "
-#~ "starting point for your own LGR. To do so, just click on it to make a "
-#~ "copy that you can then edit."
-#~ msgstr ""
-#~ "Les LGR suivantes sont pré-installées dans le système. Vous pouvez les "
-#~ "utiliser comme point de départ pour vos propres LGR. Pour ce faire, il "
-#~ "suffit de cliquer dessus pour en faire une copie que vous pourrez "
-#~ "modifier."
+#~ msgid "The following LGRs are pre-installed in the system. You may use them as a starting point for your own LGR. To do so, just click on it to make a copy that you can then edit."
+#~ msgstr "Les LGR suivantes sont pré-installées dans le système. Vous pouvez les utiliser comme point de départ pour vos propres LGR. Pour ce faire, il suffit de cliquer dessus pour en faire une copie que vous pourrez modifier."
 
 #, python-format
 #~ msgid "Open %(lgr_file)s"
@@ -442,12 +361,8 @@ msgstr "Ces fichiers seront supprimés après"
 #~ msgid "Open %(lgr_obj)s"
 #~ msgstr "Ouvrir %(lgr_obj)s"
 
-#~ msgid ""
-#~ "<strong class=\"text-danger\">Remember to save your work regularly by "
-#~ "downloading a copy of the XML file.</strong>"
-#~ msgstr ""
-#~ "<strong class=\"text-danger\">Souvenez-vous de sauvegarder régulièrement "
-#~ "votre travail en téléchargeant une copie du fichier XML.</strong>"
+#~ msgid "<strong class=\"text-danger\">Remember to save your work regularly by downloading a copy of the XML file.</strong>"
+#~ msgstr "<strong class=\"text-danger\">Souvenez-vous de sauvegarder régulièrement votre travail en téléchargeant une copie du fichier XML.</strong>"
 
 #~ msgid "Your saved results"
 #~ msgstr "Vos résultats sauvegardés"
@@ -455,12 +370,8 @@ msgstr "Ces fichiers seront supprimés après"
 #~ msgid "The following files contains your tools computation results."
 #~ msgstr "Le fichier suivant contient les résultats de calculs des outils."
 
-#~ msgid ""
-#~ "Please send any feedback to <a href=\"mailto:support@viagenie."
-#~ "ca\">support@viagenie.ca</a>."
-#~ msgstr ""
-#~ "Merci d'envoyer vos commentaires à <a href=\"mailto:support@viagenie."
-#~ "ca\">support@viagenie.ca</a>."
+#~ msgid "Please send any feedback to <a href=\"mailto:support@viagenie.ca\">support@viagenie.ca</a>."
+#~ msgstr "Merci d'envoyer vos commentaires à <a href=\"mailto:support@viagenie.ca\">support@viagenie.ca</a>."
 
 #~ msgid "Label"
 #~ msgstr "Label"
@@ -477,14 +388,8 @@ msgstr "Ces fichiers seront supprimés après"
 #~ msgid "Label forms"
 #~ msgstr "Formes"
 
-#~ msgid ""
-#~ "The following files contains your tools computation results.<br/> "
-#~ "<strong><i class=\"glyphicon glyphicon-alert\"></i> Note that these files "
-#~ "could be cleaned up regularly.</strong>"
-#~ msgstr ""
-#~ "Ces fichiers contiennent les résultats des calculs fournis par les outils."
-#~ "<br/> <strong><i class=\"glyphicon glyphicon-alert\"></i> Veuillez noter "
-#~ "que ces fichiers pourraient être régulièrement supprimés.</strong>"
+#~ msgid "The following files contains your tools computation results.<br/> <strong><i class=\"glyphicon glyphicon-alert\"></i> Note that these files could be cleaned up regularly.</strong>"
+#~ msgstr "Ces fichiers contiennent les résultats des calculs fournis par les outils.<br/> <strong><i class=\"glyphicon glyphicon-alert\"></i> Veuillez noter que ces fichiers pourraient être régulièrement supprimés.</strong>"
 
 #~ msgid "Display forms"
 #~ msgstr "Afficher les formes"
