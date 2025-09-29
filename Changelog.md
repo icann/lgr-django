@@ -7,6 +7,7 @@
 - Fix a typo in the error message for leading hyphen in label validation
 - Fix LGRDisplayView not being able to use the force_download parameter
 - Fix the parent folder not being deleted when the last file in it is deleted
+- Hide the "Label forms" button in the menu when the user is not logged in 
 
 ### Improvements
 - Add more test coverage to the codebase

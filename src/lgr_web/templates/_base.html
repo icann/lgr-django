@@ -60,7 +60,7 @@
                                    class="show-tooltip"
                                    data-placement="bottom">{% trans "LGR Tools" %}</a>
                             </p>
-                        {% endblock %}
+                        {% endblock navbar-left %}
                     </div>
                     <div class="navbar-form navbar-right">
                         {% if home_url_name %}
@@ -91,14 +91,15 @@
                               </li>
                             </ul>
                             </div>
-                        {% endif %}
-                        {% block navbar-right %}
-                        <a class="btn btn-default show-tooltip show-iframe-button"
-                           data-toggle="modal" data-target="#label-forms-modal"
-                           title="{% trans 'Display all label forms' %}" data-placement="bottom">
-                            <i class="glyphicon glyphicon-text-size"></i> {% trans "Label forms" %}
-                        </a>
-                        {% if user.is_authenticated %}
+
+                            {% block navbar-right %}
+                            <a class="btn btn-default show-tooltip show-iframe-button"
+                               data-toggle="modal" data-target="#label-forms-modal"
+                               title="{% trans 'Display all label forms' %}" data-placement="bottom">
+                                <i class="glyphicon glyphicon-text-size"></i> {% trans "Label forms" %}
+                            </a>
+                            {% endblock navbar-right %}
+
                             <div class="btn-group">
                             <a class="btn btn-default dropdown-toggle pull-right" href="#" data-toggle="dropdown"
                                role="button" aria-expanded="false">
@@ -127,9 +128,8 @@
                                 {% trans 'Login' %}
                             </a>
                         {% endif %}
-                    {% endblock %}
                 </div>
-                {% endblock %}
+                {% endblock navbar-content %}
             </div><!--/.nav-collapse -->
         </div><!--/.container -->
     </nav>
