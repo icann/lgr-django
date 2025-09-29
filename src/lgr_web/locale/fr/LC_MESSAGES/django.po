@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-25 15:45+0000\n"
-"PO-Revision-Date: 2023-07-07 22:30-0400\n"
+"PO-Revision-Date: 2025-09-29 11:00-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.7\n"
 
 #: src/lgr_web/forms.py:12
 msgid "Label"
@@ -94,11 +94,11 @@ msgstr "Connexion"
 
 #: src/lgr_web/templates/_base.html:152
 msgid ""
-"If you have questions, please contact <a href=\"mailto:globalsupport@icann."
-"org\">globalsupport@icann.org</a>"
+"If you have questions, please contact <a "
+"href=\"mailto:globalsupport@icann.org\">globalsupport@icann.org</a>"
 msgstr ""
-"Si vous avez des questions, contactez <a href=\"mailto:globalsupport@icann."
-"org\">globalsupport@icann.org</a> svp"
+"Si vous avez des questions, contactez <a "
+"href=\"mailto:globalsupport@icann.org\">globalsupport@icann.org</a> svp"
 
 #: src/lgr_web/templates/_base.html:175 src/lgr_web/templates/_base.html:195
 msgid "Close"
@@ -231,7 +231,7 @@ msgstr ""
 #: src/lgr_web/views.py:76 src/lgr_web/views.py:120
 #, python-format
 msgid "%(label)s is invalid as it contains disallowed characters."
-msgstr ""
+msgstr "%(label)s est invalide puisqu'il contient des caractères non permis."
 
 #~ msgid "Download"
 #~ msgstr "Telécharger"
@@ -520,11 +520,11 @@ msgstr ""
 #~ msgstr "Télécharger %(file)s"
 
 #~ msgid ""
-#~ "Please send any feedback to <a href=\"mailto:support@viagenie."
-#~ "ca\">support@viagenie.ca</a>."
+#~ "Please send any feedback to <a "
+#~ "href=\"mailto:support@viagenie.ca\">support@viagenie.ca</a>."
 #~ msgstr ""
-#~ "Merci d'envoyer vos commentaires à <a href=\"mailto:support@viagenie."
-#~ "ca\">support@viagenie.ca</a>."
+#~ "Merci d'envoyer vos commentaires à <a "
+#~ "href=\"mailto:support@viagenie.ca\">support@viagenie.ca</a>."
 
 #~ msgid "E-mail is mandatory to get the collision test results"
 #~ msgstr ""

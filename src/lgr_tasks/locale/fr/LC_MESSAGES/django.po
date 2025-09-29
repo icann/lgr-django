@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-25 15:45+0000\n"
-"PO-Revision-Date: 2023-07-07 22:27-0400\n"
+"PO-Revision-Date: 2025-09-29 11:03-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.7\n"
 
 #: src/lgr_tasks/templates/lgr_tasks/process_list.html:5
 msgid "LGR Process List"
@@ -69,8 +69,7 @@ msgstr "Êtes vous sur de vouloir supprimer cette tâche ?"
 
 #: src/lgr_tasks/templates/lgr_tasks/process_list.html:120
 msgid "When you delete a task, the corresponding report is not deleted"
-msgstr ""
-"Lorsque vous supprimez une tâche, le rapport correspondant n'est pas supprimé"
+msgstr "Lorsque vous supprimez une tâche, le rapport correspondant n'est pas supprimé"
 
 #: src/lgr_tasks/templates/lgr_tasks/process_list.html:124
 msgid "Are you sure you want to clean tasks?"

@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-25 15:45+0000\n"
-"PO-Revision-Date: 2023-07-07 22:18-0400\n"
+"PO-Revision-Date: 2025-09-29 11:04-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.7\n"
 
 #: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:5
 msgid "IDN Table Review reports"
@@ -24,8 +24,7 @@ msgstr "Rapports de vérification des Tables IDN"
 
 #: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:16
 msgid "The following files contains your IDN review reports."
-msgstr ""
-"Les fichiers suivants contiennent les rapport de vérification des Tables IDN."
+msgstr "Les fichiers suivants contiennent les rapport de vérification des Tables IDN."
 
 #: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:23
 msgid "File"
@@ -46,8 +45,7 @@ msgstr "Précédent"
 
 #: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:63
 msgid "Wait until full report is completed for the file to be valid"
-msgstr ""
-"Veuillez attendre que le rapport soit complet pour que le fichier soit valide"
+msgstr "Veuillez attendre que le rapport soit complet pour que le fichier soit valide"
 
 #: src/lgr_idn_table_review/templates/lgr_idn_table_review/list_report_files.html:65
 msgid "Get the zip file containing all generated reports"
@@ -61,14 +59,8 @@ msgstr "Télécharger tout"
 msgid "Summary"
 msgstr "Résumé"
 
-#~ msgid ""
-#~ "The following files contains IDN review reports.<br/> <strong> <i "
-#~ "class=\"glyphicon glyphicon-alert\"></i> Note that these files could be "
-#~ "cleaned up regularly. </strong>"
-#~ msgstr ""
-#~ "Les fichiers suivants contiennent vos rapports de vérification IDN.<br/> "
-#~ "<strong><i class=\"glyphicon glyphicon-alert\"></i> Veuillez noter que "
-#~ "ces fichiers pourraient être nettoyés régulièrement.</strong>"
+#~ msgid "The following files contains IDN review reports.<br/> <strong> <i class=\"glyphicon glyphicon-alert\"></i> Note that these files could be cleaned up regularly. </strong>"
+#~ msgstr "Les fichiers suivants contiennent vos rapports de vérification IDN.<br/> <strong><i class=\"glyphicon glyphicon-alert\"></i> Veuillez noter que ces fichiers pourraient être nettoyés régulièrement.</strong>"
 
 #~ msgid "Switch mode"
 #~ msgstr "Changer de mode"
