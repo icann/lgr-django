@@ -24,3 +24,5 @@ natsort
 
 # ICANN Login
 okta-jwt-verifier
+# https://github.com/okta/okta-jwt-verifier-python/issues/72
+cryptography

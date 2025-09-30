@@ -25,6 +25,8 @@ celery[redis]==5.5.3
     #   -r requirements.in
     #   django-celery-beat
     #   django-celery-results
+cffi==2.0.0
+    # via cryptography
 click==8.3.0
     # via
     #   celery
@@ -39,6 +41,8 @@ click-repl==0.3.0
     # via celery
 cron-descriptor==2.0.6
     # via django-celery-beat
+cryptography==46.0.1
+    # via -r requirements.in
 decorator==5.2.1
     # via retry2
 django==5.2.6
@@ -104,6 +108,8 @@ propcache==0.3.2
     #   yarl
 pycountry==24.6.1
     # via lgr-core
+pycparser==2.23
+    # via cffi
 pyjwt==2.10.1
     # via okta-jwt-verifier
 python-crontab==3.3.0
