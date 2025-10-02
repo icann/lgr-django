@@ -232,7 +232,7 @@ class LgrBaseModel(models.Model):
 
 
 class TemporaryLgrBase(LgrBaseModel):
-    """Allow to use the parsing methods of LgrBaseModel"""
+    """Allows using the parsing methods of LgrBaseModel"""
     class Meta:
         managed = False
 
