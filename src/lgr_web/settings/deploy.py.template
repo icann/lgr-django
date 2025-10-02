@@ -57,19 +57,6 @@ for mod in ['django.request', 'lgr_web', 'lgr_auth', 'lgr_advanced', 'lgr_advanc
 SUPPORTED_UNICODE_VERSION = '16.0.0'
 DEFAULT_UNICODE_VERSION = '16.0.0'
 METADATA_UNICODE_VERSIONS = (
-    '6.3.0',
-    '6.0.0',
-    '6.1.0',
-    '6.2.0',
-    '7.0.0',
-    '8.0.0',
-    '9.0.0',
-    '10.0.0',
-    '11.0.0',
-    '12.0.0',
-    '12.0.0',
-    '14.0.0',
-    '15.1.0',
     '16.0.0',
 )
 
