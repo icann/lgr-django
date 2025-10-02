@@ -1,6 +1,6 @@
-{% load i18n %}
+{% load i18n lgr_advanced%}
 
-{% regroup lgrs|dictsort:"is_set" by is_set as lgrs_sorted %}
+{% regroup lgrs|sort_by_is_set by group_key as lgrs_sorted %}
 <ul>
     {% for local_lgrs in lgrs_sorted %}
         {% if local_lgrs.grouper %}

@@ -1,11 +1,11 @@
 {% extends "lgr_advanced/_base.html" %}
-{% load i18n %}
+{% load i18n lgr_advanced %}
 
 {% block content-title %}
     {% trans "Advanced LGR (Label Generation Ruleset) Tools" %}
 {% endblock %}
 {% block content %}
-    {% regroup lgrs|dictsort:"is_set" by is_set as lgrs_sorted %}
+    {% regroup lgrs|sort_by_is_set by group_key as lgrs_sorted %}
     <p>
     {% blocktrans trimmed %}
         This application provides a convenient interface for browsing
