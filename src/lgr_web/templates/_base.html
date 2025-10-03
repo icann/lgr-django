@@ -115,10 +115,13 @@
                                     </a>
                                 </li>
                                 <li class="dropdown-item">
-                                    <a class="btn" href="{% url 'logout' %}">
-                                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-                                        {% trans 'Logout' %}
-                                    </a>
+                                    <form method="POST" action="{% url 'logout' %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="log-out-button">
+                                            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                                            {% trans 'Logout' %}
+                                        </button>
+                                    </form>
                                 </li>
                             </ul>
                             </div>
