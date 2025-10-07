@@ -13,7 +13,7 @@ class TestLGRDisplayView(LgrWebClientTestBase):
     def test_returns_file_as_downloadable_file(self):
         self.login_admin()
 
-        response = self.client.get('/render/file/rzlgr/1', {'force_download': True})
+        response = self.client.get('/render/dl/rzlgr/1')
 
         # TODO: We need proper teardowns on tests when files being added to achieve repeatable results
         self.assertIn('attachment; filename=', response['Content-Disposition'])
