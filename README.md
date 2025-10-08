@@ -26,9 +26,17 @@ in another project would require some work:
 
 ## Acknowledgment
 
-This toolset was implemented by Cofomo (formerly Viagenie) (Audric Schiltknecht, Julien Bernard, Guillaume Blanchet,
-Michel Bernier, David Drouin, Vincent Gonzalez, Marc Blanchet and Alexandre Taillon-Desrochers) 
-and Wil Tan on an ICANN contract.
+This toolset was implemented on an ICANN contract by: 
+- Cofomo (formerly Viagenie)
+  - Julien Bernard
+  - Michel Bernier
+  - Guillaume Blanchet
+  - Marc Blanchet
+  - David Drouin
+  - Vincent Gonzalez
+  - Audric Schiltknecht
+  - Alexandre Taillon-Desrochers
+- Wil Tan
 
 ## License
 
