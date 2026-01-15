@@ -20,7 +20,8 @@ def _get_validity(lgr, label_cplist, idna_encoder):
         label_a = lgr_exception_to_text(e)
         conversion_error = True
 
-    (eligible, label_valid_parts, label_invalid_parts, disp, action_idx, logs) = lgr.test_label_eligible(label_cplist)
+    (eligible, label_valid_parts, label_invalid_parts, disp, action_idx, logs, chars) = lgr.test_label_eligible(
+        label_cplist)
 
     invalid_codepoints = set([c for c, _ in label_invalid_parts])
 

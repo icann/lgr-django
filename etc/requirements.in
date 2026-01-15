@@ -13,7 +13,7 @@ django-celery-results
 
 
 # LGR/Unicode modules
-lgr-core @ git+https://github.com/icann/lgr-core.git@master
+lgr-core @ git+https://github.com/icann/lgr-core.git@v7.0.0
 munidata
 picu
 
