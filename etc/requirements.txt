@@ -45,7 +45,7 @@ cryptography==46.0.3
     # via -r requirements.in
 decorator==5.2.1
     # via retry2
-django==5.2.10
+django==5.2.11
     # via
     #   -r requirements.in
     #   django-autocomplete-light
