@@ -20,7 +20,7 @@ attrs==25.4.0
     # via aiohttp
 billiard==4.2.4
     # via celery
-celery[redis]==5.5.3
+celery[redis]==5.6.2
     # via
     #   -r requirements.in
     #   django-celery-beat
@@ -74,7 +74,7 @@ frozenlist==1.8.0
     #   aiosignal
 idna==3.11
     # via yarl
-kombu[redis]==5.5.4
+kombu[redis]==5.6.2
     # via celery
 language-tags==1.2.0
     # via lgr-core
@@ -94,7 +94,7 @@ natsort==8.4.0
     # via -r requirements.in
 okta-jwt-verifier==0.3.0
     # via -r requirements.in
-packaging==25.0
+packaging==26.0
     # via kombu
 picu==1.6
     # via
@@ -117,7 +117,7 @@ python-crontab==3.3.0
     # via django-celery-beat
 python-dateutil==2.9.0.post0
     # via celery
-redis==5.2.1
+redis==6.4.0
     # via
     #   django-redis
     #   kombu
@@ -133,15 +133,14 @@ tzdata==2025.3
     # via
     #   django-celery-beat
     #   kombu
+tzlocal==5.3.1
+    # via celery
 vine==5.1.0
     # via
     #   amqp
     #   celery
     #   kombu
-wcwidth==0.2.14
+wcwidth==0.5.3
     # via prompt-toolkit
 yarl==1.22.0
     # via aiohttp
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
