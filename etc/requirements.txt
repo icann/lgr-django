@@ -111,7 +111,7 @@ pycountry==24.6.1
     # via lgr-core
 pycparser==2.23
     # via cffi
-pyjwt==2.10.1
+pyjwt==2.12.0
     # via okta-jwt-verifier
 python-crontab==3.3.0
     # via django-celery-beat
