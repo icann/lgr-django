@@ -80,7 +80,7 @@ language-tags==1.2.0
     # via lgr-core
 lgr-core @ git+https://github.com/icann/lgr-core.git@v7.0.0
     # via -r requirements.in
-lxml==6.0.2
+lxml==6.1.0
     # via lgr-core
 multidict==6.7.0
     # via
